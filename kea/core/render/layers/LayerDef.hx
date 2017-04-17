@@ -167,10 +167,18 @@ class LayerOrders
 			//}
 		//}
 		//else { // Starts with non-static layer
-			dynamicStart = startIndex;
+			
 			
 			var j:Int = 0;
 			var len:Int = layerDefinitions.length;
+			if (layerDefinitions[0].startIndex == startIndex) {
+				topLayers.push(layerDefinitions[0]);
+				dynamicStart = layerDefinitions[0].endIndex;
+			}
+			else {
+				dynamicStart = startIndex;
+			}
+			
 			while (j < len) 
 			{
 				if (j < len - 1) {
@@ -184,6 +192,7 @@ class LayerOrders
 				
 				j++;
 			}
+			
 		//}
 		
 		layerDefinitions = topLayers;
