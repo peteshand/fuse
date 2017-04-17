@@ -12,6 +12,8 @@ class Sprite extends DisplayObject implements IDisplay
 
 	function addChild(child:IDisplay):Void
 	{
+		if (children == null) children = [];
+		
 		var parentIndex:Int = this.renderIndex;
 		//stage.renderList.insert(parentIndex + children.length + 1, child);
 		
@@ -28,6 +30,8 @@ class Sprite extends DisplayObject implements IDisplay
 		child.parent = this;
 		children.push(child);
 		//child.drawToBackBuffer();
+		
+		child.onAdd.dispatch();
 	}
 
 	override function get_totalNumChildren():Int

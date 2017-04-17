@@ -8,6 +8,7 @@ import kea.core.render.UpdateList;
 import kea.atlas.TextureAtlas;
 import kea.core.profiling.ProfileMonitor;
 import kea.model.Performance;
+import kha.Assets;
 
 import kha.Canvas;
 import kha.Scheduler;
@@ -37,6 +38,7 @@ class Kea {
 	//}
 	public var onRender:Void -> Void;
 	var g2:Graphics;
+	static private var rootClass:Class<Sprite>;
 
 	public static inline function get_current():Kea
 	{
@@ -84,9 +86,24 @@ class Kea {
 		//root.transformAvailable.value = true;
 	}
 
-	public static function init(rootClass:Class<Sprite>): Void {
+	/*public static function init(rootClass:Class<Sprite>): Void {
 		System.init({title: "Project", width: 1024, height: 768}, function () {
 			Kea.current.stage = new Stage(rootClass);
 		});
+	}*/
+	
+	public static function init(rootClass:Class<Sprite>): Void {
+		Kea.rootClass = rootClass;
+		System.init( { title: "Project", width: 1024, height: 768 }, OnKhaSetupComplete);
+	}
+	
+	static private function OnKhaSetupComplete() 
+	{
+		Assets.loadEverything(OnEverythingLoaded);
+	}
+	
+	static private function OnEverythingLoaded() 
+	{
+		Kea.current.stage = new Stage(rootClass);
 	}
 }

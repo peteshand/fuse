@@ -11,16 +11,24 @@ class DisplayList
 	var display:IDisplay;
 	
 	public var parent:DisplayList;
-	public var values:Array<DisplayList> = [];
+	public static var linear:Array<DisplayList> = [];
 	public var child:Array<DisplayList> = [];
 	
 	//public var onAdd = new Signal0();
 	//public var onRemove = new Signal0();
 	
-	public function new(display:IDisplay) 
+	public var prev:DisplayList;
+	public var next:DisplayList;
+	
+	static function __init__()
 	{
+		linear = [];
+	}
+	
+	public function new(parent:DisplayList, display:IDisplay) 
+	{
+		this.parent = parent;
 		this.display = display;
-		
 	}
 	
 	public function addChild(item:DisplayList):Void

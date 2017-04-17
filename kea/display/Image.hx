@@ -1,5 +1,6 @@
 package kea.display;
 
+import kea.atlas.AtlasObject;
 import kha.Image;
 import kha.Shaders;
 import kha.graphics2.Graphics;
@@ -11,22 +12,24 @@ import kha.graphics4.VertexStructure;
 
 class Image extends DisplayObject implements IDisplay
 {
-	private var drawWidth:Float;
-	private var drawHeight:Float;
 	static var shaderPipeline:PipelineState;
 	var map = new Map<String, Array<BlendingFactor>>();
 	
+	private static var lastImage:kha.Image = null;
+	
 	public function new(base:kha.Image)
 	{
-		super();
+		this.renderable = true;
 		this.base = base;
-		drawWidth = this.base.width;
-		drawHeight = this.base.height;
+		
+		
+		
+		
 		
 		// "multiply" => [ Context3DBlendFactor.DESTINATION_COLOR, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA ],
 		// "none"     => [ Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO ],
 		
-		if (shaderPipeline == null){
+		/*if (shaderPipeline == null){
 			var random:Int = Math.floor(Math.random() * 2);
 			
 			shaderPipeline = new PipelineState();
@@ -53,79 +56,42 @@ class Image extends DisplayObject implements IDisplay
 			shaderPipeline.blendSource = blendingFactors[0];
 			shaderPipeline.blendDestination = blendingFactors[1];
 			
-			//map.set("none"     => [ Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO ],
-			/*"normal"   => [ Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA ],
-			"add"      => [ Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.DESTINATION_ALPHA ],
-			"multiply" => [ Context3DBlendFactor.DESTINATION_COLOR, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA ],
-			"screen"   => [ Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE ],
-			"erase"    => [ Context3DBlendFactor.ZERO, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA ],
-			"mask"     => [ Context3DBlendFactor.ZERO, Context3DBlendFactor.SOURCE_ALPHA ],
-			"below"    => [ Context3DBlendFactor.ONE_MINUS_DESTINATION_ALPHA, Context3DBlendFactor.DESTINATION_ALPHA ]*/
-			
-			/*var blendingFactors:Array<BlendingFactor> = [
-				BlendingFactor.BlendOne,
-				BlendingFactor.BlendZero,
-				BlendingFactor.DestinationAlpha,
-				BlendingFactor.DestinationColor,
-				BlendingFactor.InverseDestinationAlpha,
-				BlendingFactor.InverseDestinationColor,
-				BlendingFactor.InverseSourceAlpha,
-				BlendingFactor.InverseSourceColor,
-				BlendingFactor.SourceAlpha,
-				BlendingFactor.SourceColor
-			];
-			
-			shaderPipeline.blendSource = blendingFactors[Math.floor(Math.random() * blendingFactors.length)];
-			shaderPipeline.blendDestination = blendingFactors[Math.floor(Math.random() * blendingFactors.length)];
-			shaderPipeline.alphaBlendSource = blendingFactors[Math.floor(Math.random() * blendingFactors.length)];
-			shaderPipeline.alphaBlendDestination = blendingFactors[Math.floor(Math.random() * blendingFactors.length)];*/
-			
-			//if (random == 0) {
-				//shaderPipeline.blendSource = BlendingFactor.BlendOne;
-				//shaderPipeline.blendDestination = BlendingFactor.InverseSourceAlpha;
-				//shaderPipeline.alphaBlendSource = BlendingFactor.SourceAlpha;
-				//shaderPipeline.alphaBlendDestination = BlendingFactor.InverseSourceAlpha;
-			//}
-			//else {
-				//"multiply" => [ Context3DBlendFactor.DESTINATION_COLOR, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA ],
-				
-				//"add"      => [ Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.DESTINATION_ALPHA ],
-				
-				//shaderPipeline.blendSource = BlendingFactor.SourceAlpha;
-				//shaderPipeline.blendDestination = BlendingFactor.DestinationAlpha;
-				
-				//shaderPipeline.blendSource = BlendingFactor.BlendZero;
-				//shaderPipeline.blendDestination = BlendingFactor.InverseSourceAlpha;
-				/*shaderPipeline.blendOperation = BlendingOperation.Min;
-				shaderPipeline.alphaBlendSource = BlendingFactor.SourceAlpha;
-				shaderPipeline.alphaBlendDestination = BlendingFactor.InverseSourceAlpha;
-				shaderPipeline.alphaBlendOperation = BlendingOperation.Min;*/
-				
-				/*shaderPipeline.blendOperation = 
-				shaderPipeline.blendSource = BlendingFactor.BlendOne;
-				shaderPipeline.blendDestination = BlendingFactor.InverseSourceAlpha;
-				shaderPipeline.alphaBlendSource = BlendingFactor.SourceAlpha;
-				shaderPipeline.alphaBlendDestination = BlendingFactor.BlendZero;*/
-			//}
 			shaderPipeline.compile();
-		}
-	}
-
-	override public function render(graphics:Graphics): Void
-	{
-		//this.pipeline = shaderPipeline;
-		/*if (graphics.pipeline != shaderPipeline) {
-			graphics.pipeline = shaderPipeline;
 		}*/
 		
-		if (atlas != null){
-			if (atlas.texture != null){
-				graphics.drawSubImage(atlas.texture, 
-					-pivotX, -pivotY, // draw x/y
-					0, 0, // sample x/y
-					drawWidth, drawHeight // draw width/height
-				);
-			}
-		}
+		super();
 	}
+
+	//override public function render(graphics:Graphics): Void
+	//{
+		////this.pipeline = shaderPipeline;
+		///*if (graphics.pipeline != shaderPipeline) {
+			//graphics.pipeline = shaderPipeline;
+		//}*/
+		//
+		//renderLine(graphics);
+	//}
+	
+	
+	//function renderImage(graphics:Graphics): Void
+	//{
+		//graphics.drawImage(base, -pivotX, -pivotY);
+	//}
+	//
+	//function renderAtlas(graphics:Graphics): Void
+	//{
+		//graphics.drawSubImage(atlas.texture, 
+			//-pivotX, -pivotY,
+			//atlas.x, atlas.y,
+			//drawWidth, drawHeight
+		//);
+	//}
+	//
+	//override function set_atlas(value:AtlasObject):AtlasObject 
+	//{
+		//atlas = value;
+		//if (atlas == null) renderLine = renderImage;
+		//else renderLine = renderAtlas;
+		//return atlas;
+	//}
 }

@@ -9,37 +9,37 @@ class CacheRenderer extends BaseRenderer
 	var drawnStartIndex:Int;
 	var drawnEndIndex:Int;
 	
-	var image:Image;
+	var buffer:Image;
 
 	public function new() {
 		super();
-		image = Image.createRenderTarget(1024, 1024);
+		buffer = Image.createRenderTarget(1024, 1024);
 		
-		image.g2.begin(true, 0x00000000);
-		image.g2.end();
+		//buffer.g2.begin(true, 0x00000000);
+		//buffer.g2.end();
 	}
 
 	override public function cache(graphics:Graphics):Void
 	{
 		if (drawnStartIndex != layerDefinition.startIndex || drawnEndIndex != layerDefinition.endIndex){
-			image.g2.begin(true, 0x00000000);		
-			for (i in 0...layerDefinition.displays.length){
-				var display:IDisplay = layerDefinition.displays[i];
-				display.prerender(image.g2);
-				display.render(image.g2);
-				display.postrender(image.g2);
+			buffer.g2.begin(true, 0x00000000);		
+			for (i in layerDefinition.startIndex...layerDefinition.endIndex){
+				var display:IDisplay = Kea.current.updateList.renderList[i];
+				display.prerender(buffer.g2);
+				display.render(buffer.g2);
+				display.postrender(buffer.g2);
 			}
-			image.g2.end();
+			buffer.g2.end();
+			
+			drawnStartIndex = layerDefinition.startIndex;
+			drawnEndIndex = layerDefinition.endIndex;
 		}
-
-		drawnStartIndex = layerDefinition.startIndex;
-		drawnEndIndex = layerDefinition.endIndex;
 	}
 
 	override public function render(graphics:Graphics):Void
 	{
-		//trace("cache");
+		//trace(" cache:  " + layerDefinition.startIndex + " " + layerDefinition.endIndex);
 		graphics.color = 0xFFFFFFFF;
-		graphics.drawImage(image, 0, 0);
+		graphics.drawImage(buffer, 0, 0);
 	}
 }

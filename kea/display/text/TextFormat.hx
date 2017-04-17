@@ -16,7 +16,7 @@ class TextFormat
 		if (defaultFormat == null){
 			defaultFormat = new TextFormat();
 			defaultFormat.fontSize = 40;
-			defaultFormat.color = 0xFFFF0000;
+			defaultFormat.color = 0xFFFFFFFF;
 		}
 		return defaultFormat;
 	}

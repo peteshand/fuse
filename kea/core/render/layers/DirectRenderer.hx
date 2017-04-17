@@ -16,9 +16,9 @@ class DirectRenderer extends BaseRenderer
 
 	override public function render(graphics:Graphics):Void
 	{
-		//trace("direct");
-		for (i in 0...layerDefinition.displays.length){
-			var display:IDisplay = layerDefinition.displays[i];
+		//trace("render: " + layerDefinition.startIndex + " " + layerDefinition.endIndex);
+		for (i in layerDefinition.startIndex...layerDefinition.endIndex) {
+			var display:IDisplay = Kea.current.updateList.renderList[i];
 			display.prerender(graphics);
 			display.render(graphics);
 			display.postrender(graphics);

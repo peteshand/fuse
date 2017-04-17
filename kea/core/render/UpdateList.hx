@@ -5,7 +5,7 @@ import kea.display.IDisplay;
 class UpdateList
 {	
 	public var renderList:Array<IDisplay> = [];
-	public var justAdded:Array<IDisplay> = [];
+	//public var justAdded:Array<IDisplay> = [];
 	public var lowestChange:Int = 1073741823;
 
 	public function new() {
@@ -20,7 +20,7 @@ class UpdateList
 		if (index >= renderList.length) pushToRenderList(display);
 		else insertToRenderList(index, display);
 
-		justAdded.push(display);
+		//justAdded.push(display);
 		if (lowestChange > index-1){
 			lowestChange = index-1;
 			

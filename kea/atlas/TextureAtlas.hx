@@ -1,6 +1,7 @@
 package kea.atlas;
 
 import kea.core.Kea;
+import kea.display.DisplayObject;
 import kea.display.IDisplay;
 import kha.Image;
 import kha.graphics2.Graphics;
@@ -13,8 +14,10 @@ class TextureAtlas
 	private var positionX:Int = 0;
 	private var positionY:Int = 0;
 	private var texture: Image;
-	private var images = new Map<Image, IDisplay>();
+	private var images = new Map<Int, IDisplay>();
 	public var changeAvailable:Bool = false;
+	
+	//public var current
 	
 	private var atlasObjects = new Map<kha.Image, AtlasObject>();
 	
@@ -29,15 +32,27 @@ class TextureAtlas
 
 	public function update():Void
 	{
-		var justAdded:Array<IDisplay> = Kea.current.updateList.justAdded;
-		if (justAdded.length > 0){
-			for (i in 0...justAdded.length){
-				add(justAdded[i]);
-			}
+		if (changeAvailable) {
 			draw();
-
-			Kea.current.updateList.justAdded = [];
+			changeAvailable = false;
 		}
+		//var justAdded:Array<IDisplay> = Kea.current.updateList.justAdded;
+		//if (justAdded.length > 0){
+			//for (i in 0...justAdded.length){
+				//add(justAdded[i]);
+			//}
+			//draw();
+			//Kea.current.updateList.justAdded = [];
+		//}
+	}
+	
+	public function setTexture(id:Int, displayObject:DisplayObject) 
+	{
+		if (!images.exists(id)) {
+			images.set(id, displayObject);
+			add(displayObject);
+		}
+		
 	}
 
 	function add(display:IDisplay):Void
@@ -47,6 +62,7 @@ class TextureAtlas
 		if (display.atlas == null){
 			atlasObjects.set(display.base, new AtlasObject(display.base));
 			display.atlas = atlasObjects.get(display.base);
+			changeAvailable = true;
 		}
 	}
 	
@@ -55,7 +71,7 @@ class TextureAtlas
 	//}
 
 	function draw():Void
-	{	
+	{
 		texture.g2.begin(false);
 		for (key in atlasObjects.keys()){
 			var atlas:AtlasObject = atlasObjects.get(key);
@@ -66,13 +82,10 @@ class TextureAtlas
 				atlas.x = positionX;
 				atlas.y = positionY;
 				atlas.texture = texture;
-				//atlas.display.atlas = atlas;
-
 				positionX += base.width;
 			}
 		}
 		texture.g2.end();
-
 		/*if (display.atlas != null){
 			var atlas = display.atlas;
 			if (!images.exists(atlas.base)){

@@ -19,13 +19,13 @@ class Stage extends Sprite {
 		super();
 		
 		this.name = "stage";
-
+		
 		textureAtlas = new TextureAtlas();
 		
 		stage = this;
-
-		root = Type.createInstance(RootClass, []);
 		
+		root = Type.createInstance(RootClass, []);
+		root.stage = this;
 		//layerRenderer = new LayerRenderer(this, root);
 
 		addChild(root);

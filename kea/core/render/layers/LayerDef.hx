@@ -6,239 +6,225 @@ import kea.notify.Notifier;
 class LayerDef
 {	
 	var layerOrders = new LayerOrders();
-	var changedDisplaysMap = new Map<IDisplay, IDisplay>();
-	var changedDisplays:Array<IDisplay> = [];
-	var lastChangedDisplays:Array<IDisplay> = [];
+	var currentLayers:Array<LayerDefinition>;
 	
-	public function new() {
-		
-	}
-
-	public function add(display:IDisplay):Void
-	{
-		changedDisplaysMap.set(display, display);
-		return;
-
-		/*for (i in 0...changedDisplays.length){
-			//trace([changedDisplays[i].name, display.name]);
-			if (changedDisplays[i] == display){
-				return;
-			}
-		}
-		//trace("renderIndex = " + display.renderIndex);
-		changedDisplays.push(display);*/
-	}
-
+	public function new() { }
+	
+	@:access(kea.core.render.Renderer)
 	public function calc():Array<LayerDefinition>
 	{
-		changedDisplays.splice(0, changedDisplays.length);
-		for (display in changedDisplaysMap.iterator()){
-			changedDisplays.push(display);
-			//trace(display.name);
+		checkStatic();
+		if (Renderer.layerStateChangeAvailable) {
+			//trace("Renderer.layerStateChangeAvailable = " + Renderer.layerStateChangeAvailable);
+			currentLayers = layerOrders.findOrder(Kea.current.updateList.renderList);
+			//trace("layerDefinitions.length = " + currentLayers.length);
+			Renderer.layerStateChangeAvailable = false;	
 		}
-		//trace(changedDisplays.length);
-		changedDisplaysMap = new Map<IDisplay, IDisplay>();
-
-		orderArray();
 		
-		var layerDefinitions:Array<LayerDefinition> = layerOrders.findOrder(changedDisplays);
-		
-		reset();
-		
-		return layerDefinitions;
+		return currentLayers;
 	}
-
-	public function orderArray():Void
+	
+	function checkStatic() 
 	{
-		var arrayHasChanged:Bool = checkForChange();
-		if (!arrayHasChanged) {
-			changedDisplays = lastChangedDisplays.copy();
-			return;
-		}
-
-		changedDisplays.sort(function(d1:IDisplay, d2:IDisplay):Int
+		for (i in 0...Kea.current.updateList.renderList.length) 
 		{
-			if (d1.renderIndex > d2.renderIndex) return 1;
-			else if (d1.renderIndex < d2.renderIndex) return -1;
-			else return 0;
-		});
-
-		lastChangedDisplays.splice(0, lastChangedDisplays.length);
-		for (i in 0...changedDisplays.length){
-			//trace(changedDisplays[i].name);
-			lastChangedDisplays.push(changedDisplays[i]);
+			Kea.current.updateList.renderList[i].checkStatic();
 		}
-	}
-
-	function checkForChange():Bool
-	{
-		if (lastChangedDisplays.length == changedDisplays.length) {
-			return false;
-		}
-		if (changedDisplays.length == 0) {
-			return true;
-		}
-		if (lastChangedDisplays.length > 0) {
-			if (changedDisplays[0] != lastChangedDisplays[0]) {
-				return true;
-			}
-		}
-		
-		var matchFound:Bool;
-		var matchCount:Int = 0;
-		
-		
-
-		for (i in 0...changedDisplays.length){
-			matchFound = false;
-			for (j in 0...lastChangedDisplays.length){
-				if (changedDisplays[i] == lastChangedDisplays[j]){
-					matchFound = true;
-					break;
-				}
-			}
-			if (matchFound){
-				matchCount++;
-			}
-		}
-		if (matchCount == changedDisplays.length) {
-			//trace("nothing has changed");
-			return false;
-		}
-		
-		//trace("sort");
-		return true;
-	}
-
-	function reset():Void
-	{
-		var renderList:Array<IDisplay> = Kea.current.updateList.renderList;
-		if (renderList.length > 0){
-			renderList[0].staticCount.value++;
-			//trace("renderList[0] = " + renderList[0].staticCount.value);
-		}
-
-		for (i in 0...changedDisplays.length){
-			changedDisplays[i].staticCount.value ++;
-		}
-
-		changedDisplays.splice(0, changedDisplays.length);
 	}
 }
 
+@:access(kea.core.render.Renderer)
 class LayerOrders
 {
-	var currentDisplay:IDisplay;
 	var renderIndex:Int = 0;
-	var changeAvailable = new Notifier<Null<Bool>>();
 	var layerDefinitions:Array<LayerDefinition> = [];
-
+	var topLayers:Array<LayerDefinition> = [];
+	var currentLayerDefinition:LayerDefinition;
+	var changeAvailable = new Notifier<Null<Bool>>();
+	var startIndex:Int;
+	var endIndex:Int;
+	var max:Int;
+	
 	public function new()
 	{
-		changeAvailable.add(onChangeAvailableChange);
+		max = Renderer.maxLayers - 1;
+		changeAvailable.add(onChangeAvailable);
 	}
-
-	public function findOrder(changedDisplays:Array<IDisplay>):Array<LayerDefinition>
+	
+	function onChangeAvailable():Void
 	{
+		// close current
+		if (currentLayerDefinition != null) CloseLayer();
+		
+		// start new
+		if (changeAvailable.value) {
+			currentLayerDefinition = { startIndex:renderIndex, isStatic:changeAvailable.value };
+		}
+	}
+	
+	function CloseLayer() 
+	{
+		if (currentLayerDefinition.isStatic) { // only push static 
+			currentLayerDefinition.endIndex = renderIndex;
+			currentLayerDefinition.length = currentLayerDefinition.endIndex - currentLayerDefinition.startIndex;
+			addTop();
+		}
+		currentLayerDefinition = null;
+	}
+	
+	function addTop()
+    {
+		if (layerDefinitions.length < max) {
+			layerDefinitions.push(currentLayerDefinition);
+			return;
+		}
+		
+		var dif:Int = 0;
+		var index:Int = -1;
+		for (j in 0...layerDefinitions.length) 
+		{
+			if (currentLayerDefinition.length - layerDefinitions[j].length > dif) {
+				dif = currentLayerDefinition.length - layerDefinitions[j].length;
+				index = j;
+				//trace("dif = " + dif);
+				
+			}
+		}
+		if (index != -1) {
+			layerDefinitions.splice(index, 1);
+			layerDefinitions.push(currentLayerDefinition);
+			//return;
+		}
+    }
+	
+	@:access(kea.notify.Notifier)
+	@:access(kea.display.DisplayObject)
+	public function findOrder(renderList:Array<IDisplay>):Array<LayerDefinition>
+	{
+		startIndex = 0;// renderList[0].renderIndex;
+		endIndex = renderList.length;// renderList[renderList.length - 1].renderIndex;
+		
 		layerDefinitions = [];
+		currentLayerDefinition = null;
+		changeAvailable._value = null;
 		
-		//if (changedDisplays.length == 0) return layerDefinitions;
+		for (i in 0...renderList.length) 
+		{
+			//if (renderList[i].renderable){
+				renderIndex = i;
+				//trace(i + " name = " + renderList[i].name);
+				//trace("renderList[" + i + "].isStatic2.value = " + renderList[i].isStatic2.value);
+				changeAvailable.value = renderList[i].isStatic2.value;
+				renderList[i].isStatic = true;
+				/*if (renderList[i].staticCount.value <= 0) {
+					changeAvailable.value = false;
+				}
+				else {
+					changeAvailable.value = true;
+				}*/
+			//}
+		}
 		
-		findStartIndex(changedDisplays);
-		findEndActiveIndex();
-		findLastEndActiveIndex();
-		findLastIndex();
-		findDisplays();
+		// close last layer
+		if (currentLayerDefinition != null) {
+			CloseLayer();
+		}
+		
+		optimize();
 		
 		return layerDefinitions;
 	}
-	@:access(kea.notify.Notifier)
-	inline function findStartIndex(changedDisplays:Array<IDisplay>):Void
+	
+	function optimize() 
 	{
-		//trace("changedDisplays.length = " + changedDisplays.length);
-		renderIndex = 0;
-		currentDisplay = changedDisplays[0];
-		//changeAvailable.remove(onChangeAvailableChange);
-		changeAvailable._value = null;
-		//changeAvailable.add(onChangeAvailableChange);
+		if (layerDefinitions.length == 0) {
+			layerDefinitions = [ { startIndex:startIndex, endIndex:endIndex, isStatic:false } ];
+			return;
+		}
 		
-		changeAvailable.value = true;
+		var topLayers:Array<LayerDefinition> = [];// layerDefinitions.concat([]);
 		
-		for (i in 0...changedDisplays.length){
-			currentDisplay = changedDisplays[i];
-			renderIndex = changedDisplays[i].renderIndex;
-			//trace("staticCount = " + changedDisplays[i].staticCount.value);
-			//trace("name = " + changedDisplays[i].name);
-			//trace("renderIndex = " + changedDisplays[i].renderIndex);
+		var dynamicStart:Null<Int>;
+		var dunamicEnd:Null<Int>;
+		//var firstStaticLayer:LayerDefinition = topLayers[0];
+		
+		// Starts with static layer
+		//if (firstStaticLayer != null && firstStaticLayer.startIndex == startIndex) {
+			//trace("dgdsfgfd");
+			//dynamicStart = firstStaticLayer.endIndex;
+			////dunamicEnd = topLayers[0].endIndex;
+			//var j:Int = 0;
+			//var len:Int = layerDefinitions.length;
+			//while (j < len) 
+			//{
+				//if (j < len - 1) dunamicEnd = layerDefinitions[j+1].startIndex;
+				//else dunamicEnd = endIndex;
+				//
+				//var layerDefinition = { /*index:0,*/ startIndex:dynamicStart, endIndex:dunamicEnd, isStatic:false };
+				//topLayers.insert((j * 2) + 1, layerDefinition);
+				//dynamicStart = layerDefinitions[j].endIndex;
+				//j++;
+			//}
+		//}
+		//else { // Starts with non-static layer
+			dynamicStart = startIndex;
 			
-			if (changedDisplays[i].staticCount.value == 0){
-				// Direct Renderer
-				changeAvailable.value = false;
+			var j:Int = 0;
+			var len:Int = layerDefinitions.length;
+			while (j < len) 
+			{
+				if (j < len - 1) {
+					dunamicEnd = layerDefinitions[j+1].startIndex;
+					topLayers.push(layerDefinitions[j]);
+					dynamicStart = layerDefinitions[j].endIndex;
+				}
+				else dunamicEnd = endIndex;
+				
+				topLayers.push({ startIndex:dynamicStart, endIndex:dunamicEnd, isStatic:false });
+				
+				j++;
 			}
-			else {
-				// Cache Renderer
-					// Render Into Cache
-					// Render From Cache
-				changeAvailable.value = true;
-			}
-			
-		}
-	}
-	
-	inline function findEndActiveIndex():Void
-	{
-		if (layerDefinitions.length == 0) return;
-		for (i in 0...layerDefinitions.length-1){
-			layerDefinitions[i].endIndex = layerDefinitions[i+1].startIndex - 1;
-		}
-	}
-	
-	inline function findLastEndActiveIndex():Void
-	{
+		//}
 		
-		var lastDef = layerDefinitions[layerDefinitions.length-1];
-		for (i in lastDef.startIndex...Kea.current.updateList.renderList.length){
-			if (Kea.current.updateList.renderList[i].staticCount.value <= 0){
-				lastDef.endIndex = i;
-			}
-		}
+		layerDefinitions = topLayers;
 	}
 	
-	inline function findLastIndex():Void
-	{
-		var lastDef = layerDefinitions[layerDefinitions.length-1];
-		if (lastDef.endIndex != Kea.current.updateList.renderList.length-1){
-			layerDefinitions.push({startIndex:lastDef.endIndex + 1, endIndex:Kea.current.updateList.renderList.length-1 ,isStatic:true});
-		}
-	}
 	
-	inline function findDisplays():Void
-	{
-		for (i in 0...layerDefinitions.length){
-			var layerDefinition:LayerDefinition = layerDefinitions[i];
-			layerDefinition.displays = [];
-			for (j in layerDefinition.startIndex...layerDefinition.endIndex+1){
-				layerDefinition.displays.push(Kea.current.updateList.renderList[j]);
-			}
-		}
-	}
+	/*function findTopX(output:Array<LayerDefinition>, sortArray:Array<LayerDefinition>, findTopNum:Int, findStart = 0)
+    {
+        if (sortArray.length > findStart) {
+            // count the number of element that larger 
+            // than the element at start position
+            var count:Int = 0;     
+            for (i in (findStart + 1)...sortArray.length) {
+				if (sortArray[findStart].length < sortArray[i].length) count++;
+            }
+            // if there are more than [findTopNum] number of element
+            // that is larger than this element
+            // it cannot be in the [findTopNum] largest number
+            if (count >= findTopNum) {
+                sortArray[findStart].top = false;
+            } else {
+                sortArray[findStart].top = true;
+				output.push(sortArray[findStart]);
+                findTopNum -= 1;
+            }
+            // continue to next element
+            findTopX(output, sortArray, findTopNum, findStart + 1);
+        }
+		
+		return output;
+    }*/
 	
-	function onChangeAvailableChange():Void
-	{
-		for (i in 0...layerDefinitions.length){
-			if (layerDefinitions[i].startIndex == renderIndex){
-				layerDefinitions[i].isStatic = changeAvailable.value;
-				return;
-			}
-		}
-		layerDefinitions.push({startIndex:renderIndex, isStatic:changeAvailable.value});
-	}
 }
 
 typedef LayerDefinition =
 {
+	//index:Int,
 	isStatic:Bool,
 	startIndex:Int,
 	?endIndex:Int,
-	?displays:Array<IDisplay>,
+	?length:Int,
+	?top:Bool
+	//displays:Array<IDisplay>,
 }

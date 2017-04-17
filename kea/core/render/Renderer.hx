@@ -13,11 +13,12 @@ class Renderer
 	private var directRenderers:Array<DirectRenderer> = [];
 	private var cacheRenderers:Array<CacheRenderer> = [];
 	private var renderers:Array<BaseRenderer> = [];
-	private var maxLayers:Int = 5;
+	private static var maxLayers:Int = 5;
 	
 	var layerDefinitions:Array<LayerDefinition>;
 	var directCount:Int = 0;
 	var cacheCount:Int = 0;
+	static var layerStateChangeAvailable:Bool = true;
 	
 	public function new() {
 		for (i in 0...maxLayers){
@@ -28,6 +29,7 @@ class Renderer
 	
 	public function render(graphics:Graphics):Void
 	{
+		//trace("render");
 		layerDefinitions = Kea.current.layerDef.calc();
 		
 		directCount = 0;
@@ -56,15 +58,19 @@ class Renderer
 			}
 		}
 		
+		//trace(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> renderers.length = " + renderers.length);
 		for (i in 0...renderers.length){
 			renderers[i].cache(graphics);
 		}
-		
+		//trace("---------------------");
 		graphics.begin(true, 0xFFFF0000);	
-		graphics.imageScaleQuality = ImageScaleQuality.Low;	
+		//graphics.imageScaleQuality = ImageScaleQuality.Low;	
 		for (i in 0...renderers.length){
+			
 			renderers[i].render(graphics);
 		}
 		graphics.end();
+		
+		
 	}
 }
