@@ -1,7 +1,8 @@
 package kea.display;
 
 import kea.display.Sprite;
-import kea.atlas.TextureAtlas;
+import kea.model.buffers.atlas.TextureAtlas;
+import kha.System;
 import kha.graphics2.Graphics;
 
 class Stage extends Sprite {
@@ -10,6 +11,10 @@ class Stage extends Sprite {
 	var count:Int = 0;
 
 	public var textureAtlas:TextureAtlas;
+	
+	@:isVar public var stageWidth(get, null):Int;
+	@:isVar public var stageHeight(get, null):Int;
+	
 	//public var layerRenderer:LayerRenderer;
 	
 	//public var renderList:Array<IDisplay> = [];
@@ -30,9 +35,19 @@ class Stage extends Sprite {
 
 		addChild(root);
 	}
-
+	
 	override function get_renderIndex():Null<Int> 
 	{
 		return 0;
+	}
+	
+	function get_stageHeight():Int 
+	{
+		return System.windowHeight();
+	}
+	
+	function get_stageWidth():Int 
+	{
+		return System.windowWidth();
 	}
 }

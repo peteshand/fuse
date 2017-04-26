@@ -1,39 +1,77 @@
-package kea.core.render.layers;
+package kea.logic.layerConstruct;
 
+import kea.Kea;
+import kea.logic.displaylist.DisplayList;
+import kea.logic.renderer.Renderer;
 import kea.display.IDisplay;
 import kea.notify.Notifier;
 
-class LayerDef
+class LayerConstruct
 {	
 	var layerOrders = new LayerOrders();
-	var currentLayers:Array<LayerDefinition>;
+	var layers:Array<LayerDefinition>;
 	
 	public function new() { }
 	
-	@:access(kea.core.render.Renderer)
-	public function calc():Array<LayerDefinition>
+	@:access(kea.logic.renderer.Renderer)
+	public function update():Void
 	{
 		checkStatic();
 		if (Renderer.layerStateChangeAvailable) {
+			
+			//var orderedList:Array<IDisplay> = orderLayers(Kea.current.updateList.renderList);
+			orderLayers(Kea.current.logic.displayList);
 			//trace("Renderer.layerStateChangeAvailable = " + Renderer.layerStateChangeAvailable);
-			currentLayers = layerOrders.findOrder(Kea.current.updateList.renderList);
-			//trace("layerDefinitions.length = " + currentLayers.length);
-			Renderer.layerStateChangeAvailable = false;	
+			layers = layerOrders.findOrder(Kea.current.logic.displayList.renderList);
+			
+			/*for (i in 0...layers.length) 
+			{
+				if (layers[i].isStatic) {
+					Kea.current.updateList.renderList[layers[i].startIndex].nextNonStaticIndex;
+				}
+			}*/
+			//trace("layerDefinitions.length = " + layers.length);
 		}
 		
-		return currentLayers;
+		Kea.current.logic.renderer.layers = layers;
+	}
+	
+	function orderLayers(displayList:DisplayList) 
+	{
+		displayList.layerIndices.sort(function(l1:Int, l2:Int):Int
+		{
+			if (l1 > l2) return 1;
+			if (l1 < l2) return -1;
+			else return 0;
+		});
+		
+		var maxLayer:Int = 0;
+		var orderedList:Array<IDisplay> = [];
+		for (j in 0...displayList.layerIndices.length) 
+		{
+			
+			for (i in 0...displayList.renderList.length) 
+			{
+				if (displayList.renderList[i].layerIndex == j) {
+					//trace([renderList[i], renderList[i].layerIndex]);
+					orderedList.push(displayList.renderList[i]);
+				}
+			}
+			
+		}
+		displayList.renderList = orderedList;
 	}
 	
 	function checkStatic() 
 	{
-		for (i in 0...Kea.current.updateList.renderList.length) 
+		for (i in 0...Kea.current.logic.displayList.renderList.length) 
 		{
-			Kea.current.updateList.renderList[i].checkStatic();
+			Kea.current.logic.displayList.renderList[i].checkStatic();
 		}
 	}
 }
 
-@:access(kea.core.render.Renderer)
+@:access(kea.logic.renderer.Renderer)
 class LayerOrders
 {
 	var renderIndex:Int = 0;
@@ -62,10 +100,10 @@ class LayerOrders
 		}
 	}
 	
-	function CloseLayer() 
+	function CloseLayer(offset:Int = 0) 
 	{
 		if (currentLayerDefinition.isStatic) { // only push static 
-			currentLayerDefinition.endIndex = renderIndex;
+			currentLayerDefinition.endIndex = renderIndex + offset;
 			currentLayerDefinition.length = currentLayerDefinition.endIndex - currentLayerDefinition.startIndex;
 			addTop();
 		}
@@ -116,6 +154,7 @@ class LayerOrders
 				//trace("renderList[" + i + "].isStatic2.value = " + renderList[i].isStatic2.value);
 				changeAvailable.value = renderList[i].isStatic2.value;
 				renderList[i].isStatic = true;
+				renderList[i].layerDefinition = currentLayerDefinition;
 				/*if (renderList[i].staticCount.value <= 0) {
 					changeAvailable.value = false;
 				}
@@ -127,7 +166,7 @@ class LayerOrders
 		
 		// close last layer
 		if (currentLayerDefinition != null) {
-			CloseLayer();
+			CloseLayer(1);
 		}
 		
 		optimize();
@@ -179,18 +218,23 @@ class LayerOrders
 				dynamicStart = startIndex;
 			}
 			
-			while (j < len) 
-			{
-				if (j < len - 1) {
-					dunamicEnd = layerDefinitions[j+1].startIndex;
-					topLayers.push(layerDefinitions[j]);
-					dynamicStart = layerDefinitions[j].endIndex;
+			if (topLayers.length == 1 && len == 1 && topLayers[0].endIndex == endIndex) {
+				// All Static
+			}
+			else {
+				while (j < len) 
+				{
+					if (j < len - 1) {
+						dunamicEnd = layerDefinitions[j+1].startIndex;
+						topLayers.push(layerDefinitions[j]);
+						dynamicStart = layerDefinitions[j].endIndex;
+					}
+					else dunamicEnd = endIndex;
+					
+					topLayers.push({ startIndex:dynamicStart, endIndex:dunamicEnd, isStatic:false });
+					
+					j++;
 				}
-				else dunamicEnd = endIndex;
-				
-				topLayers.push({ startIndex:dynamicStart, endIndex:dunamicEnd, isStatic:false });
-				
-				j++;
 			}
 			
 		//}

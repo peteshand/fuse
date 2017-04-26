@@ -1,7 +1,8 @@
-package kea.core.render.layers;
+package kea.logic.layerConstruct.layers;
 
+import kea.logic.layerConstruct.LayerConstruct;
 import kha.graphics2.Graphics;
-import kea.core.render.layers.LayerDef.LayerDefinition;
+import kea.logic.layerConstruct.LayerConstruct.LayerDefinition;
 
 class BaseRenderer
 {	

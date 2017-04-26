@@ -5,7 +5,7 @@ import kha.Color;
 import kha.graphics2.Graphics;
 import kea.display.Sprite;
 import kea.display.IDisplay;
-import kea.core.Kea;
+import kea.Kea;
 import kha.Font;
 import kha.Assets;
 
@@ -40,8 +40,8 @@ class Stats extends Sprite implements IDisplay
 			graphics.font = font;
 			graphics.color = 0xFF000000;
 			graphics.fontSize = 16;
-			graphics.drawString("fps: " + Kea.current.performance.fps.value, 4, 4);
-			var percentage:String = Std.string(Math.floor(Kea.current.performance.frameBudget.value * 100));
+			graphics.drawString("fps: " + Kea.current.model.performance.fps.value, 4, 4);
+			var percentage:String = Std.string(Math.floor(Kea.current.model.performance.frameBudget.value * 100));
 			if (percentage.length == 1) percentage = "0" + percentage;
 			graphics.drawString("frame budget: " + percentage + "%", 4, 24);
 			graphics.color = 0xFFFFFFFF;

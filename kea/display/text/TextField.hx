@@ -13,7 +13,7 @@ class TextField extends DisplayObject implements IDisplay
 	
 	public function new()
 	{
-		this.renderable = true;
+		//this.renderable = true;
 		//Assets.loadEverything(OnLoadComplete);
 		//updateBase();
 		
@@ -52,6 +52,8 @@ class TextField extends DisplayObject implements IDisplay
 	
 	function updateBase() 
 	{
+		return;
+		
 		if (text == null) return;
 		/*if (font == null) {
 			return;
@@ -73,13 +75,19 @@ class TextField extends DisplayObject implements IDisplay
 		drawHeight = base.height;
 	}
 	
-	override function renderImage(graphics:Graphics): Void
+	/*override function renderImage(graphics:Graphics): Void
 	{
 		if (base != null) graphics.drawImage(base, -pivotX, -pivotY);
-	}
+	}*/
 	
 	override public function render(graphics:Graphics): Void
 	{
+		graphics.font = Assets.fonts.arial;
+		graphics.fontSize = format.fontSize;
+		graphics.color = format.color;
+		graphics.drawString(text, 0, 0);
+		return;
+		
 		if (base != null) {
 			graphics.drawImage(base, -pivotX, -pivotY);
 		}

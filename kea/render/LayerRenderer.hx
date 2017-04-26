@@ -7,7 +7,7 @@ import kha.graphics2.Graphics;
 import kea.render.layers.LayerBuffer;
 import kea.render.layers.ILayerBuffer;
 import kea.render.layers.DynamicLayerBuffer;
-import kea.core.Kea;
+import kea.Kea;
 
 class LayerRenderer
 {

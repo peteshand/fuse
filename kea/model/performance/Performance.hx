@@ -1,4 +1,4 @@
-package kea.model;
+package kea.model.performance;
 
 import kea.notify.Notifier;
 

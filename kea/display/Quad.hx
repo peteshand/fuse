@@ -10,9 +10,10 @@ class Quad extends DisplayObject implements IDisplay
 	
 	public function new(width:Int, height:Int, color:Color)
 	{
-		this.renderable = true;
+		//this.renderable = true;
 		if (!baseImages.exists(color)){
 			var baseImage:Image = Image.createRenderTarget(1, 1);
+			baseImage.name = "KeaQuad#" + StringTools.hex(color);
 			baseImage.g2.begin(true, color);		
 			baseImage.g2.end();
 			baseImages.set(color, baseImage);
@@ -27,7 +28,7 @@ class Quad extends DisplayObject implements IDisplay
 	
 	override function setScale() 
 	{
-		_matrix._00 = scaleX * width;
-		_matrix._11 = scaleY * height;
+		localTransform._00 = scaleX * width;
+		localTransform._11 = scaleY * height;
 	}
 }

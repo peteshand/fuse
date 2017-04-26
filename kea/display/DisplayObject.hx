@@ -1,36 +1,44 @@
 package kea.display;
 
-import kea.core.render.Renderer;
+import kea.display._private.PrivateDisplayBase;
+import kea.logic.layerConstruct.LayerConstruct;
+import kea.util.transform.TransformHelper;
+
+import kea.logic.renderer.Renderer;
+import kea.logic.layerConstruct.LayerConstruct.LayerDefinition;
+import kea.display.BlendMode.BlendModeUtil;
 import kea.display.DisplayObject;
+import kea.util.MatrixUtils;
 import kha.Color;
 import kha.FastFloat;
 import kea.display.Stage;
 import kea.notify.Notifier;
-import kea.atlas.AtlasObject;
+import kea.model.buffers.atlas.AtlasObject;
 import kha.graphics2.Graphics;
+import kha.graphics4.PipelineState;
 import kha.math.FastMatrix3;
 import msignal.Signal.Signal0;
-//import kea.util.RenderUtils;
 
-import kea.core.Kea;
+import kea.Kea;
 
-
-class DisplayObject implements IDisplay
+@:access(kea)
+class DisplayObject extends PrivateDisplayBase implements IDisplay
 {
-	static var objectIdCount:Int = 0;
-	public var objectId:Int;
+	public var name:String;
 	public var stage:Stage;
 	public var parent:DisplayObject;
-	
-	public var renderable:Bool;
-	public var onAdd = new Signal0();
-	//private static var atlases = new Map<kha.Image,AtlasObject>();
-	//@:isVar public var atlas(get, null):AtlasObject;
-	public var atlas(default, set):AtlasObject;
 	public var base:kha.Image;
-	//@:isVar public var base(get, null):kha.Image;
+	public var onAdd = new Signal0();
 	public var previous:IDisplay;
+	public var totalNumChildren(get, null):Int;
+	public var renderIndex(get, null):Null<Int>;
+	public var children:Array<IDisplay>;
+	public var isStatic:Null<Bool> = false;
+	public var isStatic2 = new Notifier<Null<Bool>>(false);
+	public var layerDefinition:LayerDefinition;
+	public var calcTransform:Graphics -> Void;
 	
+	@:isVar public var atlas(default, set):AtlasObject;
 	@:isVar public var x(default, set):Float = 0;
 	@:isVar public var y(default, set):Float = 0;
 	@:isVar public var width(default, set):Float = 0;
@@ -42,66 +50,28 @@ class DisplayObject implements IDisplay
 	@:isVar public var scaleY(default, set):FastFloat = 1;
 	@:isVar public var color(default, set):Color = 0xFFFFFFFF;
 	@:isVar public var alpha(default, set):Float = 1;
+	@:isVar public var blendMode(default, set):BlendMode;
+	@:isVar public var layerIndex(default, set):Null<Int> = null;
 	
 	var _totalNumChildren:Int;
-	public var totalNumChildren(get, null):Int;
-	
-	
-	public var _renderIndex:Null<Int> = 0x3FFFFFFF;
-	public var renderIndex(get, null):Null<Int>;
-
-	var renderLine:Graphics -> Void;
-	public var name:String;
-
-	public var children:Array<IDisplay>;
-	//public var changeAvailable:Bool;
-	//public var transformAvailable = new Notifier<Bool>(null);
-	//@:isVar public var changeAvailable(get, null):Bool;
-	//public var staticCount = new Notifier<Int>(1);
-	public var isStatic:Null<Bool> = false;
-	public var isStatic2 = new Notifier<Null<Bool>>(false);
-	
-	//public var alwaysRender:Bool = false;
-
-	var scaleMatrix:FastMatrix3;
-	var rotationMatrix:FastMatrix3;
-	var translateMatrix:FastMatrix3;
-	var matrix:FastMatrix3;
-	
+	var _renderIndex:Null<Int> = 0x3FFFFFFF;
+	var renderPath:Graphics -> Void;
 	var applyPosition:Bool = false;
 	var popAlpha:Bool = false;
 	var applyRotation:Bool = false;
-	
 	var drawWidth:Float;
 	var drawHeight:Float;
+	var shaderPipeline:PipelineState;
 	
-	var _matrix:FastMatrix3;
-	var positionMatrix:FastMatrix3;
-	var rotMatrix:FastMatrix3;
-	var rotMatrix1:FastMatrix3;
-	var rotMatrix2:FastMatrix3;
-	var rotMatrix3:FastMatrix3;
-	
-	static var clearMatrix:FastMatrix3;
-	static function __init__():Void
-	{
-		clearMatrix = FastMatrix3.identity();
-	}
-	
-	@:access(kea.core.render.Renderer)
 	public function new()
 	{
-		renderLine = renderImage;
+		super();
 		
-		objectId = objectIdCount++;
-		Kea.current.textureAtlas.setTexture(objectId, this);
+		layerIndex = 0;
+		renderPath = renderImage;
 		
-		_matrix = FastMatrix3.empty();
-		positionMatrix = FastMatrix3.identity();
-		rotMatrix = FastMatrix3.identity();
-		rotMatrix1 = FastMatrix3.identity();
-		rotMatrix2 = FastMatrix3.identity();
-		rotMatrix3 = FastMatrix3.identity();
+		// TODO, move this to render loop
+		Kea.current.logic.atlasBuffer.setTexture(objectId, this);
 		
 		if (base != null){
 			drawWidth = base.width;
@@ -109,154 +79,113 @@ class DisplayObject implements IDisplay
 		}
 		
 		isStatic2.add(OnStaticStateChange);
-		
-		//staticCount.add(onStaticCountChange);
+		OnStaticStateChange();
 		
 		Renderer.layerStateChangeAvailable = true;
 	}
 	
-	@:access(kea.core.render.Renderer)
-	function OnStaticStateChange() 
+	public function update():Void
 	{
-		//trace("isStatic2 = " + isStatic2.value);
-		//if (isStatic2.value == false) {
-			Renderer.layerStateChangeAvailable = true;
-		//}
+		
 	}
 	
-	/*function onStaticCountChange():Void
+	public inline function checkStatic():Void
 	{
-		if (staticCount.value == 0){
-			//RenderUtils.addToChangeList(this);
-			Kea.current.layerDef.add(this);
+		isStatic2.value = isStatic;
+		isStatic = true;
+	}
+	
+	function OnStaticStateChange() 
+	{
+		if (isStatic2.value)	calcTransform = calcTransformCache;
+		else 					calcTransform = calcTransformDirect;
+		Renderer.layerStateChangeAvailable = true;
+	}
+	
+	public function calcTransformCache(graphics:Graphics) 
+	{
+		//trace("Cache" + Kea.calcTransformIndex);
+		Kea.calcTransformIndex++;
+		if (children != null) {
+			var i:Int = 0;
+			/*trace("Kea.calcTransformIndex   = " + Kea.calcTransformIndex);
+			trace("children.length          = " + children.length);
+			trace("layerDefinition.endIndex = " + layerDefinition.endIndex);
+			trace("layerDefinition.length = " + layerDefinition.length);*/
+			
+			// TODO, fix this.. as it actually probably isn't going to work when dealing with complex nested objects
+			if (Kea.calcTransformIndex + children.length > layerDefinition.endIndex) {
+				i = layerDefinition.endIndex - Kea.calcTransformIndex;//layerDefinition.length;
+				Kea.calcTransformIndex = i;
+			}
+			else if (Kea.calcTransformIndex + children.length >= layerDefinition.endIndex) {
+				i = children.length - 1;// layerDefinition.endIndex - 2;
+				Kea.calcTransformIndex = i;
+			}
+			
+			while (i < children.length) 
+			{
+				//trace("i = " +i);
+				children[i].calcTransform(graphics);
+				i++;
+			}
 		}
-	}*/
-
+	}
+	
+	public function calcTransformDirect(graphics:Graphics) 
+	{
+		prerender(graphics);
+		Kea.calcTransformIndex++;
+		//trace("Direct" + Kea.calcTransformIndex);
+		if (children != null) {
+			for (i in 0...children.length) 
+			{
+				
+				children[i].calcTransform(graphics);
+			}
+		}
+		postrender(graphics);
+	}
+	
 	public function prerender(graphics:Graphics):Void
 	{
-		//fastMatrix3._00 = scaleX;
-		//fastMatrix3._11 = scaleY;
-		
-		//Kea.current.textureAtlas.setTexture(objectId, this);
-		
 		if (alpha != graphics.opacity) {
 			graphics.pushOpacity(graphics.opacity * alpha);
 			popAlpha = true;
 		}
 		graphics.color = color.value;
 		
-		clear();
+		TransformHelper.clear(localTransform);
 		setScale();
-		setPosition();
-		setRotation();
+		TransformHelper.setPosition(applyPosition, positionMatrix, localTransform, x, y);
+		TransformHelper.setRotation(applyRotation, applyPosition, localTransform, rotMatrix, rotMatrix1, rotMatrix2, rotMatrix3, rotation);
 		pushTransform(graphics);
 	}
 	
-	inline function clear() 
-	{
-		_matrix.setFrom(clearMatrix);
-	}
-
 	function setScale() 
 	{
-		_matrix._00 = scaleX;
-		_matrix._11 = scaleY;
-	}
-	
-	function setPosition() 
-	{
-		if (applyPosition) translation(positionMatrix, x, y);
-		_matrix = positionMatrix.multmat(_matrix);
-	}
-	
-	inline function setRotation() 
-	{
-		if (applyRotation) {
-			/*rotMatrix = translation(rotMatrix1, _matrix._20, _matrix._21)
-					.multmat(rotateMatrix(rotMatrix2, rotation / 180 * Math.PI))
-					.multmat(translation(rotMatrix1, -_matrix._20, -_matrix._21));*/
-			
-			if (applyPosition){
-				rotMatrix1 = translation(rotMatrix1, _matrix._20, _matrix._21);
-				rotMatrix2 = rotateMatrix(rotMatrix2, rotation / 180 * Math.PI);
-				rotMatrix3 = translation(rotMatrix3, -_matrix._20, -_matrix._21);
-				multMatrix(rotMatrix1, rotMatrix2, rotMatrix);
-				multMatrix(rotMatrix, rotMatrix3, rotMatrix);
-			}
-			else {
-				rotMatrix2 = rotateMatrix(rotMatrix2, rotation / 180 * Math.PI);
-				//rotMatrix = rotMatrix1.multmat(rotMatrix2).multmat(rotMatrix3);
-				/*trace("rotMatrix1 = " + rotMatrix1);
-				trace("rotMatrix2 = " + rotMatrix2);
-				trace("rotMatrix3 = " + rotMatrix1);*/
-				multMatrix(rotMatrix1, rotMatrix2, rotMatrix);
-				multMatrix(rotMatrix, rotMatrix3, rotMatrix);
-			}
-		}
-		_matrix = rotMatrix.multmat(_matrix);
+		TransformHelper.setScale(localTransform, scaleX, scaleY, base, width, height);
 	}
 	
 	inline function pushTransform(graphics:Graphics) 
 	{
-		graphics.pushTransformation(_matrix);
+		graphics.pushTransformation(graphics.transformation.multmat(localTransform));
+		globalTransform.setFrom(graphics.transformation);
 	}
 	
 	
-	public inline function multMatrix(m1:FastMatrix3, m2:FastMatrix3, output:FastMatrix3):Void
-	{	
-		output._00 = m1._00 * m2._00 + m1._10 * m2._01 + m1._20 * m2._02;
-		output._10 = m1._00 * m2._10 + m1._10 * m2._11 + m1._20 * m2._12;
-		output._20 = m1._00 * m2._20 + m1._10 * m2._21 + m1._20 * m2._22;
-		
-		output._01 = m1._01 * m2._00 + m1._11 * m2._01 + m1._21 * m2._02;
-		output._11 = m1._01 * m2._10 + m1._11 * m2._11 + m1._21 * m2._12;
-		output._21 = m1._01 * m2._20 + m1._11 * m2._21 + m1._21 * m2._22;
-		
-		/*output._02 = m1._02 * m2._00 + m1._12 * m2._01 + m1._22 * m2._02;
-		output._12 = m1._02 * m2._10 + m1._12 * m2._11 + m1._22 * m2._12;
-		output._22 = m1._02 * m2._20 + m1._12 * m2._21 + m1._22 * m2._22;*/
-	}
 	
-	inline function rotateMatrix(m:FastMatrix3, rotation: FastFloat):FastMatrix3
-	{
-		return setMatrix(m, 
-			Math.cos(rotation), -Math.sin(rotation), 0,
-			Math.sin(rotation), Math.cos(rotation), 0,
-			0, 0, 1
-		);
-	}
-
-	inline function translation(m:FastMatrix3, x: FastFloat, y: FastFloat):FastMatrix3
-	{
-		return setMatrix(m, 
-			1, 0, x,
-			0, 1, y,
-			0, 0, 1
-		);
-	}
-
-	inline function setMatrix(m:FastMatrix3, _00:FastFloat, _10:FastFloat, _20:FastFloat, _01:FastFloat, _11:FastFloat, _21:FastFloat, _02:FastFloat, _12:FastFloat, _22:FastFloat):FastMatrix3
-	{
-		m._00 = _00;
-		m._10 = _10;
-		m._20 = _20;
-		
-		m._01 = _01;
-		m._11 = _11;
-		m._21 = _21;
-		
-		m._02 = _02;
-		m._12 = _12;
-		m._22 = _22;
-
-		return m;
-	}
+	
+	
 	
 	///////////////////////////////////////////////////////////////
 	
 	public function render(graphics:Graphics): Void
 	{
-		renderLine(graphics);
+		graphics.pushTransformation(globalTransform);
+		if (graphics.pipeline != shaderPipeline) graphics.pipeline = shaderPipeline;
+		renderPath(graphics);
+		graphics.popTransformation();
 	}
 	
 	function renderImage(graphics:Graphics): Void
@@ -273,44 +202,32 @@ class DisplayObject implements IDisplay
 		);
 	}
 	
-	function set_atlas(value:AtlasObject):AtlasObject 
-	{
-		atlas = value;
-		if (atlas == null) renderLine = renderImage;
-		else renderLine = renderAtlas;
-		return atlas;
-	}
-	
 	///////////////////////////////////////////////////////////////
-	
-	public function checkStatic():Void
-	{
-		isStatic2.value = isStatic;
-		isStatic = true;
-	}
 	
 	public function postrender(graphics:Graphics):Void
 	{
 		graphics.popTransformation();
 		if (popAlpha) graphics.popOpacity();
 		
-		//staticCount.value++;
-		/*if (isStatic.value == false) isStatic.value = null;
-		else if (isStatic == null) isStatic.value = true;*/
-		
-		
-		//isStatic = true;
-		
 		applyPosition = false;
 		popAlpha = false;
 		applyRotation = false;
+	}
+	
+	///////////////////////////////////////////////////////////////
+	
+	inline function set_atlas(value:AtlasObject):AtlasObject 
+	{
+		atlas = value;
+		if (atlas == null) renderPath = renderImage;
+		else renderPath = renderAtlas;
+		return atlas;
 	}
 	
 	inline function set_x(value:Float):Float { 
 		if (x != value){
 			x = value;
 			applyPosition = true;
-			//staticCount.value = 0;
 			isStatic = false;
 		}
 		return value;
@@ -319,7 +236,6 @@ class DisplayObject implements IDisplay
 		if (y != value){
 			y = value;
 			applyPosition = true;
-			//staticCount.value = 0;
 			isStatic = false;
 		}
 		return value;
@@ -329,7 +245,6 @@ class DisplayObject implements IDisplay
 		if (width != value){
 			width = value;
 			applyPosition = true;
-			//staticCount.value = 0;
 			isStatic = false;
 		}
 		return value;
@@ -339,7 +254,6 @@ class DisplayObject implements IDisplay
 		if (height != value){
 			height = value;
 			applyPosition = true;
-			//staticCount.value = 0;
 			isStatic = false;
 		}
 		return value;
@@ -349,7 +263,6 @@ class DisplayObject implements IDisplay
 		if (pivotX != value){
 			pivotX = value;
 			applyPosition = true;
-			//staticCount.value = 0;
 			isStatic = false;
 		}
 		return value;
@@ -359,7 +272,6 @@ class DisplayObject implements IDisplay
 		if (pivotY != value){
 			pivotY = value;
 			applyPosition = true;
-			//staticCount.value = 0;
 			isStatic = false;
 		}
 		return value;
@@ -369,7 +281,6 @@ class DisplayObject implements IDisplay
 		if (rotation != value){
 			rotation = value;
 			applyRotation = true;
-			//staticCount.value = 0;
 			isStatic = false;
 		}
 		return value;
@@ -379,7 +290,6 @@ class DisplayObject implements IDisplay
 		if (scaleX != value){
 			scaleX = value;
 			applyPosition = true;
-			//staticCount.value = 0;
 			isStatic = false;
 		}
 		return value;
@@ -389,7 +299,6 @@ class DisplayObject implements IDisplay
 		if (scaleY != value){
 			scaleY = value;
 			applyPosition = true;
-			//staticCount.value = 0;
 			isStatic = false;
 		}
 		return value;
@@ -398,7 +307,6 @@ class DisplayObject implements IDisplay
 	inline function set_color(value:Color):Color { 
 		if (color != value){
 			color = value;
-			//staticCount.value = 0;
 			isStatic = false;
 		}
 		return value;
@@ -407,11 +315,31 @@ class DisplayObject implements IDisplay
 	inline function set_alpha(value:Float):Float { 
 		if (alpha != value){
 			alpha = value;
-			//staticCount.value = 0;
 			isStatic = false;
 		}
 		return value;
 	}
+	
+	inline function set_blendMode(value:BlendMode):BlendMode { 
+		if (blendMode != value){
+			blendMode = value;
+			shaderPipeline = BlendModeUtil.applyBlend(blendMode);
+			isStatic = false;
+		}
+		return value;
+	}
+	
+	inline function set_layerIndex(value:Null<Int>):Null<Int> { 
+		if (layerIndex != value){
+			if (layerIndex != null) Kea.current.logic.displayList.removeLayerIndex(layerIndex);
+			layerIndex = value;
+			Kea.current.logic.displayList.addLayerIndex(layerIndex);
+			isStatic = false;
+		}
+		return value;
+	}
+	
+	///////////////////////////////////////////////////////////////
 	
 	function get_totalNumChildren():Int
 	{ 
@@ -420,10 +348,9 @@ class DisplayObject implements IDisplay
 	
 	function get_renderIndex():Null<Int> 
 	{
-		if (_renderIndex > Kea.current.updateList.lowestChange){
+		if (_renderIndex > Kea.current.logic.displayList.lowestChange){
 			UpdateRenderIndex();
 		}
-		//trace("_renderIndex = " + _renderIndex);
 		return _renderIndex;
 	}
 
@@ -431,10 +358,10 @@ class DisplayObject implements IDisplay
 	{
 		//Kea.current.updateList.lowestChange = _renderIndex = Kea.current.updateList.renderList.indexOf(this);
 		if (previous == null){
-			Kea.current.updateList.lowestChange = _renderIndex = 0;
+			Kea.current.logic.displayList.lowestChange = _renderIndex = 0;
 		}
 		else {
-			Kea.current.updateList.lowestChange = _renderIndex = previous.renderIndex + 1;
+			Kea.current.logic.displayList.lowestChange = _renderIndex = previous.renderIndex + 1;
 		}
 		//trace("new _renderIndex = " + _renderIndex + " name = " + this.name);
 	}

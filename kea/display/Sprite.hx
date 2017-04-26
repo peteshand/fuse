@@ -1,7 +1,7 @@
 package kea.display;
 
 import kha.graphics2.Graphics;
-import kea.core.Kea;
+import kea.Kea;
 
 class Sprite extends DisplayObject implements IDisplay
 {
@@ -19,13 +19,11 @@ class Sprite extends DisplayObject implements IDisplay
 		
 		var index:Int = parentIndex + totalNumChildren;
 		//child.previous = stage.layerRenderer.renderList[index];
-
-
-
+		
 		//stage.layerRenderer.add(index + 1, child);
-		child.previous = Kea.current.updateList.renderList[index];
-		Kea.current.updateList.add(index + 1, child);
-
+		child.previous = Kea.current.logic.displayList.renderList[index];
+		Kea.current.logic.displayList.add(index + 1, child);
+		
 		child.stage = stage;
 		child.parent = this;
 		children.push(child);
@@ -33,7 +31,26 @@ class Sprite extends DisplayObject implements IDisplay
 		
 		child.onAdd.dispatch();
 	}
-
+	
+	function removeChild(child:IDisplay):Void
+	{
+		// unlink from child
+		child.next.previous = child.previous;
+		
+		//Kea.current.logic.displayList.remove(index + 1, child);
+		
+		child.stage = null;
+		child.parent = null;
+		var i:Int = children.length - 1;
+		while (i >= 0) 
+		{
+			if (children[i] == child) {
+				children.splice(i, 1);
+			}
+			i--;
+		}
+	}
+	
 	override function get_totalNumChildren():Int
 	{ 
 		_totalNumChildren = 0;
@@ -44,14 +61,14 @@ class Sprite extends DisplayObject implements IDisplay
 		return _totalNumChildren;
 	}
 
-	/*override public function render(graphics:Graphics):Void
-	{	
-		prerender(graphics);
-		for (i in 0...children.length){
-			children[i].render(graphics);
-		}
-		postrender(graphics);
-	}*/
+	//override public function render(graphics:Graphics):Void
+	//{	
+		///*prerender(graphics);
+		//for (i in 0...children.length){
+			//children[i].render(graphics);
+		//}
+		//postrender(graphics);*/
+	//}
 
 	/*override private function get_changeAvailable():Bool
 	{

@@ -1,6 +1,6 @@
-package kea.atlas;
+package kea.model.buffers.atlas;
 
-import kea.core.Kea;
+import kea.Kea;
 import kea.display.DisplayObject;
 import kea.display.IDisplay;
 import kha.Image;
@@ -8,12 +8,9 @@ import kha.graphics2.Graphics;
 
 class TextureAtlas
 {
-	public static inline var screenWidth = 1024;
-	public static inline var screenHeight = 1024;
-	
 	private var positionX:Int = 0;
 	private var positionY:Int = 0;
-	private var texture: Image;
+	public var texture: Image;
 	private var images = new Map<Int, IDisplay>();
 	public var changeAvailable:Bool = false;
 	
@@ -22,10 +19,10 @@ class TextureAtlas
 	private var atlasObjects = new Map<kha.Image, AtlasObject>();
 	
 	public function new() {
-		texture = Image.createRenderTarget(screenWidth, screenHeight);
+		texture = Image.createRenderTarget(Buffer.bufferWidth, Buffer.bufferHeight);
 		texture.g2.begin(true, 0x00000000);
 		texture.g2.end();
-
+		
 		positionX = 0;
 		positionY = 0;
 	}
@@ -66,13 +63,12 @@ class TextureAtlas
 		}
 	}
 	
-	//public function clear(){
-	//	texture.g2.begin(true, 0x00000000);
-	//}
-
 	function draw():Void
 	{
-		texture.g2.begin(false);
+		positionX = 0;
+		positionY = 0;
+		
+		texture.g2.begin(true, 0x00000000);
 		for (key in atlasObjects.keys()){
 			var atlas:AtlasObject = atlasObjects.get(key);
 			var base:kha.Image = atlas.base;

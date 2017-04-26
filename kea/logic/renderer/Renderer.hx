@@ -1,21 +1,23 @@
-package kea.core.render;
+package kea.logic.renderer;
 
+import kea.logic.layerConstruct.LayerConstruct;
 import kea.display.IDisplay;
+import kea.logic.layerConstruct.layers.IRenderer;
+import kea.logic.buffers.atlas.AtlasBuffer;
 import kha.graphics2.Graphics;
-import kea.core.render.layers.LayerDef.LayerDefinition;
-import kea.core.render.layers.DirectRenderer;
-import kea.core.render.layers.CacheRenderer;
-import kea.core.render.layers.BaseRenderer;
+import kea.logic.layerConstruct.LayerConstruct.LayerDefinition;
+import kea.logic.layerConstruct.layers.DirectRenderer;
+import kea.logic.layerConstruct.layers.CacheRenderer;
 import kha.graphics2.ImageScaleQuality;
 
 class Renderer
 {	
 	private var directRenderers:Array<DirectRenderer> = [];
 	private var cacheRenderers:Array<CacheRenderer> = [];
-	private var renderers:Array<BaseRenderer> = [];
+	private var renderers:Array<IRenderer> = [];
 	private static var maxLayers:Int = 5;
 	
-	var layerDefinitions:Array<LayerDefinition>;
+	public var layers:Array<LayerDefinition>;
 	var directCount:Int = 0;
 	var cacheCount:Int = 0;
 	static var layerStateChangeAvailable:Bool = true;
@@ -27,32 +29,32 @@ class Renderer
 		}
 	}
 	
+	@:access(kea.logic.buffers.atlas.AtlasBuffer)
 	public function render(graphics:Graphics):Void
 	{
 		//trace("render");
-		layerDefinitions = Kea.current.layerDef.calc();
 		
 		directCount = 0;
 		cacheCount = 0;
 		
 		renderers = [];
 		
-		for (i in 0...layerDefinitions.length){
+		for (i in 0...layers.length){
 			/*trace(
-				"startIndex  = " + layerDefinitions[i].startIndex  
-				+ " endIndex = " + layerDefinitions[i].endIndex
-				+ " displays.length  = " + (layerDefinitions[i].displays.length)  
-				+ " isStatic = " + layerDefinitions[i].isStatic);*/
+				"startIndex  = " + layers[i].startIndex  
+				+ " endIndex = " + layers[i].endIndex
+				+ " displays.length  = " + (layers[i].displays.length)  
+				+ " isStatic = " + layers[i].isStatic);*/
 			
-			if (layerDefinitions[i].isStatic == true){
+			if (layers[i].isStatic == true){
 				var cacheRenderer:CacheRenderer = cacheRenderers[cacheCount];
-				cacheRenderer.layerDefinition = layerDefinitions[i];
+				cacheRenderer.layerDefinition = layers[i];
 				renderers.push(cacheRenderer);
 				cacheCount++;
 			}
 			else {
 				var directRenderer:DirectRenderer = directRenderers[directCount];
-				directRenderer.layerDefinition = layerDefinitions[i];
+				directRenderer.layerDefinition = layers[i];
 				renderers.push(directRenderer);
 				directCount++;
 			}
@@ -63,14 +65,16 @@ class Renderer
 			renderers[i].cache(graphics);
 		}
 		//trace("---------------------");
-		graphics.begin(true, 0xFFFF0000);	
+		graphics.begin(true, 0x00444499);	
 		//graphics.imageScaleQuality = ImageScaleQuality.Low;	
 		for (i in 0...renderers.length){
 			
 			renderers[i].render(graphics);
 		}
+		//graphics.drawImage(Kea.current.atlasBuffer.textureAtlas.texture, 0, 0);
+		
 		graphics.end();
 		
-		
+		Renderer.layerStateChangeAvailable = false;	
 	}
 }

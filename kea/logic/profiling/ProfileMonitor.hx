@@ -1,7 +1,7 @@
-package kea.core.profiling;
+package kea.logic.profiling;
 
 import haxe.Timer;
-import kea.core.Kea;
+import kea.Kea;
 import kea.notify.Notifier;
 
 class ProfileMonitor
@@ -20,7 +20,7 @@ class ProfileMonitor
 
 	function OnTick():Void
 	{
-		Kea.current.performance.fps.value = frameCount;
+		Kea.current.model.performance.fps.value = frameCount;
 		//trace("fps.value = " + fps.value);
 		frameCount = 0;
 		var frameBudget:Float = 0;
@@ -28,7 +28,7 @@ class ProfileMonitor
 			frameBudget += frameBudgets[i];
 		}
 		frameBudget /= frameBudgets.length;
-		Kea.current.performance.frameBudget.value = frameBudget;
+		Kea.current.model.performance.frameBudget.value = frameBudget;
 		frameBudgets.splice(0, frameBudgets.length);
 		//trace("frameBudget = " + frameBudget);
 		
@@ -46,6 +46,6 @@ class ProfileMonitor
 
 		renderTime = postTime - preTime;
 		//trace("renderTime = " + renderTime);
-		frameBudgets.push(renderTime / (1000 / Kea.current.performance.fps.value));
+		frameBudgets.push(renderTime / (1000 / Kea.current.model.performance.fps.value));
 	}
 }

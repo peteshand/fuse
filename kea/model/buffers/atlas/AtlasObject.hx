@@ -1,4 +1,4 @@
-package kea.atlas;
+package kea.model.buffers.atlas;
 
 import kha.Image;
 
