@@ -4,12 +4,16 @@ import kea.display.Stage;
 import kea.logic.Logic;
 import kea.model.Model;
 import kea.model.config.KeaConfig;
+import kea.worker.WorkerController;
+import kea.worker.WorkerEntryPoint;
 import kha.Canvas;
 import kha.Scheduler;
 import kha.System;
 import kha.System.SystemOptions;
 import kha.graphics2.Graphics;
 import msignal.Signal.Signal0;
+
+import flash.system.Worker;
 
 class Kea
 {
@@ -29,6 +33,9 @@ class Kea
 	static var calcTransformIndex:Int = 0;
 	static var count:Int = 0;
 	
+	var workerController:WorkerController;
+	var workerEntryPoint:WorkerEntryPoint;
+	
 	static function __init__():Void
 	{
 		current = new Kea();
@@ -36,6 +43,30 @@ class Kea
 
 	public function new() { 
 		model = new Model();
+		
+		if (Worker.current.isPrimordial) {
+			setupStage3D();
+			setupWorkerController();
+		}
+		else {
+			setupWorkerEntryPoint();
+		}
+	}
+	
+	function setupStage3D() 
+	{
+		//stage.stage3Ds[0].addEventListener( Event.CONTEXT3D_CREATE, initMolehill );
+		//stage.stage3Ds[0].requestContext3D();
+	}
+	
+	function setupWorkerController() 
+	{
+		workerController = new WorkerController();
+	}
+	
+	function setupWorkerEntryPoint() 
+	{
+		workerEntryPoint = new WorkerEntryPoint();
 	}
 	
 	public static function init(rootClass:Class<Sprite>, keaConfig:KeaConfig): Void {
