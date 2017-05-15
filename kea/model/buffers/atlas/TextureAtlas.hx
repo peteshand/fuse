@@ -3,23 +3,21 @@ package kea.model.buffers.atlas;
 import kea.Kea;
 import kea.display.DisplayObject;
 import kea.display.IDisplay;
-import kha.Image;
+import kea.texture.Texture;
 import kha.graphics2.Graphics;
 
 class TextureAtlas
 {
 	private var positionX:Int = 0;
 	private var positionY:Int = 0;
-	public var texture: Image;
+	public var texture: Texture;
 	private var images = new Map<Int, IDisplay>();
 	public var changeAvailable:Bool = false;
 	
-	//public var current
-	
-	private var atlasObjects = new Map<kha.Image, AtlasObject>();
+	private var atlasObjects = new Map<Texture, AtlasObject>();
 	
 	public function new() {
-		texture = Image.createRenderTarget(Buffer.bufferWidth, Buffer.bufferHeight);
+		texture = Texture.createRenderTarget(Buffer.bufferWidth, Buffer.bufferHeight);
 		texture.g2.begin(true, 0x00000000);
 		texture.g2.end();
 		
@@ -33,14 +31,6 @@ class TextureAtlas
 			draw();
 			changeAvailable = false;
 		}
-		//var justAdded:Array<IDisplay> = Kea.current.updateList.justAdded;
-		//if (justAdded.length > 0){
-			//for (i in 0...justAdded.length){
-				//add(justAdded[i]);
-			//}
-			//draw();
-			//Kea.current.updateList.justAdded = [];
-		//}
 	}
 	
 	public function setTexture(id:Int, displayObject:DisplayObject) 
@@ -49,7 +39,6 @@ class TextureAtlas
 			images.set(id, displayObject);
 			add(displayObject);
 		}
-		
 	}
 
 	function add(display:IDisplay):Void
@@ -71,10 +60,9 @@ class TextureAtlas
 		texture.g2.begin(true, 0x00000000);
 		for (key in atlasObjects.keys()){
 			var atlas:AtlasObject = atlasObjects.get(key);
-			var base:kha.Image = atlas.base;
+			var base:Texture = atlas.base;
 			if (base != null){
 				texture.g2.drawImage(base, positionX, positionY);
-				//texture.g2.drawImage(atlas.base, positionX, positionY);
 				atlas.x = positionX;
 				atlas.y = positionY;
 				atlas.texture = texture;
@@ -82,33 +70,5 @@ class TextureAtlas
 			}
 		}
 		texture.g2.end();
-		/*if (display.atlas != null){
-			var atlas = display.atlas;
-			if (!images.exists(atlas.base)){
-				images.set(atlas.base, display);
-
-				texture.g2.begin(false);
-				
-				texture.g2.fillRect(positionX, positionY, atlas.base.width, atlas.base.height);
-				texture.g2.drawImage(atlas.base, positionX, positionY);
-				
-				texture.g2.end();
-
-				atlas.x = positionX;
-				atlas.y = positionY;
-				atlas.texture = texture;
-
-				positionX += atlas.base.width;
-
-				changeAvailable = true;
-			}
-		}*/
 	}
-
-	/*public function render(graphics:Graphics): Void
-	{
-		//graphics.scissor(0, 0, 100, 100);
-		graphics.drawImage(texture, 0, 0);
-		//graphics.disableScissor();
-	}*/
 }

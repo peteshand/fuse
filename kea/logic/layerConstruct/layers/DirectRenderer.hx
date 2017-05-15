@@ -18,7 +18,7 @@ class DirectRenderer implements IRenderer
 
 	public function render(graphics:Graphics):Void
 	{
-		//trace("render: " + layerDefinition.startIndex + " " + layerDefinition.endIndex);
+		
 		for (i in layerDefinition.startIndex...layerDefinition.endIndex) {
 			var display:IDisplay = Kea.current.logic.displayList.renderList[i];
 			//display.prerender(graphics);

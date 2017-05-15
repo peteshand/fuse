@@ -1,7 +1,11 @@
 package kea.display;
 
+import flash.display.BitmapData;
 import kea.display.Sprite;
-import kea.model.buffers.atlas.TextureAtlas;
+import kea.display._private.Background;
+import kea.texture.Texture;
+import kea.util.ColourUtils;
+import kha.Color;
 import kha.System;
 import kha.graphics2.Graphics;
 
@@ -9,8 +13,9 @@ class Stage extends Sprite {
 	
 	var root:Sprite;
 	var count:Int = 0;
+	var background:Quad;
 
-	public var textureAtlas:TextureAtlas;
+	//public var textureAtlas:TextureAtlas;
 	
 	@:isVar public var stageWidth(get, null):Int;
 	@:isVar public var stageHeight(get, null):Int;
@@ -21,11 +26,15 @@ class Stage extends Sprite {
 
 	public function new(RootClass:Class<Sprite>) 
 	{	
+		background = new Quad(stageWidth, stageHeight, 0xFFFFFFFF);
+		
 		super();
 		
 		this.name = "stage";
 		
-		textureAtlas = new TextureAtlas();
+		//textureAtlas = new TextureAtlas();
+		
+		
 		
 		stage = this;
 		
@@ -34,12 +43,38 @@ class Stage extends Sprite {
 		//layerRenderer = new LayerRenderer(this, root);
 
 		addChild(root);
+		
+		
+		
+		stage.addChildAt(background, 0);
 	}
 	
-	override function get_renderIndex():Null<Int> 
+	override function set_color(value:Color):Color { 
+		
+		var value2:Color = ColourUtils.addMissingAlpha(value, 0xFF);
+		
+		if (color != value2){
+			color = value2;
+			
+			background.color = color;
+			/*if (background != null) {
+				if (background.parent != null) {
+					background.parent.removeChild(background);
+				}
+			}
+			background = new Quad(32, 32, color);
+			stage.addChildAt(background, 0);*/
+			
+			isStatic = false;
+		}
+		return value;
+	}
+	
+	
+	/*override function get_renderIndex():Null<Int> 
 	{
 		return 0;
-	}
+	}*/
 	
 	function get_stageHeight():Int 
 	{

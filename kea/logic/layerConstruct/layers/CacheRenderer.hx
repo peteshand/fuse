@@ -3,34 +3,50 @@ package kea.logic.layerConstruct.layers;
 import kea.logic.layerConstruct.LayerConstruct.LayerDefinition;
 import kea.logic.layerConstruct.layers.BaseRenderer;
 import kea.model.buffers.Buffer;
+import kea.texture.Texture;
 import kha.graphics2.Graphics;
-import kha.Image;
 import kea.display.IDisplay;
 
 class CacheRenderer implements IRenderer
 {	
 	public var layerDefinition:LayerDefinition;
-	var drawnStartIndex:Int;
-	var drawnEndIndex:Int;
-	
-	var buffer:Image;
+	//var prevDrawnStartIndex:Int = -1;
+	//var prevDrawnEndIndex:Int = -1;
+	var drawnStartIndex:Int = -1;
+	var drawnEndIndex:Int = -1;
+	var buffer:Texture;
 
 	public function new() {
-		buffer = Image.createRenderTarget(Buffer.bufferWidth, Buffer.bufferHeight);
-		
-		//buffer.g2.begin(true, 0x00000000);
-		//buffer.g2.end();
+		buffer = Texture.createRenderTarget(Buffer.bufferWidth, Buffer.bufferHeight);
+		clear();
+	}
+	
+	function clear():Void
+	{
+		buffer.g2.begin(true, 0x00000000);
+		buffer.g2.end();
 	}
 
 	public function cache(graphics:Graphics):Void
 	{
 		if (drawnStartIndex != layerDefinition.startIndex || drawnEndIndex != layerDefinition.endIndex){
-			buffer.g2.begin(true, 0x00000000);		
-			for (i in layerDefinition.startIndex...layerDefinition.endIndex){
+			
+			/*if (drawnStartIndex == -1) {
+				clear();
+			}*/
+			
+			buffer.g2.begin(false);
+			
+			var startIndex:Int = layerDefinition.startIndex;
+			var endIndex:Int = layerDefinition.endIndex;
+			
+			if (startIndex < drawnEndIndex) {
+				startIndex = drawnEndIndex;
+			}
+			
+			for (i in startIndex...endIndex){
 				var display:IDisplay = Kea.current.logic.displayList.renderList[i];
-				//display.prerender(buffer.g2);
 				display.render(buffer.g2);
-				//display.postrender(buffer.g2);
 			}
 			buffer.g2.end();
 			

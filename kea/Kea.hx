@@ -3,6 +3,7 @@ import kea.display.Sprite;
 import kea.display.Stage;
 import kea.logic.Logic;
 import kea.model.Model;
+import kea.model.config.KeaConfig;
 import kha.Canvas;
 import kha.Scheduler;
 import kha.System;
@@ -15,6 +16,7 @@ class Kea
 	public var stage:Stage;
 	public var model:Model;
 	public var logic:Logic;
+	@:isVar public var frameRate(get, set):Int;
 	public var onRender:Signal0;
 	
 	var index:Int;
@@ -32,23 +34,29 @@ class Kea
 		current = new Kea();
 	}
 
-	public function new() { }
+	public function new() { 
+		model = new Model();
+	}
 	
-	public static function init(rootClass:Class<Sprite>): Void {
+	public static function init(rootClass:Class<Sprite>, keaConfig:KeaConfig): Void {
 		
 		current.index = count;
 		count++;
 		
+		Kea.current.model.init(keaConfig);
 		Kea.rootClass = rootClass;
 		var options:SystemOptions = { title: "Project", width: 1920, height: 1080 };
 		System.init(options, OnKhaSetupComplete);
+		Kea.current.frameRate = keaConfig.frameRate;
 	}
 	
 	static private function OnKhaSetupComplete() 
 	{
 		current.onRender = new Signal0();
-		current.model = new Model();
 		current.logic = new Logic();
+		
+		//current.logic.displayList.init();
+		//current.logic.atlasBuffer.add( -1, current.logic.displayList.background);
 		
 		System.notifyOnRender(current.systemRender);
 		Scheduler.addTimeTask(current.update, 0, 1 / 60);
@@ -69,6 +77,8 @@ class Kea
 	{
 		onRender.dispatch();
 		
+		logic.updater.execute();
+		
 		g2 = framebuffer.g2;
 		
 		//profileMonitor.prerender();
@@ -80,7 +90,6 @@ class Kea
 		logic.displayList.update(g2);	// Hierarchical
 		
 		
-		logic.updater.execute();
 		/*
 		 * - Loops through whole displaylist in linear order and updates isStatic
 		 * - If Renderer.layerStateChangeAvailable == true
@@ -99,5 +108,17 @@ class Kea
 		//profileMonitor.postrender();
 		
 		count++;
+	}
+	
+	function get_frameRate():Int 
+	{
+		return frameRate;
+	}
+	
+	function set_frameRate(value:Int):Int 
+	{
+		frameRate = value;
+		flash.Lib.current.stage.frameRate = frameRate;
+		return frameRate;
 	}
 }

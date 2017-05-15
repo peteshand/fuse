@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project version="2">
+  <!-- Output SWF options -->
+  <output>
+    <movie outputType="CustomBuild" />
+    <movie input="" />
+    <movie path="project.xml" />
+    <movie fps="60" />
+    <movie width="800" />
+    <movie height="480" />
+    <movie version="1" />
+    <movie minorVersion="0" />
+    <movie platform="Lime" />
+    <movie background="000000" />
+    <movie preferredSDK=";3.1.3;" />
+  </output>
+  <!-- Other classes to be compiled into your SWF -->
+  <classpaths>
+    <class path="C:\_sdks\haxe\lib\openfl\4,9,2" />
+    <class path="C:\_sdks\haxe\lib\lime\4,0,3" />
+    <class path="C:\_sdks\haxe\lib\actuate\1,8,7" />
+    <class path="C:\_projects\HaxeLibraries\Robotlegs\openfl-robotlegs-framework\src" />
+    <class path="C:\_sdks\haxe\lib\msignal\1,2,4" />
+    <class path="C:\_projects\HaxeLibraries\Robotlegs\openfl-swiftsuspenders\src" />
+    <class path="C:\_sdks\haxe\lib\hxColorToolkit\1,6,1" />
+    <class path="src" />
+    <class path="C:\_sdks\haxe\lib\openfl\4,9,2\externs\core\openfl" />
+    <class path="C:\_sdks\haxe\lib\openfl\4,9,2\externs\extras" />
+    <class path="src" />
+    <class path=".." />
+    <class path="C:\_sdks\haxe\lib\kha\git\Sources" />
+    <class path="C:\_sdks\haxe\lib\kha\git\Backends\Flash" />
+    <class path="bin\flash\release\haxe" />
+  </classpaths>
+  <!-- Build options -->
+  <build>
+    <option directives="openfl=4.9.2&#xA;lime=4.0.3&#xA;actuate=1.8.7&#xA;robotlegs=0.4.3&#xA;msignal=1.2.4&#xA;swiftsuspenders=0.2.1&#xA;hxColorToolkit=1.6.1&#xA;tools=4.0.3&#xA;no-compilation&#xA;openfl-flash&#xA;web&#xA;sys_flash&#xA;sys_g1&#xA;sys_g2&#xA;sys_g3&#xA;sys_g4&#xA;advanced-telemetry&#xA;display" />
+    <option flashStrict="False" />
+    <option noInlineOnDebug="False" />
+    <option mainClass="ApplicationMain" />
+    <option enabledebug="True" />
+    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;-swf-version 19" />
+  </build>
+  <!-- haxelib libraries -->
+  <haxelib>
+    <!-- example: <library name="..." /> -->
+  </haxelib>
+  <!-- Class files to compile (other referenced classes will automatically be included) -->
+  <compileTargets>
+    <compile path="src\net\peteshand\keaOpenFL\Main.hx" />
+  </compileTargets>
+  <!-- Paths to exclude from the Project Explorer tree -->
+  <hiddenPaths>
+    <hidden path="obj" />
+  </hiddenPaths>
+  <!-- Executed before build -->
+  <preBuildCommand>"$(CompilerPath)/haxelib" run lime build "$(OutputFile)" $(TargetBuild) -$(BuildConfig) -Dfdb</preBuildCommand>
+  <!-- Executed after build -->
+  <postBuildCommand alwaysRun="False" />
+  <!-- Other project options -->
+  <options>
+    <option showHiddenPaths="False" />
+    <option testMovie="Custom" />
+    <option testMovieCommand="" />
+  </options>
+  <!-- Plugin storage -->
+  <storage />
+</project>

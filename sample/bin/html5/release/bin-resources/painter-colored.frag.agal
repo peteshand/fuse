@@ -1,0 +1,8 @@
+{
+	"varnames": {
+		"fragmentColor": "v0"
+	},
+	"consts": {
+	},
+	"agalasm": "mov ft0, v0\nmov oc, ft0\n"
+}

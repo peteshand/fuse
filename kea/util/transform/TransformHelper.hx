@@ -1,5 +1,5 @@
 package kea.util.transform;
-import kha.Image;
+import kea.texture.Texture;
 import kha.math.FastMatrix3;
 
 /**
@@ -24,7 +24,7 @@ class TransformHelper
 		localTransform.setFrom(clearMatrix);
 	}
 	
-	public static inline function setScale(localTransform:FastMatrix3, scaleX:Float, scaleY:Float, base:Image, width:Float, height:Float) 
+	public static inline function setScale(localTransform:FastMatrix3, scaleX:Float, scaleY:Float, base:Texture, width:Float, height:Float) 
 	{
 		if (base != null) {
 			localTransform._00 = scaleX * (width / base.width);

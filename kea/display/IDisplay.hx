@@ -1,28 +1,31 @@
 package kea.display;
+
+import kea.logic.buffers.atlas.items.AtlasItem;
 import kea.logic.layerConstruct.LayerConstruct;
+import kea.texture.Texture;
 
 import kea.logic.layerConstruct.LayerConstruct.LayerDefinition;
 import kha.Color;
-import kha.Image;
 import kha.FastFloat;
 import kha.graphics2.Graphics;
 import msignal.Signal.Signal0;
 
 import kea.display.Stage;
 import kea.display.DisplayObject;
-import kea.model.buffers.atlas.AtlasObject;
 import kea.notify.Notifier;
 
 interface IDisplay
 {
 	var objectId:Int;
-	var stage:Stage;
-	var parent:DisplayObject;
+	var parent:Sprite;
 	
-	var atlas(default, set):AtlasObject;
-	var base:Image;
-	var previous:IDisplay;
+	//var atlas(default, set):AtlasObject;
+	var atlasItem(default, set):AtlasItem;
+	var base:Texture;
+	//var previous:IDisplay;
 	
+	//var isStatic:Null<Bool>;
+	//var isStatic(default, set):Null<Bool>;
 	var isStatic:Null<Bool>;
 	var isStatic2:Notifier<Null<Bool>>;
 	var children:Array<IDisplay>;
@@ -30,6 +33,7 @@ interface IDisplay
 	var onAdd:Signal0;
 	//var renderable:Bool;
 	
+	var stage(get, set):Stage;
 	var x(default, set):Float;
 	var y(default, set):Float;
 	var width(default, set):Float;
@@ -45,15 +49,17 @@ interface IDisplay
 	
 	var totalNumChildren(get, null):Int;
 
-	@:allow(kea)
-	private var _renderIndex:Null<Int>;
-	var renderIndex(get, null):Null<Int>;
+	//@:allow(kea)
+	//private var _renderIndex:Null<Int>;
+	//var renderIndex(get, null):Null<Int>;
 
 	function update():Void;
 	
+	
+	function buildHierarchy():Void;
 	var calcTransform:Graphics->Void;
-	function prerender(graphics:Graphics):Void;
-	function postrender(graphics:Graphics):Void;
+	function pushTransform(graphics:Graphics):Void;
+	function popTransform(graphics:Graphics):Void;
 	
 	function render(graphics:Graphics):Void;
 	

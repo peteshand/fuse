@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<!-- NMML reference: https://gist.github.com/1763850 -->
+	
+	<!-- metadata, make sure 'package' is at least 3 segments (ie. com.mycompany.myproject) -->
+	<meta title="KeaOpenFL" package="net.peteshand.keaOpenFL.KeaOpenFL" version="1.0.0" company="P.J.Shand" />
+	
+	<!-- output -->
+	<app main="net.peteshand.keaOpenFL.Main" file="KeaOpenFL" path="bin" />
+	
+	<window background="#000000" fps="60" />
+	<window width="800" height="480" unless="mobile" />
+	<window orientation="landscape" vsync="false" antialiasing="0" if="cpp" />
+	
+	<!-- classpath, haxe libs -->
+	<source path="src" />
+	<haxelib name="openfl" />
+	<haxelib name="actuate" />
+	<haxelib name="robotlegs" />
+	<haxelib name="hxColorToolkit" />
+	
+	
+	<source path="src" />
+	<source path="../" />
+	<source path="C:/_sdks/haxe/lib/kha/git/Sources" />
+	<source path="C:/_sdks/haxe/lib/kha/git/Backends/Flash" />
+	<!--<source if="flash" path="C:/_sdks/haxe/lib/kha/git/Backends/Flash" />
+	<source if="html5" path="C:/_sdks/haxe/lib/kha/git/Backends/HTML5" />-->
+	
+	<app swf-version="19"/>
+	
+	<haxeflag name="-D sys_flash"></haxeflag>
+	<haxeflag name="-D sys_g1"></haxeflag>
+	<haxeflag name="-D sys_g2"></haxeflag>
+	<haxeflag name="-D sys_g3"></haxeflag>
+	<haxeflag name="-D sys_g4"></haxeflag>
+	<haxeflag name="-D advanced-telemetry"></haxeflag>
+	
+	<!-- assets -->
+	<icon path="assets/openfl.svg" />
+	<assets path="assets/img" rename="" embed="false" />
+	<assets path="assets/fonts" rename="" embed="false" />
+	
+	<!-- optimize output
+	<haxeflag name="-dce full" /> -->
+	
+</project>

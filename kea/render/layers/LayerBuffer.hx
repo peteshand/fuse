@@ -1,8 +1,8 @@
 package kea.render.layers;
 
 import kea.display.IDisplay;
-import kha.Image;
 import kea.notify.Notifier;
+import kea.texture.Texture;
 import kha.graphics2.Graphics;
 
 class LayerBuffer implements ILayerBuffer
@@ -15,7 +15,7 @@ class LayerBuffer implements ILayerBuffer
 	public var next:ILayerBuffer;
 	
 	var index:Int;
-	var image:Image;
+	var image:Texture;
 	var lastEndIndex:Null<Int>;
 	
 	var g2:Graphics;
@@ -24,7 +24,7 @@ class LayerBuffer implements ILayerBuffer
 	public function new(index:Int)
 	{
 		this.index = index;
-		image = Image.createRenderTarget(1024, 1024);
+		image = Texture.createRenderTarget(1024, 1024);
 		g2 = image.g2;
 
 		active.add(OnActiveChange);

@@ -1,7 +1,6 @@
 package kea.display;
 
-import kea.model.buffers.atlas.AtlasObject;
-import kha.Image;
+import kea.texture.Texture;
 import kha.Shaders;
 import kha.graphics2.Graphics;
 import kha.graphics4.BlendingFactor;
@@ -15,15 +14,14 @@ class Image extends DisplayObject implements IDisplay
 	//static var shaderPipeline:PipelineState;
 	//var map = new Map<String, Array<BlendingFactor>>();
 	
-	private static var lastImage:kha.Image = null;
+	private static var lastImage:Texture = null;
 	
-	public function new(base:kha.Image)
+	public function new(base:Texture)
 	{
-		//this.renderable = true;
 		this.base = base;
 		
 		super();
-		
+		this.renderable = true;
 		this.width = base.width;
 		this.height = base.height;
 	}

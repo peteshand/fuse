@@ -1,13 +1,13 @@
 package kea.display.text;
 
-import kha.Image;
+import kea.texture.Texture;
 import kha.Font;
 import kha.graphics2.Graphics;
 import kha.Assets;
 
 class TextField extends DisplayObject implements IDisplay
 {
-	private static var baseImages = new Map<String, kha.Image>();
+	private static var baseImages = new Map<String, Texture>();
 	private var format:TextFormat = TextFormat.defaultFormat;
 	@:isVar public var text(default, set):String;
 	
@@ -41,7 +41,7 @@ class TextField extends DisplayObject implements IDisplay
 	{
 		if (text == null) return;
 		if (baseImages.exists(text)) {
-			var _base:kha.Image = baseImages.get(text);
+			var _base:Texture = baseImages.get(text);
 			/*if (_base != null) {
 				_base.unload();
 			}*/
@@ -60,7 +60,7 @@ class TextField extends DisplayObject implements IDisplay
 		}*/
 		if (!baseImages.exists(text))
 		{	
-			var baseImage:Image = Image.createRenderTarget(400, 400);
+			var baseImage:Texture = Texture.createRenderTarget(400, 400);
 			baseImage.g2.begin(true, 0x00000000);
 			baseImage.g2.font = Assets.fonts.arial;
 			baseImage.g2.fontSize = format.fontSize;

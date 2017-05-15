@@ -1,6 +1,5 @@
 package kea.display.stats;
 
-import kha.Image;
 import kha.Color;
 import kha.graphics2.Graphics;
 import kea.display.Sprite;

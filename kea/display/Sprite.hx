@@ -1,8 +1,10 @@
 package kea.display;
 
+import kea.texture.TextureHelper;
 import kha.graphics2.Graphics;
 import kea.Kea;
 
+@:access(kha)
 class Sprite extends DisplayObject implements IDisplay
 {
 	public function new() {
@@ -10,32 +12,51 @@ class Sprite extends DisplayObject implements IDisplay
 		children = [];
 	}
 
-	function addChild(child:IDisplay):Void
+	public function addChild(child:IDisplay):Void
+	{
+		addChildAt(child, -1);
+	}
+	
+	public function addChildAt(child:IDisplay, index:Int):Void
 	{
 		if (children == null) children = [];
 		
-		var parentIndex:Int = this.renderIndex;
+		//var parentIndex:Int = this.renderIndex;
 		//stage.renderList.insert(parentIndex + children.length + 1, child);
 		
-		var index:Int = parentIndex + totalNumChildren;
+		//var index:Int = parentIndex + totalNumChildren;
 		//child.previous = stage.layerRenderer.renderList[index];
 		
 		//stage.layerRenderer.add(index + 1, child);
-		child.previous = Kea.current.logic.displayList.renderList[index];
-		Kea.current.logic.displayList.add(index + 1, child);
-		
-		child.stage = stage;
-		child.parent = this;
-		children.push(child);
-		//child.drawToBackBuffer();
-		
-		child.onAdd.dispatch();
+		//child.previous = Kea.current.logic.displayList.renderList[index];
+		//Kea.current.logic.displayList.add(index + 1, child);
+		if (child.base == null || child.base.data != null){
+			child.stage = stage;
+			child.parent = this;
+			
+			if (index >= 0 && index < children.length) {
+				children.insert(index, child);
+			}
+			else {
+				children.push(child);
+			}
+			
+			//child.drawToBackBuffer();
+			
+			child.onAdd.dispatch();
+			
+			isStatic = false;
+		}
+		else {
+			//trace("Wait for upload");
+			TextureHelper.register(child, this, index);
+		}
 	}
 	
 	function removeChild(child:IDisplay):Void
 	{
 		// unlink from child
-		child.next.previous = child.previous;
+		//child.next.previous = child.previous;
 		
 		//Kea.current.logic.displayList.remove(index + 1, child);
 		
@@ -49,6 +70,7 @@ class Sprite extends DisplayObject implements IDisplay
 			}
 			i--;
 		}
+		isStatic = false;
 	}
 	
 	override function get_totalNumChildren():Int

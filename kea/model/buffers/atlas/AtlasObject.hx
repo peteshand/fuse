@@ -1,15 +1,15 @@
 package kea.model.buffers.atlas;
+import kea.texture.Texture;
 
-import kha.Image;
 
 class AtlasObject
 {
-	public var base:kha.Image;
-	public var texture:kha.Image;
+	public var base:Texture;
+	public var texture:Texture;
 	public var x:Int = 0;
 	public var y:Int = 0;
 	
-	public function new(base:kha.Image) {
+	public function new(base:Texture) {
 		this.base = base;
 	}
 }

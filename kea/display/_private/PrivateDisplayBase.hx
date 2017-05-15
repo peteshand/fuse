@@ -8,7 +8,6 @@ import kha.math.FastMatrix3;
 class PrivateDisplayBase
 {
 	static var objectIdCount:Int = 0;
-	
 	public var objectId:Int;
 	
 	var localTransform:FastMatrix3;
