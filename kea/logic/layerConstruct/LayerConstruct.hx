@@ -1,10 +1,11 @@
 package kea.logic.layerConstruct;
 
-import kea.Kea;
+import kea2.Kea;
 import kea.logic.displaylist.DisplayList;
 import kea.logic.renderer.Renderer;
-import kea.display.IDisplay;
+import kea2.display.containers.IDisplay;
 import kea.notify.Notifier;
+import kea2.display.containers.DisplayObject;
 
 class LayerConstruct
 {	
@@ -156,7 +157,7 @@ class LayerOrders
     }
 	
 	@:access(kea.notify.Notifier)
-	@:access(kea.display.DisplayObject)
+	@:access(kea2.display.containers.DisplayObject)
 	public function findOrder(renderList:Array<IDisplay>):Array<LayerDefinition>
 	{
 		startIndex = 0;// renderList[0].renderIndex;

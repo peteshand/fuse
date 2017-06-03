@@ -1,6 +1,8 @@
 package kea.display.text;
 
 import kea.texture.Texture;
+import kea2.display.containers.DisplayObject;
+import kea2.display.containers.IDisplay;
 import kha.Font;
 import kha.graphics2.Graphics;
 import kha.Assets;

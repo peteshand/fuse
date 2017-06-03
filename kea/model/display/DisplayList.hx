@@ -1,5 +1,5 @@
 package kea.model.display;
-import kea.display.IDisplay;
+import kea2.display.containers.IDisplay;
 import msignal.Signal.Signal0;
 
 /**

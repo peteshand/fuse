@@ -2,8 +2,8 @@ package net.peteshand.keaOpenFL.view.kea.atlas;
 
 import flash.display.BitmapData;
 import hxColorToolkit.spaces.RGB;
-import kea.Kea;
-import kea.display.IDisplay;
+import kea2.Kea;
+import kea2.display.containers.IDisplay;
 import kea.display.Quad;
 import kea.display.Sprite;
 import kea.texture.Texture;

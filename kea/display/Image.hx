@@ -1,6 +1,8 @@
 package kea.display;
 
 import kea.texture.Texture;
+import kea2.display.containers.DisplayObject;
+import kea2.display.containers.IDisplay;
 import kha.Shaders;
 import kha.graphics2.Graphics;
 import kha.graphics4.BlendingFactor;

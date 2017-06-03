@@ -9,7 +9,7 @@
 	<app main="net.peteshand.keaOpenFL.Main" file="KeaOpenFL" path="bin" />
 	
 	<window background="#000000" fps="60" />
-	<window width="800" height="480" unless="mobile" />
+	<window width="1600" height="900" unless="mobile" />
 	<window orientation="landscape" vsync="false" antialiasing="0" if="cpp" />
 	
 	<!-- classpath, haxe libs -->
@@ -17,6 +17,7 @@
 	<haxelib name="openfl" />
 	<haxelib name="actuate" />
 	<haxelib name="robotlegs" />
+	<haxelib name="delay" />
 	<haxelib name="hxColorToolkit" />
 	
 	
@@ -38,8 +39,8 @@
 	
 	<!-- assets -->
 	<icon path="assets/openfl.svg" />
-	<assets path="assets/img" rename="" embed="false" />
-	<assets path="assets/fonts" rename="" embed="false" />
+	<assets path="assets/img" rename="img" />
+	<!--<assets path="assets/fonts" rename="" embed="false" />-->
 	
 	<!-- optimize output
 	<haxeflag name="-dce full" /> -->

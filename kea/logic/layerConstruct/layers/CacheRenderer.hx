@@ -4,8 +4,9 @@ import kea.logic.layerConstruct.LayerConstruct.LayerDefinition;
 import kea.logic.layerConstruct.layers.BaseRenderer;
 import kea.model.buffers.Buffer;
 import kea.texture.Texture;
+import kea2.Kea;
 import kha.graphics2.Graphics;
-import kea.display.IDisplay;
+import kea2.display.containers.IDisplay;
 
 class CacheRenderer implements IRenderer
 {	

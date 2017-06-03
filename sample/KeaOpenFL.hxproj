@@ -6,8 +6,8 @@
     <movie input="" />
     <movie path="project.xml" />
     <movie fps="60" />
-    <movie width="800" />
-    <movie height="480" />
+    <movie width="1600" />
+    <movie height="900" />
     <movie version="1" />
     <movie minorVersion="0" />
     <movie platform="Lime" />
@@ -22,6 +22,7 @@
     <class path="C:\_projects\HaxeLibraries\Robotlegs\openfl-robotlegs-framework\src" />
     <class path="C:\_sdks\haxe\lib\msignal\1,2,4" />
     <class path="C:\_projects\HaxeLibraries\Robotlegs\openfl-swiftsuspenders\src" />
+    <class path="C:\_projects\HaxeLibraries\Imagination\haxe-delay" />
     <class path="C:\_sdks\haxe\lib\hxColorToolkit\1,6,1" />
     <class path="src" />
     <class path="C:\_sdks\haxe\lib\openfl\4,9,2\externs\core\openfl" />
@@ -30,16 +31,16 @@
     <class path=".." />
     <class path="C:\_sdks\haxe\lib\kha\git\Sources" />
     <class path="C:\_sdks\haxe\lib\kha\git\Backends\Flash" />
-    <class path="bin\flash\release\haxe" />
+    <class path="bin\flash\debug\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="openfl=4.9.2&#xA;lime=4.0.3&#xA;actuate=1.8.7&#xA;robotlegs=0.4.3&#xA;msignal=1.2.4&#xA;swiftsuspenders=0.2.1&#xA;hxColorToolkit=1.6.1&#xA;tools=4.0.3&#xA;no-compilation&#xA;openfl-flash&#xA;web&#xA;sys_flash&#xA;sys_g1&#xA;sys_g2&#xA;sys_g3&#xA;sys_g4&#xA;advanced-telemetry&#xA;display" />
+    <option directives="openfl=4.9.2&#xA;lime=4.0.3&#xA;actuate=1.8.7&#xA;robotlegs=0.4.3&#xA;msignal=1.2.4&#xA;swiftsuspenders=0.2.1&#xA;delay=1.1.6&#xA;hxColorToolkit=1.6.1&#xA;tools=4.0.3&#xA;no-compilation&#xA;openfl-flash&#xA;web&#xA;sys_flash&#xA;sys_g1&#xA;sys_g2&#xA;sys_g3&#xA;sys_g4&#xA;advanced-telemetry&#xA;display" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="True" />
-    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;-swf-version 19" />
+    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;-swf-version 19&#xA;-debug " />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

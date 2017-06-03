@@ -1,6 +1,6 @@
 package kea.render.layers;
 
-import kea.display.IDisplay;
+import kea2.display.containers.IDisplay;
 import kea.notify.Notifier;
 import kha.graphics2.Graphics;
 

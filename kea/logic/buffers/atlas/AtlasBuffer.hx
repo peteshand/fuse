@@ -1,6 +1,6 @@
 package kea.logic.buffers.atlas;
 
-import kea.Kea;
+import kea2.Kea;
 import kea.logic.buffers.atlas.drawOrder.AtlasDrawOrder;
 import kea.logic.buffers.atlas.items.AtlasItem;
 import kea.logic.buffers.atlas.items.AtlasItems;
@@ -8,8 +8,8 @@ import kea.logic.buffers.atlas.packer.AtlasPacker;
 import kea.logic.buffers.atlas.renderer.AtlasRenderer;
 import kea.logic.buffers.atlas.renderer.TextureAtlas;
 import kea.logic.renderer.Renderer;
-import kea.display.DisplayObject;
-import kea.display.IDisplay;
+import kea2.display.containers.DisplayObject;
+import kea2.display.containers.IDisplay;
 import kea.notify.Notifier;
 import kha.Image;
 

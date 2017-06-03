@@ -1,17 +1,18 @@
 package kea.logic.displaylist;
 
 import flash.display.BitmapData;
-import kea.display.DisplayObject;
-import kea.display.IDisplay;
+import kea2.display.containers.DisplayObject;
+import kea2.display.containers.IDisplay;
 import kea.display.Sprite;
-import kea.display._private.Background;
+import kea2.display._private.Background;
 import kea.texture.Texture;
+import kea2.Kea;
 import kha.graphics2.Graphics;
 
-@:access(kea.Kea)
+@:access(kea2.Kea)
 class DisplayList
 {	
-	static var updateHierarchy:Bool = false;
+	public static var updateHierarchy:Bool = false;
 	
 	public var renderList:Array<IDisplay> = [];
 	var renderMap:Map<IDisplay, Bool> = new Map<IDisplay, Bool>();

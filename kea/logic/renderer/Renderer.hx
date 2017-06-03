@@ -2,10 +2,11 @@ package kea.logic.renderer;
 
 import kea.logic.buffers.atlas.renderer.TextureAtlas;
 import kea.logic.layerConstruct.LayerConstruct;
-import kea.display.IDisplay;
+import kea2.display.containers.IDisplay;
 import kea.logic.layerConstruct.layers.IRenderer;
 import kea.logic.buffers.atlas.AtlasBuffer;
 import kea.model.buffers.Buffer;
+import kea2.Kea;
 import kha.graphics2.Graphics;
 import kea.logic.layerConstruct.LayerConstruct.LayerDefinition;
 import kea.logic.layerConstruct.layers.DirectRenderer;
@@ -22,7 +23,7 @@ class Renderer
 	public var layers:Array<LayerDefinition>;
 	var directCount:Int = 0;
 	var cacheCount:Int = 0;
-	static var layerStateChangeAvailable:Bool = true;
+	public static var layerStateChangeAvailable:Bool = true;
 	
 	public function new() {
 		for (i in 0...maxLayers){

@@ -1,8 +1,10 @@
 package kea.display;
 
 import kea.texture.TextureHelper;
+import kea2.display.containers.DisplayObject;
+import kea2.display.containers.IDisplay;
 import kha.graphics2.Graphics;
-import kea.Kea;
+import kea2.Kea;
 
 @:access(kha)
 class Sprite extends DisplayObject implements IDisplay
@@ -21,15 +23,8 @@ class Sprite extends DisplayObject implements IDisplay
 	{
 		if (children == null) children = [];
 		
-		//var parentIndex:Int = this.renderIndex;
-		//stage.renderList.insert(parentIndex + children.length + 1, child);
 		
-		//var index:Int = parentIndex + totalNumChildren;
-		//child.previous = stage.layerRenderer.renderList[index];
 		
-		//stage.layerRenderer.add(index + 1, child);
-		//child.previous = Kea.current.logic.displayList.renderList[index];
-		//Kea.current.logic.displayList.add(index + 1, child);
 		if (child.base == null || child.base.data != null){
 			child.stage = stage;
 			child.parent = this;

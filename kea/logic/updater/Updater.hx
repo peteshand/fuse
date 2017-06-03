@@ -1,4 +1,5 @@
 package kea.logic.updater;
+import kea2.Kea;
 
 /**
  * ...

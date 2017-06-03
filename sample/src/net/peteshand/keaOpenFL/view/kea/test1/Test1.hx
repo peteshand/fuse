@@ -2,7 +2,7 @@ package net.peteshand.keaOpenFL.view.kea.test1;
 
 import net.peteshand.keaOpenFL.view.kea.imageDemo.DemoImage;
 import net.peteshand.keaOpenFL.view.kea.imageDemo.DemoVideo;
-import kea.Kea;
+import kea2.Kea;
 import kea.display.Quad;
 import kea.display.Sprite;
 import kea.display.stats.Stats;
@@ -106,7 +106,7 @@ class Test1 extends Sprite
 			}
 		}*/
 		
-		var numQuads:Int = 5000;// Math.floor(Math.random() * 5);
+		var numQuads:Int = 500;// Math.floor(Math.random() * 5);
 		for (j in 0...numQuads) 
 		{
 			quad = new Quad(4, 4, 0xFF00FF00);

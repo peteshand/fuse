@@ -1,7 +1,7 @@
 package net.peteshand.keaOpenFL.view.kea.layerTest;
 
 import hxColorToolkit.spaces.RGB;
-import kea.Kea;
+import kea2.Kea;
 import kea.display.BlendMode;
 import kea.display.Image;
 import kea.display.Quad;

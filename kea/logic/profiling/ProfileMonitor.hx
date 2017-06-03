@@ -1,7 +1,7 @@
 package kea.logic.profiling;
 
 import haxe.Timer;
-import kea.Kea;
+import kea2.Kea;
 import kea.notify.Notifier;
 
 class ProfileMonitor

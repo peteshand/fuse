@@ -1,13 +1,13 @@
 package kea.render;
 
-import kea.display.IDisplay;
-import kea.display.Stage;
+import kea2.display.containers.IDisplay;
+import kea2.display.containers.Stage;
 import kea.util.RenderUtils;
 import kha.graphics2.Graphics;
 import kea.render.layers.LayerBuffer;
 import kea.render.layers.ILayerBuffer;
 import kea.render.layers.DynamicLayerBuffer;
-import kea.Kea;
+import kea2.Kea;
 
 class LayerRenderer
 {

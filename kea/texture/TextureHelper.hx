@@ -1,10 +1,11 @@
 package kea.texture;
 
-import kea.display.IDisplay;
+import kea2.display.containers.IDisplay;
 import kea.display.Sprite;
 import kea.notify.Notifier;
 import kea.texture.Texture.FromBitmapData;
 import kea.util.Time;
+import kea2.Kea;
 
 /**
  * ...

@@ -1,6 +1,6 @@
 package net.peteshand.keaOpenFL;
 
-import kea.Kea;
+import kea2.Kea;
 import kea.model.config.KeaConfig;
 import net.peteshand.keaOpenFL.view.kea.MainLayer;
 import openfl.display.Sprite;
@@ -17,6 +17,7 @@ class Main extends Sprite
 	{
 		super();
 		
+		trace("Main");
 		// Assets:
 		// openfl.Assets.getBitmapData("img/assetname.jpg");
 		

@@ -3,6 +3,7 @@ import kea.logic.buffers.atlas.items.AtlasItem;
 import kea.logic.buffers.atlas.items.AtlasItems;
 import kea.notify.Notifier;
 import kea.texture.Texture;
+import kea2.Kea;
 
 /**
  * ...

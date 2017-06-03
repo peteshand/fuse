@@ -1,6 +1,6 @@
 package kea.logic.buffers.atlas.items;
 
-import kea.display.DisplayObject;
+import kea2.display.containers.DisplayObject;
 import kea.logic.buffers.atlas.items.AtlasItem;
 import kea.logic.buffers.atlas.packer.AtlasPartition;
 import kea.notify.Notifier;

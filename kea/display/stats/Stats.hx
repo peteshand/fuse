@@ -3,8 +3,8 @@ package kea.display.stats;
 import kha.Color;
 import kha.graphics2.Graphics;
 import kea.display.Sprite;
-import kea.display.IDisplay;
-import kea.Kea;
+import kea2.display.containers.IDisplay;
+import kea2.Kea;
 import kha.Font;
 import kha.Assets;
 

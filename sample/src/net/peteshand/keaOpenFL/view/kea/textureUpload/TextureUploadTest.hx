@@ -3,7 +3,7 @@ package net.peteshand.keaOpenFL.view.kea.textureUpload;
 import flash.display.BitmapData;
 import flash.geom.Rectangle;
 import hxColorToolkit.spaces.RGB;
-import kea.Kea;
+import kea2.Kea;
 import kea.display.Image;
 import kea.display.Sprite;
 import kea.texture.Texture;

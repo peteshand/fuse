@@ -1,8 +1,9 @@
 package kea.logic.layerConstruct.layers;
 
-import kea.display.IDisplay;
+import kea2.display.containers.IDisplay;
 import kea.logic.layerConstruct.LayerConstruct.LayerDefinition;
 import kea.logic.layerConstruct.layers.BaseRenderer;
+import kea2.Kea;
 import kha.graphics2.Graphics;
 
 class DirectRenderer implements IRenderer

@@ -3,6 +3,8 @@ package kea.display;
 import flash.display.BitmapData;
 import kea.texture.Texture;
 import kea.util.ColourUtils;
+import kea2.display.containers.DisplayObject;
+import kea2.display.containers.IDisplay;
 import kha.Color;
 import kha.graphics2.Graphics;
 

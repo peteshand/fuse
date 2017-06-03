@@ -1,8 +1,8 @@
 package kea.model.buffers.atlas;
 
-import kea.Kea;
-import kea.display.DisplayObject;
-import kea.display.IDisplay;
+import kea2.Kea;
+import kea2.display.containers.DisplayObject;
+import kea2.display.containers.IDisplay;
 import kea.texture.Texture;
 import kha.graphics2.Graphics;
 

@@ -6,7 +6,7 @@ import kha.graphics4.TextureFormat;
 import flash.display.BitmapData;
 import haxe.Timer;
 import kha.graphics4.Usage;
-import kea.display.IDisplay;
+import kea2.display.containers.IDisplay;
 import kea.display.Sprite;
 
 /**
@@ -33,6 +33,7 @@ abstract Texture(Image) from Image to Image
 	
 	public static function fromBitmapData(bmd:BitmapData, readable:Bool, name:String = null, queUpload:Bool=true):Texture
 	{
+		queUpload = false;
 		var texture:Texture = null;
 		if (queUpload) {
 			texture = Image.create(bmd.width, bmd.height, TextureFormat.RGBA32, Usage.DynamicUsage);
