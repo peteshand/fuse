@@ -8,10 +8,15 @@ import kea2.core.memory.data.vertexData.VertexData;
 import kea2.core.texture.Textures;
 import kea2.display.containers.IDisplay;
 import kea2.display.effects.BlendMode;
+import kea2.render.program.Context3DProgram;
+import kea2.render.texture.Context3DTexture;
+import kea2.texture.Texture;
+import kea2.utils.Notifier;
 import kea2.worker.thread.Conductor;
 import kea2.worker.thread.display.ShaderProgram;
 import kea2.worker.thread.display.ShaderPrograms;
 import kea2.worker.thread.display.TextureOrder;
+import kea2.worker.thread.display.TextureRenderBatch;
 import kha.Color;
 import kha.FastFloat;
 import kha.math.FastMatrix3;
@@ -34,16 +39,20 @@ import openfl.display3D.Context3DVertexBufferFormat;
 import openfl.display3D.IndexBuffer3D;
 import openfl.display3D.Program3D;
 import openfl.display3D.VertexBuffer3D;
-import openfl.display3D.textures.Texture;
+import openfl.display3D.textures.Texture as NativeTexture;
+import openfl.events.TimerEvent;
 import openfl.geom.Matrix3D;
 import openfl.utils.ByteArray;
+import openfl.utils.Timer;
 
 /**
  * ...
  * @author P.J.Shand
  */
+@:access(kea2)
 class Renderer
 {
+	var renderIndex:Int = 0;
 	public static var bufferSize:Int = 2000;
 	
 	var stage3D:Stage3D;
@@ -61,31 +70,45 @@ class Renderer
 	var numberOfDisplays:Int = 1;
 	
 	var textureOrder:TextureOrder;
+	var textureRenderBatch:TextureRenderBatch;
 	var shaderPrograms:ShaderPrograms;
 	
 	//public var vertexbuffer:VertexBuffer3D;
 	//public var indexbuffer:IndexBuffer3D;
 	
 	/** Texture the scene is rendered to */
-	private var sceneTexture:Texture;
+	private var sceneTexture:NativeTexture;
 	var vertexDataPool:MemoryPool;
-	var conductorDataAccess:ConductorData;
+	public var conductorData:ConductorData;
 	var currentBlendMode:Int = -1;
-	var textureChannelData:Vector<Float>;
+	var currentTextureId = new Notifier<Int>(-2);
+	
+	var context3DTexture:Context3DTexture;
+	var context3DProgram:Context3DProgram;
+	var baseShader:BaseShader;
+	var shaderProgram = new Notifier<ShaderProgram>();
 	
 	public function new(stage3D:Stage3D) 
 	{
-		
-		
 		vertexDataPool = Kea.current.keaMemory.vertexDataPool;
+		
 		
 		this.stage3D = stage3D;
 		context3D = stage3D.context3D;
 		context3D.configureBackBuffer(1600, 900, 0);
 		context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
 		
-		conductorDataAccess = new ConductorData();
+		#if debug
+			context3D.enableErrorChecking = true;
+		#end
+		
+		context3DTexture = new Context3DTexture(context3D);
+		context3DProgram = new Context3DProgram(context3D);
+		
+		
+		conductorData = new ConductorData();
 		textureOrder = new TextureOrder();
+		textureRenderBatch = new TextureRenderBatch();
 		shaderPrograms = new ShaderPrograms(context3D);
 		
 		sceneTexture = context3D.createTexture(
@@ -100,129 +123,113 @@ class Renderer
 		transformations = new Array<FastMatrix3>();
 		transformations.push(FastMatrix3.identity());
 		
-		textureChannelData = Vector.ofArray(
-		[
-			1, 0, 0, 0,
-			0, 1, 0, 0,
-			0, 0, 1, 0,
-			0, 0, 0, 1
-		]);
-		
-		//var indexCount:Int = 6;// bufferSize * 3 * 2;
-		//indices = new Vector<UInt>(bufferSize * indexCount);
-		//for (i in 0...bufferSize) {
-			//indices[i * 3 * 2 + 0] = i * 4 + 0;
-			//indices[i * 3 * 2 + 1] = i * 4 + 1;
-			//indices[i * 3 * 2 + 2] = i * 4 + 2;
-			//indices[i * 3 * 2 + 3] = i * 4 + 0;
-			//indices[i * 3 * 2 + 4] = i * 4 + 2;
-			//indices[i * 3 * 2 + 5] = i * 4 + 3;
-		//}
-		
-		var baseShader:BaseShader = new BaseShader();
+		baseShader = new BaseShader();
 		program = context3D.createProgram();
 		program.upload(baseShader.vertexCode, baseShader.fragmentCode);
 		
-		var numVertex:Int = 4;
-		//var floatsPerVectex:Int = (2 + 3 /*+ 4*/);
-		
-		//rectVertices = new Vector<Float>(bufferSize * floatsPerVectex * numVertex);
-		
-		
-		//// Create VertexBuffer3D. 4 vertices, of 5 Numbers each
-		//vertexbuffer = context3D.createVertexBuffer(4 * bufferSize, 5, Context3DBufferUsage.DYNAMIC_DRAW);
-		//// Upload VertexBuffer3D to GPU. Offset 0, 4 vertices
-		////vertexbuffer.uploadFromVector(rectVertices, 0, 4 * bufferSize);				
-		////vertexbuffer.uploadFromByteArray(vertexData, 0, 0, 4);				
-		//
-		//
-		//// Create IndexBuffer3D. Total of 3 indices. 1 triangle of 3 vertices
-		//indexbuffer = context3D.createIndexBuffer(6 * bufferSize);	
-		//// Upload IndexBuffer3D to GPU. Offset 0, count 3
-		//indexbuffer.uploadFromVector (indices, 0, 6 * bufferSize);
+		currentTextureId.add(OnCurrentTextureIdChange);
+		shaderProgram.add(OnShaderProgramChange);
 	}
 	
-	public function begin(clear:Bool = true, clearColor:Color = null):Void
+	function OnShaderProgramChange() 
 	{
-		context3D.clear(clearColor.R, clearColor.G, clearColor.B);
+		if (shaderProgram.value == null) return;
+		
+		var numItems:Int = conductorData.numberOfRenderables;
+		
+		// vertex position to attribute register 0
+		context3D.setVertexBufferAt(0, shaderProgram.value.vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
+		// UV to attribute register 1 x,y
+		context3D.setVertexBufferAt(1, shaderProgram.value.vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_2);
+		// Texture Index attribute register 1 z
+		context3D.setVertexBufferAt(2, shaderProgram.value.vertexbuffer, 5, Context3DVertexBufferFormat.FLOAT_2);
+		// Colour to attribute register 2
+		//context3D.setVertexBufferAt(2, shaderProgram.value.vertexbuffer, 5, Context3DVertexBufferFormat.FLOAT_4);
+		
+		shaderProgram.value.indexbuffer.uploadFromVector(shaderProgram.value.indices, 0, 6 * numItems);
+		
+		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, baseShader.textureChannelData, 4);
+		// assign shader program
+		context3DProgram.setProgram(program);
+	}
+	
+	function OnCurrentTextureIdChange() 
+	{
+		
+		if (currentTextureId.value == -1) {
+		//	trace("OnCurrentTextureIdChange: setRenderToBackBuffer");
+			context3D.setRenderToBackBuffer();
+		}
+		else {
+		//	trace("OnCurrentTextureIdChange: setRenderToTexture");
+			var texture:Texture = Textures.getTexture(currentTextureId.value);
+			context3D.setRenderToTexture(texture.nativeTexture, true);
+			if (texture._clear) {
+				texture._clear = false;
+				context3D.clear(0, 0, 0, 0);
+			}
+		}
 	}
 	
 	public function update() 
 	{
-		
 		//context3D.setRenderToTexture(sceneTexture);
+		
+		//trace("frameIndex = " + conductorData.frameIndex);
+		//trace("renderIndex = " + renderIndex);
+		
+		//currentTextureId._value = -2;
+		currentTextureId.value = -1;
+		
 		
 		begin(true, 0xFF0000);
 		drawBuffer();
 		end();
 		
-		//conductorDataAccess.processIndex++;
-		
-		//context3D.setRenderToBackBuffer();
-		//
-		//// Render a full-screen quad with the scene texture to the actual screen
-		////context3D.setProgram(program);
-		////context3D.setTextureAt(0, sceneTexture);
-		//context3D.clear(0, 0, 0, 0);
-		////context3D.setVertexBufferAt(0, postFilterVertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
-		//context3D.setVertexBufferAt(1, null);
-		////context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, POST_FILTER_VERTEX_CONSTANTS);
-		///*if (fragConsts)
-		//{
-			//context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragConsts);
-		//}*/
-		//context3D.drawTriangles(indexbuffer);
+	}
+	
+	public function begin(clear:Bool = true, clearColor:Color = null):Void
+	{
+		//context3D.clear(clearColor.R, clearColor.G, clearColor.B, 0.3);
+		context3D.clear(0, 0, 0, 1);
 	}
 	
 	function drawBuffer() 
 	{
-		if (conductorDataAccess.numberOfRenderables == 0) return;
+		var numItems:Int = conductorData.numberOfRenderables;
+		if (numItems == 0) return;
+		//trace("total numItems = " + numItems);
 		
-		//trace(conductorDataAccess.numberOfRenderables);
+		shaderProgram.value = shaderPrograms.getProgram(numItems);
 		
-		var shaderProgram:ShaderProgram = shaderPrograms.getProgram(conductorDataAccess.numberOfRenderables);
+		var batchData:BatchData = textureRenderBatch.getBatchData(0);
+		if (batchData != null){
+			shaderProgram.value.vertexbuffer.uploadFromByteArray(KeaMemory.memory, batchData.startIndex, 0, 4 * numItems);
+		}
 		
+		var itemCount:Int = 0;
 		
-		var batchData:BatchData = textureOrder.getBatchData(0);
+		//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
 		
-		shaderProgram.vertexbuffer.uploadFromByteArray(KeaMemory.memory, batchData.startIndex, 0, 4 * conductorDataAccess.numberOfRenderables);		
-		// vertex position to attribute register 0
-		context3D.setVertexBufferAt(0, shaderProgram.vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
-		// UV to attribute register 1 x,y and Texture Index attribute register 1 z
-		context3D.setVertexBufferAt(1, shaderProgram.vertexbuffer, 3, Context3DVertexBufferFormat.FLOAT_3);
-		
-		// Colour to attribute register 2
-		//context3D.setVertexBufferAt(2, shaderProgram.vertexbuffer, 5, Context3DVertexBufferFormat.FLOAT_4);
-		
-		shaderProgram.indexbuffer.uploadFromVector(shaderProgram.indices, 0, 6 * conductorDataAccess.numberOfRenderables);
-		
-		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, textureChannelData, 4);
-		// assign shader program
-		context3D.setProgram(program);
-		
-		var firstIndex:Int = 0;
-		
-		for (i in 0...conductorDataAccess.numberOfBatches) 
+		for (i in 0...conductorData.numberOfBatches) 
 		{
-			batchData = textureOrder.getBatchData(i);
-			/*trace("batchData.textureId = " + batchData.textureId);
-			trace("batchData.startIndex = " + batchData.startIndex);
-			trace("batchData.length = " + batchData.length);*/
-			var numItems:Int = Math.floor(batchData.length / VertexData.BYTES_PER_ITEM);
 			
+			var batchData:BatchData = textureRenderBatch.getBatchData(i);
+			var numItemsInBatch:Int = batchData.numItems;
 			
+			//trace("numItemsInBatch = " + numItemsInBatch);
 			
+			if (numItemsInBatch == 0) continue;
 			
-			
-			// assign texture to texture sampler 0
-			//context3D.setTextureAt(0, Textures.getTexture(batchData.textureId));
-			//context3D.setTextureAt(0, null);
+			currentTextureId.value = batchData.renderTargetId;
 			
 			//trace([batchData.textureId1, batchData.textureId2, batchData.textureId3, batchData.textureId4]);
-			context3D.setTextureAt(0, Textures.getTexture(batchData.textureId1));
-			context3D.setTextureAt(1, Textures.getTexture(batchData.textureId2));
-			context3D.setTextureAt(2, Textures.getTexture(batchData.textureId3));
-			context3D.setTextureAt(3, Textures.getTexture(batchData.textureId4));
+			
+			
+			context3DTexture.setContextTexture(0, batchData.textureId1);
+			context3DTexture.setContextTexture(1, batchData.textureId2);
+			context3DTexture.setContextTexture(2, batchData.textureId3);
+			context3DTexture.setContextTexture(3, batchData.textureId4);
 			
 			// TODO: move this logic into worker
 			var newBlendMode:Int = 0;
@@ -243,46 +250,43 @@ class Renderer
 			
 			//m.appendRotation(Lib.getTimer()/40, Vector3D.Z_AXIS);
 			//context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, m, true);
+			//trace("itemCount = " + itemCount);
+			//trace(numItemsInBatch * 2);
 			
+			context3D.drawTriangles(shaderProgram.value.indexbuffer, itemCount, numItemsInBatch * 2);
 			
-			context3D.drawTriangles(shaderProgram.indexbuffer, firstIndex, numItems * 2);
-			firstIndex += numItems * 6;
+			itemCount += numItemsInBatch * 6;
 		}
-		
-		//trace("vertexDataPool.start = " + vertexDataPool.start);
-		/*
-		vertexbuffer.uploadFromByteArray(KeaMemory.memory, vertexDataPool.start, 0, 4 * bufferSize);		
-		// UV to attribute register 1
-		context3D.setVertexBufferAt(1, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
-		// vertex position to attribute register 0
-		context3D.setVertexBufferAt(0, vertexbuffer, 2, Context3DVertexBufferFormat.FLOAT_3);
-		// Colour to attribute register 2
-		//context3D.setVertexBufferAt(2, vertexbuffer, 5, Context3DVertexBufferFormat.FLOAT_4);
-		// assign texture to texture sampler 0
-		context3D.setTextureAt(0, Textures.getTexture(0));
-		//context3D.setTextureAt(0, null);
-		
-		//context3D.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
-		//context3D.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO);
-		context3D.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
-		
-		//context3D.setSamplerStateAt(0, Context3DWrapMode.CLAMP, Context3DTextureFilter.NEAREST, Context3DMipFilter.MIPNONE);
-		
-		// assign shader program
-		context3D.setProgram(program);
-		
-		
-		//m.appendRotation(Lib.getTimer()/40, Vector3D.Z_AXIS);
-		//context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, m, true);
-		
-		context3D.drawTriangles(indexbuffer, 0, bufferSize * 2);
-		*/
 		
 		bufferIndex = 0;
 	}
+	
+	
+	
+	
 	
 	public function end():Void
 	{
 		context3D.present();
 	}
+	
+	//public function start() 
+	//{
+		//var timer:Timer = new Timer(1, 0);
+		//timer.addEventListener(TimerEvent.TIMER, OnTick);
+		//timer.start();
+	//}
+	//
+	//private function OnTick(e:TimerEvent):Void 
+	//{
+		///*var i:Int = 0;
+		//while (renderIndex == conductorData.frameIndex) {
+			//// wait
+			//i++;
+		//}*/
+		//if (renderIndex != conductorData.frameIndex) {
+			//update();
+			//renderIndex = conductorData.frameIndex;
+		//}
+	//}
 }

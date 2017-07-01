@@ -1,6 +1,6 @@
 package kea.model.performance;
 
-import kea.notify.Notifier;
+import kea2.utils.Notifier;
 
 class Performance
 {

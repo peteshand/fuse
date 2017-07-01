@@ -1,5 +1,5 @@
 package kea.model.buffers;
-import kea.util.PowerOfTwo;
+import kea2.utils.PowerOfTwo;
 import kha.System;
 
 /**

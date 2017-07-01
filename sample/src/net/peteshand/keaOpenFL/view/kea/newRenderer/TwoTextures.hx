@@ -1,9 +1,10 @@
 package net.peteshand.keaOpenFL.view.kea.newRenderer;
 
 import kea.display.Sprite;
+import kea2.Kea;
 import kea2.display.renderables.Image;
 import kea2.render.Renderer;
-import kea2.texture.Texture;
+import kea2.texture.BitmapTexture;
 import openfl.Assets;
 import openfl.Lib;
 import openfl.display.BitmapData;
@@ -30,8 +31,8 @@ class TwoTextures extends Sprite
 		var bmd2:BitmapData = Assets.getBitmapData("img/keaSquare2.png");
 		//var bmd:BitmapData = new BitmapData(256, 256, true, 0x44FFFFFF);
 		
-		var texture1:Texture = new Texture(bmd1);
-		var texture2:Texture = new Texture(bmd2);
+		var texture1:BitmapTexture = new BitmapTexture(bmd1);
+		var texture2:BitmapTexture = new BitmapTexture(bmd2);
 		
 		var numQuads:Int = 100;// Renderer.bufferSize;// Math.floor(Math.random() * 5);
 		for (j in 0...numQuads) 
@@ -65,14 +66,20 @@ class TwoTextures extends Sprite
 			images.push(image2);
 		}
 		
-		Lib.current.stage.addEventListener(Event.ENTER_FRAME, Update);
+		//Lib.current.stage.addEventListener(Event.ENTER_FRAME, Update);
+		Kea.enterFrame.add(OnTick);
 	}
 	
-	private function Update(e:Event):Void 
+	function OnTick() 
 	{
 		for (i in 0...images.length) 
 		{
-			images[i].rotation++;
+			images[i].rotation += 10;
 		}
 	}
+	
+	/*private function Update(e:Event):Void 
+	{
+		
+	}*/
 }

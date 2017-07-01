@@ -1,7 +1,7 @@
 package kea.logic.buffers.atlas.renderer;
 import kea.logic.buffers.atlas.items.AtlasItem;
 import kea.logic.buffers.atlas.packer.AtlasPartition;
-import kea.notify.Notifier;
+import kea2.utils.Notifier;
 import kea.texture.Texture;
 import kea.util.MatrixUtils;
 import kha.math.FastMatrix3;

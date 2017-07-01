@@ -1,14 +1,17 @@
 package net.peteshand.keaOpenFL.view.kea;
-import net.peteshand.keaOpenFL.view.kea.atlas.AtlasTest;
-import net.peteshand.keaOpenFL.view.kea.atlas.AtlasTest2;
-import net.peteshand.keaOpenFL.view.kea.bgColour.BgColourTest;
-import net.peteshand.keaOpenFL.view.kea.bunchMark.BunnyMark;
-import net.peteshand.keaOpenFL.view.kea.layerTest.LayerTest;
-import net.peteshand.keaOpenFL.view.kea.layerTest.LayerTest2;
+import net.peteshand.keaOpenFL.view.kea.newRenderer.AtlasGenTest;
+import net.peteshand.keaOpenFL.view.kea.newRenderer.RenderTextureTest;
+import net.peteshand.keaOpenFL.view.kea.old.atlas.AtlasTest;
+import net.peteshand.keaOpenFL.view.kea.old.atlas.AtlasTest2;
+import net.peteshand.keaOpenFL.view.kea.old.bgColour.BgColourTest;
+import net.peteshand.keaOpenFL.view.kea.old.bunchMark.BunnyMark;
+import net.peteshand.keaOpenFL.view.kea.old.layerTest.LayerTest;
+import net.peteshand.keaOpenFL.view.kea.old.layerTest.LayerTest2;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.NewRendererTest;
+import net.peteshand.keaOpenFL.view.kea.newRenderer.NonPowerOfTwo;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.TwoTextures;
-import net.peteshand.keaOpenFL.view.kea.test1.Test1;
-import net.peteshand.keaOpenFL.view.kea.textureUpload.TextureUploadTest;
+import net.peteshand.keaOpenFL.view.kea.old.test1.Test1;
+import net.peteshand.keaOpenFL.view.kea.old.textureUpload.TextureUploadTest;
 import kea2.Kea;
 import kea.display.Sprite;
 
@@ -56,10 +59,21 @@ class MainLayer extends Sprite
 		addChild(newRendererTest);
 		newRendererTest.init();*/
 		
-		var twoTextures:TwoTextures = new TwoTextures();
+		/*var twoTextures:TwoTextures = new TwoTextures();
 		addChild(twoTextures);
-		twoTextures.init();
+		twoTextures.init();*/
 		
+		/*var nonPowerOfTwo:NonPowerOfTwo = new NonPowerOfTwo();
+		addChild(nonPowerOfTwo);
+		nonPowerOfTwo.init();*/
+		
+		var renderTextureTest:RenderTextureTest = new RenderTextureTest();
+		addChild(renderTextureTest);
+		renderTextureTest.init();
+		
+		/*var atlasGenTest:AtlasGenTest = new AtlasGenTest();
+		addChild(atlasGenTest);
+		atlasGenTest.init();*/
 		
 	}
 	

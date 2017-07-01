@@ -16,7 +16,7 @@ import kea.util.MatrixUtils;
 import kha.Color;
 import kha.FastFloat;
 import kea2.display.containers.Stage;
-import kea.notify.Notifier;
+import kea2.utils.Notifier;
 import kha.graphics2.Graphics;
 import kha.graphics4.PipelineState;
 import kha.math.FastMatrix3;

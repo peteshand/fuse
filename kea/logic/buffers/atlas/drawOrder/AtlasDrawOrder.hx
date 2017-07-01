@@ -1,7 +1,7 @@
 package kea.logic.buffers.atlas.drawOrder;
 import kea.logic.buffers.atlas.items.AtlasItem;
 import kea.logic.buffers.atlas.items.AtlasItems;
-import kea.notify.Notifier;
+import kea2.utils.Notifier;
 import kea.texture.Texture;
 import kea2.Kea;
 

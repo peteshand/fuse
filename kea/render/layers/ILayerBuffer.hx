@@ -1,7 +1,7 @@
 package kea.render.layers;
 
 import kea2.display.containers.IDisplay;
-import kea.notify.Notifier;
+import kea2.utils.Notifier;
 import kha.graphics2.Graphics;
 
 interface ILayerBuffer

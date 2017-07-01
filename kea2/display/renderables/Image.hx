@@ -1,5 +1,7 @@
 package kea2.display.renderables;
-import kea2.texture.Texture;
+
+import kea2.texture.ITexture;
+
 
 /**
  * ...
@@ -8,7 +10,7 @@ import kea2.texture.Texture;
 class Image extends Renderable
 {
 
-	public function new(texture:Texture) 
+	public function new(texture:ITexture) 
 	{
 		super();
 		this.width = texture.width;

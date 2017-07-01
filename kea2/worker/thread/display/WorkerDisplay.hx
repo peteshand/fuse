@@ -1,9 +1,17 @@
 package kea2.worker.thread.display;
-import kea.notify.Notifier;
+import kea2.core.memory.data.batchData.BatchData;
+import kea2.texture.RenderTexture;
+import kea2.utils.Notifier;
 import kea2.core.memory.data.displayData.DisplayData;
+import kea2.core.memory.data.textureData.TextureData;
 import kea2.core.memory.data.vertexData.VertexData;
 import kea2.display._private.PrivateDisplayBase;
+import kea2.worker.thread.atlas.AtlasPacker;
+import kea2.worker.thread.display.TextureOrder.TextureDef;
+import kea2.worker.thread.display.TextureRenderBatch.RenderBatchDef;
+import kea2.worker.thread.display.WorkerDisplay;
 import kea2.worker.thread.display.WorkerDisplayList;
+import kea2.worker.thread.texture.ObjectPool;
 import kea2.worker.thread.util.transform.WorkerTransformHelper;
 import kha.Color;
 import kha.math.FastMatrix3;
@@ -17,6 +25,7 @@ import openfl.utils.ByteArray;
  * ...
  * @author P.J.Shand
  */
+@:access(kea2)
 class WorkerDisplay extends PrivateDisplayBase
 {
 	@:isVar public var x(default, set):Float = 0;
@@ -35,7 +44,9 @@ class WorkerDisplay extends PrivateDisplayBase
 	//public var objectId:Int;
 	//public var parentId:Int;
 	//public var renderId:Int;
-	public var textureId:Int;
+	@:isVar public var textureId(default, set):Int = -1;
+	//@:isVar public var renderTargetId(default, set):Int = -1;
+	
 	/*public var applyPosition:Bool;
 	public var applyRotation:Bool;*/
 	
@@ -56,9 +67,14 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	//var textureIds:Notifier<Int>;
 	//var workerDisplayList:WorkerDisplayList;
-	var textureOrder:TextureOrder;
+	var textureData:TextureData;
 	
-	public function new(textureOrder:TextureOrder, displayData:DisplayData, vertexData:VertexData) 
+	//var workerEntryPoint:WorkerEntryPoint;
+	/*var textureOrder:TextureOrder;
+	var atlasPacker:AtlasPacker;
+	var textureRenderBatch:TextureRenderBatch;*/
+	
+	public function new(displayData:DisplayData/*, vertexData:VertexData*/) 
 	{
 		bottomLeft = new FastVector2();
 		topLeft = new FastVector2();
@@ -66,8 +82,10 @@ class WorkerDisplay extends PrivateDisplayBase
 		bottomRight = new FastVector2();
 		
 		this.displayData = displayData;
-		this.vertexData = vertexData;
-		this.textureOrder = textureOrder;
+		this.vertexData = new VertexData();
+		//this.workerEntryPoint = workerEntryPoint;
+		//this.textureRenderBatch = textureRenderBatch;
+		//this.atlasPacker = atlasPacker;
 		
 		super();
 	}
@@ -89,24 +107,13 @@ class WorkerDisplay extends PrivateDisplayBase
 		child.parent = null;
 	}
 	
-	//public function buildHierarchy(workerDisplayList:WorkerDisplayList) 
-	//{
-		////if (renderable) {
-			//workerDisplayList.hierarchy.push(this);
-		////}		
-		//for (i in 0...children.length) 
-		//{
-			//children[i].buildHierarchy(workerDisplayList);
-		//}
-	//}
-	
-	public function buildTransformData(hierarchyBuildRequired:Bool, workerDisplayList:WorkerDisplayList, graphics:WorkerGraphics) 
+	public function buildHierarchy(hierarchyBuildRequired:Bool, workerDisplayList:WorkerDisplayList, graphics:WorkerGraphics) 
 	{
 		pushTransform(hierarchyBuildRequired, workerDisplayList, graphics);
 		
 		for (i in 0...children.length) 
 		{
-			children[i].buildTransformData(hierarchyBuildRequired, workerDisplayList, graphics);
+			children[i].buildHierarchy(hierarchyBuildRequired, workerDisplayList, graphics);
 		}
 		popTransform(graphics);
 	}
@@ -146,21 +153,23 @@ class WorkerDisplay extends PrivateDisplayBase
 		
 		if (hierarchyBuildRequired) {
 			workerDisplayList.hierarchy.push(this);
+			workerDisplayList.hierarchyAll.push(this);
 			if (renderId != -1) {
-				workerDisplayList.numberOfRenderables++;
+				//workerDisplayList.numberOfRenderables++;
+				//trace("this.numberOfRenderables = " + Conductor.conductorDataAccess.numberOfRenderables);
 			}
 		}
 	}
 	
 	
 	
-	var textureWidth:Int;
-	var textureHeight:Int;
+	//var textureWidth:Int;
+	//var textureHeight:Int;
 	
-	var sx:Float;
-	var sy:Float;
-	var sw:Float;
-	var sh:Float;
+	//var sx:Float;
+	//var sy:Float;
+	//var sw:Float;
+	//var sh:Float;
 	
 	var opacity:Float;
 	//var color:Color;
@@ -185,11 +194,12 @@ class WorkerDisplay extends PrivateDisplayBase
 	var updateUVs:Bool = true;
 	var updatePosition:Bool = true;
 	var updateColour:Bool = false;
+	var renderTextureId:Int;
 	
 	
-	public function updateVertexData(graphics:WorkerGraphics) 
+	public function updateVertexData() 
 	{
-		updateUVData();
+		//updateUVData();
 		updatePositionData();
 		
 		opacity = 1;
@@ -201,27 +211,36 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function updateUVData() 
 	{
-		if (updateUVs) {
-			//var x:Float = -pivotX;
-			//var y:Float = -pivotY;
-			sx = 0;// pivotX;
-			sy = 0;//pivotY;
-			//var width:Float = width;
-			//var height:Float = height;
-			
-			textureWidth = 200;
-			textureHeight = 200;
-			
-			//sx = sx;
-			//sy = sy;
-			sw = width;
-			sh = height;
-			
-			left = 0;//sx / textureWidth;// tex.realWidth;
-			top = 0;//sy / textureHeight;// tex.realHeight;
-			right = 1;//(sx + sw) / textureWidth;//tex.realWidth;
-			bottom = 1;//(sy + sh) / textureHeight;//tex.realHeight;
-		}
+		//if (updateUVs) {
+		
+		
+		//textureData
+		//var x:Float = -pivotX;
+		//var y:Float = -pivotY;
+		//sx = 0;// pivotX;
+		//sy = 0;//pivotY;
+		//var width:Float = width;
+		//var height:Float = height;
+		
+		//textureWidth = textureData.width;
+		//textureHeight = textureData.height;
+		
+		//sx = sx;
+		//sy = sy;
+		//sw = width;
+		//sh = height;
+		
+		//left = 0;//sx / textureWidth;// tex.realWidth;
+		//top = 0;//sy / textureHeight;// tex.realHeight;
+		//right = 1;//(sx + sw) / textureWidth;//tex.realWidth;
+		//bottom = 1;//(sy + sh) / textureHeight;//tex.realHeight;
+		
+		
+		left = textureData.x;
+		top = textureData.y;
+		right = textureData.width / textureData.p2Width;
+		bottom = textureData.height / textureData.p2Height;
+		//}
 	}
 	
 	inline function updatePositionData() 
@@ -246,26 +265,55 @@ class WorkerDisplay extends PrivateDisplayBase
 		alpha = displayData.alpha;
 		color = displayData.color;
 		textureId = displayData.textureId;
-		
-		//trace("textureId = " + textureId);
 	}
 	
-	public function setVertexData(graphics:WorkerGraphics) 
+	public function setTextures() 
 	{
 		if (textureId == -1) return;
 		
-		textureOrder.textureEndIndex = vertexData.memoryBlock.end;
-		textureOrder.textureStartIndex = vertexData.memoryBlock.start;
-		textureOrder.textureIds.value = textureId;
+		WorkerCore.textureOrder.textureEndIndex = VertexData.basePosition + VertexData.BYTES_PER_ITEM;
+		WorkerCore.textureOrder.textureStartIndex = VertexData.basePosition;
+		renderTextureId = RenderTexture.currentRenderTextureId;
+		//trace("setTextures:   renderTextureId = " + renderTextureId);
 		
-		mulX = 1600 / 2;// Kea.current.stage.stageWidth / 2;
-		mulY = 900 / 2;// Kea.current.stage.stageHeight / 2;
+		WorkerCore.textureOrder.setValues(VertexData.OBJECT_POSITION, textureId, renderTextureId, textureData);
+		
+		VertexData.OBJECT_POSITION++;
+	}
+	
+	public function setVertexData() 
+	{
+		if (textureId == -1) return;
+		//trace("setVertexData: renderTextureId = " + renderTextureId);
+		
+		vertexData.textureId = textureId;
+		
+		var renderBatchIndex:Int = WorkerCore.textureRenderBatch.getRenderBatchIndex(VertexData.OBJECT_POSITION);
+		var renderBatchDef:RenderBatchDef = WorkerCore.textureRenderBatch.getRenderBatchDef(renderBatchIndex);
+		vertexData.renderBatchIndex = renderBatchIndex;
+		//var textureDef:TextureDef = renderBatchDef.textureDefs[renderBatchIndex];
+		//trace("key = " + textureDef.textureData.partition.value.key);
+		
+		//var renderBatchDef:RenderBatchDef = WorkerCore.textureRenderBatch.getRenderBatchDef(VertexData.OBJECT_POSITION);
+		for (i in 0...renderBatchDef.textureIdArray.length) 
+		{
+			if (vertexData.textureId == renderBatchDef.textureIdArray[i]) vertexData.textureId = i;
+		}
+		
+		if (renderBatchDef.renderTargetId == -1) {
+			mulX = 1600 / 2;// Kea.current.stage.stageWidth / 2;
+			mulY = 900 / 2;// Kea.current.stage.stageHeight / 2;	
+		}
+		else {
+			mulX = 512 / 2;
+			mulY = 512 / 2;
+		}
 		offsetX = -mulX;
 		offsetY = -mulY;
 		
-		vertexData.t1 = vertexData.t2 = vertexData.t3 = vertexData.t4 = textureOrder.getTextureIndex(textureId);
+		//vertexData.textureId = textureId;
 		
-		if (updateUVs) {
+		//if (updateUVs) {
 			vertexData.u1 = left;
 			vertexData.v1 = bottom;
 			
@@ -277,9 +325,9 @@ class WorkerDisplay extends PrivateDisplayBase
 			
 			vertexData.u4 = right;
 			vertexData.v4 = bottom;
-		}
+		//}
 		
-		if (updatePosition) {
+		//if (updatePosition) {
 			vertexData.x1 = (bottomLeft.x + offsetX) / mulX;
 			vertexData.y1 = (-bottomLeft.y - offsetY) / mulY;
 			//vertexData.z1 = 0;
@@ -295,7 +343,7 @@ class WorkerDisplay extends PrivateDisplayBase
 			vertexData.x4 = (bottomRight.x + offsetX) / mulX;
 			vertexData.y4 = (-bottomRight.y - offsetY) / mulY;
 			//vertexData.z4 = 0;
-		}
+		//}
 		
 		/*if (updateColour) {
 			//VertexData.blockIndex = BlockIndex.COLOUR;
@@ -368,6 +416,13 @@ class WorkerDisplay extends PrivateDisplayBase
 		else vertexData.move(4);*/
 		
 		updateUVs = false;
+		
+		VertexData.OBJECT_POSITION++;
+	}
+	
+	public function checkAtlas() 
+	{
+		//textureData
 	}
 	
 	public inline function multvec(output:FastVector2, localTransform:FastMatrix3, x: Float, y:Float):Void
@@ -396,14 +451,14 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function set_x(value:Float):Float { 
 		if (x != value){
-			displayData.x = x = value;
+			/*displayData.x = */x = value;
 			applyPosition = true;
 		}
 		return value;
 	}
 	inline function set_y(value:Float):Float { 
 		if (y != value){
-			displayData.y = y = value;
+			/*displayData.y = */y = value;
 			applyPosition = true;
 		}
 		return value;
@@ -411,7 +466,7 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function set_width(value:Float):Float { 
 		if (width != value){
-			displayData.width = width = value;
+			/*displayData.width = */width = value;
 			applyPosition = true;
 		}
 		return value;
@@ -419,7 +474,7 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function set_height(value:Float):Float { 
 		if (height != value){
-			displayData.height = height = value;
+			/*displayData.height = */height = value;
 			applyPosition = true;
 		}
 		return value;
@@ -427,7 +482,7 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function set_pivotX(value:Float):Float { 
 		if (pivotX != value){
-			displayData.pivotX = pivotX = value;
+			/*displayData.pivotX = */pivotX = value;
 			applyPosition = true;
 		}
 		return value;
@@ -435,7 +490,7 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function set_pivotY(value:Float):Float { 
 		if (pivotY != value){
-			displayData.pivotY = pivotY = value;
+			/*displayData.pivotY = */pivotY = value;
 			applyPosition = true;
 		}
 		return value;
@@ -443,7 +498,7 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function set_rotation(value:Float):Float { 
 		if (rotation != value){
-			displayData.rotation = rotation = value;
+			/*displayData.rotation = */rotation = value;
 			applyRotation = true;
 		}
 		return value;
@@ -451,7 +506,7 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function set_scaleX(value:Float):Float { 
 		if (scaleX != value){
-			displayData.scaleX = scaleX = value;
+			/*displayData.scaleX = */scaleX = value;
 			applyPosition = true;
 		}
 		return value;
@@ -459,7 +514,7 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function set_scaleY(value:Float):Float { 
 		if (scaleY != value){
-			displayData.scaleY = scaleY = value;
+			/*displayData.scaleY = */scaleY = value;
 			applyPosition = true;
 		}
 		return value;
@@ -467,7 +522,7 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function set_color(value:Color):Color { 
 		if (color != value){
-			displayData.color = color = value;
+			/*displayData.color = */color = value;
 			isStatic = false;
 		}
 		return value;
@@ -475,11 +530,38 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function set_alpha(value:Float):Float { 
 		if (alpha != value){
-			displayData.alpha = alpha = value;
+			/*displayData.alpha = */alpha = value;
 			isStatic = false;
 		}
 		return value;
 	}
+	
+	inline function set_textureId(value:Int):Int { 
+		if (textureId != value){
+			textureId = value;
+			
+			if (textureData != null && textureId == -1) {
+				WorkerCore.atlasPacker.removeTexture(textureData.textureId);
+				textureData = null;
+			}
+			else if (textureData == null || textureData.textureId != textureId){
+				textureData = WorkerCore.atlasPacker.registerTexture(textureId);
+			}
+			
+			updateUVData();
+			isStatic = false;
+		}
+		return value;
+	}
+	
+	/*inline function set_renderTargetId(value:Int):Int { 
+		if (renderTargetId != value){
+			renderTargetId = value;
+			updateUVData();
+			isStatic = false;
+		}
+		return value;
+	}*/
 	
 	
 	
@@ -499,5 +581,42 @@ class WorkerDisplay extends PrivateDisplayBase
 			isStatic = false;
 		}
 		return applyRotation;
+	}
+	
+	public function clone():WorkerDisplay
+	{
+		var _clone:WorkerDisplay = new WorkerDisplay(displayData);
+		_clone.objectId = objectId;
+		_clone.renderId = renderId;
+		_clone.parentId = parentId;
+		for (i in 0...children.length) 
+		{
+			_clone.children.push(children[i].clone());
+		}
+		return _clone;
+	}
+	
+	public function copyTo(destination:WorkerDisplay) 
+	{
+		destination.displayData = this.displayData;
+		destination.objectId = this.objectId;
+		destination.renderId = this.renderId;
+		destination.parentId = this.parentId;
+		for (i in 0...children.length) 
+		{
+			var clonedChild:WorkerDisplay = ObjectPool.request();
+			children[i].copyTo(clonedChild);
+			destination.addChildAt(clonedChild, destination.children.length);
+		}
+	}
+	
+	public function releaseToPool() 
+	{
+		while (children.length > 0)
+		{
+			children[0].releaseToPool();
+			children.shift();
+		}
+		ObjectPool.release(this);
 	}
 }

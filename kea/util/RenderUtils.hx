@@ -1,7 +1,7 @@
 package kea.util;
 
 import kea2.display.containers.IDisplay;
-import kea.notify.Notifier;
+import kea2.utils.Notifier;
 import kea.render.layers.ILayerBuffer;
 
 class RenderUtils

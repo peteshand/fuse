@@ -10,7 +10,7 @@ import kea.logic.buffers.atlas.renderer.TextureAtlas;
 import kea.logic.renderer.Renderer;
 import kea2.display.containers.DisplayObject;
 import kea2.display.containers.IDisplay;
-import kea.notify.Notifier;
+import kea2.utils.Notifier;
 import kha.Image;
 
 /**

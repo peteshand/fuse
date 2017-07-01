@@ -2,6 +2,7 @@ package kea2;
 import flash.events.Event;
 import flash.display.Stage as OpenFLStage;
 import kea.display.Sprite;
+import kea2.core.atlas.AtlasBuffers;
 import kea2.core.memory.KeaMemory;
 import kea2.display.containers.Stage;
 import kea.logic.Logic;
@@ -16,6 +17,8 @@ import kha.System.SystemOptions;
 import kha.graphics2.Graphics;
 import msignal.Signal.Signal0;
 import openfl.Lib;
+import openfl.display3D.Context3DProfile;
+import openfl.display3D.Context3DRenderMode;
 
 import flash.system.Worker;
 
@@ -23,14 +26,18 @@ class Kea
 {
 	public var keaMemory:KeaMemory;
 	public var renderer:Renderer;
+	//public var atlasBuffer:AtlasBuffer;
 	public var stage:Stage;
 	public var model:Model;
 	public var logic:Logic;
 	@:isVar public var frameRate(get, set):Int;
+	public var keaConfig:KeaConfig;
 	public var onRender:Signal0;
 	
 	var index:Int;
 	var g2:Graphics;
+	
+	public static var enterFrame:Signal0;
 	
 	@:isVar 
 	public static var current(get, null):Kea;
@@ -39,12 +46,14 @@ class Kea
 	static var calcTransformIndex:Int = 0;
 	static var count:Int = 0;
 	var rootClass:Class<Sprite>;
+	var atlasBuffers:AtlasBuffers;
 	
 	public var workers:Workers;
 	
 	static function __init__():Void
 	{
 		current = new Kea();
+		enterFrame = new Signal0();
 	}
 	
 	public static function init(rootClass:Class<Sprite>, keaConfig:KeaConfig): Void {
@@ -57,6 +66,7 @@ class Kea
 			//Kea.rootClass = rootClass;
 			//var options:SystemOptions = { title: "Project", width: 1920, height: 1080 };
 			//System.init(options, OnKhaSetupComplete);
+			Kea.current.keaConfig = keaConfig;
 			Kea.current.frameRate = keaConfig.frameRate;
 			//Kea.current.start(rootClass);
 			//OnKeaSetupComplete();
@@ -117,7 +127,7 @@ class Kea
 	{
 		var stage:OpenFLStage = Lib.current.stage;
 		stage.stage3Ds[0].addEventListener( Event.CONTEXT3D_CREATE, onStage3DInit );
-		stage.stage3Ds[0].requestContext3D();
+		stage.stage3Ds[0].requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.STANDARD);
 	}
 	
 	private function onStage3DInit(e:Event):Void 
@@ -126,15 +136,32 @@ class Kea
 		renderer = new Renderer(openFLStage.stage3Ds[0]/*, workers.vertexData*/);
 		openFLStage.addEventListener(Event.ENTER_FRAME, Update);
 		
+		atlasBuffers = new AtlasBuffers(keaConfig.atlasBuffers, 2048, 2048);
+		
 		stage = new Stage(rootClass);
+		
+		//atlasBuffer = new AtlasBuffer();
+		
 	}
 	
 	private function Update(e:Event):Void 
 	{
+		checkMemoryIsAvailable();
+		
+		Kea.enterFrame.dispatch();
+		
 		renderer.update();
 	}
 	
-	
+	function checkMemoryIsAvailable() 
+	{
+		var i:Int = 0;
+		while (renderer.conductorData.busy == 1) {
+			// wait
+			//trace("wait");
+			i++;
+		}
+	}
 
 	function update(): Void {
 		

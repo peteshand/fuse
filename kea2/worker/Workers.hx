@@ -4,6 +4,7 @@ import flash.system.Worker;
 import kea.display.Sprite;
 import kea2.core.memory.KeaMemory;
 import kea2.core.memory.data.conductorData.ConductorData;
+import kea2.texture.ITexture;
 //import kea2.core.memory.vertexData.VertexData;
 import kea2.worker.communication.IWorkerComms;
 import kea2.display.containers.IDisplay;
@@ -32,11 +33,12 @@ import flash.concurrent.Mutex;
  */
 class Workers
 {
+	public static var syncThreads:Bool = false;
 	private var workerComms:Array<IWorkerComms> = [];
 	
 	var count:Int = 0;
 	
-	private var numberOfWorkers:Int = 1;
+	private var numberOfWorkers:Int = 0;
 	
 	public var onReady = new Signal0();
 	var workerStartCount:Int = 0;
@@ -61,8 +63,9 @@ class Workers
 	
 	function initWorkerControl() 
 	{
-		condition = new Condition(new Mutex());
-		condition.mutex.lock();
+		var mutex:Mutex = new Mutex();
+		mutex.lock();
+		condition = new Condition(mutex);
 		
 		Kea.current.keaMemory = new KeaMemory();
 		
@@ -134,7 +137,7 @@ class Workers
 			onReady.dispatch();
 			
 			//Trigger();
-			Lib.current.stage.addEventListener(Event.ENTER_FRAME, OnUpdate);
+			Kea.enterFrame.add(OnUpdate);
 		}
 	}
 	
@@ -168,8 +171,21 @@ class Workers
 		}
 	}
 	
-	private function OnUpdate(e:Event):Void 
+	/*public function addTexture(texture:ITexture) 
 	{
+		for (workerComm in workerComms) 
+		{
+			workerComm.send(MessageType.ADD_TEXTURE, texture.textureId );
+		}
+	}*/
+	
+	private function OnUpdate():Void 
+	{
+		if (Workers.syncThreads){
+			//trace("WAIT");
+			condition.wait();
+		}
+		/*
 		//trace("OnUpdate");
 		//if (conductorDataAccess.frameIndex == -1){
 		//	count++;
@@ -185,7 +201,12 @@ class Workers
 		//}
 		
 		//conductorDataAccess.frameIndex++;
-		//workerComms[conductorDataAccess.frameIndex % workerComms.length].send(MessageType.MAIN_THREAD_TICK);
+		*/
+		
+		
+		
+		
+		workerComms[conductorDataAccess.frameIndex % workerComms.length].send(MessageType.MAIN_THREAD_TICK);
 		
 		
 		

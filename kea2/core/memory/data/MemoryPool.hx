@@ -1,4 +1,5 @@
 package kea2.core.memory.data;
+import openfl.Memory;
 import openfl.errors.Error;
 
 

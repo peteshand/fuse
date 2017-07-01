@@ -6,9 +6,11 @@ import kea2.worker.data.WorkerSharedProperties;
 import msignal.Signal.Signal0;
 import openfl.Lib;
 import openfl.events.Event;
+import openfl.events.TimerEvent;
 import openfl.utils.Endian;
+import openfl.utils.Timer;
 
-//import flash.concurrent.Condition;
+import flash.concurrent.Condition;
 /**
  * ...
  * @author P.J.Shand
@@ -24,7 +26,7 @@ class Conductor
 	static var usingWorkers:Bool;
 	static private var workerComms:IWorkerComms;
 	
-	//static var condition:Condition;
+	static var condition:Condition;
 	static var isActiveWorker:Bool = false;
 	static private var numberOfWorkers:Int;
 	public static var conductorDataAccess:ConductorData;
@@ -35,7 +37,7 @@ class Conductor
 		Conductor.workerComms = workerComms;
 		Conductor.index = index;
 		//Conductor.conductorData = workerComms.getSharedProperty(WorkerSharedProperties.CONDUCTOR_DATA);
-		//Conductor.condition = workerComms.getSharedProperty(WorkerSharedProperties.CONDITION);
+		Conductor.condition = workerComms.getSharedProperty(WorkerSharedProperties.CONDITION);
 		Conductor.usingWorkers = usingWorkers;
 		//conductorData.endian = Endian.LITTLE_ENDIAN;
 		
@@ -47,31 +49,67 @@ class Conductor
 			condition.mutex.lock();
 		}*/
 		
+		
+		
 		onTick = new Signal0();
-		//workerComms.addListener(MessageType.MAIN_THREAD_TICK, OnMainTick);
-		Lib.current.stage.addEventListener(Event.ENTER_FRAME, OnUpdate);
+		workerComms.addListener(MessageType.MAIN_THREAD_TICK, OnMainTick);
+		//Lib.current.stage.addEventListener(Event.ENTER_FRAME, OnUpdate);
+		
+		/*var timer:Timer = new Timer(1, 0);
+		timer.addEventListener(TimerEvent.TIMER, OnTick);
+		timer.start();*/
+		
+		//new SetIntervalTimer(Interval, 1, true, []);
+		
+		//var id:Int = untyped __global__["flash.utils.setInterval"](Interval,1);
+	}
+	
+	static private function Interval() 
+	{
+		trace("Interval");
+	}
+	
+	static private function OnTick(e:TimerEvent):Void 
+	{
+		trace("OnTick");
 	}
 	
 	static private function OnMainTick(e:Event):Void 
 	{
+		
+		
 		//trace("conductorDataAccess.frameIndex = " + conductorDataAccess.frameIndex);
 		//trace(conductorDataAccess.frameIndex % numberOfWorkers == index);
 		onTick.dispatch();
+		
 		//conductorDataAccess.processIndex++;
 		//trace(conductorDataAccess.processIndex);
 	}
 	
 	static private function OnUpdate(e:Event):Void 
 	{
-		//onTick.dispatch();
+		//trace("OnUpdate");
+		onTick.dispatch();
+		return;
 		
 		//trace([Conductor.index, "threadActive = " + Conductor.threadActive]);
 		
 		
 		if (Conductor.threadActive) {
+			
+			if (Workers.syncThreads){
+				//trace("WORKER LOCK");
+				Conductor.condition.mutex.lock();
+			}
 			//conductorDataAccess.frameIndex++;
 			onTick.dispatch();
 			//conductorData.index = -1;
+			
+			if (Workers.syncThreads){
+				Conductor.condition.notify();
+				//trace("WORKER UNLOCK");
+				Conductor.condition.mutex.unlock();
+			}
 		}
 		
 		//trace("frameIndex = " + conductorDataAccess.frameIndex);

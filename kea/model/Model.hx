@@ -15,7 +15,7 @@ class Model
 	{
 		performance = new Performance();
 		
-		keaConfig = { frameRate:60 };
+		keaConfig = { frameRate:60, atlasBuffers:5 };
 		keaConfig.useCacheLayers = true;
 	
 	}

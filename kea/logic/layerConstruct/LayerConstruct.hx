@@ -4,7 +4,7 @@ import kea2.Kea;
 import kea.logic.displaylist.DisplayList;
 import kea.logic.renderer.Renderer;
 import kea2.display.containers.IDisplay;
-import kea.notify.Notifier;
+import kea2.utils.Notifier;
 import kea2.display.containers.DisplayObject;
 
 class LayerConstruct
@@ -156,7 +156,7 @@ class LayerOrders
 		}
     }
 	
-	@:access(kea.notify.Notifier)
+	@:access(kea2.utils.Notifier)
 	@:access(kea2.display.containers.DisplayObject)
 	public function findOrder(renderList:Array<IDisplay>):Array<LayerDefinition>
 	{

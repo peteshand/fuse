@@ -1,13 +1,19 @@
 package kea2.worker.thread;
 
 import kea2.core.memory.KeaMemory;
+import kea2.core.memory.data.vertexData.VertexData;
+import kea2.texture.RenderTexture;
 import kea2.worker.communication.IWorkerComms;
 import kea2.worker.thread.Conductor;
 import kea2.worker.data.AddChild;
+import kea2.worker.thread.atlas.AtlasPacker;
+import kea2.worker.thread.display.TextureOrder;
+import kea2.worker.thread.display.TextureRenderBatch;
 import kea2.worker.thread.display.WorkerDisplay;
 import kea2.worker.thread.display.WorkerDisplayList;
 import kea2.worker.communication.WorkerComms;
 import kea2.worker.thread.layerConstruct.WorkerLayerConstruct;
+import kea2.worker.thread.texture.RenderTextureManager;
 import openfl.Lib;
 import openfl.events.Event;
 import openfl.utils.ByteArray;
@@ -22,15 +28,14 @@ import kea2.worker.data.WorkerSharedProperties;
  * ...
  * @author P.J.Shand
  */
+@:access(kea2)
 class WorkerEntryPoint
 {
 	private var numberOfWorkers:Int;
 	private var workerComms:IWorkerComms;
 	var index:Int;
 	
-	var workerDisplayList:WorkerDisplayList;
-	var workerLayerConstruct:WorkerLayerConstruct;
-	public static var hierarchyBuildRequired:Bool = true;
+	
 	
     public function new(workerComms:IWorkerComms, numberOfWorkers:Int)
     {
@@ -41,13 +46,17 @@ class WorkerEntryPoint
 		workerComms.addListener(MessageType.ADD_CHILD, OnAddChild);
 		workerComms.addListener(MessageType.ADD_CHILD_AT, OnAddChildAt);
 		workerComms.addListener(MessageType.REMOVE_CHILD, OnRemoveChild);
+		//workerComms.addListener(MessageType.ADD_TEXTURE, OnAddTexture);
 		
-		workerDisplayList = new WorkerDisplayList(workerComms);
-		workerLayerConstruct = new WorkerLayerConstruct();
+		WorkerCore.textureOrder = new TextureOrder();
+		WorkerCore.textureRenderBatch = new TextureRenderBatch();
+		WorkerCore.atlasPacker = new AtlasPacker();
+		WorkerCore.workerDisplayList = new WorkerDisplayList(workerComms);
+		WorkerCore.renderTextureManager = new RenderTextureManager();
+		WorkerCore.workerLayerConstruct = new WorkerLayerConstruct();
 		
 		if (Kea.current.keaMemory == null) {
 			var memory:ByteArray = workerComms.getSharedProperty(WorkerSharedProperties.CORE_MEMORY);
-			trace(memory == null);
 			Kea.current.keaMemory = new KeaMemory(memory);
 		}
 		
@@ -78,7 +87,7 @@ class WorkerEntryPoint
 		
 		//Delay.nextFrame(Tick);
 		//Lib.current.stage.addEventListener(Event.ENTER_FRAME, OnUpdate);
-		trace("MessageType.WORKER_STARTED");
+		//trace("MessageType.WORKER_STARTED");
 		workerComms.send(MessageType.WORKER_STARTED);
 	}
 	
@@ -110,21 +119,32 @@ class WorkerEntryPoint
 		//if (Conductor.conductorDataAccess.processIndex % numberOfWorkers == index){
 			//if (index == 0) trace("Mod = " + (Math.floor(Conductor.conductorDataAccess.frameIndex % numberOfWorkers)));
 			//if (Conductor.conductorDataAccess.frameIndex % numberOfWorkers == index){
-				workerDisplayList.buildTransformData();
 				
-				
-				
-				workerDisplayList.updateVertexData();
-				
-				Conductor.conductorDataAccess.frameIndex++;
-				
-				
-				workerDisplayList.setVertexData();
-				
-				hierarchyBuildRequired = false;
+				//Conductor.conductorDataAccess.busy = 1;
+				//
+				//workerDisplayList.buildHierarchy();
+				//
+				//
+				//
+				//workerDisplayList.updateVertexData();
+				//
+				//
+				//
+				//VertexData.OBJECT_POSITION = 0;
+				//workerDisplayList.setVertexData();
+				//
+				//renderTextureManager.update();
+				//
+				//atlasPacker.update();
+				//
+				//Conductor.conductorDataAccess.busy = 0;
+				//
+				//Conductor.conductorDataAccess.frameIndex++;
+				//hierarchyBuildRequired = false;
 			//}
 		//}
 		
+		WorkerCore.workerDisplayList.update();
 	}
 	
 	function OnAddChild(addChildPayload:AddChild) 
@@ -144,16 +164,21 @@ class WorkerEntryPoint
 		transformData.endian = Endian.LITTLE_ENDIAN;
 		
 		workerDisplayList.addChild(new WorkerDisplay(transformData));*/
-		workerDisplayList.addChildAt(objectId, renderId, parentId, addAtIndex);
-		hierarchyBuildRequired = true;
+		WorkerCore.workerDisplayList.addChildAt(objectId, renderId, parentId, addAtIndex);
+		WorkerCore.hierarchyBuildRequired = true;
 	}
 	
 	function OnRemoveChild(workerPayload:WorkerPayload) 
 	{
 		var objectId:Int = workerPayload;
-		workerDisplayList.removeChild(objectId);
-		hierarchyBuildRequired = true;
+		WorkerCore.workerDisplayList.removeChild(objectId);
+		WorkerCore.hierarchyBuildRequired = true;
 	}
+	
+	/*private function OnAddTexture(workerPayload:WorkerPayload):Void 
+	{
+		var textureId:Int = workerPayload;
+	}*/
 	
 	function OnUpdateMsg(workerPayload:WorkerPayload) 
 	{

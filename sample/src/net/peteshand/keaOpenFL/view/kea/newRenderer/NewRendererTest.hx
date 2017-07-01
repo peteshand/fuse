@@ -4,7 +4,8 @@ import kea.display.Sprite;
 import kea2.display.renderables.Image;
 import kea2.display.renderables.Quad;
 import kea2.render.Renderer;
-import kea2.texture.Texture;
+import kea2.texture.BitmapTexture;
+import kea2.texture.ITexture;
 import kha.Color;
 import openfl.Assets;
 import openfl.Lib;
@@ -31,7 +32,7 @@ class NewRendererTest extends Sprite
 		var bmd:BitmapData = Assets.getBitmapData("img/keaSquare.png");
 		//var bmd:BitmapData = new BitmapData(256, 256, true, 0x44FFFFFF);
 		
-		var texture:Texture = new Texture(bmd);
+		var texture:ITexture = new BitmapTexture(bmd);
 		
 		var numQuads:Int = Renderer.bufferSize;// Math.floor(Math.random() * 5);
 		for (j in 0...numQuads) 

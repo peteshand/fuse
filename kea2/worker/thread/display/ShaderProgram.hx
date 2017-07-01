@@ -28,7 +28,7 @@ class ShaderProgram
 			indices[i * 3 * 2 + 5] = i * 4 + 3;
 		}
 		
-		vertexbuffer = context3D.createVertexBuffer(4 * bufferSize, 6, Context3DBufferUsage.DYNAMIC_DRAW);
+		vertexbuffer = context3D.createVertexBuffer(4 * bufferSize, 7, Context3DBufferUsage.DYNAMIC_DRAW);
 		indexbuffer = context3D.createIndexBuffer(6 * bufferSize);
 		
 	}

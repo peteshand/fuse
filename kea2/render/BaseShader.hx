@@ -1,4 +1,5 @@
 package kea2.render;
+import openfl.Vector;
 import openfl.display3D.Context3DProgramType;
 import openfl.utils.AGALMiniAssembler;
 import openfl.utils.ByteArray;
@@ -17,12 +18,19 @@ class BaseShader
 	var vertexString(get, null):String;
 	var fragmentString(get, null):String;
 	
+	public var textureChannelData:Vector<Float>;
 	public var vertexCode(get, null):ByteArray;
 	public var fragmentCode(get, null):ByteArray;
 	
 	public function new() 
 	{
-		
+		textureChannelData = Vector.ofArray(
+		[
+			1, 0, 0, 0,
+			0, 1, 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1
+		]);
 	}
 	
 	function get_vertexCode():ByteArray 
@@ -40,53 +48,34 @@ class BaseShader
 	// Override
 	function get_fragmentString():String 
 	{
-		/*return //
-			"tex ft0, v0, fs0 <2d>\n" +
-			"mul ft1, v1, ft0 \n" +
-			//"mov ft1, v1 \n" +
-			"mov oc, ft1";
-			
-		return "mov oc, v0 ";*/
-		
-		//return "tex ft1, v0, fs[fc0.x] <2d,repeat,linear>\n" +
-		return "tex ft1, v0, fs0 <2d,repeat,linear>	\n" +
-			"tex ft2, v0, fs1 <2d,repeat,linear>\n" +
-			"tex ft3, v0, fs2 <2d,repeat,linear>\n" +
-			"tex ft4, v0, fs3 <2d,repeat,linear>\n" +
-			//"div ft1.xyz, ft1.xyz, ft1.w \n" +  // un-premultiply png
-			
-			//"mov ft3.xxxx, v1.xxxx		\n" +
-			//"mov ft4.xxxx, fc[ft3.x].xxxx		\n" +
-			//"mov ft5.xyzw, fc[ft3.x].xxxx		\n" +
+		return "\n" +
+			"tex ft1, v0, fs0 <2d,repeat,linear>	\n" +
+			"tex ft2, v0, fs1 <2d,repeat,linear>	\n" +
+			"tex ft3, v0, fs2 <2d,repeat,linear>	\n" +
+			"tex ft4, v0, fs3 <2d,repeat,linear>	\n" +
 			
 			"mul ft1.xyzw, ft1.xyzw, v1.xxxx		\n" +
 			"mul ft2.xyzw, ft2.xyzw, v1.yyyy		\n" +
+			"mul ft3.xyzw, ft3.xyzw, v1.zzzz		\n" +
+			"mul ft4.xyzw, ft4.xyzw, v1.wwww		\n" +
 			
 			"add ft1, ft1, ft2						\n" +
+			"add ft1, ft1, ft3						\n" +
+			"add ft1, ft1, ft4						\n" +
 			
 			"mov oc, ft1";
 	}
 	
-	// Override
 	function get_vertexString():String 
 	{
 		return "mov op, va0	\n" + // pos to clipspace
 			"mov v0, va1	\n" + // + // copy UV
 			
-			"mov vt0, va1	\n" + // copy Texture Index
+			"mov vt2, va2	\n" + // copy Texture Index
 			
-			"mov v1.xyzw, vc[vt0.z].xyzw"; // copy Texture Index
+			"mov v1.xyzw, vc[vt2.x].xyzw"; // copy Texture Index
 			//"mov v1, va2"; // copy Colour
 			
 	}
 	
 }
-//
-////First, here's the most basic texture sampling shader you can get
-//fragmentShader = "tex oc, v1, fs0 <2d,repeat,linear>"; //sample texture and output RGB
- //
-////Here's what it looks like un-multiplied
-//fragmentShader = 
-//"tex ft0, v1, fs0 <2d,repeat,linear> \n" + //sample texture
-//"div ft0.rgb, ft0.rgb, ft0.a \n" +  // un-premultiply png
-//"mov oc, ft0" //output fixed RGB

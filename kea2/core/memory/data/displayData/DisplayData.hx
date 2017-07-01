@@ -32,7 +32,7 @@ class DisplayData
 	//public static inline var INDEX_APPLY_POSITION:Int = 64;
 	//public static inline var INDEX_APPLY_ROTATION:Int = 68;
 	
-	public var memoryBlock:MemoryBlock;
+	var memoryBlock:MemoryBlock;
 	
 	public var x(get, set):Float;
 	public var y(get, set):Float;
@@ -46,6 +46,10 @@ class DisplayData
 	public var alpha(get, set):Float;
 	
 	public var color(get, set):Color;
+	
+	private var _objectId:Int;
+	public var objectId(get, null):Int;
+	
 	//public var objectId(get, set):Int;
 	//public var parentId(get, set):Int;
 	//public var renderId(get, set):Int;
@@ -55,9 +59,12 @@ class DisplayData
 	//public var applyPosition(get, set):Int;
 	//public var applyRotation(get, set):Int;
 	
-	public function new(objectOffset:Int) 
+	public function new(objectOffset:Null<Int>) 
 	{
-		memoryBlock = Kea.current.keaMemory.displayDataPool.createMemoryBlock(DisplayData.BYTES_PER_ITEM, objectOffset);
+		if (objectOffset != null) {
+			_objectId = objectOffset;
+			memoryBlock = Kea.current.keaMemory.displayDataPool.createMemoryBlock(DisplayData.BYTES_PER_ITEM, objectOffset);
+		}
 	}
 	
 	inline function get_x():Float { 
@@ -132,6 +139,10 @@ class DisplayData
 		//return memoryBlock.readInt(INDEX_APPLY_ROTATION);
 	//}
 	
+	inline function get_objectId():Int
+	{
+		return _objectId;
+	}
 	
 	
 	inline function set_x(value:Float):Float { 
