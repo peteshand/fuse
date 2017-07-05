@@ -19,6 +19,7 @@ class BaseShader
 	var fragmentString(get, null):String;
 	
 	public var textureChannelData:Vector<Float>;
+	public var fragData:Vector<Float>;
 	public var vertexCode(get, null):ByteArray;
 	public var fragmentCode(get, null):ByteArray;
 	
@@ -29,6 +30,10 @@ class BaseShader
 			1, 0, 0, 0,
 			0, 1, 0, 0,
 			0, 0, 1, 0,
+			0, 0, 0, 1
+		]);
+		fragData = Vector.ofArray(
+		[
 			0, 0, 0, 1
 		]);
 	}
@@ -68,14 +73,24 @@ class BaseShader
 	
 	function get_vertexString():String 
 	{
-		return "mov op, va0	\n" + // pos to clipspace
+		return "mov vt0.zw, vc4.xw	\n" + // set z and w pos to vt0
+			"mov vt0.xy, va0.xy	\n" + // set x and y pos to vt0
+			"mov op, vt0	\n" + // set vt0 to clipspace
 			"mov v0, va1	\n" + // + // copy UV
 			
 			"mov vt2, va2	\n" + // copy Texture Index
 			
 			"mov v1.xyzw, vc[vt2.x].xyzw"; // copy Texture Index
 			//"mov v1, va2"; // copy Colour
+		
+		/*return "mov op, va0	\n" + // pos to clipspace
+			"mov v0, va1	\n" + // + // copy UV
 			
+			"mov vt2, va2	\n" + // copy Texture Index
+			
+			"mov v1.xyzw, vc[vt2.x].xyzw"; // copy Texture Index
+			//"mov v1, va2"; // copy Colour
+			*/
 	}
 	
 }

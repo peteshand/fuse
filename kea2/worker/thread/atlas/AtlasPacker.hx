@@ -1,5 +1,10 @@
 package kea2.worker.thread.atlas;
 
+import kea2.core.memory.data.conductorData.ConductorData;
+import kea2.core.memory.data.textureData.ITextureData;
+import kea2.core.memory.data.vertexData.VertexData;
+import kea2.utils.GcoArray;
+import kea2.worker.thread.atlas.partition.PartitionRenderable;
 import kea2.worker.thread.display.TextureOrder;
 import kea2.core.memory.data.textureData.TextureData;
 import kea2.worker.thread.display.TextureRenderBatch;
@@ -11,17 +16,30 @@ import kea2.worker.thread.display.TextureRenderBatch;
 @:access(kea2)
 class AtlasPacker
 {
+	static public var NUM_ATLAS_DRAWS:Int = 0;
 	//public var textureDataMap = new Map<Int, TextureData>();
 	var textureUsageMap = new Map<Int, TextureUsage>();
 	var newTextures:Array<TextureUsage> = [];
 	
 	var sheets:Array<SheetPacker> = [];
-	 
+	//var conductorData:ConductorData = new ConductorData();
+	static public var partitionRenderables:GcoArray<PartitionRenderable>;
+	
 	public function new() 
 	{
+		/*var textureIds:Array<Int> = [];
+		if (conductorData.atlasTextureId1 != 0) textureIds.push(conductorData.atlasTextureId1);
+		if (conductorData.atlasTextureId2 != 0) textureIds.push(conductorData.atlasTextureId2);
+		if (conductorData.atlasTextureId3 != 0) textureIds.push(conductorData.atlasTextureId3);
+		if (conductorData.atlasTextureId4 != 0) textureIds.push(conductorData.atlasTextureId4);
+		if (conductorData.atlasTextureId5 != 0) textureIds.push(conductorData.atlasTextureId5);*/
+		
+		if (partitionRenderables == null) {
+			partitionRenderables = new GcoArray<PartitionRenderable>([]);
+		}
 		for (i in 0...5) 
 		{
-			sheets.push(new SheetPacker(i));
+			sheets.push(new SheetPacker(i, i+1));
 		}
 	}
 	
@@ -44,14 +62,10 @@ class AtlasPacker
 	
 	public function update() 
 	{
-		if (WorkerCore.textureOrder.textureDefArray.length > 0) {
-			
-			//trace("WorkerCore.textureOrder.textureDefArray = " + WorkerCore.textureOrder.textureDefArray);
-			
+		if (WorkerCore.atlasTextureDrawOrder.textureDefArray.length > 0) {
+			partitionRenderables.clear();
 			pack(0, 0);
-			
-			setVertexData();
-			//WorkerCore.textureOrder.textureDefArray = [];
+			//setVertexData();
 		}
 		//trace("sheets = " + sheets);
 	}
@@ -67,17 +81,21 @@ class AtlasPacker
 		var endIndex:Int = sheet.pack(startIndex);
 		//trace("endIndex = " + endIndex);
 		
-		if (endIndex < WorkerCore.textureOrder.textureDefArray.length) {
+		if (endIndex < WorkerCore.atlasTextureDrawOrder.textureDefArray.length) {
 			pack(sheetIndex + 1, endIndex);
 		}
 	}
 	
-	function setVertexData() 
+	public function setVertexData() 
 	{
-		
+		VertexData.OBJECT_POSITION = 0;
+		for (i in 0...partitionRenderables.length) 
+		{
+			partitionRenderables[i].setVertexData();
+		}
 	}
 	
-	public function registerTexture(textureId:Int):TextureData
+	public function registerTexture(textureId:Int):ITextureData
 	{
 		if (!textureUsageMap.exists(textureId)) {
 			var textureUsage:TextureUsage = new TextureUsage(textureId);
@@ -103,9 +121,9 @@ class AtlasPacker
 
 class TextureUsage
 {
-	public var textureId:Int;
+	public var textureId:Float;
 	public var activeCount:Int = 0;
-	public var textureData:TextureData;
+	public var textureData:ITextureData;
 	
 	public function new(textureId:Int)
 	{

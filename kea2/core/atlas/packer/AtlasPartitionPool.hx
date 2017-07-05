@@ -24,7 +24,7 @@ class AtlasPartitionPool
 		}
 	}
 	
-	public static function allocate(x:Float, y:Float, width:Float, height:Float):AtlasPartition
+	public static function allocate(x:Int, y:Int, width:Int, height:Int):AtlasPartition
 	{
 		if (availableItems == null) AtlasPartitionPool.init();
 		//

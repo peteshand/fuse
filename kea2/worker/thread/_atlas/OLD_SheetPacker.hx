@@ -2,6 +2,7 @@ package kea2.worker.thread.atlas;
 
 import kea2.core.atlas.packer.AtlasPartition;
 import kea2.core.atlas.packer.AtlasPartitionPool;
+import kea2.core.memory.data.textureData.ITextureData;
 import kea2.core.memory.data.textureData.TextureData;
 import kea2.worker.thread.display.TextureOrder;
 
@@ -36,7 +37,7 @@ class OLD_SheetPacker
 		var i:Int = startIndex;
 		while (i < textureOrder.textureDataArray.length)
 		{
-			var textureData:TextureData = textureOrder.textureDataArray[i];
+			var textureData:ITextureData = textureOrder.textureDataArray[i];
 			textureData.atlasIndex = index;
 			
 			var placedSuccessfully:Bool = place(textureOrder.textureDataArray[i]);
@@ -69,7 +70,7 @@ class OLD_SheetPacker
 		{
 			//AtlasPartitionPool.release(partitions[i]);
 		}
-		partitions = /*textureAtlas.partitions =*/ [AtlasPartitionPool.allocate(0, 0, 2048, 2048)];
+		partitions = /*textureAtlas.partitions =*/ [AtlasPartitionPool.allocate(0, 0, 1024, 1024)];
 	}
 	
 	function reorderToBetween(textureOrder:Array<TextureData>, startIndex:Int, endIndex:Int) 
@@ -82,7 +83,7 @@ class OLD_SheetPacker
 			ordered.push(textureOrder[i]);
 		}
 		
-		ordered.sort(function(a1:TextureData, a2:TextureData):Int
+		ordered.sort(function(a1:ITextureData, a2:ITextureData):Int
 		{
 			if (a1.area > a2.area) return -1;
 			if (a1.area < a2.area) return 1;
@@ -95,7 +96,7 @@ class OLD_SheetPacker
 		}
 	}
 	
-	function place(textureData:TextureData):Bool
+	function place(textureData:ITextureData):Bool
 	{
 		if (textureData.placed) {
 			return true; // already placed

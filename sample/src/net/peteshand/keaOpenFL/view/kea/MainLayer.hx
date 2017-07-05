@@ -1,6 +1,7 @@
 package net.peteshand.keaOpenFL.view.kea;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.AtlasGenTest;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.RenderTextureTest;
+import net.peteshand.keaOpenFL.view.kea.newRenderer.StressTest;
 import net.peteshand.keaOpenFL.view.kea.old.atlas.AtlasTest;
 import net.peteshand.keaOpenFL.view.kea.old.atlas.AtlasTest2;
 import net.peteshand.keaOpenFL.view.kea.old.bgColour.BgColourTest;
@@ -67,13 +68,20 @@ class MainLayer extends Sprite
 		addChild(nonPowerOfTwo);
 		nonPowerOfTwo.init();*/
 		
-		var renderTextureTest:RenderTextureTest = new RenderTextureTest();
+		/*var renderTextureTest:RenderTextureTest = new RenderTextureTest();
 		addChild(renderTextureTest);
-		renderTextureTest.init();
+		renderTextureTest.init();*/
 		
 		/*var atlasGenTest:AtlasGenTest = new AtlasGenTest();
 		addChild(atlasGenTest);
 		atlasGenTest.init();*/
+		
+		
+		var stressTest:StressTest = new StressTest();
+		addChild(stressTest);
+		stressTest.init();
+		
+		
 		
 	}
 	

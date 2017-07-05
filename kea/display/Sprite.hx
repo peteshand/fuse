@@ -40,7 +40,7 @@ class Sprite extends DisplayObject implements IDisplay
 			
 			child.onAdd.dispatch();
 			
-			isStatic = false;
+			isStatic = 0;
 		}
 		else {
 			//trace("Wait for upload");
@@ -65,7 +65,7 @@ class Sprite extends DisplayObject implements IDisplay
 			}
 			i--;
 		}
-		isStatic = false;
+		isStatic = 0;
 	}
 	
 	override function get_totalNumChildren():Int

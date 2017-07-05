@@ -6,31 +6,26 @@ import kha.Color;
  * ...
  * @author P.J.Shand
  */
-class DisplayData
+class DisplayData implements IDisplayData
 {
 	public static var BUFFER_SIZE:Int = 10000;
-	public static inline var BYTES_PER_ITEM:Int = 48;
 	
-	public static inline var INDEX_X:Int = 0;
-	public static inline var INDEX_Y:Int = 4;
-	public static inline var INDEX_WIDTH:Int = 8;
-	public static inline var INDEX_HEIGHT:Int = 12;
-	public static inline var INDEX_PIVOT_X:Int = 16;
-	public static inline var INDEX_PIVOT_Y:Int = 20;
-	public static inline var INDEX_SCALE_X:Int = 24;
-	public static inline var INDEX_SCALE_Y:Int = 28;
-	public static inline var INDEX_ROTATION:Int = 32;
-	public static inline var INDEX_ALPHA:Int = 36;
+	static inline var INDEX_X:Int = 0;
+	static inline var INDEX_Y:Int = 4;
+	static inline var INDEX_WIDTH:Int = 8;
+	static inline var INDEX_HEIGHT:Int = 12;
+	static inline var INDEX_PIVOT_X:Int = 16;
+	static inline var INDEX_PIVOT_Y:Int = 20;
+	static inline var INDEX_SCALE_X:Int = 24;
+	static inline var INDEX_SCALE_Y:Int = 28;
+	static inline var INDEX_ROTATION:Int = 32;
+	static inline var INDEX_ALPHA:Int = 36;
+	static inline var INDEX_COLOR:Int = 40;
 	
-	public static inline var INDEX_COLOR:Int = 40;
-	//public static inline var INDEX_OBJECT_ID:Int = 44;
-	//public static inline var INDEX_PARENT_ID:Int = 48;
-	//public static inline var INDEX_RENDER_ID:Int = 52;
-	public static inline var INDEX_TEXTURE_ID:Int = 44;
+	static inline var INDEX_TEXTURE_ID:Int = 44;
+	static inline var INDEX_IS_STATIC:Int = 48;
 	
-	//public static inline var INDEX_IS_STATIC:Int = 60;
-	//public static inline var INDEX_APPLY_POSITION:Int = 64;
-	//public static inline var INDEX_APPLY_ROTATION:Int = 68;
+	public static inline var BYTES_PER_ITEM:Int = 50;
 	
 	var memoryBlock:MemoryBlock;
 	
@@ -44,20 +39,13 @@ class DisplayData
 	public var scaleY(get, set):Float;
 	public var rotation(get, set):Float;
 	public var alpha(get, set):Float;
-	
 	public var color(get, set):Color;
+	
+	public var textureId(get, set):Int;
+	public var isStatic(get, set):Int;
 	
 	private var _objectId:Int;
 	public var objectId(get, null):Int;
-	
-	//public var objectId(get, set):Int;
-	//public var parentId(get, set):Int;
-	//public var renderId(get, set):Int;
-	public var textureId(get, set):Int;
-	
-	//public var isStatic(get, set):Int;
-	//public var applyPosition(get, set):Int;
-	//public var applyRotation(get, set):Int;
 	
 	public function new(objectOffset:Null<Int>) 
 	{
@@ -108,36 +96,16 @@ class DisplayData
 	}
 	
 	inline function get_color():Color { 
-		return memoryBlock.readInt(DisplayData.INDEX_COLOR);
+		return cast(memoryBlock.readFloat(DisplayData.INDEX_COLOR), Color);
 	}
-	
-	//inline function get_objectId():Int { 
-		//return memoryBlock.readInt(INDEX_OBJECT_ID);
-	//}
-	
-	//inline function get_parentId():Int { 
-		//return memoryBlock.readInt(INDEX_PARENT_ID);
-	//}
-	
-	//inline function get_renderId():Int { 
-		//return memoryBlock.readInt(INDEX_RENDER_ID);
-	//}
 	
 	inline function get_textureId():Int { 
 		return memoryBlock.readInt(INDEX_TEXTURE_ID);
 	}
 	
-	//inline function get_isStatic():Int { 
-		//return memoryBlock.readInt(INDEX_IS_STATIC);
-	//}
-	
-	//inline function get_applyPosition():Int { 
-		//return memoryBlock.readInt(INDEX_APPLY_POSITION);
-	//}
-	
-	//inline function get_applyRotation():Int { 
-		//return memoryBlock.readInt(INDEX_APPLY_ROTATION);
-	//}
+	inline function get_isStatic():Int { 
+		return memoryBlock.readByte(INDEX_IS_STATIC);
+	}
 	
 	inline function get_objectId():Int
 	{
@@ -195,42 +163,17 @@ class DisplayData
 	}
 	
 	inline function set_color(value:Color):Color { 
-		memoryBlock.writeInt(INDEX_COLOR, value);
+		memoryBlock.writeFloat(INDEX_COLOR, value);
 		return value;
 	}
-	
-	//inline function set_objectId(value:Int):Int { 
-		//memoryBlock.writeInt(INDEX_OBJECT_ID, value);
-		//return value;
-	//}
-	
-	//inline function set_parentId(value:Int):Int { 
-		//memoryBlock.writeInt(INDEX_PARENT_ID, value);
-		//return value;
-	//}
-	
-	//inline function set_renderId(value:Int):Int { 
-		//memoryBlock.writeInt(INDEX_RENDER_ID, value);
-		//return value;
-	//}
 	
 	inline function set_textureId(value:Int):Int { 
 		memoryBlock.writeInt(INDEX_TEXTURE_ID, value);
 		return value;
 	}
 	
-	//inline function set_isStatic(value:Int):Int { 
-		//memoryBlock.writeInt(INDEX_IS_STATIC, value);
-		//return value;
-	//}
-	
-	//inline function set_applyPosition(value:Int):Int { 
-		//memoryBlock.writeInt(INDEX_APPLY_POSITION, value);
-		//return value;
-	//}
-	
-	//inline function set_applyRotation(value:Int):Int { 
-		//memoryBlock.writeInt(INDEX_APPLY_ROTATION, value);
-		//return value;
-	//}
+	inline function set_isStatic(value:Int):Int { 
+		memoryBlock.writeByte(INDEX_IS_STATIC, value);
+		return value;
+	}
 }

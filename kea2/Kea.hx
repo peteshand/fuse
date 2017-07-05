@@ -125,9 +125,10 @@ class Kea
 	
 	function setupStage3D() 
 	{
+		Lib.current.stopAllMovieClips();
 		var stage:OpenFLStage = Lib.current.stage;
 		stage.stage3Ds[0].addEventListener( Event.CONTEXT3D_CREATE, onStage3DInit );
-		stage.stage3Ds[0].requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.STANDARD);
+		stage.stage3Ds[0].requestContext3D(Context3DRenderMode.AUTO, Context3DProfile.STANDARD_EXTENDED);
 	}
 	
 	private function onStage3DInit(e:Event):Void 
@@ -136,7 +137,7 @@ class Kea
 		renderer = new Renderer(openFLStage.stage3Ds[0]/*, workers.vertexData*/);
 		openFLStage.addEventListener(Event.ENTER_FRAME, Update);
 		
-		atlasBuffers = new AtlasBuffers(keaConfig.atlasBuffers, 2048, 2048);
+		atlasBuffers = new AtlasBuffers(keaConfig.atlasBuffers, 1024, 1024);
 		
 		stage = new Stage(rootClass);
 		

@@ -1,6 +1,7 @@
 package kea2.display._private;
 import kea2.core.memory.data.displayData.DisplayData;
-import kea2.core.memory.data.vertexData.VertexData;
+import kea2.core.memory.data.displayData.IDisplayData;
+import kea2.core.memory.data.vertexData.IVertexData;
 import kha.math.FastMatrix3;
 import openfl.geom.Matrix;
 
@@ -18,9 +19,8 @@ class PrivateDisplayBase
 	
 	public var parentId:Int = -1;
 	
-	//public var displayData:DisplayData;
-	public var vertexData:VertexData;
-	public var displayData:DisplayData;
+	public var vertexData:IVertexData;
+	public var displayData:IDisplayData;
 	
 	var localTransform:FastMatrix3;
 	var globalTransform:FastMatrix3;

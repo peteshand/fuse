@@ -14,14 +14,19 @@ import openfl.utils.Endian;
  */
 class WorkerGraphics
 {
-	public var transformation(get, set): FastMatrix3;
-	var transformations: Array<FastMatrix3>;
+	public static var transformation(get, set): FastMatrix3;
+	static var transformations: Array<FastMatrix3>;
 	
+	static function __init__():Void
+	{
+		transformations = new Array<FastMatrix3>();
+		transformations.push(FastMatrix3.identity());
+	}
 	//var transformData:FastMatrix3Data;
-	//public var vertexData:VertexData;
-	//public var displayData:DisplayData;
+	//public var vertexData:IVertexData;
+	//public var displayData:IDisplayData;
 	
-	public function new(workerComms:IWorkerComms) 
+	public function new() 
 	{
 		//transformData = workerComms.getSharedProperty(WorkerSharedProperties.TRANSFORM_DATA);
 		//transformData.endian = Endian.LITTLE_ENDIAN;
@@ -35,13 +40,12 @@ class WorkerGraphics
 		
 		//Memory.select(displayData);
 		
-		transformations = new Array<FastMatrix3>();
-		transformations.push(FastMatrix3.identity());
+		
 		
 		//transformation = FastMatrix3.identity();
 	}
 	
-	public function pushTransformation(transformation:FastMatrix3, renderId:Int): Void {
+	public static function pushTransformation(transformation:FastMatrix3, renderId:Int): Void {
 		//setTransformation(transformation, renderId);
 		transformations.push(transformation);
 	}
@@ -63,24 +67,23 @@ class WorkerGraphics
 		//
 	//}
 	
-	public function popTransformation(): FastMatrix3 {
+	public static function popTransformation(): FastMatrix3 {
 		var ret = transformations.pop();
 		//setTransformation(get_transformation());
 		return ret;
 	}
 	
-	public function buildData() 
-	{
+	//public function buildData() 
+	//{
 		//trace("buildData");
 		//trace(transformations.length);
-	}
+	//}
 	
-	private inline function set_transformation(transformation: FastMatrix3): FastMatrix3 {
-		//setTransformation(transformation);
+	private static inline function set_transformation(transformation: FastMatrix3): FastMatrix3 {
 		return transformations[transformations.length - 1] = transformation;
 	}
 	
-	private inline function get_transformation(): FastMatrix3 {
+	private static inline function get_transformation(): FastMatrix3 {
 		return transformations[transformations.length - 1];
 	}
 }

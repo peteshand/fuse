@@ -35,7 +35,7 @@ class TextField extends DisplayObject implements IDisplay
 		text = value;
 		updateBase();
 		//staticCount.value = 0;
-		isStatic = false;
+		isStatic = 0;
 		return text = value;
 	}
 	

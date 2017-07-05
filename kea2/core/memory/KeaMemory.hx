@@ -27,18 +27,18 @@ class KeaMemory
 	public var displayDataPool:MemoryPool;
 	public var textureDataPool:MemoryPool;
 	public var vertexDataPool:MemoryPool;
-	public var atlasVertexDataPool:MemoryPool;
+	//public var atlasVertexDataPool:MemoryPool;
 	public var renderTextureDataPool:MemoryPool;
 	public var renderTextureDrawDataPool:MemoryPool;
 	
 	public function new(memory:ByteArray=null) 
 	{
-		batchDataPool = CreatePool(BatchData.BUFFER_SIZE);
+		vertexDataPool = CreatePool(VertexData.BUFFER_SIZE * VertexData.BYTES_PER_ITEM);
+		batchDataPool = CreatePool(BatchData.BUFFER_SIZE * BatchData.BYTES_PER_ITEM);
 		conductorDataPool = CreatePool(ConductorData.BUFFER_SIZE);
 		displayDataPool = CreatePool(DisplayData.BUFFER_SIZE * DisplayData.BYTES_PER_ITEM);
 		textureDataPool = CreatePool(TextureData.BUFFER_SIZE * TextureData.BYTES_PER_ITEM);
-		vertexDataPool = CreatePool(VertexData.BUFFER_SIZE * VertexData.BYTES_PER_ITEM);
-		atlasVertexDataPool = CreatePool(VertexData.BUFFER_SIZE * VertexData.BYTES_PER_ITEM);
+		//atlasVertexDataPool = CreatePool(VertexData.BUFFER_SIZE * VertexData.BYTES_PER_ITEM);
 		renderTextureDataPool = CreatePool(RenderTextureData.BUFFER_SIZE * RenderTextureData.BYTES_PER_ITEM);
 		renderTextureDrawDataPool = CreatePool(RenderTextureDrawData.BUFFER_SIZE * RenderTextureDrawData.BYTES_PER_ITEM);
 		
@@ -69,7 +69,7 @@ class KeaMemory
 	
 	function CreatePool(size:Int):MemoryPool
 	{
-		var pool = new MemoryPool(BatchData.BUFFER_SIZE);
+		var pool = new MemoryPool(size);
 		memorySize += pool.size;
 		return pool;
 	}

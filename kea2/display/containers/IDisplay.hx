@@ -4,6 +4,8 @@ import kea.logic.buffers.atlas.items.AtlasItem;
 import kea.logic.layerConstruct.LayerConstruct;
 import kea.texture.Texture;
 import kea2.core.memory.data.displayData.DisplayData;
+import kea2.core.memory.data.displayData.IDisplayData;
+import kea.display.BlendMode;
 
 import kea.logic.layerConstruct.LayerConstruct.LayerDefinition;
 import kha.Color;
@@ -29,8 +31,8 @@ interface IDisplay
 	
 	//var isStatic:Null<Bool>;
 	//var isStatic(default, set):Null<Bool>;
-	var isStatic(default, set):Null<Bool>;
-	var isStatic2:Notifier<Null<Bool>>;
+	/*var isStatic(default, set):Int;*/
+	//var isStatic2:Notifier<Null<Bool>>;
 	var children:Array<IDisplay>;
 	var name:String;
 	var onAdd:Signal0;
@@ -38,11 +40,30 @@ interface IDisplay
 	
 	var stage(get, set):Stage;
 	
-	//var displayData:DisplayData;
+	//var displayData:IDisplayData;
 	//var vectexDataAccess:VectexDataAccess;
-	var displayData:DisplayData;
+	var displayData:IDisplayData;
 	
-	var x(default, set):Float;
+	
+	var x(get, set):Float;
+	var y(get, set):Float;
+	var width(get, set):Float;
+	var height(get, set):Float;
+	var pivotX(get, set):Float;
+	var pivotY(get, set):Float;
+	var rotation(get, set):Float;
+	var scaleX(get, set):Float;
+	var scaleY(get, set):Float;
+	var color(get, set):Color;
+	var alpha(get, set):Float;
+	var blendMode(get, set):BlendMode;
+	var layerIndex(get, set):Null<Int>;
+	
+	var isStatic(get, set):Int;
+	/*var applyPosition(get, set):Bool = false;
+	var applyRotation(get, set):Bool = false;*/
+	
+	/*var x(default, set):Float;
 	var y(default, set):Float;
 	var width(default, set):Float;
 	var height(default, set):Float;
@@ -53,7 +74,7 @@ interface IDisplay
 	var scaleY(default, set):FastFloat;
 	var color(default, set):Color;
 	var alpha(default, set):Float;
-	var layerIndex(default, set):Null<Int>;
+	var layerIndex(default, set):Null<Int>;*/
 	
 	var totalNumChildren(get, null):Int;
 

@@ -1,6 +1,7 @@
 package kea2.core.atlas.packer;
 import kea2.core.atlas.items.AtlasItem;
 import kea2.core.atlas.packer.AtlasPartition;
+import kea2.core.memory.data.textureData.ITextureData;
 import kea2.core.memory.data.textureData.TextureData;
 
 /**
@@ -13,17 +14,17 @@ class AtlasPartition
 	var bottomPartition:AtlasPartition;
 	var placementReturn:PlacementReturn;
 	public var key:Int;
-	public var x:Float;
-	public var y:Float;
-	public var width:Float;
-	public var height:Float;
+	public var x:Int;
+	public var y:Int;
+	public var width:Int;
+	public var height:Int;
 	
 	static function __init__():Void
 	{
 		
 	}
 	
-	public function new(key:Int, x:Float, y:Float, width:Float, height:Float) 
+	public function new(key:Int, x:Int, y:Int, width:Int, height:Int) 
 	{
 		this.key = key;
 		
@@ -32,7 +33,7 @@ class AtlasPartition
 		
 	}
 	
-	public function init(x:Float, y:Float, width:Float, height:Float) 
+	public function init(x:Int, y:Int, width:Int, height:Int) 
 	{
 		this.x = x;
 		this.y = y;
@@ -46,9 +47,10 @@ class AtlasPartition
 		placementReturn.bottomPartition = null;
 	}
 	
-	public function place(textureData:TextureData):PlacementReturn
+	public function place(textureData:ITextureData):PlacementReturn
 	{
 		placementReturn.successful = false;
+		
 		
 		if (textureData.width <= width && textureData.height <= height) {
 			placementReturn.successful = true;
@@ -63,15 +65,15 @@ class AtlasPartition
 			this.width = textureData.width;
 			this.height = textureData.height;
 			
-			if (textureData.partition.value != null) {
-				AtlasPartitionPool.release(textureData.partition.value);
-			}
-			textureData.partition.value = AtlasPartitionPool.allocate(this.x, this.y, this.width, this.height);
+			//if (textureData.partition.value != null) {
+			//	AtlasPartitionPool.release(textureData.partition.value);
+			//}
+			//textureData.partition.value = AtlasPartitionPool.allocate(this.x, this.y, this.width, this.height);
 		}
 		return placementReturn;
 	}
 	
-	function getRightPartition(textureData:TextureData):AtlasPartition
+	function getRightPartition(textureData:ITextureData):AtlasPartition
 	{
 		if (textureData.width < width) {
 			/*if (height > width){
@@ -100,7 +102,7 @@ class AtlasPartition
 		return null;
 	}
 	
-	function getBottomPartition(textureData:TextureData):AtlasPartition
+	function getBottomPartition(textureData:ITextureData):AtlasPartition
 	{
 		if (textureData.height < height) {
 			/*if (height > width){

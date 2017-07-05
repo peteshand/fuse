@@ -119,7 +119,7 @@ class LayerTest extends Sprite
 		shaderPipeline.compile();
 		
 		image.shaderPipeline = shaderPipeline;
-		image.isStatic = false;
+		image.isStatic = 0;
 	}
 	
 }

@@ -1,26 +1,13 @@
 package kea2.worker.thread;
 
 import kea2.core.memory.KeaMemory;
-import kea2.core.memory.data.vertexData.VertexData;
-import kea2.texture.RenderTexture;
 import kea2.worker.communication.IWorkerComms;
 import kea2.worker.thread.Conductor;
 import kea2.worker.data.AddChild;
-import kea2.worker.thread.atlas.AtlasPacker;
-import kea2.worker.thread.display.TextureOrder;
-import kea2.worker.thread.display.TextureRenderBatch;
-import kea2.worker.thread.display.WorkerDisplay;
-import kea2.worker.thread.display.WorkerDisplayList;
-import kea2.worker.communication.WorkerComms;
-import kea2.worker.thread.layerConstruct.WorkerLayerConstruct;
-import kea2.worker.thread.texture.RenderTextureManager;
 import openfl.Lib;
 import openfl.events.Event;
 import openfl.utils.ByteArray;
-import openfl.utils.Endian;
 import kea2.worker.data.MessageType;
-import openfl.Vector;
-import kea2.worker.data.WorkerMessage;
 import kea2.worker.data.WorkerPayload;
 import kea2.worker.data.WorkerSharedProperties;
 
@@ -48,12 +35,9 @@ class WorkerEntryPoint
 		workerComms.addListener(MessageType.REMOVE_CHILD, OnRemoveChild);
 		//workerComms.addListener(MessageType.ADD_TEXTURE, OnAddTexture);
 		
-		WorkerCore.textureOrder = new TextureOrder();
-		WorkerCore.textureRenderBatch = new TextureRenderBatch();
-		WorkerCore.atlasPacker = new AtlasPacker();
-		WorkerCore.workerDisplayList = new WorkerDisplayList(workerComms);
-		WorkerCore.renderTextureManager = new RenderTextureManager();
-		WorkerCore.workerLayerConstruct = new WorkerLayerConstruct();
+		WorkerCore.init(workerComms);
+		
+		
 		
 		if (Kea.current.keaMemory == null) {
 			var memory:ByteArray = workerComms.getSharedProperty(WorkerSharedProperties.CORE_MEMORY);
@@ -64,7 +48,7 @@ class WorkerEntryPoint
 		numberOfWorkers = workerComms.getSharedProperty(WorkerSharedProperties.NUMBER_OF_WORKERS);
 		var framerate:Float = workerComms.getSharedProperty(WorkerSharedProperties.FRAME_RATE);
 		Lib.current.stage.frameRate = framerate;
-		
+		Lib.current.stopAllMovieClips();
 		
 		Conductor.init(workerComms, index, numberOfWorkers, workerComms.usingWorkers);
 		Conductor.onTick.add(OnTick);
@@ -93,6 +77,9 @@ class WorkerEntryPoint
 	
 	function OnTick() 
 	{
+		WorkerCore.STAGE_WIDTH = Conductor.conductorDataAccess.stageWidth;
+		WorkerCore.STAGE_HEIGHT = Conductor.conductorDataAccess.stageHeight;
+		
 		//trace("OnTick: " + index);
 		
 		/*

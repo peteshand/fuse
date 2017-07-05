@@ -173,8 +173,8 @@ class LayerOrders
 				renderIndex = i;
 				//trace(i + " name = " + renderList[i].name);
 				//trace("renderList[" + i + "].isStatic2.value = " + renderList[i].isStatic2.value);
-				changeAvailable.value = renderList[i].isStatic2.value;
-				renderList[i].isStatic = true;
+				//changeAvailable.value = renderList[i].isStatic2.value;
+				renderList[i].isStatic = 1;
 				renderList[i].layerDefinition = currentLayerDefinition;
 				/*if (renderList[i].staticCount.value <= 0) {
 					changeAvailable.value = false;

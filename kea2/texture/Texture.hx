@@ -1,5 +1,6 @@
 package kea2.texture;
 
+import kea2.core.memory.data.textureData.ITextureData;
 import kea2.utils.PowerOfTwo;
 import kea2.core.texture.upload.TextureUploadQue;
 import kea2.texture.ITexture;
@@ -29,7 +30,7 @@ class Texture implements ITexture
 	public var name:String;
 	var _clear:Bool = false;
 	
-	var textureData:TextureData;
+	var textureData:ITextureData;
 	var onTextureUploadComplete:Void-> Void;
 	public var nativeTexture:NativeTexture;
 	
@@ -49,13 +50,22 @@ class Texture implements ITexture
 		textureData.p2Width = p2Width;
 		textureData.p2Height = p2Height;
 		
+		textureData.baseX = 0;
+		textureData.baseY = 0;
+		textureData.baseWidth = width;
+		textureData.baseHeight = height;
+		textureData.baseP2Width = p2Width;
+		textureData.baseP2Height = p2Height;
+		
+		textureData.textureAvailable = 0;
+		
 		if (queUpload) TextureUploadQue.add(this);
 		else upload();
 	}
 	
 	function createNativeTexture() 
 	{
-		nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, false, 0);
+		nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA_PACKED, false, 0);
 		return nativeTexture;
 	}
 	

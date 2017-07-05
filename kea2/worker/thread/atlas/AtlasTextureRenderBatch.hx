@@ -1,4 +1,5 @@
-package kea2.worker.thread.display;
+package kea2.worker.thread.atlas;
+
 import kea2.core.memory.data.batchData.BatchData;
 import kea2.core.memory.data.batchData.IBatchData;
 import kea2.core.memory.data.vertexData.VertexData;
@@ -9,7 +10,7 @@ import kea2.worker.thread.display.TextureOrder.TextureDef;
  * ...
  * @author P.J.Shand
  */
-class TextureRenderBatch
+class AtlasTextureRenderBatch
 {
 	var batchDataArray:Array<IBatchData> = [];
 	
@@ -23,29 +24,24 @@ class TextureRenderBatch
 		
 	}
 	
-	public function begin() 
+	public function update() 
+	{
+		currentRenderBatchDefs(WorkerCore.atlasTextureDrawOrder.textureDefArray);
+		
+		for (i in 0...renderBatchDefs.length) 
+		{
+			trace(renderBatchDefs[i]);
+		}
+		createBatchData();
+		trace("renderBatchDefs.length = " + renderBatchDefs.length);
+		Conductor.conductorDataAccess.numberOfBatches = renderBatchDefs.length;
+	}
+	
+	function currentRenderBatchDefs(textureDefArray:GcoArray<TextureDef>) 
 	{
 		renderBatchDefs.clear();
 		currentRenderBatchDef = null;
 		itemCount = 0;
-	}
-	
-	public function update() 
-	{
-		//clear();
-		currentRenderBatchDefs(WorkerCore.textureOrder.textureDefArray);
-		createBatchData();
-		
-	}
-	
-	public function end() 
-	{
-		Conductor.conductorDataAccess.numberOfBatches = renderBatchDefs.length;
-	}
-	
-	inline function currentRenderBatchDefs(textureDefArray:GcoArray<TextureDef>) 
-	{
-		
 		
 		for (i in 0...textureDefArray.length) 
 		{
@@ -58,8 +54,6 @@ class TextureRenderBatch
 				currentRenderBatchDef.renderTargetId = currentTextureDef.renderTargetId;
 				currentRenderBatchDef.textureIdArray.clear();
 			}
-			
-			currentRenderBatchDef.numItems += currentTextureDef.numItems;
 			
 			var alreadyAdded:Bool = false;
 			for (i in 0...currentRenderBatchDef.textureIdArray.length) 
@@ -76,19 +70,9 @@ class TextureRenderBatch
 			itemCount++;
 		}
 		closeCurrentRenderBatch();
-		//currentTextureDef = null;
 	}
 	
-	inline function closeCurrentRenderBatch() 
-	{
-		if (currentRenderBatchDef != null) {
-			currentRenderBatchDef.length = currentRenderBatchDef.textureIdArray.length * VertexData.BYTES_PER_ITEM;
-			currentRenderBatchDef = null;
-		}
-		itemCount = 0;
-	}
-	
-	inline function createBatchData() 
+	function createBatchData() 
 	{
 		for (j in 0...renderBatchDefs.length) 
 		{
@@ -103,7 +87,6 @@ class TextureRenderBatch
 			
 			batchData.renderTargetId = renderBatchDefs[j].renderTargetId;
 			batchData.numItems = renderBatchDefs[j].numItems;
-			
 			batchData.numTextures = renderBatchDefs[j].textureIdArray.length;
 			if (batchData.renderTargetId == -1){
 				batchData.width = 1600;
@@ -114,6 +97,16 @@ class TextureRenderBatch
 				batchData.height = 512;
 			}
 		}
+	}
+	
+	function closeCurrentRenderBatch() 
+	{
+		if (currentRenderBatchDef != null) {
+			currentRenderBatchDef.length = currentRenderBatchDef.textureIdArray.length * VertexData.BYTES_PER_ITEM;
+			currentRenderBatchDef.numItems = itemCount;
+			currentRenderBatchDef = null;
+		}
+		itemCount = 0;
 	}
 	
 	function setTextureIds(textureIdArray:GcoArray<Int>, index:Int):Null<Int>
@@ -171,8 +164,7 @@ class TextureRenderBatch
 				//textureIds:new Map<Int, Int>(),
 				renderTargetId: -1,
 				textureDefs:new GcoArray<TextureDef>([]),
-				textureIdArray:new GcoArray<Int>([]),
-				numItems:0
+				textureIdArray:new GcoArray<Int>([])
 			}
 			renderBatchDefPool[index] = renderBatchDef;
 		}
@@ -181,7 +173,6 @@ class TextureRenderBatch
 			renderBatchDefPool[index].startIndex = -1;
 			renderBatchDefPool[index].renderTargetId = -1;
 			renderBatchDefPool[index].textureIdArray.clear();
-			renderBatchDefPool[index].numItems = 0;
 		}
 		
 		renderBatchDefs[index] = renderBatchDefPool[index];
@@ -230,6 +221,6 @@ typedef RenderBatchDef =
 	renderTargetId:Int,
 	textureIdArray:GcoArray<Int>,
 	textureDefs:GcoArray<TextureDef>,
-	numItems:Int,
+	?numItems:Int,
 	?length:Int
 }

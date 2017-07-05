@@ -1,6 +1,7 @@
 package kea2.worker.thread.display;
 
-import kea2.core.memory.data.vertexData.AtlasVertexData;
+import kea2.core.memory.data.displayData.IDisplayData;
+import kea2.pool.Pool;
 import kea2.texture.RenderTexture;
 import kea2.utils.GcoArray;
 import kea2.utils.Notifier;
@@ -19,9 +20,8 @@ import openfl.utils.Endian;
 @:access(kea2)
 class WorkerDisplayList
 {
-	var workerGraphics:WorkerGraphics;
 	var workerComms:IWorkerComms;
-	public var transformDataMap:Map<Int, DisplayData> = new Map<Int, DisplayData>();
+	public var transformDataMap:Map<Int, IDisplayData> = new Map<Int, IDisplayData>();
 	//public var vertexDataMap:Map<Int, VertexData> = new Map<Int, VertexData>();
 	
 	
@@ -30,20 +30,19 @@ class WorkerDisplayList
 	
 	public var hierarchyAll = new GcoArray<WorkerDisplay>([]);
 	public var hierarchy = new GcoArray<WorkerDisplay>([]);
+	public var hierarchyApplyTransform = new GcoArray<Void -> Void>([]);
 	
 	public function new(workerComms:IWorkerComms) 
 	{
 		this.workerComms = workerComms;
-		workerGraphics = new WorkerGraphics(workerComms);
 	}
-	
-	
 	
 	public function addChildAt(objectId:Int, renderId:Int, parentId:Int, addAtIndex:Int) 
 	{
 		/*var vertexData:VertexData = null;
 		if (renderId != -1) vertexData = getVertexData(renderId);*/
-		var workerDisplay:WorkerDisplay = new WorkerDisplay(getDisplayData(objectId));
+		var workerDisplay:WorkerDisplay = Pool.workerDisplay.request();// new WorkerDisplay(getDisplayData(objectId));
+		workerDisplay.displayData = getDisplayData(objectId);
 		workerDisplay.objectId = objectId;
 		workerDisplay.renderId = renderId;
 		workerDisplay.parentId = parentId;
@@ -63,9 +62,9 @@ class WorkerDisplayList
 		//workerDisplayList.addChildAt(new WorkerDisplay(transformData), addAtIndex);
 	}
 	
-	function getDisplayData(objectId:Int):DisplayData
+	function getDisplayData(objectId:Int):IDisplayData
 	{
-		var displayDataAccess:DisplayData = null;
+		var displayDataAccess:IDisplayData = null;
 		if (!transformDataMap.exists(objectId)) {
 			displayDataAccess = new DisplayData(objectId);
 			//displayDataAccess = workerComms.getSharedProperty(WorkerSharedProperties.DISPLAY + objectId);
@@ -116,7 +115,7 @@ class WorkerDisplayList
 		// Builds the displaylist hierarchy and defines the order in which textures are used
 		buildDisplayListHierarchy();
 		
-		// Based on the order in which textures are used, this works out how to draw textures into
+		// Based on the order in which textures are used, work out how to draw textures into
 		// a large texture atlas so a large number of display items can be draw in a single draw call
 		createDynamicTextureAtlas();
 		
@@ -130,85 +129,120 @@ class WorkerDisplayList
 		end();
 	}
 	
-	function begin() 
+	inline function begin() 
 	{
 		Conductor.conductorDataAccess.busy = 1;
 		
 		// Reset vertexData read position
 		VertexData.OBJECT_POSITION = 0;
-		AtlasVertexData.OBJECT_POSITION = 0;
 		
-		//if (WorkerCore.hierarchyBuildRequired) {
+		if (WorkerCore.hierarchyBuildRequired) {
 			this.hierarchyAll.clear();
-		//}
+		}
 		
-		WorkerCore.textureOrder.begin();
+		if (WorkerCore.textureBuildRequired) {
+			WorkerCore.atlasTextureDrawOrder.begin();
+			WorkerCore.textureOrder.begin();
+		}
+		
 	}
 	
-	function buildRenderTexturesHierarchy() 
+	inline function buildRenderTexturesHierarchy() 
 	{
 		// Loop through all renderTextures to check if there is content to render
 		WorkerCore.renderTextureManager.update();
-		//WorkerCore.textureOrder.renderTargetId = -1;
-		RenderTexture.currentRenderTextureId = -1;
+		RenderTexture.currentRenderTargetId = -1;
 	}
 	
-	function buildDisplayListHierarchy() 
+	inline function buildDisplayListHierarchy() 
 	{
 		process(this.stage);
-		WorkerCore.textureOrder.end();
 	}
 	
-	function createDynamicTextureAtlas() 
+	inline function createDynamicTextureAtlas() 
 	{
-		WorkerCore.atlasPacker.update();
-		this.checkAtlas();
+		VertexData.OBJECT_POSITION = 0;
+		if (WorkerCore.textureBuildRequired) {
+			WorkerCore.atlasPacker.update();
+		}
+		
+		AtlasPacker.NUM_ATLAS_DRAWS = VertexData.OBJECT_POSITION;
+		//trace("Number of atlas draws = " + VertexData.OBJECT_POSITION);
+		//this.checkAtlas();
 	}
 	
-	function quadBatchTextureDraws() 
+	inline function quadBatchTextureDraws() 
 	{
-		WorkerCore.textureRenderBatch.update(WorkerCore.textureOrder.textureDefArray);
+		if (WorkerCore.textureBuildRequired){
+			this.setTextures();
+			VertexData.OBJECT_POSITION = AtlasPacker.NUM_ATLAS_DRAWS;
+			//WorkerCore.atlasTextureRenderBatch.update();
+			//trace(WorkerCore.textureBuildRequired);
+		}
+		
+		WorkerCore.textureRenderBatch.begin();
+		//if (WorkerCore.textureBuildRequired){
+			WorkerCore.textureRenderBatch.update();
+		//}
+		WorkerCore.textureRenderBatch.end();
 	}
 	
-	function writeVertexData() 
+	inline function writeVertexData() 
 	{
 		this.setVertexData();
 	}
 	
-	function end() 
+	inline function end() 
 	{
 		Conductor.conductorDataAccess.busy = 0;
 		Conductor.conductorDataAccess.frameIndex++;
 		WorkerCore.hierarchyBuildRequired = false;
 	}
 	
-	function process(root:WorkerDisplay) 
+	inline function process(root:WorkerDisplay) 
 	{
 		this.buildHierarchy(root);
-		this.updateVertexData();
-		this.setTextures();
-	}
-	
-	public function buildHierarchy(root:WorkerDisplay) 
-	{
-		//if (WorkerCore.hierarchyBuildRequired) {
-			hierarchy.clear();
-			//numberOfRenderables = 0;
-		//}
-		if (root != null) {
-			root.buildHierarchy(WorkerCore.hierarchyBuildRequired, this, workerGraphics);
+		this.applyTransform();
+		this.updateInternalData();
+		if (WorkerCore.textureBuildRequired){
+			this.setAtlasTextures();
 		}
 	}
 	
-	public function updateVertexData() 
+	inline function buildHierarchy(root:WorkerDisplay) 
+	{
+		if (WorkerCore.hierarchyBuildRequired) {
+			hierarchy.clear();
+			hierarchyApplyTransform.clear();
+			if (root != null) root.buildHierarchy();
+		}
+	}
+	
+	inline function applyTransform() 
+	{
+		for (i in 0...hierarchyApplyTransform.length) 
+		{
+			hierarchyApplyTransform[i]();
+		}
+	}
+	
+	public function updateInternalData() 
 	{
 		for (k in 0...hierarchy.length) 
 		{
-			hierarchy[k].updateVertexData();
+			hierarchy[k].updateInternalData();
 		}
 	}
 	
-	public function setTextures() 
+	inline function setAtlasTextures() 
+	{
+		for (k in 0...hierarchy.length) 
+		{
+			hierarchy[k].setAtlasTextures();
+		}
+	}
+	
+	inline function setTextures() 
 	{
 		for (k in 0...hierarchy.length) 
 		{
@@ -216,27 +250,20 @@ class WorkerDisplayList
 		}
 	}
 	
-	public function setVertexData() 
+	inline function setVertexData() 
 	{
-		VertexData.OBJECT_POSITION = 0;
-		//WorkerCore.textureOrder.begin();
+		if (WorkerCore.textureBuildRequired){
+			WorkerCore.atlasPacker.setVertexData();
+		}
+		//VertexData.OBJECT_POSITION = 0;
 		for (k in 0...hierarchyAll.length) 
 		{
 			hierarchyAll[k].setVertexData();
 		}
 		
-		//WorkerCore.textureOrder.end();
-		
 		//if (WorkerCore.hierarchyBuildRequired) {
 			Conductor.conductorDataAccess.numberOfRenderables = VertexData.OBJECT_POSITION;
+			//trace("VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
 		//}
-	}
-	
-	public function checkAtlas() 
-	{
-		for (k in 0...hierarchyAll.length) 
-		{
-			hierarchyAll[k].checkAtlas();
-		}
 	}
 }

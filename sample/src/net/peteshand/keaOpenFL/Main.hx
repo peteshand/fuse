@@ -4,8 +4,10 @@ import haxe.Json;
 import kea2.Kea;
 import kea.model.config.KeaConfig;
 import net.peteshand.keaOpenFL.view.kea.MainLayer;
+import openfl.Memory;
 import openfl.display.Sprite;
 import openfl.Lib;
+import openfl.utils.ByteArray;
 
 /**
  * ...
@@ -18,11 +20,6 @@ class Main extends Sprite
 	{
 		super();
 		
-		
-		trace("Main");
-		// Assets:
-		// openfl.Assets.getBitmapData("img/assetname.jpg");
-		
 		var keaConfig:KeaConfig = { frameRate:60, atlasBuffers:5 };
 		keaConfig.useCacheLayers = true;
 		keaConfig.debugTextureAtlas = false;
@@ -30,7 +27,19 @@ class Main extends Sprite
 		
 		Kea.init(MainLayer, keaConfig);
 		
+		/*var transparentTest:TransparentTest = new TransparentTest();
+		addChild(transparentTest);
 		
+		transparentTest.init();*/
+		
+		/*var ba:ByteArray = new ByteArray();
+		ba.length = 10000;
+		Memory.select(ba);
+		var i:Int = 16;
+		Memory.setI16(0, i);
+		var o:Int = Memory.getUI16(0);
+		
+		trace([i, o]);*/
 	}
 
 }

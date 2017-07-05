@@ -38,8 +38,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	public var children:Array<IDisplay>;
 	
 	//@:isVar public var isStatic(default, set):Null<Bool>;
-	public var isStatic(default, set):Null<Bool>;
-	public var isStatic2 = new Notifier<Null<Bool>>(false);
+	//public var isStatic2 = new Notifier<Null<Bool>>(false);
 	public var layerDefinition:LayerDefinition;
 	public var calcTransform:Graphics -> Void;
 	var renderable:Bool = false;
@@ -48,25 +47,27 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	//@:isVar public var atlas(default, set):AtlasObject;
 	@:isVar public var atlasItem(default, set):AtlasItem;
 	
-	@:isVar public var x(default, set):Float = 0;
-	@:isVar public var y(default, set):Float = 0;
-	@:isVar public var width(default, set):Float = 0;
-	@:isVar public var height(default, set):Float = 0;
-	@:isVar public var pivotX(default, set):Float = 0;
-	@:isVar public var pivotY(default, set):Float = 0;
-	@:isVar public var rotation(default, set):Float = 0;
-	@:isVar public var scaleX(default, set):Float = 0;
-	@:isVar public var scaleY(default, set):Float = 0;
-	@:isVar public var color(default, set):Color = 0x0;
-	@:isVar public var alpha(default, set):Float = 0;
-	@:isVar public var blendMode(default, set):BlendMode;
-	@:isVar public var layerIndex(default, set):Null<Int> = null;
+	@:isVar public var x(get, set):Float = 0;
+	@:isVar public var y(get, set):Float = 0;
+	@:isVar public var width(get, set):Float = 0;
+	@:isVar public var height(get, set):Float = 0;
+	@:isVar public var pivotX(get, set):Float = 0;
+	@:isVar public var pivotY(get, set):Float = 0;
+	@:isVar public var rotation(get, set):Float = 0;
+	@:isVar public var scaleX(get, set):Float = 0;
+	@:isVar public var scaleY(get, set):Float = 0;
+	@:isVar public var color(get, set):Color = 0x0;
+	@:isVar public var alpha(get, set):Float = 0;
+	@:isVar public var blendMode(get, set):BlendMode;
+	@:isVar public var layerIndex(get, set):Null<Int> = null;
+	@:isVar public var isStatic(get, set):Int;
+	
+	@:isVar var applyPosition(get, set):Bool = false;
+	@:isVar var applyRotation(get, set):Bool = false;
 	
 	var _totalNumChildren:Int;
 	var _renderIndex:Null<Int> = 0x3FFFFFFF;
 	var renderPath:Graphics -> Void;
-	@:isVar var applyPosition(default, set):Bool = false;
-	@:isVar var applyRotation(default, set):Bool = false;
 	var popAlpha:Bool = false;
 	var drawWidth:Float;
 	var drawHeight:Float;
@@ -91,7 +92,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		
 		layerIndex = 0;
 		renderPath = renderImage;
-		isStatic = false;
+		isStatic = 0;
 		
 		if (base != null){
 			drawWidth = base.width;
@@ -99,7 +100,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		}
 		
 		calcTransform = calcTransformDirect;
-		isStatic2.add(OnStaticStateChange);
+		//isStatic2.add(OnStaticStateChange);
 		
 		Renderer.layerStateChangeAvailable = true;
 	}
@@ -111,8 +112,8 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	
 	public inline function checkStatic():Void
 	{
-		isStatic2.value = isStatic;
-		isStatic = true;
+		//isStatic2.value = isStatic;
+		isStatic = 1;
 	}
 	
 	public function buildHierarchy():Void
@@ -128,12 +129,12 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		}
 	}
 	
-	function OnStaticStateChange() 
+	/*function OnStaticStateChange() 
 	{
 		if (isStatic2.value)	calcTransform = calcTransformCache;
 		else 					calcTransform = calcTransformDirect;
 		Renderer.layerStateChangeAvailable = true;
-	}
+	}*/
 	
 	public function calcTransformCache(graphics:Graphics) 
 	{
@@ -306,16 +307,32 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	
 	function OnPartitionSet() 
 	{
-		isStatic = false;
+		isStatic = 0;
 	}
 	
+	inline function get_x():Float { return x; }
+	inline function get_y():Float { return y; }
+	inline function get_width():Float { return width; }
+	inline function get_height():Float { return height; }
+	inline function get_pivotX():Float { return pivotX; }
+	inline function get_pivotY():Float { return pivotY; }
+	inline function get_rotation():Float { return rotation; }
+	inline function get_scaleX():Float { return scaleX; }
+	inline function get_scaleY():Float { return scaleY; }
+	inline function get_color():Color { return color; }
+	inline function get_alpha():Float { return alpha; }
+	inline function get_blendMode():BlendMode { return blendMode; }
+	inline function get_layerIndex():Null<Int> { return layerIndex; }
+	inline function get_applyPosition():Bool { return applyPosition; }
+	inline function get_applyRotation():Bool { return applyRotation; }
+	inline function get_isStatic():Int { return isStatic; }
 	
 	
 	inline function set_x(value:Float):Float { 
 		if (x != value){
 			displayData.x = x = value;
 			applyPosition = true;
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -323,7 +340,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		if (y != value){
 			displayData.y = y = value;
 			applyPosition = true;
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -332,7 +349,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		if (width != value){
 			displayData.width = width = value;
 			applyPosition = true;
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -341,7 +358,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		if (height != value){
 			displayData.height = height = value;
 			applyPosition = true;
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -350,7 +367,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		if (pivotX != value){
 			displayData.pivotX = pivotX = value;
 			applyPosition = true;
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -359,7 +376,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		if (pivotY != value){
 			displayData.pivotY = pivotY = value;
 			applyPosition = true;
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -368,7 +385,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		if (rotation != value){
 			displayData.rotation = rotation = value;
 			applyRotation = true;
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -377,7 +394,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		if (scaleX != value){
 			displayData.scaleX = scaleX = value;
 			applyPosition = true;
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -386,7 +403,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		if (scaleY != value){
 			displayData.scaleY = scaleY = value;
 			applyPosition = true;
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -394,7 +411,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	function set_color(value:Color):Color { 
 		if (color != value){
 			displayData.color = color = value;
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -402,7 +419,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	inline function set_alpha(value:Float):Float { 
 		if (alpha != value){
 			displayData.alpha = alpha = value;
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -411,7 +428,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		if (blendMode != value){
 			/*displayData.blendMode =*/ blendMode = value;
 			shaderPipeline = BlendModeUtil.applyBlend(blendMode);
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}
@@ -421,12 +438,38 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		//return displayData.objectId = value;
 	//}
 	
-	function set_layerIndex(value:Null<Int>):Null<Int> { 
+	inline function set_layerIndex(value:Null<Int>):Null<Int> { 
 		if (layerIndex != value){
 			//if (layerIndex != null) Kea.current.logic.displayList.removeLayerIndex(layerIndex);
 			layerIndex = value;
 			//Kea.current.logic.displayList.addLayerIndex(layerIndex);
-			isStatic = false;
+			isStatic = 0;
+		}
+		return value;
+	}
+	
+	inline function set_applyPosition(value:Bool):Bool 
+	{
+		if (applyPosition = value) {
+			applyPosition = value;
+		}
+		return applyPosition;
+	}
+	
+	inline function set_applyRotation(value:Bool):Bool 
+	{
+		if (applyRotation = value) {
+			applyRotation = value;
+		}
+		return applyRotation;
+	}
+	
+	inline function set_isStatic(value:Int):Int 
+	{
+		if (isStatic != value) {
+			isStatic = value;
+			trace("isStatic = " + isStatic);
+			displayData.isStatic = isStatic;
 		}
 		return value;
 	}
@@ -468,12 +511,6 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		return stage;
 	}
 	
-	inline function set_isStatic(value:Null<Bool>):Null<Bool> 
-	{
-		if (isStatic != value) /*displayData.isStatic =*/ isStatic = value;
-		return value;
-	}
-	
 	function set_parent(value:IDisplay):IDisplay 
 	{
 		parent = value;
@@ -489,25 +526,11 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		return parent = value;
 	}
 	
-	function set_applyPosition(value:Bool):Bool 
-	{
-		if (applyPosition = value) {
-			applyPosition = value;
-		}
-		return applyPosition;
-	}
 	
-	function set_applyRotation(value:Bool):Bool 
-	{
-		if (applyRotation = value) {
-			applyRotation = value;
-		}
-		return applyRotation;
-	}
 	
 	/*function set_isStatic(value:Null<Bool>):Null<Bool> 
 	{
-		if (parent != null) parent.isStatic = false;
+		if (parent != null) parent.isStatic = 0;
 		return isStatic = value;
 	}*/
 	

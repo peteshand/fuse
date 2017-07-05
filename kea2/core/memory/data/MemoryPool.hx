@@ -19,6 +19,9 @@ class MemoryPool
 	public function new(size:Int) 
 	{
 		this.size = size;
+		if (size == 10000) {
+			trace("size = " + size);
+		}
 		start = position;
 		end = start + size;
 		position = end;
@@ -28,7 +31,7 @@ class MemoryPool
 	{
 		var startPosition:Int = start + (blockSize * index);
 		if (startPosition + blockSize > end) {
-			throw new Error("Block outside pool limit!");
+			throw new Error("Block outside pool limit!, blockSize =" + blockSize + " index = " + index + " size = " + size);
 			return null;
 		}
 		

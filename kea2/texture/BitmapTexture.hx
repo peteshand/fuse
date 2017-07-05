@@ -22,14 +22,14 @@ class BitmapTexture extends Texture
 		this.height = bitmapData.height;
 		
 		super(queUpload, onTextureUploadComplete);
-		
 	}
 	
 	override public function upload() 
 	{
 		createNativeTexture();
-		nativeTexture.uploadFromBitmapData(bitmapData);
+		nativeTexture.uploadFromBitmapData(bitmapData, 0);
 		Textures.registerTexture(textureId, this);
+		textureData.textureAvailable = 1;
 		if (onTextureUploadComplete != null) onTextureUploadComplete();
 	}
 }

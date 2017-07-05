@@ -204,7 +204,8 @@ class Workers
 		*/
 		
 		
-		
+		conductorDataAccess.stageWidth = Kea.current.stage.stageWidth;
+		conductorDataAccess.stageHeight = Kea.current.stage.stageHeight;
 		
 		workerComms[conductorDataAccess.frameIndex % workerComms.length].send(MessageType.MAIN_THREAD_TICK);
 		

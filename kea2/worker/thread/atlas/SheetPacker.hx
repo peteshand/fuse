@@ -2,27 +2,43 @@ package kea2.worker.thread.atlas;
 
 import kea2.core.atlas.packer.AtlasPartition;
 import kea2.core.atlas.packer.AtlasPartitionPool;
+import kea2.core.memory.data.textureData.ITextureData;
 import kea2.core.memory.data.textureData.TextureData;
-import kea2.core.memory.data.vertexData.AtlasVertexData;
+import kea2.core.memory.data.vertexData.IVertexData;
+import kea2.core.memory.data.vertexData.VertexData;
+import kea2.texture.RenderTexture;
 import kea2.utils.GcoArray;
+import kea2.worker.thread.atlas.partition.PartitionRenderable;
 import kea2.worker.thread.display.TextureOrder;
+import kea2.worker.thread.display.WorkerDisplay;
+import kea2.pool.ObjectPool;
+import openfl.geom.Point;
 
 /**
  * ...
  * @author P.J.Shand
  */
+@:access(kea2)
 class SheetPacker
 {
+	static var bufferWidth:Int = 1024;
+	static var bufferHeight:Int = 1024;
 	var index:Int;
+	var textureId:Int;
+	
 	var orderTo:Int = -1;
 	var partitions:Array<AtlasPartition> = [];
-	var atlasVertexData:AtlasVertexData;
+	var vertexData:IVertexData;
+	//var atlasTextureData:TextureData;
 	
-	public function new(index:Int) 
+	public function new(index:Int, textureId:Int) 
 	{
 		this.index = index;
+		this.textureId = textureId;
 		
-		atlasVertexData = new AtlasVertexData();
+		//trace(["SheetPacker", index, textureId]);
+		vertexData = new VertexData();
+		//atlasTextureData = new TextureData(index + 1);
 		clearPartitions();
 	}
 	
@@ -36,10 +52,11 @@ class SheetPacker
 		orderTo = 0;
 		
 		var i:Int = startIndex;
-		while (i < WorkerCore.textureOrder.textureDefArray.length)
+		while (i < WorkerCore.atlasTextureDrawOrder.textureDefArray.length)
 		{
-			var textureData:TextureData = WorkerCore.textureOrder.textureDefArray[i].textureData;
-			textureData.atlasIndex = index;
+			//trace("i = " + i);
+			var textureData:ITextureData = WorkerCore.atlasTextureDrawOrder.textureDefArray[i].textureData;
+			//textureData.atlasIndex = index;
 			
 			var placedSuccessfully:Bool = place(textureData);
 			if (placedSuccessfully) {
@@ -55,7 +72,7 @@ class SheetPacker
 				else {
 					//trace("Re-order: " + orderTo);
 					orderTo = i;
-					reorderToBetween(WorkerCore.textureOrder.textureDefArray, startIndex, orderTo);
+					reorderToBetween(WorkerCore.atlasTextureDrawOrder.textureDefArray, startIndex, orderTo);
 					clearPartitions();
 					i = startIndex;
 				}
@@ -71,7 +88,7 @@ class SheetPacker
 		{
 			//AtlasPartitionPool.release(partitions[i]);
 		}
-		partitions = /*textureAtlas.partitions =*/ [AtlasPartitionPool.allocate(0, 0, 2048, 2048)];
+		partitions = /*textureAtlas.partitions =*/ [AtlasPartitionPool.allocate(0, 0, bufferWidth, bufferHeight)];
 	}
 	
 	function reorderToBetween(textureOrder:GcoArray<TextureDef>, startIndex:Int, endIndex:Int) 
@@ -97,33 +114,46 @@ class SheetPacker
 		}
 	}
 	
-	function place(textureData:TextureData):Bool
+	function place(textureData:ITextureData):Bool
 	{
-		if (textureData.placed) {
-			return true; // already placed
+		if (textureData.placed || textureData.textureAvailable == 0) {
+			return true;
 		}
-		
+		trace("place");
 		for (i in 0...partitions.length) 
 		{
-			trace("i = " + i);
+			//trace("i = " + i);
 			
 			var partition:AtlasPartition = partitions[i];
-			trace("partition.key = " + partition.key);
+			//trace("partition.key = " + partition.key);
 			var placementReturn:PlacementReturn = partition.place(textureData);
 			if (placementReturn.successful) {
 				
 				//textureData.atlasTexture = textureAtlas.texture;
-				textureData.atlasX = partition.x;
-				textureData.atlasY = partition.y;
-				textureData.atlasWidth = partition.width;
-				textureData.atlasHeight = partition.height;
+				//textureData.atlasX = partition.x;
+				//textureData.atlasY = partition.y;
 				
-				textureData.atlasIndex = index;
+				textureData.x = partition.x;
+				textureData.y = partition.y;
+				textureData.width = partition.width;
+				textureData.height = partition.height;
+				textureData.p2Width = SheetPacker.bufferWidth;// partition.width;
+				textureData.p2Height = SheetPacker.bufferHeight;// partition.height;
 				
-				setVertexData(partition);
+				//textureData.partition.value = partition;
 				
 				
-				trace([partition.x, partition.y, partition.width, partition.height]);
+				
+				textureData.atlasTextureId = this.textureId;
+				textureData.atlasBatchTextureIndex = this.index;
+				
+				var partitionRenderable:PartitionRenderable = new PartitionRenderable(partition, textureData);
+				AtlasPacker.partitionRenderables.push(partitionRenderable);
+				
+				//setVertexData(partition, textureData);
+				
+				
+				//trace([partition.x, partition.y, partition.width, partition.height]);
 				partitions.splice(i, 1);
 				
 				if (placementReturn.rightPartition != null) addPartition(placementReturn.rightPartition);
@@ -143,49 +173,12 @@ class SheetPacker
 		return false;
 	}
 	
-	function setVertexData(partition:AtlasPartition) 
-	{
-		trace("partition = " + partition);
-		trace("AtlasVertexData.OBJECT_POSITION = " + AtlasVertexData.OBJECT_POSITION);
-		
-		// Where to sample from source texture
-		// BOTTOM LEFT
-		atlasVertexData.u1 = 0;// (partition.x) / 2048;
-		atlasVertexData.v1 = 1;// (partition.y + partition.height) / 2048;
-		
-		// TOP LEFT
-		atlasVertexData.u2 = 0;// (partition.x) / 2048;
-		atlasVertexData.v2 = 0;// (partition.y) / 2048;
-		
-		// TOP RIGHT
-		atlasVertexData.u3 = 1;// (partition.x + partition.width) / 2048;
-		atlasVertexData.v3 = 0;// (partition.y) / 2048;
-		
-		// BOTTOM RIGHT
-		atlasVertexData.u4 = 1;// (partition.x + partition.width) / 2048;
-		atlasVertexData.v4 = 1;// (partition.y + partition.height) / 2048;
-		
-		// Where to draw on destination texture
-		// BOTTOM LEFT
-		atlasVertexData.x1 = (partition.x) / 2048;
-		atlasVertexData.y1 = (partition.y + partition.height) / 2048;
-		
-		// TOP LEFT
-		atlasVertexData.x2 = (partition.x) / 2048;
-		atlasVertexData.y2 = (partition.y) / 2048;
-		
-		// TOP RIGHT
-		atlasVertexData.x3 = (partition.x + partition.width) / 2048;
-		atlasVertexData.y3 = (partition.y) / 2048;
-		
-		// BOTTOM RIGHT
-		atlasVertexData.x4 = (partition.x + partition.width) / 2048;
-		atlasVertexData.y4 = (partition.y + partition.height) / 2048;
-		
-		//atlasVertexData
-		
-		AtlasVertexData.OBJECT_POSITION++;
-	}
+	//function setVertexData(partition:AtlasPartition, textureData:ITextureData) 
+	//{
+		////return;
+		//
+		//
+	//}
 	
 	function addPartition(partition:AtlasPartition) 
 	{

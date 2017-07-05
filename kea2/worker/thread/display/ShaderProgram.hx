@@ -17,8 +17,11 @@ class ShaderProgram
 	
 	public function new(context3D:Context3D, bufferSize:Int) 
 	{
-		var indexCount:Int = 6;// bufferSize * 3 * 2;
-		indices = new Vector<UInt>(bufferSize * indexCount);
+		var verticesPerQuad:Int = 4;
+		var indicesPerQuad:Int = 6;
+		var valuesPerVertex:Int = 5;
+		
+		indices = new Vector<UInt>(bufferSize * indicesPerQuad);
 		for (i in 0...bufferSize) {
 			indices[i * 3 * 2 + 0] = i * 4 + 0;
 			indices[i * 3 * 2 + 1] = i * 4 + 1;
@@ -28,8 +31,8 @@ class ShaderProgram
 			indices[i * 3 * 2 + 5] = i * 4 + 3;
 		}
 		
-		vertexbuffer = context3D.createVertexBuffer(4 * bufferSize, 7, Context3DBufferUsage.DYNAMIC_DRAW);
-		indexbuffer = context3D.createIndexBuffer(6 * bufferSize);
+		vertexbuffer = context3D.createVertexBuffer(verticesPerQuad * bufferSize, valuesPerVertex, Context3DBufferUsage.DYNAMIC_DRAW);
+		indexbuffer = context3D.createIndexBuffer(indicesPerQuad * bufferSize);
 		
 	}
 }

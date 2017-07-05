@@ -73,7 +73,7 @@ class Stage extends Sprite {
 			background = new Quad(32, 32, color);
 			stage.addChildAt(background, 0);*/
 			
-			isStatic = false;
+			isStatic = 0;
 		}
 		return value;
 	}

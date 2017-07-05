@@ -6,17 +6,17 @@ import openfl.Memory;
  * ...
  * @author P.J.Shand
  */
-class RenderTextureDrawData
+class RenderTextureDrawData implements IRenderTextureDrawData
 {
 	public static var BUFFER_SIZE:Int = 10000;
-	public static inline var BYTES_PER_ITEM:Int = 8;
 	
 	@:isVar public static var OBJECT_POSITION(get, set):Int = 0;
 	static var _basePosition:Int = 0;
 	public static var basePosition(get, null):Int = 0;
 	
 	public static inline var INDEX_RENDER_TEXTURE_ID:Int = 0;
-	public static inline var INDEX_DISPLAY_OBJECT_ID:Int = 4;
+	public static inline var INDEX_DISPLAY_OBJECT_ID:Int = 2;
+	public static inline var BYTES_PER_ITEM:Int = 4;
 	
 	public var renderTextureId(get, set):Int;
 	public var displayObjectId(get, set):Int;
@@ -31,33 +31,33 @@ class RenderTextureDrawData
 	///////////////////////////////////////////////////////////////
 	
 	inline function get_renderTextureId():Int { 
-		return readInt(INDEX_RENDER_TEXTURE_ID);
+		return readInt16(INDEX_RENDER_TEXTURE_ID);
 	}
 	
 	inline function get_displayObjectId():Int { 
-		return readInt(INDEX_DISPLAY_OBJECT_ID);
+		return readInt16(INDEX_DISPLAY_OBJECT_ID);
 	}
 	
 	///////////////////////////////////////////////////////////////
 	
 	inline function set_renderTextureId(value:Int):Int { 
-		writeInt(INDEX_RENDER_TEXTURE_ID, value);
+		writeInt16(INDEX_RENDER_TEXTURE_ID, value);
 		return value;
 	}
 	
 	inline function set_displayObjectId(value:Int):Int { 
-		writeInt(INDEX_DISPLAY_OBJECT_ID, value);
+		writeInt16(INDEX_DISPLAY_OBJECT_ID, value);
 		return value;
 	}
 	
-	inline function readInt(offset:Int):Int
+	inline function readInt16(offset:Int):Int
 	{
-		return Memory.getI32(RenderTextureDrawData.basePosition + offset);
+		return Memory.getUI16(RenderTextureDrawData.basePosition + offset);
 	}
 	
-	inline function writeInt(offset:Int, value:Int):Void
+	inline function writeInt16(offset:Int, value:Int):Void
 	{
-		Memory.setI32(RenderTextureDrawData.basePosition + offset, value);
+		Memory.setI16(RenderTextureDrawData.basePosition + offset, value);
 	}
 	
 	static inline function get_OBJECT_POSITION():Int 

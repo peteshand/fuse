@@ -1,4 +1,4 @@
-package kea2.worker.thread.display;
+package kea2.worker.thread.atlas;
 
 import kea2.core.memory.data.textureData.ITextureData;
 import kea2.core.memory.data.textureData.TextureData;
@@ -15,7 +15,7 @@ import kea2.worker.thread.display.TextureOrder.TextureDef;
  * @author P.J.Shand
  */
 @:access(kea2)
-class TextureOrder
+class AtlasTextureDrawOrder
 {
 	public var textureStartIndex:Null<Int>;
 	public var textureEndIndex:Null<Int>;
@@ -58,7 +58,6 @@ class TextureOrder
 		currentTextureDef.renderTargetId = renderTargetId;
 		currentTextureDef.drawIndex = drawIndex;
 		currentTextureDef.textureData = textureData;
-		currentTextureDef.numItems = 0;
 		
 		textureDefArray[textureDefArray.length] = currentTextureDef;
 	}
@@ -70,23 +69,22 @@ class TextureOrder
 		
 	}
 	
-	public function setValues(textureId:Int, textureData:ITextureData):Void
+	public function setValues(textureData:ITextureData):Void
 	{
 		textureStartIndex = VertexData.basePosition;
 		textureEndIndex = textureStartIndex + VertexData.BYTES_PER_ITEM;
 		
 		//trace(["setValues", textureStartIndex, textureEndIndex]);
-		if (this.textureId != textureId || this.renderTargetId != RenderTexture.currentRenderTargetId)
+		if (this.textureId != textureData.textureId || this.renderTargetId != RenderTexture.currentRenderTargetId)
 		{
-			this.textureId = textureId;
+			this.textureId = textureData.textureId;
 			this.renderTargetId = RenderTexture.currentRenderTargetId;
 			this.drawIndex = VertexData.OBJECT_POSITION;
 			this.textureData = textureData;
 			
 			OnTextureStateChange();
 		}
-		currentTextureDef.numItems++;
-		//trace("VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
+		
 		VertexData.OBJECT_POSITION++;
 		//return currentRenderBatchDef.index;
 	}
@@ -121,16 +119,15 @@ class TextureOrder
 	
 }
 
-typedef TextureDef =
+/*typedef TextureDef =
 {
 	index:Int,
 	startIndex:Int,
 	textureId:Int,
 	renderTargetId:Int,
 	drawIndex:Int,
-	textureData:ITextureData,
-	numItems:Int
-}
+	textureData:ITextureData
+}*/
 
 /*typedef RenderBatchDef =
 {

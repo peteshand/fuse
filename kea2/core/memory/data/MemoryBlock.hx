@@ -36,13 +36,35 @@ class MemoryBlock
 		return Memory.getI32(start + offset);
 	}
 	
+	public inline function readInt16(offset:Int):Int 
+	{
+		return Memory.getUI16(start + offset);
+	}
+	
+	public inline function readByte(offset:Int):Int 
+	{
+		return Memory.getByte(start + offset);
+	}
+	
+	
+	
 	public inline function writeFloat(offset:Int, value:Float):Void 
 	{
 		Memory.setFloat(start + offset, value);
 	}
 	
-	public inline function writeInt(offset:Int, value:Int):Void 
+	public function writeInt(offset:Int, value:Int):Void 
 	{
 		Memory.setI32(start + offset, value);
+	}
+	
+	public function writeInt16(offset:Int, value:Int):Void 
+	{
+		Memory.setI16(start + offset, value);
+	}
+	
+	public function writeByte(offset:Int, value:Int):Void 
+	{
+		Memory.setByte(start + offset, value);
 	}
 }
