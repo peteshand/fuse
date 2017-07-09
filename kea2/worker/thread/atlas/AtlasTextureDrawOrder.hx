@@ -99,6 +99,7 @@ class AtlasTextureDrawOrder
 				renderTargetId:-1,
 				drawIndex:-1,
 				textureData:null,
+				//workerDisplays:null,
 				numItems:0
 			};
 		}

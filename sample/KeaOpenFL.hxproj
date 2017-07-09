@@ -31,7 +31,7 @@
     <class path=".." />
     <class path="C:\_sdks\haxe\lib\kha\git\Sources" />
     <class path="C:\_sdks\haxe\lib\kha\git\Backends\Flash" />
-    <class path="bin\flash\release\haxe" />
+    <class path="bin\flash\debug\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -40,7 +40,7 @@
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="True" />
-    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;-swf-version 19" />
+    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;-swf-version 19&#xA;-debug " />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

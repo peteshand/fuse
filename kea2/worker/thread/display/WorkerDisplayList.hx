@@ -119,6 +119,7 @@ class WorkerDisplayList
 		// a large texture atlas so a large number of display items can be draw in a single draw call
 		createDynamicTextureAtlas();
 		
+		checkLayerCache();
 		// Works out how to group textures together so multiple textures (currently 4) can be drawn in a single draw call
 		quadBatchTextureDraws();
 		
@@ -131,6 +132,10 @@ class WorkerDisplayList
 	
 	inline function begin() 
 	{
+		//trace("WorkerCore.textureBuildRequired = " + WorkerCore.textureBuildRequired);
+		if (WorkerCore.textureBuildNextFrame) {
+			WorkerCore.textureBuildRequired = true;
+		}
 		Conductor.conductorDataAccess.busy = 1;
 		
 		// Reset vertexData read position
@@ -145,6 +150,7 @@ class WorkerDisplayList
 			WorkerCore.textureOrder.begin();
 		}
 		
+		WorkerCore.textureBuildNextFrame = false;
 	}
 	
 	inline function buildRenderTexturesHierarchy() 
@@ -173,6 +179,7 @@ class WorkerDisplayList
 	
 	inline function quadBatchTextureDraws() 
 	{
+		VertexData.OBJECT_POSITION = 0;
 		if (WorkerCore.textureBuildRequired){
 			this.setTextures();
 			VertexData.OBJECT_POSITION = AtlasPacker.NUM_ATLAS_DRAWS;
@@ -180,11 +187,12 @@ class WorkerDisplayList
 			//trace(WorkerCore.textureBuildRequired);
 		}
 		
-		WorkerCore.textureRenderBatch.begin();
-		//if (WorkerCore.textureBuildRequired){
+		
+		if (WorkerCore.textureBuildRequired) {
+			WorkerCore.textureRenderBatch.begin();
 			WorkerCore.textureRenderBatch.update();
-		//}
-		WorkerCore.textureRenderBatch.end();
+			WorkerCore.textureRenderBatch.end();
+		}
 	}
 	
 	inline function writeVertexData() 
@@ -220,10 +228,13 @@ class WorkerDisplayList
 	
 	inline function applyTransform() 
 	{
+		
+		WorkerCore.layerCache.begin();
 		for (i in 0...hierarchyApplyTransform.length) 
 		{
 			hierarchyApplyTransform[i]();
 		}
+		WorkerCore.layerCache.end();
 	}
 	
 	public function updateInternalData() 
@@ -236,22 +247,40 @@ class WorkerDisplayList
 	
 	inline function setAtlasTextures() 
 	{
+		VertexData.OBJECT_POSITION = 0;
 		for (k in 0...hierarchy.length) 
 		{
 			hierarchy[k].setAtlasTextures();
 		}
 	}
 	
+	inline function checkLayerCache() 
+	{
+		VertexData.OBJECT_POSITION = 0;
+		for (k in 0...hierarchy.length) 
+		{
+			hierarchy[k].checkLayerCache();
+		}
+	}
+	
 	inline function setTextures() 
 	{
+		
 		for (k in 0...hierarchy.length) 
 		{
 			hierarchy[k].setTextures();
 		}
 	}
 	
-	inline function setVertexData() 
+	function setVertexData() 
 	{
+		if (WorkerCore.textureBuildRequired) {
+			for (k in 0...hierarchyAll.length) 
+			{
+				hierarchyAll[k].setTextureIndex();
+			}
+		}
+		VertexData.OBJECT_POSITION = 0;
 		if (WorkerCore.textureBuildRequired){
 			WorkerCore.atlasPacker.setVertexData();
 		}
@@ -260,6 +289,8 @@ class WorkerDisplayList
 		{
 			hierarchyAll[k].setVertexData();
 		}
+		
+		//WorkerDisplay.layerCacheRenderTarget.value = -1;
 		
 		//if (WorkerCore.hierarchyBuildRequired) {
 			Conductor.conductorDataAccess.numberOfRenderables = VertexData.OBJECT_POSITION;

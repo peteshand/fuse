@@ -21,8 +21,8 @@ import openfl.geom.Point;
 @:access(kea2)
 class SheetPacker
 {
-	static var bufferWidth:Int = 1024;
-	static var bufferHeight:Int = 1024;
+	static var bufferWidth:Int = 2048;
+	static var bufferHeight:Int = 2048;
 	var index:Int;
 	var textureId:Int;
 	

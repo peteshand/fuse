@@ -466,11 +466,11 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	
 	inline function set_isStatic(value:Int):Int 
 	{
-		if (isStatic != value) {
+		//if (isStatic != value) {
 			isStatic = value;
-			trace("isStatic = " + isStatic);
+			//trace("isStatic = " + isStatic);
 			displayData.isStatic = isStatic;
-		}
+		//}
 		return value;
 	}
 	

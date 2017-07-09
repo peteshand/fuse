@@ -32,31 +32,53 @@ class TextureRenderBatch
 	
 	public function update() 
 	{
+		//trace("update: " + WorkerCore.textureOrder.textureDefArray.length);
 		//clear();
 		currentRenderBatchDefs(WorkerCore.textureOrder.textureDefArray);
 		createBatchData();
-		
 	}
 	
 	public function end() 
 	{
+		//trace("renderBatchDefs.length = " + renderBatchDefs.length);
+		/*for (i in 0...renderBatchDefs.length) 
+		{
+			var renderBatchDef:RenderBatchDef = renderBatchDefs[i];
+			//trace("renderBatchDef.textureDefs.length = " + renderBatchDef.textureDefs.length);
+			for (i in 0...renderBatchDef.textureDefs.length) 
+			{
+				var textureDef:TextureDef = renderBatchDef.textureDefs[i];
+				trace("textureDef.workerDisplays.length = " + textureDef.workerDisplays.length);
+				for (j in 0...textureDef.workerDisplays.length) 
+				{
+					var workerDisplay:WorkerDisplay = textureDef.workerDisplays[j];
+					//trace("workerDisplay.textureData.atlasTextureId = " + workerDisplay.textureData.atlasTextureId);
+					for (k in 0...renderBatchDef.textureIdArray.length) 
+					{
+						//trace("renderBatchDef.textureIdArray[k] = " + renderBatchDef.textureIdArray[k]);
+						if (workerDisplay.textureData.atlasTextureId == renderBatchDef.textureIdArray[k]) {
+							//trace(["workerDisplay.textureIndex = " + k, workerDisplay.objectId]);
+							workerDisplay.textureIndex = k;
+						}
+					}
+				}
+			}
+		}*/
+		
+		//trace("number of batches = " + renderBatchDefs.length);
 		Conductor.conductorDataAccess.numberOfBatches = renderBatchDefs.length;
 	}
 	
-	inline function currentRenderBatchDefs(textureDefArray:GcoArray<TextureDef>) 
+	function currentRenderBatchDefs(textureDefArray:GcoArray<TextureDef>) 
 	{
-		
-		
 		for (i in 0...textureDefArray.length) 
 		{
 			var currentTextureDef:TextureDef = textureDefArray[i];
-			
 			if (requiresNewRenderBatchDef(currentTextureDef, currentTextureDef)) {
 				closeCurrentRenderBatch();
 				currentRenderBatchDef = createRenderBatchDef(renderBatchDefs.length);
 				currentRenderBatchDef.startIndex = currentTextureDef.startIndex;
 				currentRenderBatchDef.renderTargetId = currentTextureDef.renderTargetId;
-				currentRenderBatchDef.textureIdArray.clear();
 			}
 			
 			currentRenderBatchDef.numItems += currentTextureDef.numItems;
@@ -76,10 +98,22 @@ class TextureRenderBatch
 			itemCount++;
 		}
 		closeCurrentRenderBatch();
+		/*trace("renderBatchDefPool.length = " + renderBatchDefPool.length);
+		for (j in 0...renderBatchDefPool.length) 
+		{
+			for (k in 0...renderBatchDefPool[j].textureDefs.length) 
+			{
+				//trace("renderBatchDefPool[j].textureDefs[k].workerDisplay = " + renderBatchDefPool[j].textureDefs[k].workerDisplay);
+				for (j in 0...renderBatchDefPool[j].textureDefs[k].workerDisplays.length) 
+				{
+					trace(renderBatchDefPool[j].textureDefs[k].workerDisplays);
+				}
+			}
+		}*/
 		//currentTextureDef = null;
 	}
 	
-	inline function closeCurrentRenderBatch() 
+	function closeCurrentRenderBatch() 
 	{
 		if (currentRenderBatchDef != null) {
 			currentRenderBatchDef.length = currentRenderBatchDef.textureIdArray.length * VertexData.BYTES_PER_ITEM;
@@ -181,6 +215,7 @@ class TextureRenderBatch
 			renderBatchDefPool[index].startIndex = -1;
 			renderBatchDefPool[index].renderTargetId = -1;
 			renderBatchDefPool[index].textureIdArray.clear();
+			renderBatchDefPool[index].textureDefs.clear();
 			renderBatchDefPool[index].numItems = 0;
 		}
 		
@@ -207,15 +242,28 @@ class TextureRenderBatch
 		return null;
 	}*/
 	
-	public function getRenderBatchIndex(drawIndex:Int):Int
+	public function getRenderBatchIndex(index:Int):Int
 	{
 		for (i in 0...renderBatchDefs.length) 
 		{
 			for (j in 0...renderBatchDefs[i].textureDefs.length) 
 			{
-				if (renderBatchDefs[i].textureDefs[j].drawIndex == drawIndex) {
+				if (renderBatchDefs[i].textureDefs[j].index == index) {
 					return i;
 				}
+			}
+		}
+		return 0;
+	}
+	
+	public function findTextureIndex(batchIndex:Int, textureId:Int):Int
+	{
+		//trace("textureId = " + textureId);
+		for (j in 0...renderBatchDefs[batchIndex].textureDefs.length) 
+		{
+			//trace("renderBatchDefs[" + batchIndex + "].textureDefs[" + j + "].textureId = " + renderBatchDefs[batchIndex].textureDefs[j].textureId);
+			if (renderBatchDefs[batchIndex].textureDefs[j].textureId == textureId) {
+				return j;
 			}
 		}
 		return 0;

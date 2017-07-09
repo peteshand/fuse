@@ -38,6 +38,9 @@ class TextureOrder
 		textureId = -2;
 		renderTargetId = -2;
 		
+		textureStartIndex = VertexData.basePosition;
+		textureEndIndex = textureStartIndex + VertexData.BYTES_PER_ITEM;
+		
 		//if (WorkerEntryPoint.hierarchyBuildRequired){
 			textureDefArray.clear();
 		//}
@@ -58,6 +61,7 @@ class TextureOrder
 		currentTextureDef.renderTargetId = renderTargetId;
 		currentTextureDef.drawIndex = drawIndex;
 		currentTextureDef.textureData = textureData;
+		//currentTextureDef.workerDisplays.clear();
 		currentTextureDef.numItems = 0;
 		
 		textureDefArray[textureDefArray.length] = currentTextureDef;
@@ -70,12 +74,10 @@ class TextureOrder
 		
 	}
 	
-	public function setValues(textureId:Int, textureData:ITextureData):Void
+	public function setValues(textureId:Int, textureData:ITextureData):Int
 	{
 		textureStartIndex = VertexData.basePosition;
 		textureEndIndex = textureStartIndex + VertexData.BYTES_PER_ITEM;
-		
-		//trace(["setValues", textureStartIndex, textureEndIndex]);
 		if (this.textureId != textureId || this.renderTargetId != RenderTexture.currentRenderTargetId)
 		{
 			this.textureId = textureId;
@@ -86,10 +88,15 @@ class TextureOrder
 			OnTextureStateChange();
 		}
 		currentTextureDef.numItems++;
-		//trace("VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
+		
 		VertexData.OBJECT_POSITION++;
-		//return currentRenderBatchDef.index;
+		return currentTextureDef.index;
 	}
+	
+	/*public function addWorkerDisplay(workerDisplay:WorkerDisplay):Void
+	{
+		currentTextureDef.workerDisplays.push(workerDisplay);
+	}*/
 	
 	function getTextureDef(index:Int):TextureDef
 	{
@@ -101,6 +108,7 @@ class TextureOrder
 				renderTargetId:-1,
 				drawIndex:-1,
 				textureData:null,
+				//workerDisplays:new GcoArray<WorkerDisplay>([]),
 				numItems:0
 			};
 		}
@@ -129,15 +137,6 @@ typedef TextureDef =
 	renderTargetId:Int,
 	drawIndex:Int,
 	textureData:ITextureData,
+	//workerDisplays:GcoArray<WorkerDisplay>,
 	numItems:Int
 }
-
-/*typedef RenderBatchDef =
-{
-	index:Int,
-	startIndex:Int,
-	renderTargetId:Int,
-	textureIdArray:GcoArray<Int>,
-	?numItems:Int,
-	?length:Int
-}*/

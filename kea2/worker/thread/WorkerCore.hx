@@ -1,11 +1,10 @@
 package kea2.worker.thread;
 import kea2.worker.communication.IWorkerComms;
 import kea2.worker.thread.atlas.AtlasTextureDrawOrder;
-import kea2.worker.thread.atlas.AtlasTextureRenderBatch;
 import kea2.worker.thread.display.TextureOrder;
 import kea2.worker.thread.display.TextureRenderBatch;
 import kea2.worker.thread.display.WorkerDisplayList;
-import kea2.worker.thread.layerConstruct.WorkerLayerConstruct;
+import kea2.worker.thread.layerCache.LayerCaches;
 import kea2.worker.thread.texture.RenderTextureManager;
 import kea2.worker.thread.atlas.AtlasPacker;
 
@@ -19,15 +18,17 @@ class WorkerCore
 	
 	public static var atlasPacker:AtlasPacker;
 	public static var atlasTextureDrawOrder:AtlasTextureDrawOrder;
-	//static public var atlasTextureRenderBatch:AtlasTextureRenderBatch;
 	
 	public static var textureOrder:TextureOrder;
 	public static var textureRenderBatch:TextureRenderBatch;
 	
 	public static var renderTextureManager:RenderTextureManager;
-	public static var workerLayerConstruct:WorkerLayerConstruct;
+	//public static var workerLayerConstruct:WorkerLayerConstruct;
+	public static var layerCache:LayerCaches;
 	
 	@:isVar public static var textureBuildRequiredCount(default, set):Int = 0;
+	
+	public static var textureBuildNextFrame:Bool;
 	public static var textureBuildRequired:Bool;
 	@:isVar public static var hierarchyBuildRequired(get, set):Bool = true;
 	public static var STAGE_WIDTH:Int;
@@ -47,7 +48,8 @@ class WorkerCore
 		WorkerCore.textureRenderBatch = new TextureRenderBatch();
 		
 		WorkerCore.renderTextureManager = new RenderTextureManager();
-		WorkerCore.workerLayerConstruct = new WorkerLayerConstruct();
+		//WorkerCore.workerLayerConstruct = new WorkerLayerConstruct();
+		WorkerCore.layerCache = new LayerCaches();
 	}
 	
 	static inline function get_hierarchyBuildRequired():Bool 

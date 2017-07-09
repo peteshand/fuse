@@ -1,5 +1,6 @@
 package net.peteshand.keaOpenFL.view.kea;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.AtlasGenTest;
+import net.peteshand.keaOpenFL.view.kea.newRenderer.LayerCacheTest;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.RenderTextureTest;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.StressTest;
 import net.peteshand.keaOpenFL.view.kea.old.atlas.AtlasTest;
@@ -76,13 +77,13 @@ class MainLayer extends Sprite
 		addChild(atlasGenTest);
 		atlasGenTest.init();*/
 		
-		
 		var stressTest:StressTest = new StressTest();
 		addChild(stressTest);
 		stressTest.init();
 		
-		
-		
+		/*var layerCacheTest:LayerCacheTest = new LayerCacheTest();
+		addChild(layerCacheTest);
+		layerCacheTest.init();*/
 	}
 	
 	override function update(): Void {

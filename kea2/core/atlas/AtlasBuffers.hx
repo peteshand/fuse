@@ -13,16 +13,14 @@ class AtlasBuffers
 	var buffers:Array<RenderTexture> = [];
 	var conductorData:ConductorData = new ConductorData();
 	
-	public function new(atlasBuffers:Int, bufferWidth:Int, bufferHeight:Int) 
+	public function new(numBuffers:Int, bufferWidth:Int, bufferHeight:Int) 
 	{
 		AtlasBuffers.bufferWidth = bufferWidth;
 		AtlasBuffers.bufferHeight = bufferHeight;
 		
-		for (i in 0...atlasBuffers) 
+		for (i in 0...numBuffers) 
 		{
 			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight);
-			trace("buffer.textureId = " + buffer.textureId);
-			
 			buffers.push(buffer);
 		}
 		

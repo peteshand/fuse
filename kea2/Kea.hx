@@ -3,6 +3,7 @@ import flash.events.Event;
 import flash.display.Stage as OpenFLStage;
 import kea.display.Sprite;
 import kea2.core.atlas.AtlasBuffers;
+import kea2.core.layers.LayerCacheBuffers;
 import kea2.core.memory.KeaMemory;
 import kea2.display.containers.Stage;
 import kea.logic.Logic;
@@ -47,6 +48,7 @@ class Kea
 	static var count:Int = 0;
 	var rootClass:Class<Sprite>;
 	var atlasBuffers:AtlasBuffers;
+	var layerCacheBuffers:LayerCacheBuffers;
 	
 	public var workers:Workers;
 	
@@ -137,7 +139,8 @@ class Kea
 		renderer = new Renderer(openFLStage.stage3Ds[0]/*, workers.vertexData*/);
 		openFLStage.addEventListener(Event.ENTER_FRAME, Update);
 		
-		atlasBuffers = new AtlasBuffers(keaConfig.atlasBuffers, 1024, 1024);
+		atlasBuffers = new AtlasBuffers(keaConfig.atlasBuffers, 2048, 2048);
+		layerCacheBuffers = new LayerCacheBuffers(2, 2048, 2048);
 		
 		stage = new Stage(rootClass);
 		

@@ -88,7 +88,6 @@ class AtlasPacker
 	
 	public function setVertexData() 
 	{
-		VertexData.OBJECT_POSITION = 0;
 		for (i in 0...partitionRenderables.length) 
 		{
 			partitionRenderables[i].setVertexData();

@@ -52,7 +52,8 @@ abstract GcoArray<T>(GcoArrayBase<T>)
 	
 	function set_length(value:Int):Int 
 	{
-		return this.length = value;
+		this.length = value;
+		return value;
 	}
 }
 

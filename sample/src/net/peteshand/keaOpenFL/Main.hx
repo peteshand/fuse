@@ -24,7 +24,6 @@ class Main extends Sprite
 		keaConfig.useCacheLayers = true;
 		keaConfig.debugTextureAtlas = false;
 		keaConfig.debugSkipRender = false;
-		
 		Kea.init(MainLayer, keaConfig);
 		
 		/*var transparentTest:TransparentTest = new TransparentTest();
