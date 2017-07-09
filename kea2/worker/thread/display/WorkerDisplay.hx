@@ -16,7 +16,8 @@ import kea2.worker.thread.display.WorkerDisplay;
 import kea2.worker.thread.display.WorkerDisplayList;
 import kea2.pool.ObjectPool;
 import kea2.worker.thread.layerCache.LayerCache;
-import kea2.worker.thread.layerCache.groups.StaticLayerGroup.StaticGroupState;
+import kea2.worker.thread.layerCache.groups.LayerGroup;
+import kea2.worker.thread.layerCache.groups.LayerGroup.LayerGroupState;
 import kea2.worker.thread.util.transform.WorkerTransformHelper;
 import kha.Color;
 import kha.math.FastMatrix3;
@@ -115,6 +116,8 @@ class WorkerDisplay extends PrivateDisplayBase
 	//static var layerCacheRenderTarget:Notifier<Null<Int>>;
 	//static var layerCacheRenderTarget2:Notifier<Null<Int>>;
 	var staticDef:StaticDef;
+	public var layerGroup:LayerGroup;
+	
 	var mulX:Float;
 	var mulY:Float;
 	var textureDefIndex:Int;
@@ -132,7 +135,7 @@ class WorkerDisplay extends PrivateDisplayBase
 		staticDef = { 
 			index:-1,
 			layerCacheRenderTarget:0,
-			state:StaticGroupState.DRAW_TO_LAYER
+			state:LayerGroupState.DRAW_TO_LAYER
 		};
 		
 		bottomLeft = new Point();
@@ -184,7 +187,6 @@ class WorkerDisplay extends PrivateDisplayBase
 	{
 		updateIsStatic();
 		
-		
 		//trace(["pushTransform", objectId, VertexData.OBJECT_POSITION]);
 		
 		if (isStatic == WorkerDisplay.FALSE) {
@@ -225,6 +227,12 @@ class WorkerDisplay extends PrivateDisplayBase
 		if (WorkerCore.hierarchyBuildRequired) {
 			WorkerCore.workerDisplayList.hierarchy.push(this);
 			WorkerCore.workerDisplayList.hierarchyAll.push(this);
+			
+			if (textureId != -1) {
+				WorkerCore.workerDisplayList.visHierarchy.push(this);
+				WorkerCore.workerDisplayList.visHierarchyAll.push(this);
+			}
+			
 			if (renderId != -1) {
 				//WorkerCore.workerDisplayList.numberOfRenderables++;
 				//trace("this.numberOfRenderables = " + Conductor.conductorDataAccess.numberOfRenderables);
@@ -234,18 +242,16 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	inline function updateInternalData() 
 	{
-		if (isStatic == WorkerDisplay.FALSE){
+		//if (isStatic == WorkerDisplay.FALSE){
 			//updateUVData();
 			updatePositionData();
 			
-			opacity = 1;
+			/*opacity = 1;
 			if (color != Color.Green) {
 				color = Color.Green;
 				updateColour = true;
-			}
-			
-			//isStatic = WorkerDisplay.TRUE;
-		}
+			}*/
+		//}
 	}
 	
 	inline function updateUVData() 
@@ -271,8 +277,7 @@ class WorkerDisplay extends PrivateDisplayBase
 		isStatic = displayData.isStatic;
 		
 		if (textureId != -1) {
-			WorkerCore.layerCache.currentIsStatic.value = isStatic;
-			VertexData.OBJECT_POSITION++;
+			WorkerCore.layerCaches.build(this);	
 		}
 	}
 	
@@ -306,351 +311,344 @@ class WorkerDisplay extends PrivateDisplayBase
 	{
 		if (textureId == -1) return;
 		
-		layerCache = WorkerCore.layerCache.checkRenderTarget(staticDef);
-	}
-	
-	public function setTextures() 
-	{
-		if (textureId == -1 || textureData.textureAvailable == 0) return;
-		
-		
-		
-		/*if (renderTarget) {
-			
-		}
-		else {
-			
+		layerCache = WorkerCore.layerCaches.checkRenderTarget(staticDef);
+		/*if (layerGroup != null){
+			staticDef = layerGroup.staticDef;
+			trace("staticDef.index = " + staticDef.index);
 		}*/
-		
-		
-		RenderTexture.currentRenderTargetId = renderTarget;
-		
-		//trace("renderTarget = " + WorkerCore.layerCache.renderTarget);
-		
-		//layerCacheRenderTarget.value = staticDef.layerCacheRenderTarget;
-		//trace(staticDef);
-		//trace("VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
-		
-		if (staticDef.state == StaticGroupState.ALREADY_ADDED) {
-			// skip draw because it's already in a static layer
-			
-			layerCache.setTextures(staticDef/*, this*/);
-		}
-		else if (staticDef.state == StaticGroupState.DRAW_TO_LAYER) {
-			// Draw Into LayerCache Texture
-			RenderTexture.currentRenderTargetId = staticDef.layerCacheRenderTarget;
-			textureDefIndex = WorkerCore.textureOrder.setValues(textureData.atlasTextureId, textureData);
-			//WorkerCore.textureOrder.addWorkerDisplay(this);
-			layerCache.setTextures(staticDef/*, this*/);
-		}
-		else if (staticDef.state == StaticGroupState.MOVING) {
-			// Draw Into Screen Buffer
-			RenderTexture.currentRenderTargetId = staticDef.layerCacheRenderTarget;
-			textureDefIndex = WorkerCore.textureOrder.setValues(textureData.atlasTextureId, textureData);
-			//WorkerCore.textureOrder.addWorkerDisplay(this);
-		}
-		
-		/*if (staticDef.layerCacheRenderTarget != -1 && staticDef.state == StaticGroupState.NO_CHANGE) {
-			// display in static range
-			trace("display in static range");
-			//RenderTexture.currentRenderTargetId = -1;
-			//VertexData.OBJECT_POSITION++;
-		}
-		else {*/
-		
-			//trace("staticDef.layerCacheRenderTarget = " + staticDef.layerCacheRenderTarget);
-			//RenderTexture.currentRenderTargetId = staticDef.layerCacheRenderTarget;
-			//trace("atlasTextureId = " + textureData.atlasTextureId);
-			//WorkerCore.textureOrder.setValues(textureData.atlasTextureId, textureData);
-			//WorkerCore.atlasTextureDrawOrder.setValues(textureData);
-		//}
 	}
 	
-	public function setTextureIndex():Void
+	public function setTexturesMove() 
+	{
+		RenderTexture.currentRenderTargetId = renderTarget;
+		// Draw Into Screen Buffer
+		RenderTexture.currentRenderTargetId = staticDef.layerCacheRenderTarget;
+		textureDefIndex = WorkerCore.textureOrder.setValues(textureData.atlasTextureId, textureData);
+		//WorkerCore.textureOrder.addWorkerDisplay(this);
+	}
+	
+	public function setTexturesDraw() 
+	{
+		RenderTexture.currentRenderTargetId = renderTarget;
+		// Draw Into LayerCache Texture
+		RenderTexture.currentRenderTargetId = staticDef.layerCacheRenderTarget;
+		textureDefIndex = WorkerCore.textureOrder.setValues(textureData.atlasTextureId, textureData);
+		//WorkerCore.textureOrder.addWorkerDisplay(this);
+		layerCache.setTextures();
+	}
+	
+	public function setTexturesAlreadyAdded() 
+	{
+		RenderTexture.currentRenderTargetId = renderTarget;
+		// skip draw because it's already in a static layer
+		layerCache.setTextures();
+	}
+	
+	//public function setTextures() 
+	//{
+		//if (textureId == -1 || textureData.textureAvailable == 0) return;
+		//
+		//RenderTexture.currentRenderTargetId = renderTarget;
+		//
+		//if (staticDef.state == LayerGroupState.ALREADY_ADDED) {
+			//// skip draw because it's already in a static layer
+			//
+			//layerCache.setTextures(staticDef/*, this*/);
+		//}
+		//else if (staticDef.state == LayerGroupState.DRAW_TO_LAYER) {
+			//// Draw Into LayerCache Texture
+			//RenderTexture.currentRenderTargetId = staticDef.layerCacheRenderTarget;
+			//textureDefIndex = WorkerCore.textureOrder.setValues(textureData.atlasTextureId, textureData);
+			////WorkerCore.textureOrder.addWorkerDisplay(this);
+			//layerCache.setTextures(staticDef/*, this*/);
+		//}
+		//else if (staticDef.state == LayerGroupState.MOVING) {
+			//// Draw Into Screen Buffer
+			//RenderTexture.currentRenderTargetId = staticDef.layerCacheRenderTarget;
+			//textureDefIndex = WorkerCore.textureOrder.setValues(textureData.atlasTextureId, textureData);
+			////WorkerCore.textureOrder.addWorkerDisplay(this);
+		//}
+	//}
+	
+	public function setTextureIndexMove():Void
+	{
+		var batchIndex:Int = WorkerCore.textureRenderBatch.getRenderBatchIndex(textureDefIndex);
+		textureIndex = WorkerCore.textureRenderBatch.findTextureIndex(batchIndex, textureData.atlasTextureId);
+	}
+	
+	public function setTextureIndexDraw():Void
+	{
+		var batchIndex:Int = WorkerCore.textureRenderBatch.getRenderBatchIndex(textureDefIndex);
+		textureIndex = WorkerCore.textureRenderBatch.findTextureIndex(batchIndex, textureData.atlasTextureId);
+	}
+	
+	public function setTextureIndexAlreadyAdded():Void
+	{
+		var batchIndex:Int = WorkerCore.textureRenderBatch.getRenderBatchIndex(textureDefIndex);
+		textureIndex = WorkerCore.textureRenderBatch.findTextureIndex(batchIndex, staticDef.layerCacheRenderTarget);
+	}
+	
+	/*public function setTextureIndex():Void
 	{
 		if (textureId == -1) return;
 		var batchIndex:Int = WorkerCore.textureRenderBatch.getRenderBatchIndex(textureDefIndex);
-		if (staticDef.state == StaticGroupState.ALREADY_ADDED) {
+		if (staticDef.state == LayerGroupState.ALREADY_ADDED) {
 			textureIndex = WorkerCore.textureRenderBatch.findTextureIndex(batchIndex, staticDef.layerCacheRenderTarget);
 		}
-		else if (staticDef.state == StaticGroupState.DRAW_TO_LAYER) {
+		else if (staticDef.state == LayerGroupState.DRAW_TO_LAYER) {
 			textureIndex = WorkerCore.textureRenderBatch.findTextureIndex(batchIndex, textureData.atlasTextureId);
 		}
-		else if (staticDef.state == StaticGroupState.MOVING) {
+		else if (staticDef.state == LayerGroupState.MOVING) {
 			textureIndex = WorkerCore.textureRenderBatch.findTextureIndex(batchIndex, textureData.atlasTextureId);
 		}
 		//trace("textureIndex = " + textureIndex);
+	}*/
+	
+	public function setVertexDataMove() 
+	{
+		if (textureData.textureAvailable == 0) return;
+		vertexData.batchTextureIndex = this.textureIndex;
+		writeVertexData();
 	}
 	
-	public function setVertexData() 
+	public function setVertexDataDraw() 
+	{
+		if (textureData.textureAvailable == 0) return;
+		vertexData.batchTextureIndex = this.textureIndex;
+		writeVertexData();
+		//layerCache.setVertexData(staticDef, textureIndex);
+	}
+	
+	/*public function setVertexDataAlreadyAdded() 
+	{
+		if (textureData.textureAvailable == 0) return;
+		layerCache.setVertexData(staticDef, textureIndex);
+	}*/
+	
+	/*public function setVertexData() 
 	{
 		if (textureId == -1) return;
-		
-		//
-		//
-		
-		/*if (staticDef.layerCacheRenderTarget != -1 && staticDef.state == StaticGroupState.NO_CHANGE) {
-			
-			return;
-		}*/
-		
-		//trace(["setVertexData", objectId, VertexData.OBJECT_POSITION]);
-		
-		//if (staticDef.layerCacheRenderTarget != -1 && staticDef.state == StaticGroupState.NO_CHANGE) {
-			// display in static range
-			//trace(["display in static range", staticDef.layerCacheRenderTarget]);
-			//return;
-		//}
-		
-		/*if (drawIndex == VertexData.OBJECT_POSITION && isStatic == WorkerDisplay.TRUE) {
-			// Hasn't changed, so don't need to update vertex data
-			finishSetVertexData();
-			return;
-		}*/
-		
 		if (textureData.textureAvailable == 0) return;
 		
-		//trace("setVertexData: renderTextureId = " + renderTextureId);
-		
-		
-		
-		/*if (staticDef.state == StaticGroupState.DRAW_TO_LAYER || staticDef.state == StaticGroupState.MOVING) {
-			vertexData.batchTextureIndex = this.textureIndex;
+		if (staticDef.state == LayerGroupState.MOVING) {
 			writeVertexData();
 		}
-		
-		if (staticDef.state == StaticGroupState.DRAW_TO_LAYER || staticDef.state == StaticGroupState.ALREADY_ADDED) {
-			layerCache.setVertexData(staticDef);
-		}*/
-		
-		vertexData.batchTextureIndex = this.textureIndex;
-		
-		if (staticDef.state == StaticGroupState.MOVING) {
+		else if (staticDef.state == LayerGroupState.DRAW_TO_LAYER) {
 			writeVertexData();
+			layerCache.setVertexData(staticDef, textureIndex);
 		}
-		else if (staticDef.state == StaticGroupState.DRAW_TO_LAYER) {
-			writeVertexData();
-			layerCache.setVertexData(staticDef);
+		else if (staticDef.state == LayerGroupState.ALREADY_ADDED) {
+			layerCache.setVertexData(staticDef, textureIndex);
 		}
-		else if (staticDef.state == StaticGroupState.ALREADY_ADDED) {
-			layerCache.setVertexData(staticDef);
-		}
-		
-		/*if (staticDef.state == StaticGroupState.DRAW_TO_LAYER) {
-			var isLastItem:Bool = layerCache.setVertexData(staticDef, this);
-			if (!isLastItem) return;
-		}
-		else if (staticDef.state == StaticGroupState.ALREADY_ADDED) {
-			var isLastItem:Bool = layerCache.isLastItem(staticDef);
-			if (!isLastItem) return;
-		}*/
-		
-	}
+	}*/
 	
 	inline function writeVertexData() 
 	{
-		//vertexData.textureId = textureId;
-		//trace("staticDef.layerCacheRenderTarget = " + staticDef.layerCacheRenderTarget);
-		
-		var atlasBatchTextureIndex:Int = textureData.atlasTextureId;
-		//trace("atlasBatchTextureIndex = " + atlasBatchTextureIndex);
-		
-		
-		//WorkerCore.textureRenderBatch.find
-		//trace("this.textureIndex = " + this.textureIndex);
-		
-		/*trace("textureDefIndex = " + textureDefIndex);
-		var batchIndex:Int = WorkerCore.textureRenderBatch.getRenderBatchIndex(textureDefIndex);
-		trace("batchIndex = " + batchIndex);
-		trace("textureData.atlasTextureId = " + textureData.atlasTextureId);
-		var batchTextureIndex:Int = WorkerCore.textureRenderBatch.findIndex(batchIndex, textureData.atlasTextureId);
-		trace("batchTextureIndex = " + batchTextureIndex);*/
-		
-		
-		//var renderBatchIndex:Int = WorkerCore.textureRenderBatch.getRenderBatchIndex(atlasBatchTextureIndex);
-		//trace("renderBatchIndex = " + renderBatchIndex);
-		//var renderBatchDef:RenderBatchDef = WorkerCore.textureRenderBatch.getRenderBatchDef(renderBatchIndex);
-		//vertexData.renderBatchIndex = renderBatchIndex;
-		//var textureDef:TextureDef = renderBatchDef.textureDefs[renderBatchIndex];
-		//trace("key = " + textureDef.textureData.partition.value.key);
-		
-		
-		//var renderBatchDef:RenderBatchDef = WorkerCore.textureRenderBatch.getRenderBatchDef(VertexData.OBJECT_POSITION);
-		/*for (i in 0...renderBatchDef.textureIdArray.length) 
-		{
-			if (renderBatchDef.textureIdArray[i] == textureId) vertexData.batchTextureIndex = i;
-		}*/
-		
-		
-		
-		if (staticDef.state == StaticGroupState.DRAW_TO_LAYER) {
-			targetWidth = 2048;
-			targetHeight = 2048;
-			/*mulX = 1;// WorkerCore.STAGE_WIDTH / 2048;
-			mulY = 1;//WorkerCore.STAGE_HEIGHT / 2048;
+		if (isStatic == WorkerDisplay.FALSE || drawIndex != VertexData.OBJECT_POSITION){
+			vertexData.batchTextureIndex = this.textureIndex;
 			
-			trace("mulX = " + mulX);
-			trace("mulY = " + mulY);
-			trace(bottomLeft);
-			trace(bottomLeft);*/
+			//vertexData.textureId = textureId;
+			//trace("staticDef.layerCacheRenderTarget = " + staticDef.layerCacheRenderTarget);
 			
+			var atlasBatchTextureIndex:Int = textureData.atlasTextureId;
+			//trace("atlasBatchTextureIndex = " + atlasBatchTextureIndex);
+			
+			
+			//WorkerCore.textureRenderBatch.find
+			//trace("this.textureIndex = " + this.textureIndex);
+			
+			/*trace("textureDefIndex = " + textureDefIndex);
+			var batchIndex:Int = WorkerCore.textureRenderBatch.getRenderBatchIndex(textureDefIndex);
+			trace("batchIndex = " + batchIndex);
+			trace("textureData.atlasTextureId = " + textureData.atlasTextureId);
+			var batchTextureIndex:Int = WorkerCore.textureRenderBatch.findIndex(batchIndex, textureData.atlasTextureId);
+			trace("batchTextureIndex = " + batchTextureIndex);*/
+			
+			
+			//var renderBatchIndex:Int = WorkerCore.textureRenderBatch.getRenderBatchIndex(atlasBatchTextureIndex);
+			//trace("renderBatchIndex = " + renderBatchIndex);
+			//var renderBatchDef:RenderBatchDef = WorkerCore.textureRenderBatch.getRenderBatchDef(renderBatchIndex);
+			//vertexData.renderBatchIndex = renderBatchIndex;
+			//var textureDef:TextureDef = renderBatchDef.textureDefs[renderBatchIndex];
+			//trace("key = " + textureDef.textureData.partition.value.key);
+			
+			
+			//var renderBatchDef:RenderBatchDef = WorkerCore.textureRenderBatch.getRenderBatchDef(VertexData.OBJECT_POSITION);
+			/*for (i in 0...renderBatchDef.textureIdArray.length) 
+			{
+				if (renderBatchDef.textureIdArray[i] == textureId) vertexData.batchTextureIndex = i;
+			}*/
+			
+			
+			
+			if (staticDef.state == LayerGroupState.DRAW_TO_LAYER) {
+				targetWidth = 2048;
+				targetHeight = 2048;
+				/*mulX = 1;// WorkerCore.STAGE_WIDTH / 2048;
+				mulY = 1;//WorkerCore.STAGE_HEIGHT / 2048;
+				
+				trace("mulX = " + mulX);
+				trace("mulY = " + mulY);
+				trace(bottomLeft);
+				trace(bottomLeft);*/
+				
+			}
+			else {
+				targetWidth = WorkerCore.STAGE_WIDTH;
+				targetHeight = WorkerCore.STAGE_HEIGHT;
+				//mulX = 1;
+				//mulY = 1;
+			}
+			//if (renderBatchDef.renderTargetId == -1) {
+				//targetWidth = WorkerCore.STAGE_WIDTH / 2;// Kea.current.stage.stageWidth / 2;
+				//targetHeight = WorkerCore.STAGE_HEIGHT / 2;// Kea.current.stage.stageHeight / 2;	
+			//}
+			//else {
+			//	targetWidth = 512 / 2;
+			//	targetHeight = 512 / 2;
+			//}
+			offsetX = -targetWidth;
+			offsetY = -targetHeight;
+			
+			//vertexData.textureId = textureId;
+			//trace("VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
+			//trace("targetWidth = " + targetWidth);
+			
+			updateUVData();
+			/*left = textureData.partition.value.x / textureData.atlasWidth;
+			top = textureData.partition.value.y / textureData.atlasHeight;
+			right = (textureData.partition.value.x + textureData.partition.value.width) / textureData.atlasWidth;
+			bottom = (textureData.partition.value.y + textureData.partition.value.height) / textureData.atlasHeight;*/
+			
+			//trace(["Write Vertex: " + VertexData.OBJECT_POSITION]);
+			
+			//if (updateUVs) {
+				vertexData.u1 = left;
+				vertexData.v1 = bottom;
+				
+				vertexData.u2 = left;
+				vertexData.v2 = top;
+				
+				vertexData.u3 = right;
+				vertexData.v3 = top;
+				
+				vertexData.u4 = right;
+				vertexData.v4 = bottom;
+			//}
+			
+			//if (updatePosition) {
+				//vertexData.x1 = (bottomLeft.x + offsetX) / targetWidth * mulX;
+				//vertexData.y1 = (-bottomLeft.y - offsetY) / targetHeight * mulY;
+				////vertexData.z1 = 0;
+				//
+				//vertexData.x2 = (topLeft.x + offsetX) / targetWidth * mulX;
+				//vertexData.y2 = (-topLeft.y - offsetY) / targetHeight * mulY;
+				////vertexData.z2 = 0;
+				//
+				//vertexData.x3 = (topRight.x + offsetX) / targetWidth * mulX;
+				//vertexData.y3 = (-topRight.y - offsetY) / targetHeight * mulY;
+				////vertexData.z3 = 0;
+				//
+				//vertexData.x4 = (bottomRight.x + offsetX) / targetWidth * mulX;
+				//vertexData.y4 = ( -bottomRight.y - offsetY) / targetHeight * mulY;
+				//
+				
+				//trace([bottomLeft, topLeft, topRight, bottomRight]);
+				vertexData.x1 = transformX(bottomLeft.x);
+				vertexData.y1 = transformY(bottomLeft.y);
+				//vertexData.z1 = 0;
+				
+				vertexData.x2 = transformX(topLeft.x);
+				vertexData.y2 = transformY(topLeft.y);
+				//vertexData.z2 = 0;
+				
+				vertexData.x3 = transformX(topRight.x);
+				vertexData.y3 = transformY(topRight.y);
+				//vertexData.z3 = 0;
+				
+				vertexData.x4 = transformX(bottomRight.x);
+				vertexData.y4 = transformY(bottomRight.y);
+				
+				/*trace([vertexData.x1, vertexData.y1]);
+				trace([vertexData.x2, vertexData.y2]);
+				trace([vertexData.x3, vertexData.y3]);
+				trace([vertexData.x4, vertexData.y4]);*/
+				
+				//vertexData.z4 = 0;
+			//}
+			
+			
+			
+			/*if (updateColour) {
+				//VertexData.blockIndex = BlockIndex.COLOUR;
+				//vertexData.updatePosition();
+				vertexData.red = r;
+				vertexData.green = g;
+				vertexData.blue = b;
+				vertexData.alpha = a;
+			}
+			else vertexData.move(4);*/
+			
+			////////////////////////////////////////////////////////
+			
+			if (updateUVs) {
+				
+			}
+			
+			if (updatePosition) {
+				
+			}
+			
+			/*if (updateColour) {
+				//VertexData.blockIndex = BlockIndex.COLOUR;
+				//vertexData.updatePosition();	
+				vertexData.red = r;
+				vertexData.green = g;
+				vertexData.blue = b;
+				vertexData.alpha = a;
+			}
+			else vertexData.move(4);*/
+			
+			////////////////////////////////////////////////////////
+			
+			if (updateUVs) {
+				
+			}
+			
+			if (updatePosition) {
+				
+			}
+			
+			/*if (updateColour) {
+				//VertexData.blockIndex = BlockIndex.COLOUR;
+				//vertexData.updatePosition();
+				vertexData.red = r;
+				vertexData.green = g;
+				vertexData.blue = b;
+				vertexData.alpha = a;
+			}
+			else vertexData.move(4);*/
+			
+			////////////////////////////////////////////////////////
+			
+			if (updateUVs) {
+				
+			}
+			
+			if (updatePosition) {
+				
+			}
+			
+			/*if (updateColour) {
+				//VertexData.blockIndex = BlockIndex.COLOUR;
+				//vertexData.updatePosition();	
+				vertexData.red = r;
+				vertexData.green = g;
+				vertexData.blue = b;
+				vertexData.alpha = a;
+			}
+			else vertexData.move(4);*/
 		}
-		else {
-			targetWidth = WorkerCore.STAGE_WIDTH;
-			targetHeight = WorkerCore.STAGE_HEIGHT;
-			//mulX = 1;
-			//mulY = 1;
-		}
-		//if (renderBatchDef.renderTargetId == -1) {
-			//targetWidth = WorkerCore.STAGE_WIDTH / 2;// Kea.current.stage.stageWidth / 2;
-			//targetHeight = WorkerCore.STAGE_HEIGHT / 2;// Kea.current.stage.stageHeight / 2;	
-		//}
-		//else {
-		//	targetWidth = 512 / 2;
-		//	targetHeight = 512 / 2;
-		//}
-		offsetX = -targetWidth;
-		offsetY = -targetHeight;
-		
-		//vertexData.textureId = textureId;
-		//trace("VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
-		//trace("targetWidth = " + targetWidth);
-		
-		updateUVData();
-		/*left = textureData.partition.value.x / textureData.atlasWidth;
-		top = textureData.partition.value.y / textureData.atlasHeight;
-		right = (textureData.partition.value.x + textureData.partition.value.width) / textureData.atlasWidth;
-		bottom = (textureData.partition.value.y + textureData.partition.value.height) / textureData.atlasHeight;*/
-		
-		//trace(["Write Vertex: " + VertexData.OBJECT_POSITION]);
-		
-		//if (updateUVs) {
-			vertexData.u1 = left;
-			vertexData.v1 = bottom;
-			
-			vertexData.u2 = left;
-			vertexData.v2 = top;
-			
-			vertexData.u3 = right;
-			vertexData.v3 = top;
-			
-			vertexData.u4 = right;
-			vertexData.v4 = bottom;
-		//}
-		
-		//if (updatePosition) {
-			//vertexData.x1 = (bottomLeft.x + offsetX) / targetWidth * mulX;
-			//vertexData.y1 = (-bottomLeft.y - offsetY) / targetHeight * mulY;
-			////vertexData.z1 = 0;
-			//
-			//vertexData.x2 = (topLeft.x + offsetX) / targetWidth * mulX;
-			//vertexData.y2 = (-topLeft.y - offsetY) / targetHeight * mulY;
-			////vertexData.z2 = 0;
-			//
-			//vertexData.x3 = (topRight.x + offsetX) / targetWidth * mulX;
-			//vertexData.y3 = (-topRight.y - offsetY) / targetHeight * mulY;
-			////vertexData.z3 = 0;
-			//
-			//vertexData.x4 = (bottomRight.x + offsetX) / targetWidth * mulX;
-			//vertexData.y4 = ( -bottomRight.y - offsetY) / targetHeight * mulY;
-			//
-			
-			//trace([bottomLeft, topLeft, topRight, bottomRight]);
-			vertexData.x1 = transformX(bottomLeft.x);
-			vertexData.y1 = transformY(bottomLeft.y);
-			//vertexData.z1 = 0;
-			
-			vertexData.x2 = transformX(topLeft.x);
-			vertexData.y2 = transformY(topLeft.y);
-			//vertexData.z2 = 0;
-			
-			vertexData.x3 = transformX(topRight.x);
-			vertexData.y3 = transformY(topRight.y);
-			//vertexData.z3 = 0;
-			
-			vertexData.x4 = transformX(bottomRight.x);
-			vertexData.y4 = transformY(bottomRight.y);
-			
-			/*trace([vertexData.x1, vertexData.y1]);
-			trace([vertexData.x2, vertexData.y2]);
-			trace([vertexData.x3, vertexData.y3]);
-			trace([vertexData.x4, vertexData.y4]);*/
-			
-			//vertexData.z4 = 0;
-		//}
-		
-		
-		
-		/*if (updateColour) {
-			//VertexData.blockIndex = BlockIndex.COLOUR;
-			//vertexData.updatePosition();
-			vertexData.red = r;
-			vertexData.green = g;
-			vertexData.blue = b;
-			vertexData.alpha = a;
-		}
-		else vertexData.move(4);*/
-		
-		////////////////////////////////////////////////////////
-		
-		if (updateUVs) {
-			
-		}
-		
-		if (updatePosition) {
-			
-		}
-		
-		/*if (updateColour) {
-			//VertexData.blockIndex = BlockIndex.COLOUR;
-			//vertexData.updatePosition();	
-			vertexData.red = r;
-			vertexData.green = g;
-			vertexData.blue = b;
-			vertexData.alpha = a;
-		}
-		else vertexData.move(4);*/
-		
-		////////////////////////////////////////////////////////
-		
-		if (updateUVs) {
-			
-		}
-		
-		if (updatePosition) {
-			
-		}
-		
-		/*if (updateColour) {
-			//VertexData.blockIndex = BlockIndex.COLOUR;
-			//vertexData.updatePosition();
-			vertexData.red = r;
-			vertexData.green = g;
-			vertexData.blue = b;
-			vertexData.alpha = a;
-		}
-		else vertexData.move(4);*/
-		
-		////////////////////////////////////////////////////////
-		
-		if (updateUVs) {
-			
-		}
-		
-		if (updatePosition) {
-			
-		}
-		
-		/*if (updateColour) {
-			//VertexData.blockIndex = BlockIndex.COLOUR;
-			//vertexData.updatePosition();	
-			vertexData.red = r;
-			vertexData.green = g;
-			vertexData.blue = b;
-			vertexData.alpha = a;
-		}
-		else vertexData.move(4);*/
-		
 		finishSetVertexData();
 	}
 	
@@ -898,5 +896,5 @@ typedef StaticDef =
 {
 	index:Int,
 	layerCacheRenderTarget:Int,
-	state:StaticGroupState
+	state:LayerGroupState
 }

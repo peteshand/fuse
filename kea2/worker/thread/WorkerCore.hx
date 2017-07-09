@@ -24,7 +24,7 @@ class WorkerCore
 	
 	public static var renderTextureManager:RenderTextureManager;
 	//public static var workerLayerConstruct:WorkerLayerConstruct;
-	public static var layerCache:LayerCaches;
+	public static var layerCaches:LayerCaches;
 	
 	@:isVar public static var textureBuildRequiredCount(default, set):Int = 0;
 	
@@ -49,7 +49,7 @@ class WorkerCore
 		
 		WorkerCore.renderTextureManager = new RenderTextureManager();
 		//WorkerCore.workerLayerConstruct = new WorkerLayerConstruct();
-		WorkerCore.layerCache = new LayerCaches();
+		WorkerCore.layerCaches = new LayerCaches();
 	}
 	
 	static inline function get_hierarchyBuildRequired():Bool 

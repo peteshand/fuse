@@ -1,5 +1,6 @@
 package kea2.worker.thread.layerCache.groups;
 import kea2.utils.Notifier;
+import kea2.worker.thread.layerCache.groups.LayerGroup.LayerGroupState;
 
 /**
  * ...
@@ -13,10 +14,10 @@ class StaticLayerGroup
 	@:isVar public var end(get, set):Int;
 	public var length:Int;
 	public var textureId:Int;
-	@:isVar public var state(get, set):Notifier<StaticGroupState>;
+	@:isVar public var state(get, set):Notifier<LayerGroupState>;
 	
 	public function new() { 
-		state = new Notifier<StaticGroupState>();
+		state = new Notifier<LayerGroupState>();
 	}
 	
 	public function toString():String
@@ -36,12 +37,12 @@ class StaticLayerGroup
 		return end;
 	}
 	
-	function get_state():Notifier<StaticGroupState> 
+	function get_state():Notifier<LayerGroupState> 
 	{
 		return state;
 	}
 	
-	function set_state(value:Notifier<StaticGroupState>):Notifier<StaticGroupState> 
+	function set_state(value:Notifier<LayerGroupState>):Notifier<LayerGroupState> 
 	{
 		state = value;
 		if (value == null) {
@@ -49,13 +50,4 @@ class StaticLayerGroup
 		}
 		return state;
 	}
-}
-
-@:enum abstract StaticGroupState(String) to String {
-	
-	public var ALREADY_ADDED = "alreadyAdded";
-	public var MOVING = "moving";
-	public var DRAW_TO_LAYER = "drawToLayer";
-	//public var ADD_TO_LAYER = "addToLayer";
-	
 }

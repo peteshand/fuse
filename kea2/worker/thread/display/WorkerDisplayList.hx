@@ -12,6 +12,8 @@ import kea2.worker.communication.WorkerComms;
 import kea2.worker.data.WorkerSharedProperties;
 import kea2.worker.thread.atlas.AtlasPacker;
 import kea2.worker.thread.display.WorkerDisplay;
+import kea2.worker.thread.layerCache.LayerCache;
+import kea2.worker.thread.layerCache.groups.LayerGroup;
 import openfl.utils.Endian;
 /**
  * ...
@@ -30,6 +32,9 @@ class WorkerDisplayList
 	
 	public var hierarchyAll = new GcoArray<WorkerDisplay>([]);
 	public var hierarchy = new GcoArray<WorkerDisplay>([]);
+	public var visHierarchyAll = new GcoArray<WorkerDisplay>([]);
+	public var visHierarchy = new GcoArray<WorkerDisplay>([]);
+	
 	public var hierarchyApplyTransform = new GcoArray<Void -> Void>([]);
 	
 	public function new(workerComms:IWorkerComms) 
@@ -43,6 +48,7 @@ class WorkerDisplayList
 		if (renderId != -1) vertexData = getVertexData(renderId);*/
 		var workerDisplay:WorkerDisplay = Pool.workerDisplay.request();// new WorkerDisplay(getDisplayData(objectId));
 		workerDisplay.displayData = getDisplayData(objectId);
+		workerDisplay.textureId = workerDisplay.displayData.textureId;
 		workerDisplay.objectId = objectId;
 		workerDisplay.renderId = renderId;
 		workerDisplay.parentId = parentId;
@@ -143,6 +149,7 @@ class WorkerDisplayList
 		
 		if (WorkerCore.hierarchyBuildRequired) {
 			this.hierarchyAll.clear();
+			this.visHierarchyAll.clear();
 		}
 		
 		if (WorkerCore.textureBuildRequired) {
@@ -211,7 +218,7 @@ class WorkerDisplayList
 	{
 		this.buildHierarchy(root);
 		this.applyTransform();
-		this.updateInternalData();
+		//this.updateInternalData();
 		if (WorkerCore.textureBuildRequired){
 			this.setAtlasTextures();
 		}
@@ -221,6 +228,7 @@ class WorkerDisplayList
 	{
 		if (WorkerCore.hierarchyBuildRequired) {
 			hierarchy.clear();
+			visHierarchy.clear();
 			hierarchyApplyTransform.clear();
 			if (root != null) root.buildHierarchy();
 		}
@@ -229,21 +237,21 @@ class WorkerDisplayList
 	inline function applyTransform() 
 	{
 		
-		WorkerCore.layerCache.begin();
+		WorkerCore.layerCaches.begin();
 		for (i in 0...hierarchyApplyTransform.length) 
 		{
 			hierarchyApplyTransform[i]();
 		}
-		WorkerCore.layerCache.end();
+		WorkerCore.layerCaches.end();
 	}
 	
-	public function updateInternalData() 
+	/*public function updateInternalData() 
 	{
 		for (k in 0...hierarchy.length) 
 		{
 			hierarchy[k].updateInternalData();
 		}
-	}
+	}*/
 	
 	inline function setAtlasTextures() 
 	{
@@ -256,28 +264,75 @@ class WorkerDisplayList
 	
 	inline function checkLayerCache() 
 	{
-		VertexData.OBJECT_POSITION = 0;
-		for (k in 0...hierarchy.length) 
-		{
-			hierarchy[k].checkLayerCache();
+		if (WorkerCore.layerCaches.change){
+			VertexData.OBJECT_POSITION = 0;
+			for (k in 0...hierarchy.length) 
+			{
+				hierarchy[k].checkLayerCache();
+			}
 		}
 	}
 	
 	inline function setTextures() 
 	{
-		
-		for (k in 0...hierarchy.length) 
+		for (i in 0...WorkerCore.layerCaches.allLayerGroups.length) 
 		{
-			hierarchy[k].setTextures();
+			var layerGroup:LayerGroup = WorkerCore.layerCaches.allLayerGroups[i];
+			if (layerGroup.state.value == LayerGroupState.MOVING) {
+				for (j in layerGroup.start...layerGroup.end+1) 
+				{
+					visHierarchy[j].setTexturesMove();
+				}
+			}
+			else if (layerGroup.state.value == LayerGroupState.DRAW_TO_LAYER) {
+				for (j in layerGroup.start...layerGroup.end+1) 
+				{
+					visHierarchy[j].setTexturesDraw();
+				}
+			}
+			else if (layerGroup.state.value == LayerGroupState.ALREADY_ADDED) {
+				for (j in layerGroup.start...layerGroup.end+1) 
+				{
+					visHierarchy[j].setTexturesAlreadyAdded();
+				}
+			}
 		}
+		/*for (k in 0...visHierarchy.length) 
+		{
+			trace("allLayerGroups k = " + k);
+			visHierarchy[k].setTextures();
+		}*/
 	}
 	
 	function setVertexData() 
 	{
 		if (WorkerCore.textureBuildRequired) {
-			for (k in 0...hierarchyAll.length) 
+			/*for (k in 0...visHierarchyAll.length) 
 			{
-				hierarchyAll[k].setTextureIndex();
+				visHierarchyAll[k].setTextureIndex();
+			}*/
+			
+			for (i in 0...WorkerCore.layerCaches.allLayerGroups.length) 
+			{
+				var layerGroup:LayerGroup = WorkerCore.layerCaches.allLayerGroups[i];
+				if (layerGroup.state.value == LayerGroupState.MOVING) {
+					for (j in layerGroup.start...layerGroup.end+1) 
+					{
+						visHierarchy[j].setTextureIndexMove();
+					}
+				}
+				else if (layerGroup.state.value == LayerGroupState.DRAW_TO_LAYER) {
+					for (j in layerGroup.start...layerGroup.end+1) 
+					{
+						visHierarchy[j].setTextureIndexDraw();
+					}
+				}
+				else if (layerGroup.state.value == LayerGroupState.ALREADY_ADDED) {
+					for (j in layerGroup.start...layerGroup.end+1) 
+					{
+						visHierarchy[j].setTextureIndexAlreadyAdded();
+					}
+				}
 			}
 		}
 		VertexData.OBJECT_POSITION = 0;
@@ -285,10 +340,45 @@ class WorkerDisplayList
 			WorkerCore.atlasPacker.setVertexData();
 		}
 		//VertexData.OBJECT_POSITION = 0;
-		for (k in 0...hierarchyAll.length) 
-		{
-			hierarchyAll[k].setVertexData();
-		}
+		
+		//{
+			
+			
+			for (i in 0...WorkerCore.layerCaches.allLayerGroups.length) 
+			{
+				var layerGroup:LayerGroup = WorkerCore.layerCaches.allLayerGroups[i];
+				if (layerGroup.state.value == LayerGroupState.MOVING) {
+					for (j in layerGroup.start...layerGroup.end+1) 
+					{
+						visHierarchy[j].setVertexDataMove();
+					}
+				}
+				else {
+					if (layerGroup.state.value == LayerGroupState.DRAW_TO_LAYER) {
+						for (j in layerGroup.start...layerGroup.end+1) 
+						{
+							visHierarchy[j].setVertexDataDraw();
+						}
+					}
+					else if (layerGroup.state.value == LayerGroupState.ALREADY_ADDED) {
+						
+						/*for (j in layerGroup.start...layerGroup.end+1) 
+						{
+							visHierarchy[j].setVertexDataAlreadyAdded();
+						}*/
+					}
+					
+					var layerCache:LayerCache = WorkerCore.layerCaches.activeGroups[layerGroup.staticIndex];
+					layerCache.setVertexData();
+				}
+			}
+			
+			/*for (k in 0...visHierarchyAll.length) 
+			{
+				trace("k = " + k);
+				visHierarchyAll[k].setVertexData();
+			}*/
+		//}
 		
 		//WorkerDisplay.layerCacheRenderTarget.value = -1;
 		
