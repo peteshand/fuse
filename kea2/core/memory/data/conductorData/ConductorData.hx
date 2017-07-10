@@ -30,8 +30,9 @@ class ConductorData
 	
 	static public inline var STAGE_WIDTH:Int = 68;
 	static public inline var STAGE_HEIGHT:Int = 72;
+	static public inline var IS_STATIC:Int = 76;
 	
-	public static inline var BUFFER_SIZE:Int = 76;
+	public static inline var BUFFER_SIZE:Int = 80;
 	
 	public static var memoryBlock:MemoryBlock;
 	
@@ -57,6 +58,7 @@ class ConductorData
 	
 	@:isVar public var stageWidth(get, set):Int = 0;
 	@:isVar public var stageHeight(get, set):Int = 0;
+	@:isVar public var isStatic(get, set):Int = 0;
 	
 	public function new() 
 	{
@@ -87,6 +89,7 @@ class ConductorData
 	
 	inline function get_stageWidth():Int				{ return memoryBlock.readInt(STAGE_WIDTH); }
 	inline function get_stageHeight():Int				{ return memoryBlock.readInt(STAGE_HEIGHT); }
+	inline function get_isStatic():Int					{ return memoryBlock.readInt(IS_STATIC); }
 	
 	
 	inline function set_frameIndex(value:Int):Int {
@@ -183,5 +186,12 @@ class ConductorData
 		memoryBlock.writeInt(STAGE_HEIGHT, value);
 		return value;
 	}
+	
+	inline function set_isStatic(value:Int):Int {
+		memoryBlock.writeInt(IS_STATIC, value);
+		return value;
+	}
+	
+	
 	
 }

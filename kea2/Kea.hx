@@ -5,6 +5,7 @@ import kea.display.Sprite;
 import kea2.core.atlas.AtlasBuffers;
 import kea2.core.layers.LayerCacheBuffers;
 import kea2.core.memory.KeaMemory;
+import kea2.core.memory.data.conductorData.ConductorData;
 import kea2.display.containers.Stage;
 import kea.logic.Logic;
 import kea.model.Model;
@@ -51,6 +52,9 @@ class Kea
 	var layerCacheBuffers:LayerCacheBuffers;
 	
 	public var workers:Workers;
+	public var staticCount:Int = 0;
+	public var isStatic:Int = 0;
+	public var conductorData:ConductorData;
 	
 	static function __init__():Void
 	{

@@ -112,28 +112,30 @@ class WorkerDisplayList
 	
 	public function update() 
 	{
-		// Reset / Clear objects
-		begin();
-		
-		// Builds the RenderTextures displaylist hierarchy and defines the order in which textures are used
-		buildRenderTexturesHierarchy();
-		
-		// Builds the displaylist hierarchy and defines the order in which textures are used
-		buildDisplayListHierarchy();
-		
-		// Based on the order in which textures are used, work out how to draw textures into
-		// a large texture atlas so a large number of display items can be draw in a single draw call
-		createDynamicTextureAtlas();
-		
-		checkLayerCache();
-		// Works out how to group textures together so multiple textures (currently 4) can be drawn in a single draw call
-		quadBatchTextureDraws();
-		
-		// Writes data into VertexData byteArray for used in the Renderer class
-		writeVertexData();
-		
-		// Close calculation phase
-		end();
+		if (Conductor.conductorDataAccess.isStatic == 0){
+			// Reset / Clear objects
+			begin();
+			
+			// Builds the RenderTextures displaylist hierarchy and defines the order in which textures are used
+			buildRenderTexturesHierarchy();
+			
+			// Builds the displaylist hierarchy and defines the order in which textures are used
+			buildDisplayListHierarchy();
+			
+			// Based on the order in which textures are used, work out how to draw textures into
+			// a large texture atlas so a large number of display items can be draw in a single draw call
+			createDynamicTextureAtlas();
+			
+			checkLayerCache();
+			// Works out how to group textures together so multiple textures (currently 4) can be drawn in a single draw call
+			quadBatchTextureDraws();
+			
+			// Writes data into VertexData byteArray for used in the Renderer class
+			writeVertexData();
+			
+			// Close calculation phase
+			end();
+		}
 	}
 	
 	inline function begin() 
@@ -215,7 +217,7 @@ class WorkerDisplayList
 	}
 	
 	inline function process(root:WorkerDisplay) 
-	{
+	{		
 		this.buildHierarchy(root);
 		this.applyTransform();
 		//this.updateInternalData();
@@ -235,8 +237,7 @@ class WorkerDisplayList
 	}
 	
 	inline function applyTransform() 
-	{
-		
+	{		
 		WorkerCore.layerCaches.begin();
 		for (i in 0...hierarchyApplyTransform.length) 
 		{

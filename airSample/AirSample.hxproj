@@ -2,17 +2,16 @@
 <project version="2">
   <!-- Output SWF options -->
   <output>
-    <movie outputType="CustomBuild" />
+    <movie outputType="Application" />
     <movie input="" />
-    <movie path="project.xml" />
+    <movie path="bin\AirSample.swf" />
     <movie fps="60" />
-    <movie width="1600" />
-    <movie height="900" />
-    <movie version="1" />
+    <movie width="800" />
+    <movie height="600" />
+    <movie version="21" />
     <movie minorVersion="0" />
-    <movie platform="Lime" />
-    <movie background="000000" />
-    <movie preferredSDK=";3.1.3;" />
+    <movie platform="AIR" />
+    <movie background="#FFFFFF" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
@@ -27,42 +26,45 @@
     <class path="src" />
     <class path="C:\_sdks\haxe\lib\openfl\4,9,2\externs\core\openfl" />
     <class path="C:\_sdks\haxe\lib\openfl\4,9,2\externs\extras" />
-    <class path="src" />
-    <class path=".." />
+    <class path="bin\flash\release\haxe" />
+    <class path="..\" />
     <class path="C:\_sdks\haxe\lib\kha\git\Sources" />
     <class path="C:\_sdks\haxe\lib\kha\git\Backends\Flash" />
-    <class path="bin\flash\release\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="openfl=4.9.2&#xA;lime=4.0.3&#xA;actuate=1.8.7&#xA;robotlegs=0.4.3&#xA;msignal=1.2.4&#xA;swiftsuspenders=0.2.1&#xA;delay=1.1.6&#xA;hxColorToolkit=1.6.1&#xA;tools=4.0.3&#xA;no-compilation&#xA;openfl-flash&#xA;web&#xA;sys_flash&#xA;sys_g1&#xA;sys_g2&#xA;sys_g3&#xA;sys_g4&#xA;advanced-telemetry&#xA;display" />
+    <option directives="" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
-    <option mainClass="ApplicationMain" />
+    <option mainClass="kea.sample.Main" />
     <option enabledebug="True" />
-    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;-swf-version 19" />
+    <option additional="" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
-    <!-- example: <library name="..." /> -->
+    <library name="air3" />
   </haxelib>
   <!-- Class files to compile (other referenced classes will automatically be included) -->
   <compileTargets>
-    <compile path="src\net\peteshand\keaOpenFL\Main.hx" />
+    <compile path="src\kea\sample\Main.hx" />
   </compileTargets>
+  <!-- Assets to embed into the output SWF -->
+  <library>
+    <!-- example: <asset path="..." id="..." update="..." glyphs="..." mode="..." place="..." sharepoint="..." /> -->
+  </library>
   <!-- Paths to exclude from the Project Explorer tree -->
   <hiddenPaths>
     <hidden path="obj" />
   </hiddenPaths>
   <!-- Executed before build -->
-  <preBuildCommand>"$(CompilerPath)/haxelib" run lime build "$(OutputFile)" $(TargetBuild) -$(BuildConfig) -Dfdb</preBuildCommand>
+  <preBuildCommand />
   <!-- Executed after build -->
   <postBuildCommand alwaysRun="False" />
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="False" />
     <option testMovie="Custom" />
-    <option testMovieCommand="" />
+    <option testMovieCommand="bat\RunApp.bat" />
   </options>
   <!-- Plugin storage -->
   <storage />

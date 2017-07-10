@@ -1,6 +1,7 @@
 package kea2.worker.thread;
 
 import kea2.core.memory.KeaMemory;
+import kea2.core.memory.data.conductorData.ConductorData;
 import kea2.worker.communication.IWorkerComms;
 import kea2.worker.thread.Conductor;
 import kea2.worker.data.AddChild;
@@ -42,6 +43,7 @@ class WorkerEntryPoint
 		if (Kea.current.keaMemory == null) {
 			var memory:ByteArray = workerComms.getSharedProperty(WorkerSharedProperties.CORE_MEMORY);
 			Kea.current.keaMemory = new KeaMemory(memory);
+			Kea.current.conductorData = new ConductorData();
 		}
 		
 		index = workerComms.getSharedProperty(WorkerSharedProperties.INDEX);
@@ -79,6 +81,20 @@ class WorkerEntryPoint
 	{
 		WorkerCore.STAGE_WIDTH = Conductor.conductorDataAccess.stageWidth;
 		WorkerCore.STAGE_HEIGHT = Conductor.conductorDataAccess.stageHeight;
+		
+		if (Kea.current.isStatic == 1) {
+			Kea.current.staticCount++;
+		}
+		else {
+			Kea.current.staticCount = 0;
+		}
+		if (Kea.current.staticCount <= 2) {
+			Kea.current.conductorData.isStatic = 0;
+		}
+		else {
+			Kea.current.conductorData.isStatic = 1;
+		}
+		Kea.current.isStatic = 1;
 		
 		//trace("OnTick: " + index);
 		

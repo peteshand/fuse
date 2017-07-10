@@ -194,8 +194,6 @@ class Renderer
 		begin(true, 0xFF0000);
 		drawBuffer();
 		end();
-		
-		
 	}
 	
 	public function begin(clear:Bool = true, clearColor:Color = null):Void
@@ -219,7 +217,7 @@ class Renderer
 		
 		
 		var batchData:IBatchData = textureRenderBatch.getBatchData(0);
-		if (batchData != null) {
+		if (batchData != null && Kea.current.conductorData.isStatic == 0) {
 			shaderProgram.value.vertexbuffer.uploadFromByteArray(KeaMemory.memory, batchData.startIndex, 0, 4 * numItems);
 		}
 		

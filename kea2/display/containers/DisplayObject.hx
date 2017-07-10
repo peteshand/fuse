@@ -1,6 +1,7 @@
 package kea2.display.containers;
 
 import kea.display.BlendMode;
+import kea2.core.memory.data.conductorData.ConductorData;
 import kea2.core.memory.data.displayData.DisplayData;
 import kea2.display._private.PrivateDisplayBase;
 import kea.logic.buffers.atlas.items.AtlasItem;
@@ -470,6 +471,9 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 			isStatic = value;
 			//trace("isStatic = " + isStatic);
 			displayData.isStatic = isStatic;
+			if (value == 0){
+				Kea.current.isStatic = 0;
+			}
 		//}
 		return value;
 	}

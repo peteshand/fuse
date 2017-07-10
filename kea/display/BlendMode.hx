@@ -1,5 +1,5 @@
 package kea.display;
-import kha.Shaders;
+//import kha.Shaders;
 import kha.graphics4.BlendingFactor;
 import kha.graphics4.BlendingOperation;
 import kha.graphics4.PipelineState;
@@ -107,8 +107,8 @@ class BlendModeUtil
 	{
 		if (!shaderPipelines.exists(blendMode)) {
 			var shaderPipeline:PipelineState = new PipelineState();
-			shaderPipeline.fragmentShader = Shaders.painter_image_frag;
-			shaderPipeline.vertexShader = Shaders.painter_image_vert;
+			//shaderPipeline.fragmentShader = Shaders.painter_image_frag;
+			//shaderPipeline.vertexShader = Shaders.painter_image_vert;
 			
 			var structure = new VertexStructure();
 			structure.add("vertexPosition", VertexData.Float3);
