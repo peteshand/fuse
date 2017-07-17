@@ -1,5 +1,5 @@
 package fuse.core.memory.data.textureData;
-import fuse.Kea;
+import fuse.Fuse;
 import fuse.core.memory.data.MemoryBlock;
 import fuse.core.atlas.packer.AtlasPartition;
 import fuse.utils.Notifier;
@@ -66,7 +66,7 @@ class TextureData implements ITextureData
 	public function new(objectOffset:Int) 
 	{
 		this.textureId = objectOffset;
-		memoryBlock = Kea.current.keaMemory.textureDataPool.createMemoryBlock(TextureData.BYTES_PER_ITEM, objectOffset);
+		memoryBlock = Fuse.current.keaMemory.textureDataPool.createMemoryBlock(TextureData.BYTES_PER_ITEM, objectOffset);
 	}
 	
 	inline function get_x():Int { 

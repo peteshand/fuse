@@ -1,5 +1,5 @@
 package fuse.core.memory.data.vertexData;
-import fuse.Kea;
+import fuse.Fuse;
 import openfl.Memory;
 
 /**
@@ -16,7 +16,7 @@ class AtlasVertexData extends VertexData
 	public function new() 
 	{
 		super();
-		poolStartPosition = Kea.current.keaMemory.atlasVertexDataPool.start;
+		poolStartPosition = Fuse.current.keaMemory.atlasVertexDataPool.start;
 	}
 	
 	override function readFloat(offset:Int):Float

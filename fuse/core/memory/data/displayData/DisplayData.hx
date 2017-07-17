@@ -1,5 +1,5 @@
 package fuse.core.memory.data.displayData;
-import fuse.Kea;
+import fuse.Fuse;
 import fuse.core.memory.data.MemoryBlock;
 
 /**
@@ -55,7 +55,7 @@ class DisplayData implements IDisplayData
 	{
 		if (objectOffset != null) {
 			_objectId = objectOffset;
-			memoryBlock = Kea.current.keaMemory.displayDataPool.createMemoryBlock(DisplayData.BYTES_PER_ITEM, objectOffset);
+			memoryBlock = Fuse.current.keaMemory.displayDataPool.createMemoryBlock(DisplayData.BYTES_PER_ITEM, objectOffset);
 		}
 	}
 	

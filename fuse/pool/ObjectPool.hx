@@ -30,7 +30,7 @@ class ObjectPool<T>
 	public function request():T
 	{
 		if (counter == 0) {
-			trace("Create New");
+			//trace("Create New");
 			return Type.createInstance(_pooledType, args);
 		}
 		return pool[--counter];

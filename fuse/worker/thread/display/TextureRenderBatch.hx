@@ -125,13 +125,13 @@ class TextureRenderBatch
 	function closeCurrentRenderBatch() 
 	{
 		if (currentRenderBatchDef != null) {
-			trace("closeCurrentRenderBatch");
+			//trace("closeCurrentRenderBatch");
 			currentRenderBatchDef.length = currentRenderBatchDef.textureIdArray.length * VertexData.BYTES_PER_ITEM;
 			for (i in 0...currentRenderBatchDef.textureDefs.length) 
 			{
 				currentRenderBatchDef.textureDefs[i].renderBatchIndex = currentRenderBatchDef.index;
 				currentRenderBatchDef.textureDefs[i].textureIndex = i;
-				trace("currentRenderBatchDef.textureDefs[" + i + "].textureIndex = " + currentRenderBatchDef.textureDefs[i].textureIndex);
+				//trace("currentRenderBatchDef.textureDefs[" + i + "].textureIndex = " + currentRenderBatchDef.textureDefs[i].textureIndex);
 			}
 			currentRenderBatchDef = null;
 		}

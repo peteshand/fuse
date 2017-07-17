@@ -1,5 +1,5 @@
 package fuse.core.memory.data.batchData;
-import fuse.Kea;
+import fuse.Fuse;
 import fuse.core.memory.data.MemoryBlock;
 
 /**
@@ -49,7 +49,7 @@ class BatchData implements IBatchData
 	public function new(objectId:Int) 
 	{
 		this.objectId = objectId;
-		memoryBlock = Kea.current.keaMemory.batchDataPool.createMemoryBlock(BatchData.BYTES_PER_ITEM, objectId);
+		memoryBlock = Fuse.current.keaMemory.batchDataPool.createMemoryBlock(BatchData.BYTES_PER_ITEM, objectId);
 	}
 	
 	function get_renderTargetId():Int	{ return memoryBlock.readInt(RENDER_TARGET_ID); }

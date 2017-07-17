@@ -315,23 +315,23 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	public function setTexturesMove() 
 	{
-		trace("setTexturesMove");
+		//trace("setTexturesMove");
 		//RenderTexture.currentRenderTargetId = renderTarget;
 		// Draw Into Screen Buffer
 		RenderTexture.currentRenderTargetId = staticDef.layerCacheRenderTarget;
-		trace("textureData.atlasTextureId = " + textureData.atlasTextureId);
+		//trace("textureData.atlasTextureId = " + textureData.atlasTextureId);
 		
 		textureDef = WorkerCore.textureOrder.setValues(textureData.atlasTextureId, textureData);
 		//WorkerCore.textureOrder.addWorkerDisplay(this);
 		
-		trace("textureDef.drawIndex = " + textureDef.drawIndex);	
-		trace("textureDef.textureIndex = " + textureDef.textureIndex);	
+		//trace("textureDef.drawIndex = " + textureDef.drawIndex);	
+		//trace("textureDef.textureIndex = " + textureDef.textureIndex);	
 		
 	}
 	
 	public function setTexturesDraw() 
 	{
-		trace("setTexturesDraw");
+		//trace("setTexturesDraw");
 		//RenderTexture.currentRenderTargetId = renderTarget;
 		// Draw Into LayerCache Texture
 		RenderTexture.currentRenderTargetId = staticDef.layerCacheRenderTarget;
@@ -342,7 +342,7 @@ class WorkerDisplay extends PrivateDisplayBase
 	
 	public function setTexturesAlreadyAdded() 
 	{
-		trace("setTexturesAlreadyAdded");
+		//trace("setTexturesAlreadyAdded");
 		RenderTexture.currentRenderTargetId = renderTarget;
 		// skip draw because it's already in a static layer
 		layerCache.setTextures();

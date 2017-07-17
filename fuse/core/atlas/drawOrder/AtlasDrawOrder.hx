@@ -3,7 +3,7 @@ import fuse.core.atlas.items.AtlasItem;
 import fuse.core.atlas.items.AtlasItems;
 import fuse.texture.ITexture;
 import fuse.utils.Notifier;
-import fuse.Kea;
+import fuse.Fuse;
 
 /**
  * ...

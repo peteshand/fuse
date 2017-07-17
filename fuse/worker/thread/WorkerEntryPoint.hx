@@ -1,7 +1,7 @@
 package fuse.worker.thread;
 
 import com.imagination.delay.Delay;
-import fuse.Kea;
+import fuse.Fuse;
 import fuse.core.memory.KeaMemory;
 import fuse.core.memory.data.conductorData.ConductorData;
 import fuse.worker.communication.IWorkerComms;
@@ -36,10 +36,10 @@ class WorkerEntryPoint
 		workerComms.addListener(MessageType.REMOVE_CHILD, OnRemoveChild);
 		//workerComms.addListener(MessageType.ADD_TEXTURE, OnAddTexture);
 		
-		if (Kea.current.keaMemory == null) {
+		if (Fuse.current.keaMemory == null) {
 			var memory:ByteArray = workerComms.getSharedProperty(WorkerSharedProperties.CORE_MEMORY);
-			Kea.current.keaMemory = new KeaMemory(memory);
-			Kea.current.conductorData = new ConductorData();
+			Fuse.current.keaMemory = new KeaMemory(memory);
+			Fuse.current.conductorData = new ConductorData();
 		}
 		
 		WorkerCore.init(workerComms);

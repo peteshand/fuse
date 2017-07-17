@@ -29,7 +29,7 @@ class WorkerCore
 	@:isVar public static var textureBuildRequiredCount(default, set):Int = 0;
 	
 	public static var textureBuildNextFrame:Bool;
-	@:isVar public static var textureBuildRequired(get, set):Bool;
+	public static var textureBuildRequired:Bool;
 	@:isVar public static var hierarchyBuildRequired(get, set):Bool = true;
 	public static var STAGE_WIDTH:Int;
 	public static var STAGE_HEIGHT:Int;
@@ -81,21 +81,5 @@ class WorkerCore
 		else textureBuildRequired = false;
 		
 		return textureBuildRequiredCount = value;
-	}
-	
-	static function get_textureBuildRequired():Bool 
-	{
-		return textureBuildRequired;
-	}
-	
-	static function set_textureBuildRequired(value:Bool):Bool 
-	{
-		if (textureBuildRequired != value) {
-			textureBuildRequired = value;
-			if (textureBuildRequired == true) {
-				trace("textureBuildRequired = " + textureBuildRequired);
-			}
-		}
-		return value;
 	}
 }

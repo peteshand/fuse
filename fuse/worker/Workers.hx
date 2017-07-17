@@ -1,7 +1,7 @@
 package fuse.worker;
 import com.imagination.delay.Delay;
 import flash.system.Worker;
-import fuse.Kea;
+import fuse.Fuse;
 import fuse.core.memory.KeaMemory;
 import fuse.core.memory.data.conductorData.ConductorData;
 import fuse.texture.ITexture;
@@ -38,7 +38,6 @@ class Workers
 	
 	var count:Int = 0;
 	
-	
 	public var onReady = new Signal0();
 	var workerStartCount:Int = 0;
 	
@@ -63,7 +62,7 @@ class Workers
 		//mutex.lock();
 		condition = new Condition(mutex);
 		
-		Kea.current.keaMemory = new KeaMemory();
+		Fuse.current.keaMemory = new KeaMemory();
 		
 		conductorData = new ConductorData();
 		conductorData.frameIndex = 0;
@@ -129,14 +128,14 @@ class Workers
 	
 	function CheckStartCount() 
 	{
-		trace("workerStartCount = " + workerStartCount);
-		trace("numberOfWorkers = " + numberOfWorkers);
+		//trace("workerStartCount = " + workerStartCount);
+		//trace("numberOfWorkers = " + numberOfWorkers);
 		
 		if (workerStartCount == numberOfWorkers) {
 			onReady.dispatch();
 			
 			//Trigger();
-			Kea.enterFrame.add(OnUpdate);
+			Fuse.enterFrame.add(OnUpdate);
 		}
 	}
 	
@@ -200,8 +199,8 @@ class Workers
 		*/
 		
 		
-		conductorData.stageWidth = Kea.current.stage.stageWidth;
-		conductorData.stageHeight = Kea.current.stage.stageHeight;
+		conductorData.stageWidth = Fuse.current.stage.stageWidth;
+		conductorData.stageHeight = Fuse.current.stage.stageHeight;
 		
 		//workerComms[conductorData.frameIndex % workerComms.length].send(MessageType.MAIN_THREAD_TICK);
 		

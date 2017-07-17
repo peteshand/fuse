@@ -68,7 +68,7 @@ interface IDisplay
 	var alpha(default, set):Float;
 	var layerIndex(default, set):Null<Int>;*/
 	
-	var totalNumChildren(get, null):Int;
+	//var totalNumChildren(get, null):Int;
 
 	//@:allow(kea)
 	//private var _renderIndex:Null<Int>;

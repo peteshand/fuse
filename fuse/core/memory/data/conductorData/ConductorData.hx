@@ -1,5 +1,5 @@
 package fuse.core.memory.data.conductorData;
-import fuse.Kea;
+import fuse.Fuse;
 import fuse.core.memory.data.MemoryBlock;
 
 /**
@@ -64,7 +64,7 @@ class ConductorData
 	public function new() 
 	{
 		if (memoryBlock == null) {
-			memoryBlock = Kea.current.keaMemory.conductorDataPool.createMemoryBlock(ConductorData.BUFFER_SIZE, 0);
+			memoryBlock = Fuse.current.keaMemory.conductorDataPool.createMemoryBlock(ConductorData.BUFFER_SIZE, 0);
 		}
 	}
 	

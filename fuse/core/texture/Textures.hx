@@ -47,7 +47,7 @@ class Textures
 		if (!textures.exists(textureId)) {
 			textures.set(textureId, texture);
 			textureCount++;
-			trace("textureCount = " + textureCount);
+			//trace("textureCount = " + textureCount);
 		}
 	}
 	

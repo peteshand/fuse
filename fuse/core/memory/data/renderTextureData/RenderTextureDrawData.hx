@@ -1,5 +1,5 @@
 package fuse.core.memory.data.renderTextureData;
-import fuse.Kea;
+import fuse.Fuse;
 import fuse.core.memory.data.displayData.DisplayData;
 import openfl.Memory;
 
@@ -69,7 +69,7 @@ class RenderTextureDrawData implements IRenderTextureDrawData
 	static inline function set_OBJECT_POSITION(value:Int):Int 
 	{
 		RenderTextureDrawData.OBJECT_POSITION = value;
-		RenderTextureDrawData._basePosition = Kea.current.keaMemory.renderTextureDrawDataPool.start + (RenderTextureDrawData.OBJECT_POSITION * RenderTextureDrawData.BYTES_PER_ITEM);
+		RenderTextureDrawData._basePosition = Fuse.current.keaMemory.renderTextureDrawDataPool.start + (RenderTextureDrawData.OBJECT_POSITION * RenderTextureDrawData.BYTES_PER_ITEM);
 		return value;
 	}
 	

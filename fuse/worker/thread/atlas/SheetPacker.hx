@@ -120,7 +120,7 @@ class SheetPacker
 		if (textureData.placed || textureData.textureAvailable == 0) {
 			return true;
 		}
-		trace("place");
+		//trace("place");
 		for (i in 0...partitions.length) 
 		{
 			//trace("i = " + i);

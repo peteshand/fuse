@@ -1,5 +1,5 @@
 package fuse.core.memory.data.vertexData;
-import fuse.Kea;
+import fuse.Fuse;
 import openfl.Memory;
 
 /**
@@ -63,7 +63,7 @@ class VertexData implements IVertexData
 	
 	public function new() 
 	{
-		poolStartPosition = Kea.current.keaMemory.vertexDataPool.start;
+		poolStartPosition = Fuse.current.keaMemory.vertexDataPool.start;
 	}
 	
 	inline function get_x1():Float return readFloat(INDEX_X1);

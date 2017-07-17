@@ -21,7 +21,7 @@ class LayerCacheBuffers
 		for (i in 0...numBuffers) 
 		{
 			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight);
-			trace("buffer.textureId = " + buffer.textureId);
+			//trace("buffer.textureId = " + buffer.textureId);
 			
 			buffers.push(buffer);
 		}

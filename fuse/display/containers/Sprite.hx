@@ -2,7 +2,7 @@ package fuse.display.containers;
 
 import fuse.display.containers.DisplayObject;
 import fuse.display.containers.IDisplay;
-import fuse.Kea;
+import fuse.Fuse;
 
 @:access(kha)
 class Sprite extends DisplayObject implements IDisplay
@@ -68,7 +68,7 @@ class Sprite extends DisplayObject implements IDisplay
 		//isStatic = 0;
 	}
 	
-	override function get_totalNumChildren():Int
+	/*override function get_totalNumChildren():Int
 	{ 
 		_totalNumChildren = 0;
 		for (i in 0...children.length){
@@ -76,5 +76,5 @@ class Sprite extends DisplayObject implements IDisplay
 			_totalNumChildren += children[i].totalNumChildren;
 		}
 		return _totalNumChildren;
-	}
+	}*/
 }

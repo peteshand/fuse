@@ -9,7 +9,7 @@ import fuse.utils.Notifier;
 import kha.Color;
 import msignal.Signal.Signal0;
 
-import fuse.Kea;
+import fuse.Fuse;
 
 @:access(fuse)
 class DisplayObject extends PrivateDisplayBase implements IDisplay
@@ -18,7 +18,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	
 	@:isVar public var parent(default, set):IDisplay;
 	public var onAdd = new Signal0();
-	public var totalNumChildren(get, null):Int;
+	//public var totalNumChildren(get, null):Int;
 	public var children:Array<IDisplay>;
 	
 	var renderable:Bool = false;
@@ -43,9 +43,11 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	@:isVar public var applyPosition(get, set):Int;
 	@:isVar public var applyRotation(get, set):Int;
 	
-	var _totalNumChildren:Int;
+	//var _totalNumChildren:Int;
 	var _renderIndex:Null<Int> = 0x3FFFFFFF;
 	var popAlpha:Bool = false;
+	
+	public var numChildren(get, null):Int;
 	
 	public function new()
 	{
@@ -212,7 +214,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		//if (applyPosition != value) {
 			displayData.applyPosition = applyPosition = value;
 			if (value == 1) {
-				Kea.current.isStatic = 0;
+				Fuse.current.isStatic = 0;
 			}
 		//}
 		return applyPosition;
@@ -223,7 +225,7 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		//if (applyRotation != value) {
 			displayData.applyRotation = applyRotation = value;
 			if (value == 1) {
-				Kea.current.isStatic = 0;
+				Fuse.current.isStatic = 0;
 			}
 		//}
 		return applyRotation;
@@ -244,10 +246,10 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	
 	///////////////////////////////////////////////////////////////
 	
-	function get_totalNumChildren():Int
+	/*function get_totalNumChildren():Int
 	{ 
 		return 0;
-	}
+	}*/
 	
 	function get_stage():Stage 
 	{
@@ -285,13 +287,23 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 		
 		if (parent == null) {
 			//displayData.parentId = -1;
-			Kea.current.workers.removeChild(this);
+			Fuse.current.workers.removeChild(this);
 		}
 		else {
 			//displayData.parentId = parent.objectId;
-			Kea.current.workers.addChild(this, parent);
+			Fuse.current.workers.addChild(this, parent);
 		}
 		return parent = value;
 	}
+	
+	function get_numChildren():Int 
+	{
+		if (children == null) return 0;
+		return children.length;
+	}
+	
+	public function getChildAt(index:Int):IDisplay
+	{
+		return children[index];
+	}
 }
-

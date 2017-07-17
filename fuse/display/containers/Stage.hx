@@ -1,8 +1,7 @@
 package fuse.display.containers;
 
 import flash.display.BitmapData;
-import hxColorToolkit.spaces.Color;
-import fuse.Kea;
+import fuse.Fuse;
 import fuse.display.renderables.Quad;
 import openfl.Lib;
 
@@ -29,7 +28,7 @@ class Stage extends Sprite {
 		
 		this.parentId = -1;
 		//displayDataAccess.parentId = -1;
-		Kea.current.workers.addChild(this, null);
+		Fuse.current.workers.addChild(this, null);
 		
 		
 		

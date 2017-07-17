@@ -1,6 +1,6 @@
 package fuse.render;
 
-import fuse.Kea;
+import fuse.Fuse;
 import fuse.core.memory.KeaMemory;
 import fuse.core.memory.data.batchData.BatchData;
 import fuse.core.memory.data.batchData.IBatchData;
@@ -22,6 +22,10 @@ import fuse.worker.thread.display.TextureRenderBatch;
 import kha.Color;
 import kha.FastFloat;
 import kha.math.FastMatrix3;
+import msignal.Signal;
+import openfl.display3D.Context3DProfile;
+import openfl.events.Event;
+
 import openfl.Assets;
 import openfl.Lib;
 import openfl.Vector;
@@ -33,6 +37,7 @@ import openfl.display3D.Context3DBufferUsage;
 import openfl.display3D.Context3DClearMask;
 import openfl.display3D.Context3DCompareMode;
 import openfl.display3D.Context3DProgramType;
+import openfl.display3D.Context3DRenderMode;
 import openfl.display3D.Context3DTextureFormat;
 import openfl.display3D.Context3DTriangleFace;
 import openfl.display3D.Context3DVertexBufferFormat;
@@ -56,7 +61,6 @@ class Renderer
 	var renderIndex:Int = 0;
 	public static var bufferSize:Int = 2000;
 	
-	var stage3D:Stage3D;
 	var context3D:Context3D;
 	
 	var transformations:Array<FastMatrix3>;
@@ -88,15 +92,24 @@ class Renderer
 	var context3DProgram:Context3DProgram;
 	var baseShader:BaseShader;
 	var shaderProgram = new Notifier<ShaderProgram>();
+	//var context3DSetup:Context3DSetup;
 	
-	public function new(stage3D:Stage3D) 
+	//public var onContextCreated:Signal0 = new Signal0();
+	
+	public function new(context3D:Context3D) 
 	{
-		vertexDataPool = Kea.current.keaMemory.vertexDataPool;
+		vertexDataPool = Fuse.current.keaMemory.vertexDataPool;
+		
+		/*context3DSetup = new Context3DSetup();
+		context3DSetup.onComplete.add(OnContextCreated);
+		context3DSetup.init(stage3D, renderMode, profile);*/
+	//}
+	
+	//function OnContextCreated() 
+	//{
 		
 		
-		this.stage3D = stage3D;
-		
-		context3D = stage3D.context3D;
+		this.context3D = context3D;// context3DSetup.context3D;
 		context3D.configureBackBuffer(1600, 900, 0);
 		context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
 		//context3D.setScissorRectangle(new Rectangle(0, 0, 1600, 900));
@@ -215,7 +228,7 @@ class Renderer
 		//trace("Kea.current.conductorData.isStatic = " + Kea.current.conductorData.isStatic);
 		
 		var batchData:IBatchData = textureRenderBatch.getBatchData(0);
-		if (batchData != null && Kea.current.conductorData.isStatic == 0) {
+		if (batchData != null && Fuse.current.conductorData.isStatic == 0) {
 			shaderProgram.value.vertexbuffer.uploadFromByteArray(KeaMemory.memory, batchData.startIndex, 0, 4 * numItems);
 		}
 		

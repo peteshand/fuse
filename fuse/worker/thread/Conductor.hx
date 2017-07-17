@@ -34,7 +34,6 @@ class Conductor
 	
 	public static function init(workerComms:IWorkerComms, index:Int, numberOfWorkers:Int, usingWorkers:Bool) 
 	{
-		trace("Conductor");
 		Conductor.numberOfWorkers = numberOfWorkers;
 		Conductor.workerComms = workerComms;
 		Conductor.index = index;

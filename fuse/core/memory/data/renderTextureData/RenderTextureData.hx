@@ -1,5 +1,5 @@
 package fuse.core.memory.data.renderTextureData;
-import fuse.Kea;
+import fuse.Fuse;
 import fuse.core.memory.data.MemoryBlock;
 import fuse.core.memory.data.displayData.DisplayData;
 
@@ -20,7 +20,7 @@ class RenderTextureData implements IRenderTextureData
 	
 	public function new(objectOffset:Int) 
 	{
-		memoryBlock = Kea.current.keaMemory.renderTextureDataPool.createMemoryBlock(RenderTextureDrawData.BYTES_PER_ITEM, objectOffset);
+		memoryBlock = Fuse.current.keaMemory.renderTextureDataPool.createMemoryBlock(RenderTextureDrawData.BYTES_PER_ITEM, objectOffset);
 	}
 	
 	///////////////////////////////////////////////////////////////
