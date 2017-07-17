@@ -3,7 +3,7 @@ package net.peteshand.keaOpenFL.view.kea.old.layerTest;
 import kea.display.BlendMode;
 import kea.display.Image;
 import kea.display.Quad;
-import kea.display.Sprite;
+import fuse.display.containers.Sprite;
 import kha.Assets;
 import kha.Color;
 import kha.Key;

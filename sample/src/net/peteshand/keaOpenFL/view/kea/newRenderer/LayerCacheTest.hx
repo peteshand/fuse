@@ -1,11 +1,11 @@
 package net.peteshand.keaOpenFL.view.kea.newRenderer;
 
-import kea.display.Sprite;
-import kea2.Kea;
-import kea2.display.renderables.Image;
-import kea2.render.Renderer;
-import kea2.texture.BitmapTexture;
-import kea2.texture.RenderTexture;
+import fuse.Kea;
+import fuse.display.containers.Sprite;
+import fuse.display.renderables.Image;
+import fuse.render.Renderer;
+import fuse.texture.BitmapTexture;
+import fuse.texture.RenderTexture;
 import openfl.Assets;
 import openfl.Lib;
 import openfl.display.BitmapData;

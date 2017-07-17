@@ -1,13 +1,9 @@
 package net.peteshand.keaOpenFL;
 
-import haxe.Json;
-import kea2.Kea;
-import kea.model.config.KeaConfig;
+import fuse.Kea;
+import fuse.core.KeaConfig;
 import net.peteshand.keaOpenFL.view.kea.MainLayer;
-import openfl.Memory;
 import openfl.display.Sprite;
-import openfl.Lib;
-import openfl.utils.ByteArray;
 
 /**
  * ...
@@ -25,6 +21,30 @@ class Main extends Sprite
 		keaConfig.debugTextureAtlas = false;
 		keaConfig.debugSkipRender = false;
 		Kea.init(MainLayer, keaConfig);
+		
+		/*var a:Int = 1;
+		var b:Int = 0;
+		
+		trace(a);
+		trace(b);
+		
+		var x:Int = a << 16 | b;
+		
+		trace(x);
+		
+		a = x >> 16;
+		b = x & 0x0000FFFF;
+		
+		trace(a);
+		trace(b);*/
+		
+		//Split
+		//a = x >> 16;
+		//b = x & 0x0000FFFF;
+		 
+		//Reconstruction
+		//x = (uint32_t)a << 16 | (uint32_t)b
+		 
 		
 		/*var transparentTest:TransparentTest = new TransparentTest();
 		addChild(transparentTest);

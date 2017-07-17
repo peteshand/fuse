@@ -2,7 +2,7 @@ package kea.sample;
 
 import flash.Lib;
 import flash.display.Sprite;
-import kea2.Kea;
+import fuse.Kea;
 
 /**
  * ...

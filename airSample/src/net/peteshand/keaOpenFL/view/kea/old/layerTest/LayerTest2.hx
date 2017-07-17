@@ -1,11 +1,11 @@
 package net.peteshand.keaOpenFL.view.kea.old.layerTest;
 
 import hxColorToolkit.spaces.RGB;
-import kea2.Kea;
+import fuse.Kea;
 import kea.display.BlendMode;
 import kea.display.Image;
 import kea.display.Quad;
-import kea.display.Sprite;
+import fuse.display.containers.Sprite;
 import kha.Assets;
 import kha.Color;
 import kha.Key;

@@ -1,25 +1,18 @@
 package net.peteshand.keaOpenFL.view.kea;
+
+import fuse.display.containers.Sprite;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.AtlasGenTest;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.LayerCacheTest;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.RenderTextureTest;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.StressTest;
-import net.peteshand.keaOpenFL.view.kea.old.atlas.AtlasTest;
-import net.peteshand.keaOpenFL.view.kea.old.atlas.AtlasTest2;
-import net.peteshand.keaOpenFL.view.kea.old.bgColour.BgColourTest;
-import net.peteshand.keaOpenFL.view.kea.old.bunchMark.BunnyMark;
-import net.peteshand.keaOpenFL.view.kea.old.layerTest.LayerTest;
-import net.peteshand.keaOpenFL.view.kea.old.layerTest.LayerTest2;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.NewRendererTest;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.NonPowerOfTwo;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.TwoTextures;
-import net.peteshand.keaOpenFL.view.kea.old.test1.Test1;
-import net.peteshand.keaOpenFL.view.kea.old.textureUpload.TextureUploadTest;
-import kea2.Kea;
-import kea.display.Sprite;
+import fuse.Kea;
 
 class MainLayer extends Sprite
 {	
-	var test1:Test1;
+	//var test1:Test1;
 	
 
 	public function new()
@@ -86,7 +79,7 @@ class MainLayer extends Sprite
 		layerCacheTest.init();*/
 	}
 	
-	override function update(): Void {
+	/*override function update(): Void {
 		
-	}
+	}*/
 }

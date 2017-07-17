@@ -1,6 +1,6 @@
 package net.peteshand.keaOpenFL.view.kea.old.bunchMark;
 
-import kea.display.Sprite;
+import fuse.display.containers.Sprite;
 import kea.display.text.TextField;
 import kha.Assets;
 import kha.graphics2.Graphics;

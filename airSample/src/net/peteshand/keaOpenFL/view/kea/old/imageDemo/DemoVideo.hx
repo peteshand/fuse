@@ -1,6 +1,6 @@
 package net.peteshand.keaOpenFL.view.kea.old.imageDemo;
 
-import kea.display.Sprite;
+import fuse.display.containers.Sprite;
 import kha.graphics2.Graphics;
 import kha.Assets;
 import kha.Video;

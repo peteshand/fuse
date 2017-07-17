@@ -2,9 +2,9 @@ package net.peteshand.keaOpenFL.view.kea.old.test1;
 
 import net.peteshand.keaOpenFL.view.kea.old.imageDemo.DemoImage;
 import net.peteshand.keaOpenFL.view.kea.old.imageDemo.DemoVideo;
-import kea2.Kea;
+import fuse.Kea;
 import kea.display.Quad;
-import kea.display.Sprite;
+import fuse.display.containers.Sprite;
 import kea.display.stats.Stats;
 import kea.display.text.TextField;
 import kea.texture.Texture;

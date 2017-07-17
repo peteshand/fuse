@@ -1,8 +1,8 @@
 package net.peteshand.keaOpenFL;
 
 import haxe.Json;
-import kea2.Kea;
-import kea.model.config.KeaConfig;
+import fuse.Kea;
+import fuse.core.KeaConfig;
 import net.peteshand.keaOpenFL.view.kea.MainLayer;
 import openfl.Memory;
 import openfl.display.Sprite;

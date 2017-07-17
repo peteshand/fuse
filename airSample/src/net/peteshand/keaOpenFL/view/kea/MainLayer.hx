@@ -14,8 +14,8 @@ import net.peteshand.keaOpenFL.view.kea.newRenderer.NonPowerOfTwo;
 import net.peteshand.keaOpenFL.view.kea.newRenderer.TwoTextures;
 import net.peteshand.keaOpenFL.view.kea.old.test1.Test1;
 import net.peteshand.keaOpenFL.view.kea.old.textureUpload.TextureUploadTest;
-import kea2.Kea;
-import kea.display.Sprite;
+import fuse.Kea;
+import fuse.display.containers.Sprite;
 
 class MainLayer extends Sprite
 {	
