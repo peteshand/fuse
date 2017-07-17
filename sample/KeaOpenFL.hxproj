@@ -29,13 +29,11 @@
     <class path="C:\_sdks\haxe\lib\openfl\4,9,2\externs\extras" />
     <class path="src" />
     <class path=".." />
-    <class path="C:\_sdks\haxe\lib\kha\git\Sources" />
-    <class path="C:\_sdks\haxe\lib\kha\git\Backends\Flash" />
     <class path="bin\flash\release\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="openfl=4.9.2&#xA;lime=4.0.3&#xA;actuate=1.8.7&#xA;robotlegs=0.4.3&#xA;msignal=1.2.4&#xA;swiftsuspenders=0.2.1&#xA;delay=1.1.6&#xA;hxColorToolkit=1.6.1&#xA;tools=4.0.3&#xA;no-compilation&#xA;openfl-flash&#xA;web&#xA;sys_flash&#xA;sys_g1&#xA;sys_g2&#xA;sys_g3&#xA;sys_g4&#xA;advanced-telemetry&#xA;display" />
+    <option directives="openfl=4.9.2&#xA;lime=4.0.3&#xA;actuate=1.8.7&#xA;robotlegs=0.4.3&#xA;msignal=1.2.4&#xA;swiftsuspenders=0.2.1&#xA;delay=1.1.6&#xA;hxColorToolkit=1.6.1&#xA;tools=4.0.3&#xA;no-compilation&#xA;openfl-flash&#xA;web&#xA;advanced-telemetry&#xA;display" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />

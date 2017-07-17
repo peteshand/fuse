@@ -1,7 +1,6 @@
 package fuse.core.memory.data.displayData;
 import fuse.Kea;
 import fuse.core.memory.data.MemoryBlock;
-import kha.Color;
 
 /**
  * ...
@@ -42,7 +41,7 @@ class DisplayData implements IDisplayData
 	public var scaleY(get, set):Float;
 	public var rotation(get, set):Float;
 	public var alpha(get, set):Float;
-	public var color(get, set):Color;
+	public var color(get, set):Int;
 	
 	public var textureId(get, set):Int;
 	//public var isStatic(get, set):Int;
@@ -100,8 +99,8 @@ class DisplayData implements IDisplayData
 		return memoryBlock.readFloat(INDEX_ALPHA);
 	}
 	
-	inline function get_color():Color { 
-		return cast(memoryBlock.readFloat(DisplayData.INDEX_COLOR), Color);
+	inline function get_color():Int { 
+		return memoryBlock.readInt(DisplayData.INDEX_COLOR);
 	}
 	
 	inline function get_textureId():Int { 
@@ -176,8 +175,8 @@ class DisplayData implements IDisplayData
 		return value;
 	}
 	
-	inline function set_color(value:Color):Color { 
-		memoryBlock.writeFloat(INDEX_COLOR, value);
+	inline function set_color(value:Int):Int { 
+		memoryBlock.writeInt(INDEX_COLOR, value);
 		return value;
 	}
 	

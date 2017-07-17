@@ -23,18 +23,9 @@
 	
 	<source path="src" />
 	<source path="../" />
-	<source path="C:/_sdks/haxe/lib/kha/git/Sources" />
-	<source path="C:/_sdks/haxe/lib/kha/git/Backends/Flash" />
-	<!--<source if="flash" path="C:/_sdks/haxe/lib/kha/git/Backends/Flash" />
-	<source if="html5" path="C:/_sdks/haxe/lib/kha/git/Backends/HTML5" />-->
 	
 	<app swf-version="19"/>
 	
-	<haxeflag name="-D sys_flash"></haxeflag>
-	<haxeflag name="-D sys_g1"></haxeflag>
-	<haxeflag name="-D sys_g2"></haxeflag>
-	<haxeflag name="-D sys_g3"></haxeflag>
-	<haxeflag name="-D sys_g4"></haxeflag>
 	<haxeflag name="-D advanced-telemetry"></haxeflag>
 	
 	<!-- assets -->

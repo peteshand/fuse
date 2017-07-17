@@ -7,7 +7,6 @@ import fuse.display.effects.BlendMode;
 import fuse.display.containers.Stage;
 import fuse.utils.Notifier;
 import kha.Color;
-import kha.graphics4.PipelineState;
 import msignal.Signal.Signal0;
 
 import fuse.Kea;

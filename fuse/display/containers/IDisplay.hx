@@ -3,8 +3,6 @@ package fuse.display.containers;
 import fuse.core.memory.data.displayData.DisplayData;
 import fuse.core.memory.data.displayData.IDisplayData;
 import kha.Color;
-import kha.FastFloat;
-import kha.graphics2.Graphics;
 import msignal.Signal.Signal0;
 
 import fuse.display.containers.Stage;

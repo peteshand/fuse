@@ -10,11 +10,6 @@ import fuse.display.containers.DisplayObject;
 import fuse.display.containers.Stage;
 import fuse.render.Renderer;
 import fuse.worker.Workers;
-import kha.Canvas;
-import kha.Scheduler;
-import kha.System;
-import kha.System.SystemOptions;
-import kha.graphics2.Graphics;
 import msignal.Signal.Signal0;
 import openfl.Lib;
 import openfl.display.Sprite;
@@ -34,7 +29,6 @@ class Kea
 	public var onRender:Signal0;
 	
 	var index:Int;
-	var g2:Graphics;
 	
 	public static var enterFrame:Signal0;
 	
@@ -84,8 +78,6 @@ class Kea
 		//current.logic.displayList.init();
 		//current.logic.atlasBuffer.add( -1, current.logic.displayList.background);
 		
-		//System.notifyOnRender(current.systemRender);
-		//Scheduler.addTimeTask(current.update, 0, 1 / 60);
 		
 		//Kea.current.stage = new Stage(rootClass);
 	}
@@ -207,16 +199,6 @@ class Kea
 		
 	}
 
-	public function systemRender(framebuffer:Canvas): Void
-	{
-		
-		
-		
-		return;
-		
-		count++;
-	}
-	
 	function get_frameRate():Int 
 	{
 		return frameRate;

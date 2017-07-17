@@ -1,6 +1,5 @@
 package fuse.core.memory.data.displayData;
 
-import kha.Color;
 
 /**
  * @author P.J.Shand
@@ -17,7 +16,7 @@ interface IDisplayData
 	public var scaleY(get, set):Float;
 	public var rotation(get, set):Float;
 	public var alpha(get, set):Float;
-	public var color(get, set):Color;
+	public var color(get, set):Int;
 	public var objectId(get, null):Int;
 	public var textureId(get, set):Int;
 	

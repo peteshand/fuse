@@ -2,7 +2,6 @@ package fuse.display.containers;
 
 import fuse.display.containers.DisplayObject;
 import fuse.display.containers.IDisplay;
-import kha.graphics2.Graphics;
 import fuse.Kea;
 
 @:access(kha)
@@ -78,24 +77,4 @@ class Sprite extends DisplayObject implements IDisplay
 		}
 		return _totalNumChildren;
 	}
-
-	//override public function render(graphics:Graphics):Void
-	//{	
-		///*prerender(graphics);
-		//for (i in 0...children.length){
-			//children[i].render(graphics);
-		//}
-		//postrender(graphics);*/
-	//}
-
-	/*override private function get_changeAvailable():Bool
-	{
-		var returnVal:Bool = _changeAvailable;
-		for (i in 0...children.length){
-			if (children[i].changeAvailable) returnVal = true;
-		}
-		_changeAvailable = false;
-		return returnVal;
-	}*/
-	
 }

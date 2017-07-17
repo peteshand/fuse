@@ -21,12 +21,9 @@ import fuse.worker.thread.layerCache.groups.LayerGroup.LayerGroupState;
 import fuse.worker.thread.util.transform.WorkerTransformHelper;
 import kha.Color;
 import kha.math.FastMatrix3;
-import kha.math.FastVector2;
-import kha.math.FastVector3;
-import kha.math.FastVector4;
 import openfl.geom.Point;
 import openfl.utils.ByteArray;
-//import avm2.intrinsics.memory.
+
 /**
  * ...
  * @author P.J.Shand
