@@ -1,8 +1,8 @@
 package fuse.display._private;
-import fuse.core.memory.data.displayData.DisplayData;
-import fuse.core.memory.data.displayData.IDisplayData;
-import fuse.core.memory.data.vertexData.IVertexData;
-import kha.math.FastMatrix3;
+import fuse.core.front.memory.data.displayData.DisplayData;
+import fuse.core.front.memory.data.displayData.IDisplayData;
+import fuse.core.front.memory.data.vertexData.IVertexData;
+import fuse.math.FastMatrix3;
 import openfl.geom.Matrix;
 
 /**

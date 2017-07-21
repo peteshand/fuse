@@ -1,90 +1,56 @@
 package fuse.display.containers;
 
-import flash.display.BitmapData;
-import fuse.Fuse;
 import fuse.display.renderables.Quad;
+import fuse.Fuse;
+
 import openfl.Lib;
+import openfl.events.Event;
 
 class Stage extends Sprite {
 	
-	var root:DisplayObject;
 	var count:Int = 0;
 	var background:Quad;
-
-	//public var textureAtlas:TextureAtlas;
 	
-	@:isVar public var stageWidth(get, null):Int;
-	@:isVar public var stageHeight(get, null):Int;
+	@:isVar public var stageWidth(default, set):Int;
+	@:isVar public var stageHeight(default, set):Int;
 	
-	//public var layerRenderer:LayerRenderer;
-	
-	//public var renderList:Array<IDisplay> = [];
-
-	public function new(RootClass:Class<DisplayObject>) 
+	public function new() 
 	{	
 		stage = this;
 		
 		super();
 		
 		this.parentId = -1;
-		//displayDataAccess.parentId = -1;
 		Fuse.current.workers.addChild(this, null);
-		
-		
-		
-		
 		
 		this.name = "stage";
 		
-		//textureAtlas = new TextureAtlas();
-		
-		/*background = new Quad(stageWidth, stageHeight, 0xFFFFFFFF);
-		addChild(background);*/
-		
-		root = Type.createInstance(RootClass, []);
-		root.stage = this;
-		//layerRenderer = new LayerRenderer(this, root);
-
-		addChild(root);
-		
-		
-		
+		Lib.current.stage.addEventListener(Event.RESIZE, OnStageResize);
+		OnStageResize(null);
 	}
 	
-	//override function set_color(value:Color):Color { 
-		//
-		//var value2:Color = ColourUtils.addMissingAlpha(value, 0xFF);
-		//
-		//if (color != value2){
-			//color = value2;
-			//
-			////background.color = color;
-			///*if (background != null) {
-				//if (background.parent != null) {
-					//background.parent.removeChild(background);
-				//}
-			//}
-			//background = new Quad(32, 32, color);
-			//stage.addChildAt(background, 0);*/
-			//
-			//isStatic = 0;
-		//}
-		//return value;
-	//}
-	
-	
-	/*override function get_renderIndex():Null<Int> 
+	private function OnStageResize(e:Event):Void 
 	{
-		return 0;
-	}*/
-	
-	function get_stageHeight():Int 
-	{
-		return Lib.current.stage.stageHeight;
+		/*trace(["OnStageResize", Lib.current.stage.stageWidth, Lib.current.stage.stageHeight]);*/
+		this.stageWidth = Lib.current.stage.stageWidth;
+		this.stageHeight = Lib.current.stage.stageHeight;
 	}
 	
-	function get_stageWidth():Int 
+	function set_stageHeight(value:Int):Int 
 	{
-		return Lib.current.stage.stageWidth;
+		if (stageHeight != value) {
+			stageHeight = value;
+			Fuse.current.conductorData.stageHeight = value;
+		}
+		return value;
+	}
+	
+	function set_stageWidth(value:Int):Int 
+	{
+		if (stageWidth != value) {
+			stageWidth = value;
+			Fuse.current.conductorData.stageWidth = value;
+		}
+		return value;
 	}
 }

@@ -19,18 +19,10 @@ class PlayerVersion
 		var versionArray:Array<String> = versionNumber.split(",");// Split it up
 		var length:Int = versionArray.length;
 		var osPlusVersion:Array<String> = versionArray[0].split(" ");// The main version contains the OS (e.g. WIN), so we split that off as well.
-		// Populate the version object (the OS is a string, others are numbers):
 		os = osPlusVersion[0];
 		major = Std.parseInt(osPlusVersion[1]);
 		minor = Std.parseInt(versionArray[1]);
 		build = Std.parseInt(versionArray[2]);
-		// Test the output:
-		/*trace("versionNumber = " + versionNumber);
-		trace(os);
-		trace(major);
-		trace(minor);
-		trace(build);*/
-		
 		majorMinor = major + (minor / 10);
 	}
 	

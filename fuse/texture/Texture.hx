@@ -1,17 +1,15 @@
 package fuse.texture;
 
-import fuse.core.memory.data.textureData.ITextureData;
-import fuse.utils.PowerOfTwo;
-import fuse.core.texture.upload.TextureUploadQue;
+import fuse.core.front.memory.data.textureData.ITextureData;
+import fuse.core.front.memory.data.textureData.TextureData;
+import fuse.core.front.texture.upload.TextureUploadQue;
+import fuse.core.front.texture.Textures;
 import fuse.texture.ITexture;
-import fuse.core.memory.data.textureData.TextureData;
-import fuse.core.texture.Textures;
-import openfl.display.BitmapData;
-import openfl.display3D.Context3DTextureFormat;
-import openfl.display3D.textures.Texture as OpenFLTexture;
+import fuse.utils.PowerOfTwo;
+
 import openfl.display3D.textures.Texture as NativeTexture;
+import openfl.display3D.Context3DTextureFormat;
 import openfl.errors.Error;
-import openfl.geom.Rectangle;
 
 /**
  * ...

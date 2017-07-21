@@ -1,8 +1,9 @@
 package fuse.pool;
+
 import fuse.pool.ObjectPool;
-import fuse.worker.thread.display.WorkerDisplay;
-import fuse.worker.thread.layerCache.groups.LayerGroup;
-import fuse.worker.thread.layerCache.groups.StaticLayerGroup;
+import fuse.core.worker.thread.display.WorkerDisplay;
+import fuse.core.worker.thread.layerCache.groups.LayerGroup;
+import fuse.core.worker.thread.layerCache.groups.StaticLayerGroup;
 
 /**
  * ...
@@ -19,12 +20,7 @@ class Pool
 		workerDisplay = new ObjectPool<WorkerDisplay>(WorkerDisplay, 100, [null]);
 		staticLayerGroup = new ObjectPool<StaticLayerGroup>(StaticLayerGroup, 100, []);
 		layerGroup = new ObjectPool<LayerGroup>(LayerGroup, 100, []);
-		
 	}
 	
-	public function new() 
-	{
-		
-	}
-	
+	public function new() { }
 }

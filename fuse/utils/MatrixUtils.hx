@@ -1,6 +1,6 @@
 package fuse.utils;
-import kha.FastFloat;
-import kha.math.FastMatrix3;
+
+import fuse.math.FastMatrix3;
 
 /**
  * ...
@@ -9,10 +9,7 @@ import kha.math.FastMatrix3;
 class MatrixUtils
 {
 
-	public function new() 
-	{
-		
-	}
+	public function new() { }
 	
 	public static inline function multMatrix(m1:FastMatrix3, m2:FastMatrix3, output:FastMatrix3):Void
 	{	
@@ -23,13 +20,9 @@ class MatrixUtils
 		output._01 = m1._01 * m2._00 + m1._11 * m2._01 + m1._21 * m2._02;
 		output._11 = m1._01 * m2._10 + m1._11 * m2._11 + m1._21 * m2._12;
 		output._21 = m1._01 * m2._20 + m1._11 * m2._21 + m1._21 * m2._22;
-		
-		/*output._02 = m1._02 * m2._00 + m1._12 * m2._01 + m1._22 * m2._02;
-		output._12 = m1._02 * m2._10 + m1._12 * m2._11 + m1._22 * m2._12;
-		output._22 = m1._02 * m2._20 + m1._12 * m2._21 + m1._22 * m2._22;*/
 	}
 	
-	public static inline function rotateMatrix(m:FastMatrix3, rotation: FastFloat):FastMatrix3
+	public static inline function rotateMatrix(m:FastMatrix3, rotation: Float):FastMatrix3
 	{
 		return setMatrix(m, 
 			Math.cos(rotation), -Math.sin(rotation), 0,
@@ -38,7 +31,7 @@ class MatrixUtils
 		);
 	}
 
-	public static inline function translation(m:FastMatrix3, x: FastFloat, y: FastFloat):FastMatrix3
+	public static inline function translation(m:FastMatrix3, x: Float, y: Float):FastMatrix3
 	{
 		return setMatrix(m, 
 			1, 0, x,
@@ -47,7 +40,7 @@ class MatrixUtils
 		);
 	}
 
-	inline static function setMatrix(m:FastMatrix3, _00:FastFloat, _10:FastFloat, _20:FastFloat, _01:FastFloat, _11:FastFloat, _21:FastFloat, _02:FastFloat, _12:FastFloat, _22:FastFloat):FastMatrix3
+	inline static function setMatrix(m:FastMatrix3, _00:Float, _10:Float, _20:Float, _01:Float, _11:Float, _21:Float, _02:Float, _12:Float, _22:Float):FastMatrix3
 	{
 		m._00 = _00;
 		m._10 = _10;

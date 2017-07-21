@@ -1,13 +1,12 @@
 package fuse.texture;
-import fuse.core.memory.data.conductorData.ConductorData;
-import fuse.core.memory.data.renderTextureData.IRenderTextureData;
-import fuse.core.memory.data.renderTextureData.IRenderTextureDrawData;
-import fuse.core.memory.data.renderTextureData.RenderTextureData;
-import fuse.core.memory.data.renderTextureData.RenderTextureDrawData;
-import fuse.core.texture.Textures;
+
+import fuse.core.front.memory.data.conductorData.ConductorData;
+import fuse.core.front.memory.data.renderTextureData.IRenderTextureData;
+import fuse.core.front.memory.data.renderTextureData.IRenderTextureDrawData;
+import fuse.core.front.memory.data.renderTextureData.RenderTextureData;
+import fuse.core.front.memory.data.renderTextureData.RenderTextureDrawData;
+import fuse.core.front.texture.Textures;
 import fuse.display.containers.IDisplay;
-import fuse.display.renderables.Image;
-import openfl.display.BitmapData;
 import openfl.display3D.Context3DTextureFormat;
 
 /**
@@ -48,27 +47,15 @@ class RenderTexture extends Texture
 	override function upload() 
 	{
 		nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, false, 0);
-		//nativeTexture.uploadFromBitmapData(new BitmapData(512, 512, false, 0xFF0000));
 		
-		//Textures.context3D.setRenderToTexture(nativeTexture, true);
-		//Textures.context3D.clear(0, 0, 0, 0);
 		clear();
 		
 		Textures.registerTexture(textureId, this);
 		textureData.textureAvailable = 1;
 	}
 	
-	public function clear(/*clear:Bool, colour:UInt*/) 
+	public function clear() 
 	{
 		this._clear = true;
-		//Textures.context3D.setRenderToTexture(nativeTexture, true);
-		//Textures.context3D.clear(0, 0, 0, 0);
-		//Textures.context3D.present();
-		//Textures.context3D.setRenderToBackBuffer();
 	}
-	
-	/*public function end() 
-	{
-		
-	}*/
 }

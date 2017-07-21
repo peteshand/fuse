@@ -1,12 +1,12 @@
 package fuse.display.containers;
 
-import fuse.core.memory.data.conductorData.ConductorData;
-import fuse.core.memory.data.displayData.DisplayData;
+import fuse.core.front.memory.data.conductorData.ConductorData;
+import fuse.core.front.memory.data.displayData.DisplayData;
 import fuse.display._private.PrivateDisplayBase;
 import fuse.display.effects.BlendMode;
 import fuse.display.containers.Stage;
 import fuse.utils.Notifier;
-import kha.Color;
+import fuse.Color;
 import msignal.Signal.Signal0;
 
 import fuse.Fuse;
@@ -18,7 +18,6 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	
 	@:isVar public var parent(default, set):IDisplay;
 	public var onAdd = new Signal0();
-	//public var totalNumChildren(get, null):Int;
 	public var children:Array<IDisplay>;
 	
 	var renderable:Bool = false;
@@ -43,7 +42,6 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	@:isVar public var applyPosition(get, set):Int;
 	@:isVar public var applyRotation(get, set):Int;
 	
-	//var _totalNumChildren:Int;
 	var _renderIndex:Null<Int> = 0x3FFFFFFF;
 	var popAlpha:Bool = false;
 	
@@ -246,11 +244,6 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	
 	///////////////////////////////////////////////////////////////
 	
-	/*function get_totalNumChildren():Int
-	{ 
-		return 0;
-	}*/
-	
 	function get_stage():Stage 
 	{
 		return stage;
@@ -259,24 +252,8 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	function set_stage(value:Stage):Stage 
 	{
 		if (stage != value) {
-			//DisplayList.updateHierarchy = true;
 			stage = value;
 		}
-		
-		// TODO, move this to render loop
-		if (value == null) {
-			/*if (renderable) {
-				Kea.current.logic.displayList.remove(this);
-			}*/
-			//Kea.current.logic.atlasBuffer.remove(this);
-		}
-		else {
-			/*if (renderable) {
-				Kea.current.logic.displayList.add(this);
-			}*/
-			//Kea.current.logic.atlasBuffer.add(this);
-		}
-		
 		
 		return stage;
 	}
@@ -284,13 +261,10 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	function set_parent(value:IDisplay):IDisplay 
 	{
 		parent = value;
-		
 		if (parent == null) {
-			//displayData.parentId = -1;
 			Fuse.current.workers.removeChild(this);
 		}
 		else {
-			//displayData.parentId = parent.objectId;
 			Fuse.current.workers.addChild(this, parent);
 		}
 		return parent = value;
@@ -305,5 +279,16 @@ class DisplayObject extends PrivateDisplayBase implements IDisplay
 	public function getChildAt(index:Int):IDisplay
 	{
 		return children[index];
+	}
+	
+	function forceRedraw():Void
+	{
+		this.applyPosition = 1;
+		if (children != null){
+			for (i in 0...children.length) 
+			{
+				children[i].forceRedraw();
+			}		
+		}
 	}
 }

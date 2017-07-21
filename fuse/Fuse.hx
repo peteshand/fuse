@@ -1,15 +1,15 @@
 package fuse;
 
-import fuse.core.KeaConfig;
-import fuse.core.atlas.AtlasBuffers;
-import fuse.core.layers.LayerCacheBuffers;
-import fuse.core.memory.KeaMemory;
-import fuse.core.memory.data.conductorData.ConductorData;
+import fuse.core.front.KeaConfig;
+import fuse.core.front.atlas.AtlasBuffers;
+import fuse.core.front.layers.LayerCacheBuffers;
+import fuse.core.front.memory.KeaMemory;
+import fuse.core.front.memory.data.conductorData.ConductorData;
 import fuse.display.containers.DisplayObject;
 import fuse.display.containers.Stage;
 import fuse.render.Context3DSetup;
 import fuse.render.Renderer;
-import fuse.worker.Workers;
+import fuse.core.worker.Workers;
 import openfl.display.Stage3D;
 
 import msignal.Signal.Signal0;
@@ -25,6 +25,7 @@ import openfl.events.EventDispatcher;
 import flash.system.Worker;
 #end
 
+@:access(fuse)
 class Fuse extends EventDispatcher
 {
 	static public inline var ROOT_CREATED:String = "rootCreated";
@@ -42,6 +43,7 @@ class Fuse extends EventDispatcher
 	public var staticCount:Int = 0;
 	public var isStatic:Int = 0;
 	public var conductorData:ConductorData;
+	public var root:DisplayObject;
 	
 	static var count:Int = 0;
 	var index:Int;
@@ -56,6 +58,11 @@ class Fuse extends EventDispatcher
 	var context3DSetup:Context3DSetup;
 	
 	var isWorker(get, null):Bool;
+	var setupComplete:Bool = false;
+	
+	var stageWidth:Int;
+	var stageHeight:Int;
+	var dimensionChange:Bool = false;
 	
 	public function new(rootClass:Class<DisplayObject>, keaConfig:KeaConfig, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
 	{	
@@ -71,6 +78,11 @@ class Fuse extends EventDispatcher
 		this.profile = profile;
 		//this.frameRate = keaConfig.frameRate;
 		
+		
+	}
+	
+	public function init():Void
+	{
 		Lib.current.stopAllMovieClips();
 		
 		workers = new Workers();
@@ -89,18 +101,41 @@ class Fuse extends EventDispatcher
 	
 	function OnContextCreated() 
 	{
-		renderer = new Renderer(context3DSetup.context3D);
-		
-		Lib.current.stage.addEventListener(Event.ENTER_FRAME, Update);
-		
+		stage = new Stage();
+		renderer = new Renderer(context3DSetup.context3D, context3DSetup.sharedContext);
 		atlasBuffers = new AtlasBuffers(keaConfig.atlasBuffers, 2048, 2048);
 		layerCacheBuffers = new LayerCacheBuffers(2, 2048, 2048);
 		
-		stage = new Stage(rootClass);
+		root = Type.createInstance(rootClass, []);
+		root.stage = stage;
+		stage.addChild(root);
+		
+		setupComplete = true;
+		dispatchEvent(new Event(Fuse.ROOT_CREATED));
+	}
+	
+	public function start():Void
+	{
+		if (isWorker) return;
+		Lib.current.stage.addEventListener(Event.ENTER_FRAME, Update);
+	}
+	
+	public function stop():Void
+	{
+		if (isWorker) return;
+		Lib.current.stage.removeEventListener(Event.ENTER_FRAME, Update);
 	}
 	
 	private function Update(e:Event):Void 
 	{
+		process();
+	}
+	
+	public function process():Void
+	{
+		if (isWorker) return;
+		if (!setupComplete) return;
+		
 		//trace("Update");
 		workers.condition.mutex.lock();
 		
@@ -125,7 +160,22 @@ class Fuse extends EventDispatcher
 		////////////////////////////////////////////////
 		////////////////////////////////////////////////
 		
-		renderer.update();
+		if (renderer != null) {
+			renderer.update();
+		}
+		
+		dimensionChange = false;
+		if (stageWidth != stage.stageWidth) {
+			stageWidth = stage.stageWidth;
+			dimensionChange = true;
+		}
+		if (stageHeight != stage.stageHeight) {
+			stageHeight = stage.stageHeight;
+			dimensionChange = true;
+		}
+		if (dimensionChange) {
+			//stage.forceRedraw();
+		}
 		
 		Fuse.enterFrame.dispatch();
 		

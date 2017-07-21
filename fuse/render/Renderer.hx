@@ -1,55 +1,28 @@
 package fuse.render;
 
-import fuse.Fuse;
-import fuse.core.memory.KeaMemory;
-import fuse.core.memory.data.batchData.BatchData;
-import fuse.core.memory.data.batchData.IBatchData;
-import fuse.core.memory.data.conductorData.ConductorData;
-import fuse.core.memory.data.MemoryPool;
-import fuse.core.memory.data.vertexData.VertexData;
-import fuse.core.texture.Textures;
-import fuse.display.containers.IDisplay;
-import fuse.display.effects.BlendMode;
+import fuse.core.front.memory.data.conductorData.ConductorData;
+import fuse.core.front.memory.data.vertexData.VertexData;
+import fuse.core.worker.thread.display.TextureRenderBatch;
+import fuse.core.front.memory.data.batchData.IBatchData;
+import fuse.core.worker.thread.display.ShaderPrograms;
+import fuse.core.worker.thread.display.ShaderProgram;
 import fuse.render.program.Context3DProgram;
 import fuse.render.texture.Context3DTexture;
+import fuse.display.effects.BlendMode;
+import fuse.core.front.memory.KeaMemory;
+import fuse.core.front.texture.Textures;
 import fuse.texture.Texture;
 import fuse.utils.Notifier;
-import fuse.worker.thread.Conductor;
-import fuse.worker.thread.display.ShaderProgram;
-import fuse.worker.thread.display.ShaderPrograms;
-import fuse.worker.thread.display.TextureOrder;
-import fuse.worker.thread.display.TextureRenderBatch;
-import kha.Color;
-import kha.FastFloat;
-import kha.math.FastMatrix3;
-import msignal.Signal;
-import openfl.display3D.Context3DProfile;
-import openfl.events.Event;
+import fuse.Color;
+import fuse.Fuse;
 
-import openfl.Assets;
-import openfl.Lib;
-import openfl.Vector;
-import openfl.display.BitmapData;
-import openfl.display.Stage3D;
-import openfl.display3D.Context3D;
-import openfl.display3D.Context3DBlendFactor;
-import openfl.display3D.Context3DBufferUsage;
-import openfl.display3D.Context3DClearMask;
+import openfl.display3D.Context3DVertexBufferFormat;
+import openfl.display3D.Context3DTriangleFace;
 import openfl.display3D.Context3DCompareMode;
 import openfl.display3D.Context3DProgramType;
-import openfl.display3D.Context3DRenderMode;
-import openfl.display3D.Context3DTextureFormat;
-import openfl.display3D.Context3DTriangleFace;
-import openfl.display3D.Context3DVertexBufferFormat;
-import openfl.display3D.IndexBuffer3D;
+import openfl.display3D.Context3D;
 import openfl.display3D.Program3D;
-import openfl.display3D.VertexBuffer3D;
-import openfl.display3D.textures.Texture as NativeTexture;
-import openfl.events.TimerEvent;
 import openfl.geom.Matrix3D;
-import openfl.geom.Rectangle;
-import openfl.utils.ByteArray;
-import openfl.utils.Timer;
 
 /**
  * ...
@@ -58,87 +31,46 @@ import openfl.utils.Timer;
 @:access(fuse)
 class Renderer
 {
-	var renderIndex:Int = 0;
-	public static var bufferSize:Int = 2000;
-	
-	var context3D:Context3D;
-	
-	var transformations:Array<FastMatrix3>;
-	var _opacity:Float = 1;
-	var opacities:Array<Float>;
-	
-	var bufferIndex:Int;
-	//var indices:Vector<UInt>;
-	
-	var program:Program3D;
-	var m:Matrix3D = new Matrix3D();
-	var numberOfDisplays:Int = 1;
-	
-	var textureOrder:TextureOrder;
 	var textureRenderBatch:TextureRenderBatch;
-	var shaderPrograms:ShaderPrograms;
-	
-	//public var vertexbuffer:VertexBuffer3D;
-	//public var indexbuffer:IndexBuffer3D;
-	
-	/** Texture the scene is rendered to */
-	private var sceneTexture:NativeTexture;
-	var vertexDataPool:MemoryPool;
-	public var conductorData:ConductorData;
-	var currentBlendMode:Int = -1;
-	var targetTextureId = new Notifier<Int>(-2);
-	
 	var context3DTexture:Context3DTexture;
 	var context3DProgram:Context3DProgram;
+	var shaderPrograms:ShaderPrograms;
+	var conductorData:ConductorData;
 	var baseShader:BaseShader;
+	var context3D:Context3D;
+	var program:Program3D;
+	var sharedContext:Bool;
+	var programChanged:Bool;
+	
+	var m:Matrix3D = new Matrix3D();
+	var currentBlendMode:Int = -1;
+	var targetTextureId = new Notifier<Int>(-2);
 	var shaderProgram = new Notifier<ShaderProgram>();
-	//var context3DSetup:Context3DSetup;
 	
-	//public var onContextCreated:Signal0 = new Signal0();
-	
-	public function new(context3D:Context3D) 
+	public function new(context3D:Context3D, sharedContext:Bool) 
 	{
-		vertexDataPool = Fuse.current.keaMemory.vertexDataPool;
+		this.context3D = context3D;
+		this.sharedContext = sharedContext;
 		
-		/*context3DSetup = new Context3DSetup();
-		context3DSetup.onComplete.add(OnContextCreated);
-		context3DSetup.init(stage3D, renderMode, profile);*/
-	//}
-	
-	//function OnContextCreated() 
-	//{
-		
-		
-		this.context3D = context3D;// context3DSetup.context3D;
-		context3D.configureBackBuffer(1600, 900, 0);
+		if (!sharedContext){
+			context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0);
+			
+		}
 		context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
 		//context3D.setScissorRectangle(new Rectangle(0, 0, 1600, 900));
 		context3D.setCulling(Context3DTriangleFace.BACK);
 		
-		//setScissorRectangle
 		#if debug
 			context3D.enableErrorChecking = true;
 		#end
 		
+		conductorData = new ConductorData();
 		context3DTexture = new Context3DTexture(context3D);
 		context3DProgram = new Context3DProgram(context3D);
-		
-		conductorData = new ConductorData();
-		textureOrder = new TextureOrder();
-		textureRenderBatch = new TextureRenderBatch();
 		shaderPrograms = new ShaderPrograms(context3D);
+		textureRenderBatch = new TextureRenderBatch();
 		
-		sceneTexture = context3D.createTexture(
-			2048,
-			2048,
-			Context3DTextureFormat.BGRA,
-			true
-		);
 		Textures.init(context3D);
-		
-		bufferIndex = 0;
-		transformations = new Array<FastMatrix3>();
-		transformations.push(FastMatrix3.identity());
 		
 		baseShader = new BaseShader();
 		program = context3D.createProgram();
@@ -151,6 +83,8 @@ class Renderer
 	function OnShaderProgramChange() 
 	{
 		if (shaderProgram.value == null) return;
+		
+		programChanged = true;
 		
 		var numItems:Int = conductorData.numberOfRenderables;
 		
@@ -175,10 +109,7 @@ class Renderer
 	function OnTargetTextureIdChange() 
 	{
 		if (targetTextureId.value == -1) {
-		//	trace("OnTargetTextureIdChange: setRenderToBackBuffer");
 			context3D.setRenderToTexture(null, false, 0, 0);
-			
-			//context3D.setRenderToBackBuffer();
 		}
 		else {
 			var texture:Texture = Textures.getTexture(targetTextureId.value);
@@ -193,18 +124,19 @@ class Renderer
 	
 	public function update() 
 	{
-		//context3D.setRenderToTexture(sceneTexture);
-		
-		//trace("frameIndex = " + conductorData.frameIndex);
-		//trace("renderIndex = " + renderIndex);
-		
-		//targetTextureId._value = -2;
 		targetTextureId.value = -1;
 		
+		if (sharedContext) {
+			// context3D.clear will need to be called externally
+			drawBuffer();
+			// context3D.present will need to be called externally
+		}
+		else {
+			begin(true, 0xFF0000);
+			drawBuffer();
+			end();
+		}
 		
-		begin(true, 0xFF0000);
-		drawBuffer();
-		end();
 	}
 	
 	public function begin(clear:Bool = true, clearColor:Color = null):Void
@@ -221,14 +153,16 @@ class Renderer
 		if (numItems == 0) return;
 		
 		
+		
+		programChanged = false;
 		shaderProgram.value = shaderPrograms.getProgram(numItems);
 		
 		
 		
-		//trace("Kea.current.conductorData.isStatic = " + Kea.current.conductorData.isStatic);
+		//trace("conductorData.isStatic = " + conductorData.isStatic);
 		
 		var batchData:IBatchData = textureRenderBatch.getBatchData(0);
-		if (batchData != null && Fuse.current.conductorData.isStatic == 0) {
+		if (batchData != null && (conductorData.isStatic == 0 || programChanged)) {
 			shaderProgram.value.vertexbuffer.uploadFromByteArray(KeaMemory.memory, batchData.startIndex, 0, 4 * numItems);
 		}
 		
@@ -315,10 +249,10 @@ class Renderer
 				////trace([INDEX_U3, INDEX_V3]);
 				////trace([INDEX_U4, INDEX_V4]);
 				////
-				///*trace([INDEX_X1, INDEX_Y1]);
+				//trace([INDEX_X1, INDEX_Y1]);
 				//trace([INDEX_X2, INDEX_Y2]);
 				//trace([INDEX_X3, INDEX_Y3]);
-				//trace([INDEX_X4, INDEX_Y4]);*/
+				//trace([INDEX_X4, INDEX_Y4]);
 				//
 				////
 				//
@@ -349,60 +283,20 @@ class Renderer
 			var newBlendMode:Int = 0;
 			if (currentBlendMode != newBlendMode) {
 				currentBlendMode = newBlendMode;
-				//context3D.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA, Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
-				//context3D.setBlendFactors(Context3DBlendFactor.ONE, Context3DBlendFactor.ZERO);
-				
 				var blendFactors:BlendFactors = BlendMode.getBlendFactors(currentBlendMode);
 				context3D.setBlendFactors(blendFactors.sourceFactor, blendFactors.destinationFactor);
 			}
 			
-			
-			//context3D.setSamplerStateAt(0, Context3DWrapMode.CLAMP, Context3DTextureFilter.NEAREST, Context3DMipFilter.MIPNONE);
-			
-			
-			
-			
 			//m.appendRotation(Lib.getTimer()/40, Vector3D.Z_AXIS);
 			//context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, m, true);
-			//trace("itemCount = " + itemCount);
-			//trace(numItemsInBatch * 2);
 			
-			//trace("i = " + i);
-			//trace("itemCount = " + itemCount);
 			context3D.drawTriangles(shaderProgram.value.indexbuffer, itemCount, numItemsInBatch * 2);
-			
 			itemCount += numItemsInBatch * 6;
 		}
-		
-		bufferIndex = 0;
 	}
-	
-	
-	
-	
 	
 	public function end():Void
 	{
 		context3D.present();
 	}
-	
-	//public function start() 
-	//{
-		//var timer:Timer = new Timer(1, 0);
-		//timer.addEventListener(TimerEvent.TIMER, OnTick);
-		//timer.start();
-	//}
-	//
-	//private function OnTick(e:TimerEvent):Void 
-	//{
-		///*var i:Int = 0;
-		//while (renderIndex == conductorData.frameIndex) {
-			//// wait
-			//i++;
-		//}*/
-		//if (renderIndex != conductorData.frameIndex) {
-			//update();
-			//renderIndex = conductorData.frameIndex;
-		//}
-	//}
 }

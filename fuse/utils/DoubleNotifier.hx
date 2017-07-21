@@ -22,7 +22,6 @@ class DoubleNotifier<T1, T2>
 	{
 		v1 = new Notifier<T1>(default1);
 		v2 = new Notifier<T2>(default2);
-		
 	}
 	
 	private inline function get_value1():Null<T1> 

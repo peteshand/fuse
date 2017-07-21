@@ -67,14 +67,4 @@ class Sprite extends DisplayObject implements IDisplay
 		}
 		//isStatic = 0;
 	}
-	
-	/*override function get_totalNumChildren():Int
-	{ 
-		_totalNumChildren = 0;
-		for (i in 0...children.length){
-			_totalNumChildren++;
-			_totalNumChildren += children[i].totalNumChildren;
-		}
-		return _totalNumChildren;
-	}*/
 }

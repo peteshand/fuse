@@ -1,10 +1,8 @@
 package fuse.texture;
 
-import fuse.core.texture.Textures;
 import fuse.texture.Texture;
+import fuse.core.front.texture.Textures;
 import openfl.display.BitmapData;
-import openfl.display3D.Context3DTextureFormat;
-import openfl.display3D.textures.Texture as NativeTexture;
 
 /**
  * ...

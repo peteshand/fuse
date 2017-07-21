@@ -9,7 +9,6 @@ import openfl.display3D.Context3DRenderMode;
 import openfl.display.Stage3D;
 import openfl.errors.Error;
 import openfl.events.Event;
-import openfl.system.Capabilities;
 
 /**
  * ...
@@ -17,21 +16,19 @@ import openfl.system.Capabilities;
  */
 class Context3DSetup
 {
-	var stage3D:Stage3D;
-	var profiles:Array<Context3DProfile>;
-	var renderMode:Context3DRenderMode;
-	var targetProfile:Context3DProfile;
-	var targetProfiles:Array<Context3DProfile>;
+	public var sharedContext:Bool = false;
 	public var context3D:Context3D;
 	public var onComplete:Signal0 = new Signal0();
 	public var activeProfile:Context3DProfile;
 	
+	var stage3D:Stage3D;
+	var profiles:Array<Context3DProfile> = [];
+	var renderMode:Context3DRenderMode;
+	var targetProfile:Context3DProfile;
+	var targetProfiles:Array<Context3DProfile>;
+	
 	public function new() 
 	{
-		trace(PlayerVersion.majorMinor);
-		
-		profiles = [];
-		
 		if (PlayerVersion.majorMinor >= 25.0) profiles.push(Context3DProfile.ENHANCED);
 		if (PlayerVersion.majorMinor >= 17.0) profiles.push(Context3DProfile.STANDARD_EXTENDED);
 		if (PlayerVersion.majorMinor >= 16.0) profiles.push(Context3DProfile.STANDARD);
@@ -52,17 +49,6 @@ class Context3DSetup
 		checkStage3D();
 		setTargetProfile();
 		createContext();
-		
-		/*if (this.stage3D.context3D == null) {
-			this.stage3D.addEventListener(Event.CONTEXT3D_CREATE, OnContentCreated);
-			this.stage3D.requestContext3D(renderMode, Context3DProfile.STANDARD_EXTENDED);
-		}
-		else {
-			trace("context already created");
-			context3D = this.stage3D.context3D;
-			onComplete.dispatch();
-		}*/
-		
 	}
 	
 	function checkStage3D() 
@@ -87,6 +73,7 @@ class Context3DSetup
 	{
 		if (stage3D.context3D != null) {
 			trace("context already created");
+			sharedContext = true;
 			context3D = stage3D.context3D;
 			activeProfile = targetProfile;
 			onComplete.dispatch();
@@ -114,17 +101,6 @@ class Context3DSetup
 			activeProfile = targetProfile;
 			onComplete.dispatch();
 		}
-		
-		/*if (renderMode == Context3DRenderMode.AUTO && profiles.length != 0 &&
-			(context.driverInfo != null && context.driverInfo.indexOf("Software") != -1))
-		{
-			onError(event);
-		}
-		else
-		{
-			mProfile = currentProfile;
-			onFinished();
-		}*/
 	}
 	
 	function moveToNextProfile() 

@@ -13,9 +13,4 @@ class Renderable extends DisplayObject
 		super();
 		this.renderId = PrivateDisplayBase.renderIdCount++;
 	}
-	
-	/*override function set_renderId(value:Int):Int 
-	{
-		return displayDataAccess.renderId = value;
-	}*/
 }
