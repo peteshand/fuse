@@ -4,12 +4,12 @@ import fuse.core.front.KeaConfig;
 import fuse.core.front.atlas.AtlasBuffers;
 import fuse.core.front.layers.LayerCacheBuffers;
 import fuse.core.front.memory.KeaMemory;
-import fuse.core.front.memory.data.conductorData.ConductorData;
-import fuse.display.containers.DisplayObject;
-import fuse.display.containers.Stage;
+import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.display.DisplayObject;
+import fuse.display.Stage;
 import fuse.render.Context3DSetup;
 import fuse.render.Renderer;
-import fuse.core.worker.Workers;
+import fuse.core.Workers;
 import openfl.display.Stage3D;
 
 import msignal.Signal.Signal0;
@@ -47,8 +47,7 @@ class Fuse extends EventDispatcher
 	
 	static var count:Int = 0;
 	var index:Int;
-	var atlasBuffers:AtlasBuffers;
-	var layerCacheBuffers:LayerCacheBuffers;
+	//var atlasBuffers:AtlasBuffers;
 	
 	var rootClass:Class<DisplayObject>;
 	var keaConfig:KeaConfig;
@@ -103,8 +102,9 @@ class Fuse extends EventDispatcher
 	{
 		stage = new Stage();
 		renderer = new Renderer(context3DSetup.context3D, context3DSetup.sharedContext);
-		atlasBuffers = new AtlasBuffers(keaConfig.atlasBuffers, 2048, 2048);
-		layerCacheBuffers = new LayerCacheBuffers(2, 2048, 2048);
+		
+		AtlasBuffers.init(2048, 2048);
+		LayerCacheBuffers.init(2048, 2048);
 		
 		root = Type.createInstance(rootClass, []);
 		root.stage = stage;

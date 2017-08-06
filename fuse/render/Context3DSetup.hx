@@ -29,13 +29,20 @@ class Context3DSetup
 	
 	public function new() 
 	{
-		if (PlayerVersion.majorMinor >= 25.0) profiles.push(Context3DProfile.ENHANCED);
-		if (PlayerVersion.majorMinor >= 17.0) profiles.push(Context3DProfile.STANDARD_EXTENDED);
-		if (PlayerVersion.majorMinor >= 16.0) profiles.push(Context3DProfile.STANDARD);
-		if (PlayerVersion.majorMinor >= 14.0) profiles.push(Context3DProfile.STANDARD_CONSTRAINED);
-		if (PlayerVersion.majorMinor >= 11.8) profiles.push(Context3DProfile.BASELINE_EXTENDED);
-		if (PlayerVersion.majorMinor >= 11.4) profiles.push(Context3DProfile.BASELINE);
-		if (PlayerVersion.majorMinor >= 11.4) profiles.push(Context3DProfile.BASELINE_CONSTRAINED);
+		#if flash
+			//if (PlayerVersion.majorMinor >= 25.0) profiles.push(Context3DProfile.ENHANCED);
+			//if (PlayerVersion.majorMinor >= 17.0) profiles.push(Context3DProfile.STANDARD_EXTENDED);
+			if (PlayerVersion.majorMinor >= 16.0) profiles.push(Context3DProfile.STANDARD);
+			if (PlayerVersion.majorMinor >= 14.0) profiles.push(Context3DProfile.STANDARD_CONSTRAINED);
+			if (PlayerVersion.majorMinor >= 11.8) profiles.push(Context3DProfile.BASELINE_EXTENDED);
+			if (PlayerVersion.majorMinor >= 11.4) profiles.push(Context3DProfile.BASELINE);
+			if (PlayerVersion.majorMinor >= 11.4) profiles.push(Context3DProfile.BASELINE_CONSTRAINED);
+		#else
+			profiles.push(Context3DProfile.BASELINE_EXTENDED);
+			profiles.push(Context3DProfile.BASELINE);
+			profiles.push(Context3DProfile.BASELINE_CONSTRAINED);
+		#end
+		
 	}
 	
 	public function init(stage3D:Stage3D, renderMode:Context3DRenderMode, targetProfiles:Array<Context3DProfile>) 
@@ -71,15 +78,7 @@ class Context3DSetup
 	
 	function createContext() 
 	{
-		if (stage3D.context3D != null) {
-			trace("context already created");
-			sharedContext = true;
-			context3D = stage3D.context3D;
-			activeProfile = targetProfile;
-			onComplete.dispatch();
-		}
-		else {
-			
+		if (stage3D.context3D == null) {
 			try {
 				stage3D.requestContext3D(renderMode, targetProfile);
 			}
@@ -88,11 +87,21 @@ class Context3DSetup
 				moveToNextProfile();
 			}
 		}
+		else {
+			#if flash
+				sharedContext = true;
+			#end
+			context3D = stage3D.context3D;
+			activeProfile = targetProfile;
+			onComplete.dispatch();
+			trace("context already created, driverInfo = " + context3D.driverInfo);
+		}
 	}
 	
 	private function OnContentCreated(e:Event):Void 
 	{
 		context3D = stage3D.context3D;
+		trace("context3D = " + context3D);
 		
 		if (renderMode == Context3DRenderMode.AUTO && context3D.driverInfo != null && context3D.driverInfo.indexOf("Software") != -1) {
 			moveToNextProfile();

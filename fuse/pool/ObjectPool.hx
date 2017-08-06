@@ -9,7 +9,7 @@ import haxe.ds.ObjectMap;
 class ObjectPool<T>
 {
 	private var pool:Array<T>;
-	private var counter:Int;
+	private var counter:Int = 0;
 	var _pooledType:Class<T>;
 	var args:Array<Dynamic>;
 
@@ -18,13 +18,7 @@ class ObjectPool<T>
 		this.args = args;
 		this._pooledType = _pooledType;
 		pool = new Array();
-		counter = len;
-
-		var i:Int = len;
-		while(--i > -1)
-		{
-			pool[i] = Type.createInstance(_pooledType, args);
-		}
+		spawn(len);
 	}
 
 	public function request():T
@@ -39,5 +33,15 @@ class ObjectPool<T>
 	public function release(s:T):Void
 	{
 		pool[counter++] = s;
+	}
+	
+	public function spawn(len:Int) 
+	{
+		var i:Int = len;
+		while(--i > -1)
+		{
+			pool[i] = Type.createInstance(_pooledType, args);
+		}
+		counter += len;
 	}
 }

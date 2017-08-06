@@ -1,8 +1,8 @@
 package fuse.core.front.atlas.packer;
 
 import fuse.core.front.atlas.items.AtlasItem;
-import fuse.core.front.memory.data.textureData.ITextureData;
-import fuse.core.front.memory.data.textureData.TextureData;
+import fuse.core.communication.data.textureData.ITextureData;
+import fuse.core.communication.data.textureData.TextureData;
 
 /**
  * ...

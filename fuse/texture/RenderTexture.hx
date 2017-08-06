@@ -1,12 +1,12 @@
 package fuse.texture;
 
-import fuse.core.front.memory.data.conductorData.ConductorData;
-import fuse.core.front.memory.data.renderTextureData.IRenderTextureData;
-import fuse.core.front.memory.data.renderTextureData.IRenderTextureDrawData;
-import fuse.core.front.memory.data.renderTextureData.RenderTextureData;
-import fuse.core.front.memory.data.renderTextureData.RenderTextureDrawData;
+import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.renderTextureData.IRenderTextureData;
+import fuse.core.communication.data.renderTextureData.IRenderTextureDrawData;
+import fuse.core.communication.data.renderTextureData.RenderTextureData;
+import fuse.core.communication.data.renderTextureData.RenderTextureDrawData;
 import fuse.core.front.texture.Textures;
-import fuse.display.containers.IDisplay;
+import fuse.display.DisplayObject;
 import openfl.display3D.Context3DTextureFormat;
 
 /**
@@ -36,7 +36,7 @@ class RenderTexture extends Texture
 		renderTextureDrawData = new RenderTextureDrawData(0);
 	}
 	
-	public function draw(display:IDisplay) 
+	public function draw(display:DisplayObject) 
 	{
 		RenderTextureDrawData.OBJECT_POSITION = conductorData.renderTextureCountIndex++;
 		renderTextureDrawData.renderTextureId = textureId;

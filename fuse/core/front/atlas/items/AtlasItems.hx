@@ -1,7 +1,7 @@
 package fuse.core.front.atlas.items;
 
 import fuse.texture.ITexture;
-import fuse.display.containers.DisplayObject;
+import fuse.display.DisplayObject;
 import fuse.core.front.atlas.items.AtlasItem;
 /**
  * ...

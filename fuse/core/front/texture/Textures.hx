@@ -1,6 +1,7 @@
 package fuse.core.front.texture;
 
-import com.imagination.delay.EnterFrame;
+import fuse.core.front.atlas.AtlasBuffers;
+import fuse.core.front.layers.LayerCacheBuffers;
 import fuse.core.front.texture.upload.TextureUploadQue;
 import fuse.texture.BitmapTexture;
 import fuse.texture.Texture;
@@ -12,11 +13,15 @@ import openfl.display3D.Context3DTextureFormat;
  * ...
  * @author P.J.Shand
  */
+@:access(fuse.core.front.atlas.AtlasBuffers)
+@:access(fuse.core.front.layers.LayerCacheBuffers)
+
 class Textures
 {
 	static private var context3D:Context3D;
 	static private var textures = new Map<Int, Texture>();
-	static private var defaultId:Int;
+	static private var blankId:Int;
+	static private var whiteId:Int;
 	static private var textureCount:Int = 0;
 	
 	public function new() { }
@@ -25,21 +30,25 @@ class Textures
 	{
 		Textures.context3D = context3D;
 		
-		createDefaultTexture();
+		createDefaultTextures();
 		
-		EnterFrame.add(OnTick);
+		Fuse.enterFrame.add(OnTick);
 	}
 	
-	static private function OnTick(delta:Int) 
+	static private function OnTick() 
 	{
 		TextureUploadQue.check();
 	}
 	
-	static private function createDefaultTexture() 
+	static private function createDefaultTextures() 
 	{
-		var bmd:BitmapData = new BitmapData(32, 32, true, 0x11000000);
-		var defaultTexture:BitmapTexture = new BitmapTexture(bmd, false);
-		defaultId = defaultTexture.textureId;
+		var blank:BitmapData = new BitmapData(32, 32, true, 0x00000000);
+		var blankTexture:BitmapTexture = new BitmapTexture(blank, false);
+		blankId = blankTexture.textureId;
+		
+		var white:BitmapData = new BitmapData(32, 32, true, 0xFFFFFFFF);
+		var whiteTexture:BitmapTexture = new BitmapTexture(white, false);
+		whiteId = whiteTexture.textureId;
 	}
 	
 	static public function registerTexture(textureId:Int, texture:Texture):Void
@@ -58,9 +67,19 @@ class Textures
 	
 	static public function getTextureId(textureId:Int):Int
 	{
-		if (textures.exists(textureId)){
-			return textureId;
+		if (textures.exists(textureId)) return textureId;
+		
+		if (textureId >= AtlasBuffers.startIndex && textureId < AtlasBuffers.endIndex) {
+			AtlasBuffers.create(textureId);
+			// recheck
+			if (textures.exists(textureId)) return textureId;
 		}
-		return defaultId;
+		else if (textureId >= LayerCacheBuffers.startIndex && textureId < LayerCacheBuffers.endIndex) {
+			LayerCacheBuffers.create(textureId);
+			// recheck
+			if (textures.exists(textureId)) return textureId;
+		}
+		// still can't find textureId, default to blankId
+		return blankId;
 	}
 }

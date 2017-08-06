@@ -1,7 +1,7 @@
 package fuse.texture;
 
-import fuse.core.front.memory.data.textureData.ITextureData;
-import fuse.core.front.memory.data.textureData.TextureData;
+import fuse.core.communication.data.textureData.ITextureData;
+import fuse.core.communication.data.textureData.TextureData;
 import fuse.core.front.texture.upload.TextureUploadQue;
 import fuse.core.front.texture.Textures;
 import fuse.texture.ITexture;
@@ -27,14 +27,17 @@ class Texture implements ITexture
 	private var p2Height:Int;
 	public var name:String;
 	var _clear:Bool = false;
+	public var red:Float = 0;
+	public var green:Float = 0;
+	public var blue:Float = 0;
 	
 	var textureData:ITextureData;
-	var onTextureUploadComplete:Void-> Void;
+	var onTextureUploadCompleteCallback:Void-> Void;
 	public var nativeTexture:NativeTexture;
 	
-	public function new(queUpload:Bool=true, onTextureUploadComplete:Void -> Void = null) 
+	public function new(queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
-		this.onTextureUploadComplete = onTextureUploadComplete;
+		this.onTextureUploadCompleteCallback = onTextureUploadCompleteCallback;
 		textureId = textureIdCount++;
 		textureData = new TextureData(textureId);
 		
