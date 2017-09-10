@@ -46,7 +46,7 @@ class RenderTexture extends Texture
 	
 	override function upload() 
 	{
-		nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, false, 0);
+		nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, true, 0);
 		
 		clear();
 		

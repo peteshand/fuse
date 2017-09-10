@@ -9,7 +9,8 @@ package fuse.core.backend.displaylist;
 	var STAGE = 0;
 	var SPRITE = 1;
 	var DISPLAY_OBJECT = 2;
-	var IMAGE = 3;
-	var QUAD = 4;
+	var DISPLAY_OBJECT_CONTAINER = 3;
+	var IMAGE = 4;
+	var QUAD = 5;
 	
 }

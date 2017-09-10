@@ -73,6 +73,7 @@ class GcoArrayBase<T>
 	
 	public function new(base:Array<T>=null)
 	{
-		this.base = base;
+		if (base == null) this.base = [];
+		else this.base = base;
 	}
 }

@@ -6,7 +6,7 @@ import fuse.pool.Pool;
  * ...
  * @author P.J.Shand
  */
-class CoreStage extends CoreDisplayObject
+class CoreStage extends CoreInteractiveObject
 {
 
 	public function new() 

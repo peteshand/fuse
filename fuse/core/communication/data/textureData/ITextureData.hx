@@ -27,9 +27,11 @@ interface ITextureData
 	public var baseP2Height(get, set):Int;
 	
 	public var textureAvailable(get, set):Int;
+	//public var atlasRedraw(get, set):Int;
 	
 	public var area(get, null):Float;
-	public var placed:Bool;
+	//public var placed:Bool;
+	public var placed(get, set):Int;
 	
 	public var atlasTextureId(get, set):Int;
 	public var atlasBatchTextureIndex(get, set):Int;

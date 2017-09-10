@@ -1,4 +1,5 @@
 package fuse.texture;
+import openfl.display.BitmapData;
 
 /**
  * @author P.J.Shand
@@ -13,4 +14,6 @@ interface ITexture
 	public var name:String;
 	
 	private function upload():Void;
+	
+	function dispose():Void;
 }

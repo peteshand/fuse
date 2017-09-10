@@ -14,7 +14,7 @@ import fuse.core.backend.layerCache.groups.LayerGroup.LayerGroupState;
  * ...
  * @author P.J.Shand
  */
-@:access(fuse)
+@:access(fuse.utils.Notifier)
 class LayerGroups
 {
 	static var OBJECT_POSITION:Int = 0;
@@ -75,7 +75,7 @@ class LayerGroups
 		currentIsStatic.value = coreDisplay.isStatic;
 		coreDisplay.layerGroup = currentLayerGroup;
 		LayerGroups.OBJECT_POSITION++;
-		IndicesData.OBJECT_POSITION++;
+		//IndicesData.OBJECT_POSITION++;
 	}
 	
 	function OnIsStaticChange():Void
@@ -138,8 +138,12 @@ class LayerGroups
 		{
 			if (j < staticLayerGroups.length) {
 				activeGroups[j].active = true;
-				if (activeGroups[j].start != staticLayerGroups[j].start) change = true;
-				if (activeGroups[j].end != staticLayerGroups[j].end) change = true;
+				if (activeGroups[j].start != staticLayerGroups[j].start) {
+					change = true;
+				}
+				if (activeGroups[j].end != staticLayerGroups[j].end) {
+					change = true;
+				}
 				
 				if (activeGroups[j].start == staticLayerGroups[j].start) {
 					if (activeGroups[j].end == staticLayerGroups[j].end) {
@@ -199,7 +203,7 @@ class LayerGroups
 		
 		//trace("change = " + change);
 		if (change) {
-			Core.textureBuildRequiredCount = 0;
+			//Core.textureBuildRequiredCount = 0;
 		}
 	}
 	

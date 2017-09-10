@@ -117,7 +117,7 @@ class SheetPacker
 	
 	function place(textureData:ITextureData):Bool
 	{
-		if (textureData.placed || textureData.textureAvailable == 0) {
+		if (textureData.placed == 1 || textureData.textureAvailable == 0) {
 			return true;
 		}
 		//trace("place");
@@ -164,7 +164,7 @@ class SheetPacker
 				{
 					addPartition(placementReturn.newPartitions[j]);
 				}*/
-				textureData.placed = true;
+				textureData.placed = 1;
 				return true;
 			}
 			else {

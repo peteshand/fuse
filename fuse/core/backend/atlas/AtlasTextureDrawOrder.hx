@@ -16,7 +16,7 @@ import fuse.core.backend.texture.TextureOrder.TextureDef;
  * ...
  * @author P.J.Shand
  */
-@:access(fuse)
+@:access(fuse.texture.RenderTexture)
 class AtlasTextureDrawOrder
 {
 	public var textureStartIndex:Null<Int>;
@@ -75,7 +75,6 @@ class AtlasTextureDrawOrder
 	{
 		textureStartIndex = VertexData.basePosition;
 		textureEndIndex = textureStartIndex + VertexData.BYTES_PER_ITEM;
-		
 		//trace(["setValues", textureStartIndex, textureEndIndex]);
 		if (this.textureId != textureData.textureId || this.renderTargetId != RenderTexture.currentRenderTargetId)
 		{
@@ -88,7 +87,7 @@ class AtlasTextureDrawOrder
 		}
 		
 		VertexData.OBJECT_POSITION++;
-		IndicesData.OBJECT_POSITION++;
+		//IndicesData.OBJECT_POSITION++;
 		//return currentRenderBatchDef.index;
 	}
 	

@@ -4,6 +4,7 @@ import fuse.core.backend.displaylist.DisplayType;
 import fuse.display.Sprite;
 import fuse.display.Quad;
 import fuse.Fuse;
+import msignal.Signal.Signal1;
 
 import openfl.Lib;
 import openfl.events.Event;
@@ -16,11 +17,14 @@ class Stage extends Sprite {
 	@:isVar public var stageWidth(default, set):Int;
 	@:isVar public var stageHeight(default, set):Int;
 	
+	public var onDisplayAdded = new Signal1<DisplayObject>();
+	public var onDisplayRemoved = new Signal1<DisplayObject>();
+	
 	public function new() 
 	{	
-		this.setStage(this);
-		
 		super();
+		
+		this.setStage(this);
 		
 		displayType = DisplayType.STAGE;
 		//this.parentId = -1;

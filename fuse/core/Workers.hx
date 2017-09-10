@@ -15,7 +15,7 @@ import fuse.core.communication.WorkerComms;
 import fuse.core.backend.CoreEntryPoint;
 import msignal.Signal.Signal0;
 import fuse.core.communication.data.MessageType;
-import fuse.core.communication.data.WorkerPayload;
+import fuse.core.communication.messageData.WorkerPayload;
 import fuse.core.communication.data.WorkerSharedProperties;
 
 import flash.system.Worker;
@@ -38,7 +38,7 @@ class Workers
 	var workerStartCount:Int = 0;
 	
 	public var condition:Condition;
-	var conductorData:ConductorData;
+	//var conductorData:ConductorData;
 	
     public function new() { }
 	
@@ -61,8 +61,8 @@ class Workers
 		
 		Fuse.current.keaMemory = new KeaMemory();
 		
-		conductorData = new ConductorData();
-		conductorData.frameIndex = 0;
+		Fuse.current.conductorData = new ConductorData();
+		Fuse.current.conductorData.frameIndex = 0;
 		
 		var workerComm:IWorkerComms = null;
 		if (numberOfWorkers == 0) {
@@ -124,6 +124,27 @@ class Workers
 		
 	}*/
 	
+	public function addMask(display:DisplayObject, mask:DisplayObject) 
+	{
+		for (workerComm in workerComms) 
+		{
+			var maskId:Int = -1;
+			if (mask != null) maskId = mask.objectId;
+			workerComm.send(MessageType.ADD_MASK, { 
+				objectId:display.objectId, 
+				maskId:maskId
+			} );
+		}
+	}
+	
+	public function removeMask(display:DisplayObject) 
+	{
+		for (workerComm in workerComms) 
+		{
+			workerComm.send(MessageType.REMOVE_MASK, display.objectId);
+		}
+	}
+	
 	public function addChild(child:DisplayObject, parent:DisplayObject) 
 	{
 		addChildAt(child, -1, parent);
@@ -148,7 +169,23 @@ class Workers
 	{
 		for (workerComm in workerComms) 
 		{
-			workerComm.send(MessageType.ADD_CHILD, child.objectId);
+			workerComm.send(MessageType.REMOVE_CHILD, child.objectId);
+		}
+	}
+	
+	public function addTexture(textureId:Int) 
+	{
+		for (workerComm in workerComms) 
+		{
+			workerComm.send(MessageType.ADD_TEXTURE, textureId);
+		}
+	}
+	
+	public function removeTexture(textureId:Int) 
+	{
+		for (workerComm in workerComms) 
+		{
+			workerComm.send(MessageType.REMOVE_TEXTURE, textureId);
 		}
 	}
 	
@@ -157,10 +194,10 @@ class Workers
 		
 		/*
 		//trace("OnUpdate");
-		//if (conductorData.frameIndex == -1){
+		//if (Fuse.current.conductorData.frameIndex == -1){
 		//	count++;
-		//	//conductorData.index = count % numberOfWorkers;
-		//	conductorData.frameIndex = count % numberOfWorkers;
+		//	//Fuse.current.conductorData.index = count % numberOfWorkers;
+		//	Fuse.current.conductorData.frameIndex = count % numberOfWorkers;
 		//}
 		
 		
@@ -170,12 +207,12 @@ class Workers
 			//workerComm.send(MessageType.MAIN_THREAD_TICK);
 		//}
 		
-		//conductorData.frameIndex++;
+		//Fuse.current.conductorData.frameIndex++;
 		*/
 		
 		
-		conductorData.stageWidth = Fuse.current.stage.stageWidth;
-		conductorData.stageHeight = Fuse.current.stage.stageHeight;
+		Fuse.current.conductorData.stageWidth = Fuse.current.stage.stageWidth;
+		Fuse.current.conductorData.stageHeight = Fuse.current.stage.stageHeight;
 		
 		//workerComms[conductorData.frameIndex % workerComms.length].send(MessageType.MAIN_THREAD_TICK);
 		

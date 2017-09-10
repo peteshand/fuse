@@ -19,9 +19,11 @@ interface IDisplayData
 	public var color(get, set):Int;
 	public var objectId(get, null):Int;
 	public var textureId(get, set):Int;
+	public var renderLayer(get, set):Int;
+	public var visible(get, set):Int;
 	
-	//public var isStatic(get, set):Int;
-	public var applyPosition(get, set):Int;
-	public var applyRotation(get, set):Int;
+	public var isStatic(get, set):Int;
+	//public var applyPosition(get, set):Int;
+	//public var applyRotation(get, set):Int;
 	
 }

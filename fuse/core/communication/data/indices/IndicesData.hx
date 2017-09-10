@@ -7,7 +7,7 @@ import openfl.Memory;
  */
 class IndicesData implements IIndicesData
 {
-	@:isVar public static var OBJECT_POSITION(get, set):Int = 0;
+	@:isVar private static var OBJECT_POSITION(get, set):Int = 0;
 	public static var BUFFER_SIZE:Int = 10000;
 	
 	static var poolStartPosition:Int;

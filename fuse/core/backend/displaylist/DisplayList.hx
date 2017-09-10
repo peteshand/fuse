@@ -1,5 +1,7 @@
 package fuse.core.backend.displaylist;
 import fuse.core.backend.display.CoreDisplayObject;
+import fuse.core.backend.display.CoreImage;
+import fuse.core.backend.display.CoreInteractiveObject;
 import fuse.core.backend.display.CoreStage;
 import fuse.core.communication.data.displayData.DisplayData;
 import fuse.core.communication.data.displayData.IDisplayData;
@@ -20,14 +22,40 @@ class DisplayList
 		
 	}
 	
+	function addMask(objectId:Int, maskId:Int) 
+	{
+		var coreDisplay:CoreImage = untyped map.get(objectId);
+		if (coreDisplay == null) {
+			trace("displayObject much be added to the stage before it can have a mask attached to it");
+			return;
+		}
+		var maskDisplay:CoreImage = untyped map.get(maskId);
+		if (maskDisplay == null) {
+			trace("mask displayObject much be added to the stage before it can be attached to a displayObject");
+			return;
+		}
+		coreDisplay.mask = maskDisplay;
+		
+	}
+	
+	function removeMask(objectId:Int) 
+	{
+		var coreDisplay:CoreImage = untyped map.get(objectId);
+		if (coreDisplay == null) return;
+		coreDisplay.mask = null;
+	}
+	
 	public function addChildAt(objectId:Int, displayType:Int, parentId:Int, addAtIndex:Int) 
 	{
 		var coreDisplay:CoreDisplayObject = getDisplayFromPool(displayType);
 		coreDisplay.displayData = getDisplayData(objectId);
-		coreDisplay.textureId = coreDisplay.displayData.textureId;
 		coreDisplay.objectId = objectId;
 		
-		var parent:CoreDisplayObject = getParent(parentId);
+		if (Std.is(coreDisplay, CoreImage)){
+			cast(coreDisplay, CoreImage).textureId = coreDisplay.displayData.textureId;
+		}
+		
+		var parent:CoreInteractiveObject = getParent(parentId);
 		if (parent != null) {
 			parent.addChildAt(coreDisplay, addAtIndex);
 		}
@@ -48,21 +76,20 @@ class DisplayList
 		return null;
 	}
 	
-	function getParent(parentId:Int):CoreDisplayObject
+	function getParent(parentId:Int):CoreInteractiveObject
 	{
-		return map.get(parentId);
+		return untyped map.get(parentId);
 	}
 	
 	public function removeChild(objectId:Int) 
 	{
-		var coreDisplay:CoreDisplayObject = map.get(objectId);
+		var coreDisplay:CoreInteractiveObject = untyped map.get(objectId);
 		if (coreDisplay == null) return;
 		
 		if (coreDisplay.parent != null) {
 			coreDisplay.parent.removeChild(coreDisplay);
 		}
 		transformDataMap.remove(objectId);
-		//vertexDataMap.remove(objectId);
 		map.remove(objectId);
 	}
 	
@@ -76,8 +103,6 @@ class DisplayList
 		var displayDataAccess:IDisplayData = null;
 		if (!transformDataMap.exists(objectId)) {
 			displayDataAccess = new DisplayData(objectId);
-			//displayDataAccess = workerComms.getSharedProperty(WorkerSharedProperties.DISPLAY + objectId);
-			//displayDataAccess.endian = Endian.LITTLE_ENDIAN;
 			transformDataMap.set(objectId, displayDataAccess);
 		}
 		return transformDataMap.get(objectId);

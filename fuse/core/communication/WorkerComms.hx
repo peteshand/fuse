@@ -7,7 +7,7 @@ import flash.system.WorkerDomain;
 import openfl.Lib;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.data.WorkerMessage;
-import fuse.core.communication.data.WorkerPayload;
+import fuse.core.communication.messageData.WorkerPayload;
 import fuse.core.communication.data.WorkerSharedProperties;
 
 /**

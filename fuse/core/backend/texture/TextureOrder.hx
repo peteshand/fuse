@@ -15,7 +15,7 @@ import fuse.core.backend.texture.TextureRenderBatch.RenderBatchDef;
  * ...
  * @author P.J.Shand
  */
-@:access(fuse)
+@:access(fuse.texture.RenderTexture)
 class TextureOrder
 {
 	public var textureStartIndex:Null<Int>;
@@ -55,17 +55,22 @@ class TextureOrder
 		//currentRenderBatchDef = null;
 	}
 	
-	public function setValues(textureId:Int, textureData:ITextureData):TextureDef
+	public function setValues(textureId:Int, textureData:ITextureData, visible:Bool):TextureDef
 	{
+		//trace("VertexData.basePosition = " + VertexData.basePosition);
+		
 		textureStartIndex = VertexData.basePosition;
+		//trace("textureStartIndex = " + textureStartIndex);
 		textureEndIndex = textureStartIndex + VertexData.BYTES_PER_ITEM;
 		if (this.textureId != textureId || this.renderTargetId != RenderTexture.currentRenderTargetId)
 		{
 			//trace("setValues");
 			currentTextureDef = getTextureDef(textureDefArray.length);
 			currentTextureDef.startIndex = textureStartIndex;
+			//trace("currentTextureDef.startIndex = " + currentTextureDef.startIndex);
 			currentTextureDef.textureId = this.textureId = textureId;
 			currentTextureDef.renderTargetId = this.renderTargetId = RenderTexture.currentRenderTargetId;
+			//trace("currentTextureDef.renderTargetId = " + currentTextureDef.renderTargetId);
 			currentTextureDef.drawIndex = VertexData.OBJECT_POSITION;
 			currentTextureDef.textureData = this.textureData = textureData;
 			//currentTextureDef.workerDisplays.clear();
@@ -73,10 +78,14 @@ class TextureOrder
 			
 			textureDefArray[textureDefArray.length] = currentTextureDef;
 		}
-		currentTextureDef.numItems++;
+		if (visible) {
+			currentTextureDef.numItems++;
+			VertexData.OBJECT_POSITION++;
+			//IndicesData.OBJECT_POSITION++;
+		}
 		
-		VertexData.OBJECT_POSITION++;
-		IndicesData.OBJECT_POSITION++;
+		//trace("VertexData.basePosition = " + VertexData.basePosition);
+		
 		return currentTextureDef;
 	}
 	

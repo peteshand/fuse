@@ -27,15 +27,12 @@ class TextureData implements ITextureData
 	static inline var BASE_P2_HEIGHT:Int = 22;
 	
 	static inline var TEXTURE_AVAILABLE:Int = 24;
+	static inline var TEXTURE_PLACED:Int = 26;
 	
-	/*static inline var ATLAS_X:Int = 52;
-	static inline var ATLAS_Y:Int = 56;
-	static inline var ATLAS_WIDTH:Int = 60;
-	static inline var ATLAS_HEIGHT:Int = 64;*/
-	static inline var ATLAS_TEXTURE_ID:Int = 26;
-	static inline var ATLAS_BATCH_TEXTURE_INDEX:Int = 28;
+	static inline var ATLAS_TEXTURE_ID:Int = 28;
+	static inline var ATLAS_BATCH_TEXTURE_INDEX:Int = 30;
 	
-	public static inline var BYTES_PER_ITEM:Int = 30;
+	public static inline var BYTES_PER_ITEM:Int = 32;
 	
 	public var memoryBlock:MemoryBlock;
 	public var textureId:Int;
@@ -55,9 +52,10 @@ class TextureData implements ITextureData
 	public var baseP2Height(get, set):Int;
 	
 	public var textureAvailable(get, set):Int;
+	public var placed(get, set):Int;
 	
 	public var area(get, null):Float;
-	public var placed:Bool = false;
+	//public var placed:Bool = false;
 	public var partition = new Notifier<AtlasPartition>();
 	
 	public var atlasTextureId(get, set):Int;
@@ -120,6 +118,10 @@ class TextureData implements ITextureData
 	
 	inline function get_textureAvailable():Int { 
 		return memoryBlock.readInt16(TEXTURE_AVAILABLE);
+	}
+		
+	inline function get_placed():Int { 
+		return memoryBlock.readInt16(TEXTURE_PLACED);
 	}
 	
 	/*inline function get_atlasX():Int { 
@@ -211,6 +213,11 @@ class TextureData implements ITextureData
 	
 	inline function set_textureAvailable(value:Int):Int { 
 		memoryBlock.writeInt16(TEXTURE_AVAILABLE, value);
+		return value;
+	}
+	
+	inline function set_placed(value:Int):Int { 
+		memoryBlock.writeInt16(TEXTURE_PLACED, value);
 		return value;
 	}
 	

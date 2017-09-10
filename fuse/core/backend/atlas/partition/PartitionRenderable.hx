@@ -16,7 +16,8 @@ import fuse.core.backend.texture.TextureRenderBatch.RenderBatchDef;
  * ...
  * @author P.J.Shand
  */
-@:access(fuse)
+@:access(fuse.texture.RenderTexture)
+@:access(fuse.core.backend.atlas.SheetPacker)
 class PartitionRenderable
 {
 	var partition:AtlasPartition;
@@ -26,6 +27,8 @@ class PartitionRenderable
 	
 	public function new(partition:AtlasPartition, textureData:ITextureData) 
 	{
+		//trace("PartitionRenderable VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
+		
 		this.textureData = textureData;
 		this.partition = partition;
 		vertexData = new VertexData();
@@ -50,21 +53,10 @@ class PartitionRenderable
 		var bottom:Float = textureData.baseHeight / textureData.baseP2Height;
 		
 		// Where to sample from source texture
-		// BOTTOM LEFT
-		vertexData.setU(0, left);
-		vertexData.setV(0, bottom);
-		
-		// TOP LEFT
-		vertexData.setU(1, left);
-		vertexData.setV(1, top);
-		
-		// TOP RIGHT
-		vertexData.setU(2, right);
-		vertexData.setV(2, top);
-		
-		// BOTTOM RIGHT
-		vertexData.setU(3, right);
-		vertexData.setV(3, bottom);
+		vertexData.setUV(0, left, bottom);	// BOTTOM LEFT
+		vertexData.setUV(1, left, top);		// TOP LEFT
+		vertexData.setUV(2, right, top);	// TOP RIGHT
+		vertexData.setUV(3, right, bottom); // BOTTOM RIGHT
 		
 		
 		
@@ -82,24 +74,18 @@ class PartitionRenderable
 		var topRight:Point = new Point(partition.x + partition.width, partition.y);
 		var bottomRight:Point = new Point(partition.x + partition.width, partition.y + partition.height);
 		
-		vertexData.setX(0, (bottomLeft.x + offsetX) / mulX);
-		vertexData.setY(0, (-bottomLeft.y - offsetY) / mulY);
-		//vertexData.z1 = 0;
-		
-		vertexData.setX(1, (topLeft.x + offsetX) / mulX);
-		vertexData.setY(1, (-topLeft.y - offsetY) / mulY);
-		//vertexData.z2 = 0;
-		
-		vertexData.setX(2, (topRight.x + offsetX) / mulX);
-		vertexData.setY(2, (-topRight.y - offsetY) / mulY);
-		//vertexData.z3 = 0;
-		
-		vertexData.setX(3, (bottomRight.x + offsetX) / mulX);
-		vertexData.setY(3, (-bottomRight.y - offsetY) / mulY);
-		//vertexData.z4 = 0;
+		vertexData.setXY(0, (bottomLeft.x + offsetX) / mulX,	(-bottomLeft.y - offsetY) / mulY);
+		vertexData.setXY(1, (topLeft.x + offsetX) / mulX,		(-topLeft.y - offsetY) / mulY);
+		vertexData.setXY(2, (topRight.x + offsetX) / mulX,		(-topRight.y - offsetY) / mulY);
+		vertexData.setXY(3, (bottomRight.x + offsetX) / mulX,	(-bottomRight.y - offsetY) / mulY);
 		
 		vertexData.setColor(0x0);
 		vertexData.setAlpha(1);
+		
+		/*vertexData.setMaskT(0, -1);
+		vertexData.setMaskT(1, -1);
+		vertexData.setMaskT(2, -1);
+		vertexData.setMaskT(3, -1);*/
 		
 		//vertexData.setColor(displayData.color);
 		//vertexData.setAlpha(displayData.alpha);
@@ -125,19 +111,20 @@ class PartitionRenderable
 		//textureData.atlasTextureId
 		//trace("textureData.textureId = " + textureData.textureId);
 		//vertexData.batchTextureIndex = 0;// textureData.textureId;
-		vertexData.setT(0, 0);
-		vertexData.setT(1, 0);
-		vertexData.setT(2, 0);
-		vertexData.setT(3, 0);
+		vertexData.setTexture(0);
+		
+		// don't draw masks while drawing into atlas //
+		vertexData.setMaskTexture(-1);
+		///////////////////////////////////////
 		
 		//vertexData.renderBatchIndex = 0;
 		
-		Core.textureOrder.setValues(textureData.textureId, textureData);
+		Core.textureOrder.setValues(textureData.textureId, textureData, true);
 	}
 	
 	public function setVertexData() 
 	{
-		//trace("VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
+		//trace("PartitionRenderable VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
 		
 		var renderBatchIndex:Int = Core.textureRenderBatch.getRenderBatchIndex(VertexData.OBJECT_POSITION);
 		var renderBatchDef:RenderBatchDef = Core.textureRenderBatch.getRenderBatchDef(renderBatchIndex);
@@ -147,15 +134,12 @@ class PartitionRenderable
 			if (renderBatchDef.textureIdArray[i] == textureData.textureId) {
 				//trace("i = " + i);
 				//vertexData.batchTextureIndex = i;
-				vertexData.setT(0, i);
-				vertexData.setT(1, i);
-				vertexData.setT(2, i);
-				vertexData.setT(3, i);
+				vertexData.setTexture(i);
 			}
 		}
 		
 		VertexData.OBJECT_POSITION++;
-		IndicesData.OBJECT_POSITION++;
+		//IndicesData.OBJECT_POSITION++;
 	}
 	
 }

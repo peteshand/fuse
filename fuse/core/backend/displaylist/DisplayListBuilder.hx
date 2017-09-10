@@ -1,5 +1,7 @@
 package fuse.core.backend.displaylist;
 
+import fuse.core.backend.display.CoreImage;
+import fuse.core.backend.layerCache.LayerCaches;
 import fuse.core.communication.IWorkerComms;
 import fuse.core.backend.Conductor;
 import fuse.core.backend.Core;
@@ -18,13 +20,14 @@ import fuse.utils.GcoArray;
  * ...
  * @author P.J.Shand
  */
-@:access(fuse)
+@:access(fuse.texture.RenderTexture)
+@:access(fuse.core.backend.layerCache.LayerCaches)
 class DisplayListBuilder
 {
-	public var hierarchyAll = new GcoArray<CoreDisplayObject>([]);
-	public var hierarchy = new GcoArray<CoreDisplayObject>([]);
-	public var visHierarchyAll = new GcoArray<CoreDisplayObject>([]);
-	public var visHierarchy = new GcoArray<CoreDisplayObject>([]);
+	//public var hierarchyAll = new GcoArray<CoreDisplayObject>([]);
+	//public var hierarchy = new GcoArray<CoreDisplayObject>([]);
+	//public var visHierarchyAll = new GcoArray<CoreDisplayObject>([]);
+	public var visHierarchy = new GcoArray<CoreImage>([]);
 	
 	public var hierarchyApplyTransform = new GcoArray<Void -> Void>([]);
 	
@@ -37,7 +40,9 @@ class DisplayListBuilder
 	{
 		Core.isStatic = Conductor.conductorData.isStatic;
 		
-		if (Core.isStatic == 0) {
+		checkForTextureChanges();
+		
+		if (Core.isStatic == 0 || Core.texturesHaveChanged) {
 			
 			// Reset / Clear objects
 			begin();
@@ -64,6 +69,14 @@ class DisplayListBuilder
 		}
 	}
 	
+	function checkForTextureChanges() 
+	{
+		Core.texturesHaveChanged = Core.textures.checkForUpdates();
+		//Core.hierarchyBuildRequired = true;
+		//Core.textureBuildRequired = true;
+		//Core.textureBuildNextFrame = true;
+	}
+	
 	inline function begin() 
 	{
 		Conductor.conductorData.busy = 1;
@@ -73,16 +86,16 @@ class DisplayListBuilder
 			Core.textureBuildRequired = true;
 		}
 		
+		//trace("begin VertexData.OBJECT_POSITION");
 		// Reset vertexData read position
 		VertexData.OBJECT_POSITION = 0;
-		IndicesData.OBJECT_POSITION = 0;
 		
 		if (Core.hierarchyBuildRequired) {
-			this.hierarchyAll.clear();
-			this.visHierarchyAll.clear();
+			//this.hierarchyAll.clear();
+			//this.visHierarchyAll.clear();
 		}
 		
-		if (Core.textureBuildRequired) {
+		if (Core.textureBuildRequired || Core.texturesHaveChanged) {
 			Core.atlasTextureDrawOrder.begin();
 			Core.textureOrder.begin();
 		}
@@ -104,12 +117,19 @@ class DisplayListBuilder
 	
 	inline function createDynamicTextureAtlas() 
 	{
+		//trace("createDynamicTextureAtlas VertexData.OBJECT_POSITION");
+		//trace("createDynamicTextureAtlas");
 		VertexData.OBJECT_POSITION = 0;
-		IndicesData.OBJECT_POSITION = 0;
 		
-		if (Core.textureBuildRequired) {
+		
+		
+		//trace("Core.textureBuildRequired = " + Core.textureBuildRequired);
+		if (Core.textureBuildRequired || Core.texturesHaveChanged) {
 			Core.atlasPacker.update();
 		}
+		/*else {
+			Core.textures.checkForUpdates();
+		}*/
 		
 		AtlasPacker.NUM_ATLAS_DRAWS = VertexData.OBJECT_POSITION;
 		//trace("Number of atlas draws = " + VertexData.OBJECT_POSITION);
@@ -118,17 +138,17 @@ class DisplayListBuilder
 	
 	inline function quadBatchTextureDraws() 
 	{
+		//trace("quadBatchTextureDraws VertexData.OBJECT_POSITION");
 		VertexData.OBJECT_POSITION = 0;
-		IndicesData.OBJECT_POSITION = 0;
 		
-		if (Core.textureBuildRequired){
+		if (Core.textureBuildRequired || Core.texturesHaveChanged){
 			this.setTextures();
 			VertexData.OBJECT_POSITION = AtlasPacker.NUM_ATLAS_DRAWS;
 			//WorkerCore.atlasTextureRenderBatch.update();
 			//trace(WorkerCore.textureBuildRequired);
 		}
 		
-		if (Core.textureBuildRequired) {
+		if (Core.textureBuildRequired || Core.texturesHaveChanged) {
 			Core.textureRenderBatch.begin();
 			Core.textureRenderBatch.update();
 			Core.textureRenderBatch.end();
@@ -151,8 +171,11 @@ class DisplayListBuilder
 	{		
 		this.buildHierarchy(root);
 		this.applyTransform();
+		this.OrderByRenderLayers(visHierarchy);
+		this.buildLayerCache();
+		
 		//this.updateInternalData();
-		if (Core.textureBuildRequired){
+		if (Core.textureBuildRequired || Core.texturesHaveChanged){
 			this.setAtlasTextures();
 		}
 	}
@@ -160,7 +183,7 @@ class DisplayListBuilder
 	inline function buildHierarchy(root:CoreDisplayObject) 
 	{
 		if (Core.hierarchyBuildRequired) {
-			hierarchy.clear();
+			//hierarchy.clear();
 			visHierarchy.clear();
 			hierarchyApplyTransform.clear();
 			if (root != null) root.buildHierarchy();
@@ -169,10 +192,37 @@ class DisplayListBuilder
 	
 	inline function applyTransform() 
 	{		
-		Core.layerCaches.begin();
+		
 		for (i in 0...hierarchyApplyTransform.length) 
 		{
 			hierarchyApplyTransform[i]();
+		}
+		
+	}
+	
+	function OrderByRenderLayers(displayObjects:GcoArray<CoreImage>):Void
+	{
+		var swapping = false;
+		var temp:CoreImage;
+		while (!swapping) {
+			swapping = true;
+			for (i in 0...displayObjects.length-1) {
+				if (displayObjects[i].renderLayer > displayObjects[i+1].renderLayer) {
+					temp = displayObjects[i+1];
+					displayObjects[i+1] = displayObjects[i];
+					displayObjects[i] = temp;
+					swapping = false;
+				}
+			}
+		}
+	}
+	
+	function buildLayerCache() 
+	{
+		Core.layerCaches.begin();
+		for (i in 0...visHierarchy.length) 
+		{
+			visHierarchy[i].buildLayerCache();
 		}
 		Core.layerCaches.end();
 	}
@@ -187,24 +237,23 @@ class DisplayListBuilder
 	
 	inline function setAtlasTextures() 
 	{
+		//trace("setAtlasTextures VertexData.OBJECT_POSITION");
 		VertexData.OBJECT_POSITION = 0;
-		IndicesData.OBJECT_POSITION = 0;
 		
-		for (k in 0...hierarchy.length) 
+		for (k in 0...visHierarchy.length) 
 		{
-			hierarchy[k].setAtlasTextures();
+			visHierarchy[k].setAtlasTextures();
 		}
 	}
 	
 	inline function checkLayerCache() 
 	{
 		if (Core.layerCaches.change){
-			VertexData.OBJECT_POSITION = 0;
-			IndicesData.OBJECT_POSITION = 0;
+			LayerCaches.OBJECT_COUNT = 0;
 			
-			for (k in 0...hierarchy.length) 
+			for (k in 0...visHierarchy.length) 
 			{
-				hierarchy[k].checkLayerCache();
+				visHierarchy[k].checkLayerCache();
 			}
 		}
 	}
@@ -273,7 +322,7 @@ class DisplayListBuilder
 	
 	function setVertexData() 
 	{
-		if (Core.textureBuildRequired) {
+		if (Core.textureBuildRequired || Core.texturesHaveChanged) {
 			/*for (k in 0...visHierarchyAll.length) 
 			{
 				visHierarchyAll[k].setTextureIndex();
@@ -303,9 +352,10 @@ class DisplayListBuilder
 			}*/
 		}
 		
+		//trace("setVertexData VertexData.OBJECT_POSITION");
 		VertexData.OBJECT_POSITION = 0;
-		IndicesData.OBJECT_POSITION = 0;
-		if (Core.textureBuildRequired){
+		//trace("Core.textureBuildRequired = " + Core.textureBuildRequired);
+		if (Core.textureBuildRequired || Core.texturesHaveChanged){
 			Core.atlasPacker.setVertexData();
 		}
 		
@@ -385,7 +435,8 @@ class DisplayListBuilder
 		//if (WorkerCore.hierarchyBuildRequired) {
 			Conductor.conductorData.numberOfRenderables = VertexData.OBJECT_POSITION;
 			Conductor.conductorData.numTriangles = VertexData.OBJECT_POSITION * 2;
-			//trace("VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
 		//}
+		
+		//trace("END");
 	}
 }

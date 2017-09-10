@@ -23,11 +23,11 @@ class DisplayData implements IDisplayData
 	static inline var INDEX_COLOR:Int = 40;
 	
 	static inline var INDEX_TEXTURE_ID:Int = 44;
-	//static inline var INDEX_IS_STATIC:Int = 48;
-	static inline var INDEX_APPLY_POSITION:Int = 48;
-	static inline var INDEX_APPLY_ROTATION:Int = 50;
+	static inline var INDEX_RENDER_LAYER:Int = 48;
+	static inline var INDEX_IS_STATIC:Int = 52;
+	static inline var INDEX_VISIBLE:Int = 54;
 	
-	public static inline var BYTES_PER_ITEM:Int = 52;
+	public static inline var BYTES_PER_ITEM:Int = 56;
 	
 	var memoryBlock:MemoryBlock;
 	
@@ -42,11 +42,11 @@ class DisplayData implements IDisplayData
 	public var rotation(get, set):Float;
 	public var alpha(get, set):Float;
 	public var color(get, set):Int;
-	
 	public var textureId(get, set):Int;
-	//public var isStatic(get, set):Int;
-	public var applyPosition(get, set):Int;
-	public var applyRotation(get, set):Int;
+	public var renderLayer(get, set):Int;
+	
+	public var isStatic(get, set):Int;
+	public var visible(get, set):Int;
 	
 	private var _objectId:Int;
 	public var objectId(get, null):Int;
@@ -107,16 +107,17 @@ class DisplayData implements IDisplayData
 		return memoryBlock.readInt(INDEX_TEXTURE_ID);
 	}
 	
-	/*inline function get_isStatic():Int { 
-		return memoryBlock.readByte(INDEX_IS_STATIC);
-	}*/
-	
-	inline function get_applyPosition():Int { 
-		return memoryBlock.readByte(INDEX_APPLY_POSITION);
+	inline function get_renderLayer():Int { 
+		return memoryBlock.readInt(INDEX_RENDER_LAYER);
 	}
 	
-	inline function get_applyRotation():Int { 
-		return memoryBlock.readByte(INDEX_APPLY_ROTATION);
+	
+	inline function get_isStatic():Int { 
+		return memoryBlock.readByte(INDEX_IS_STATIC);
+	}
+	
+	inline function get_visible():Int { 
+		return memoryBlock.readByte(INDEX_VISIBLE);
 	}
 	
 	
@@ -185,20 +186,18 @@ class DisplayData implements IDisplayData
 		return value;
 	}
 	
-	/*inline function set_isStatic(value:Int):Int { 
+	inline function set_renderLayer(value:Int):Int { 
+		memoryBlock.writeInt(INDEX_RENDER_LAYER, value);
+		return value;
+	}
+	
+	inline function set_isStatic(value:Int):Int { 
 		memoryBlock.writeByte(INDEX_IS_STATIC, value);
 		return value;
-	}*/
-	
-	inline function set_applyPosition(value:Int):Int { 
-		memoryBlock.writeByte(INDEX_APPLY_POSITION, value);
-		return value;
 	}
 	
-	inline function set_applyRotation(value:Int):Int { 
-		memoryBlock.writeByte(INDEX_APPLY_ROTATION, value);
+	inline function set_visible(value:Int):Int { 
+		memoryBlock.writeByte(INDEX_VISIBLE, value);
 		return value;
 	}
-	
-	
 }

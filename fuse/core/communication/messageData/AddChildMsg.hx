@@ -1,9 +1,9 @@
-package fuse.core.communication.data;
+package fuse.core.communication.messageData;
 
 /**
  * @author P.J.Shand
  */
-typedef AddChild =
+typedef AddChildMsg =
 {
 	objectId:Int,
 	displayType:Int,

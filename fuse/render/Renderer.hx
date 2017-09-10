@@ -45,6 +45,8 @@ class Renderer
 	var currentBlendMode:Int = -1;
 	var targetTextureId = new Notifier<Int>(-2);
 	var shaderProgram = new Notifier<ShaderProgram>();
+	var numItemsInBatch:Int;
+	var quadCount:Int;
 	
 	public function new(context3D:Context3D, sharedContext:Bool) 
 	{
@@ -79,16 +81,46 @@ class Renderer
 	{
 		if (shaderProgram.value == null) return;
 		
+		//trace("quadCount = " + quadCount);
+		//trace("start index = " + Fuse.current.keaMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM));
+		
 		programChanged = true;
-		var numItems:Int = conductorData.numberOfRenderables;
-		shaderProgram.value.indexbuffer.uploadFromByteArray(KeaMemory.memory, Fuse.current.keaMemory.indicesDataPool.start, 0, 6 * numItems);
+		//var numItems:Int = conductorData.numberOfRenderables;
+		//debugIndex(numItemsInBatch, Fuse.current.keaMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM));
+		
+		
+		
+		/*shaderProgram.value.indexbuffer.uploadFromByteArray(
+			KeaMemory.memory, 
+			Fuse.current.keaMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM), 
+			0, 
+			ShaderProgram.INDICES_PER_QUAD * numItemsInBatch
+		);*/
+		//trace(quadCount * IndicesData.BYTES_PER_ITEM);
 		
 		// assign shader program
-		context3DProgram.setProgram(shaderProgram.value.program);
+		//context3DProgram.setProgram(shaderProgram.value.program);
+	}
+	
+	function debugIndex(numItemsInBatch:Int, startIndex:Int) 
+	{
+		KeaMemory.memory.position = startIndex;
+		for (i in 0...numItemsInBatch) 
+		{
+			var i1:Int = KeaMemory.memory.readShort();
+			var i2:Int = KeaMemory.memory.readShort();
+			var i3:Int = KeaMemory.memory.readShort();
+			var i4:Int = KeaMemory.memory.readShort();
+			var i5:Int = KeaMemory.memory.readShort();
+			var i6:Int = KeaMemory.memory.readShort();
+			trace([i1, i2, i3, i4, i5, i6]);
+		}
+		//trace("debugIndex");
 	}
 	
 	function OnTargetTextureIdChange() 
 	{
+		//trace("targetTextureId.value = " + targetTextureId.value);
 		if (targetTextureId.value == -1) {
 			#if flash
 				context3D.setRenderToTexture(null, false, 0, 0);
@@ -104,6 +136,8 @@ class Renderer
 				texture._clear = false;
 				context3D.clear(texture.red, texture.green, texture.blue, 0);
 			}
+			
+			//context3D.clear(Math.random(), Math.random(), Math.random(), 1);
 		}
 	}
 	
@@ -136,27 +170,73 @@ class Renderer
 		
 		if (numItems == 0) return;
 		
-		programChanged = false;
+		/*programChanged = false;
 		shaderProgram.value = shaderPrograms.getProgram(numItems, numTriangles);
 		
 		var batchData:IBatchData = textureRenderBatch.getBatchData(0);
+		
 		if (batchData != null && (conductorData.isStatic == 0 || programChanged)) {
+			
+			vertexDebug(batchData, numItems);
 			shaderProgram.value.vertexbuffer.uploadFromByteArray(KeaMemory.memory, batchData.startIndex, 0, 4 * numItems);
-		}
+			
+		}*/
+		
+		//trace("numberOfBatches = " + conductorData.numberOfBatches);
+		
+		
 		
 		var itemCount:Int = 0;
+		quadCount = 0;
 		
-		//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
+		shaderProgram.value = null;
 		
 		for (i in 0...conductorData.numberOfBatches) 
 		{
 			var batchData:IBatchData = textureRenderBatch.getBatchData(i);
-			var numItemsInBatch:Int = batchData.numItems;
+			numItemsInBatch = batchData.numItems;
+			//if (numItemsInBatch > 1) numItemsInBatch--;
+			
 			if (numItemsInBatch == 0) continue;
+			
+			//trace("batch = " + i);
+			//trace("numItemsInBatch = " + numItemsInBatch);
+			//
+			//trace([numItemsInBatch * ShaderProgram.VERTICES_PER_QUAD, numItemsInBatch * ShaderProgram.INDICES_PER_QUAD]);
+			programChanged = false;
+			
+			
+			shaderProgram.value = shaderPrograms.getProgram(numItemsInBatch, -1);
+			
+			
+			var batchData:IBatchData = textureRenderBatch.getBatchData(i);
+			
+			if (batchData != null && (conductorData.isStatic == 0 || programChanged)) {
+				
+				//trace("quadCount = " + quadCount);
+				//trace("VertexData.BYTES_PER_ITEM = " + VertexData.BYTES_PER_ITEM);
+				//trace("batchData.startIndex = " + batchData.startIndex);
+				//
+				//vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, numItemsInBatch);
+				//
+				//trace("quadCount = " + quadCount);
+				shaderProgram.value.vertexbuffer.uploadFromByteArray(
+					KeaMemory.memory, 
+					quadCount * VertexData.BYTES_PER_ITEM,
+					0, 
+					ShaderProgram.VERTICES_PER_QUAD * numItemsInBatch
+				);
+				
+				//trace(ShaderProgram.VERTICES_PER_QUAD * numItemsInBatch);
+				
+			}
+			
+			context3DProgram.setProgram(shaderProgram.value.program);
+			
 			
 			targetTextureId.value = batchData.renderTargetId;
 			
-			//debugData(i, batchData, numItemsInBatch);
+			//batchDebug(batchData);
 			
 			context3DTexture.setContextTexture(0, batchData.textureId1);
 			context3DTexture.setContextTexture(1, batchData.textureId2);
@@ -176,17 +256,44 @@ class Renderer
 			
 			//trace("itemCount = " + itemCount);
 			
-			context3D.drawTriangles(shaderProgram.value.indexbuffer, itemCount, numItemsInBatch * 2);
+			//if (numItemsInBatch > 1) numItemsInBatch = 1;
+			//trace("numItemsInBatch = " + numItemsInBatch);
+			
+			context3D.drawTriangles(shaderProgram.value.indexbuffer, 0, numItemsInBatch * 2);
 			#if flash
-				itemCount += numItemsInBatch * 6;
+				itemCount += numItemsInBatch * ShaderProgram.INDICES_PER_QUAD;
 			#else
-				itemCount += numItemsInBatch * 6 * 2;
+				itemCount += numItemsInBatch * ShaderProgram.INDICES_PER_QUAD * 2;
 			#end
+			
+			quadCount++;
+		}
+		
+		
+		if (Fuse.cleanContext) {
+			context3DTexture.clear();
+			shaderPrograms.clear();
+			context3DProgram.setProgram(null);
+			shaderProgram.value = null;
+			targetTextureId.value = -2;
+			
+			
 		}
 	}
 	
-	inline function debugData(i:Int, batchData:IBatchData, numItemsInBatch:Int) 
+	function batchDebug(batchData:IBatchData) 
 	{
+		//trace("startIndex      = " + batchData.startIndex);
+		trace("numItemsInBatch = " + batchData.numItems);
+		trace([batchData.textureId1, batchData.textureId2, batchData.textureId3, batchData.textureId4]);
+		trace("renderTargetId = " + batchData.renderTargetId);
+	}
+	
+	inline function vertexDebug(startIndex:Int, numItems:Int) 
+	{
+		trace("numItems = " + numItems);
+		if (numItems == 0) return;
+		
 		/*for (k in 0...numItems) 
 		{
 			KeaMemory.memory.position = Fuse.current.keaMemory.indicesDataPool.start + (k * IndicesData.BYTES_PER_ITEM);
@@ -199,43 +306,67 @@ class Renderer
 			trace([i1, i2, i3, i4, i5, i6]);
 		}*/
 		
-		trace("Batch: " + i);
+		/*trace("Batch: " + i);
 		trace("batchData.startIndex = " + batchData.startIndex);
 		trace("numItemsInBatch = " + numItemsInBatch);
 		trace([batchData.textureId1, batchData.textureId2, batchData.textureId3, batchData.textureId4]);
-		trace("targetTextureId = " + targetTextureId.value);
+		trace("targetTextureId = " + targetTextureId.value);*/
 		
-		for (j in 0...numItemsInBatch) 
+		KeaMemory.memory.position = startIndex;// + (j * VertexData.BYTES_PER_ITEM);
+		trace("startIndex = " + startIndex);
+		
+		for (j in 0...numItems) 
 		{
-			KeaMemory.memory.position = batchData.startIndex + (j * VertexData.BYTES_PER_ITEM);
-			//trace("KeaMemory.memory.position = " + KeaMemory.memory.position);
+			trace("KeaMemory.memory.position = " + KeaMemory.memory.position);
 			
-			for (k in 0...1) 
+			for (k in 0...ShaderProgram.VERTICES_PER_QUAD) 
 			{
+				
 				var INDEX_X:Float = KeaMemory.memory.readFloat();
+				
+				/*var p:Int = KeaMemory.memory.position;
+				KeaMemory.memory.writeFloat(-1);
+				KeaMemory.memory.position = p;*/
 				var INDEX_Y:Float = KeaMemory.memory.readFloat();
+				
 				var INDEX_U:Float = KeaMemory.memory.readFloat();
 				var INDEX_V:Float = KeaMemory.memory.readFloat();
-				var INDEX_T:Float = KeaMemory.memory.readFloat();
+				var INDEX_MU:Float = KeaMemory.memory.readFloat();
+				var INDEX_MV:Float = KeaMemory.memory.readFloat();
+				
+				var INDEX_Texture:Float = KeaMemory.memory.readFloat();
+				var INDEX_MaskTexture:Float = KeaMemory.memory.readFloat();
+				var INDEX_MASK_BASE_VALUE:Float = KeaMemory.memory.readFloat();
 				var INDEX_ALPHA:Float = KeaMemory.memory.readFloat();
+				
 				var INDEX_R:Float = KeaMemory.memory.readFloat();
 				var INDEX_G:Float = KeaMemory.memory.readFloat();
 				var INDEX_B:Float = KeaMemory.memory.readFloat();
 				var INDEX_A:Float = KeaMemory.memory.readFloat();
 				
+				trace([INDEX_X, INDEX_Y, INDEX_U, INDEX_V]);
+				trace([INDEX_Texture, INDEX_ALPHA]);
+				//trace([INDEX_MU, INDEX_MV, INDEX_MaskTexture, INDEX_MASK_BASE_VALUE]);
+				//trace([INDEX_R, INDEX_G, INDEX_B, INDEX_A]);
+				trace("--");
+
 				//trace("INDEX_X = " + INDEX_X);
 				//trace("INDEX_Y = " + INDEX_Y);
 				//trace("INDEX_U = " + INDEX_U);
 				//trace("INDEX_V = " + INDEX_V);
-				trace("INDEX_T = " + INDEX_T);
-				//trace("INDEX_ALPHA = " + INDEX_ALPHA);
+				////trace("INDEX_MU = " + INDEX_MU);
+				////trace("INDEX_MV = " + INDEX_MV);
+				//trace("INDEX_Texture = " + INDEX_Texture);
+				////trace("INDEX_MaskTexture = " + INDEX_MaskTexture);
+				////trace("INDEX_MASK_BASE_VALUE = " + INDEX_MASK_BASE_VALUE);
+				////trace("INDEX_ALPHA = " + INDEX_ALPHA);
 				//trace("INDEX_R = " + INDEX_R);
 				//trace("INDEX_G = " + INDEX_G);
 				//trace("INDEX_B = " + INDEX_B);
 				//trace("INDEX_A = " + INDEX_A);
 				
 			}
-			
+			//trace("---------------------");
 		}
 	}
 	

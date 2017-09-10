@@ -2,16 +2,17 @@ package fuse.core.backend;
 
 import fuse.Fuse;
 import fuse.core.backend.Core;
+import fuse.core.communication.messageData.AddMaskMsg;
 import fuse.core.front.memory.KeaMemory;
 import fuse.core.communication.data.conductorData.ConductorData;
 import fuse.core.communication.IWorkerComms;
 import fuse.core.backend.Conductor;
-import fuse.core.communication.data.AddChild;
+import fuse.core.communication.messageData.AddChildMsg;
 import openfl.Lib;
 import openfl.events.Event;
 import openfl.utils.ByteArray;
 import fuse.core.communication.data.MessageType;
-import fuse.core.communication.data.WorkerPayload;
+import fuse.core.communication.messageData.WorkerPayload;
 import fuse.core.communication.data.WorkerSharedProperties;
 
 /**
@@ -42,6 +43,10 @@ class CoreEntryPoint
 		workerComms.addListener(MessageType.ADD_CHILD, OnAddChild);
 		workerComms.addListener(MessageType.ADD_CHILD_AT, OnAddChildAt);
 		workerComms.addListener(MessageType.REMOVE_CHILD, OnRemoveChild);
+		workerComms.addListener(MessageType.ADD_MASK, OnAddMask);
+		workerComms.addListener(MessageType.REMOVE_MASK, OnRemoveMask);
+		workerComms.addListener(MessageType.ADD_TEXTURE, OnAddTexture);
+		workerComms.addListener(MessageType.REMOVE_TEXTURE, OnRemoveTexture);
 		//workerComms.addListener(MessageType.ADD_TEXTURE, OnAddTexture);
 		
 		index = workerComms.getSharedProperty(WorkerSharedProperties.INDEX);
@@ -84,67 +89,39 @@ class CoreEntryPoint
 		Core.STAGE_WIDTH = Conductor.conductorData.stageWidth;
 		Core.STAGE_HEIGHT = Conductor.conductorData.stageHeight;
 		
-		//trace("OnTick: " + index);
-		
-		/*
-		 * Loop through whole displaylist in a Hierarchical order and calculate their transform matrix
-		 * TODO: skip items that are currently in cached layer
-		*/
-		//displayListBuilder.buildHierarchy();	// Hierarchical
-		
-		/*
-		 * - Loops through whole displaylist in linear order and updates isStatic
-		 * - If Renderer.layerStateChangeAvailable == true
-		 * -- Order displaylist by layerIndex > low to high
-		 * -- Group displaylist items into cache and direct render layers
-		 * Calculate cache vs direct layers
-		*/
-		//workerLayerConstruct.update();
-		
-		// Calculate texture draw order and generate atlas buffers
-		//logic.atlasBuffer.update();		// Linear
-		
-		// Draw renderables in linear order (cache and direct layers)
-		//logic.renderer.render(g2);		// Linear
-		
-		//if (Conductor.conductorData.processIndex % numberOfWorkers == index){
-			//if (index == 0) trace("Mod = " + (Math.floor(Conductor.conductorData.frameIndex % numberOfWorkers)));
-			//if (Conductor.conductorData.frameIndex % numberOfWorkers == index){
-				
-				//Conductor.conductorData.busy = 1;
-				//
-				//displayListBuilder.buildHierarchy();
-				//
-				//
-				//
-				//displayListBuilder.updateVertexData();
-				//
-				//
-				//
-				//VertexData.OBJECT_POSITION = 0;
-				//displayListBuilder.setVertexData();
-				//
-				//renderTextureManager.update();
-				//
-				//atlasPacker.update();
-				//
-				//Conductor.conductorData.busy = 0;
-				//
-				//Conductor.conductorData.frameIndex++;
-				//hierarchyBuildRequired = false;
-			//}
-		//}
-		
 		Core.displayListBuilder.update();
 	}
 	
-	function OnAddChild(addChildPayload:AddChild) 
+	function OnAddMask(addChildPayload:AddMaskMsg) 
+	{
+		Core.displayList.addMask(addChildPayload.objectId, addChildPayload.maskId);
+		//Core.hierarchyBuildRequired = true;
+	}
+	
+	function OnRemoveMask(workerPayload:WorkerPayload) 
+	{
+		var objectId:Int = workerPayload;
+		Core.displayList.removeMask(objectId);
+		//Core.hierarchyBuildRequired = true;
+	}
+	
+	private function OnAddTexture(textureId:Int):Void 
+	{
+		Core.textures.create(textureId);
+	}
+	
+	private function OnRemoveTexture(textureId:Int):Void 
+	{
+		Core.textures.dispose(textureId);
+	}
+	
+	function OnAddChild(addChildPayload:AddChildMsg) 
 	{
 		addChildPayload.addAtIndex = -1;
 		OnAddChildAt(addChildPayload);
 	}
 	
-	function OnAddChildAt(addChildPayload:AddChild) 
+	function OnAddChildAt(addChildPayload:AddChildMsg) 
 	{
 		Core.displayList.addChildAt(addChildPayload.objectId, addChildPayload.displayType, addChildPayload.parentId, addChildPayload.addAtIndex);
 		Core.hierarchyBuildRequired = true;

@@ -41,6 +41,9 @@ class Texture implements ITexture
 		textureId = textureIdCount++;
 		textureData = new TextureData(textureId);
 		
+		trace(this);
+		trace("textureId = " + textureId);
+		
 		p2Width = PowerOfTwo.getNextPowerOfTwo(width);
 		p2Height = PowerOfTwo.getNextPowerOfTwo(height);
 		
@@ -60,13 +63,15 @@ class Texture implements ITexture
 		
 		textureData.textureAvailable = 0;
 		
+		Fuse.current.workers.addTexture(textureId);
+		
 		if (queUpload) TextureUploadQue.add(this);
 		else upload();
 	}
 	
 	function createNativeTexture() 
 	{
-		nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA_PACKED, false, 0);
+		nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, false, 0);
 		return nativeTexture;
 	}
 	
@@ -75,4 +80,13 @@ class Texture implements ITexture
 		throw new Error("This function should be overriden");
 	}
 	
+	public function dispose():Void
+	{
+		Fuse.current.workers.removeTexture(textureId);
+		Textures.deregisterTexture(textureId, this);
+		if (nativeTexture != null) {
+			nativeTexture.dispose();
+			nativeTexture = null;
+		}
+	}
 }

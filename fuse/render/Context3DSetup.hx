@@ -92,6 +92,7 @@ class Context3DSetup
 				sharedContext = true;
 			#end
 			context3D = stage3D.context3D;
+			trace("driverInfo = " + context3D.driverInfo);
 			activeProfile = targetProfile;
 			onComplete.dispatch();
 			trace("context already created, driverInfo = " + context3D.driverInfo);
@@ -107,6 +108,7 @@ class Context3DSetup
 			moveToNextProfile();
 		}
 		else {
+			trace("driverInfo = " + context3D.driverInfo);
 			activeProfile = targetProfile;
 			onComplete.dispatch();
 		}

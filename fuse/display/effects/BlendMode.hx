@@ -14,6 +14,7 @@ class BlendMode
 	{
 		factors = new Map<Int, BlendFactors>();
 		factors.set(0, { sourceFactor:Context3DBlendFactor.ONE, destinationFactor:Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA } );
+		//factors.set(0, { sourceFactor:Context3DBlendFactor.SOURCE_ALPHA, destinationFactor:Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA } );
 	}
 	
 	public function new() 

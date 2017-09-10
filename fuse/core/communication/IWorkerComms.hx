@@ -1,5 +1,5 @@
 package fuse.core.communication;
-import fuse.core.communication.data.WorkerPayload;
+import fuse.core.communication.messageData.WorkerPayload;
 
 /**
  * @author P.J.Shand

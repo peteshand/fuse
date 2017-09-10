@@ -4,7 +4,6 @@ import fuse.core.backend.layerCache.groups.LayerGroup;
 import fuse.core.backend.layerCache.groups.LayerGroup.LayerGroupState;
 import fuse.core.backend.layerCache.groups.LayerGroups;
 import fuse.core.backend.layerCache.groups.StaticLayerGroup;
-import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.front.layers.LayerCacheBuffers;
 import fuse.pool.Pool;
 import fuse.utils.GcoArray;
@@ -19,6 +18,8 @@ import fuse.core.backend.display.CoreDisplayObject.StaticDef;
 @:access(fuse)
 class LayerCaches
 {
+	public static var OBJECT_COUNT:Int = 0;
+	
 	var layerGroups:LayerGroups;
 	
 	public var allLayerGroups(get, null):GcoArray<LayerGroup>;
@@ -71,12 +72,12 @@ class LayerCaches
 	public function checkRenderTarget(staticDef:StaticDef) 
 	{
 		if (currentIndex < activeGroups.length && activeGroups[currentIndex].active) {
-			if (VertexData.OBJECT_POSITION < activeGroups[currentIndex].start) {
+			if (LayerCaches.OBJECT_COUNT < activeGroups[currentIndex].start) {
 				staticDef.layerCacheRenderTarget = -1;
 				staticDef.state = LayerGroupState.MOVING;
 				staticDef.index = -1;
 			}
-			else if (VertexData.OBJECT_POSITION > activeGroups[currentIndex].end) {
+			else if (LayerCaches.OBJECT_COUNT > activeGroups[currentIndex].end) {
 				staticDef.layerCacheRenderTarget = -1;
 				staticDef.state = LayerGroupState.MOVING;
 				staticDef.index = -1;
@@ -86,7 +87,7 @@ class LayerCaches
 				staticDef.layerCacheRenderTarget = activeGroups[currentIndex].textureId;
 				staticDef.state = activeGroups[currentIndex].state.value;
 				staticDef.index = currentIndex;
-				VertexData.OBJECT_POSITION++;
+				LayerCaches.OBJECT_COUNT++;
 				return activeGroups[currentIndex];
 			}
 		}
@@ -95,7 +96,7 @@ class LayerCaches
 			staticDef.state = LayerGroupState.MOVING;
 			staticDef.index = -1;
 		}
-		VertexData.OBJECT_POSITION++;
+		LayerCaches.OBJECT_COUNT++;
 		return null;
 	}
 	

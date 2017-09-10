@@ -10,6 +10,7 @@ import fuse.display.Stage;
 import fuse.render.Context3DSetup;
 import fuse.render.Renderer;
 import fuse.core.Workers;
+import fuse.text.SnapTextField;
 import openfl.display.Stage3D;
 
 import msignal.Signal.Signal0;
@@ -29,6 +30,7 @@ import flash.system.Worker;
 class Fuse extends EventDispatcher
 {
 	static public inline var ROOT_CREATED:String = "rootCreated";
+	public static var MAX_TEXTURE_SIZE:Int = 4096;
 	
 	@:isVar 
 	public static var current(default, null):Fuse;
@@ -62,10 +64,12 @@ class Fuse extends EventDispatcher
 	var stageWidth:Int;
 	var stageHeight:Int;
 	var dimensionChange:Bool = false;
+	public static var cleanContext:Bool;
 	
 	public function new(rootClass:Class<DisplayObject>, keaConfig:KeaConfig, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
 	{	
 		super();
+		
 		
 		Fuse.current = this;
 		index = count++;
@@ -100,6 +104,8 @@ class Fuse extends EventDispatcher
 	
 	function OnContextCreated() 
 	{
+		Fuse.cleanContext = context3DSetup.sharedContext;
+		
 		stage = new Stage();
 		renderer = new Renderer(context3DSetup.context3D, context3DSetup.sharedContext);
 		
@@ -135,6 +141,8 @@ class Fuse extends EventDispatcher
 	{
 		if (isWorker) return;
 		if (!setupComplete) return;
+		
+		SnapTextField.updateDirtyTextFields();
 		
 		//trace("Update");
 		workers.condition.mutex.lock();

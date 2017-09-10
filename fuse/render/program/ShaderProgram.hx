@@ -1,5 +1,6 @@
 package fuse.render.program;
-import fuse.core.communication.data.indices.IndicesData;
+
+import fuse.core.communication.data.vertexData.VertexData;
 import openfl.Vector;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DBufferUsage;
@@ -15,65 +16,93 @@ import openfl.utils.Endian;
  * ...
  * @author P.J.Shand
  */
+//@:access(fuse.core.communication.data.indices.IndicesData)
 class ShaderProgram
 {
+	public static var VERTICES_PER_QUAD:Int = 4;
+	public static var INDICES_PER_QUAD:Int = 6;
+	
 	public var vertexbuffer:VertexBuffer3D;
 	public var indexbuffer:IndexBuffer3D;
-	//public var indices:Vector<UInt>;
-	//public var indices:ByteArray;
-	
-	var indicesData:IndicesData;
+	public var indices:ByteArray;
 	
 	var baseShader:BaseShader;
 	var program:Program3D;
+	var numOfQuads:Int;
+	var context3D:Context3D;
 	
 	public function new(context3D:Context3D, numOfQuads:Int, numTriangles:Int=0) 
 	{
-		indicesData = new IndicesData();
-		
-		
+		this.context3D = context3D;
+		this.numOfQuads = numOfQuads;
 		baseShader = new BaseShader();
+		
+		indices = new ByteArray();
+		indices.endian = Endian.LITTLE_ENDIAN;
 		
 		context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, baseShader.fragmentData, 1);
 		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, baseShader.textureChannelData, 4);
 		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, baseShader.posData, 1);
 		
-		var verticesPerQuad:Int = 4;
-		var indicesPerQuad:Int = 6;
-		var valuesPerVertex:Int = 10;
-		
 		for (i in 0...numOfQuads) {
+			indices.writeShort((i * ShaderProgram.VERTICES_PER_QUAD) + 0);
+			indices.writeShort((i * ShaderProgram.VERTICES_PER_QUAD) + 1);
+			indices.writeShort((i * ShaderProgram.VERTICES_PER_QUAD) + 2);
 			
-			/*IndicesData.OBJECT_POSITION = i;
-			indicesData.setIndex(0, 0);
-			indicesData.setIndex(1, 1);
-			indicesData.setIndex(2, 2);
-			indicesData.setIndex(3, 0);
-			indicesData.setIndex(4, 2);
-			indicesData.setIndex(5, 3);*/
-			
-			/*indicesData.i1 = i * 4 + 0;
-			indicesData.i2 = i * 4 + 1;
-			indicesData.i3 = i * 4 + 2;
-			indicesData.i4 = i * 4 + 0;
-			indicesData.i5 = i * 4 + 2;
-			indicesData.i6 = i * 4 + 3;*/
+			indices.writeShort((i * ShaderProgram.VERTICES_PER_QUAD) + 0);
+			indices.writeShort((i * ShaderProgram.VERTICES_PER_QUAD) + 2);
+			indices.writeShort((i * ShaderProgram.VERTICES_PER_QUAD) + 3);
 		}
 		
-		vertexbuffer = context3D.createVertexBuffer(verticesPerQuad * numOfQuads, valuesPerVertex, Context3DBufferUsage.DYNAMIC_DRAW);
-		indexbuffer = context3D.createIndexBuffer(indicesPerQuad * numOfQuads);
+		vertexbuffer = context3D.createVertexBuffer(VERTICES_PER_QUAD * numOfQuads, VertexData.VALUES_PER_VERTEX, Context3DBufferUsage.DYNAMIC_DRAW);
+		indexbuffer = context3D.createIndexBuffer(INDICES_PER_QUAD * numOfQuads, Context3DBufferUsage.STATIC_DRAW);
+	}
+	
+	public function update() 
+	{
+		// Vertex x y position x,y
+		context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
+		// RGB-UV x,y | Mask-UV
+		context3D.setVertexBufferAt(1, vertexbuffer, 2, Context3DVertexBufferFormat.FLOAT_4);
+		// RGB-TextureIndex x | Mask-TextureIndex y | Alpha Value z
+		context3D.setVertexBufferAt(2, vertexbuffer, 6, Context3DVertexBufferFormat.FLOAT_4);
+		// Tint Colour RGBA x,y,z,w
+		context3D.setVertexBufferAt(3, vertexbuffer, 10, Context3DVertexBufferFormat.FLOAT_4);
+		
+		debugIndex(indices, numOfQuads, 0);
+		
+		indexbuffer.uploadFromByteArray(
+			indices, 
+			0, 
+			0, 
+			ShaderProgram.INDICES_PER_QUAD * numOfQuads
+		);
 		
 		program = context3D.createProgram();
 		program.upload(baseShader.vertexCode, baseShader.fragmentCode);
-		
-		// vertex x y position to attribute register 0
-		context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
-		// UV to attribute register 1 x,y
-		context3D.setVertexBufferAt(1, vertexbuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
-		// Texture Index attribute register 2 z & Alpha
-		context3D.setVertexBufferAt(2, vertexbuffer, 4, Context3DVertexBufferFormat.FLOAT_2);
-		// Colour to attribute, R G B A
-		context3D.setVertexBufferAt(3, vertexbuffer, 6, Context3DVertexBufferFormat.FLOAT_4);
-		
+	}
+	
+	function debugIndex(indices:ByteArray, numItemsInBatch:Int, startIndex:Int) 
+	{
+		indices.position = startIndex;
+		for (i in 0...numItemsInBatch) 
+		{
+			var i1:Int = indices.readShort();
+			var i2:Int = indices.readShort();
+			var i3:Int = indices.readShort();
+			var i4:Int = indices.readShort();
+			var i5:Int = indices.readShort();
+			var i6:Int = indices.readShort();
+			//trace([i1, i2, i3, i4, i5, i6]);
+		}
+		//trace("debugIndex");
+	}
+	
+	public function clear():Void
+	{
+		context3D.setVertexBufferAt(0, null);
+		context3D.setVertexBufferAt(1, null);
+		context3D.setVertexBufferAt(2, null);
+		context3D.setVertexBufferAt(3, null);
 	}
 }

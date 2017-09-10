@@ -33,6 +33,10 @@ class WorkerTransformHelper
 		//}
 		//Graphics.color = color.value;
 		
+		var applyRotation:Int = 0;
+		var applyPosition:Int = 0;
+		if (coreDisplay.isStatic == 0) applyRotation = 1;
+		if (coreDisplay.isStatic == 0) applyPosition = 1;
 		
 		
 		WorkerTransformHelper.clear(coreDisplay.transformData.localTransform);
@@ -45,10 +49,10 @@ class WorkerTransformHelper
 			WorkerTransformHelper.setRotation(applyRotation, applyPosition, localTransform, rotMatrix, rotMatrix1, rotMatrix2, rotMatrix3, rotation + atlasItem.rotation);
 		}
 		else {*/
-			WorkerTransformHelper.setPosition(coreDisplay.parentNonStatic, coreDisplay.applyPosition, coreDisplay.transformData.positionMatrix, coreDisplay.transformData.localTransform, coreDisplay.x, coreDisplay.y);
+			WorkerTransformHelper.setPosition(coreDisplay.parentNonStatic, applyPosition, coreDisplay.transformData.positionMatrix, coreDisplay.transformData.localTransform, coreDisplay.x, coreDisplay.y);
 			
 			
-			WorkerTransformHelper.setRotation(coreDisplay.parentNonStatic, coreDisplay.applyRotation, coreDisplay.applyPosition, coreDisplay.transformData.localTransform, coreDisplay.transformData.rotMatrix, coreDisplay.transformData.rotMatrix1, coreDisplay.transformData.rotMatrix2, coreDisplay.transformData.rotMatrix3, coreDisplay.rotation);
+			WorkerTransformHelper.setRotation(coreDisplay.parentNonStatic, applyRotation, applyPosition, coreDisplay.transformData.localTransform, coreDisplay.transformData.rotMatrix, coreDisplay.transformData.rotMatrix1, coreDisplay.transformData.rotMatrix2, coreDisplay.transformData.rotMatrix3, coreDisplay.rotation);
 		//}
 		
 		//Graphics.pushTransformation(coreDisplay.localTransform/*, coreDisplay.renderId*/);

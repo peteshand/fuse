@@ -8,6 +8,7 @@ import openfl.display3D.Context3D;
  * ...
  * @author P.J.Shand
  */
+@:access(fuse.utils.Notifier)
 class Context3DTexture
 {
 	var context3D:Context3D;
@@ -25,16 +26,19 @@ class Context3DTexture
 		add(contextTextureId2, SetContextTexture2);
 		add(contextTextureId3, SetContextTexture3);
 		add(contextTextureId4, SetContextTexture4);
+	}
+	
+	public function clear() 
+	{
+		contextTextureId1._value = -1;
+		contextTextureId2._value = -1;
+		contextTextureId3._value = -1;
+		contextTextureId4._value = -1;
 		
-		//contextTextureIds.push(contextTextureId1);
-		//contextTextureIds.push(contextTextureId2);
-		//contextTextureIds.push(contextTextureId3);
-		//contextTextureIds.push(contextTextureId4);
-		//
-		//contextTextureId1.add(SetContextTexture1);
-		//contextTextureId2.add(SetContextTexture2);
-		//contextTextureId3.add(SetContextTexture3);
-		//contextTextureId4.add(SetContextTexture4);
+		context3D.setTextureAt(0, null);
+		context3D.setTextureAt(1, null);
+		context3D.setTextureAt(2, null);
+		context3D.setTextureAt(3, null);
 	}
 	
 	function add(notifier:Notifier<Int>, SetContextTexture:Void -> Void) 
@@ -52,4 +56,6 @@ class Context3DTexture
 	{
 		contextTextureIds[index].value = Textures.getTextureId(textureId);
 	}
+	
+	
 }

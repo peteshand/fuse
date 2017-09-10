@@ -20,7 +20,8 @@ import openfl.geom.Point;
  * ...
  * @author P.J.Shand
  */
-@:access(fuse)
+@:access(fuse.texture.RenderTexture)
+@:access(fuse.core.communication.data.vertexData.VertexData)
 class LayerCache extends StaticLayerGroup
 {
 	var vertexData:VertexData;
@@ -69,7 +70,7 @@ class LayerCache extends StaticLayerGroup
 		count = 0;
 		
 		RenderTexture.currentRenderTargetId = -1;
-		textureDef = Core.textureOrder.setValues(textureData.textureId, textureData);
+		textureDef = Core.textureOrder.setValues(textureData.textureId, textureData, true);
 		return true;
 	}
 	
@@ -77,9 +78,10 @@ class LayerCache extends StaticLayerGroup
 	{
 		if (drawIndex != VertexData.OBJECT_POSITION)
 		{	
+			//trace("LayerCache");
 			//textureData.width = WorkerCore.STAGE_WIDTH;
 			//textureData.height = WorkerCore.STAGE_HEIGHT;
-			trace([Core.STAGE_WIDTH, Core.STAGE_HEIGHT]);
+			//trace([Core.STAGE_WIDTH, Core.STAGE_HEIGHT]);
 			
 			right = Core.STAGE_WIDTH / textureData.p2Width;
 			bottom = Core.STAGE_HEIGHT / textureData.p2Height;
@@ -115,11 +117,11 @@ class LayerCache extends StaticLayerGroup
 			vertexData.setColor(0x0);
 			vertexData.setAlpha(1);
 			
+			// don't draw masks while drawing cached layer //
+			vertexData.setMaskTexture(-1);
+			
 			//vertexData.batchTextureIndex = textureDef.textureIndex;
-			vertexData.setT(0, textureDef.textureIndex);
-			vertexData.setT(1, textureDef.textureIndex);
-			vertexData.setT(2, textureDef.textureIndex);
-			vertexData.setT(3, textureDef.textureIndex);
+			vertexData.setTexture(textureDef.textureIndex);
 			
 			// TODO: only update when you need to
 			indicesData.setIndex(0, 0);
@@ -132,7 +134,7 @@ class LayerCache extends StaticLayerGroup
 		
 		drawIndex = VertexData.OBJECT_POSITION;
 		VertexData.OBJECT_POSITION++;
-		IndicesData.OBJECT_POSITION++;
+		//IndicesData.OBJECT_POSITION++;
 	}
 	
 	public function isLastItem(staticDef:StaticDef):Bool

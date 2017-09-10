@@ -60,6 +60,13 @@ class Textures
 		}
 	}
 	
+	static public function deregisterTexture(textureId:Int, texture:Texture) 
+	{
+		if (textures.exists(textureId)) {
+			textures.remove(textureId);
+		}
+	}
+	
 	static inline public function getTexture(textureId:Int):Texture
 	{
 		return textures.get(getTextureId(textureId));
@@ -67,6 +74,7 @@ class Textures
 	
 	static public function getTextureId(textureId:Int):Int
 	{
+		if (textureId == -1) return -1;
 		if (textures.exists(textureId)) return textureId;
 		
 		if (textureId >= AtlasBuffers.startIndex && textureId < AtlasBuffers.endIndex) {

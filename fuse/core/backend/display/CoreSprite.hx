@@ -8,7 +8,7 @@ import fuse.pool.Pool;
  * @author P.J.Shand
  */
 @:keep
-class CoreSprite extends CoreDisplayObject
+class CoreSprite extends CoreInteractiveObject
 {
 
 	public function new() 
@@ -16,19 +16,9 @@ class CoreSprite extends CoreDisplayObject
 		super();
 	}
 	
-	override public function setAtlasTextures() 
-	{
-		
-	}
-	
-	override public function checkLayerCache() 
-	{
-		
-	}
-	
 	override public function clone():CoreDisplayObject
 	{
-		var _clone:CoreDisplayObject = Pool.sprites.request();
+		var _clone:CoreSprite = Pool.sprites.request();
 		_clone.displayData = displayData;
 		_clone.objectId = objectId;
 		for (i in 0...children.length) 
