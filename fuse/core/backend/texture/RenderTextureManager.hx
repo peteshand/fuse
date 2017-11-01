@@ -66,7 +66,7 @@ class RenderTextureManager
 		lastStart = start;
 		lastEnd = end;
 		
-		//memoryBlock = Kea.current.keaMemory.renderTextureDataPool.createMemoryBlock(RenderTextureData.BYTES_PER_ITEM, objectOffset);
+		//memoryBlock = Kea.current.sharedMemory.renderTextureDataPool.createMemoryBlock(RenderTextureData.BYTES_PER_ITEM, objectOffset);
 		//trace(Conductor.conductorData.renderTextureCountIndex, Conductor.conductorData.renderTextureProcessIndex);
 	}
 	

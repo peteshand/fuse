@@ -17,7 +17,7 @@ import fuse.core.backend.texture.TextureOrder.TextureDef;
  * @author P.J.Shand
  */
 @:access(fuse.texture.RenderTexture)
-class AtlasTextureDrawOrder
+class AtlasDrawOrder
 {
 	public var textureStartIndex:Null<Int>;
 	public var textureEndIndex:Null<Int>;
@@ -28,7 +28,7 @@ class AtlasTextureDrawOrder
 	var currentTextureDef:TextureDef;
 	var drawIndex:Int;
 	var textureData:ITextureData;
-	public var textureDefArray = new GcoArray<TextureDef>([]);
+	public var textureDefs = new GcoArray<TextureDef>([]);
 	
 	public function new() 
 	{
@@ -41,7 +41,7 @@ class AtlasTextureDrawOrder
 		renderTargetId = -2;
 		
 		//if (WorkerEntryPoint.hierarchyBuildRequired){
-			textureDefArray.clear();
+			textureDefs.clear();
 		//}
 		
 		//renderBatchDefs.clear();
@@ -54,17 +54,15 @@ class AtlasTextureDrawOrder
 	
 	function OnTextureStateChange() 
 	{
-		currentTextureDef = getTextureDef(textureDefArray.length);
+		currentTextureDef = getTextureDef(textureDefs.length);
 		currentTextureDef.startIndex = textureStartIndex;
 		currentTextureDef.textureId = textureId;
 		currentTextureDef.renderTargetId = renderTargetId;
 		currentTextureDef.drawIndex = drawIndex;
 		currentTextureDef.textureData = textureData;
 		
-		textureDefArray[textureDefArray.length] = currentTextureDef;
+		textureDefs[textureDefs.length] = currentTextureDef;
 	}
-	
-	
 	
 	public function end() 
 	{
@@ -101,7 +99,6 @@ class AtlasTextureDrawOrder
 				renderTargetId:-1,
 				drawIndex:-1,
 				textureData:null,
-				//workerDisplays:null,
 				numItems:0,
 				renderBatchDef:null,
 				renderBatchIndex:0,
@@ -120,27 +117,5 @@ class AtlasTextureDrawOrder
 			}
 		}
 		return null;
-	}
-	
-	
+	}	
 }
-
-/*typedef TextureDef =
-{
-	index:Int,
-	startIndex:Int,
-	textureId:Int,
-	renderTargetId:Int,
-	drawIndex:Int,
-	textureData:ITextureData
-}*/
-
-/*typedef RenderBatchDef =
-{
-	index:Int,
-	startIndex:Int,
-	renderTargetId:Int,
-	textureIdArray:GcoArray<Int>,
-	?numItems:Int,
-	?length:Int
-}*/

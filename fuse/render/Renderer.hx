@@ -10,12 +10,13 @@ import fuse.render.program.ShaderProgram;
 import fuse.render.program.Context3DProgram;
 import fuse.render.texture.Context3DTexture;
 import fuse.display.effects.BlendMode;
-import fuse.core.front.memory.KeaMemory;
+import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.texture.Textures;
 import fuse.texture.Texture;
 import fuse.utils.Notifier;
 import fuse.Color;
 import fuse.Fuse;
+import openfl.display3D.Context3DClearMask;
 
 import openfl.display3D.Context3DVertexBufferFormat;
 import openfl.display3D.Context3DTriangleFace;
@@ -61,16 +62,14 @@ class Renderer
 		//context3D.setScissorRectangle(new Rectangle(0, 0, 1600, 900));
 		context3D.setCulling(Context3DTriangleFace.BACK);
 		
-		#if debug
-			context3D.enableErrorChecking = true;
-		#end
-		
 		conductorData = new ConductorData();
 		context3DTexture = new Context3DTexture(context3D);
 		context3DProgram = new Context3DProgram(context3D);
 		shaderPrograms = new ShaderPrograms(context3D);
 		textureRenderBatch = new TextureRenderBatch();
 		
+		BaseShader.init();
+		ShaderProgram.init();
 		Textures.init(context3D);
 		
 		targetTextureId.add(OnTargetTextureIdChange);
@@ -82,17 +81,17 @@ class Renderer
 		if (shaderProgram.value == null) return;
 		
 		//trace("quadCount = " + quadCount);
-		//trace("start index = " + Fuse.current.keaMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM));
+		//trace("start index = " + Fuse.current.sharedMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM));
 		
 		programChanged = true;
 		//var numItems:Int = conductorData.numberOfRenderables;
-		//debugIndex(numItemsInBatch, Fuse.current.keaMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM));
+		//debugIndex(numItemsInBatch, Fuse.current.sharedMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM));
 		
 		
 		
 		/*shaderProgram.value.indexbuffer.uploadFromByteArray(
-			KeaMemory.memory, 
-			Fuse.current.keaMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM), 
+			SharedMemory.memory, 
+			Fuse.current.sharedMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM), 
 			0, 
 			ShaderProgram.INDICES_PER_QUAD * numItemsInBatch
 		);*/
@@ -104,15 +103,15 @@ class Renderer
 	
 	function debugIndex(numItemsInBatch:Int, startIndex:Int) 
 	{
-		KeaMemory.memory.position = startIndex;
+		SharedMemory.memory.position = startIndex;
 		for (i in 0...numItemsInBatch) 
 		{
-			var i1:Int = KeaMemory.memory.readShort();
-			var i2:Int = KeaMemory.memory.readShort();
-			var i3:Int = KeaMemory.memory.readShort();
-			var i4:Int = KeaMemory.memory.readShort();
-			var i5:Int = KeaMemory.memory.readShort();
-			var i6:Int = KeaMemory.memory.readShort();
+			var i1:Int = SharedMemory.memory.readShort();
+			var i2:Int = SharedMemory.memory.readShort();
+			var i3:Int = SharedMemory.memory.readShort();
+			var i4:Int = SharedMemory.memory.readShort();
+			var i5:Int = SharedMemory.memory.readShort();
+			var i6:Int = SharedMemory.memory.readShort();
 			trace([i1, i2, i3, i4, i5, i6]);
 		}
 		//trace("debugIndex");
@@ -130,11 +129,15 @@ class Renderer
 		}
 		else {
 			var texture:Texture = Textures.getTexture(targetTextureId.value);
-			context3D.setRenderToTexture(texture.nativeTexture, false, 0, 0);
+			context3D.setRenderToTexture(texture.textureBase, false, 0, 0);
+			
 			
 			if (texture._clear) {
 				texture._clear = false;
 				context3D.clear(texture.red, texture.green, texture.blue, 0);
+			}
+			else {
+				context3D.clear(0, 0, 0, 0, 0, 0, Context3DClearMask.DEPTH);
 			}
 			
 			//context3D.clear(Math.random(), Math.random(), Math.random(), 1);
@@ -178,7 +181,7 @@ class Renderer
 		if (batchData != null && (conductorData.isStatic == 0 || programChanged)) {
 			
 			vertexDebug(batchData, numItems);
-			shaderProgram.value.vertexbuffer.uploadFromByteArray(KeaMemory.memory, batchData.startIndex, 0, 4 * numItems);
+			shaderProgram.value.vertexbuffer.uploadFromByteArray(SharedMemory.memory, batchData.startIndex, 0, 4 * numItems);
 			
 		}*/
 		
@@ -189,39 +192,42 @@ class Renderer
 		var itemCount:Int = 0;
 		quadCount = 0;
 		
-		shaderProgram.value = null;
+		if (Fuse.current.cleanContext) {
+			shaderProgram.value = null;
+		}
 		
 		for (i in 0...conductorData.numberOfBatches) 
 		{
 			var batchData:IBatchData = textureRenderBatch.getBatchData(i);
 			numItemsInBatch = batchData.numItems;
+			//trace("numItemsInBatch = " + numItemsInBatch);
 			//if (numItemsInBatch > 1) numItemsInBatch--;
 			
 			if (numItemsInBatch == 0) continue;
 			
 			//trace("batch = " + i);
 			//trace("numItemsInBatch = " + numItemsInBatch);
-			//
 			//trace([numItemsInBatch * ShaderProgram.VERTICES_PER_QUAD, numItemsInBatch * ShaderProgram.INDICES_PER_QUAD]);
 			programChanged = false;
 			
-			
 			shaderProgram.value = shaderPrograms.getProgram(numItemsInBatch, -1);
 			
+			//var batchData:IBatchData = textureRenderBatch.getBatchData(i);
+			//trace("conductorData.isStatic = " + conductorData.isStatic);
+			//trace("programChanged = " + programChanged);
 			
-			var batchData:IBatchData = textureRenderBatch.getBatchData(i);
-			
-			if (batchData != null && (conductorData.isStatic == 0 || programChanged)) {
+			if (batchData != null /*&& (conductorData.isStatic == 0 || programChanged)*/) {
 				
 				//trace("quadCount = " + quadCount);
 				//trace("VertexData.BYTES_PER_ITEM = " + VertexData.BYTES_PER_ITEM);
 				//trace("batchData.startIndex = " + batchData.startIndex);
+				//trace("batchData.firstIndex = " + batchData.firstIndex);
 				//
 				//vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, numItemsInBatch);
 				//
 				//trace("quadCount = " + quadCount);
 				shaderProgram.value.vertexbuffer.uploadFromByteArray(
-					KeaMemory.memory, 
+					SharedMemory.memory, 
 					quadCount * VertexData.BYTES_PER_ITEM,
 					0, 
 					ShaderProgram.VERTICES_PER_QUAD * numItemsInBatch
@@ -232,7 +238,6 @@ class Renderer
 			}
 			
 			context3DProgram.setProgram(shaderProgram.value.program);
-			
 			
 			targetTextureId.value = batchData.renderTargetId;
 			
@@ -266,11 +271,11 @@ class Renderer
 				itemCount += numItemsInBatch * ShaderProgram.INDICES_PER_QUAD * 2;
 			#end
 			
-			quadCount++;
+			quadCount += numItemsInBatch;
+			
 		}
 		
-		
-		if (Fuse.cleanContext) {
+		if (Fuse.current.cleanContext) {
 			context3DTexture.clear();
 			shaderPrograms.clear();
 			context3DProgram.setProgram(null);
@@ -296,13 +301,13 @@ class Renderer
 		
 		/*for (k in 0...numItems) 
 		{
-			KeaMemory.memory.position = Fuse.current.keaMemory.indicesDataPool.start + (k * IndicesData.BYTES_PER_ITEM);
-			var i1:Int = KeaMemory.memory.readShort();
-			var i2:Int = KeaMemory.memory.readShort();
-			var i3:Int = KeaMemory.memory.readShort();
-			var i4:Int = KeaMemory.memory.readShort();
-			var i5:Int = KeaMemory.memory.readShort();
-			var i6:Int = KeaMemory.memory.readShort();
+			SharedMemory.memory.position = Fuse.current.sharedMemory.indicesDataPool.start + (k * IndicesData.BYTES_PER_ITEM);
+			var i1:Int = SharedMemory.memory.readShort();
+			var i2:Int = SharedMemory.memory.readShort();
+			var i3:Int = SharedMemory.memory.readShort();
+			var i4:Int = SharedMemory.memory.readShort();
+			var i5:Int = SharedMemory.memory.readShort();
+			var i6:Int = SharedMemory.memory.readShort();
 			trace([i1, i2, i3, i4, i5, i6]);
 		}*/
 		
@@ -312,43 +317,44 @@ class Renderer
 		trace([batchData.textureId1, batchData.textureId2, batchData.textureId3, batchData.textureId4]);
 		trace("targetTextureId = " + targetTextureId.value);*/
 		
-		KeaMemory.memory.position = startIndex;// + (j * VertexData.BYTES_PER_ITEM);
-		trace("startIndex = " + startIndex);
+		SharedMemory.memory.position = startIndex;// + (j * VertexData.BYTES_PER_ITEM);
+		//trace("startIndex = " + startIndex);
 		
 		for (j in 0...numItems) 
 		{
-			trace("KeaMemory.memory.position = " + KeaMemory.memory.position);
+			trace("SharedMemory.memory.position = " + SharedMemory.memory.position);
 			
 			for (k in 0...ShaderProgram.VERTICES_PER_QUAD) 
 			{
 				
-				var INDEX_X:Float = KeaMemory.memory.readFloat();
+				var INDEX_X:Float = SharedMemory.memory.readFloat();
 				
-				/*var p:Int = KeaMemory.memory.position;
-				KeaMemory.memory.writeFloat(-1);
-				KeaMemory.memory.position = p;*/
-				var INDEX_Y:Float = KeaMemory.memory.readFloat();
+				/*var p:Int = SharedMemory.memory.position;
+				SharedMemory.memory.writeFloat(-1);
+				SharedMemory.memory.position = p;*/
+				var INDEX_Y:Float = SharedMemory.memory.readFloat();
 				
-				var INDEX_U:Float = KeaMemory.memory.readFloat();
-				var INDEX_V:Float = KeaMemory.memory.readFloat();
-				var INDEX_MU:Float = KeaMemory.memory.readFloat();
-				var INDEX_MV:Float = KeaMemory.memory.readFloat();
+				var INDEX_U:Float = SharedMemory.memory.readFloat();
+				var INDEX_V:Float = SharedMemory.memory.readFloat();
+				var INDEX_MU:Float = SharedMemory.memory.readFloat();
+				var INDEX_MV:Float = SharedMemory.memory.readFloat();
 				
-				var INDEX_Texture:Float = KeaMemory.memory.readFloat();
-				var INDEX_MaskTexture:Float = KeaMemory.memory.readFloat();
-				var INDEX_MASK_BASE_VALUE:Float = KeaMemory.memory.readFloat();
-				var INDEX_ALPHA:Float = KeaMemory.memory.readFloat();
+				var INDEX_Texture:Float = SharedMemory.memory.readFloat();
+				var INDEX_MaskTexture:Float = SharedMemory.memory.readFloat();
+				var INDEX_MASK_BASE_VALUE:Float = SharedMemory.memory.readFloat();
+				var INDEX_ALPHA:Float = SharedMemory.memory.readFloat();
 				
-				var INDEX_R:Float = KeaMemory.memory.readFloat();
-				var INDEX_G:Float = KeaMemory.memory.readFloat();
-				var INDEX_B:Float = KeaMemory.memory.readFloat();
-				var INDEX_A:Float = KeaMemory.memory.readFloat();
+				var INDEX_R:Float = SharedMemory.memory.readFloat();
+				var INDEX_G:Float = SharedMemory.memory.readFloat();
+				var INDEX_B:Float = SharedMemory.memory.readFloat();
+				var INDEX_A:Float = SharedMemory.memory.readFloat();
 				
-				trace([INDEX_X, INDEX_Y, INDEX_U, INDEX_V]);
-				trace([INDEX_Texture, INDEX_ALPHA]);
+				trace([INDEX_X, INDEX_Y]);
+				//trace([INDEX_X, INDEX_Y, INDEX_U, INDEX_V]);
+				//trace([INDEX_Texture, INDEX_ALPHA]);
 				//trace([INDEX_MU, INDEX_MV, INDEX_MaskTexture, INDEX_MASK_BASE_VALUE]);
 				//trace([INDEX_R, INDEX_G, INDEX_B, INDEX_A]);
-				trace("--");
+				//trace("--");
 
 				//trace("INDEX_X = " + INDEX_X);
 				//trace("INDEX_Y = " + INDEX_Y);

@@ -4,6 +4,7 @@ import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.display.CoreInteractiveObject;
 import fuse.core.backend.display.CoreQuad;
 import fuse.core.backend.display.CoreSprite;
+import fuse.core.backend.atlas.partition.AtlasPartition;
 import fuse.pool.ObjectPool;
 import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.backend.layerCache.groups.LayerGroup;
@@ -15,7 +16,7 @@ import fuse.core.backend.layerCache.groups.StaticLayerGroup;
  */
 class Pool
 {
-	
+	public static var atlasPartitions:ObjectPool<AtlasPartition>;
 	public static var displayObjects:ObjectPool<CoreDisplayObject>;
 	public static var interactiveObject:ObjectPool<CoreInteractiveObject>;
 	public static var sprites:ObjectPool<CoreSprite>;
@@ -27,6 +28,7 @@ class Pool
 	
 	static function __init__():Void
 	{
+		atlasPartitions = new ObjectPool<AtlasPartition>(AtlasPartition, 0, []);
 		displayObjects = new ObjectPool<CoreDisplayObject>(CoreDisplayObject, 0, []);
 		interactiveObject = new ObjectPool<CoreInteractiveObject>(CoreInteractiveObject, 0, []);
 		sprites = new ObjectPool<CoreSprite>(CoreSprite, 0, []);

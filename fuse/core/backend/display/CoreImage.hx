@@ -114,7 +114,7 @@ class CoreImage extends CoreDisplayObject
 	public function setAtlasTextures() 
 	{
 		this.renderTarget = RenderTexture.currentRenderTargetId;
-		Core.atlasTextureDrawOrder.setValues(coreTexture.textureData);
+		Core.atlasDrawOrder.setValues(coreTexture.textureData);
 	}
 	
 	public function checkLayerCache() 
@@ -172,8 +172,8 @@ class CoreImage extends CoreDisplayObject
 	
 	public function setVertexDataDraw() 
 	{
-		targetWidth = 2048;
-		targetHeight = 2048;
+		targetWidth = Fuse.MAX_TEXTURE_SIZE;
+		targetHeight = Fuse.MAX_TEXTURE_SIZE;
 		
 		transformXMul = 2 * (Core.STAGE_WIDTH / targetWidth);
 		transformYMul = 2 * (Core.STAGE_HEIGHT / targetHeight);

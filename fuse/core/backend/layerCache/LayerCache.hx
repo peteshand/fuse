@@ -7,7 +7,7 @@ import fuse.core.backend.layerCache.groups.LayerGroup;
 import fuse.core.backend.Core;
 import fuse.core.backend.layerCache.groups.LayerGroup.LayerGroupState;
 import fuse.core.backend.layerCache.groups.StaticLayerGroup;
-import fuse.core.front.atlas.packer.AtlasPartition;
+import fuse.core.backend.atlas.partition.AtlasPartition;
 import fuse.core.communication.data.textureData.TextureData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.texture.RenderTexture;
@@ -54,8 +54,8 @@ class LayerCache extends StaticLayerGroup
 		textureData.x = textureData.y = 0;
 		//textureData.width = WorkerCore.STAGE_WIDTH;
 		//textureData.height = WorkerCore.STAGE_HEIGHT;
-		textureData.p2Width = 2048;
-		textureData.p2Height = 2048;
+		textureData.p2Width = Fuse.MAX_TEXTURE_SIZE;
+		textureData.p2Height = Fuse.MAX_TEXTURE_SIZE;
 		
 		
 		left = textureData.x;

@@ -47,10 +47,10 @@ class Context3DTexture
 		notifier.add(SetContextTexture);
 	}
 	
-	function SetContextTexture1():Void { context3D.setTextureAt(0, Textures.getTexture(contextTextureId1.value).nativeTexture); }
-	function SetContextTexture2():Void { context3D.setTextureAt(1, Textures.getTexture(contextTextureId2.value).nativeTexture); }
-	function SetContextTexture3():Void { context3D.setTextureAt(2, Textures.getTexture(contextTextureId3.value).nativeTexture); }
-	function SetContextTexture4():Void { context3D.setTextureAt(3, Textures.getTexture(contextTextureId4.value).nativeTexture); }
+	function SetContextTexture1():Void { context3D.setTextureAt(0, Textures.getTexture(contextTextureId1.value).textureBase); }
+	function SetContextTexture2():Void { context3D.setTextureAt(1, Textures.getTexture(contextTextureId2.value).textureBase); }
+	function SetContextTexture3():Void { context3D.setTextureAt(2, Textures.getTexture(contextTextureId3.value).textureBase); }
+	function SetContextTexture4():Void { context3D.setTextureAt(3, Textures.getTexture(contextTextureId4.value).textureBase); }
 	
 	function setContextTexture(index:Int, textureId:Int) 
 	{

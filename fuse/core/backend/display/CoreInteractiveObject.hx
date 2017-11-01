@@ -8,6 +8,7 @@ import fuse.pool.Pool;
 class CoreInteractiveObject extends CoreDisplayObject
 {
 	var children:Array<CoreDisplayObject> = [];
+	public var numChildren(get, null):Int;
 	
 	public function new() 
 	{
@@ -84,5 +85,15 @@ class CoreInteractiveObject extends CoreDisplayObject
 			children.shift();
 		}
 		Pool.interactiveObject.release(this);
+	}
+	
+	public function getChildAt(index:Int):CoreDisplayObject
+	{
+		return children[index];
+	}
+	
+	function get_numChildren():Int 
+	{
+		return numChildren;
 	}
 }

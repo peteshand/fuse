@@ -1,10 +1,12 @@
 package fuse.core.backend;
 
-import fuse.core.Workers;
+import flash.display.Sprite;
+import fuse.core.WorkerSetup;
 import fuse.core.communication.data.conductorData.ConductorData;
 import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.data.WorkerSharedProperties;
+import fuse.core.utils.WorkerInfo;
 import msignal.Signal.Signal0;
 import openfl.Lib;
 import openfl.events.Event;
@@ -31,6 +33,7 @@ class Conductor
 	static var isActiveWorker:Bool = false;
 	static private var numberOfWorkers:Int;
 	public static var conductorData:ConductorData;
+	static var update:Sprite = new Sprite();
 	
 	public static function init(workerComms:IWorkerComms, index:Int, numberOfWorkers:Int, usingWorkers:Bool) 
 	{
@@ -54,7 +57,7 @@ class Conductor
 		
 		onTick = new Signal0();
 		//workerComms.addListener(MessageType.MAIN_THREAD_TICK, OnMainTick);
-		Lib.current.stage.addEventListener(Event.ENTER_FRAME, OnUpdate);
+		update.addEventListener(Event.ENTER_FRAME, OnUpdate);
 		
 		/*var timer:Timer = new Timer(1, 0);
 		timer.addEventListener(TimerEvent.TIMER, OnTick);
@@ -79,7 +82,7 @@ class Conductor
 	{
 		//trace("OnMainTick");
 		
-		if (Workers.syncThreads){
+		if (WorkerInfo.usingWorkers){
 			//trace("WORKER LOCK");
 			Conductor.condition.mutex.lock();
 		}
@@ -88,7 +91,7 @@ class Conductor
 		onTick.dispatch();
 		//conductorData.index = -1;
 		
-		if (Workers.syncThreads){
+		if (WorkerInfo.usingWorkers){
 			Conductor.condition.notify();
 			//trace("WORKER UNLOCK");
 			Conductor.condition.mutex.unlock();
@@ -109,7 +112,7 @@ class Conductor
 			
 			if (Conductor.threadActive) {
 				
-				if (Workers.syncThreads){
+				if (WorkerInfo.usingWorkers){
 					//trace("WORKER LOCK");
 					Conductor.condition.mutex.lock();
 				}
@@ -117,7 +120,7 @@ class Conductor
 				onTick.dispatch();
 				//conductorData.index = -1;
 				
-				if (Workers.syncThreads){
+				if (WorkerInfo.usingWorkers){
 					Conductor.condition.notifyAll();
 					//trace("WORKER UNLOCK");
 					Conductor.condition.wait();

@@ -42,7 +42,7 @@ class DisplayListBuilder
 		
 		checkForTextureChanges();
 		
-		if (Core.isStatic == 0 || Core.texturesHaveChanged) {
+		if (Core.isStatic == 0 || Core.texturesHaveChanged || Core.hierarchyBuildRequired) {
 			
 			// Reset / Clear objects
 			begin();
@@ -96,7 +96,7 @@ class DisplayListBuilder
 		}
 		
 		if (Core.textureBuildRequired || Core.texturesHaveChanged) {
-			Core.atlasTextureDrawOrder.begin();
+			Core.atlasDrawOrder.begin();
 			Core.textureOrder.begin();
 		}
 		
@@ -188,16 +188,15 @@ class DisplayListBuilder
 			hierarchyApplyTransform.clear();
 			if (root != null) root.buildHierarchy();
 		}
+		//trace(visHierarchy.length);
 	}
 	
 	inline function applyTransform() 
 	{		
-		
 		for (i in 0...hierarchyApplyTransform.length) 
 		{
 			hierarchyApplyTransform[i]();
 		}
-		
 	}
 	
 	function OrderByRenderLayers(displayObjects:GcoArray<CoreImage>):Void

@@ -1,6 +1,8 @@
 package fuse.core.backend.texture;
+
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.TextureData;
+import fuse.utils.Notifier;
 
 /**
  * ...
@@ -9,8 +11,10 @@ import fuse.core.communication.data.textureData.TextureData;
 class CoreTexture
 {
 	public var textureId:Int;
-	public var textureData:ITextureData;
+	@:isVar public var textureData(get, set):ITextureData;
 	public var activeCount:Int = 0;
+	var changeAvailable:Bool = false;
+	var textureAvailable:Notifier<Int>;
 	
 	public var uvLeft	:Float = 0;
 	public var uvTop	:Float = 0;
@@ -21,6 +25,14 @@ class CoreTexture
 	{
 		this.textureId = textureId;
 		textureData = new TextureData(textureId);
+		textureAvailable = new Notifier<Int>(0);
+		textureAvailable.add(OnTextureAvailableChange);
+	}
+	
+	function OnTextureAvailableChange() 
+	{
+		if (textureData.directRender == 1) return;
+		changeAvailable = true;
 	}
 	
 	public function updateUVData() 
@@ -33,7 +45,22 @@ class CoreTexture
 	
 	public function checkForUpdate():Bool
 	{
-		if (textureData.placed == 0) return true;
+		textureAvailable.value = textureData.textureAvailable;
+		if (changeAvailable) {
+			changeAvailable = false;
+			return true;
+		}
 		return false;
+	}
+	
+	inline function get_textureData():ITextureData 
+	{
+		return textureData;
+	}
+	
+	inline function set_textureData(value:ITextureData):ITextureData 
+	{
+		textureData = value;
+		return textureData;
 	}
 }

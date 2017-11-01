@@ -3,7 +3,7 @@ package fuse.core.front;
 /**
  * @author P.J.Shand
  */
-typedef KeaConfig =
+typedef FuseConfig =
 {
 	?useCacheLayers:Null<Bool>,
 	?debugTextureAtlas:Null<Bool>,

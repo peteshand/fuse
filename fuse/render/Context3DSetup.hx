@@ -92,6 +92,12 @@ class Context3DSetup
 				sharedContext = true;
 			#end
 			context3D = stage3D.context3D;
+			#if debug
+				context3D.enableErrorChecking = true;
+			#else
+				context3D.enableErrorChecking = false;
+			#end
+			
 			trace("driverInfo = " + context3D.driverInfo);
 			activeProfile = targetProfile;
 			onComplete.dispatch();

@@ -1,4 +1,5 @@
 package fuse.render.program;
+
 import fuse.utils.Notifier;
 import openfl.display3D.Context3D;
 import openfl.display3D.Program3D;
@@ -18,12 +19,12 @@ class Context3DProgram
 		currentProgram.add(OnProgramChnge);
 	}
 	
-	public function setProgram(program:Program3D) 
+	public inline function setProgram(program:Program3D) 
 	{
 		currentProgram.value = program;
 	}
 	
-	function OnProgramChnge() 
+	inline function OnProgramChnge() 
 	{
 		context3D.setProgram(currentProgram.value);
 	}

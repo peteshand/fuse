@@ -1,7 +1,7 @@
 package fuse.core.communication.data.textureData;
 import fuse.Fuse;
 import fuse.core.communication.data.MemoryBlock;
-import fuse.core.front.atlas.packer.AtlasPartition;
+import fuse.core.backend.atlas.partition.AtlasPartition;
 import fuse.utils.Notifier;
 
 /**
@@ -28,11 +28,13 @@ class TextureData implements ITextureData
 	
 	static inline var TEXTURE_AVAILABLE:Int = 24;
 	static inline var TEXTURE_PLACED:Int = 26;
+	static inline var TEXTURE_PERSISTENT:Int = 28;
+	static inline var TEXTURE_DIRECT_RENDER:Int = 30;
+		
+	static inline var ATLAS_TEXTURE_ID:Int = 32;
+	static inline var ATLAS_BATCH_TEXTURE_INDEX:Int = 34;
 	
-	static inline var ATLAS_TEXTURE_ID:Int = 28;
-	static inline var ATLAS_BATCH_TEXTURE_INDEX:Int = 30;
-	
-	public static inline var BYTES_PER_ITEM:Int = 32;
+	public static inline var BYTES_PER_ITEM:Int = 36;
 	
 	public var memoryBlock:MemoryBlock;
 	public var textureId:Int;
@@ -53,6 +55,8 @@ class TextureData implements ITextureData
 	
 	public var textureAvailable(get, set):Int;
 	public var placed(get, set):Int;
+	public var persistent(get, set):Int;
+	public var directRender(get, set):Int;
 	
 	public var area(get, null):Float;
 	//public var placed:Bool = false;
@@ -63,8 +67,9 @@ class TextureData implements ITextureData
 	
 	public function new(objectOffset:Int) 
 	{
-		this.textureId = objectOffset;
-		memoryBlock = Fuse.current.keaMemory.textureDataPool.createMemoryBlock(TextureData.BYTES_PER_ITEM, objectOffset);
+		textureId = objectOffset;
+		memoryBlock = Fuse.current.sharedMemory.textureDataPool.createMemoryBlock(TextureData.BYTES_PER_ITEM, objectOffset);
+		atlasTextureId = textureId;
 	}
 	
 	inline function get_x():Int { 
@@ -123,6 +128,15 @@ class TextureData implements ITextureData
 	inline function get_placed():Int { 
 		return memoryBlock.readInt16(TEXTURE_PLACED);
 	}
+		
+	inline function get_persistent():Int { 
+		return memoryBlock.readInt16(TEXTURE_PERSISTENT);
+	}
+		
+	inline function get_directRender():Int { 
+		return memoryBlock.readInt16(TEXTURE_DIRECT_RENDER);
+	}
+	
 	
 	/*inline function get_atlasX():Int { 
 		return memoryBlock.readInt16(ATLAS_X);
@@ -218,6 +232,16 @@ class TextureData implements ITextureData
 	
 	inline function set_placed(value:Int):Int { 
 		memoryBlock.writeInt16(TEXTURE_PLACED, value);
+		return value;
+	}
+	
+	inline function set_persistent(value:Int):Int { 
+		memoryBlock.writeInt16(TEXTURE_PERSISTENT, value);
+		return value;
+	}
+	
+	inline function set_directRender(value:Int):Int { 
+		memoryBlock.writeInt16(TEXTURE_DIRECT_RENDER, value);
 		return value;
 	}
 	

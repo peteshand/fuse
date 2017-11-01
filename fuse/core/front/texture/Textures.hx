@@ -1,7 +1,7 @@
 package fuse.core.front.texture;
 
-import fuse.core.front.atlas.AtlasBuffers;
-import fuse.core.front.layers.LayerCacheBuffers;
+import fuse.core.front.buffers.AtlasBuffers;
+import fuse.core.front.buffers.LayerCacheBuffers;
 import fuse.core.front.texture.upload.TextureUploadQue;
 import fuse.texture.BitmapTexture;
 import fuse.texture.Texture;
@@ -13,9 +13,9 @@ import openfl.display3D.Context3DTextureFormat;
  * ...
  * @author P.J.Shand
  */
-@:access(fuse.core.front.atlas.AtlasBuffers)
-@:access(fuse.core.front.layers.LayerCacheBuffers)
-
+@:access(fuse.core.front.buffers.AtlasBuffers)
+@:access(fuse.core.front.buffers.LayerCacheBuffers)
+@:access(fuse.core.front.texture)
 class Textures
 {
 	static private var context3D:Context3D;
@@ -32,7 +32,7 @@ class Textures
 		
 		createDefaultTextures();
 		
-		Fuse.enterFrame.add(OnTick);
+		Fuse.current.enterFrame.add(OnTick);
 	}
 	
 	static private function OnTick() 
@@ -42,12 +42,16 @@ class Textures
 	
 	static private function createDefaultTextures() 
 	{
+		#if debug
+		var blank:BitmapData = new BitmapData(512, 512, true, 0x9900FF00);
+		#else
 		var blank:BitmapData = new BitmapData(32, 32, true, 0x00000000);
-		var blankTexture:BitmapTexture = new BitmapTexture(blank, false);
+		#end
+		var blankTexture:DefaultTexture = new DefaultTexture(blank, false);
 		blankId = blankTexture.textureId;
 		
 		var white:BitmapData = new BitmapData(32, 32, true, 0xFFFFFFFF);
-		var whiteTexture:BitmapTexture = new BitmapTexture(white, false);
+		var whiteTexture:DefaultTexture = new DefaultTexture(white, false);
 		whiteId = whiteTexture.textureId;
 	}
 	
@@ -89,5 +93,15 @@ class Textures
 		}
 		// still can't find textureId, default to blankId
 		return blankId;
+	}
+}
+
+class DefaultTexture extends BitmapTexture
+{
+	function new(bitmapData:BitmapData, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	{
+		this.persistent = 1;
+		
+		super(bitmapData, queUpload, onTextureUploadCompleteCallback);
 	}
 }

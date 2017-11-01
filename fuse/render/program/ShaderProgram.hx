@@ -21,6 +21,7 @@ class ShaderProgram
 {
 	public static var VERTICES_PER_QUAD:Int = 4;
 	public static var INDICES_PER_QUAD:Int = 6;
+	static var BASE_INDICES:ByteArray;
 	
 	public var vertexbuffer:VertexBuffer3D;
 	public var indexbuffer:IndexBuffer3D;
@@ -31,14 +32,25 @@ class ShaderProgram
 	var numOfQuads:Int;
 	var context3D:Context3D;
 	
+	static function init():Void
+	{
+		if (BASE_INDICES != null) return;
+		
+		BASE_INDICES = new ByteArray();
+		BASE_INDICES.endian = Endian.LITTLE_ENDIAN;
+	}
+	
 	public function new(context3D:Context3D, numOfQuads:Int, numTriangles:Int=0) 
 	{
+		ShaderProgram.init();
+		
 		this.context3D = context3D;
 		this.numOfQuads = numOfQuads;
 		baseShader = new BaseShader();
 		
-		indices = new ByteArray();
-		indices.endian = Endian.LITTLE_ENDIAN;
+		indices = ShaderProgram.BASE_INDICES;
+		indices.position = 0;
+		indices.length = numOfQuads * 2;
 		
 		context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, baseShader.fragmentData, 1);
 		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, baseShader.textureChannelData, 4);
@@ -56,6 +68,20 @@ class ShaderProgram
 		
 		vertexbuffer = context3D.createVertexBuffer(VERTICES_PER_QUAD * numOfQuads, VertexData.VALUES_PER_VERTEX, Context3DBufferUsage.DYNAMIC_DRAW);
 		indexbuffer = context3D.createIndexBuffer(INDICES_PER_QUAD * numOfQuads, Context3DBufferUsage.STATIC_DRAW);
+		
+		indexbuffer.uploadFromByteArray(
+			indices, 
+			0, 
+			0, 
+			ShaderProgram.INDICES_PER_QUAD * numOfQuads
+		);
+		
+		program = context3D.createProgram();
+		program.upload(baseShader.vertexCode, baseShader.fragmentCode);
+		
+		#if debug
+		debugIndex(indices, numOfQuads, 0);
+		#end
 	}
 	
 	public function update() 
@@ -68,20 +94,9 @@ class ShaderProgram
 		context3D.setVertexBufferAt(2, vertexbuffer, 6, Context3DVertexBufferFormat.FLOAT_4);
 		// Tint Colour RGBA x,y,z,w
 		context3D.setVertexBufferAt(3, vertexbuffer, 10, Context3DVertexBufferFormat.FLOAT_4);
-		
-		debugIndex(indices, numOfQuads, 0);
-		
-		indexbuffer.uploadFromByteArray(
-			indices, 
-			0, 
-			0, 
-			ShaderProgram.INDICES_PER_QUAD * numOfQuads
-		);
-		
-		program = context3D.createProgram();
-		program.upload(baseShader.vertexCode, baseShader.fragmentCode);
 	}
 	
+	#if debug
 	function debugIndex(indices:ByteArray, numItemsInBatch:Int, startIndex:Int) 
 	{
 		indices.position = startIndex;
@@ -97,6 +112,7 @@ class ShaderProgram
 		}
 		//trace("debugIndex");
 	}
+	#end
 	
 	public function clear():Void
 	{

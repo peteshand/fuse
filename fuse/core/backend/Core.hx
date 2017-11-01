@@ -1,7 +1,7 @@
 package fuse.core.backend;
 import fuse.core.backend.texture.CoreTextures;
 import fuse.core.communication.IWorkerComms;
-import fuse.core.backend.atlas.AtlasTextureDrawOrder;
+import fuse.core.backend.atlas.AtlasDrawOrder;
 import fuse.core.backend.displaylist.DisplayList;
 import fuse.core.backend.texture.TextureOrder;
 import fuse.core.backend.texture.TextureRenderBatch;
@@ -20,7 +20,7 @@ class Core
 	public static var displayListBuilder:DisplayListBuilder;
 	
 	public static var atlasPacker:AtlasPacker;
-	public static var atlasTextureDrawOrder:AtlasTextureDrawOrder;
+	public static var atlasDrawOrder:AtlasDrawOrder;
 	
 	public static var textures:CoreTextures;
 	public static var textureOrder:TextureOrder;
@@ -38,7 +38,7 @@ class Core
 	public static var STAGE_WIDTH:Int;
 	public static var STAGE_HEIGHT:Int;
 	
-	public static var isStatic:Int;
+	@:isVar public static var isStatic(get, set):Int;
 	
 	public static var texturesHaveChanged:Bool = false;
 	
@@ -50,7 +50,7 @@ class Core
 		Core.displayListBuilder = new DisplayListBuilder();
 		
 		Core.atlasPacker = new AtlasPacker();
-		Core.atlasTextureDrawOrder = new AtlasTextureDrawOrder();
+		Core.atlasDrawOrder = new AtlasDrawOrder();
 		//WorkerCore.atlasTextureRenderBatch = new AtlasTextureRenderBatch();
 		
 		Core.textures = new CoreTextures();
@@ -70,7 +70,6 @@ class Core
 	static function set_hierarchyBuildRequired(value:Bool):Bool 
 	{
 		hierarchyBuildRequired = value;
-		//trace("hierarchyBuildRequired = " + hierarchyBuildRequired);
 		if (hierarchyBuildRequired) textureBuildRequiredCount = 0;
 		else textureBuildRequiredCount++;
 		
@@ -90,5 +89,17 @@ class Core
 		else textureBuildRequired = false;
 		
 		return textureBuildRequiredCount = value;
+	}
+	
+	static function get_isStatic():Int 
+	{
+		return isStatic;
+	}
+	
+	static function set_isStatic(value:Int):Int 
+	{
+		if (isStatic == value) return value;
+		isStatic = value;
+		return isStatic;
 	}
 }

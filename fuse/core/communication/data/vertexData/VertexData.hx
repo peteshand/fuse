@@ -42,7 +42,7 @@ class VertexData implements IVertexData
 	
 	public function new() 
 	{
-		poolStartPosition = Fuse.current.keaMemory.vertexDataPool.start;
+		poolStartPosition = Fuse.current.sharedMemory.vertexDataPool.start;
 	}
 	
 	/*public function getX(index:Int):Float { return readFloat(INDEX_X + indexOffset(index)); }
@@ -60,7 +60,7 @@ class VertexData implements IVertexData
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	public function setXY(index:Int, x:Float, y:Float):Void 
-	{ 
+	{
 		setX(index, x);
 		setY(index, y);
 	}

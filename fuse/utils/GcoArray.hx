@@ -5,6 +5,7 @@ import haxe.ds.ObjectMap;
  * ...
  * @author P.J.Shand
  */
+@:forward(sort, splice)
 abstract GcoArray<T>(GcoArrayBase<T>)
 {
 	var index(get, never):Int;
@@ -75,5 +76,16 @@ class GcoArrayBase<T>
 	{
 		if (base == null) this.base = [];
 		else this.base = base;
+	}
+	
+	public function sort( f : T -> T -> Int ) : Void
+	{
+		base.sort(f);
+	}
+	
+	public function splice( pos : Int, len : Int ) : Array<T>
+	{
+		length -= len; // will cause issues if you splice more value than what are available in the array
+		return base.splice(pos, len);
 	}
 }

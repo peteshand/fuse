@@ -4,11 +4,13 @@ import flash.events.Event;
 import flash.system.MessageChannel;
 import flash.system.Worker;
 import flash.system.WorkerDomain;
+import fuse.core.utils.WorkerInfo;
 import openfl.Lib;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.data.WorkerMessage;
 import fuse.core.communication.messageData.WorkerPayload;
 import fuse.core.communication.data.WorkerSharedProperties;
+import openfl.display.Sprite;
 
 /**
  * ...
@@ -25,6 +27,7 @@ class WorkerComms implements IWorkerComms
 	private var sendMessageChannel:MessageChannel;
 	
 	var que:Array<WorkerMessage> = [];
+	var sprite:Sprite = new Sprite();
 	
 	public function new() 
 	{
@@ -52,7 +55,7 @@ class WorkerComms implements IWorkerComms
 			mainToBack.addEventListener(Event.CHANNEL_MESSAGE, onMessageReceived);
 		}
 		
-		Lib.current.stage.addEventListener(Event.ENTER_FRAME, Update);
+		sprite.addEventListener(Event.ENTER_FRAME, Update);
 	}
 	
 	private function Update(e:Event):Void 
@@ -61,6 +64,7 @@ class WorkerComms implements IWorkerComms
 			
 			//var workerMessage:WorkerMessage = { name:name, payload:workerPayload };
 			//sendMessageChannel.send(workerMessage);
+			//trace(que);
 			sendMessageChannel.send(que);
 			
 			que = [];

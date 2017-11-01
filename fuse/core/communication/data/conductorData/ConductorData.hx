@@ -66,7 +66,7 @@ class ConductorData
 	public function new() 
 	{
 		if (memoryBlock == null) {
-			memoryBlock = Fuse.current.keaMemory.conductorDataPool.createMemoryBlock(ConductorData.BUFFER_SIZE, 0);
+			memoryBlock = Fuse.current.sharedMemory.conductorDataPool.createMemoryBlock(ConductorData.BUFFER_SIZE, 0);
 		}
 	}
 	

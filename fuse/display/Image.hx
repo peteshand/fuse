@@ -39,10 +39,10 @@ class Image extends DisplayObject
 		if (mask != value) {
 			mask = value;
 			if (mask == null) {
-				Fuse.current.workers.removeMask(this);
+				Fuse.current.workerSetup.removeMask(this);
 			}
 			else {
-				Fuse.current.workers.addMask(this, mask);
+				Fuse.current.workerSetup.addMask(this, mask);
 			}
 		}
 		return mask;

@@ -38,9 +38,9 @@ class TextureRenderBatch
 	
 	public function update() 
 	{
-		//trace("update: " + WorkerCore.textureOrder.textureDefArray.length);
+		//trace("update: " + WorkerCore.textureOrder.textureDefs.length);
 		//clear();
-		currentRenderBatchDefs(Core.textureOrder.textureDefArray);
+		currentRenderBatchDefs(Core.textureOrder.textureDefs);
 		createBatchData();
 	}
 	
@@ -71,15 +71,14 @@ class TextureRenderBatch
 			}
 		}*/
 		
-		//trace("number of batches = " + renderBatchDefs.length);
 		Conductor.conductorData.numberOfBatches = renderBatchDefs.length;
 	}
 	
-	function currentRenderBatchDefs(textureDefArray:GcoArray<TextureDef>) 
+	function currentRenderBatchDefs(textureDefs:GcoArray<TextureDef>) 
 	{
-		for (i in 0...textureDefArray.length) 
+		for (i in 0...textureDefs.length) 
 		{
-			var currentTextureDef:TextureDef = textureDefArray[i];
+			var currentTextureDef:TextureDef = textureDefs[i];
 			if (requiresNewRenderBatchDef(currentTextureDef, currentTextureDef)) {
 				closeCurrentRenderBatch();
 				currentRenderBatchDef = createRenderBatchDef(renderBatchDefs.length);

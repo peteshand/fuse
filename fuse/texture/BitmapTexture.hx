@@ -4,7 +4,7 @@ import fuse.texture.Texture;
 import fuse.core.front.texture.Textures;
 import openfl.display.BitmapData;
 import openfl.events.Event;
-
+//import openfl.display3D.textures.Texture as NativeTexture;
 /**
  * ...
  * @author P.J.Shand
@@ -19,7 +19,6 @@ class BitmapTexture extends Texture
 		this.bitmapData = bitmapData;
 		this.width = bitmapData.width;
 		this.height = bitmapData.height;
-		trace([bitmapData.width, bitmapData.height]);
 		
 		super(queUpload, onTextureUploadCompleteCallback);
 	}
@@ -41,11 +40,11 @@ class BitmapTexture extends Texture
 		//nativeTexture.uploadFromBitmapDataAsync(bitmapData, 0);
 	}
 	
-	/*public function uploadFromBitmapData(source:BitmapData, miplevel:UInt = 0):Void
-	{
-		nativeTexture.uploadFromBitmapData(source, miplevel);
-		textureData.placed = 0;
-	}*/
+	//public function uploadFromBitmapData(source:BitmapData, miplevel:UInt = 0):Void
+	//{
+		//nativeTexture.uploadFromBitmapData(source, miplevel);
+		//textureData.placed = 0;
+	//}
 	
 	private function OnTextureUploadComplete(e:Event):Void 
 	{

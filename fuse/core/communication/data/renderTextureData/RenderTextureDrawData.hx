@@ -26,7 +26,7 @@ class RenderTextureDrawData implements IRenderTextureDrawData
 	
 	public function new(objectOffset:Int) 
 	{
-		//memoryBlock = Kea.current.keaMemory.renderTextureDrawDataPool.createMemoryBlock(RenderTextureDrawData.BYTES_PER_ITEM, objectOffset);
+		//memoryBlock = Kea.current.sharedMemory.renderTextureDrawDataPool.createMemoryBlock(RenderTextureDrawData.BYTES_PER_ITEM, objectOffset);
 	}
 	
 	///////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ class RenderTextureDrawData implements IRenderTextureDrawData
 	static inline function set_OBJECT_POSITION(value:Int):Int 
 	{
 		RenderTextureDrawData.OBJECT_POSITION = value;
-		RenderTextureDrawData._basePosition = Fuse.current.keaMemory.renderTextureDrawDataPool.start + (RenderTextureDrawData.OBJECT_POSITION * RenderTextureDrawData.BYTES_PER_ITEM);
+		RenderTextureDrawData._basePosition = Fuse.current.sharedMemory.renderTextureDrawDataPool.start + (RenderTextureDrawData.OBJECT_POSITION * RenderTextureDrawData.BYTES_PER_ITEM);
 		return value;
 	}
 	

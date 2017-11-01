@@ -1,16 +1,14 @@
-package fuse.core.backend.atlas.partition;
+package fuse.core.backend.atlas.render;
+
+import fuse.core.backend.atlas.partition.AtlasPartition;
+import fuse.core.backend.texture.TextureRenderBatch.RenderBatchDef;
 import fuse.core.communication.data.indices.IIndicesData;
 import fuse.core.communication.data.indices.IndicesData;
-import fuse.core.backend.Core;
-import fuse.core.backend.atlas.SheetPacker;
-import fuse.core.backend.texture.TextureRenderBatch;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.core.front.atlas.packer.AtlasPartition;
 import fuse.core.communication.data.vertexData.IVertexData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.texture.RenderTexture;
 import openfl.geom.Point;
-import fuse.core.backend.texture.TextureRenderBatch.RenderBatchDef;
 
 /**
  * ...
@@ -18,34 +16,22 @@ import fuse.core.backend.texture.TextureRenderBatch.RenderBatchDef;
  */
 @:access(fuse.texture.RenderTexture)
 @:access(fuse.core.backend.atlas.SheetPacker)
-class PartitionRenderable
+class AtlasPartitionRenderer
 {
-	var partition:AtlasPartition;
-	var textureData:ITextureData;
-	var vertexData:IVertexData;
-	var indicesData:IIndicesData;
+	public function new() { }
 	
-	public function new(partition:AtlasPartition, textureData:ITextureData) 
+	static public function add(partition:AtlasPartition) 
 	{
-		//trace("PartitionRenderable VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
+		var textureData:ITextureData = partition.textureData;
+		if (textureData.placed == 1) return;
 		
-		this.textureData = textureData;
-		this.partition = partition;
-		vertexData = new VertexData();
-		indicesData = new IndicesData();
-		
-		//trace("partition = " + partition);
-		//trace("textureData = " + textureData);
 		//trace("VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
+		//trace("textureId = " + textureData.textureId);
+		
+		var vertexData:IVertexData = new VertexData();
+		var indicesData:IIndicesData = new IndicesData();
 		
 		RenderTexture.currentRenderTargetId = textureData.atlasTextureId;
-		
-		/*
-		WorkerCore.displayListBuilder.process(coreDisplay);
-		
-		coreDisplay.releaseToPool();*/
-		
-		//WorkerCore.textureOrder.setValues(textureData);
 		
 		var left:Float = textureData.baseX;
 		var top:Float = textureData.baseY;
@@ -58,11 +44,6 @@ class PartitionRenderable
 		vertexData.setUV(2, right, top);	// TOP RIGHT
 		vertexData.setUV(3, right, bottom); // BOTTOM RIGHT
 		
-		
-		
-		
-		
-		
 		var mulX:Float = SheetPacker.bufferWidth / 2;
 		var mulY:Float = SheetPacker.bufferHeight / 2;
 		
@@ -73,6 +54,11 @@ class PartitionRenderable
 		var topLeft:Point = new Point(partition.x, partition.y);
 		var topRight:Point = new Point(partition.x + partition.width, partition.y);
 		var bottomRight:Point = new Point(partition.x + partition.width, partition.y + partition.height);
+		
+		//trace([(bottomLeft.x + offsetX) / mulX,	(-bottomLeft.y - offsetY) / mulY]);
+		//trace([(topLeft.x + offsetX) / mulX,		(-topLeft.y - offsetY) / mulY]);
+		//trace([(topRight.x + offsetX) / mulX,		(-topRight.y - offsetY) / mulY]);
+		//trace([(bottomRight.x + offsetX) / mulX,	(-bottomRight.y - offsetY) / mulY]);
 		
 		vertexData.setXY(0, (bottomLeft.x + offsetX) / mulX,	(-bottomLeft.y - offsetY) / mulY);
 		vertexData.setXY(1, (topLeft.x + offsetX) / mulX,		(-topLeft.y - offsetY) / mulY);
@@ -122,12 +108,17 @@ class PartitionRenderable
 		Core.textureOrder.setValues(textureData.textureId, textureData, true);
 	}
 	
-	public function setVertexData() 
+	public static function setVertexData(partition:AtlasPartition) 
 	{
+		var textureData:ITextureData = partition.textureData;
+		if (textureData.placed == 1) return;
+		textureData.placed = 1;
+		
 		//trace("PartitionRenderable VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
 		
 		var renderBatchIndex:Int = Core.textureRenderBatch.getRenderBatchIndex(VertexData.OBJECT_POSITION);
 		var renderBatchDef:RenderBatchDef = Core.textureRenderBatch.getRenderBatchDef(renderBatchIndex);
+		var vertexData:IVertexData = new VertexData();
 		
 		for (i in 0...renderBatchDef.textureIdArray.length) 
 		{
@@ -141,5 +132,4 @@ class PartitionRenderable
 		VertexData.OBJECT_POSITION++;
 		//IndicesData.OBJECT_POSITION++;
 	}
-	
 }

@@ -8,13 +8,18 @@ import fuse.core.communication.messageData.WorkerPayload;
 class WorkerlessComms implements IWorkerComms
 {
 	public var usingWorkers:Bool = false;
-	var properties:Map<String, Dynamic>;
-	var listeners:Map<String, Array<WorkerPayload-> Void>>;
+	static var properties:Map<String, Dynamic>;
+	static var listeners:Map<String, Array<WorkerPayload-> Void>>;
 	
-	public function new() 
+	static function __init__() 
 	{
 		properties = new Map<String, Dynamic>();
 		listeners = new Map<String, Array<WorkerPayload-> Void>>();
+	}
+	
+	public function new() 
+	{
+		
 	}
 	
 	public function addListener(name:String, callback:WorkerPayload-> Void):Void 

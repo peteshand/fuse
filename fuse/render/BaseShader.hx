@@ -1,4 +1,5 @@
 package fuse.render;
+
 import openfl.Vector;
 import openfl.display3D.Context3DProgramType;
 import openfl.utils.AGALMiniAssembler;
@@ -10,13 +11,16 @@ import openfl.utils.ByteArray;
  */
 class BaseShader
 {
-	var vertexShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler();
-	var fragmentShaderAssembler:AGALMiniAssembler = new AGALMiniAssembler();
-	var _vertexCode:ByteArray;
-	var _fragmentCode:ByteArray;
+	static var VERTEX_CODE:ByteArray;
+	static var FRAGMENT_CODE:ByteArray;
 	
-	var vertexString(get, null):String;
-	var fragmentString(get, null):String;
+	static var vertexShaderAssembler:AGALMiniAssembler;
+	static var fragmentShaderAssembler:AGALMiniAssembler;
+	//var _vertexCode:ByteArray;
+	//var _fragmentCode:ByteArray;
+	
+	//var vertexString(get, null):String;
+	//var fragmentString(get, null):String;
 	
 	public var textureChannelData:Vector<Float>;
 	public var posData:Vector<Float>;
@@ -24,8 +28,21 @@ class BaseShader
 	public var vertexCode(get, null):ByteArray;
 	public var fragmentCode(get, null):ByteArray;
 	
+	static function init():Void
+	{
+		if (BaseShader.vertexShaderAssembler == null) {		
+			BaseShader.vertexShaderAssembler = new AGALMiniAssembler();
+			BaseShader.fragmentShaderAssembler = new AGALMiniAssembler();
+			
+			BaseShader.VERTEX_CODE = vertexShaderAssembler.assemble(Context3DProgramType.VERTEX, VERTEX_STRING());
+			BaseShader.FRAGMENT_CODE = fragmentShaderAssembler.assemble(Context3DProgramType.FRAGMENT, FRAGMENT_STRING());
+		}
+	}
+	
 	public function new() 
 	{
+		BaseShader.init();
+		
 		textureChannelData = Vector.ofArray(
 		[
 			1.0, 0.0, 0.0, 0.0,
@@ -45,18 +62,20 @@ class BaseShader
 	
 	function get_vertexCode():ByteArray 
 	{
-		if (_vertexCode == null) _vertexCode = vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, vertexString);
-		return _vertexCode;
+		return BaseShader.VERTEX_CODE;
+		//if (_vertexCode == null) _vertexCode = vertexShaderAssembler.assemble( Context3DProgramType.VERTEX, vertexString);
+		//return _vertexCode;
 	}
 	
 	function get_fragmentCode():ByteArray 
 	{
-		if (_fragmentCode == null) _fragmentCode = fragmentShaderAssembler.assemble( Context3DProgramType.FRAGMENT, fragmentString);
-		return _fragmentCode;
+		return BaseShader.FRAGMENT_CODE;
+		//if (_fragmentCode == null) _fragmentCode = fragmentShaderAssembler.assemble( Context3DProgramType.FRAGMENT, fragmentString);
+		//return _fragmentCode;
 	}
 	
 	// Override
-	function get_fragmentString():String 
+	static function FRAGMENT_STRING():String 
 	{
 		var alias:Array<AgalAlias> = [];
 		alias.push( { alias:"TWO.3", value:"fc0.www" } );
@@ -70,19 +89,19 @@ class BaseShader
 			
 			/////////////////////////////////////////////
 			// RGBA from 4 available textures ///////////
-			"tex ft0, v1.xy, fs0 <2d,repeat,linear>	\n" +
+			"tex ft0, v1.xy, fs0 <2d,clamp,linear>	\n" +
 			"mul ft0.xyzw, ft0.xyzw, v2.xxxx		\n" +
 			"mov ft1, ft0							\n" +
 			
-			"tex ft0, v1.xy, fs1 <2d,repeat,linear>	\n" +
+			"tex ft0, v1.xy, fs1 <2d,clamp,linear>	\n" +
 			"mul ft0.xyzw, ft0.xyzw, v2.yyyy		\n" +
 			"add ft1, ft1, ft0						\n" +
 			
-			"tex ft0, v1.xy, fs2 <2d,repeat,linear>	\n" +
+			"tex ft0, v1.xy, fs2 <2d,clamp,linear>	\n" +
 			"mul ft0.xyzw, ft0.xyzw, v2.zzzz		\n" +
 			"add ft1, ft1, ft0						\n" +
 			
-			"tex ft0, v1.xy, fs3 <2d,repeat,linear>	\n" +
+			"tex ft0, v1.xy, fs3 <2d,clamp,linear>	\n" +
 			"mul ft0.xyzw, ft0.xyzw, v2.wwww		\n" +
 			"add ft1, ft1, ft0						\n" +
 			/////////////////////////////////////////////
@@ -91,19 +110,19 @@ class BaseShader
 			
 			/////////////////////////////////////////////
 			// Mask from 4 available textures ///////////
-			"tex ft0, v1.zw, fs0 <2d,repeat,linear>	\n" +
+			"tex ft0, v1.zw, fs0 <2d,clamp,linear>	\n" +
 			"mul ft0.xyzw, ft0.xyzw, v4.xxxx		\n" +
 			"mov ft2, ft0							\n" +
 			
-			"tex ft0, v1.zw, fs1 <2d,repeat,linear>	\n" +
+			"tex ft0, v1.zw, fs1 <2d,clamp,linear>	\n" +
 			"mul ft0.xyzw, ft0.xyzw, v4.yyyy		\n" +
 			"add ft2, ft2, ft0						\n" +
 			
-			"tex ft0, v1.zw, fs2 <2d,repeat,linear>	\n" +
+			"tex ft0, v1.zw, fs2 <2d,clamp,linear>	\n" +
 			"mul ft0.xyzw, ft0.xyzw, v4.zzzz		\n" +
 			"add ft2, ft2, ft0						\n" +
 			
-			"tex ft0, v1.zw, fs3 <2d,repeat,linear>	\n" +
+			"tex ft0, v1.zw, fs3 <2d,clamp,linear>	\n" +
 			"mul ft0.xyzw, ft0.xyzw, v4.wwww		\n" +
 			"add ft2, ft2, ft0						\n" +
 			/////////////////////////////////////////////
@@ -144,7 +163,7 @@ class BaseShader
 		return agal;
 	}
 	
-	function get_vertexString():String 
+	static function VERTEX_STRING():String 
 	{
 		var agal:String = "mov vt0.zw, vc4.zw	\n" + // set z and w pos to vt0
 			"mov vt0.xy, va0.xy		\n" + // set x and y pos to vt0
@@ -152,8 +171,15 @@ class BaseShader
 			"mov v1, va1			\n" + // + // copy RGB-UV && Mask-UVc
 			
 			"mov vt2, va2			\n" + // copy RGB-TextureIndex | Mask-TextureIndex | Alpha Value
-			"mov vt3, vc[vt2.x]		\n" + // set textureIndex alpha multipliers
-			"mov vt4, vc[vt2.y]		\n" + // set mask textureIndex alpha multipliers
+			
+			#if flash
+				"mov vt3, vc[vt2.x]		\n" + // set textureIndex alpha multipliers
+				"mov vt4, vc[vt2.y]		\n" + // set mask textureIndex alpha multipliers
+			#else
+				// TODO: add array access for non-air targets
+				"mov vt3, vc0		\n" + // set textureIndex alpha multipliers
+				"mov vt4, vc0		\n" + // set mask textureIndex alpha multipliers
+			#end
 			
 			"sub vt3, vt3, vt2.wwww \n" + // substract inverted alpha from textureIndex alpha
 			"max vt3, vt3, vc0.w	\n" + // clamp above 0 // NEED TO SWITCH TO vc4

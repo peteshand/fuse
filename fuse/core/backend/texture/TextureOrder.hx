@@ -27,7 +27,7 @@ class TextureOrder
 	var currentTextureDef:TextureDef;
 	//var drawIndex:Int;
 	var textureData:ITextureData;
-	public var textureDefArray = new GcoArray<TextureDef>([]);
+	public var textureDefs = new GcoArray<TextureDef>([]);
 	
 	public function new() 
 	{
@@ -44,7 +44,7 @@ class TextureOrder
 		textureEndIndex = textureStartIndex + VertexData.BYTES_PER_ITEM;
 		
 		//if (WorkerEntryPoint.hierarchyBuildRequired){
-			textureDefArray.clear();
+			textureDefs.clear();
 		//}
 		
 		//renderBatchDefs.clear();
@@ -65,7 +65,7 @@ class TextureOrder
 		if (this.textureId != textureId || this.renderTargetId != RenderTexture.currentRenderTargetId)
 		{
 			//trace("setValues");
-			currentTextureDef = getTextureDef(textureDefArray.length);
+			currentTextureDef = getTextureDef(textureDefs.length);
 			currentTextureDef.startIndex = textureStartIndex;
 			//trace("currentTextureDef.startIndex = " + currentTextureDef.startIndex);
 			currentTextureDef.textureId = this.textureId = textureId;
@@ -76,7 +76,7 @@ class TextureOrder
 			//currentTextureDef.workerDisplays.clear();
 			currentTextureDef.numItems = 0;
 			
-			textureDefArray[textureDefArray.length] = currentTextureDef;
+			textureDefs[textureDefs.length] = currentTextureDef;
 		}
 		if (visible) {
 			currentTextureDef.numItems++;

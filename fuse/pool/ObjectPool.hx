@@ -37,11 +37,12 @@ class ObjectPool<T>
 	
 	public function spawn(len:Int) 
 	{
-		var i:Int = len;
-		while(--i > -1)
+		var i:Int = counter + len;
+		while(--i > counter - 1)
 		{
 			pool[i] = Type.createInstance(_pooledType, args);
 		}
+		
 		counter += len;
 	}
 }

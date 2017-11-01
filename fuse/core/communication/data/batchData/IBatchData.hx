@@ -17,5 +17,5 @@ interface IBatchData
 	public var numItems(get, set):Int;
 	public var width(get, set):Int;
 	public var height(get, set):Int;
-	public var firstIndex(get, null):Int;
+	//public var firstIndex(get, null):Int;
 }

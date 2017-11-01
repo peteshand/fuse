@@ -1,7 +1,6 @@
 package fuse.core.communication.data.textureData;
 
 import fuse.core.communication.data.MemoryBlock;
-import fuse.core.front.atlas.packer.AtlasPartition;
 import fuse.utils.Notifier;
 
 /**
@@ -32,6 +31,8 @@ interface ITextureData
 	public var area(get, null):Float;
 	//public var placed:Bool;
 	public var placed(get, set):Int;
+	public var persistent(get, set):Int;
+	public var directRender(get, set):Int;
 	
 	public var atlasTextureId(get, set):Int;
 	public var atlasBatchTextureIndex(get, set):Int;

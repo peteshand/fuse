@@ -237,11 +237,11 @@ class DisplayObject
 	{
 		parent = value;
 		if (parent != null) {
-			Fuse.current.workers.addChild(this, parent);
+			Fuse.current.workerSetup.addChild(this, parent);
 			onAdd.dispatch(this);
 		}
 		else {
-			Fuse.current.workers.removeChild(this);
+			Fuse.current.workerSetup.removeChild(this);
 			onRemove.dispatch(this);
 		}
 	}
@@ -251,4 +251,8 @@ class DisplayObject
 		this.isStatic = 0;
 	}
 	
+	public function dispose():Void
+	{
+		
+	}
 }

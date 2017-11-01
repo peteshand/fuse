@@ -7,19 +7,25 @@ package fuse.core.backend.texture;
 class CoreTextures
 {
 	var texturesMap = new Map<Int, CoreTexture>();
+	var textures = new Array<CoreTexture>();
+	var count:Int = 0;
 	
 	public function new() { }
 	
 	public function checkForUpdates():Bool 
 	{
-		var texturesHaveChanged:Bool = false;
-		for (texture in texturesMap) 
+		//var texturesHaveChanged:Bool = false;
+		for (i in 0...textures.length) 
 		{
-			if (texture.checkForUpdate()) {
-				texturesHaveChanged = true;
+			if (textures[i].checkForUpdate()) {
+				count = -1;
+				break;
+				//texturesHaveChanged = true;
 			}
 		}
-		return texturesHaveChanged;
+		count++;
+		if (count <= 1) return true;
+		return false;
 	}
 	
 	public function create(textureId:Int) 
@@ -27,12 +33,21 @@ class CoreTextures
 		if (!texturesMap.exists(textureId)) {
 			var texture:CoreTexture = new CoreTexture(textureId);
 			texturesMap.set(textureId, texture);
+			textures.push(texture);
 		}
 	}
 	
 	public function dispose(textureId:Int):Void
 	{
 		if (texturesMap.exists(textureId)) {
+			var i:Int = textures.length - 1;
+			while (i >= 0) 
+			{
+				if (textures[i].textureId == textureId) {
+					textures.splice(i, 1);
+				}
+				i--;
+			}
 			texturesMap.remove(textureId);
 		}
 	}

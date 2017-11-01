@@ -1,19 +1,13 @@
 package fuse.core.backend.atlas;
 
 import fuse.core.backend.Core;
-import fuse.core.front.atlas.packer.AtlasPartition;
-import fuse.core.front.atlas.packer.AtlasPartitionPool;
+import fuse.core.backend.atlas.partition.AtlasPartition;
+import fuse.core.backend.atlas.placer.AtlasPartitionPlacer;
+import fuse.core.backend.atlas.render.AtlasPartitionRenderer;
+import fuse.core.backend.texture.TextureOrder.TextureDef;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.core.communication.data.textureData.TextureData;
-import fuse.core.communication.data.vertexData.IVertexData;
-import fuse.core.communication.data.vertexData.VertexData;
-import fuse.texture.RenderTexture;
+import fuse.pool.Pool;
 import fuse.utils.GcoArray;
-import fuse.core.backend.atlas.partition.PartitionRenderable;
-import fuse.core.backend.texture.TextureOrder;
-import fuse.core.backend.display.CoreDisplayObject;
-import fuse.pool.ObjectPool;
-import openfl.geom.Point;
 
 /**
  * ...
@@ -22,80 +16,144 @@ import openfl.geom.Point;
 @:access(fuse)
 class SheetPacker
 {
-	static var bufferWidth:Int = 2048;
-	static var bufferHeight:Int = 2048;
+	static var bufferWidth:Int = Fuse.MAX_TEXTURE_SIZE;
+	static var bufferHeight:Int = Fuse.MAX_TEXTURE_SIZE;
+	
+	var activePartitions = new GcoArray<AtlasPartition>([]);
+	var availablePartition = new Array<AtlasPartition>();
+	
 	var index:Int;
-	var textureId:Int;
+	var startIndex:Int;
+	var texturesPerBatch:Int;
+	var orderTo:Int;
 	
-	var orderTo:Int = -1;
-	var partitions:Array<AtlasPartition> = [];
-	var vertexData:IVertexData;
-	//var atlasTextureData:TextureData;
-	
-	public function new(index:Int, textureId:Int) 
+	public function new(index:Int, startIndex:Int, texturesPerBatch:Int) 
 	{
 		this.index = index;
-		this.textureId = textureId;
+		this.startIndex = startIndex;
+		this.texturesPerBatch = texturesPerBatch;
 		
-		//trace(["SheetPacker", index, textureId]);
-		vertexData = new VertexData();
-		//atlasTextureData = new TextureData(index + 1);
-		clearPartitions();
+		clear();
 	}
 	
-	public function pack(startIndex:Int) 
+	public function clear() 
 	{
-		//textureAtlas.active = true;
-		
-		//clearPartitions();
-		
-		
+		//trace("clear");
+		availablePartition = [];
+		for (i in 0...texturesPerBatch) 
+		{
+			availablePartition.push(Pool.atlasPartitions.request().init(index + i, startIndex + i, 0, 0, bufferWidth, bufferHeight));
+		}
+		activePartitions.clear();
+	}
+	
+	public function pack(startIndex:Int):Int
+	{
+		//trace("index = " + index);
+		//trace("Core.atlasDrawOrder.textureDefs.length = " + Core.atlasDrawOrder.textureDefs.length);
 		orderTo = 0;
 		
 		var i:Int = startIndex;
-		while (i < Core.atlasTextureDrawOrder.textureDefArray.length)
+		while (i < Core.atlasDrawOrder.textureDefs.length)
 		{
-			//trace("i = " + i);
-			var textureData:ITextureData = Core.atlasTextureDrawOrder.textureDefArray[i].textureData;
-			//textureData.atlasIndex = index;
+			var textureData:ITextureData = Core.atlasDrawOrder.textureDefs[i].textureData;
+			if (textureData.directRender == 1) {
+				i++;
+				continue;
+			}
+			//trace([textureData.textureId, textureData.placed]);
 			
 			var placedSuccessfully:Bool = place(textureData);
+			//trace("i = " + i + " placedSuccessfully = " + placedSuccessfully);
+		
 			if (placedSuccessfully) {
 				i++;
 			}
 			else {
-				if (orderTo == i || orderTo != -1) {
-					// Re-ordering didn't help
-					//trace("Re-ordering didn't help: " + i);
-					//i++; // should now move to next sheet
+				
+				if (!findInactivePartitions()) {
 					return i;
 				}
-				else {
+				
+				
+				// THIS ALL NEEDS TO BE RETESTED!!! /////////////
+				/////////////////////////////////////////////////
+				//if (orderTo == i || orderTo != -1) {
+					//// Re-ordering didn't help
+					//trace("Re-ordering didn't help: " + i);
+					////i++; // should now move to next sheet
+					//
+					//drawActive();
+					//return i;
+				//}
+				//else {
 					//trace("Re-order: " + orderTo);
-					orderTo = i;
-					reorderToBetween(Core.atlasTextureDrawOrder.textureDefArray, startIndex, orderTo);
-					clearPartitions();
-					i = startIndex;
-				}
-				//trace(["placedSuccessfully = " + placedSuccessfully, i]);
+					//orderTo = i;
+					//reorderToBetween(Core.atlasDrawOrder.textureDefs, startIndex, orderTo);
+					//
+					//clear();
+					//i = startIndex;
+				//}
+				/////////////////////////////////////////////////
+				/////////////////////////////////////////////////
 			}
 		}
+		
+		drawActive();
+		
 		return i;
 	}
 	
-	function clearPartitions() 
+	function findInactivePartitions():Bool
 	{
-		for (i in 0...partitions.length) 
+		var i:Int = 0;
+		while (i < activePartitions.length) 
 		{
-			//AtlasPartitionPool.release(partitions[i]);
+			//trace("activePartitions.length = " + activePartitions.length);
+			var activePartition:AtlasPartition = activePartitions[i];
+			activePartition.active = false;
+			for (j in 0...Core.atlasDrawOrder.textureDefs.length) 
+			{
+				if (Core.atlasDrawOrder.textureDefs[j].textureId == activePartition.textureData.textureId) {
+					activePartition.active = true;
+					break;
+				}
+			}
+			
+			if (activePartition.active == false) {
+				trace("Inactive Partitions Found");
+				activePartitions.splice(i, 1);
+				activePartition.clear();
+				availablePartition.push(activePartition);
+				return true;
+			}
+			else {
+				i++;
+			}
 		}
-		partitions = /*textureAtlas.partitions =*/ [AtlasPartitionPool.allocate(0, 0, bufferWidth, bufferHeight)];
+		return false;
+	}
+	
+	function drawActive() 
+	{
+		activePartitions.sort(function(a1:AtlasPartition, a2:AtlasPartition):Int
+		{
+			if (a1.atlasIndex > a2.atlasIndex) return 1;
+			if (a1.atlasIndex < a2.atlasIndex) return -1;
+			else return 0;
+		});
+		
+		//trace("activePartitions.length = " + activePartitions.length);
+		for (i in 0...activePartitions.length) 
+		{
+			//trace("atlasIndex = " + activePartitions[i].atlasIndex);
+			AtlasPartitionRenderer.add(activePartitions[i]);
+		}
 	}
 	
 	function reorderToBetween(textureOrder:GcoArray<TextureDef>, startIndex:Int, endIndex:Int) 
 	{
-		var ordered:Array<TextureDef> = [];// textureOrder.textureOrder.concat([]);
-		//ordered = ordered.splice(startIndex, endIndex);
+		var ordered:Array<TextureDef> = [];
 		
 		for (i in startIndex...endIndex) 
 		{
@@ -117,81 +175,70 @@ class SheetPacker
 	
 	function place(textureData:ITextureData):Bool
 	{
-		if (textureData.placed == 1 || textureData.textureAvailable == 0) {
+		if (alreadyPlaced(textureData)) {
+			//trace("alreadyPlaced");
 			return true;
 		}
-		//trace("place");
-		for (i in 0...partitions.length) 
+		
+		for (i in 0...availablePartition.length) 
 		{
-			//trace("i = " + i);
+			var partition:AtlasPartition = availablePartition[i];
 			
-			var partition:AtlasPartition = partitions[i];
-			//trace("partition.key = " + partition.key);
-			var placementReturn:PlacementReturn = partition.place(textureData);
-			if (placementReturn.successful) {
-				
-				//textureData.atlasTexture = textureAtlas.texture;
-				//textureData.atlasX = partition.x;
-				//textureData.atlasY = partition.y;
+			var successfulPlacement:Bool = AtlasPartitionPlacer.place(partition, textureData);
+			
+			if (successfulPlacement) {
 				
 				textureData.x = partition.x;
 				textureData.y = partition.y;
 				textureData.width = partition.width;
 				textureData.height = partition.height;
-				textureData.p2Width = SheetPacker.bufferWidth;// partition.width;
-				textureData.p2Height = SheetPacker.bufferHeight;// partition.height;
+				textureData.p2Width = SheetPacker.bufferWidth;
+				textureData.p2Height = SheetPacker.bufferHeight;
+				textureData.atlasTextureId = partition.atlasTextureId;
+				textureData.atlasBatchTextureIndex = partition.atlasIndex;
+				//trace("partition.atlasIndex = " + partition.atlasIndex);
 				
-				//textureData.partition.value = partition;
+				//trace([textureData.x, textureData.y, textureData.width, textureData.height]);
 				
+				partition.textureData = textureData;
+				if (partition.rightPartition != null) addPartition(partition.rightPartition, i + 1);
+				if (partition.bottomPartition != null) addPartition(partition.bottomPartition, i + 1);
 				
+				activePartitions.push(partition);
+				availablePartition.splice(i, 1);
 				
-				textureData.atlasTextureId = this.textureId;
-				textureData.atlasBatchTextureIndex = this.index;
-				
-				var partitionRenderable:PartitionRenderable = new PartitionRenderable(partition, textureData);
-				AtlasPacker.partitionRenderables.push(partitionRenderable);
-				
-				//setVertexData(partition, textureData);
-				
-				
-				//trace([partition.x, partition.y, partition.width, partition.height]);
-				partitions.splice(i, 1);
-				
-				if (placementReturn.rightPartition != null) addPartition(placementReturn.rightPartition);
-				if (placementReturn.bottomPartition != null) addPartition(placementReturn.bottomPartition);
-				
-				/*for (j in 0...placementReturn.newPartitions.length) 
-				{
-					addPartition(placementReturn.newPartitions[j]);
-				}*/
-				textureData.placed = 1;
 				return true;
-			}
-			else {
-				
 			}
 		}
 		return false;
 	}
 	
-	//function setVertexData(partition:AtlasPartition, textureData:ITextureData) 
-	//{
-		////return;
-		//
-		//
-	//}
-	
-	function addPartition(partition:AtlasPartition) 
+	function alreadyPlaced(textureData:ITextureData) 
 	{
-		for (i in 0...partitions.length) 
-		{
-			if (partitions[i].height > partition.height) {
-				partitions.insert(i, partition);
-				return;
-			}
-		}
-		
-		partitions.push(partition);
+		if (textureData.placed == 1) return true;
+		if (textureData.textureAvailable == 0) return true;
+		return false;
 	}
 	
+	function addPartition(partition:AtlasPartition, insertAt:Int) 
+	{
+		availablePartition.insert(insertAt, partition);
+		//for (i in 0...availablePartition.length) 
+		//{
+			//if (availablePartition[i].height > partition.height) {
+				//availablePartition.insert(i, partition);
+				//return;
+			//}
+		//}
+		//
+		//availablePartition.push(partition);
+	}
+	
+	public function setVertexData() 
+	{
+		for (j in 0...activePartitions.length) 
+		{
+			AtlasPartitionRenderer.setVertexData(activePartitions[j]);
+		}
+	}
 }

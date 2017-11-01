@@ -35,7 +35,7 @@ class IndicesData implements IIndicesData
 	
 	public function new() 
 	{
-		poolStartPosition = Fuse.current.keaMemory.indicesDataPool.start;
+		poolStartPosition = Fuse.current.sharedMemory.indicesDataPool.start;
 	}
 	
 	/*public inline function getIndex(index:Int):Int

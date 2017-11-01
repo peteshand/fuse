@@ -20,7 +20,7 @@ class RenderTextureData implements IRenderTextureData
 	
 	public function new(objectOffset:Int) 
 	{
-		memoryBlock = Fuse.current.keaMemory.renderTextureDataPool.createMemoryBlock(RenderTextureDrawData.BYTES_PER_ITEM, objectOffset);
+		memoryBlock = Fuse.current.sharedMemory.renderTextureDataPool.createMemoryBlock(RenderTextureDrawData.BYTES_PER_ITEM, objectOffset);
 	}
 	
 	///////////////////////////////////////////////////////////////

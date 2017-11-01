@@ -16,7 +16,7 @@ class AtlasVertexData extends VertexData
 	public function new() 
 	{
 		super();
-		poolStartPosition = Fuse.current.keaMemory.atlasVertexDataPool.start;
+		poolStartPosition = Fuse.current.sharedMemory.atlasVertexDataPool.start;
 	}
 	
 	override function readFloat(offset:Int):Float

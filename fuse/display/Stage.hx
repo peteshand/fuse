@@ -28,7 +28,7 @@ class Stage extends Sprite {
 		
 		displayType = DisplayType.STAGE;
 		//this.parentId = -1;
-		Fuse.current.workers.addChild(this, null);
+		Fuse.current.workerSetup.addChild(this, null);
 		
 		this.name = "stage";
 		

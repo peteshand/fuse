@@ -24,16 +24,16 @@ class ShaderPrograms
 	
 	public function getProgram(numItems:Int, numTriangles:Int):ShaderProgram
 	{
-		if (!programs.exists(numItems)) {
-			programs.set(numItems, new ShaderProgram(context3D, numItems, numTriangles));
-		}
 		currentProgram = programs.get(numItems);
+		if (currentProgram == null) {
+			currentProgram = new ShaderProgram(context3D, numItems, numTriangles);
+			programs.set(numItems, currentProgram);
+		}
+		
 		if (lastProgram != currentProgram) {
 			currentProgram.update();
 		}
-		else {
-			
-		}
+		
 		lastProgram = currentProgram;
 		return currentProgram;
 	}

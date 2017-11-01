@@ -44,12 +44,12 @@ class BatchData implements IBatchData
 	@:isVar public var width(get, set):Int;
 	@:isVar public var height(get, set):Int;
 	
-	public var firstIndex(get, null):Int;
+	//public var firstIndex(get, null):Int;
 	
 	public function new(objectId:Int) 
 	{
 		this.objectId = objectId;
-		memoryBlock = Fuse.current.keaMemory.batchDataPool.createMemoryBlock(BatchData.BYTES_PER_ITEM, objectId);
+		memoryBlock = Fuse.current.sharedMemory.batchDataPool.createMemoryBlock(BatchData.BYTES_PER_ITEM, objectId);
 	}
 	
 	function get_renderTargetId():Int	{ return memoryBlock.readInt(RENDER_TARGET_ID); }
@@ -125,8 +125,8 @@ class BatchData implements IBatchData
 		return value;
 	}
 	
-	function get_firstIndex():Int 
-	{
-		return objectId;
-	}
+	//function get_firstIndex():Int 
+	//{
+		//return objectId;
+	//}
 }

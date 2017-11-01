@@ -55,7 +55,7 @@ class DisplayData implements IDisplayData
 	{
 		if (objectOffset != null) {
 			_objectId = objectOffset;
-			memoryBlock = Fuse.current.keaMemory.displayDataPool.createMemoryBlock(DisplayData.BYTES_PER_ITEM, objectOffset);
+			memoryBlock = Fuse.current.sharedMemory.displayDataPool.createMemoryBlock(DisplayData.BYTES_PER_ITEM, objectOffset);
 		}
 	}
 	
