@@ -3,7 +3,7 @@ import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.display.CoreInteractiveObject;
 import fuse.core.backend.display.CoreStage;
-import fuse.core.communication.data.displayData.DisplayData;
+import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.pool.Pool;
 
@@ -144,7 +144,8 @@ class DisplayList
 	{
 		var displayDataAccess:IDisplayData = null;
 		if (!transformDataMap.exists(objectId)) {
-			displayDataAccess = new DisplayData(objectId);
+			//displayDataAccess = new WorkerDisplayData(objectId);
+			displayDataAccess = CommsObjGen.getDisplayData(objectId);
 			transformDataMap.set(objectId, displayDataAccess);
 		}
 		return transformDataMap.get(objectId);

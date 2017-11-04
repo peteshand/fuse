@@ -28,7 +28,6 @@ class FrontWorkerSetup extends WorkerSetup
 	
 	override public function init():Void
 	{
-		trace("initWorkerControl");
 		#if flash
 		condition = new Condition(new Mutex());
 		#end

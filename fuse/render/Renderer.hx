@@ -13,6 +13,7 @@ import fuse.display.effects.BlendMode;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.texture.Textures;
 import fuse.texture.Texture;
+import fuse.utils.FrameBudget;
 import fuse.utils.Notifier;
 import fuse.Color;
 import fuse.Fuse;
@@ -55,7 +56,7 @@ class Renderer
 		this.sharedContext = sharedContext;
 		
 		if (!sharedContext){
-			context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0);
+			context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0, false);
 			
 		}
 		context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
@@ -122,17 +123,17 @@ class Renderer
 		//trace("targetTextureId.value = " + targetTextureId.value);
 		if (targetTextureId.value == -1) {
 			#if flash
-				context3D.setRenderToTexture(null, false, 0, 0);
+				context3D.setRenderToTexture(null, false, 0, 0, 0);
 			#else
 				context3D.setRenderToBackBuffer();
 			#end
 		}
 		else {
 			var texture:Texture = Textures.getTexture(targetTextureId.value);
-			context3D.setRenderToTexture(texture.textureBase, false, 0, 0);
+			context3D.setRenderToTexture(texture.textureBase, false, 0, 0, 0);
 			
 			
-			if (texture._clear) {
+			if (texture._clear || texture._alreadyClear) {
 				texture._clear = false;
 				context3D.clear(texture.red, texture.green, texture.blue, 0);
 			}
@@ -274,6 +275,11 @@ class Renderer
 			quadCount += numItemsInBatch;
 			
 		}
+		
+		//context3DTexture.setContextTexture(0, -1);
+		//context3DTexture.setContextTexture(1, -1);
+		//context3DTexture.setContextTexture(2, -1);
+		//context3DTexture.setContextTexture(3, -1);
 		
 		if (Fuse.current.cleanContext) {
 			context3DTexture.clear();

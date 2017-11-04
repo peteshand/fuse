@@ -43,6 +43,11 @@ class BaseShader
 	{
 		BaseShader.init();
 		
+		fragmentData = Vector.ofArray(
+		[
+			0, 0, 1.0, 2.0
+		]);
+		
 		textureChannelData = Vector.ofArray(
 		[
 			1.0, 0.0, 0.0, 0.0,
@@ -54,10 +59,7 @@ class BaseShader
 		[
 			0.0, 0.0, 0.0, 1.0
 		]);
-		fragmentData = Vector.ofArray(
-		[
-			0, 0, 1.0, 2.0
-		]);
+		
 	}
 	
 	function get_vertexCode():ByteArray 
@@ -172,18 +174,12 @@ class BaseShader
 			
 			"mov vt2, va2			\n" + // copy RGB-TextureIndex | Mask-TextureIndex | Alpha Value
 			
-			#if flash
-				"mov vt3, vc[vt2.x]		\n" + // set textureIndex alpha multipliers
-				"mov vt4, vc[vt2.y]		\n" + // set mask textureIndex alpha multipliers
-			#else
-				// TODO: add array access for non-air targets
-				"mov vt3, vc0		\n" + // set textureIndex alpha multipliers
-				"mov vt4, vc0		\n" + // set mask textureIndex alpha multipliers
-			#end
+			"mov vt3, vc[vt2.x]		\n" + // set textureIndex alpha multipliers
+			"mov vt4, vc[vt2.y]		\n" + // set mask textureIndex alpha multipliers
 			
 			"sub vt3, vt3, vt2.wwww \n" + // substract inverted alpha from textureIndex alpha
-			"max vt3, vt3, vc0.w	\n" + // clamp above 0 // NEED TO SWITCH TO vc4
-			"min vt3, vt3, vc0.x	\n" + // clamp below 1 // NEED TO SWITCH TO vc4
+			"max vt3, vt3, vc4.x	\n" + // clamp above 0 // NEED TO SWITCH TO vc4
+			"min vt3, vt3, vc4.w	\n" + // clamp below 1 // NEED TO SWITCH TO vc4
 			
 			"mov v2, vt3			\n" + // copy RGB-TextureIndex with alpha multipliers into v2
 			"mov v3, va3			\n"	+ // copy tint colour data

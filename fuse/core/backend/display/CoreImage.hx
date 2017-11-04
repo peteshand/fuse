@@ -3,7 +3,6 @@ package fuse.core.backend.display;
 import fuse.core.backend.layerCache.LayerCache;
 import fuse.core.backend.texture.CoreTexture;
 import fuse.core.backend.texture.TextureOrder.TextureDef;
-import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.communication.data.indices.IIndicesData;
 import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.communication.data.textureData.ITextureData;
@@ -136,7 +135,7 @@ class CoreImage extends CoreDisplayObject
 	public function setTexturesMove() 
 	{
 		//trace(["setTexturesMove OBJECT_POSITION = " + VertexData.OBJECT_POSITION, this.objectId]);
-		
+		//trace("setTexturesMove");
 		// Draw Into Screen Buffer
 		RenderTexture.currentRenderTargetId = staticDef.layerCacheRenderTarget;
 		//trace("setTexturesMove layerCacheRenderTarget = " + staticDef.layerCacheRenderTarget);
@@ -146,6 +145,7 @@ class CoreImage extends CoreDisplayObject
 	public function setTexturesDraw() 
 	{
 		// Draw Into LayerCache Texture
+		//trace("setTexturesDraw");
 		RenderTexture.currentRenderTargetId = staticDef.layerCacheRenderTarget;
 		//trace("setTexturesDraw layerCacheRenderTarget = " + staticDef.layerCacheRenderTarget);
 		textureDef = Core.textureOrder.setValues(coreTexture.textureData.atlasTextureId, coreTexture.textureData, visible == 1);

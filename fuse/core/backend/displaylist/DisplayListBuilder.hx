@@ -9,8 +9,6 @@ import fuse.core.backend.atlas.AtlasPacker;
 import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.backend.layerCache.LayerCache;
 import fuse.core.backend.layerCache.groups.LayerGroup;
-import fuse.core.communication.data.displayData.DisplayData;
-import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.pool.Pool;
@@ -69,9 +67,9 @@ class DisplayListBuilder
 		}
 	}
 	
-	function checkForTextureChanges() 
+	inline function checkForTextureChanges() 
 	{
-		Core.texturesHaveChanged = Core.textures.checkForUpdates();
+		Core.texturesHaveChanged = Core.textures.texturesHaveChanged;
 		//Core.hierarchyBuildRequired = true;
 		//Core.textureBuildRequired = true;
 		//Core.textureBuildNextFrame = true;

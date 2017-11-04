@@ -8,6 +8,7 @@ import fuse.core.utils.WorkerInfo;
 import fuse.display.DisplayObject;
 import fuse.display.Stage;
 import fuse.events.FuseEvent;
+import fuse.utils.FrameBudget;
 import openfl.display.Stage3D;
 import openfl.display3D.Context3DProfile;
 import openfl.display3D.Context3DRenderMode;
@@ -30,10 +31,6 @@ class Fuse extends EventDispatcher
 	
 	public function new(rootClass:Class<DisplayObject>, fuseConfig:FuseConfig, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
 	{	
-		trace("WorkerInfo.isMainThread = " + WorkerInfo.isMainThread);
-		trace("WorkerInfo.isCoreThread = " + WorkerInfo.isCoreThread);
-		trace("profile = " + profile);
-		
 		MessageManager.init();
 		
 		if (WorkerInfo.isMainThread) {
@@ -60,7 +57,6 @@ class Fuse extends EventDispatcher
 	
 	public function start():Void
 	{
-		
 		mainThread.start();
 	}
 	
@@ -71,6 +67,7 @@ class Fuse extends EventDispatcher
 	
 	public function process() 
 	{
+		FrameBudget.startFrame();
 		mainThread.process();
 	}
 	

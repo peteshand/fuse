@@ -9,7 +9,7 @@ import fuse.texture.ITexture;
 import fuse.texture.RenderTexture;
 import fuse.utils.GcoArray;
 import fuse.utils.Notifier;
-import fuse.core.communication.data.batchData.BatchData;
+import fuse.core.communication.data.batchData.WorkerBatchData;
 import fuse.core.backend.texture.TextureOrder.TextureDef;
 
 /**

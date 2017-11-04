@@ -1,7 +1,7 @@
 package fuse.display;
 
 import fuse.core.backend.displaylist.DisplayType;
-import fuse.core.communication.data.displayData.DisplayData;
+import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.display.Stage;
 import fuse.Color;
@@ -48,7 +48,9 @@ class DisplayObject
 	public function new()
 	{
 		var id:Int = DisplayObject.objectIdCount++;
-		displayData = new DisplayData(id);
+		//displayData = new WorkerDisplayData(id);
+		displayData = CommsObjGen.getDisplayData(id);
+		
 		objectId = id;
 		
 		
@@ -76,7 +78,7 @@ class DisplayObject
 	inline function get_scaleY():Float { return scaleY; }
 	inline function get_color():Color { return color; }
 	inline function get_alpha():Float { return alpha; }
-	inline function get_visible():Bool { return visible; }
+	function get_visible():Bool { return visible; }
 	
 	//inline function get_blendMode():BlendMode { return blendMode; }
 	inline function get_layerIndex():Null<Int> { return layerIndex; }
@@ -172,10 +174,10 @@ class DisplayObject
 	
 	function set_visible(value:Bool):Bool 
 	{
-		if (visible != value){
-			visible = value;
-			if (visible)	displayData.visible = 1;
-			else			displayData.visible = 0;
+		if (this.visible != value){
+			this.visible = value;
+			if (this.visible)	displayData.visible = 1;
+			else				displayData.visible = 0;
 			isStatic = 0;
 		}
 		return value;

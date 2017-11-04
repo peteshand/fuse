@@ -9,6 +9,7 @@ import fuse.core.communication.data.textureData.ITextureData;
 class AtlasPartition
 {
 	public var active:Bool;
+	public var placed:Bool;
 	
 	public var atlasIndex:Int;
 	public var atlasTextureId:Int;
@@ -40,6 +41,7 @@ class AtlasPartition
 	public function clear() 
 	{
 		active = false;
+		placed = false;
 		rightPartition = null;
 		bottomPartition = null;
 		textureData = null;

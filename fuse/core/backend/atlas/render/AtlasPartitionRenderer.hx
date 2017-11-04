@@ -22,8 +22,9 @@ class AtlasPartitionRenderer
 	
 	static public function add(partition:AtlasPartition) 
 	{
+		if (partition.placed) return;
+		
 		var textureData:ITextureData = partition.textureData;
-		if (textureData.placed == 1) return;
 		
 		//trace("VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
 		//trace("textureId = " + textureData.textureId);
@@ -110,9 +111,10 @@ class AtlasPartitionRenderer
 	
 	public static function setVertexData(partition:AtlasPartition) 
 	{
+		if (partition.placed) return;
+		partition.placed = true;
+		
 		var textureData:ITextureData = partition.textureData;
-		if (textureData.placed == 1) return;
-		textureData.placed = 1;
 		
 		//trace("PartitionRenderable VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
 		

@@ -1,9 +1,9 @@
 package fuse.core.communication.memory;
 
 import fuse.core.communication.data.MemoryPool;
-import fuse.core.communication.data.batchData.BatchData;
+import fuse.core.communication.data.batchData.WorkerBatchData;
 import fuse.core.communication.data.conductorData.ConductorData;
-import fuse.core.communication.data.displayData.DisplayData;
+import fuse.core.communication.data.displayData.WorkerDisplayData;
 import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.communication.data.renderTextureData.RenderTextureData;
 import fuse.core.communication.data.renderTextureData.RenderTextureDrawData;
@@ -41,9 +41,9 @@ class SharedMemory
 	{
 		vertexDataPool = CreatePool(VertexData.BUFFER_SIZE * VertexData.BYTES_PER_ITEM);
 		indicesDataPool = CreatePool(IndicesData.BUFFER_SIZE * IndicesData.BYTES_PER_ITEM);
-		batchDataPool = CreatePool(BatchData.BUFFER_SIZE * BatchData.BYTES_PER_ITEM);
+		batchDataPool = CreatePool(WorkerBatchData.BUFFER_SIZE * WorkerBatchData.BYTES_PER_ITEM);
 		conductorDataPool = CreatePool(ConductorData.BUFFER_SIZE);
-		displayDataPool = CreatePool(DisplayData.BUFFER_SIZE * DisplayData.BYTES_PER_ITEM);
+		displayDataPool = CreatePool(WorkerDisplayData.BUFFER_SIZE * WorkerDisplayData.BYTES_PER_ITEM);
 		textureDataPool = CreatePool(TextureData.BUFFER_SIZE * TextureData.BYTES_PER_ITEM);
 		//atlasVertexDataPool = CreatePool(VertexData.BUFFER_SIZE * VertexData.BYTES_PER_ITEM);
 		renderTextureDataPool = CreatePool(RenderTextureData.BUFFER_SIZE * RenderTextureData.BYTES_PER_ITEM);

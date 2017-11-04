@@ -8,6 +8,7 @@ import fuse.texture.Texture;
 import openfl.display.BitmapData;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DTextureFormat;
+import openfl.display3D.textures.TextureBase;
 //import openfl.display3D.textures.Texture as NativeTexture;
 /**
  * ...
@@ -70,7 +71,14 @@ class Textures
 			textures.remove(textureId);
 		}
 	}
-	
+		
+	static inline public function getTextureBase(textureId:Int):TextureBase
+	{
+		var texture:Texture = getTexture(textureId);
+		if (texture == null) return null;
+		return texture.textureBase;
+	}
+
 	static inline public function getTexture(textureId:Int):Texture
 	{
 		return textures.get(getTextureId(textureId));

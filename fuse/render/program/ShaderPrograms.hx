@@ -1,6 +1,6 @@
 package fuse.render.program;
 
-import fuse.core.communication.data.batchData.BatchData;
+import fuse.core.communication.data.batchData.WorkerBatchData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.render.program.ShaderProgram;
 import openfl.display3D.Context3D;

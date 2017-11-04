@@ -41,6 +41,10 @@ class LayerCacheBuffers
 		LayerCacheBuffers.bufferWidth = bufferWidth;
 		LayerCacheBuffers.bufferHeight = bufferHeight;
 		Texture.textureIdCount = startIndex + numBuffers;
+		//for (i in startIndex...endIndex) 
+		//{
+			//create(i);
+		//}
 	}
 	
 	static function create(textureId:Int) 
@@ -51,6 +55,7 @@ class LayerCacheBuffers
 			var currentTextureId:Int = Texture.textureIdCount;
 			Texture.textureIdCount = textureId;
 			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight);
+			//buffer._alreadyClear = true;
 			buffers.set(textureId, buffer);
 			Texture.textureIdCount = currentTextureId;
 		}

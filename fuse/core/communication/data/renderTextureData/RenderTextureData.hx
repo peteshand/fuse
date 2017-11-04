@@ -1,7 +1,6 @@
 package fuse.core.communication.data.renderTextureData;
 import fuse.Fuse;
 import fuse.core.communication.data.MemoryBlock;
-import fuse.core.communication.data.displayData.DisplayData;
 
 /**
  * ...

@@ -24,6 +24,7 @@ class Texture implements ITexture
 	var p2Width:Int;
 	var p2Height:Int;
 	var _clear:Bool = false;
+	var _alreadyClear:Bool = false;
 	var textureData:ITextureData;
 	var onTextureUploadCompleteCallback:Void-> Void;
 	var persistent:Int;

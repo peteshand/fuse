@@ -21,6 +21,8 @@ class CoreTexture
 	public var uvRight	:Float = 1;
 	public var uvBottom	:Float = 1;
 	
+	public var textureHasChanged(get, null):Bool;
+	
 	public function new(textureId:Int) 
 	{
 		this.textureId = textureId;
@@ -43,7 +45,7 @@ class CoreTexture
 		uvBottom = (textureData.y + textureData.height) / textureData.p2Height;
 	}
 	
-	public function checkForUpdate():Bool
+	function get_textureHasChanged():Bool 
 	{
 		textureAvailable.value = textureData.textureAvailable;
 		if (changeAvailable) {

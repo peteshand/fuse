@@ -1,7 +1,8 @@
 package fuse.core.backend.texture;
 import fuse.core.backend.Conductor;
 import fuse.core.backend.Core;
-import fuse.core.communication.data.batchData.BatchData;
+import fuse.core.communication.data.CommsObjGen;
+import fuse.core.communication.data.batchData.WorkerBatchData;
 import fuse.core.communication.data.batchData.IBatchData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.backend.texture.TextureOrder;
@@ -38,7 +39,7 @@ class TextureRenderBatch
 	
 	public function update() 
 	{
-		//trace("update: " + WorkerCore.textureOrder.textureDefs.length);
+		//trace("update: " + Core.textureOrder.textureDefs.length);
 		//clear();
 		currentRenderBatchDefs(Core.textureOrder.textureDefs);
 		createBatchData();
@@ -70,7 +71,7 @@ class TextureRenderBatch
 				}
 			}
 		}*/
-		
+		//trace("renderBatchDefs.length = " + renderBatchDefs.length);
 		Conductor.conductorData.numberOfBatches = renderBatchDefs.length;
 	}
 	
@@ -216,7 +217,8 @@ class TextureRenderBatch
 	public function getBatchData(objectId:Int):IBatchData
 	{
 		if (objectId >= batchDataArray.length) {
-			var batchData:IBatchData = new BatchData(objectId);
+			var batchData:IBatchData = CommsObjGen.getBatchData(objectId);
+			//var batchData:IBatchData = new WorkerBatchData(objectId);
 			batchDataArray.push(batchData);
 		}
 		return batchDataArray[objectId];

@@ -3,7 +3,6 @@ package fuse.core.backend.texture;
 import fuse.core.backend.Conductor;
 import fuse.core.backend.Core;
 import fuse.core.communication.data.MemoryBlock;
-import fuse.core.communication.data.displayData.DisplayData;
 import fuse.core.communication.data.renderTextureData.RenderTextureDrawData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.pool.ObjectPool;

@@ -143,7 +143,6 @@ class SheetPacker
 			else return 0;
 		});
 		
-		//trace("activePartitions.length = " + activePartitions.length);
 		for (i in 0...activePartitions.length) 
 		{
 			//trace("atlasIndex = " + activePartitions[i].atlasIndex);
@@ -176,7 +175,6 @@ class SheetPacker
 	function place(textureData:ITextureData):Bool
 	{
 		if (alreadyPlaced(textureData)) {
-			//trace("alreadyPlaced");
 			return true;
 		}
 		
@@ -188,6 +186,7 @@ class SheetPacker
 			
 			if (successfulPlacement) {
 				
+				textureData.placed = 1;
 				textureData.x = partition.x;
 				textureData.y = partition.y;
 				textureData.width = partition.width;

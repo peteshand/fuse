@@ -24,7 +24,6 @@ class LayerGroup
 	
 	public function new() { 
 		state = new Notifier<LayerGroupState>();
-		
 	}
 	
 	public function toString():String

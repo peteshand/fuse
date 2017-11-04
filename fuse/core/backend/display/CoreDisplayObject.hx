@@ -85,6 +85,7 @@ class CoreDisplayObject
 	function updateIsStatic() 
 	{
 		isStatic = displayData.isStatic;
+		displayData.isStatic = 1; // reset static prop
 		
 		/*var tempApplyPosition:Int = displayData.applyPosition;
 		if (applyPosition != tempApplyPosition) {

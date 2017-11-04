@@ -10,21 +10,22 @@ class CoreTextures
 	var textures = new Array<CoreTexture>();
 	var count:Int = 0;
 	
+	public var texturesHaveChanged(get, null):Bool;
+	
 	public function new() { }
 	
-	public function checkForUpdates():Bool 
+	function get_texturesHaveChanged():Bool 
 	{
-		//var texturesHaveChanged:Bool = false;
 		for (i in 0...textures.length) 
 		{
-			if (textures[i].checkForUpdate()) {
+			if (textures[i].textureHasChanged) {
 				count = -1;
-				break;
-				//texturesHaveChanged = true;
 			}
 		}
 		count++;
-		if (count <= 1) return true;
+		if (count <= 2) {
+			return true;
+		}
 		return false;
 	}
 	

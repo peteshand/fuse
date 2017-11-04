@@ -86,7 +86,6 @@ class MainThread extends ThreadBase
 	
 	function OnWorkerReady() 
 	{
-		trace("OnWorkerReady");
 		context3DSetup = new Context3DSetup();
 		context3DSetup.onComplete.add(OnContextCreated);
 		context3DSetup.init(stage3D, renderMode, profile);

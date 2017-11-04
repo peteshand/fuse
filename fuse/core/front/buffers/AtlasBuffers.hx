@@ -28,6 +28,10 @@ class AtlasBuffers
 		AtlasBuffers.bufferWidth = bufferWidth;
 		AtlasBuffers.bufferHeight = bufferHeight;
 		Texture.textureIdCount = startIndex + numBuffers;
+		//for (i in startIndex...endIndex) 
+		//{
+			//create(i);
+		//}
 	}
 	
 	static function create(textureId:Int) 
