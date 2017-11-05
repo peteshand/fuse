@@ -67,4 +67,12 @@ class CoreTextures
 			texture.activeCount--;
 		}
 	}
+	
+	public function clearTextureChanges() 
+	{
+		for (i in 0...textures.length) 
+		{
+			textures[i].clearTextureChange();
+		}
+	}
 }

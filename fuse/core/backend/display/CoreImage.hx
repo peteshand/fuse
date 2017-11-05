@@ -108,6 +108,12 @@ class CoreImage extends CoreDisplayObject
 	override function updateIsStatic() 
 	{
 		super.updateIsStatic();
+		
+		
+		if (isStatic == 1 && coreTexture.textureHasChanged) {
+			// If texture has change then set isStatic to false
+			isStatic = 0;
+		}
 	}
 	
 	public function setAtlasTextures() 

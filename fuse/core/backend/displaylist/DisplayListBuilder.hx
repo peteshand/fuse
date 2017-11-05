@@ -40,6 +40,12 @@ class DisplayListBuilder
 		
 		checkForTextureChanges();
 		
+		//if (Core.texturesHaveChanged) {
+			//Core.hierarchyBuildRequired = true;
+			//Core.isStatic = 0;
+		//}
+		//trace([Core.isStatic, Core.texturesHaveChanged, Core.hierarchyBuildRequired]);
+		
 		if (Core.isStatic == 0 || Core.texturesHaveChanged || Core.hierarchyBuildRequired) {
 			
 			// Reset / Clear objects
@@ -65,6 +71,8 @@ class DisplayListBuilder
 			// Close calculation phase
 			end();
 		}
+		
+		Core.textures.clearTextureChanges();
 	}
 	
 	inline function checkForTextureChanges() 

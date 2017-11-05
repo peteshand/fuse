@@ -85,6 +85,10 @@ class KeyboardListener
 	
 	private function execute(params:Array<Dynamic>):Void
 	{
+		if (params == null) {
+			untyped callback();
+			return;
+		}
 		switch params.length {
 			case 0: untyped callback();
 			case 1: untyped callback(params[0]);

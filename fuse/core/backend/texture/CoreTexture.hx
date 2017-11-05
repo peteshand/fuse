@@ -49,7 +49,6 @@ class CoreTexture
 	{
 		textureAvailable.value = textureData.textureAvailable;
 		if (changeAvailable) {
-			changeAvailable = false;
 			return true;
 		}
 		return false;
@@ -64,5 +63,10 @@ class CoreTexture
 	{
 		textureData = value;
 		return textureData;
+	}
+	
+	public inline function clearTextureChange() 
+	{
+		changeAvailable = false;
 	}
 }

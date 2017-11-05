@@ -1,6 +1,5 @@
 package fuse.core.front.buffers;
 import fuse.core.communication.data.conductorData.ConductorData;
-import fuse.texture.RenderTexture;
 import fuse.texture.Texture;
 
 /**
@@ -16,7 +15,7 @@ class LayerCacheBuffers
 	
 	static var bufferWidth:Int;
 	static var bufferHeight:Int;
-	static var buffers = new Map<Int, RenderTexture>();
+	static var buffers = new Map<Int, BufferTexture>();
 	//var conductorData:ConductorData = new ConductorData();
 	
 	public function new() 
@@ -25,7 +24,7 @@ class LayerCacheBuffers
 		
 		/*for (i in 0...numBuffers) 
 		{
-			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight);
+			var buffer:BufferTexture = new BufferTexture(bufferWidth, bufferHeight);
 			buffers.push(buffer);
 		}
 		
@@ -54,8 +53,9 @@ class LayerCacheBuffers
 		if (!buffers.exists(textureId)){
 			var currentTextureId:Int = Texture.textureIdCount;
 			Texture.textureIdCount = textureId;
-			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight);
-			//buffer._alreadyClear = true;
+			var buffer:BufferTexture = new BufferTexture(bufferWidth, bufferHeight);
+			//buffer.green = 0.5;
+			buffer._alreadyClear = true;
 			buffers.set(textureId, buffer);
 			Texture.textureIdCount = currentTextureId;
 		}
@@ -64,5 +64,13 @@ class LayerCacheBuffers
 	static function get_endIndex():Int 
 	{
 		return startIndex + numBuffers;
+	}
+	
+	public static function getBufferTexture(index:Int):BufferTexture
+	{
+		if (index >= numBuffers) return null;
+		var id:Int = startIndex + index;
+		create(id);
+		return buffers.get(id);
 	}
 }
