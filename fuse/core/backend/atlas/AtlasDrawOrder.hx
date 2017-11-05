@@ -3,7 +3,7 @@ package fuse.core.backend.atlas;
 import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.backend.texture.TextureOrder;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.core.communication.data.textureData.TextureData;
+import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.texture.ITexture;
 import fuse.texture.RenderTexture;

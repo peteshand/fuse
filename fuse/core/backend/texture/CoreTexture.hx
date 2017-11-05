@@ -1,7 +1,8 @@
 package fuse.core.backend.texture;
 
+import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.core.communication.data.textureData.TextureData;
+import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.utils.Notifier;
 
 /**
@@ -26,7 +27,7 @@ class CoreTexture
 	public function new(textureId:Int) 
 	{
 		this.textureId = textureId;
-		textureData = new TextureData(textureId);
+		textureData = CommsObjGen.getTextureData(textureId);
 		textureAvailable = new Notifier<Int>(0);
 		textureAvailable.add(OnTextureAvailableChange);
 	}

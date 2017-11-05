@@ -8,7 +8,6 @@ import fuse.utils.Notifier;
  */
 interface ITextureData 
 {
-	public var memoryBlock:MemoryBlock;
 	public var textureId:Int;
 	
 	public var x(get, set):Int;
@@ -26,10 +25,7 @@ interface ITextureData
 	public var baseP2Height(get, set):Int;
 	
 	public var textureAvailable(get, set):Int;
-	//public var atlasRedraw(get, set):Int;
-	
 	public var area(get, null):Float;
-	//public var placed:Bool;
 	public var placed(get, set):Int;
 	public var persistent(get, set):Int;
 	public var directRender(get, set):Int;

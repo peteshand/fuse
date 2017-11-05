@@ -1,4 +1,5 @@
 package fuse.core.backend.layerCache;
+import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.indices.IIndicesData;
 import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.backend.texture.TextureOrder;
@@ -8,7 +9,7 @@ import fuse.core.backend.Core;
 import fuse.core.backend.layerCache.groups.LayerGroup.LayerGroupState;
 import fuse.core.backend.layerCache.groups.StaticLayerGroup;
 import fuse.core.backend.atlas.partition.AtlasPartition;
-import fuse.core.communication.data.textureData.TextureData;
+import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.texture.RenderTexture;
 import fuse.core.backend.atlas.SheetPacker;
@@ -26,7 +27,7 @@ class LayerCache extends StaticLayerGroup
 {
 	var vertexData:VertexData;
 	var indicesData:IIndicesData;
-	var textureData:TextureData;
+	var textureData:ITextureData;
 	var count:Int = 0;
 	
 	var bottomLeft:Point = new Point();
@@ -50,7 +51,7 @@ class LayerCache extends StaticLayerGroup
 		this.textureId = textureId;
 		vertexData = new VertexData();
 		indicesData = new IndicesData();
-		textureData = new TextureData(textureId);
+		textureData = CommsObjGen.getTextureData(textureId);
 		textureData.x = textureData.y = 0;
 		//textureData.width = WorkerCore.STAGE_WIDTH;
 		//textureData.height = WorkerCore.STAGE_HEIGHT;

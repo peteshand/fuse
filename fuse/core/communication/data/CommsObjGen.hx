@@ -6,6 +6,8 @@ import fuse.core.communication.data.displayData.DisplayData;
 import fuse.core.communication.data.displayData.WorkerDisplayData;
 import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.communication.data.displayData.WorkerDisplayData;
+import fuse.core.communication.data.textureData.TextureData;
+import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.utils.WorkerInfo;
 
 /**
@@ -16,6 +18,7 @@ class CommsObjGen
 {
 	static var displayDataGen:ObjGen<Dynamic>;
 	static var batchDataGen:ObjGen<Dynamic>;
+	static var textureDataGen:ObjGen<Dynamic>;
 	
 	public function new() 
 	{
@@ -29,10 +32,12 @@ class CommsObjGen
 		if (WorkerInfo.usingWorkers) {
 			displayDataGen = new ObjGen<IDisplayData>(WorkerDisplayData);
 			batchDataGen = new ObjGen<IBatchData>(WorkerBatchData);
+			textureDataGen = new ObjGen<IBatchData>(WorkerTextureData);
 		}
 		else {
-			displayDataGen = new ObjGen<IDisplayData>(WorkerDisplayData);
-			batchDataGen = new ObjGen<IBatchData>(WorkerBatchData);
+			displayDataGen = new ObjGen<IDisplayData>(DisplayData);
+			batchDataGen = new ObjGen<IBatchData>(BatchData);
+			textureDataGen = new ObjGen<IBatchData>(TextureData);
 		}
 	}	
 	
@@ -46,6 +51,12 @@ class CommsObjGen
 	{
 		init();
 		return batchDataGen.get(id);
+	}	
+	
+	static public function getTextureData(id:Int) 
+	{
+		init();
+		return textureDataGen.get(id);
 	}
 }
 

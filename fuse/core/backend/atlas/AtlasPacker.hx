@@ -9,7 +9,7 @@ import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.front.buffers.AtlasBuffers;
 import fuse.utils.GcoArray;
 import fuse.core.backend.texture.TextureOrder;
-import fuse.core.communication.data.textureData.TextureData;
+import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.backend.texture.TextureRenderBatch;
 
 /**

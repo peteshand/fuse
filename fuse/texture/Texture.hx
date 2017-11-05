@@ -1,7 +1,8 @@
 package fuse.texture;
 
+import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.core.communication.data.textureData.TextureData;
+import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.front.texture.upload.TextureUploadQue;
 import fuse.core.front.texture.Textures;
 import fuse.texture.ITexture;
@@ -44,7 +45,7 @@ class Texture implements ITexture
 	{
 		this.onTextureUploadCompleteCallback = onTextureUploadCompleteCallback;
 		textureId = textureIdCount++;
-		textureData = new TextureData(textureId);
+		textureData = CommsObjGen.getTextureData(textureId);
 		
 		if (p2Texture){
 			p2Width = PowerOfTwo.getNextPowerOfTwo(width);
