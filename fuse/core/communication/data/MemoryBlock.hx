@@ -5,6 +5,7 @@ import openfl.Memory;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class MemoryBlock
 {
 	static var memoryIdCount:Int = 0;

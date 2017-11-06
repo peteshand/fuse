@@ -17,6 +17,7 @@ import fuse.core.communication.WorkerComms;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse)
 class WorkerThread extends ThreadBase
 {

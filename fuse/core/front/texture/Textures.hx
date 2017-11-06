@@ -14,6 +14,7 @@ import openfl.display3D.textures.TextureBase;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse.core.front.buffers.AtlasBuffers)
 @:access(fuse.core.front.buffers.LayerCacheBuffers)
 @:access(fuse.core.front.texture)

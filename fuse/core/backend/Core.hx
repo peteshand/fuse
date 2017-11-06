@@ -14,6 +14,7 @@ import fuse.core.backend.atlas.AtlasPacker;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class Core
 {
 	public static var displayList:DisplayList;

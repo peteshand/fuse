@@ -5,6 +5,7 @@ import fuse.pool.Pool;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class CoreQuad extends CoreImage
 {
 

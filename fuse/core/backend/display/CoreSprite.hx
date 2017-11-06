@@ -7,6 +7,7 @@ import fuse.pool.Pool;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:keep
 class CoreSprite extends CoreInteractiveObject
 {

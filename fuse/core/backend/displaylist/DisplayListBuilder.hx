@@ -18,6 +18,7 @@ import fuse.utils.GcoArray;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse.texture.RenderTexture)
 @:access(fuse.core.backend.layerCache.LayerCaches)
 class DisplayListBuilder

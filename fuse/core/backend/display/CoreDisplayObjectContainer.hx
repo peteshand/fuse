@@ -4,6 +4,7 @@ package fuse.core.backend.display;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class CoreDisplayObjectContainer extends CoreInteractiveObject
 {
 

@@ -14,6 +14,7 @@ import fuse.core.utils.WorkerInfo;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class CommsObjGen
 {
 	static var displayDataGen:ObjGen<Dynamic>;

@@ -1,12 +1,14 @@
 package fuse.core.communication.data.vertexData;
 import fuse.Fuse;
 import fuse.core.communication.data.indices.IndicesData;
+import fuse.utils.Color;
 import openfl.Memory;
 
 /**
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse.core.communication.data.indices.IndicesData)
 class VertexData implements IVertexData
 {
@@ -127,10 +129,10 @@ class VertexData implements IVertexData
 	{
 		for (i in 0...4) 
 		{
-			this.setR(i, value.R);
-			this.setG(i, value.G);
-			this.setB(i, value.B);
-			this.setA(i, value.A);
+			this.setR(i, value.red);
+			this.setG(i, value.green);
+			this.setB(i, value.blue);
+			this.setA(i, value.alpha);
 		}
 	}
 	inline function setR(index:Int, value:Float):Void { writeFloat(INDEX_R + indexOffset(index), value); }

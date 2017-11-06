@@ -15,6 +15,7 @@ import fuse.core.backend.display.CoreDisplayObject.StaticDef;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse)
 class LayerCaches
 {

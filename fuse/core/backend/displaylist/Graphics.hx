@@ -7,6 +7,7 @@ import fuse.math.FastMatrix3;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class Graphics
 {
 	public static var transformation(get, set):FastMatrix3;

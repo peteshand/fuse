@@ -6,6 +6,7 @@ import fuse.utils.Notifier;
 /**
  * @author P.J.Shand
  */
+@:dox(hide)
 interface ITextureData 
 {
 	public var textureId:Int;

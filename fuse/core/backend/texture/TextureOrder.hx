@@ -15,6 +15,7 @@ import fuse.core.backend.texture.TextureRenderBatch.RenderBatchDef;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse.texture.RenderTexture)
 class TextureOrder
 {

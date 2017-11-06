@@ -4,6 +4,7 @@ package fuse.core.communication.data.geometry;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class GeometryData implements IGeometryData
 {
 	public var id:Int;

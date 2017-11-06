@@ -8,6 +8,7 @@ import fuse.utils.Notifier;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class TextureData implements ITextureData
 {
 	public var textureId:Int;

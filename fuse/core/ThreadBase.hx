@@ -12,6 +12,7 @@ import openfl.events.EventDispatcher;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class ThreadBase extends EventDispatcher
 {
 	public var enterFrame:Signal0 = new Signal0();

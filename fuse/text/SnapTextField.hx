@@ -1,6 +1,6 @@
 package fuse.text;
 
-import fuse.Color;
+import fuse.utils.Color;
 import fuse.display.Image;
 import fuse.texture.BitmapTexture;
 import fuse.texture.ITexture;

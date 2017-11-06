@@ -10,6 +10,7 @@ import openfl.events.Event;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class MessageManager
 {
 	static var _memoryBlock:MemoryBlock;

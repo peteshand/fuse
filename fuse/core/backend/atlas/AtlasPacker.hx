@@ -16,6 +16,7 @@ import fuse.core.backend.texture.TextureRenderBatch;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse)
 class AtlasPacker
 {

@@ -6,6 +6,7 @@ import fuse.core.communication.data.MemoryBlock;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class WorkerBatchData implements IBatchData
 {
 	static public inline var RENDER_TARGET_ID:Int = 0;

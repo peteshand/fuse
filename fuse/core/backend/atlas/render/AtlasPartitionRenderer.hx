@@ -14,6 +14,7 @@ import openfl.geom.Point;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse.texture.RenderTexture)
 @:access(fuse.core.backend.atlas.SheetPacker)
 class AtlasPartitionRenderer

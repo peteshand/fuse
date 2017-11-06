@@ -6,6 +6,7 @@ import fuse.core.communication.data.textureData.ITextureData;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class AtlasPartition
 {
 	public var active:Bool;

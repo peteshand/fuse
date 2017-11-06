@@ -3,6 +3,7 @@ package fuse.core.front;
 /**
  * @author P.J.Shand
  */
+@:dox(hide)
 typedef FuseConfig =
 {
 	?useCacheLayers:Null<Bool>,

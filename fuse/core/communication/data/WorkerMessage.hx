@@ -4,6 +4,7 @@ import fuse.core.communication.messageData.WorkerPayload;
 /**
  * @author P.J.Shand
  */
+@:dox(hide)
 typedef WorkerMessage =
 {
 	name:String,

@@ -4,7 +4,7 @@ import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.display.Stage;
-import fuse.Color;
+import fuse.utils.Color;
 import fuse.Fuse;
 import msignal.Signal.Signal0;
 import msignal.Signal.Signal1;

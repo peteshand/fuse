@@ -2,6 +2,7 @@ package fuse.display;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.front.texture.Textures;
 import fuse.display.DisplayObject;
+import fuse.utils.Color;
 
 /**
  * ...
@@ -14,7 +15,7 @@ class Quad extends DisplayObject
 	{
 		super();
 		
-		colour.A = 1;
+		colour.alpha = 1;
 		
 		displayType = DisplayType.QUAD;
 		displayData.width = width;

@@ -8,6 +8,7 @@ import fuse.core.backend.display.CoreDisplayObject.StaticDef;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:keep
 class LayerGroup
 {

@@ -3,6 +3,7 @@ package fuse.core.communication.data.indices;
 /**
  * @author P.J.Shand
  */
+@:dox(hide)
 interface IIndicesData 
 {
 	var i1(get, set):Int;

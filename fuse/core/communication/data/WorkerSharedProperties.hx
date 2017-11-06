@@ -4,6 +4,7 @@ package fuse.core.communication.data;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class WorkerSharedProperties
 {
 	public static inline var BACK_TO_MAIN:String = "backToMain";

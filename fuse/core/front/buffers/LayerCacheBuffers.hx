@@ -6,6 +6,7 @@ import fuse.texture.Texture;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse.texture.Texture)
 class LayerCacheBuffers
 {

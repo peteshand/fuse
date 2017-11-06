@@ -67,6 +67,7 @@ abstract GcoArray<T>(GcoArrayBase<T>)
 	}
 }
 
+@:dox(hide)
 class GcoArrayBase<T>
 {
 	public var base:Array<T>;

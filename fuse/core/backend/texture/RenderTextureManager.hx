@@ -15,6 +15,7 @@ import fuse.core.backend.displaylist.DisplayListBuilder;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse)
 class RenderTextureManager
 {

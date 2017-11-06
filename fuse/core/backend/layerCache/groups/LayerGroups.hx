@@ -14,6 +14,7 @@ import fuse.core.backend.layerCache.groups.LayerGroup.LayerGroupState;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse.utils.Notifier)
 class LayerGroups
 {

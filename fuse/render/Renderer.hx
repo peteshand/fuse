@@ -15,7 +15,7 @@ import fuse.core.front.texture.Textures;
 import fuse.texture.Texture;
 import fuse.utils.FrameBudget;
 import fuse.utils.Notifier;
-import fuse.Color;
+import fuse.utils.Color;
 import fuse.Fuse;
 import openfl.display3D.Context3DClearMask;
 
@@ -163,7 +163,7 @@ class Renderer
 	
 	public function begin(clear:Bool = true, clearColor:Color):Void
 	{
-		context3D.clear(clearColor.R, clearColor.G, clearColor.B, 1);
+		context3D.clear(clearColor.red, clearColor.green, clearColor.blue, 1);
 	}
 	
 	function drawBuffer() 

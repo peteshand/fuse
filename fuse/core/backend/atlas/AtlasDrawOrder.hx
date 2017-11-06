@@ -16,6 +16,7 @@ import fuse.core.backend.texture.TextureOrder.TextureDef;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:access(fuse.texture.RenderTexture)
 class AtlasDrawOrder
 {

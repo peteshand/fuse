@@ -6,6 +6,7 @@ import fuse.core.communication.data.MemoryBlock;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class ConductorData
 {
 	

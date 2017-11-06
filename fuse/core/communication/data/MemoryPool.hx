@@ -7,6 +7,7 @@ import openfl.errors.Error;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class MemoryPool
 {
 	static var position:Int = 0;

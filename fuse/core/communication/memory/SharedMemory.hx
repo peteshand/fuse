@@ -21,6 +21,7 @@ import openfl.utils.Endian;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class SharedMemory
 {
 	static var memorySize:Int = 0;

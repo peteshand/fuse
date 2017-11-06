@@ -6,6 +6,7 @@ import fuse.pool.Pool;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 class CoreStage extends CoreInteractiveObject
 {
 

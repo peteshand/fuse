@@ -10,6 +10,7 @@ import openfl.geom.Point;
  * ...
  * @author P.J.Shand
  */
+@:dox(hide)
 @:keep
 @:access(fuse)
 class CoreDisplayObject
