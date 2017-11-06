@@ -10,6 +10,8 @@ import fuse.pool.Pool;
 @:dox(hide)
 class AtlasPartitionPlacer
 {
+	static var padding:Int = 1;
+	
 	public function new() 
 	{
 		
@@ -49,9 +51,9 @@ class AtlasPartitionPlacer
 				return Pool.atlasPartitions.request().init(
 					partition.atlasIndex,
 					partition.atlasTextureId,
-					partition.x + textureData.width,
+					partition.x + textureData.width + padding,
 					partition.y,
-					partition.width - textureData.width,
+					partition.width - textureData.width - padding,
 					partition.height
 				);
 				
@@ -82,9 +84,9 @@ class AtlasPartitionPlacer
 					partition.atlasIndex,
 					partition.atlasTextureId,
 					partition.x,
-					partition.y + textureData.height,
+					partition.y + textureData.height + padding,
 					textureData.width,
-					partition.height - textureData.height
+					partition.height - textureData.height - padding
 				);
 				
 				/*return new AtlasPartition(0, 
