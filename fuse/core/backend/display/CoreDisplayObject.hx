@@ -50,7 +50,7 @@ class CoreDisplayObject
 	{
 		staticDef = { 
 			index:-1,
-			layerCacheRenderTarget:0,
+			layerCacheRenderTarget:-1,
 			state:LayerGroupState.DRAW_TO_LAYER
 		};
 		transformData = new TransformData();
