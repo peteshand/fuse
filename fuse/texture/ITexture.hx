@@ -1,4 +1,5 @@
 package fuse.texture;
+import fuse.core.communication.data.textureData.ITextureData;
 import openfl.display.BitmapData;
 
 /**
@@ -6,6 +7,7 @@ import openfl.display.BitmapData;
  */
 interface ITexture 
 {
+	private var textureData:ITextureData;
 	public var textureId:Int;
 	public var width:Int;
 	public var height:Int;

@@ -35,6 +35,8 @@ class TextureData implements ITextureData
 	@:isVar public var atlasTextureId(get, set):Int;
 	@:isVar public var atlasBatchTextureIndex(get, set):Int;
 	
+	@:isVar public var changeCount(get, set):Int = 0;
+	
 	public var area(get, null):Float;
 	public var partition = new Notifier<AtlasPartition>();
 	
@@ -117,6 +119,10 @@ class TextureData implements ITextureData
 		return atlasBatchTextureIndex;
 	}
 	
+	inline function get_changeCount():Int { 
+		return changeCount;
+	}
+	
 	
 	
 	
@@ -190,6 +196,10 @@ class TextureData implements ITextureData
 	
 	inline function set_atlasBatchTextureIndex(value:Int):Int { 
 		return atlasBatchTextureIndex = value;
+	}
+	
+	inline function set_changeCount(value:Int):Int { 
+		return changeCount = value;
 	}
 	
 	

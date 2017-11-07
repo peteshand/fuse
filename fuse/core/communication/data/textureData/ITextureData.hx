@@ -33,4 +33,5 @@ interface ITextureData
 	
 	public var atlasTextureId(get, set):Int;
 	public var atlasBatchTextureIndex(get, set):Int;
+	public var changeCount(get, set):Int;
 }

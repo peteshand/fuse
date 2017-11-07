@@ -35,7 +35,10 @@ class WorkerTextureData implements ITextureData
 	static inline var ATLAS_TEXTURE_ID:Int = 32;
 	static inline var ATLAS_BATCH_TEXTURE_INDEX:Int = 34;
 	
-	public static inline var BYTES_PER_ITEM:Int = 36;
+	static inline var CHANGE_COUNT:Int = 36;
+	
+	
+	public static inline var BYTES_PER_ITEM:Int = 38;
 	
 	public var memoryBlock:MemoryBlock;
 	public var textureId:Int;
@@ -65,6 +68,8 @@ class WorkerTextureData implements ITextureData
 	
 	public var atlasTextureId(get, set):Int;
 	public var atlasBatchTextureIndex(get, set):Int;
+	
+	public var changeCount(get, set):Int;
 	
 	public function new(objectOffset:Int) 
 	{
@@ -163,7 +168,9 @@ class WorkerTextureData implements ITextureData
 		return memoryBlock.readInt16(ATLAS_BATCH_TEXTURE_INDEX);
 	}
 	
-	
+	inline function get_changeCount():Int { 
+		return memoryBlock.readInt16(CHANGE_COUNT);
+	}
 	
 	
 	inline function set_x(value:Int):Int { 
@@ -278,7 +285,10 @@ class WorkerTextureData implements ITextureData
 		return value;
 	}
 	
-	
+	inline function set_changeCount(value:Int):Int { 
+		memoryBlock.writeInt16(CHANGE_COUNT, value);
+		return value;
+	}
 	
 	public function toString():String
 	{

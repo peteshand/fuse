@@ -17,6 +17,7 @@ class CoreTexture
 	public var activeCount:Int = 0;
 	var changeAvailable:Bool = false;
 	var textureAvailable:Notifier<Int>;
+	var changeCount:Notifier<Int>;
 	
 	public var uvLeft	:Float = 0;
 	public var uvTop	:Float = 0;
@@ -31,9 +32,12 @@ class CoreTexture
 		textureData = CommsObjGen.getTextureData(textureId);
 		textureAvailable = new Notifier<Int>(0);
 		textureAvailable.add(OnTextureAvailableChange);
+		
+		changeCount = new Notifier<Int>(-1);
+		changeCount.add(OnTextureAvailableChange);
 	}
 	
-	function OnTextureAvailableChange() 
+	inline function OnTextureAvailableChange() 
 	{
 		if (textureData.directRender == 1) return;
 		changeAvailable = true;
@@ -47,8 +51,9 @@ class CoreTexture
 		uvBottom = (textureData.y + textureData.height) / textureData.p2Height;
 	}
 	
-	function get_textureHasChanged():Bool 
+	inline function get_textureHasChanged():Bool 
 	{
+		changeCount.value = textureData.changeCount;
 		textureAvailable.value = textureData.textureAvailable;
 		if (changeAvailable) {
 			return true;
