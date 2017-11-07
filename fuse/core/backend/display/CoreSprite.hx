@@ -1,7 +1,7 @@
 package fuse.core.backend.display;
 
 import fuse.core.communication.data.displayData.IDisplayData;
-import fuse.pool.Pool;
+import fuse.core.utils.Pool;
 
 /**
  * ...

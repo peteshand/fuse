@@ -8,7 +8,7 @@ import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.vertexData.IVertexData;
 import fuse.core.communication.data.vertexData.VertexData;
-import fuse.pool.Pool;
+import fuse.core.utils.Pool;
 import fuse.texture.RenderTexture;
 import fuse.utils.Color;
 

@@ -8,7 +8,7 @@
 //
 // =================================================================================================
 
-package fuse.texture;
+package fuse.utils;
 
 import flash.display3D.Context3DTextureFormat;
 import flash.errors.ArgumentError;

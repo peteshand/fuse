@@ -5,7 +5,7 @@ import fuse.core.backend.display.CoreInteractiveObject;
 import fuse.core.backend.display.CoreStage;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
-import fuse.pool.Pool;
+import fuse.core.utils.Pool;
 
 /**
  * ...

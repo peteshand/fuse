@@ -3,7 +3,7 @@ package fuse.core.backend;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.input.Input;
 import fuse.core.utils.WorkerInfo;
-import fuse.pool.Pool;
+import fuse.core.utils.Pool;
 import msignal.Signal.Signal0;
 import openfl.Lib;
 

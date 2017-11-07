@@ -1,5 +1,5 @@
 package fuse.core.backend.display;
-import fuse.pool.Pool;
+import fuse.core.utils.Pool;
 
 /**
  * ...

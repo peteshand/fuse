@@ -5,7 +5,7 @@ import fuse.core.communication.memory.SharedMemory;
 import fuse.core.communication.data.conductorData.ConductorData;
 import fuse.core.utils.WorkerInfo;
 import fuse.display.DisplayObject;
-import fuse.pool.Pool;
+import fuse.core.utils.Pool;
 
 import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.WorkerlessComms;

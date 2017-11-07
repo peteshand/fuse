@@ -3,7 +3,7 @@ import fuse.core.backend.displaylist.Graphics;
 import fuse.core.backend.layerCache.groups.LayerGroup;
 import fuse.core.backend.util.transform.WorkerTransformHelper;
 import fuse.core.communication.data.displayData.IDisplayData;
-import fuse.pool.Pool;
+import fuse.core.utils.Pool;
 import openfl.geom.Point;
 
 /**

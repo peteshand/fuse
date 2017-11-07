@@ -6,7 +6,7 @@ import fuse.core.backend.atlas.placer.AtlasPartitionPlacer;
 import fuse.core.backend.atlas.render.AtlasPartitionRenderer;
 import fuse.core.backend.texture.TextureOrder.TextureDef;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.pool.Pool;
+import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
 
 /**

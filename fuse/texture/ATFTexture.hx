@@ -1,6 +1,7 @@
 package fuse.texture;
+import fuse.utils.AtfData;
 
-import fuse.texture.AtfData.AtfDataInfo;
+import fuse.utils.AtfData.AtfDataInfo;
 import fuse.texture.Texture;
 import fuse.core.front.texture.Textures;
 import openfl.display.BitmapData;

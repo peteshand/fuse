@@ -4,7 +4,7 @@ import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.backend.Core;
 import fuse.core.backend.layerCache.LayerCache;
 import fuse.core.communication.data.vertexData.VertexData;
-import fuse.pool.Pool;
+import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
 import fuse.utils.Notifier;
 import fuse.core.backend.display.CoreDisplayObject;

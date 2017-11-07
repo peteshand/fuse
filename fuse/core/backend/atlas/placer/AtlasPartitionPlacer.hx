@@ -1,7 +1,7 @@
 package fuse.core.backend.atlas.placer;
 import fuse.core.backend.atlas.partition.AtlasPartition;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.pool.Pool;
+import fuse.core.utils.Pool;
 
 /**
  * ...

@@ -1,11 +1,11 @@
-package fuse.pool;
+package fuse.core.utils;
 
 import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.display.CoreInteractiveObject;
 import fuse.core.backend.display.CoreQuad;
 import fuse.core.backend.display.CoreSprite;
 import fuse.core.backend.atlas.partition.AtlasPartition;
-import fuse.pool.ObjectPool;
+import fuse.utils.ObjectPool;
 import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.backend.layerCache.groups.LayerGroup;
 import fuse.core.backend.layerCache.groups.StaticLayerGroup;

@@ -16,7 +16,7 @@ import openfl.display3D.Context3DTextureFormat;
 @:access(fuse)
 class RenderTexture extends Texture
 {
-	@:isVar static var currentRenderTargetId(get, set):Int;
+	static var currentRenderTargetId:Int;
 	static var conductorData:ConductorData;
 	var renderTextureData:IRenderTextureData;
 	var renderTextureDrawData:IRenderTextureDrawData;
@@ -57,19 +57,5 @@ class RenderTexture extends Texture
 	public function clear() 
 	{
 		this._clear = true;
-	}
-	
-	static function get_currentRenderTargetId():Int 
-	{
-		return currentRenderTargetId;
-	}
-	
-	static function set_currentRenderTargetId(value:Int):Int 
-	{
-		currentRenderTargetId = value;
-		if (currentRenderTargetId == 0) {
-			trace("sdfasd");
-		}
-		return currentRenderTargetId;
 	}
 }

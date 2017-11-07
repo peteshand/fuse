@@ -5,7 +5,7 @@ import fuse.core.backend.layerCache.groups.LayerGroup.LayerGroupState;
 import fuse.core.backend.layerCache.groups.LayerGroups;
 import fuse.core.backend.layerCache.groups.StaticLayerGroup;
 import fuse.core.front.buffers.LayerCacheBuffers;
-import fuse.pool.Pool;
+import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
 import fuse.utils.Notifier;
 import fuse.core.backend.display.CoreDisplayObject;

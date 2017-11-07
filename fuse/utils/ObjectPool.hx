@@ -1,4 +1,4 @@
-package fuse.pool;
+package fuse.utils;
 
 import haxe.ds.ObjectMap;
 
