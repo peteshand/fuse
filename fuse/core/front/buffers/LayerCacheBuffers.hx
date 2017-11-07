@@ -41,10 +41,10 @@ class LayerCacheBuffers
 		LayerCacheBuffers.bufferWidth = bufferWidth;
 		LayerCacheBuffers.bufferHeight = bufferHeight;
 		Texture.textureIdCount = startIndex + numBuffers;
-		//for (i in startIndex...endIndex) 
-		//{
-			//create(i);
-		//}
+		for (i in startIndex...endIndex) 
+		{
+			create(i);
+		}
 	}
 	
 	static function create(textureId:Int) 
