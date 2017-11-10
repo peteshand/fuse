@@ -33,10 +33,6 @@ class CoreImage extends CoreDisplayObject
 	var targetWidth			:Float;
 	var targetHeight		:Float;
 	var drawIndex			:Int = -1;
-	/*var uvLeft				:Float = 0;
-	var uvTop				:Float = 0;
-	var uvRight				:Float = 1;
-	var uvBottom			:Float = 1;*/
 	var updateUVs			:Int = 0;
 	var renderTarget		:Int = -1;
 	var textureDef			:TextureDef;
