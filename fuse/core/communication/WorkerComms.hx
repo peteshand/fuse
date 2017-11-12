@@ -16,7 +16,7 @@ import openfl.display.Sprite;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class WorkerComms implements IWorkerComms
 {
 	public var usingWorkers:Bool = true;

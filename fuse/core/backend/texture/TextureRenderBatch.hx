@@ -13,7 +13,7 @@ import fuse.core.backend.texture.TextureOrder.TextureDef;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class TextureRenderBatch
 {
 	var batchDataArray:Array<IBatchData> = [];

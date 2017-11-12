@@ -29,7 +29,7 @@ import fuse.core.communication.data.WorkerSharedProperties;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 @:access(fuse)
 class WorkerSetup
 {

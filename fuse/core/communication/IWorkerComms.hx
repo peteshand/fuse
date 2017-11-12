@@ -4,7 +4,7 @@ import fuse.core.communication.messageData.WorkerPayload;
 /**
  * @author P.J.Shand
  */
-@:dox(hide)
+
 interface IWorkerComms 
 {
 	var usingWorkers:Bool;

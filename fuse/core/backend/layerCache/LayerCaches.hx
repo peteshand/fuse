@@ -15,62 +15,56 @@ import fuse.core.backend.display.CoreDisplayObject.StaticDef;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 @:access(fuse)
 class LayerCaches
 {
-	public static var OBJECT_COUNT:Int = 0;
+	static var layerGroups:LayerGroups;
+	static var currentStaticGroup:StaticLayerGroup;
+	static var change(get, null):Bool;
 	
-	var layerGroups:LayerGroups;
+	public static var OBJECT_COUNT:Int;
+	public static var allLayerGroups(get, null):GcoArray<LayerGroup>;
+	public static var movingLayerGroups(get, null):GcoArray<LayerGroup>;
+	public static var drawToStaticLayerGroups(get, null):GcoArray<LayerGroup>;
+	public static var activeGroups:Array<LayerCache>;
+	public static var maxLayers:Int;
+	public static var currentIndex:Int;
 	
-	public var allLayerGroups(get, null):GcoArray<LayerGroup>;
-	public var movingLayerGroups(get, null):GcoArray<LayerGroup>;
-	public var drawToStaticLayerGroups(get, null):GcoArray<LayerGroup>;
-	//public var alreadyAddedLayerGroups(get, null):GcoArray<LayerGroup>;
-	
-	//public var staticLayerGroups(get, null):GcoArray<LayerGroup>;
-	//public var nonStaticLayerGroups(get, null):GcoArray<LayerGroup>;
-	
-	var currentStaticGroup:StaticLayerGroup;
-	var change(get, null):Bool;
-	
-	//public var currentIsStatic = new Notifier<Null<Int>>();
-	//public var groups = new GcoArray<StaticLayerGroup>([]);
-	public var activeGroups:Array<LayerCache> = [];
-	//public var minGroupSize:Int = 0;
-	
-	//public var indexOffset:Int = 6;
-	public var maxLayers:Int = 2;
-	public var currentIndex:Int = 0;
-	
-	public function new() 
+	static public function __init__() 
 	{
+		OBJECT_COUNT = 0;
+		activeGroups = [];
+		maxLayers = 2;
+		currentIndex = 0;
+		
 		for (i in 0...maxLayers) 
 		{
 			var layerCache:LayerCache = new LayerCache(LayerCacheBuffers.startIndex + i);
 			layerCache.index = i;
 			activeGroups.push(layerCache);
 		}
+		
 		layerGroups = new LayerGroups(activeGroups, maxLayers);
 	}
 	
-	public inline function begin():Void
+	public static inline function begin():Void
 	{
 		layerGroups.begin();
 	}
 	
-	public inline function build(coreDisplay:CoreDisplayObject) 
+	public static inline function build(coreDisplay:CoreDisplayObject) 
 	{
 		layerGroups.build(coreDisplay);
 	}
 	
-	public inline function end():Void
+	public static inline function end():Void
 	{
 		layerGroups.end();
 		currentIndex = 0;
 	}
 	
-	public function checkRenderTarget(staticDef:StaticDef) 
+	public static function checkRenderTarget(staticDef:StaticDef) 
 	{
 		if (currentIndex < activeGroups.length && activeGroups[currentIndex].active) {
 			if (LayerCaches.OBJECT_COUNT < activeGroups[currentIndex].start) {
@@ -101,27 +95,22 @@ class LayerCaches
 		return null;
 	}
 	
-	function get_allLayerGroups():GcoArray<LayerGroup> 
+	static function get_allLayerGroups():GcoArray<LayerGroup> 
 	{
 		return layerGroups.allLayerGroups;
 	}
 	
-	function get_movingLayerGroups():GcoArray<LayerGroup> 
+	static function get_movingLayerGroups():GcoArray<LayerGroup> 
 	{
 		return layerGroups.movingLayerGroups;
 	}
 	
-	function get_drawToStaticLayerGroups():GcoArray<LayerGroup> 
+	static function get_drawToStaticLayerGroups():GcoArray<LayerGroup> 
 	{
 		return layerGroups.drawToStaticLayerGroups;
 	}
 	
-	/*function get_alreadyAddedLayerGroups():GcoArray<LayerGroup> 
-	{
-		return layerGroups.alreadyAddedLayerGroups;
-	}*/
-	
-	function get_change():Bool 
+	static function get_change():Bool 
 	{
 		return layerGroups.change;
 	}

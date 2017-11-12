@@ -7,7 +7,7 @@ import fuse.core.utils.Pool;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class AtlasPartitionPlacer
 {
 	static var padding:Int = 1;

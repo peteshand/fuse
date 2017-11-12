@@ -9,7 +9,7 @@ import fuse.utils.Notifier;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class CoreTexture
 {
 	public var textureId:Int;

@@ -3,7 +3,7 @@ package fuse.core.communication.data.geometry;
 /**
  * @author P.J.Shand
  */
-@:dox(hide)
+
 interface IGeometryData 
 {
 	var id:Int;

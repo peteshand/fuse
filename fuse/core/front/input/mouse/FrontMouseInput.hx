@@ -11,7 +11,7 @@ import openfl.events.MouseEvent;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class FrontMouseInput
 {
 	var messenger:Messenger<Array<Float>>;

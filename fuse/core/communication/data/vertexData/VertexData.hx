@@ -8,7 +8,7 @@ import openfl.Memory;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 @:access(fuse.core.communication.data.indices.IndicesData)
 class VertexData implements IVertexData
 {

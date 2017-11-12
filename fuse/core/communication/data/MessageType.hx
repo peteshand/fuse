@@ -4,7 +4,7 @@ package fuse.core.communication.data;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class MessageType
 {
 	public static inline var INIT:String = "init";

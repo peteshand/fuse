@@ -4,7 +4,7 @@ package fuse.core.communication.data.displayData;
 /**
  * @author P.J.Shand
  */
-@:dox(hide)
+
 interface IDisplayData 
 {
 	public var x(get, set):Float;

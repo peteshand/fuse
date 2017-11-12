@@ -16,7 +16,7 @@ import fuse.core.utils.WorkerInfo;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 @:access(fuse)
 class FrontWorkerSetup extends WorkerSetup
 {

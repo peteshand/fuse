@@ -8,7 +8,7 @@ import fuse.core.messenger.message.SingleValueMessage;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class Messenger<T> implements IMessage<T>
 {
 	var message:IMessage<T>;

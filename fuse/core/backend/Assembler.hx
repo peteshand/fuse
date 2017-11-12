@@ -1,6 +1,7 @@
-package fuse.core.backend.displaylist;
+package fuse.core.backend;
 
 import fuse.core.backend.display.CoreImage;
+import fuse.core.backend.displaylist.processors.ImageProcessor;
 import fuse.core.backend.layerCache.LayerCaches;
 import fuse.core.communication.IWorkerComms;
 import fuse.core.backend.Conductor;
@@ -14,14 +15,40 @@ import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.utils.Pool;
 import fuse.texture.RenderTexture;
 import fuse.utils.GcoArray;
+
 /**
- * ...
- * @author P.J.Shand
- */
-@:dox(hide)
+    This class has it's update function run every frame and is responsible for building the stage3d render data.
+	
+	The following tasks are run:
+	
+	* Test if there are any changes to the displaylist
+	
+	* Test if there are any moving display objects
+	
+	* Test if there are any new textures
+	
+	* Test if there any textures have changed
+	
+	* Builds the RenderTextures displaylist hierarchy and defines the order in which textures are used
+	
+	* Builds the displaylist hierarchy and defines the order in which textures are used
+	
+	* Based on the order in which textures are used, work out how to draw textures into
+	  a large texture atlas so a large number of display items can be draw in a single draw call
+	
+	
+	* Check Layer Cache
+	
+	* Works out how to group textures together so multiple textures (currently 4) can be drawn in a single draw call
+	
+	* Writes data into VertexData byteArray for used in the Renderer class
+	
+	* Close calculation phase
+**/
+
 @:access(fuse.texture.RenderTexture)
 @:access(fuse.core.backend.layerCache.LayerCaches)
-class DisplayListBuilder
+class Assembler
 {
 	//public var hierarchyAll = new GcoArray<CoreDisplayObject>([]);
 	//public var hierarchy = new GcoArray<CoreDisplayObject>([]);
@@ -225,12 +252,13 @@ class DisplayListBuilder
 	
 	function buildLayerCache() 
 	{
-		Core.layerCaches.begin();
+		LayerCaches.begin();
 		for (i in 0...visHierarchy.length) 
 		{
-			visHierarchy[i].buildLayerCache();
+			//visHierarchy[i].buildLayerCache();
+			ImageProcessor.buildLayerCache(visHierarchy[i]);
 		}
-		Core.layerCaches.end();
+		LayerCaches.end();
 	}
 	
 	/*public function updateInternalData() 
@@ -248,18 +276,20 @@ class DisplayListBuilder
 		
 		for (k in 0...visHierarchy.length) 
 		{
-			visHierarchy[k].setAtlasTextures();
+			//visHierarchy[k].setAtlasTextures();
+			ImageProcessor.setAtlasTextures(visHierarchy[k]);
 		}
 	}
 	
 	inline function checkLayerCache() 
 	{
-		if (Core.layerCaches.change){
+		if (LayerCaches.change){
 			LayerCaches.OBJECT_COUNT = 0;
 			
 			for (k in 0...visHierarchy.length) 
 			{
-				visHierarchy[k].checkLayerCache();
+				//visHierarchy[k].checkLayerCache();
+				ImageProcessor.checkLayerCache(visHierarchy[k]);
 			}
 		}
 	}
@@ -298,27 +328,30 @@ class DisplayListBuilder
 		////////////////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////
 		
-		for (i in 0...Core.layerCaches.allLayerGroups.length) 
+		for (i in 0...LayerCaches.allLayerGroups.length) 
 		{
-			var layerGroup:LayerGroup = Core.layerCaches.allLayerGroups[i];
+			var layerGroup:LayerGroup = LayerCaches.allLayerGroups[i];
 			
 			if (layerGroup.state.value == LayerGroupState.MOVING) {
 				for (j in layerGroup.start...layerGroup.end+1) 
 				{
-					visHierarchy[j].setTexturesMove();
+					//visHierarchy[j].setTexturesMove();
+					ImageProcessor.setTexturesMove(visHierarchy[j]);
 				}
 			}
 			else if (layerGroup.state.value == LayerGroupState.DRAW_TO_LAYER) {
 				for (j in layerGroup.start...layerGroup.end+1) 
 				{
-					visHierarchy[j].setTexturesDraw();
+					//visHierarchy[j].setTexturesDraw();
+					ImageProcessor.setTexturesDraw(visHierarchy[j]);
 				}
 			}
 			else if (layerGroup.state.value == LayerGroupState.ALREADY_ADDED) {
 				
 				for (j in layerGroup.start...layerGroup.end+1) 
 				{
-					visHierarchy[j].setTexturesAlreadyAdded();
+					//visHierarchy[j].setTexturesAlreadyAdded();
+					ImageProcessor.setTexturesAlreadyAdded(visHierarchy[j]);
 				}
 				/*var layerCache:LayerCache = WorkerCore.layerCaches.activeGroups[layerGroup.staticIndex];
 				layerCache.setTextures();*/
@@ -400,20 +433,22 @@ class DisplayListBuilder
 		////////////////////////////////////////////////////////////////////////////////
 		
 			
-			for (i in 0...Core.layerCaches.allLayerGroups.length) 
+			for (i in 0...LayerCaches.allLayerGroups.length) 
 			{
-				var layerGroup:LayerGroup = Core.layerCaches.allLayerGroups[i];
+				var layerGroup:LayerGroup = LayerCaches.allLayerGroups[i];
 				if (layerGroup.state.value == LayerGroupState.MOVING) {
 					for (j in layerGroup.start...layerGroup.end+1) 
 					{
-						visHierarchy[j].setVertexDataMove();
+						//visHierarchy[j].setVertexDataMove();
+						ImageProcessor.setVertexDataMove(visHierarchy[j]);
 					}
 				}
 				else {
 					if (layerGroup.state.value == LayerGroupState.DRAW_TO_LAYER) {
 						for (j in layerGroup.start...layerGroup.end+1) 
 						{
-							visHierarchy[j].setVertexDataDraw();
+							//visHierarchy[j].setVertexDataDraw();
+							ImageProcessor.setVertexDataDraw(visHierarchy[j]);
 						}
 					}
 					//else if (layerGroup.state.value == LayerGroupState.ALREADY_ADDED) {
@@ -424,7 +459,7 @@ class DisplayListBuilder
 						}*/
 					//}
 					
-					var layerCache:LayerCache = Core.layerCaches.activeGroups[layerGroup.staticIndex];
+					var layerCache:LayerCache = LayerCaches.activeGroups[layerGroup.staticIndex];
 					layerCache.setVertexData();
 				}
 			}

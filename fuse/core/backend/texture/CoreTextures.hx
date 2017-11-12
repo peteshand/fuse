@@ -4,7 +4,7 @@ package fuse.core.backend.texture;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class CoreTextures
 {
 	var texturesMap = new Map<Int, CoreTexture>();

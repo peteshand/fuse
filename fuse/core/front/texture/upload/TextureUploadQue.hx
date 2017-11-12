@@ -5,7 +5,7 @@ import fuse.texture.ITexture;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 @:access(fuse)
 class TextureUploadQue
 {

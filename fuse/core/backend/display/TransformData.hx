@@ -5,7 +5,7 @@ import fuse.math.FastMatrix3;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class TransformData
 {
 	public var localTransform:FastMatrix3;

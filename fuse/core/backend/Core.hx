@@ -5,7 +5,7 @@ import fuse.core.backend.atlas.AtlasDrawOrder;
 import fuse.core.backend.displaylist.DisplayList;
 import fuse.core.backend.texture.TextureOrder;
 import fuse.core.backend.texture.TextureRenderBatch;
-import fuse.core.backend.displaylist.DisplayListBuilder;
+import fuse.core.backend.Assembler;
 import fuse.core.backend.layerCache.LayerCaches;
 import fuse.core.backend.texture.RenderTextureManager;
 import fuse.core.backend.atlas.AtlasPacker;
@@ -14,11 +14,11 @@ import fuse.core.backend.atlas.AtlasPacker;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class Core
 {
 	public static var displayList:DisplayList;
-	public static var displayListBuilder:DisplayListBuilder;
+	public static var displayListBuilder:Assembler;
 	
 	public static var atlasPacker:AtlasPacker;
 	public static var atlasDrawOrder:AtlasDrawOrder;
@@ -29,7 +29,7 @@ class Core
 	
 	public static var renderTextureManager:RenderTextureManager;
 	//public static var workerLayerConstruct:WorkerLayerConstruct;
-	public static var layerCaches:LayerCaches;
+	//public static var layerCaches:LayerCaches;
 	
 	@:isVar public static var textureBuildRequiredCount(default, set):Int = 0;
 	
@@ -48,7 +48,7 @@ class Core
 	static public function init() 
 	{
 		Core.displayList = new DisplayList();
-		Core.displayListBuilder = new DisplayListBuilder();
+		Core.displayListBuilder = new Assembler();
 		
 		Core.atlasPacker = new AtlasPacker();
 		Core.atlasDrawOrder = new AtlasDrawOrder();
@@ -60,7 +60,7 @@ class Core
 		
 		Core.renderTextureManager = new RenderTextureManager();
 		//WorkerCore.workerLayerConstruct = new WorkerLayerConstruct();
-		Core.layerCaches = new LayerCaches();
+		//Core.layerCaches = new LayerCaches();
 	}
 	
 	static inline function get_hierarchyBuildRequired():Bool 

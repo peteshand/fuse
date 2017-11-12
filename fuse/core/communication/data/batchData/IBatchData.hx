@@ -3,7 +3,7 @@ package fuse.core.communication.data.batchData;
 /**
  * @author P.J.Shand
  */
-@:dox(hide)
+
 interface IBatchData 
 {
 	public var renderTargetId(get, set):Int;

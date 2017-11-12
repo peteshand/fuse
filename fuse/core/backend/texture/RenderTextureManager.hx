@@ -9,13 +9,13 @@ import fuse.utils.ObjectPool;
 import fuse.core.utils.Pool;
 import fuse.texture.RenderTexture;
 import fuse.core.backend.display.CoreDisplayObject;
-import fuse.core.backend.displaylist.DisplayListBuilder;
+import fuse.core.backend.Assembler;
 
 /**
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 @:access(fuse)
 class RenderTextureManager
 {

@@ -7,7 +7,7 @@ import openfl.Memory;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class RenderTextureDrawData implements IRenderTextureDrawData
 {
 	public static var BUFFER_SIZE:Int = 10000;

@@ -5,7 +5,7 @@ import openfl.Memory;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class IndicesData implements IIndicesData
 {
 	@:isVar private static var OBJECT_POSITION(get, set):Int = 0;

@@ -5,7 +5,7 @@ import fuse.core.communication.memory.SharedMemory;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 @:access(fuse.core.messenger.MessageManager)
 class ArrayMessage<T> extends BaseMessage<T> implements IMessage<T>
 {

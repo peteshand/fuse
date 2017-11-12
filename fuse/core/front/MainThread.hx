@@ -29,7 +29,7 @@ import openfl.events.EventDispatcher;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 @:access(fuse)
 class MainThread extends ThreadBase
 {

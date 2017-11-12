@@ -21,7 +21,7 @@ import openfl.geom.Point;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 @:access(fuse.texture.RenderTexture)
 @:access(fuse.core.communication.data.vertexData.VertexData)
 class LayerCache extends StaticLayerGroup

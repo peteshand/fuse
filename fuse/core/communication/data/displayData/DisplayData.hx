@@ -6,7 +6,7 @@ import fuse.core.communication.data.MemoryBlock;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class DisplayData implements IDisplayData
 {
 	@:isVar public var x(get, set):Float = 0;

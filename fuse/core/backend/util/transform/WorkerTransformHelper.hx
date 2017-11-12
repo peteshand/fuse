@@ -10,7 +10,7 @@ import openfl.geom.Point;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 @:access(fuse)
 class WorkerTransformHelper
 {

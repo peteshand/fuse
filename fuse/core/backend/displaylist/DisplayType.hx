@@ -4,7 +4,7 @@ package fuse.core.backend.displaylist;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 @:enum abstract DisplayType(Int) from Int to Int {
 	
 	var STAGE = 0;

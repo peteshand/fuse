@@ -8,7 +8,7 @@ import fuse.utils.Notifier;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class WorkerTextureData implements ITextureData
 {
 	public static var BUFFER_SIZE:Int = 10000;

@@ -4,7 +4,7 @@ import fuse.utils.Color;
 /**
  * @author P.J.Shand
  */
-@:dox(hide)
+
 interface IVertexData 
 {
 	public function setXY(index:Int, x:Float, y:Float):Void;

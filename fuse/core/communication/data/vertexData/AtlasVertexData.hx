@@ -6,7 +6,7 @@ import openfl.Memory;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class AtlasVertexData extends VertexData
 {
 	@:isVar public static var OBJECT_POSITION(get, set):Int = 0;

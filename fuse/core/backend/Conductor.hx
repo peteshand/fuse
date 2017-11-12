@@ -18,7 +18,7 @@ import flash.concurrent.Condition;
  * ...
  * @author P.J.Shand
  */
-@:dox(hide)
+
 class Conductor
 {
 	public static var threadActive(get, null):Bool;
