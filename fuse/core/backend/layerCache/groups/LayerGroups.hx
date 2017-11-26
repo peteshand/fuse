@@ -1,6 +1,5 @@
 package fuse.core.backend.layerCache.groups;
 
-import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.backend.Core;
 import fuse.core.backend.layerCache.LayerCache;
 import fuse.core.communication.data.vertexData.VertexData;
@@ -24,14 +23,10 @@ class LayerGroups
 	
 	public var allLayerGroups = new GcoArray<LayerGroup>([]);
 	public var staticLayerGroups = new GcoArray<LayerGroup>([]);
-	public var nonStaticLayerGroups = new GcoArray<LayerGroup>([]);
+	public var nonStaticLayerGroups = new GcoArray<LayerGroup>([]); //
 	
 	public var movingLayerGroups = new GcoArray<LayerGroup>([]);
 	public var drawToStaticLayerGroups = new GcoArray<LayerGroup>([]);
-	//public var alreadyAddedLayerGroups = new GcoArray<LayerGroup>([]);
-	
-	//public var inactiveLayerGroups = new GcoArray<LayerGroup>([]);
-	//public var activeLayerGroups = new GcoArray<LayerGroup>([]);
 	
 	public var activeGroups:Array<LayerCache> = [];
 	
@@ -76,7 +71,6 @@ class LayerGroups
 		currentIsStatic.value = coreDisplay.isStatic;
 		coreDisplay.layerGroup = currentLayerGroup;
 		LayerGroups.OBJECT_POSITION++;
-		//IndicesData.OBJECT_POSITION++;
 	}
 	
 	function OnIsStaticChange():Void

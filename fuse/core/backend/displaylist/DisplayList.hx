@@ -14,10 +14,13 @@ import fuse.core.utils.Pool;
 
 class DisplayList
 {
+	public static var hierarchyBuildRequired:Bool = false;
+	
 	public var stage:CoreDisplayObject;
 	var map:Map<Int, CoreDisplayObject> = new Map<Int, CoreDisplayObject>();
 	var transformDataMap:Map<Int, IDisplayData> = new Map<Int, IDisplayData>();
-	var unparented:Array<Unparented> = [];
+	
+	var staticCount:Int = 0;
 	
 	public function new() 
 	{
@@ -37,7 +40,7 @@ class DisplayList
 			return;
 		}
 		coreDisplay.mask = maskDisplay;
-		
+		staticCount = 0;
 	}
 	
 	function removeMask(objectId:Int) 
@@ -45,13 +48,13 @@ class DisplayList
 		var coreDisplay:CoreImage = untyped map.get(objectId);
 		if (coreDisplay == null) return;
 		coreDisplay.mask = null;
+		staticCount = 0;
 	}
 	
 	public function addChildAt(objectId:Int, displayType:Int, parentId:Int, addAtIndex:Int) 
 	{
 		var parent:CoreInteractiveObject = getParent(parentId);
 		if (parent == null && objectId != 0) {
-			unparented.push({ objectId:objectId, displayType:displayType, parentId:parentId, addAtIndex:addAtIndex });
 			return;
 		}
 		
@@ -72,18 +75,7 @@ class DisplayList
 			stage = coreDisplay;
 		}
 		
-		
-		var i:Int = unparented.length - 1;
-		while (i >= 0) 
-		{
-			if (unparented[i].parentId == coreDisplay.objectId) {
-				addChildAt(unparented[i].objectId, unparented[i].displayType, unparented[i].parentId, unparented[i].addAtIndex);
-				unparented.splice(i, 1);
-			}
-			i--;
-		}
-		
-		Core.hierarchyBuildRequired = true;
+		staticCount = 0;
 	}
 	
 	inline function getDisplayFromPool(displayType:Int):CoreDisplayObject
@@ -124,16 +116,7 @@ class DisplayList
 		transformDataMap.remove(objectId);
 		map.remove(objectId);
 		
-		var i:Int = unparented.length - 1;
-		while (i >= 0) 
-		{
-			if (unparented[i].objectId == objectId) {
-				unparented.splice(i, 1);
-			}
-			i--;
-		}
-		
-		Core.hierarchyBuildRequired = true;
+		staticCount = 0;
 	}
 	
 	public function get(key:Int) 
@@ -145,11 +128,21 @@ class DisplayList
 	{
 		var displayDataAccess:IDisplayData = null;
 		if (!transformDataMap.exists(objectId)) {
-			//displayDataAccess = new WorkerDisplayData(objectId);
 			displayDataAccess = CommsObjGen.getDisplayData(objectId);
 			transformDataMap.set(objectId, displayDataAccess);
 		}
 		return transformDataMap.get(objectId);
+	}
+	
+	public function checkForDisplaylistChanges() 
+	{
+		if (staticCount <= 1){
+			hierarchyBuildRequired = true;
+		}
+		else {
+			hierarchyBuildRequired = false;
+		}
+		staticCount++;
 	}
 }
 

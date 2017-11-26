@@ -20,6 +20,10 @@ class DisplayData implements IDisplayData
 	@:isVar public var rotation(get, set):Float = 0;
 	@:isVar public var alpha(get, set):Float = 0;
 	@:isVar public var color(get, set):Int = 0;
+	@:isVar public var colorTL(get, set):Int = 0;
+	@:isVar public var colorTR(get, set):Int = 0;
+	@:isVar public var colorBL(get, set):Int = 0;
+	@:isVar public var colorBR(get, set):Int = 0;
 	@:isVar public var textureId(get, set):Int = 0;
 	@:isVar public var renderLayer(get, set):Int = 0;
 	
@@ -34,66 +38,25 @@ class DisplayData implements IDisplayData
 		_objectId = objectOffset;
 	}
 	
-	inline function get_x():Float { 
-		return x;
-	}
-	
-	inline function get_y():Float { 
-		return y;
-	}
-	
-	inline function get_width():Float { 
-		return width;
-	}
-	
-	inline function get_height():Float { 
-		return height;
-	}
-	
-	inline function get_pivotX():Float { 
-		return pivotX;
-	}
-	
-	inline function get_pivotY():Float { 
-		return pivotY;
-	}
-	
-	inline function get_scaleX():Float { 
-		return scaleX;
-	}
-	
-	inline function get_scaleY():Float { 
-		return scaleY;
-	}
-	
-	inline function get_rotation():Float { 
-		return rotation;
-	}
-	
-	inline function get_alpha():Float { 
-		return alpha;
-	}
-	
-	inline function get_color():Int { 
-		return color;
-	}
-	
-	inline function get_textureId():Int { 
-		return textureId;
-	}
-	
-	inline function get_renderLayer():Int { 
-		return renderLayer;
-	}
-	
-	
-	inline function get_isStatic():Int { 
-		return isStatic;
-	}
-	
-	inline function get_visible():Int { 
-		return visible;
-	}
+	inline function get_x():Float { return x; }
+	inline function get_y():Float { return y; }
+	inline function get_width():Float { return width; }
+	inline function get_height():Float { return height; }
+	inline function get_pivotX():Float { return pivotX; }
+	inline function get_pivotY():Float { return pivotY; }
+	inline function get_scaleX():Float { return scaleX; }
+	inline function get_scaleY():Float { return scaleY; }
+	inline function get_rotation():Float { return rotation; }
+	inline function get_alpha():Float { return alpha; }
+	inline function get_color():Int { return color; }
+	inline function get_colorTL():Int { return colorTL; }
+	inline function get_colorTR():Int { return colorTR; }
+	inline function get_colorBL():Int { return colorBL; }
+	inline function get_colorBR():Int { return colorBR; }
+	inline function get_textureId():Int { return textureId; }
+	inline function get_renderLayer():Int { return renderLayer; }
+	inline function get_isStatic():Int { return isStatic; }
+	inline function get_visible():Int { return visible; }
 	
 	
 	inline function get_objectId():Int
@@ -142,8 +105,24 @@ class DisplayData implements IDisplayData
 		return alpha = value;
 	}
 	
-	inline function set_color(value:Int):Int { 
-		return color = value;
+	inline function set_color(value:Int):Int {	
+		return color = colorTL = colorTR = colorBL = colorBR = value;
+	}
+	
+	inline function set_colorTL(value:Int):Int { 
+		return colorTL = value;
+	}
+	
+	inline function set_colorTR(value:Int):Int { 
+		return colorTR = value;
+	}
+	
+	inline function set_colorBL(value:Int):Int { 
+		return colorBL = value;
+	}
+	
+	inline function set_colorBR(value:Int):Int { 
+		return colorBR = value;
 	}
 	
 	inline function set_textureId(value:Int):Int { 

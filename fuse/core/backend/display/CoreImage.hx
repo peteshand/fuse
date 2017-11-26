@@ -1,10 +1,12 @@
 package fuse.core.backend.display;
 
+import fuse.core.assembler.hierarchy.HierarchyAssembler;
+import fuse.core.assembler.vertexWriter.ICoreRenderable;
+import fuse.core.backend.displaylist.Graphics;
 import fuse.core.backend.layerCache.LayerCache;
 import fuse.core.backend.texture.CoreTexture;
 import fuse.core.backend.texture.TextureOrder.TextureDef;
-import fuse.core.communication.data.indices.IIndicesData;
-import fuse.core.communication.data.indices.IndicesData;
+import fuse.core.backend.util.transform.WorkerTransformHelper;
 import fuse.core.communication.data.vertexData.IVertexData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.utils.Pool;
@@ -17,41 +19,53 @@ import fuse.utils.Color;
 
 @:keep
 @:access(fuse.texture)
-class CoreImage extends CoreDisplayObject
+class CoreImage extends CoreDisplayObject implements ICoreRenderable
 {
 	@:isVar public var textureId(get, set):Int = -1;
 	
 	public var vertexData	:IVertexData;
-	public var indicesData	:IIndicesData;
 	public var coreTexture	:CoreTexture;
+	public var textureIndex	:Int;
 	public var mask			:CoreImage;
 	public var renderLayer	:Int = 0;
 	
-	var color				:Color = 0x0;
-	var targetWidth			:Float;
-	var targetHeight		:Float;
+	//var color				:Color = 0x0;
 	var drawIndex			:Int = -1;
 	var updateUVs			:Int = 0;
 	var renderTarget		:Int = -1;
 	var textureDef			:TextureDef;
 	var layerCache			:LayerCache;
-	var transformXMul		:Float = 0;
-	var transformYMul		:Float = 0;
 	
 	public function new() 
 	{
 		super();
 		vertexData = new VertexData();
-		indicesData = new IndicesData();
 	}
 	
-	override function pushTransform() 
+	override function calculateTransform() 
 	{
-		super.pushTransform();
+		isStatic = displayData.isStatic;
+		//displayData.isStatic = 1; // reset static prop
 		
-		if (Core.hierarchyBuildRequired) {
-			Core.displayListBuilder.visHierarchy.push(this);
+		if (isStatic == 0) {
+			//readDisplayData();
+			textureId = displayData.textureId;
+			renderLayer = displayData.renderLayer;
+			
+			combinedAlpha = Graphics.alpha * displayData.alpha;
+			WorkerTransformHelper.update(this);
+			//WorkerTransformHelper.multvecs(
+				//transformData.localTransform, 
+				//bottomLeft, topLeft, topRight, bottomRight, 
+				//displayData.pivotX, displayData.pivotY, 
+				//displayData.width, displayData.height
+			//);
 		}
+	}
+	
+	override function popTransform() 
+	{
+		
 	}
 	
 	inline function get_textureId():Int { return textureId; }
@@ -74,36 +88,40 @@ class CoreImage extends CoreDisplayObject
 		return value;
 	}
 	
-	override function readDisplayData() 
+	override function beginSetChildrenIsStatic(value:Bool) 
 	{
-		super.readDisplayData();
 		
-		// TODO: add ability to update textureID after Image creation
-		/*trace("CHECK THIS ISN'T CAUSING ISSUES");
-		if (coreTexture.textureData.placed == 0) {
-			coreTexture.textureData.placed = 1;
-		}*/
-		
-		if (isStatic == 0 || parentNonStatic) {
-			color = displayData.color;
-			renderLayer = displayData.renderLayer;
-			textureId = displayData.textureId;
-		}
 	}
 	
-	override function updateIsStatic() 
-	{
-		super.updateIsStatic();
-		
-		if (isStatic == 1 && coreTexture.textureHasChanged) {
-			isStatic = 0; // If texture has change then set isStatic to false
-		}
-	}
+	//override function readDisplayData() 
+	//{
+		//super.readDisplayData();
+		//
+		//// TODO: add ability to update textureID after Image creation
+		///*trace("CHECK THIS ISN'T CAUSING ISSUES");
+		//if (coreTexture.textureData.placed == 0) {
+			//coreTexture.textureData.placed = 1;
+		//}*/
+		//
+		//if (isStatic == 0 || parentNonStatic) {
+			////color = displayData.color;
+			//renderLayer = displayData.renderLayer;
+			//textureId = displayData.textureId;
+		//}
+	//}
+	
+	//override function updateIsStatic() 
+	//{
+		//super.updateIsStatic();
+		//
+		////if (isStatic == 1 && coreTexture.textureHasChanged) {
+			////isStatic = 0; // If texture has change then set isStatic to false
+		////}
+	//}
 	
 	override public function buildHierarchy() 
 	{
-		Core.displayListBuilder.hierarchyApplyTransform.push(pushTransform);
-		Core.displayListBuilder.hierarchyApplyTransform.push(popTransform);
+		HierarchyAssembler.transformActions.push(pushTransform);
 	}
 	
 	override public function clone():CoreDisplayObject
@@ -118,4 +136,15 @@ class CoreImage extends CoreDisplayObject
 	{
 		Pool.images.release(this);
 	}
+	
+	////////////////////////////////////////////////////////////////
+	// New Assembler ///////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	
+	override public function buildHierarchy2()
+	{
+		// TODO: check if visible and parent is visible
+		HierarchyAssembler.hierarchy.push(this);
+	}
+	
 }

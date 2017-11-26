@@ -18,6 +18,8 @@ class CoreTexture
 	var changeAvailable:Bool = false;
 	var textureAvailable:Notifier<Int>;
 	var changeCount:Notifier<Int>;
+	var p2Width:Int;
+	var p2Height:Int;
 	
 	public var uvLeft	:Float = 0;
 	public var uvTop	:Float = 0;
@@ -45,10 +47,22 @@ class CoreTexture
 	
 	public function updateUVData() 
 	{
-		uvLeft = textureData.x / textureData.p2Width;
-		uvTop = textureData.y / textureData.p2Height;
-		uvRight = (textureData.x + textureData.width) / textureData.p2Width;
-		uvBottom = (textureData.y + textureData.height) / textureData.p2Height;
+		//uvLeft = textureData.x / textureData.p2Width;
+		//uvTop = textureData.y / textureData.p2Height;
+		//uvRight = (textureData.x + textureData.width) / textureData.p2Width;
+		//uvBottom = (textureData.y + textureData.height) / textureData.p2Height;
+		p2Width = textureData.p2Width;
+		p2Height = textureData.p2Height;
+		
+		uvLeft = uvRight = textureData.x;
+		uvTop = uvBottom = textureData.y;
+		uvLeft /= p2Width;
+		uvTop /= p2Height;
+		
+		uvRight += textureData.width;
+		uvBottom += textureData.height;
+		uvRight /= p2Width;
+		uvBottom /= p2Height;
 	}
 	
 	inline function get_textureHasChanged():Bool 
@@ -69,6 +83,7 @@ class CoreTexture
 	inline function set_textureData(value:ITextureData):ITextureData 
 	{
 		textureData = value;
+		updateUVData();
 		return textureData;
 	}
 	

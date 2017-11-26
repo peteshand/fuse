@@ -1,4 +1,5 @@
 package fuse.core.backend.display;
+import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.backend.displaylist.Graphics;
 import fuse.core.backend.layerCache.groups.LayerGroup;
 import fuse.core.backend.util.transform.WorkerTransformHelper;
@@ -20,17 +21,17 @@ class CoreDisplayObject
 	
 	public var objectId		:Int;
 	public var isStatic		:Int = 0;
-	public var x			:Float = 0;
-	public var y			:Float = 0;
-	public var width		:Float = 0;
-	public var height		:Float = 0;
-	public var pivotX		:Float = 0;
-	public var pivotY		:Float = 0;
-	public var rotation		:Float = 0;
-	public var scaleX		:Float = 0;
-	public var scaleY		:Float = 0;
-	public var alpha		:Float = 0;
-	public var visible		:Int = 1;
+	//public var x			:Float = 0;
+	//public var y			:Float = 0;
+	//public var width		:Float = 0;
+	//public var height		:Float = 0;
+	//public var pivotX		:Float = 0;
+	//public var pivotY		:Float = 0;
+	//public var rotation	:Float = 0;
+	//public var scaleX		:Float = 0;
+	//public var scaleY		:Float = 0;
+	//public var alpha		:Float = 0;
+	//public var visible	:Int = 1;
 	
 	public var displayData	:IDisplayData;
 	public var parent		:CoreInteractiveObject;
@@ -58,113 +59,76 @@ class CoreDisplayObject
 	
 	public function buildHierarchy() 
 	{
-		Core.displayListBuilder.hierarchyApplyTransform.push(pushTransform);
-		Core.displayListBuilder.hierarchyApplyTransform.push(popTransform);
+		HierarchyAssembler.transformActions.push(calculateTransform);
+		HierarchyAssembler.transformActions.push(popTransform);
 	}
 	
-	function pushTransform() 
-	{
-		updateIsStatic();
-		
-		if (isStatic == 0) {
-			readDisplayData();
-			combinedAlpha = Graphics.alpha * this.alpha;
-			Graphics.pushAlpha(combinedAlpha);
-			WorkerTransformHelper.update(this);
-			updatePositionData();
-		}
-	}
-	
-	inline function updatePositionData() 
-	{
-		WorkerTransformHelper.multvec(bottomLeft, transformData.localTransform, -pivotX, -pivotY + height);
-		WorkerTransformHelper.multvec(topLeft, transformData.localTransform, -pivotX, -pivotY);
-		WorkerTransformHelper.multvec(topRight, transformData.localTransform, -pivotX + width, -pivotY);
-		WorkerTransformHelper.multvec(bottomRight, transformData.localTransform, -pivotX + width, -pivotY + height);
-	}
-	
-	function updateIsStatic() 
+	function calculateTransform() 
 	{
 		isStatic = displayData.isStatic;
-		displayData.isStatic = 1; // reset static prop
+		//displayData.isStatic = 1; // reset static prop
 		
-		/*var tempApplyPosition:Int = displayData.applyPosition;
-		if (applyPosition != tempApplyPosition) {
-			applyPosition = tempApplyPosition;
-			displayData.applyPosition = 0;
-		}
-		var tempApplyRotation:Int = displayData.applyRotation;
-		if (applyRotation != tempApplyRotation) {
-			applyRotation = tempApplyRotation;
-			//trace("applyRotation = " + applyRotation);
-			displayData.applyRotation = 0;
-		}*/
 		if (isStatic == 0) {
-			setChildrenIsStatic(false);
+			beginSetChildrenIsStatic(false);
+			//readDisplayData();
+			combinedAlpha = Graphics.alpha * displayData.alpha;
+			Graphics.pushAlpha(combinedAlpha);
+			WorkerTransformHelper.update(this);
+			//WorkerTransformHelper.multvecs(
+				//transformData.localTransform, 
+				//bottomLeft, topLeft, topRight, bottomRight, 
+				//displayData.pivotX, displayData.pivotY, 
+				//displayData.width, displayData.height
+			//);
 		}
+		
+		pushTransform();
+	}
+	
+	inline function pushTransform() 
+	{
+		Graphics.pushTransformation(transformData.localTransform);
+		
+		// Not sure if this is used anymore
+		//transformData.globalTransform.setFrom(transformData.localTransform);
+	}
+	
+	function beginSetChildrenIsStatic(value:Bool) 
+	{
+		// CoreInteractiveObject will override
 	}
 	
 	function setChildrenIsStatic(value:Bool) 
 	{
 		if (value) {
 			parentNonStatic = true;
-			//checkIsStatic();
 		}
 	}
 	
-	function readDisplayData() 
-	{
-		if (isStatic == 0 || parentNonStatic){
-			x = displayData.x;
-			y = displayData.y;
-			width = displayData.width;
-			height = displayData.height;
-			pivotX = displayData.pivotX;
-			pivotY = displayData.pivotY;
-			scaleX = displayData.scaleX;
-			scaleY = displayData.scaleY;
-			rotation = displayData.rotation;
-			alpha = displayData.alpha;
-			visible = displayData.visible;
-		}
-	}
+	//function readDisplayData() 
+	//{
+		//if (isStatic == 0 || parentNonStatic){
+			////x = displayData.x;
+			////y = displayData.y;
+			////width = displayData.width;
+			////height = displayData.height;
+			////pivotX = displayData.pivotX;
+			////pivotY = displayData.pivotY;
+			////scaleX = displayData.scaleX;
+			////scaleY = displayData.scaleY;
+			////rotation = displayData.rotation;
+			////alpha = displayData.alpha;
+			////visible = displayData.visible;
+		//}
+	//}
 	
 	function popTransform() 
 	{
 		if (isStatic == 0){
 			Graphics.popTransformation();
 			Graphics.popAlpha();
-			
-			//applyPosition = 0;
-			//applyRotation = 0;
 		}
 	}
-	
-	//inline function get_applyPosition():Int { return applyPosition; }
-	//inline function get_applyRotation():Int { return applyRotation; }
-	
-	/*inline function set_applyPosition(value:Int):Int 
-	{
-		if (applyPosition != value) {
-			applyPosition = value;
-			checkIsStatic();
-		}
-		return applyPosition;
-	}
-	
-	inline function set_applyRotation(value:Int):Int 
-	{
-		if (applyRotation != value) {
-			applyRotation = value;
-			checkIsStatic();
-		}
-		return applyRotation;
-	}*/
-	
-	/*inline function checkIsStatic():Void 
-	{
-		if (applyRotation == 1 || applyPosition == 1 || parentNonStatic) isStatic = 0;
-	}*/
 	
 	public function clone():CoreDisplayObject
 	{
@@ -188,6 +152,24 @@ class CoreDisplayObject
 	function requestFromPool():CoreDisplayObject
 	{
 		return Pool.displayObjects.request();
+	}
+	
+	////////////////////////////////////////////////////////////////
+	// New Assembler ///////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	
+	public function buildHierarchy2()
+	{
+		trace("objectId = " + objectId);
+	}
+	
+	public function buildTransformActions()
+	{
+		//pushTransform();
+		//popTransform();
+		
+		HierarchyAssembler.transformActions.push(calculateTransform);
+		HierarchyAssembler.transformActions.push(popTransform);
 	}
 }
 

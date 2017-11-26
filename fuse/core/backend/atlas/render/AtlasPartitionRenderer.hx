@@ -2,8 +2,6 @@ package fuse.core.backend.atlas.render;
 
 import fuse.core.backend.atlas.partition.AtlasPartition;
 import fuse.core.backend.texture.TextureRenderBatch.RenderBatchDef;
-import fuse.core.communication.data.indices.IIndicesData;
-import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.vertexData.IVertexData;
 import fuse.core.communication.data.vertexData.VertexData;
@@ -31,7 +29,6 @@ class AtlasPartitionRenderer
 		//trace("textureId = " + textureData.textureId);
 		
 		var vertexData:IVertexData = new VertexData();
-		var indicesData:IIndicesData = new IndicesData();
 		
 		RenderTexture.currentRenderTargetId = textureData.atlasTextureId;
 		
@@ -67,7 +64,18 @@ class AtlasPartitionRenderer
 		vertexData.setXY(2, (topRight.x + offsetX) / mulX,		(-topRight.y - offsetY) / mulY);
 		vertexData.setXY(3, (bottomRight.x + offsetX) / mulX,	(-bottomRight.y - offsetY) / mulY);
 		
-		vertexData.setColor(0x0);
+		vertexData.setColor(0, 0x0);
+		vertexData.setColor(1, 0x0);
+		vertexData.setColor(2, 0x0);
+		vertexData.setColor(3, 0x0);
+		//for (i in 0...4) 
+		//{
+			//vertexData.setR(i, 0);
+			//vertexData.setG(i, 0);
+			//vertexData.setB(i, 0);
+			//vertexData.setA(i, 0);
+		//}
+		
 		vertexData.setAlpha(1);
 		
 		/*vertexData.setMaskT(0, -1);
@@ -87,14 +95,6 @@ class AtlasPartitionRenderer
 		trace([vertexData.x2, vertexData.y2]);
 		trace([vertexData.x3, vertexData.y3]);
 		trace([vertexData.x4, vertexData.y4]);*/
-		
-		// TODO: only update when you need to
-		indicesData.setIndex(0, 0);
-		indicesData.setIndex(1, 1);
-		indicesData.setIndex(2, 2);
-		indicesData.setIndex(3, 0);
-		indicesData.setIndex(4, 2);
-		indicesData.setIndex(5, 3);
 		
 		//textureData.atlasTextureId
 		//trace("textureData.textureId = " + textureData.textureId);
@@ -133,6 +133,5 @@ class AtlasPartitionRenderer
 		}
 		
 		VertexData.OBJECT_POSITION++;
-		//IndicesData.OBJECT_POSITION++;
 	}
 }

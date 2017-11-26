@@ -1,6 +1,5 @@
 package fuse.core.backend.texture;
 
-import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.communication.data.vertexData.VertexData;
@@ -82,7 +81,6 @@ class TextureOrder
 		if (visible) {
 			currentTextureDef.numItems++;
 			VertexData.OBJECT_POSITION++;
-			//IndicesData.OBJECT_POSITION++;
 		}
 		
 		//trace("VertexData.basePosition = " + VertexData.basePosition);

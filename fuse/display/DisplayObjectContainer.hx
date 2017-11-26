@@ -32,7 +32,6 @@ class DisplayObjectContainer extends InteractiveObject
 		
 		
 		//if (child.base == null || child.base.data != null){
-			child.setStage(stage);
 			child.setParent(this);
 			
 			if (index >= 0 && index < children.length) {
@@ -72,6 +71,18 @@ class DisplayObjectContainer extends InteractiveObject
 			i--;
 		}
 		//isStatic = 0;
+	}
+	
+	override function setParent(value:DisplayObjectContainer):Void 
+	{
+		super.setParent(value);
+		
+		if (parent != null) {
+			for (i in 0...children.length) children[i].setParent(this);
+		}
+		else {
+			for (i in 0...children.length) children[i].setParent(null);
+		}
 	}
 	
 	public function getChildAt(index:Int):DisplayObject

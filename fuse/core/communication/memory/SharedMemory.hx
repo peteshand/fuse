@@ -4,7 +4,6 @@ import fuse.core.communication.data.MemoryPool;
 import fuse.core.communication.data.batchData.WorkerBatchData;
 import fuse.core.communication.data.conductorData.ConductorData;
 import fuse.core.communication.data.displayData.WorkerDisplayData;
-import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.communication.data.renderTextureData.RenderTextureData;
 import fuse.core.communication.data.renderTextureData.RenderTextureDrawData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
@@ -13,7 +12,7 @@ import fuse.core.messenger.MessageManager;
 import fuse.core.messenger.Messenger;
 import fuse.core.utils.WorkerInfo;
 
-import openfl.Memory;
+import fuse.core.communication.memory.Memory;
 import openfl.utils.ByteArray;
 import openfl.utils.Endian;
 
@@ -28,12 +27,10 @@ class SharedMemory
 	@:isVar public static var memory(get, set):ByteArray;
 	
 	public var vertexDataPool:MemoryPool;
-	public var indicesDataPool:MemoryPool;
 	public var batchDataPool:MemoryPool;
 	public var conductorDataPool:MemoryPool;
 	public var displayDataPool:MemoryPool;
 	public var textureDataPool:MemoryPool;
-	//public var atlasVertexDataPool:MemoryPool;
 	public var renderTextureDataPool:MemoryPool;
 	public var renderTextureDrawDataPool:MemoryPool;
 	public var messageDataPool:MemoryPool;
@@ -41,30 +38,13 @@ class SharedMemory
 	public function new(memory:ByteArray=null) 
 	{
 		vertexDataPool = CreatePool(VertexData.BUFFER_SIZE * VertexData.BYTES_PER_ITEM);
-		indicesDataPool = CreatePool(IndicesData.BUFFER_SIZE * IndicesData.BYTES_PER_ITEM);
 		batchDataPool = CreatePool(WorkerBatchData.BUFFER_SIZE * WorkerBatchData.BYTES_PER_ITEM);
 		conductorDataPool = CreatePool(ConductorData.BUFFER_SIZE);
 		displayDataPool = CreatePool(WorkerDisplayData.BUFFER_SIZE * WorkerDisplayData.BYTES_PER_ITEM);
 		textureDataPool = CreatePool(WorkerTextureData.BUFFER_SIZE * WorkerTextureData.BYTES_PER_ITEM);
-		//atlasVertexDataPool = CreatePool(VertexData.BUFFER_SIZE * VertexData.BYTES_PER_ITEM);
 		renderTextureDataPool = CreatePool(RenderTextureData.BUFFER_SIZE * RenderTextureData.BYTES_PER_ITEM);
 		renderTextureDrawDataPool = CreatePool(RenderTextureDrawData.BUFFER_SIZE * RenderTextureDrawData.BYTES_PER_ITEM);
 		messageDataPool = CreatePool(MessageManager.BUFFER_SIZE);
-		
-		/*trace("batchDataPool.start     = " + batchDataPool.start);
-		trace("batchDataPool.end       = " + batchDataPool.end);
-		
-		trace("conductorDataPool.start = " + conductorDataPool.start);
-		trace("conductorDataPool.end   = " + conductorDataPool.end);
-		
-		trace("displayDataPool.start   = " + displayDataPool.start);
-		trace("displayDataPool.end     = " + displayDataPool.end);
-		
-		trace("vertexDataPool.start    = " + vertexDataPool.start);
-		trace("vertexDataPool.end      = " + vertexDataPool.end);
-		
-		trace("renderTextureDataPool.start    = " + renderTextureDataPool.start);
-		trace("renderTextureDataPool.end      = " + renderTextureDataPool.end);*/
 		
 		if (memory == null) {
 			SharedMemory.memory = new ByteArray();

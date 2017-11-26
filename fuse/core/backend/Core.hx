@@ -5,7 +5,6 @@ import fuse.core.backend.atlas.AtlasDrawOrder;
 import fuse.core.backend.displaylist.DisplayList;
 import fuse.core.backend.texture.TextureOrder;
 import fuse.core.backend.texture.TextureRenderBatch;
-import fuse.core.backend.Assembler;
 import fuse.core.backend.layerCache.LayerCaches;
 import fuse.core.backend.texture.RenderTextureManager;
 import fuse.core.backend.atlas.AtlasPacker;
@@ -18,7 +17,8 @@ import fuse.core.backend.atlas.AtlasPacker;
 class Core
 {
 	public static var displayList:DisplayList;
-	public static var displayListBuilder:Assembler;
+	// Remove for New Assembler //
+	//public static var assembler:Assembler;
 	
 	public static var atlasPacker:AtlasPacker;
 	public static var atlasDrawOrder:AtlasDrawOrder;
@@ -35,20 +35,22 @@ class Core
 	
 	public static var textureBuildNextFrame:Bool;
 	public static var textureBuildRequired:Bool;
-	@:isVar public static var hierarchyBuildRequired(get, set):Bool = true;
+	//@:isVar public static var hierarchyBuildRequired(get, set):Bool = true;
 	public static var STAGE_WIDTH:Int;
 	public static var STAGE_HEIGHT:Int;
 	
 	@:isVar public static var isStatic(get, set):Int;
 	
-	public static var texturesHaveChanged:Bool = false;
+	
 	
 	public function new() { }
 	
 	static public function init() 
 	{
 		Core.displayList = new DisplayList();
-		Core.displayListBuilder = new Assembler();
+		
+		// Remove for New Assembler //
+		//Core.assembler = new Assembler();
 		
 		Core.atlasPacker = new AtlasPacker();
 		Core.atlasDrawOrder = new AtlasDrawOrder();
@@ -63,19 +65,19 @@ class Core
 		//Core.layerCaches = new LayerCaches();
 	}
 	
-	static inline function get_hierarchyBuildRequired():Bool 
-	{
-		return hierarchyBuildRequired;
-	}
-	
-	static function set_hierarchyBuildRequired(value:Bool):Bool 
-	{
-		hierarchyBuildRequired = value;
-		if (hierarchyBuildRequired) textureBuildRequiredCount = 0;
-		else textureBuildRequiredCount++;
-		
-		return hierarchyBuildRequired;
-	}
+	//static inline function get_hierarchyBuildRequired():Bool 
+	//{
+		//return hierarchyBuildRequired;
+	//}
+	//
+	//static function set_hierarchyBuildRequired(value:Bool):Bool 
+	//{
+		//hierarchyBuildRequired = value;
+		//if (hierarchyBuildRequired) textureBuildRequiredCount = 0;
+		//else textureBuildRequiredCount++;
+		//
+		//return hierarchyBuildRequired;
+	//}
 	
 	static function get_textureBuildRequiredCount():Int 
 	{

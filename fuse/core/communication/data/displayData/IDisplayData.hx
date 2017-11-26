@@ -1,4 +1,5 @@
 package fuse.core.communication.data.displayData;
+import fuse.utils.Color;
 
 
 /**
@@ -18,13 +19,13 @@ interface IDisplayData
 	public var rotation(get, set):Float;
 	public var alpha(get, set):Float;
 	public var color(get, set):Int;
+	public var colorTL(get, set):Int;
+	public var colorTR(get, set):Int;
+	public var colorBL(get, set):Int;
+	public var colorBR(get, set):Int;
 	public var objectId(get, null):Int;
 	public var textureId(get, set):Int;
 	public var renderLayer(get, set):Int;
 	public var visible(get, set):Int;
-	
 	public var isStatic(get, set):Int;
-	//public var applyPosition(get, set):Int;
-	//public var applyRotation(get, set):Int;
-	
 }

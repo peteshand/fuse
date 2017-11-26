@@ -9,5 +9,6 @@ typedef AddChildMsg =
 	objectId:Int,
 	displayType:Int,
 	parentId:Int,
-	addAtIndex:Int
+	addAtIndex:Int,
+	childIds:Array<Int>
 }

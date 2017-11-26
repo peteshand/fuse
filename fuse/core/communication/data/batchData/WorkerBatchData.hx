@@ -10,18 +10,19 @@ import fuse.core.communication.data.MemoryBlock;
 class WorkerBatchData implements IBatchData
 {
 	static public inline var RENDER_TARGET_ID:Int = 0;
-	static public inline var START_INDEX:Int = 4;
-	static public inline var LENGTH_INDEX:Int = 6;
-	static public inline var TEXTURE_ID1:Int = 8;
-	static public inline var TEXTURE_ID2:Int = 10;
-	static public inline var TEXTURE_ID3:Int = 12;
-	static public inline var TEXTURE_ID4:Int = 14;
-	static public inline var NUM_TEXTURES:Int = 16;
-	static public inline var NUM_ITEMS:Int = 18;
-	static public inline var WIDTH:Int = 20;
-	static public inline var HEIGHT:Int = 22;
+	static public inline var CLEAR_RENDER_TARGET:Int = 4;
+	static public inline var START_INDEX:Int = 6;
+	static public inline var LENGTH_INDEX:Int = 8;
+	static public inline var TEXTURE_ID1:Int = 10;
+	static public inline var TEXTURE_ID2:Int = 12;
+	static public inline var TEXTURE_ID3:Int = 14;
+	static public inline var TEXTURE_ID4:Int = 16;
+	static public inline var NUM_TEXTURES:Int = 18;
+	static public inline var NUM_ITEMS:Int = 20;
+	static public inline var WIDTH:Int = 22;
+	static public inline var HEIGHT:Int = 24;
 	
-	public static inline var BYTES_PER_ITEM:Int = 24;
+	public static inline var BYTES_PER_ITEM:Int = 26;
 	public static inline var BUFFER_SIZE:Int = 10000;
 	
 	public var memoryBlock:MemoryBlock;
@@ -29,6 +30,7 @@ class WorkerBatchData implements IBatchData
 	var objectId:Int;
 	
 	@:isVar public var renderTargetId(get, set):Int;
+	@:isVar public var clearRenderTarget(get, set):Int;
 	@:isVar public var startIndex(get, set):Int;
 	@:isVar public var length(get, set):Int;
 	
@@ -51,6 +53,7 @@ class WorkerBatchData implements IBatchData
 	}
 	
 	function get_renderTargetId():Int	{ return memoryBlock.readInt(RENDER_TARGET_ID); }
+	function get_clearRenderTarget():Int	{ return memoryBlock.readInt16(CLEAR_RENDER_TARGET); }
 	function get_startIndex():Int		{ return memoryBlock.readInt16(START_INDEX); }
 	function get_length():Int			{ return memoryBlock.readInt16(LENGTH_INDEX); }
 	function get_textureId1():Int		{ return memoryBlock.readInt16(TEXTURE_ID1); }
@@ -65,6 +68,11 @@ class WorkerBatchData implements IBatchData
 	
 	function set_renderTargetId(value:Int):Int {
 		memoryBlock.writeInt(RENDER_TARGET_ID, value);
+		return value;
+	}
+	
+	function set_clearRenderTarget(value:Int):Int {
+		memoryBlock.writeInt16(CLEAR_RENDER_TARGET, value);
 		return value;
 	}
 	

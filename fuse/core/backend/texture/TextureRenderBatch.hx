@@ -40,39 +40,12 @@ class TextureRenderBatch
 	
 	public function update() 
 	{
-		//trace("update: " + Core.textureOrder.textureDefs.length);
-		//clear();
 		currentRenderBatchDefs(Core.textureOrder.textureDefs);
 		createBatchData();
 	}
 	
 	public function end() 
 	{
-		//trace("renderBatchDefs.length = " + renderBatchDefs.length);
-		/*for (i in 0...renderBatchDefs.length) 
-		{
-			var renderBatchDef:RenderBatchDef = renderBatchDefs[i];
-			//trace("renderBatchDef.textureDefs.length = " + renderBatchDef.textureDefs.length);
-			for (i in 0...renderBatchDef.textureDefs.length) 
-			{
-				var textureDef:TextureDef = renderBatchDef.textureDefs[i];
-				trace("textureDef.workerDisplays.length = " + textureDef.workerDisplays.length);
-				for (j in 0...textureDef.workerDisplays.length) 
-				{
-					var coreDisplay:IWorkerDisplay = textureDef.workerDisplays[j];
-					//trace("coreDisplay.textureData.atlasTextureId = " + coreDisplay.textureData.atlasTextureId);
-					for (k in 0...renderBatchDef.textureIdArray.length) 
-					{
-						//trace("renderBatchDef.textureIdArray[k] = " + renderBatchDef.textureIdArray[k]);
-						if (coreDisplay.textureData.atlasTextureId == renderBatchDef.textureIdArray[k]) {
-							//trace(["coreDisplay.textureIndex = " + k, coreDisplay.objectId]);
-							coreDisplay.textureIndex = k;
-						}
-					}
-				}
-			}
-		}*/
-		//trace("renderBatchDefs.length = " + renderBatchDefs.length);
 		Conductor.conductorData.numberOfBatches = renderBatchDefs.length;
 	}
 	
@@ -149,7 +122,7 @@ class TextureRenderBatch
 		{
 			var batchData:IBatchData = getBatchData(j);
 			batchData.startIndex = renderBatchDefs[j].startIndex;
-			batchData.length = renderBatchDefs[j].length;
+			//batchData.length = renderBatchDefs[j].length;
 			
 			textureIds.clear();
 			for (i in 0...renderBatchDefs[j].textureIdArray.length) 

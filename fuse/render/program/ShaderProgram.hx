@@ -16,7 +16,6 @@ import openfl.utils.Endian;
  * ...
  * @author P.J.Shand
  */
-//@:access(fuse.core.communication.data.indices.IndicesData)
 class ShaderProgram
 {
 	public static var VERTICES_PER_QUAD:Int = 4;
@@ -53,6 +52,7 @@ class ShaderProgram
 		indices.length = numOfQuads * 2;
 		
 		context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, baseShader.fragmentData, 1);
+		
 		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, baseShader.textureChannelData, 4);
 		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, baseShader.posData, 1);
 		
@@ -90,10 +90,11 @@ class ShaderProgram
 		context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
 		// RGB-UV x,y | Mask-UV
 		context3D.setVertexBufferAt(1, vertexbuffer, 2, Context3DVertexBufferFormat.FLOAT_4);
-		// RGB-TextureIndex x | Mask-TextureIndex y | Alpha Value z
-		context3D.setVertexBufferAt(2, vertexbuffer, 6, Context3DVertexBufferFormat.FLOAT_4);
 		// Tint Colour RGBA x,y,z,w
-		context3D.setVertexBufferAt(3, vertexbuffer, 10, Context3DVertexBufferFormat.FLOAT_4);
+		context3D.setVertexBufferAt(2, vertexbuffer, 6, Context3DVertexBufferFormat.BYTES_4);
+		// RGB-TextureIndex x | Mask-TextureIndex y | Alpha Value z
+		context3D.setVertexBufferAt(3, vertexbuffer, 7, Context3DVertexBufferFormat.FLOAT_4);
+		
 	}
 	
 	#if debug

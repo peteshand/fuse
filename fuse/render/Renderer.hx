@@ -1,7 +1,6 @@
 package fuse.render;
 
 import fuse.core.communication.data.conductorData.ConductorData;
-import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.backend.texture.TextureRenderBatch;
 import fuse.core.communication.data.batchData.IBatchData;
@@ -49,6 +48,7 @@ class Renderer
 	var shaderProgram = new Notifier<ShaderProgram>();
 	var numItemsInBatch:Int;
 	var quadCount:Int;
+	var currentBatchData:IBatchData;
 	
 	public function new(context3D:Context3D, sharedContext:Bool) 
 	{
@@ -82,21 +82,13 @@ class Renderer
 		if (shaderProgram.value == null) return;
 		
 		//trace("quadCount = " + quadCount);
-		//trace("start index = " + Fuse.current.sharedMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM));
 		
 		programChanged = true;
 		//var numItems:Int = conductorData.numberOfRenderables;
-		//debugIndex(numItemsInBatch, Fuse.current.sharedMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM));
 		
 		
 		
-		/*shaderProgram.value.indexbuffer.uploadFromByteArray(
-			SharedMemory.memory, 
-			Fuse.current.sharedMemory.indicesDataPool.start + (quadCount * IndicesData.BYTES_PER_ITEM), 
-			0, 
-			ShaderProgram.INDICES_PER_QUAD * numItemsInBatch
-		);*/
-		//trace(quadCount * IndicesData.BYTES_PER_ITEM);
+		
 		
 		// assign shader program
 		//context3DProgram.setProgram(shaderProgram.value.program);
@@ -133,7 +125,7 @@ class Renderer
 			context3D.setRenderToTexture(texture.textureBase, false, 0, 0, 0);
 			
 			
-			if (texture._clear || texture._alreadyClear) {
+			if (texture._clear || texture._alreadyClear || currentBatchData.clearRenderTarget == 1) {
 				texture._clear = false;
 				context3D.clear(texture.red, texture.green, texture.blue, 0);
 			}
@@ -168,11 +160,11 @@ class Renderer
 	
 	function drawBuffer() 
 	{
-		var numItems:Int = conductorData.numberOfRenderables;
-		var numTriangles:Int = conductorData.numTriangles;
+		//var numItems:Int = conductorData.numberOfRenderables;
+		//var numTriangles:Int = conductorData.numTriangles;
 		//trace("total numItems = " + numItems);
 		
-		if (numItems == 0) return;
+		//if (numItems == 0) return;
 		
 		/*programChanged = false;
 		shaderProgram.value = shaderPrograms.getProgram(numItems, numTriangles);
@@ -199,9 +191,10 @@ class Renderer
 		
 		for (i in 0...conductorData.numberOfBatches) 
 		{
-			var batchData:IBatchData = textureRenderBatch.getBatchData(i);
-			numItemsInBatch = batchData.numItems;
+			currentBatchData = textureRenderBatch.getBatchData(i);
+			numItemsInBatch = currentBatchData.numItems;
 			//trace("numItemsInBatch = " + numItemsInBatch);
+			//trace("renderTargetId = " + currentBatchData.renderTargetId);
 			//if (numItemsInBatch > 1) numItemsInBatch--;
 			
 			if (numItemsInBatch == 0) continue;
@@ -217,12 +210,12 @@ class Renderer
 			//trace("conductorData.isStatic = " + conductorData.isStatic);
 			//trace("programChanged = " + programChanged);
 			
-			if (batchData != null /*&& (conductorData.isStatic == 0 || programChanged)*/) {
+			if (currentBatchData != null /*&& (conductorData.isStatic == 0 || programChanged)*/) {
 				
 				//trace("quadCount = " + quadCount);
 				//trace("VertexData.BYTES_PER_ITEM = " + VertexData.BYTES_PER_ITEM);
-				//trace("batchData.startIndex = " + batchData.startIndex);
-				//trace("batchData.firstIndex = " + batchData.firstIndex);
+				//trace("currentBatchData.startIndex = " + currentBatchData.startIndex);
+				//trace("currentBatchData.firstIndex = " + currentBatchData.firstIndex);
 				//
 				//vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, numItemsInBatch);
 				//
@@ -240,14 +233,14 @@ class Renderer
 			
 			context3DProgram.setProgram(shaderProgram.value.program);
 			
-			targetTextureId.value = batchData.renderTargetId;
+			targetTextureId.value = currentBatchData.renderTargetId;
 			
-			//batchDebug(batchData);
+			//batchDebug(currentBatchData);
 			
-			context3DTexture.setContextTexture(0, batchData.textureId1);
-			context3DTexture.setContextTexture(1, batchData.textureId2);
-			context3DTexture.setContextTexture(2, batchData.textureId3);
-			context3DTexture.setContextTexture(3, batchData.textureId4);
+			context3DTexture.setContextTexture(0, currentBatchData.textureId1);
+			context3DTexture.setContextTexture(1, currentBatchData.textureId2);
+			context3DTexture.setContextTexture(2, currentBatchData.textureId3);
+			context3DTexture.setContextTexture(3, currentBatchData.textureId4);
 			
 			// TODO: move this logic into worker
 			var newBlendMode:Int = 0;
@@ -256,6 +249,7 @@ class Renderer
 				var blendFactors:BlendFactors = BlendMode.getBlendFactors(currentBlendMode);
 				context3D.setBlendFactors(blendFactors.sourceFactor, blendFactors.destinationFactor);
 			}
+			
 			
 			//m.appendRotation(Lib.getTimer()/40, Vector3D.Z_AXIS);
 			//context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 0, m, true);
@@ -294,7 +288,7 @@ class Renderer
 	
 	function batchDebug(batchData:IBatchData) 
 	{
-		//trace("startIndex      = " + batchData.startIndex);
+		trace("startIndex      = " + batchData.startIndex);
 		trace("numItemsInBatch = " + batchData.numItems);
 		trace([batchData.textureId1, batchData.textureId2, batchData.textureId3, batchData.textureId4]);
 		trace("renderTargetId = " + batchData.renderTargetId);
@@ -304,18 +298,6 @@ class Renderer
 	{
 		trace("numItems = " + numItems);
 		if (numItems == 0) return;
-		
-		/*for (k in 0...numItems) 
-		{
-			SharedMemory.memory.position = Fuse.current.sharedMemory.indicesDataPool.start + (k * IndicesData.BYTES_PER_ITEM);
-			var i1:Int = SharedMemory.memory.readShort();
-			var i2:Int = SharedMemory.memory.readShort();
-			var i3:Int = SharedMemory.memory.readShort();
-			var i4:Int = SharedMemory.memory.readShort();
-			var i5:Int = SharedMemory.memory.readShort();
-			var i6:Int = SharedMemory.memory.readShort();
-			trace([i1, i2, i3, i4, i5, i6]);
-		}*/
 		
 		/*trace("Batch: " + i);
 		trace("batchData.startIndex = " + batchData.startIndex);
@@ -355,11 +337,10 @@ class Renderer
 				var INDEX_B:Float = SharedMemory.memory.readFloat();
 				var INDEX_A:Float = SharedMemory.memory.readFloat();
 				
-				trace([INDEX_X, INDEX_Y]);
 				//trace([INDEX_X, INDEX_Y, INDEX_U, INDEX_V]);
 				//trace([INDEX_Texture, INDEX_ALPHA]);
 				//trace([INDEX_MU, INDEX_MV, INDEX_MaskTexture, INDEX_MASK_BASE_VALUE]);
-				//trace([INDEX_R, INDEX_G, INDEX_B, INDEX_A]);
+				trace([INDEX_R, INDEX_G, INDEX_B, INDEX_A]);
 				//trace("--");
 
 				//trace("INDEX_X = " + INDEX_X);

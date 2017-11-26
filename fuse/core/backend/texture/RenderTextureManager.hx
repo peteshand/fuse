@@ -1,5 +1,6 @@
 package fuse.core.backend.texture;
 
+import fuse.core.assembler.Assembler2;
 import fuse.core.backend.Conductor;
 import fuse.core.backend.Core;
 import fuse.core.communication.data.MemoryBlock;
@@ -9,7 +10,6 @@ import fuse.utils.ObjectPool;
 import fuse.core.utils.Pool;
 import fuse.texture.RenderTexture;
 import fuse.core.backend.display.CoreDisplayObject;
-import fuse.core.backend.Assembler;
 
 /**
  * ...
@@ -32,27 +32,25 @@ class RenderTextureManager
 	
 	public function update() 
 	{
-		start = Conductor.conductorData.renderTextureProcessIndex;
+		// Will need to be reworked for New Assembler //
+		
+		/*start = Conductor.conductorData.renderTextureProcessIndex;
 		end = Conductor.conductorData.renderTextureCountIndex;
 		
-		//if (start != lastStart || end != lastEnd) {
 		if (end > 0 && start != end) {
 			Core.hierarchyBuildRequired = true;
 			
 			for (i in start...end) 
 			{
 				var renderTextureDrawData:RenderTextureDrawData = getMemoryBlock(i);
-				//trace("renderTextureDrawData.renderTextureId = " + renderTextureDrawData.renderTextureId);
 				RenderTexture.currentRenderTargetId = renderTextureDrawData.renderTextureId;
 				
-				//var displayData:IDisplayData = new DisplayData(renderTextureDrawData.displayObjectId);
-				//trace([renderTextureDrawData.renderTextureId, renderTextureDrawData.displayObjectId/*, displayData.textureId*/]);
 				var rootWorkerDisplay:CoreDisplayObject = Core.displayList.get(renderTextureDrawData.displayObjectId);
 				
 				var clonedRoot:CoreDisplayObject = Pool.displayObjects.request();
 				rootWorkerDisplay.copyTo(clonedRoot);
 				
-				Core.displayListBuilder.process(clonedRoot);
+				Core.assembler.process(clonedRoot);
 				
 				clonedRoot.recursiveReleaseToPool();
 			}
@@ -64,10 +62,7 @@ class RenderTextureManager
 		
 		
 		lastStart = start;
-		lastEnd = end;
-		
-		//memoryBlock = Kea.current.sharedMemory.renderTextureDataPool.createMemoryBlock(RenderTextureData.BYTES_PER_ITEM, objectOffset);
-		//trace(Conductor.conductorData.renderTextureCountIndex, Conductor.conductorData.renderTextureProcessIndex);
+		lastEnd = end;*/
 	}
 	
 	function getMemoryBlock(index:Int):RenderTextureDrawData

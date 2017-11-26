@@ -43,11 +43,13 @@ class BaseShader
 	{
 		BaseShader.init();
 		
+		// FRAGMENT
 		fragmentData = Vector.ofArray(
 		[
-			0, 0, 1.0, 2.0
+			0, 255, 1.0, 2.0
 		]);
 		
+		// VERTEX
 		textureChannelData = Vector.ofArray(
 		[
 			1.0, 0.0, 0.0, 0.0,
@@ -55,6 +57,7 @@ class BaseShader
 			0.0, 0.0, 1.0, 0.0,
 			0.0, 0.0, 0.0, 1.0
 		]);
+		
 		posData = Vector.ofArray(
 		[
 			0.0, 0.0, 0.0, 1.0
@@ -146,14 +149,22 @@ class BaseShader
 			
 			/////////////////////////////////////////////
 			// Add Colour ///////////////////////////////
+			//"mov ft0, v3							\n" +
+			//"mul ft0.xyz, ft0.xyz, TWO.3			\n" + // Mul by 2
+			//"sub ft0.xyz, ft0.xyz, ONE.3			\n" + // Subtract 1
+			//"mul ft0.w, ft0.w, ft1.w				\n" +
+			//"mul ft0.xyz, ft0.xyz, ft0.www			\n" +
+			//"add ft1.xyz, ft1.xyz, ft0.xyz			\n" +
+			/////////////////////////////////////////////
+			/////////////////////////////////////////////
+			
 			"mov ft0, v3							\n" +
-			"mul ft0.xyz, ft0.xyz, TWO.3			\n" + // Mul by 2
-			"sub ft0.xyz, ft0.xyz, ONE.3			\n" + // Subtract 1
+			//"mul ft0.xyz, ft0.xyz, TWO.3			\n" + // Mul by 2
+			//"sub ft0.xyz, ft0.xyz, ONE.3			\n" + // Subtract 1
 			"mul ft0.w, ft0.w, ft1.w				\n" +
+			"sub ft0.xyz, ONE.3, ft0.xyz			\n" +
 			"mul ft0.xyz, ft0.xyz, ft0.www			\n" +
-			"add ft1.xyz, ft1.xyz, ft0.xyz			\n" +
-			/////////////////////////////////////////////
-			/////////////////////////////////////////////
+			"sub ft1.xyz, ft1.xyz, ft0.xyz			\n" +
 			
 			"mov oc, ft1";
 		
@@ -172,17 +183,17 @@ class BaseShader
 			"mov op, vt0			\n" + // set vt0 to clipspace
 			"mov v1, va1			\n" + // + // copy RGB-UV && Mask-UVc
 			
-			"mov vt2, va2			\n" + // copy RGB-TextureIndex | Mask-TextureIndex | Alpha Value
+			"mov vt2, va3			\n" + // copy RGB-TextureIndex | Mask-TextureIndex | Alpha Value
 			
 			"mov vt3, vc[vt2.x]		\n" + // set textureIndex alpha multipliers
 			"mov vt4, vc[vt2.y]		\n" + // set mask textureIndex alpha multipliers
 			
 			"sub vt3, vt3, vt2.wwww \n" + // substract inverted alpha from textureIndex alpha
-			"max vt3, vt3, vc4.x	\n" + // clamp above 0 // NEED TO SWITCH TO vc4
+			"max vt3, vt3, vc4.z	\n" + // clamp above 0 // NEED TO SWITCH TO vc4
 			"min vt3, vt3, vc4.w	\n" + // clamp below 1 // NEED TO SWITCH TO vc4
 			
 			"mov v2, vt3			\n" + // copy RGB-TextureIndex with alpha multipliers into v2
-			"mov v3, va3			\n"	+ // copy tint colour data
+			"mov v3.xyzw, va2.zyxw	\n"	+ // copy tint colour data and flip Red and Blue
 			"mov v4, vt4			\n"	+ // 
 			"mov v5.xyzw, vt2.zzzz	";// copy maskBaseValue into v5
 		

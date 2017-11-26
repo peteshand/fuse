@@ -1,7 +1,7 @@
 package fuse.core.communication.data.renderTextureData;
 
 import fuse.Fuse;
-import openfl.Memory;
+import fuse.core.communication.memory.Memory;
 
 /**
  * ...

@@ -37,6 +37,10 @@ class DisplayObject
 	@:isVar public var scaleX(get, set):Float = 0;
 	@:isVar public var scaleY(get, set):Float = 0;
 	@:isVar public var color(get, set):Color = 0x0;
+	@:isVar public var colorTL(get, set):Color = 0x0;
+	@:isVar public var colorTR(get, set):Color = 0x0;
+	@:isVar public var colorBL(get, set):Color = 0x0;
+	@:isVar public var colorBR(get, set):Color = 0x0;
 	@:isVar public var alpha(get, set):Float = 0;
 	@:isVar public var visible(get, set):Bool = false;
 	
@@ -52,7 +56,6 @@ class DisplayObject
 		displayData = CommsObjGen.getDisplayData(id);
 		
 		objectId = id;
-		
 		
 		scaleX = 1;
 		scaleY = 1;
@@ -76,7 +79,12 @@ class DisplayObject
 	inline function get_rotation():Float { return rotation; }
 	inline function get_scaleX():Float { return scaleX; }
 	inline function get_scaleY():Float { return scaleY; }
-	inline function get_color():Color { return color; }
+	inline function get_color():Color { return colorTL; }
+	inline function get_colorTL():Color { return colorTL; }
+	inline function get_colorTR():Color { return colorTR; }
+	inline function get_colorBL():Color { return colorBL; }
+	inline function get_colorBR():Color { return colorBR; }
+	
 	inline function get_alpha():Float { return alpha; }
 	function get_visible():Bool { return visible; }
 	
@@ -158,7 +166,39 @@ class DisplayObject
 	
 	function set_color(value:Color):Color { 
 		if (color != value){
-			displayData.color = color = value;
+			displayData.color = color = colorTL = colorTR = colorBL = colorBR = value;
+			isStatic = 0;
+		}
+		return value;
+	}
+	
+	function set_colorTL(value:Color):Color { 
+		if (colorTL != value){
+			displayData.colorTL = colorTL = value;
+			isStatic = 0;
+		}
+		return value;
+	}
+	
+	function set_colorTR(value:Color):Color { 
+		if (colorTR != value){
+			displayData.colorTR = colorTR = value;
+			isStatic = 0;
+		}
+		return value;
+	}
+	
+	function set_colorBL(value:Color):Color { 
+		if (colorBL != value){
+			displayData.colorBL = colorBL = value;
+			isStatic = 0;
+		}
+		return value;
+	}
+	
+	function set_colorBR(value:Color):Color { 
+		if (colorBR != value){
+			displayData.colorBR = colorBR = value;
 			isStatic = 0;
 		}
 		return value;
@@ -235,10 +275,11 @@ class DisplayObject
 		return stage;
 	}
 	
-	function setParent(value:DisplayObjectContainer):Void 
+	function setParent(parent:DisplayObjectContainer):Void 
 	{
-		parent = value;
-		if (parent != null) {
+		this.parent = parent;
+		
+		if (parent != null && parent.stage != null) {
 			Fuse.current.workerSetup.addChild(this, parent);
 			onAdd.dispatch(this);
 		}
@@ -246,6 +287,9 @@ class DisplayObject
 			Fuse.current.workerSetup.removeChild(this);
 			onRemove.dispatch(this);
 		}
+		
+		if (parent == null) setStage(null);
+		else setStage(parent.stage);
 	}
 	
 	function forceRedraw():Void

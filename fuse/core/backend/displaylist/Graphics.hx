@@ -28,7 +28,7 @@ class Graphics
 	
 	public function new() { }
 	
-	public static inline function pushTransformation(transformation:FastMatrix3/*, renderId:Int*/): Void {
+	public static inline function pushTransformation(transformation:FastMatrix3): Void {
 		transformations.push(transformation);
 	}
 	

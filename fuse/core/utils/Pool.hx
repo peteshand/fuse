@@ -1,10 +1,16 @@
 package fuse.core.utils;
 
+import fuse.core.assembler.atlas.partition.AtlasPartition as NewAtlasPartition;
+import fuse.core.assembler.batches.batch.AtlasBatch;
+import fuse.core.assembler.batches.batch.DirectBatch;
+import fuse.core.assembler.batches.batch.LayerCacheBatch;
+import fuse.core.assembler.layers.layer.LayerBuffer;
+import fuse.core.backend.atlas.partition.AtlasPartition as OldAtlasPartition;
+
 import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.display.CoreInteractiveObject;
 import fuse.core.backend.display.CoreQuad;
 import fuse.core.backend.display.CoreSprite;
-import fuse.core.backend.atlas.partition.AtlasPartition;
 import fuse.utils.ObjectPool;
 import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.backend.layerCache.groups.LayerGroup;
@@ -16,7 +22,14 @@ import fuse.core.backend.layerCache.groups.StaticLayerGroup;
  */
 class Pool
 {
-	public static var atlasPartitions:ObjectPool<AtlasPartition>;
+	public static var layerBufferes:ObjectPool<LayerBuffer>;
+	
+	public static var atlasBatches:ObjectPool<AtlasBatch>;
+	public static var layerCacheBatches:ObjectPool<LayerCacheBatch>;
+	public static var directBatches:ObjectPool<DirectBatch>;
+	
+	public static var atlasPartitions2:ObjectPool<NewAtlasPartition>;
+	public static var atlasPartitions:ObjectPool<OldAtlasPartition>;
 	public static var displayObjects:ObjectPool<CoreDisplayObject>;
 	public static var interactiveObject:ObjectPool<CoreInteractiveObject>;
 	public static var sprites:ObjectPool<CoreSprite>;
@@ -28,7 +41,14 @@ class Pool
 	
 	static function __init__():Void
 	{
-		atlasPartitions = new ObjectPool<AtlasPartition>(AtlasPartition, 0, []);
+		layerBufferes = new ObjectPool<LayerBuffer>(LayerBuffer, 0, []);
+		atlasBatches = new ObjectPool<AtlasBatch>(AtlasBatch, 0, []);
+		layerCacheBatches = new ObjectPool<LayerCacheBatch>(LayerCacheBatch, 0, []);
+		directBatches = new ObjectPool<DirectBatch>(DirectBatch, 0, []);
+		
+		atlasPartitions2 = new ObjectPool<NewAtlasPartition>(NewAtlasPartition, 0, []);
+		
+		atlasPartitions = new ObjectPool<OldAtlasPartition>(OldAtlasPartition, 0, []);
 		displayObjects = new ObjectPool<CoreDisplayObject>(CoreDisplayObject, 0, []);
 		interactiveObject = new ObjectPool<CoreInteractiveObject>(CoreInteractiveObject, 0, []);
 		sprites = new ObjectPool<CoreSprite>(CoreSprite, 0, []);

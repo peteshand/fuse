@@ -22,11 +22,16 @@ class MatrixUtils
 		output._21 = m1._01 * m2._20 + m1._11 * m2._21 + m1._21 * m2._22;
 	}
 	
-	public static inline function rotateMatrix(m:FastMatrix3, rotation: Float):FastMatrix3
+	public static inline function rotateMatrix(m:FastMatrix3, rotation:Float):FastMatrix3
+	{
+		return rotateMatrix2(m, Math.sin(rotation), Math.cos(rotation));
+	}
+
+	static inline function rotateMatrix2(m:FastMatrix3, sinRotation:Float, cosRotation:Float):FastMatrix3
 	{
 		return setMatrix(m, 
-			Math.cos(rotation), -Math.sin(rotation), 0,
-			Math.sin(rotation), Math.cos(rotation), 0,
+			cosRotation, -sinRotation, 0,
+			sinRotation, cosRotation, 0,
 			0, 0, 1
 		);
 	}

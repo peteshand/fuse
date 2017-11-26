@@ -1,6 +1,8 @@
 package fuse.core.backend;
 
 import fuse.Fuse;
+import fuse.core.assembler.Assembler2;
+import fuse.core.assembler.vertexWriter.VertexWriter;
 import fuse.core.backend.Core;
 import fuse.core.communication.messageData.AddMaskMsg;
 import fuse.core.communication.memory.SharedMemory;
@@ -59,6 +61,8 @@ class CoreEntryPoint
 		Conductor.init(workerComms, index, numberOfWorkers, workerComms.usingWorkers);
 		Conductor.onTick.add(OnTick);
 		
+		VertexWriter.init();
+		
 		workerComms.send(MessageType.WORKER_STARTED);
 	}
 	
@@ -67,7 +71,10 @@ class CoreEntryPoint
 		Core.STAGE_WIDTH = Conductor.conductorData.stageWidth;
 		Core.STAGE_HEIGHT = Conductor.conductorData.stageHeight;
 		
-		Core.displayListBuilder.update();
+		// Remove for New Assembler //
+		//Core.assembler.update();
+		
+		Assembler2.update();
 	}
 	
 	function OnAddMask(addChildPayload:AddMaskMsg) 

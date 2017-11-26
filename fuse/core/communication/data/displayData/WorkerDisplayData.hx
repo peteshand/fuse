@@ -22,13 +22,17 @@ class WorkerDisplayData implements IDisplayData
 	static inline var INDEX_ROTATION:Int = 32;
 	static inline var INDEX_ALPHA:Int = 36;
 	static inline var INDEX_COLOR:Int = 40;
+	static inline var INDEX_COLOR_TL:Int = 44;
+	static inline var INDEX_COLOR_TR:Int = 48;
+	static inline var INDEX_COLOR_BL:Int = 52;
+	static inline var INDEX_COLOR_BR:Int = 56;
 	
-	static inline var INDEX_TEXTURE_ID:Int = 44;
-	static inline var INDEX_RENDER_LAYER:Int = 48;
-	static inline var INDEX_IS_STATIC:Int = 52;
-	static inline var INDEX_VISIBLE:Int = 54;
+	static inline var INDEX_TEXTURE_ID:Int = 60;
+	static inline var INDEX_RENDER_LAYER:Int = 64;
+	static inline var INDEX_IS_STATIC:Int = 68;
+	static inline var INDEX_VISIBLE:Int = 72;
 	
-	public static inline var BYTES_PER_ITEM:Int = 56;
+	public static inline var BYTES_PER_ITEM:Int = 76;
 	
 	var memoryBlock:MemoryBlock;
 	
@@ -43,6 +47,10 @@ class WorkerDisplayData implements IDisplayData
 	public var rotation(get, set):Float;
 	public var alpha(get, set):Float;
 	public var color(get, set):Int;
+	public var colorTL(get, set):Int;
+	public var colorTR(get, set):Int;
+	public var colorBL(get, set):Int;
+	public var colorBR(get, set):Int;
 	public var textureId(get, set):Int;
 	public var renderLayer(get, set):Int;
 	
@@ -102,6 +110,22 @@ class WorkerDisplayData implements IDisplayData
 	
 	inline function get_color():Int { 
 		return memoryBlock.readInt(WorkerDisplayData.INDEX_COLOR);
+	}
+	
+	inline function get_colorTL():Int { 
+		return memoryBlock.readInt(WorkerDisplayData.INDEX_COLOR_TL);
+	}
+	
+	inline function get_colorTR():Int { 
+		return memoryBlock.readInt(WorkerDisplayData.INDEX_COLOR_TR);
+	}
+	
+	inline function get_colorBL():Int { 
+		return memoryBlock.readInt(WorkerDisplayData.INDEX_COLOR_BL);
+	}
+	
+	inline function get_colorBR():Int { 
+		return memoryBlock.readInt(WorkerDisplayData.INDEX_COLOR_BR);
 	}
 	
 	inline function get_textureId():Int { 
@@ -179,6 +203,26 @@ class WorkerDisplayData implements IDisplayData
 	
 	inline function set_color(value:Int):Int { 
 		memoryBlock.writeInt(INDEX_COLOR, value);
+		return value;
+	}
+	
+	inline function set_colorTL(value:Int):Int { 
+		memoryBlock.writeInt(INDEX_COLOR_TL, value);
+		return value;
+	}
+	
+	inline function set_colorTR(value:Int):Int { 
+		memoryBlock.writeInt(INDEX_COLOR_TR, value);
+		return value;
+	}
+	
+	inline function set_colorBL(value:Int):Int { 
+		memoryBlock.writeInt(INDEX_COLOR_BL, value);
+		return value;
+	}
+	
+	inline function set_colorBR(value:Int):Int { 
+		memoryBlock.writeInt(INDEX_COLOR_BR, value);
 		return value;
 	}
 	

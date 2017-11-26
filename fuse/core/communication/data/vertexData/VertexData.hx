@@ -1,15 +1,14 @@
 package fuse.core.communication.data.vertexData;
+
 import fuse.Fuse;
-import fuse.core.communication.data.indices.IndicesData;
 import fuse.utils.Color;
-import openfl.Memory;
+import fuse.core.communication.memory.Memory;
 
 /**
  * ...
  * @author P.J.Shand
  */
 
-@:access(fuse.core.communication.data.indices.IndicesData)
 class VertexData implements IVertexData
 {
 	@:isVar public static var OBJECT_POSITION(get, set):Int = 0;
@@ -19,6 +18,7 @@ class VertexData implements IVertexData
 	static var _basePosition:Int = 0;
 	public static var basePosition(get, null):Int = 0;
 	
+	//public static inline var INDEX_XY:Int = 0;
 	public static inline var INDEX_X:Int = 0;
 	public static inline var INDEX_Y:Int = 4;
 	
@@ -27,18 +27,15 @@ class VertexData implements IVertexData
 	public static inline var INDEX_MU:Int = 16;
 	public static inline var INDEX_MV:Int = 20;
 	
-	public static inline var INDEX_TEXTURE:Int = 24;
-	public static inline var INDEX_MASK_TEXTURE:Int = 28;
-	public static inline var INDEX_MASK_BASE_VALUE:Int = 32;
-	public static inline var INDEX_ALPHA:Int = 36;
+	public static inline var INDEX_COLOR:Int = 24;
 	
-	public static inline var INDEX_R:Int = 40;
-	public static inline var INDEX_G:Int = 44;
-	public static inline var INDEX_B:Int = 48;
-	public static inline var INDEX_A:Int = 52;
+	public static inline var INDEX_TEXTURE:Int = 28;
+	public static inline var INDEX_MASK_TEXTURE:Int = 32;
+	public static inline var INDEX_MASK_BASE_VALUE:Int = 36;
+	public static inline var INDEX_ALPHA:Int = 40;
 	
 	public static inline var BYTES_PER_VALUE:Int = 4;
-	public static inline var VALUES_PER_VERTEX:Int = 14;
+	public static inline var VALUES_PER_VERTEX:Int = 11;
 	public static inline var BYTES_PER_VERTEX:Int = BYTES_PER_VALUE * VALUES_PER_VERTEX;
 	public static inline var BYTES_PER_ITEM:Int = BYTES_PER_VERTEX * 4;
 	
@@ -47,43 +44,30 @@ class VertexData implements IVertexData
 		poolStartPosition = Fuse.current.sharedMemory.vertexDataPool.start;
 	}
 	
-	/*public function getX(index:Int):Float { return readFloat(INDEX_X + indexOffset(index)); }
-	public function getY(index:Int):Float { return readFloat(INDEX_Y + indexOffset(index)); }
-	public function getU(index:Int):Float { return readFloat(INDEX_U + indexOffset(index)); }
-	public function getV(index:Int):Float { return readFloat(INDEX_V + indexOffset(index)); }
-	public function getT(index:Int):Float { return readFloat(INDEX_TEXTURE + indexOffset(index)); }
-	public function getR(index:Int):Float { return readFloat(INDEX_R + indexOffset(index)); }
-	public function getG(index:Int):Float { return readFloat(INDEX_G + indexOffset(index)); }
-	public function getB(index:Int):Float { return readFloat(INDEX_B + indexOffset(index)); }
-	public function getA(index:Int):Float { return readFloat(INDEX_A + indexOffset(index)); }
-	public function getAlpha(index:Int):Float { return readFloat(INDEX_ALPHA + indexOffset(index)); }*/
-	
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	public function setXY(index:Int, x:Float, y:Float):Void 
+	inline public function setXY(index:Int, x:Float, y:Float):Void 
 	{
-		setX(index, x);
-		setY(index, y);
+		writeFloat(INDEX_X + indexOffset(index), x);
+		writeFloat(INDEX_Y + indexOffset(index), y);
 	}
-	inline function setX(index:Int, value:Float):Void { writeFloat(INDEX_X + indexOffset(index), value); }
-	inline function setY(index:Int, value:Float):Void { writeFloat(INDEX_Y + indexOffset(index), value); }
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public function setUV(index:Int, u:Float, v:Float):Void
+	inline public function setUV(index:Int, u:Float, v:Float):Void
 	{
-		setU(index, u);
-		setV(index, v);
+		writeFloat(INDEX_U + indexOffset(index), u);
+		writeFloat(INDEX_V + indexOffset(index), v);
+		
+		//setU(index, u);
+		//setV(index, v);
 	}
-	inline function setU(index:Int, value:Float):Void { writeFloat(INDEX_U + indexOffset(index), value); }
-	inline function setV(index:Int, value:Float):Void { writeFloat(INDEX_V + indexOffset(index), value); }
+	//inline function setU(index:Int, value:Float):Void { writeFloat(INDEX_U + indexOffset(index), value); }
+	//inline function setV(index:Int, value:Float):Void { writeFloat(INDEX_V + indexOffset(index), value); }
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public function setMaskUV(index:Int, u:Float, v:Float):Void
+	inline public function setMaskUV(index:Int, u:Float, v:Float):Void
 	{
 		setMaskU(index, u);
 		setMaskV(index, v);
@@ -94,7 +78,7 @@ class VertexData implements IVertexData
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public function setTexture(value:Float):Void
+	inline public function setTexture(value:Float):Void
 	{
 		for (i in 0...4) writeFloat(INDEX_TEXTURE + indexOffset(i), value);
 	}
@@ -109,7 +93,7 @@ class VertexData implements IVertexData
 		else setMaskBaseValue(0);
 	}
 	
-	function setMaskBaseValue(value:Float):Void
+	inline function setMaskBaseValue(value:Float):Void
 	{
 		for (i in 0...4) writeFloat(INDEX_MASK_BASE_VALUE + indexOffset(i), value);
 	}
@@ -117,7 +101,7 @@ class VertexData implements IVertexData
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public function setAlpha(value:Float):Void
+	inline public function setAlpha(value:Float):Void
 	{
 		for (i in 0...4) writeFloat(INDEX_ALPHA + indexOffset(i), 1 - value); // write inverted alpha
 	}
@@ -125,20 +109,10 @@ class VertexData implements IVertexData
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public function setColor(value:Color):Void
+	inline public function setColor(index:Int, value:Color):Void
 	{
-		for (i in 0...4) 
-		{
-			this.setR(i, value.red);
-			this.setG(i, value.green);
-			this.setB(i, value.blue);
-			this.setA(i, value.alpha);
-		}
+		writeInt32(INDEX_COLOR + indexOffset(index), value);
 	}
-	inline function setR(index:Int, value:Float):Void { writeFloat(INDEX_R + indexOffset(index), value); }
-	inline function setG(index:Int, value:Float):Void { writeFloat(INDEX_G + indexOffset(index), value); }
-	inline function setB(index:Int, value:Float):Void { writeFloat(INDEX_B + indexOffset(index), value); }
-	inline function setA(index:Int, value:Float):Void { writeFloat(INDEX_A + indexOffset(index), value); }
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -158,6 +132,11 @@ class VertexData implements IVertexData
 		Memory.setFloat(VertexData.basePosition + offset, value);
 	}
 	
+	inline function writeInt32(offset:Int, value:UInt):Void
+	{
+		Memory.setI32(VertexData.basePosition + offset, value);
+	}
+	
 	static inline function get_OBJECT_POSITION():Int 
 	{
 		return VertexData.OBJECT_POSITION;
@@ -167,7 +146,6 @@ class VertexData implements IVertexData
 	{
 		VertexData.OBJECT_POSITION = value;
 		VertexData._basePosition = poolStartPosition + (VertexData.OBJECT_POSITION * VertexData.BYTES_PER_ITEM);
-		IndicesData.OBJECT_POSITION = value;
 		return value;
 	}
 	

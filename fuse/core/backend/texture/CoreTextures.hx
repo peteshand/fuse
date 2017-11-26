@@ -7,27 +7,24 @@ package fuse.core.backend.texture;
 
 class CoreTextures
 {
+	public static var texturesHaveChanged:Bool = false;
+	
 	var texturesMap = new Map<Int, CoreTexture>();
 	var textures = new Array<CoreTexture>();
 	var count:Int = 0;
 	
-	public var texturesHaveChanged(get, null):Bool;
-	
 	public function new() { }
 	
-	function get_texturesHaveChanged():Bool 
+	public function checkForTextureChanges():Void 
 	{
 		for (i in 0...textures.length) 
-		{
-			if (textures[i].textureHasChanged) {
-				count = -1;
-			}
-		}
+			if (textures[i].textureHasChanged) count = -1;
+		
 		count++;
 		if (count <= 2) {
-			return true;
+			texturesHaveChanged = true;
 		}
-		return false;
+		texturesHaveChanged = false;
 	}
 	
 	public function create(textureId:Int) 

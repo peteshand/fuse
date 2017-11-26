@@ -1,7 +1,5 @@
 package fuse.core.backend.layerCache;
 import fuse.core.communication.data.CommsObjGen;
-import fuse.core.communication.data.indices.IIndicesData;
-import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.backend.texture.TextureOrder;
 import fuse.core.backend.texture.TextureOrder.TextureDef;
 import fuse.core.backend.layerCache.groups.LayerGroup;
@@ -27,7 +25,6 @@ import openfl.geom.Point;
 class LayerCache extends StaticLayerGroup
 {
 	var vertexData:VertexData;
-	var indicesData:IIndicesData;
 	var textureData:ITextureData;
 	var count:Int = 0;
 	
@@ -51,7 +48,6 @@ class LayerCache extends StaticLayerGroup
 		super();
 		this.textureId = textureId;
 		vertexData = new VertexData();
-		indicesData = new IndicesData();
 		textureData = CommsObjGen.getTextureData(textureId);
 		textureData.x = textureData.y = 0;
 		//textureData.width = WorkerCore.STAGE_WIDTH;
@@ -91,14 +87,10 @@ class LayerCache extends StaticLayerGroup
 			//trace([left, right, bottom, top]);
 			
 			// Where to sample from source texture
-			vertexData.setU(0, left);	// BOTTOM LEFT
-			vertexData.setV(0, bottom);	// BOTTOM LEFT
-			vertexData.setU(1, left);	// TOP LEFT
-			vertexData.setV(1, top);	// TOP LEFT
-			vertexData.setU(2, right);	// TOP RIGHT
-			vertexData.setV(2, top);	// TOP RIGHT
-			vertexData.setU(3, right);	// BOTTOM RIGHT
-			vertexData.setV(3, bottom);	// BOTTOM RIGHT
+			vertexData.setUV(0, left, bottom);
+			vertexData.setUV(1, left, top);
+			vertexData.setUV(2, right, top);
+			vertexData.setUV(3, right, bottom);
 			
 			bottomLeft.setTo(textureData.x, textureData.y + Core.STAGE_HEIGHT);
 			topLeft.setTo(textureData.x, textureData.y);
@@ -107,16 +99,22 @@ class LayerCache extends StaticLayerGroup
 			
 			//trace([bottomLeft.x, bottomRight.x, topLeft.y, bottomLeft.y]);
 			
-			vertexData.setX(0, transformX(bottomLeft.x));
-			vertexData.setY(0, transformY(bottomLeft.y));
-			vertexData.setX(1, transformX(topLeft.x));
-			vertexData.setY(1, transformY(topLeft.y));
-			vertexData.setX(2, transformX(topRight.x));
-			vertexData.setY(2, transformY(topRight.y));
-			vertexData.setX(3, transformX(bottomRight.x));
-			vertexData.setY(3, transformY(bottomRight.y));
+			vertexData.setXY(0, transformX(bottomLeft.x), transformY(bottomLeft.y));
+			vertexData.setXY(1, transformX(topLeft.x), transformY(topLeft.y));
+			vertexData.setXY(2, transformX(topRight.x), transformY(topRight.y));
+			vertexData.setXY(3, transformX(bottomRight.x), transformY(bottomRight.y));
 			
-			vertexData.setColor(0x0);
+			vertexData.setColor(0, 0x0);
+			vertexData.setColor(1, 0x0);
+			vertexData.setColor(2, 0x0);
+			vertexData.setColor(3, 0x0);
+			//for (i in 0...4) 
+			//{
+				//vertexData.setR(i, 0);
+				//vertexData.setG(i, 0);
+				//vertexData.setB(i, 0);
+				//vertexData.setA(i, 0);
+			//}
 			vertexData.setAlpha(1);
 			
 			// don't draw masks while drawing cached layer //
@@ -124,19 +122,10 @@ class LayerCache extends StaticLayerGroup
 			
 			//vertexData.batchTextureIndex = textureDef.textureIndex;
 			vertexData.setTexture(textureDef.textureIndex);
-			
-			// TODO: only update when you need to
-			indicesData.setIndex(0, 0);
-			indicesData.setIndex(1, 1);
-			indicesData.setIndex(2, 2);
-			indicesData.setIndex(3, 0);
-			indicesData.setIndex(4, 2);
-			indicesData.setIndex(5, 3);
 		}
 		
 		drawIndex = VertexData.OBJECT_POSITION;
 		VertexData.OBJECT_POSITION++;
-		//IndicesData.OBJECT_POSITION++;
 	}
 	
 	public function isLastItem(staticDef:StaticDef):Bool

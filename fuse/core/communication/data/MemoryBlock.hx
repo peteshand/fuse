@@ -1,5 +1,6 @@
 package fuse.core.communication.data;
-import openfl.Memory;
+
+import fuse.core.communication.memory.Memory;
 
 /**
  * ...

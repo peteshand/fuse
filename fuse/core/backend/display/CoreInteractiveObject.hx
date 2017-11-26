@@ -1,4 +1,5 @@
 package fuse.core.backend.display;
+import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.utils.Pool;
 
 /**
@@ -19,7 +20,7 @@ class CoreInteractiveObject extends CoreDisplayObject
 	
 	public function addChildAt(child:CoreDisplayObject, index:Int):Void
 	{
-		if (index == -1){
+		if (index == -1) {	
 			children.push(child);
 		}
 		else {
@@ -36,17 +37,18 @@ class CoreInteractiveObject extends CoreDisplayObject
 	
 	override public function buildHierarchy() 
 	{
-		Core.displayListBuilder.hierarchyApplyTransform.push(pushTransform);
+		HierarchyAssembler.transformActions.push(calculateTransform);
 		for (i in 0...children.length) children[i].buildHierarchy();
-		Core.displayListBuilder.hierarchyApplyTransform.push(popTransform);
+		HierarchyAssembler.transformActions.push(popTransform);
 	}
 	
-	override function setChildrenIsStatic(value:Bool) 
+	
+	
+	override function beginSetChildrenIsStatic(value:Bool) 
 	{
-		super.setChildrenIsStatic(value);
-		
 		for (i in 0...children.length) 
 		{
+			children[i].beginSetChildrenIsStatic(true);
 			children[i].setChildrenIsStatic(true);
 		}
 	}
@@ -96,5 +98,27 @@ class CoreInteractiveObject extends CoreDisplayObject
 	function get_numChildren():Int 
 	{
 		return numChildren;
+	}
+	
+	////////////////////////////////////////////////////////////////
+	// New Assembler ///////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////
+	
+	override public function buildTransformActions() // new verion of buildHierarchy
+	{
+		//pushTransform();
+		//for (i in 0...children.length) children[i].buildTransformActions();
+		//popTransform();
+		
+		HierarchyAssembler.transformActions.push(calculateTransform);
+		for (i in 0...children.length) children[i].buildTransformActions();
+		HierarchyAssembler.transformActions.push(popTransform);
+	}
+	
+	override public function buildHierarchy2()
+	{
+		// TODO: check if visible and parent is visible
+		
+		for (i in 0...children.length) children[i].buildHierarchy2();
 	}
 }

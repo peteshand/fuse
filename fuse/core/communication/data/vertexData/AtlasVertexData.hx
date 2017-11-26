@@ -1,6 +1,6 @@
 package fuse.core.communication.data.vertexData;
 import fuse.Fuse;
-import openfl.Memory;
+import fuse.core.communication.memory.Memory;
 
 /**
  * ...

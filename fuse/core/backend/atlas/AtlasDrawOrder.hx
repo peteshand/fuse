@@ -1,6 +1,5 @@
 package fuse.core.backend.atlas;
 
-import fuse.core.communication.data.indices.IndicesData;
 import fuse.core.backend.texture.TextureOrder;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
@@ -86,7 +85,6 @@ class AtlasDrawOrder
 		}
 		
 		VertexData.OBJECT_POSITION++;
-		//IndicesData.OBJECT_POSITION++;
 		//return currentRenderBatchDef.index;
 	}
 	

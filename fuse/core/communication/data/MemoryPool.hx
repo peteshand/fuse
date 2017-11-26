@@ -1,7 +1,5 @@
 package fuse.core.communication.data;
-import openfl.Memory;
 import openfl.errors.Error;
-
 
 /**
  * ...

@@ -23,16 +23,22 @@ class ObjectPool<T>
 
 	public function request():T
 	{
-		if (counter == 0) {
-			//trace("Create New");
-			return Type.createInstance(_pooledType, args);
+		//trace(["request counter = " + counter, pool.length]);
+		
+		if (counter == pool.length) {
+			trace("Create New");
+			pool[counter] = Type.createInstance(_pooledType, args);
+			//return pool[counter++];
 		}
-		return pool[--counter];
+		
+		return pool[counter++];
 	}
 
 	public function release(s:T):Void
 	{
-		pool[counter++] = s;
+		if (counter <= 0) return;
+		//trace(["release counter = " + counter, pool.length]);
+		pool[--counter] = s;
 	}
 	
 	public function spawn(len:Int) 
@@ -43,6 +49,11 @@ class ObjectPool<T>
 			pool[i] = Type.createInstance(_pooledType, args);
 		}
 		
-		counter += len;
+		//counter += len;
+	}
+	
+	public function forceReuse():Void
+	{
+		counter = 0;// pool.length;
 	}
 }

@@ -21,7 +21,7 @@ import openfl.events.EventDispatcher;
 @:access(fuse)
 class Fuse extends EventDispatcher
 {
-	public static inline var MAX_TEXTURE_SIZE:Int = 2048;
+	public static inline var MAX_TEXTURE_SIZE:Int = 1024;
 	
 	var mainThread:MainThread;
 	var workerThread:WorkerThread;
