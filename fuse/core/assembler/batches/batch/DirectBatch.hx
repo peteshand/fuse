@@ -79,10 +79,10 @@ class DirectBatch extends BaseBatch implements IBatch
 			//}
 			
 			//if (renderTarget == -1) {
-				vertexData.setXY(0, image.bottomLeft.x,	image.bottomLeft.y);
-				vertexData.setXY(1, image.topLeft.x,	image.topLeft.y);
-				vertexData.setXY(2, image.topRight.x,	image.topRight.y);
-				vertexData.setXY(3, image.bottomRight.x,image.bottomRight.y);
+				vertexData.setXY(0, image.bottomLeftX,	image.bottomLeftY);
+				vertexData.setXY(1, image.topLeftX,		image.topLeftY);
+				vertexData.setXY(2, image.topRightX,	image.topRightY);
+				vertexData.setXY(3, image.bottomRightX,	image.bottomRightY);
 			//}
 			//else {
 				//trace("resize");	

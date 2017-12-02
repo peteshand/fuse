@@ -90,10 +90,10 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 			//}
 			//else {
 				//trace("resize");	
-				vertexData.setXY(0, ResizeX(image.bottomLeft.x),	ResizeY(image.bottomLeft.y));
-				vertexData.setXY(1, ResizeX(image.topLeft.x),	ResizeY(image.topLeft.y));
-				vertexData.setXY(2, ResizeX(image.topRight.x),	ResizeY(image.topRight.y));
-				vertexData.setXY(3, ResizeX(image.bottomRight.x),ResizeY(image.bottomRight.y));
+				vertexData.setXY(0, ResizeX(image.bottomLeftX),		ResizeY(image.bottomLeftY));
+				vertexData.setXY(1, ResizeX(image.topLeftX),		ResizeY(image.topLeftY));
+				vertexData.setXY(2, ResizeX(image.topRightX),		ResizeY(image.topRightY));
+				vertexData.setXY(3, ResizeX(image.bottomRightX),	ResizeY(image.bottomRightY));
 			//}
 			vertexData.setColor(0, image.displayData.colorBL);
 			vertexData.setColor(1, image.displayData.colorTL);

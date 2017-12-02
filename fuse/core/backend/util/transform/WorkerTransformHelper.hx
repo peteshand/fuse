@@ -75,26 +75,24 @@ class WorkerTransformHelper
 		//coreDisplay.transformData.globalTransform.setFrom(coreDisplay.transformData.localTransform);
 		
 		multvecs(
-			coreDisplay.transformData.localTransform, 
-			coreDisplay.bottomLeft, coreDisplay.topLeft, 
-			coreDisplay.topRight, coreDisplay.bottomRight, 
+			coreDisplay, coreDisplay.transformData.localTransform,
 			pivotX, pivotY, width, height
 		);
 	}
 	
-	public static inline function multvecs(localTransform:FastMatrix3, bottomLeft:Point, topLeft:Point, topRight:Point, bottomRight:Point, pivotX:Float, pivotY:Float, width:Float, height:Float) 
+	public static inline function multvecs(coreDisplay:CoreDisplayObject, localTransform:FastMatrix3, pivotX:Float, pivotY:Float, width:Float, height:Float) 
 	{
-		multvec(bottomLeft, localTransform, -pivotX, -pivotY + height);
-		multvec(topLeft, localTransform, -pivotX, -pivotY);
-		multvec(topRight, localTransform, -pivotX + width, -pivotY);
-		multvec(bottomRight, localTransform, -pivotX + width, -pivotY + height);
+		multvec(coreDisplay, "bottomLeftX", "bottomLeftY", localTransform, -pivotX, -pivotY + height);
+		multvec(coreDisplay, "topLeftX", "topLeftY", localTransform, -pivotX, -pivotY);
+		multvec(coreDisplay, "topRightX", "topRightY", localTransform, -pivotX + width, -pivotY);
+		multvec(coreDisplay, "bottomRightX", "bottomRightY", localTransform, -pivotX + width, -pivotY + height);
 	}
 	
-	public static inline function multvec(output:Point, localTransform:FastMatrix3, x: Float, y:Float):Void
+	public static inline function multvec(coreDisplay:CoreDisplayObject, outputX:String, outputY:String, localTransform:FastMatrix3, x: Float, y:Float):Void untyped
 	{
 		var w:Float = localTransform._02 * x + localTransform._12 * y + localTransform._22;
-		output.x = transformX((localTransform._00 * x + localTransform._10 * y + localTransform._20) / w);
-		output.y = transformY((localTransform._01 * x + localTransform._11 * y + localTransform._21) / w);
+		coreDisplay[outputX] = transformX((localTransform._00 * x + localTransform._10 * y + localTransform._20) / w);
+		coreDisplay[outputY] = transformY((localTransform._01 * x + localTransform._11 * y + localTransform._21) / w);
 	}
 	
 	public inline static function clear(localTransform:FastMatrix3) 

@@ -38,10 +38,20 @@ class CoreDisplayObject
 	public var parent		:CoreInteractiveObject;
 	public var layerGroup	:LayerGroup;
 	
-	public var bottomLeft	:Point = new Point();
-	public var topLeft		:Point = new Point();
-	public var topRight		:Point = new Point();
-	public var bottomRight	:Point = new Point();
+	public var bottomLeftX:Float = 0;
+	public var bottomLeftY:Float = 0;
+	public var topLeftX:Float = 0;
+	public var topLeftY:Float = 0;
+	public var topRightX:Float = 0;
+	public var topRightY:Float = 0;
+	public var bottomRightX:Float = 0;
+	public var bottomRightY:Float = 0;
+	
+	public var left:Float = 0;
+	public var right:Float = 0;
+	public var top:Float = 0;
+	public var bottom:Float = 0;
+	
 	public var displayType	:Int;
 	
 	var transformData		:TransformData;
