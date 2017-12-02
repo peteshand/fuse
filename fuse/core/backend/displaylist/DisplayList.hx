@@ -29,8 +29,8 @@ class DisplayList
 	
 	function addMask(objectId:Int, maskId:Int) 
 	{
-		var coreDisplay:CoreImage = untyped map.get(objectId);
-		if (coreDisplay == null) {
+		var display:CoreImage = untyped map.get(objectId);
+		if (display == null) {
 			trace("displayObject much be added to the stage before it can have a mask attached to it");
 			return;
 		}
@@ -39,15 +39,15 @@ class DisplayList
 			trace("mask displayObject much be added to the stage before it can be attached to a displayObject");
 			return;
 		}
-		coreDisplay.mask = maskDisplay;
+		display.mask = maskDisplay;
 		staticCount = 0;
 	}
 	
 	function removeMask(objectId:Int) 
 	{
-		var coreDisplay:CoreImage = untyped map.get(objectId);
-		if (coreDisplay == null) return;
-		coreDisplay.mask = null;
+		var display:CoreImage = untyped map.get(objectId);
+		if (display == null) return;
+		display.mask = null;
 		staticCount = 0;
 	}
 	
@@ -58,21 +58,17 @@ class DisplayList
 			return;
 		}
 		
-		var coreDisplay:CoreDisplayObject = getDisplayFromPool(displayType);
-		coreDisplay.displayData = getDisplayData(objectId);
-		coreDisplay.objectId = objectId;
-		
-		if (Std.is(coreDisplay, CoreImage)){
-			cast(coreDisplay, CoreImage).textureId = coreDisplay.displayData.textureId;
-		}
+		var display:CoreDisplayObject = getDisplayFromPool(displayType);
+		display.displayType = displayType;
+		display.init(objectId);
 		
 		if (parent != null) {
-			parent.addChildAt(coreDisplay, addAtIndex);
+			parent.addChildAt(display, addAtIndex);
 		}
-		map.set(coreDisplay.objectId, coreDisplay);
+		map.set(display.objectId, display);
 		
 		if (objectId == 0) {
-			stage = coreDisplay;
+			stage = display;
 		}
 		
 		staticCount = 0;
@@ -95,11 +91,11 @@ class DisplayList
 	
 	public function removeChild(objectId:Int) 
 	{
-		var coreDisplay:CoreDisplayObject = untyped map.get(objectId);
-		if (coreDisplay == null) return;
+		var display:CoreDisplayObject = untyped map.get(objectId);
+		if (display == null) return;
 		
-		if (Std.is(coreDisplay, CoreInteractiveObject)){ // NEEDS TESTING
-			var coreInteractiveObject:CoreInteractiveObject = untyped coreDisplay;
+		if (Std.is(display, CoreInteractiveObject)){ // NEEDS TESTING
+			var coreInteractiveObject:CoreInteractiveObject = untyped display;
 			
 			var j:Int = coreInteractiveObject.numChildren - 1;
 			while (j >= 0) 
@@ -110,28 +106,29 @@ class DisplayList
 			}
 		}
 		
-		if (coreDisplay.parent != null) {
-			coreDisplay.parent.removeChild(coreDisplay);
+		if (display.parent != null) {
+			display.parent.removeChild(display);
 		}
+		
+		releaseDisplayToPool(display);
+		
 		transformDataMap.remove(objectId);
 		map.remove(objectId);
 		
 		staticCount = 0;
 	}
 	
+	inline function releaseDisplayToPool(display:CoreDisplayObject)
+	{
+		if (display.displayType == DisplayType.SPRITE)			Pool.sprites.release(untyped display);
+		if (display.displayType == DisplayType.DISPLAY_OBJECT)	Pool.displayObjects.release(untyped display);
+		if (display.displayType == DisplayType.IMAGE)			Pool.images.release(untyped display);
+		if (display.displayType == DisplayType.QUAD)			Pool.quads.release(untyped display);
+	}
+	
 	public function get(key:Int) 
 	{
 		return map.get(key);
-	}
-	
-	function getDisplayData(objectId:Int):IDisplayData
-	{
-		var displayDataAccess:IDisplayData = null;
-		if (!transformDataMap.exists(objectId)) {
-			displayDataAccess = CommsObjGen.getDisplayData(objectId);
-			transformDataMap.set(objectId, displayDataAccess);
-		}
-		return transformDataMap.get(objectId);
 	}
 	
 	public function checkForDisplaylistChanges() 

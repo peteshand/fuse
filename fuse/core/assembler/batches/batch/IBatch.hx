@@ -12,6 +12,6 @@ interface IBatch
 	var renderTarget:Null<Int>;
 	var renderables:GcoArray<ICoreRenderable>;
 	function init(index:Int):Void;
-	function add(renderable:ICoreRenderable, renderTarget:Int):Bool;
+	function add(renderable:ICoreRenderable, renderTarget:Int, batchType:BatchType):Bool;
 	function writeVertex():Void;
 }

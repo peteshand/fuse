@@ -7,6 +7,7 @@ package fuse.core.assembler.batches.batch;
 @:enum abstract BatchType(String) from String to String {
 	
 	public var ATLAS:String = "atlas";
-	public var LAYER_CACHE:String = "layerCache";
+	public var CACHE_BAKE:String = "cacheBake";
 	public var DIRECT:String = "direct";
+	public var CACHE_DRAW:String = "cacheDraw";
 }

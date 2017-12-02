@@ -3,6 +3,7 @@ import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.backend.displaylist.Graphics;
 import fuse.core.backend.layerCache.groups.LayerGroup;
 import fuse.core.backend.util.transform.WorkerTransformHelper;
+import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.utils.Pool;
 import openfl.geom.Point;
@@ -41,20 +42,27 @@ class CoreDisplayObject
 	public var topLeft		:Point = new Point();
 	public var topRight		:Point = new Point();
 	public var bottomRight	:Point = new Point();
+	public var displayType	:Int;
 	
 	var transformData		:TransformData;
-	var staticDef			:StaticDef;
+	//var staticDef			:StaticDef;
 	var parentNonStatic		:Bool;
 	var combinedAlpha		:Float = 1;
 	
 	public function new() 
 	{
-		staticDef = { 
-			index:-1,
-			layerCacheRenderTarget:-1,
-			state:LayerGroupState.DRAW_TO_LAYER
-		};
+		//staticDef = { 
+			//index:-1,
+			//layerCacheRenderTarget:-1,
+			//state:LayerGroupState.DRAW_TO_LAYER
+		//};
 		transformData = new TransformData();
+	}
+	
+	public function init(objectId:Int) 
+	{
+		this.objectId = objectId;
+		displayData = CommsObjGen.getDisplayData(objectId);
 	}
 	
 	public function buildHierarchy() 
@@ -66,20 +74,13 @@ class CoreDisplayObject
 	function calculateTransform() 
 	{
 		isStatic = displayData.isStatic;
-		//displayData.isStatic = 1; // reset static prop
+		displayData.isStatic = 1; // reset static prop
 		
 		if (isStatic == 0) {
 			beginSetChildrenIsStatic(false);
-			//readDisplayData();
 			combinedAlpha = Graphics.alpha * displayData.alpha;
 			Graphics.pushAlpha(combinedAlpha);
 			WorkerTransformHelper.update(this);
-			//WorkerTransformHelper.multvecs(
-				//transformData.localTransform, 
-				//bottomLeft, topLeft, topRight, bottomRight, 
-				//displayData.pivotX, displayData.pivotY, 
-				//displayData.width, displayData.height
-			//);
 		}
 		
 		pushTransform();

@@ -8,5 +8,4 @@ interface ICoreRenderable
 {
 	var coreTexture:CoreTexture;
 	var textureIndex:Int;
-	//function writeVertex():Void;
 }

@@ -277,6 +277,7 @@ class DisplayObject
 	
 	function setParent(parent:DisplayObjectContainer):Void 
 	{
+		if (this.parent == parent) return;
 		this.parent = parent;
 		
 		if (parent != null && parent.stage != null) {

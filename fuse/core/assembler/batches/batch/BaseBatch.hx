@@ -35,7 +35,7 @@ class BaseBatch
 		batchData = CommsObjGen.getBatchData(index);
 	}
 	
-	public function add(renderable:ICoreRenderable, renderTarget:Int):Bool
+	public function add(renderable:ICoreRenderable, renderTarget:Int, batchType:BatchType):Bool
 	{
 		var textureIndex:Int = getTextureIndex(renderable);
 		if (textureIndex == -1) return false;

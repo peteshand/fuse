@@ -45,7 +45,9 @@ class CommsObjGen
 	static public function getDisplayData(id:Int) 
 	{
 		init();
-		return displayDataGen.get(id);
+		var displayData:DisplayData = displayDataGen.get(id);
+		displayData.isStatic = 0;
+		return displayData;
 	}	
 	
 	static public function getBatchData(id:Int) 

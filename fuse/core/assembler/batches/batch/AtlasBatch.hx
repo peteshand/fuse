@@ -21,6 +21,12 @@ class AtlasBatch extends BaseBatch implements IBatch
 		super();
 	}
 	
+	override public function add(renderable:ICoreRenderable, renderTarget:Int, batchType:BatchType):Bool
+	{
+		if (batchType != BatchType.ATLAS) return false;
+		return super.add(renderable, renderTarget, batchType);
+	}
+	
 	public function writeVertex() 
 	{
 		batchData.clearRenderTarget = 1;

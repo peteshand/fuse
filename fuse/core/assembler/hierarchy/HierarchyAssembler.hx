@@ -21,6 +21,7 @@ class HierarchyAssembler
 	static public function build() 
 	{
 		// TODO: only rebuild hierarchy when required
+		
 		if (DisplayList.hierarchyBuildRequired)
 		{
 			hierarchy.clear();

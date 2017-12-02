@@ -42,24 +42,22 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		vertexData = new VertexData();
 	}
 	
+	override public function init(objectId:Int) 
+	{
+		super.init(objectId);
+		this.textureId = displayData.textureId;
+	}
+	
 	override function calculateTransform() 
 	{
 		isStatic = displayData.isStatic;
-		//displayData.isStatic = 1; // reset static prop
+		displayData.isStatic = 1; // reset static prop
 		
 		if (isStatic == 0) {
-			//readDisplayData();
 			textureId = displayData.textureId;
 			renderLayer = displayData.renderLayer;
-			
 			combinedAlpha = Graphics.alpha * displayData.alpha;
 			WorkerTransformHelper.update(this);
-			//WorkerTransformHelper.multvecs(
-				//transformData.localTransform, 
-				//bottomLeft, topLeft, topRight, bottomRight, 
-				//displayData.pivotX, displayData.pivotY, 
-				//displayData.width, displayData.height
-			//);
 		}
 	}
 	

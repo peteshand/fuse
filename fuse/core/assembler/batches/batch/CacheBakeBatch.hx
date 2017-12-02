@@ -12,7 +12,7 @@ import fuse.core.communication.data.vertexData.VertexData;
  * @author P.J.Shand
  */
 @:access(fuse.core.backend.display)
-class DirectBatch extends BaseBatch implements IBatch
+class CacheBakeBatch extends BaseBatch implements IBatch
 {
 	public function new() 
 	{
@@ -26,7 +26,7 @@ class DirectBatch extends BaseBatch implements IBatch
 	
 	override public function add(renderable:ICoreRenderable, renderTarget:Int, batchType:BatchType):Bool
 	{
-		if (batchType != BatchType.DIRECT) return false;
+		if (batchType != BatchType.CACHE_BAKE) return false;
 		return super.add(renderable, renderTarget, batchType);
 	}
 	
@@ -47,10 +47,13 @@ class DirectBatch extends BaseBatch implements IBatch
 		if (image.displayData.visible == 0) return;
 		
 		
+		
 		var vertexData:IVertexData = image.vertexData;
 		var coreTexture:CoreTexture = image.coreTexture;
 		
-		if (image.isStatic == 0 || image.drawIndex != VertexData.OBJECT_POSITION) {
+		if (image.isStatic == 1 || image.drawIndex != VertexData.OBJECT_POSITION) {
+			
+			//trace("bake to cache layer");
 			
 			vertexData.setTexture(image.textureIndex);
 			
@@ -79,17 +82,18 @@ class DirectBatch extends BaseBatch implements IBatch
 			//}
 			
 			//if (renderTarget == -1) {
-				vertexData.setXY(0, image.bottomLeft.x,	image.bottomLeft.y);
-				vertexData.setXY(1, image.topLeft.x,	image.topLeft.y);
-				vertexData.setXY(2, image.topRight.x,	image.topRight.y);
-				vertexData.setXY(3, image.bottomRight.x,image.bottomRight.y);
+				//trace("back buffer");	
+				//vertexData.setXY(0, image.bottomLeft.x,	image.bottomLeft.y);
+				//vertexData.setXY(1, image.topLeft.x,	image.topLeft.y);
+				//vertexData.setXY(2, image.topRight.x,	image.topRight.y);
+				//vertexData.setXY(3, image.bottomRight.x,image.bottomRight.y);
 			//}
 			//else {
 				//trace("resize");	
-				//vertexData.setXY(0, ResizeX(image.bottomLeft.x),	ResizeY(image.bottomLeft.y));
-				//vertexData.setXY(1, ResizeX(image.topLeft.x),	ResizeY(image.topLeft.y));
-				//vertexData.setXY(2, ResizeX(image.topRight.x),	ResizeY(image.topRight.y));
-				//vertexData.setXY(3, ResizeX(image.bottomRight.x),ResizeY(image.bottomRight.y));
+				vertexData.setXY(0, ResizeX(image.bottomLeft.x),	ResizeY(image.bottomLeft.y));
+				vertexData.setXY(1, ResizeX(image.topLeft.x),	ResizeY(image.topLeft.y));
+				vertexData.setXY(2, ResizeX(image.topRight.x),	ResizeY(image.topRight.y));
+				vertexData.setXY(3, ResizeX(image.bottomRight.x),ResizeY(image.bottomRight.y));
 			//}
 			vertexData.setColor(0, image.displayData.colorBL);
 			vertexData.setColor(1, image.displayData.colorTL);

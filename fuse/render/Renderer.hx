@@ -193,6 +193,7 @@ class Renderer
 		{
 			currentBatchData = textureRenderBatch.getBatchData(i);
 			numItemsInBatch = currentBatchData.numItems;
+			//trace("-- batch " + i);
 			//trace("numItemsInBatch = " + numItemsInBatch);
 			//trace("renderTargetId = " + currentBatchData.renderTargetId);
 			//if (numItemsInBatch > 1) numItemsInBatch--;
@@ -327,21 +328,24 @@ class Renderer
 				var INDEX_MU:Float = SharedMemory.memory.readFloat();
 				var INDEX_MV:Float = SharedMemory.memory.readFloat();
 				
+				var INDEX_COLOUR:Int = SharedMemory.memory.readInt();
+				
 				var INDEX_Texture:Float = SharedMemory.memory.readFloat();
 				var INDEX_MaskTexture:Float = SharedMemory.memory.readFloat();
 				var INDEX_MASK_BASE_VALUE:Float = SharedMemory.memory.readFloat();
 				var INDEX_ALPHA:Float = SharedMemory.memory.readFloat();
 				
-				var INDEX_R:Float = SharedMemory.memory.readFloat();
-				var INDEX_G:Float = SharedMemory.memory.readFloat();
-				var INDEX_B:Float = SharedMemory.memory.readFloat();
-				var INDEX_A:Float = SharedMemory.memory.readFloat();
+				//var INDEX_R:Float = SharedMemory.memory.readFloat();
+				//var INDEX_G:Float = SharedMemory.memory.readFloat();
+				//var INDEX_B:Float = SharedMemory.memory.readFloat();
+				//var INDEX_A:Float = SharedMemory.memory.readFloat();
 				
-				//trace([INDEX_X, INDEX_Y, INDEX_U, INDEX_V]);
-				//trace([INDEX_Texture, INDEX_ALPHA]);
-				//trace([INDEX_MU, INDEX_MV, INDEX_MaskTexture, INDEX_MASK_BASE_VALUE]);
-				trace([INDEX_R, INDEX_G, INDEX_B, INDEX_A]);
-				//trace("--");
+				trace([INDEX_X, INDEX_Y, INDEX_U, INDEX_V]);
+				trace([INDEX_Texture, INDEX_ALPHA]);
+				trace(StringTools.hex(INDEX_COLOUR));
+				trace([INDEX_MU, INDEX_MV, INDEX_MaskTexture, INDEX_MASK_BASE_VALUE]);
+				//trace([INDEX_R, INDEX_G, INDEX_B, INDEX_A]);
+				trace("--");
 
 				//trace("INDEX_X = " + INDEX_X);
 				//trace("INDEX_Y = " + INDEX_Y);

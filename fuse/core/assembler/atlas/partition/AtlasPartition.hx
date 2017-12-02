@@ -82,9 +82,4 @@ class AtlasPartition implements ICoreRenderable
 		}
 		return value;
 	}
-	
-	//public function writeVertex():Void
-	//{
-		////trace("Need to implement");
-	//}
 }

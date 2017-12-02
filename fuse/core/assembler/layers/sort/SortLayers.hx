@@ -1,6 +1,7 @@
 package fuse.core.assembler.layers.sort;
 import fuse.core.assembler.layers.generate.GenerateLayers;
 import fuse.core.assembler.layers.layer.LayerBuffer;
+import fuse.core.assembler.layers.layer.LayerCacheRenderable;
 import fuse.core.assembler.layers.sort.CustomSort.SortType;
 import fuse.utils.GcoArray;
 
@@ -86,10 +87,25 @@ class SortLayers
 			count++;
 			LayerBufferAssembler.directLayers[i].active = true;
 			
-			var activeLayer:LayerBuffer = LayerBufferAssembler.directLayers[i].clone();
-			activeLayer.index = LayerBufferAssembler.activeLayers.length;
-			activeLayer.renderTarget = 7; // TODO: replace with correct textureId
-			LayerBufferAssembler.activeLayers.push(activeLayer);
+			var activeLayer:LayerBuffer = LayerBufferAssembler.directLayers[i];
+			
+			//trace("LayerBufferAssembler.staticCount = " + LayerBufferAssembler.staticCount);
+			if (LayerBufferAssembler.staticCount <= 1) {
+				activeLayer.index = LayerBufferAssembler.activeLayers.length;
+				activeLayer.renderTarget = 6; // TODO: replace with correct textureId	
+				LayerBufferAssembler.activeLayers.push(activeLayer);
+			}
+			
+			var cacheLayer:LayerBuffer = activeLayer.clone();
+			cacheLayer.renderTarget = -1;
+			cacheLayer.renderables.push(new LayerCacheRenderable(6));
+			LayerBufferAssembler.directLayers[i] = cacheLayer;
+			
+			//var activeLayer:LayerBuffer = LayerBufferAssembler.directLayers[i].clone();
+			//activeLayer.index = LayerBufferAssembler.activeLayers.length;
+			//activeLayer.renderTarget = 7; // TODO: replace with correct textureId
+			
+			
 		}
 	}
 	

@@ -6,7 +6,7 @@ import fuse.core.assembler.batches.batch.AtlasBatch;
 import fuse.core.assembler.batches.batch.BatchType;
 import fuse.core.assembler.batches.batch.DirectBatch;
 import fuse.core.assembler.batches.batch.IBatch;
-import fuse.core.assembler.batches.batch.LayerCacheBatch;
+import fuse.core.assembler.batches.batch.CacheBakeBatch;
 import fuse.core.assembler.layers.LayerBufferAssembler;
 import fuse.core.assembler.layers.layer.LayerBuffer;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
@@ -29,32 +29,34 @@ class BatchAssembler
 		currentBatch = null;
 		batches.clear();
 		Pool.atlasBatches.forceReuse();
-		Pool.layerCacheBatches.forceReuse();
+		Pool.cacheBakeBatches.forceReuse();
 		Pool.directBatches.forceReuse();
+		Pool.cacheDrawBatches.forceReuse();
+		
+		
 	}
 	
 	static public function build() 
 	{
-		
 		clear();
 		
 		addAtlasRenderables();
 		addLayerRenderables();
-		addDirectRenderables();
+		addDirectAndCacheRenderables();
+		
+		closeBatch();
 		
 		//trace("batches.length = " + batches.length);
 		//for (k in 0...batches.length) 
 		//{
 			//trace(batches[k]);
 		//}
-		
 	}
 	
 	static private function addAtlasRenderables() 
 	{
 		if (AtlasSheet.activePartitions.length > 0 && AtlasSheet.active){
 			currentBatchType = BatchType.ATLAS;
-			getNewBatch();
 			
 			for (j in 0...AtlasSheet.activePartitions.length) 
 			{
@@ -66,23 +68,25 @@ class BatchAssembler
 	
 	static private function addLayerRenderables() 
 	{
-		if (LayerBufferAssembler.activeLayers.length > 0){
-			currentBatchType = BatchType.LAYER_CACHE;
-			if (currentBatch == null) getNewBatch();
-			
+		if (LayerBufferAssembler.staticCount <= 1 && LayerBufferAssembler.activeLayers.length > 0){
+			currentBatchType = BatchType.CACHE_BAKE;  // draws renderables to render texture
 			for (j in 0...LayerBufferAssembler.activeLayers.length) 
 				addRenderables(LayerBufferAssembler.activeLayers[j].renderables, LayerBufferAssembler.activeLayers[j].renderTarget);
 		}
 	}
 	
-	static private function addDirectRenderables() 
+	static private function addDirectAndCacheRenderables() 
 	{
 		if (LayerBufferAssembler.directLayers.length > 0){
-			currentBatchType = BatchType.DIRECT;
-			if (currentBatch == null) getNewBatch();
-			
-			for (i in 0...LayerBufferAssembler.directLayers.length) 
+			for (i in 0...LayerBufferAssembler.directLayers.length) {
+				if (LayerBufferAssembler.directLayers[i].active) {
+					currentBatchType = BatchType.CACHE_DRAW; // draws a single quad to the back buffer
+				}
+				else {
+					currentBatchType = BatchType.DIRECT;  // draws renderables directly to back buffer
+				}
 				addRenderables(LayerBufferAssembler.directLayers[i].renderables, LayerBufferAssembler.directLayers[i].renderTarget);
+			}
 		}
 	}
 	
@@ -96,7 +100,9 @@ class BatchAssembler
 	
 	static private function addRenderable(renderable:ICoreRenderable, renderTarget:Int)
 	{
-		var added:Bool = currentBatch.add(renderable, renderTarget);
+		if (currentBatch == null) getNewBatch();
+		
+		var added:Bool = currentBatch.add(renderable, renderTarget, currentBatchType);
 		if (added) return;
 		
 		getNewBatch();
@@ -105,13 +111,22 @@ class BatchAssembler
 	
 	static private function getNewBatch() 
 	{
+		closeBatch();
+		
 		switch currentBatchType {
 			case BatchType.ATLAS:		currentBatch = Pool.atlasBatches.request();
-			case BatchType.LAYER_CACHE:	currentBatch = Pool.layerCacheBatches.request();
+			case BatchType.CACHE_BAKE:	currentBatch = Pool.cacheBakeBatches.request();
 			case BatchType.DIRECT:		currentBatch = Pool.directBatches.request();
+			case BatchType.CACHE_DRAW:	currentBatch = Pool.cacheDrawBatches.request();
 		}
 		currentBatch.init(batches.length);
-		
-		batches.push(currentBatch);
+	}
+	
+	static private function closeBatch() 
+	{
+		if (currentBatch == null) return;
+		if (currentBatch.renderables.length > 0) {
+			batches.push(currentBatch);
+		}
 	}
 }

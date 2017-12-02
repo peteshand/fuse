@@ -14,9 +14,4 @@ interface IVertexData
 	public function setMaskTexture(value:Float):Void;
 	public function setAlpha(value:Float):Void;
 	public function setColor(index:Int, value:Color):Void;
-	
-	//public function setR(index:Int, value:Float):Void;
-	//public function setG(index:Int, value:Float):Void;
-	//public function setB(index:Int, value:Float):Void;
-	//public function setA(index:Int, value:Float):Void;
 }

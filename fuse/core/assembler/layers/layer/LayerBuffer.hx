@@ -58,10 +58,10 @@ class LayerBuffer
 	{
 		var c:LayerBuffer = Pool.layerBufferes.request();
 		c.init(isStatic, index);
-		for (i in 0...renderables.length) 
-		{
-			c.renderables.push(renderables[i]);
-		}
+		//for (i in 0...renderables.length) 
+		//{
+			//c.renderables.push(renderables[i]);
+		//}
 		c.active = active;
 		return c;
 	}
