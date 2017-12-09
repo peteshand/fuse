@@ -124,7 +124,6 @@ class Renderer
 			var texture:Texture = Textures.getTexture(targetTextureId.value);
 			context3D.setRenderToTexture(texture.textureBase, false, 0, 0, 0);
 			
-			
 			if (texture._clear || texture._alreadyClear || currentBatchData.clearRenderTarget == 1) {
 				texture._clear = false;
 				context3D.clear(texture.red, texture.green, texture.blue, 0);

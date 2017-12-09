@@ -1,11 +1,16 @@
 package fuse.core;
+import fuse.core.input.FrontMouseInput;
+import fuse.core.input.InputData;
 
+import flash.events.Event;
 import fuse.Fuse;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.communication.data.conductorData.ConductorData;
 import fuse.core.utils.WorkerInfo;
 import fuse.display.DisplayObject;
 import fuse.core.utils.Pool;
+import fuse.display.DisplayObjectContainer;
+import fuse.display.Stage;
 
 import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.WorkerlessComms;
@@ -67,6 +72,35 @@ class WorkerSetup
 	{
 		workerComm.addListener(MessageType.UPDATE_RETURN, OnUpdateReturn);
 		workerComm.addListener(MessageType.WORKER_STARTED, OnWorkerStarted);
+		workerComm.addListener(MessageType.MOUSE_COLLISION, OnInputCollision);
+	}
+	
+	private function OnInputCollision(mouseData:InputData):Void 
+	{
+		//trace([mouseData.type, mouseData.x, mouseData.y]);
+		findDisplay(mouseData, Fuse.current.stage);
+	}
+	
+	// TODO: move into it's own class
+	function findDisplay(mouseData:InputData, display:DisplayObject):Bool
+	{
+		if (mouseData.collisionId == display.objectId) {
+			//trace("FOUND: " + display);
+			display.dispatchInput(mouseData);
+			return true;
+		}
+		if (Std.is(display, DisplayObjectContainer)){
+			var d:DisplayObjectContainer = cast (display, DisplayObjectContainer);
+			for (i in 0...d.children.length) 
+			{
+				if (findDisplay(mouseData, d.children[i])) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+		
 	}
 	
 	private function OnWorkerStarted(workerPayload:WorkerPayload):Void 
@@ -146,6 +180,14 @@ class WorkerSetup
 		for (workerComm in workerComms) 
 		{
 			workerComm.send(MessageType.REMOVE_TEXTURE, textureId);
+		}
+	}
+	
+	public function addInput(mouseData:InputData) 
+	{
+		for (workerComm in workerComms) 
+		{
+			workerComm.send(MessageType.MOUSE_INPUT, mouseData);
 		}
 	}
 	

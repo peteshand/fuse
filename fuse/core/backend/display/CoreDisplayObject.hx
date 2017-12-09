@@ -1,11 +1,13 @@
 package fuse.core.backend.display;
+
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.backend.displaylist.Graphics;
-import fuse.core.backend.layerCache.groups.LayerGroup;
 import fuse.core.backend.util.transform.WorkerTransformHelper;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.utils.Pool;
+import fuse.display.geometry.Bounds;
+import fuse.display.geometry.QuadData;
 import openfl.geom.Point;
 
 /**
@@ -17,55 +19,35 @@ import openfl.geom.Point;
 @:access(fuse)
 class CoreDisplayObject
 {
-	//@:isVar var applyPosition(get, set):Int;
-	//@:isVar var applyRotation(get, set):Int;
-	
 	public var objectId		:Int;
 	public var isStatic		:Int = 0;
-	//public var x			:Float = 0;
-	//public var y			:Float = 0;
-	//public var width		:Float = 0;
-	//public var height		:Float = 0;
-	//public var pivotX		:Float = 0;
-	//public var pivotY		:Float = 0;
-	//public var rotation	:Float = 0;
-	//public var scaleX		:Float = 0;
-	//public var scaleY		:Float = 0;
-	//public var alpha		:Float = 0;
-	//public var visible	:Int = 1;
 	
 	public var displayData	:IDisplayData;
 	public var parent		:CoreInteractiveObject;
-	public var layerGroup	:LayerGroup;
 	
-	public var bottomLeftX:Float = 0;
-	public var bottomLeftY:Float = 0;
-	public var topLeftX:Float = 0;
-	public var topLeftY:Float = 0;
-	public var topRightX:Float = 0;
-	public var topRightY:Float = 0;
-	public var bottomRightX:Float = 0;
-	public var bottomRightY:Float = 0;
+	public var quadData		:QuadData;
+	public var bounds		:Bounds;
 	
-	public var left:Float = 0;
-	public var right:Float = 0;
-	public var top:Float = 0;
-	public var bottom:Float = 0;
+	public var left			:Float = 0;
+	public var right		:Float = 0;
+	public var top			:Float = 0;
+	public var bottom		:Float = 0;
 	
 	public var displayType	:Int;
 	
+	public var over:Bool = false;
+	public var area(get, null):Float;
+	public var diagonal(get, null):Float;
+	
+	
 	var transformData		:TransformData;
-	//var staticDef			:StaticDef;
 	var parentNonStatic		:Bool;
 	var combinedAlpha		:Float = 1;
 	
 	public function new() 
 	{
-		//staticDef = { 
-			//index:-1,
-			//layerCacheRenderTarget:-1,
-			//state:LayerGroupState.DRAW_TO_LAYER
-		//};
+		bounds = new Bounds();
+		quadData = new QuadData();
 		transformData = new TransformData();
 	}
 	
@@ -116,23 +98,6 @@ class CoreDisplayObject
 		}
 	}
 	
-	//function readDisplayData() 
-	//{
-		//if (isStatic == 0 || parentNonStatic){
-			////x = displayData.x;
-			////y = displayData.y;
-			////width = displayData.width;
-			////height = displayData.height;
-			////pivotX = displayData.pivotX;
-			////pivotY = displayData.pivotY;
-			////scaleX = displayData.scaleX;
-			////scaleY = displayData.scaleY;
-			////rotation = displayData.rotation;
-			////alpha = displayData.alpha;
-			////visible = displayData.visible;
-		//}
-	//}
-	
 	function popTransform() 
 	{
 		if (isStatic == 0){
@@ -176,17 +141,29 @@ class CoreDisplayObject
 	
 	public function buildTransformActions()
 	{
-		//pushTransform();
-		//popTransform();
-		
 		HierarchyAssembler.transformActions.push(calculateTransform);
 		HierarchyAssembler.transformActions.push(popTransform);
 	}
-}
-
-typedef StaticDef =
-{
-	index:Int,
-	layerCacheRenderTarget:Int,
-	state:LayerGroupState
+	
+	function get_area():Float 
+	{
+		return displayData.width * displayData.height;
+		//return (displayData.width / Core.STAGE_WIDTH * 2) * (displayData.height / Core.STAGE_HEIGHT * 2);
+		//return (displayData.width / Core.STAGE_WIDTH) * (displayData.height / Core.STAGE_HEIGHT);
+	}
+	
+	function get_diagonal():Float 
+	{
+		return Math.sqrt(Math.pow(displayData.width, 2) + Math.pow(displayData.height, 2));
+	}
+	
+	//function get_hProps():Array<Float> 
+	//{
+		//return [bottomLeftX, topLeftX, topRightX, bottomRightX];
+	//}
+	//
+	//function get_vProps():Array<Float> 
+	//{
+		//return [bottomLeftY, topLeftY, topRightY, bottomRightY];
+	//}
 }

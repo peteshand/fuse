@@ -1,5 +1,5 @@
 package fuse.core.input;
-import fuse.core.front.input.mouse.FrontMouseInput;
+import fuse.core.input.FrontMouseInput;
 
 /**
  * ...

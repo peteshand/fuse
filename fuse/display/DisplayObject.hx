@@ -3,11 +3,13 @@ package fuse.display;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
+import fuse.core.input.InputData;
 import fuse.display.Stage;
 import fuse.utils.Color;
 import fuse.Fuse;
 import msignal.Signal.Signal0;
 import msignal.Signal.Signal1;
+import openfl.events.MouseEvent;
 
 @:access(fuse)
 class DisplayObject
@@ -24,6 +26,12 @@ class DisplayObject
 	public var onRemove = new Signal1<DisplayObject>();
 	public var onAddToStage = new Signal1<DisplayObject>();
 	public var onRemoveFromStage = new Signal1<DisplayObject>();
+	
+	public var onPress = new Signal1<InputData>();
+	public var onMove = new Signal1<InputData>();
+	public var onRelease = new Signal1<InputData>();
+	public var onRollover = new Signal1<InputData>();
+	public var onRollout = new Signal1<InputData>();
 	
 	@:isVar public var parent(default, null):DisplayObjectContainer;
 	@:isVar public var stage(default, null):Stage;
@@ -301,5 +309,16 @@ class DisplayObject
 	public function dispose():Void
 	{
 		
+	}
+	
+	function dispatchInput(mouseData:InputData) 
+	{
+		switch(mouseData.type) {
+			case MouseEvent.MOUSE_DOWN:	onPress.dispatch(mouseData);
+			case MouseEvent.MOUSE_MOVE:	onMove.dispatch(mouseData);
+			case MouseEvent.MOUSE_UP:	onRelease.dispatch(mouseData);
+			case MouseEvent.MOUSE_OVER:	onRollover.dispatch(mouseData);
+			case MouseEvent.MOUSE_OUT:	onRollout.dispatch(mouseData);
+		}
 	}
 }

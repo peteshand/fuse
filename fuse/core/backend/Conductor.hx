@@ -111,23 +111,26 @@ class Conductor
 		#if flash
 			//trace([Conductor.index, "threadActive = " + Conductor.threadActive]);
 			
-			if (Conductor.threadActive) {
-				
-				if (WorkerInfo.usingWorkers){
+			if (WorkerInfo.usingWorkers)
+			{
+				if (Conductor.threadActive)
+				{					
 					//trace("WORKER LOCK");
 					Conductor.condition.mutex.lock();
-				}
-				//conductorData.frameIndex++;
-				onTick.dispatch();
-				//conductorData.index = -1;
-				
-				if (WorkerInfo.usingWorkers){
+					
+					//conductorData.frameIndex++;
+					onTick.dispatch();
+					//conductorData.index = -1;
+					
 					Conductor.condition.notifyAll();
 					//trace("WORKER UNLOCK");
 					Conductor.condition.wait();
 					Conductor.condition.mutex.unlock();
 					
 				}
+			}
+			else {
+				onTick.dispatch();
 			}
 		#else
 			onTick.dispatch();

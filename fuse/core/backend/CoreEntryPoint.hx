@@ -1,7 +1,10 @@
 package fuse.core.backend;
+import fuse.core.input.FrontMouseInput;
+import fuse.core.input.InputData;
 
 import fuse.Fuse;
-import fuse.core.assembler.Assembler2;
+import fuse.core.assembler.Assembler;
+import fuse.core.assembler.input.InputAssembler;
 import fuse.core.assembler.vertexWriter.VertexWriter;
 import fuse.core.backend.Core;
 import fuse.core.communication.messageData.AddMaskMsg;
@@ -51,6 +54,7 @@ class CoreEntryPoint
 		workerComms.addListener(MessageType.REMOVE_MASK, OnRemoveMask);
 		workerComms.addListener(MessageType.ADD_TEXTURE, OnAddTexture);
 		workerComms.addListener(MessageType.REMOVE_TEXTURE, OnRemoveTexture);
+		workerComms.addListener(MessageType.MOUSE_INPUT, OnMouseInput);
 		
 		index = workerComms.getSharedProperty(WorkerSharedProperties.INDEX);
 		numberOfWorkers = workerComms.getSharedProperty(WorkerSharedProperties.NUMBER_OF_WORKERS);
@@ -74,7 +78,12 @@ class CoreEntryPoint
 		// Remove for New Assembler //
 		//Core.assembler.update();
 		
-		Assembler2.update();
+		Assembler.update();
+		
+		for (i in 0...InputAssembler.collisions.length) 
+		{
+			workerComms.send(MessageType.MOUSE_COLLISION, InputAssembler.collisions[i]);
+		}
 	}
 	
 	function OnAddMask(addChildPayload:AddMaskMsg) 
@@ -96,6 +105,11 @@ class CoreEntryPoint
 	private function OnRemoveTexture(textureId:Int):Void 
 	{
 		Core.textures.dispose(textureId);
+	}
+	
+	private function OnMouseInput(mouseData:InputData):Void 
+	{
+		InputAssembler.add(mouseData);
 	}
 	
 	function OnAddChild(addChildPayload:AddChildMsg) 

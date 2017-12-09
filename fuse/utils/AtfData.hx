@@ -70,12 +70,12 @@ class AtfData
 
     public static function validATF(data:ByteArray):Bool
     {
-		var check:Array<String> = ["A", "T", "F"];
+		var check:Array<Int> = [65, 84, 70];
 		data.position = 0;
 		while (data.bytesAvailable > 0) 
 		{
-			if (check[data.position] != String.fromCharCode(data.readByte())) return false;
-			if (data.position == 2) return true;
+			if (check[data.position] != data.readByte()) return false;
+			if (data.position == 3) return true;
 		}
 		return false;
     }

@@ -1,5 +1,6 @@
 package fuse.core.backend.util.transform;
 
+import fuse.display.geometry.QuadData;
 import fuse.utils.MatrixUtils;
 import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.backend.displaylist.Graphics;
@@ -75,24 +76,24 @@ class WorkerTransformHelper
 		//coreDisplay.transformData.globalTransform.setFrom(coreDisplay.transformData.localTransform);
 		
 		multvecs(
-			coreDisplay, coreDisplay.transformData.localTransform,
+			coreDisplay.quadData, coreDisplay.transformData.localTransform,
 			pivotX, pivotY, width, height
 		);
 	}
 	
-	public static inline function multvecs(coreDisplay:CoreDisplayObject, localTransform:FastMatrix3, pivotX:Float, pivotY:Float, width:Float, height:Float) 
+	public static inline function multvecs(quadData:QuadData, localTransform:FastMatrix3, pivotX:Float, pivotY:Float, width:Float, height:Float) 
 	{
-		multvec(coreDisplay, "bottomLeftX", "bottomLeftY", localTransform, -pivotX, -pivotY + height);
-		multvec(coreDisplay, "topLeftX", "topLeftY", localTransform, -pivotX, -pivotY);
-		multvec(coreDisplay, "topRightX", "topRightY", localTransform, -pivotX + width, -pivotY);
-		multvec(coreDisplay, "bottomRightX", "bottomRightY", localTransform, -pivotX + width, -pivotY + height);
+		multvec(quadData, 0, 1, localTransform, -pivotX, -pivotY + height);
+		multvec(quadData, 2, 3, localTransform, -pivotX, -pivotY);
+		multvec(quadData, 4, 5, localTransform, -pivotX + width, -pivotY);
+		multvec(quadData, 6, 7, localTransform, -pivotX + width, -pivotY + height);
 	}
 	
-	public static inline function multvec(coreDisplay:CoreDisplayObject, outputX:String, outputY:String, localTransform:FastMatrix3, x: Float, y:Float):Void untyped
+	public static inline function multvec(quadData:QuadData, outputX:Int, outputY:Int, localTransform:FastMatrix3, x: Float, y:Float):Void untyped
 	{
 		var w:Float = localTransform._02 * x + localTransform._12 * y + localTransform._22;
-		coreDisplay[outputX] = transformX((localTransform._00 * x + localTransform._10 * y + localTransform._20) / w);
-		coreDisplay[outputY] = transformY((localTransform._01 * x + localTransform._11 * y + localTransform._21) / w);
+		quadData[outputX] = transformX((localTransform._00 * x + localTransform._10 * y + localTransform._20) / w);
+		quadData[outputY] = transformY((localTransform._01 * x + localTransform._11 * y + localTransform._21) / w);
 	}
 	
 	public inline static function clear(localTransform:FastMatrix3) 

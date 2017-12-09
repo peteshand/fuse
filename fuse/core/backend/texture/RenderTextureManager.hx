@@ -1,6 +1,6 @@
 package fuse.core.backend.texture;
 
-import fuse.core.assembler.Assembler2;
+import fuse.core.assembler.Assembler;
 import fuse.core.backend.Conductor;
 import fuse.core.backend.Core;
 import fuse.core.communication.data.MemoryBlock;

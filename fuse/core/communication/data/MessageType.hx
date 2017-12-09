@@ -20,6 +20,8 @@ class MessageType
 	static public inline var ADD_TEXTURE:String = "addTexture";
 	static public inline var REMOVE_TEXTURE:String = "removeTexture";
 	//static public inline var ADD_TEXTURE:String = "addTexture";
+	static public inline var MOUSE_INPUT:String = "mouseInput";
+	static public inline var MOUSE_COLLISION:String = "mouseCollision";
 	
 	public function new() 
 	{

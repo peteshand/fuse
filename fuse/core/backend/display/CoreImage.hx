@@ -3,14 +3,13 @@ package fuse.core.backend.display;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.backend.displaylist.Graphics;
-import fuse.core.backend.layerCache.LayerCache;
 import fuse.core.backend.texture.CoreTexture;
-import fuse.core.backend.texture.TextureOrder.TextureDef;
 import fuse.core.backend.util.transform.WorkerTransformHelper;
 import fuse.core.communication.data.vertexData.IVertexData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.utils.Pool;
-import fuse.utils.Color;
+import fuse.display.geometry.Bounds;
+import fuse.utils.Rect;
 
 /**
  * ...
@@ -29,12 +28,9 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public var mask			:CoreImage;
 	public var renderLayer	:Int = 0;
 	
-	//var color				:Color = 0x0;
 	var drawIndex			:Int = -1;
 	var updateUVs			:Int = 0;
 	var renderTarget		:Int = -1;
-	var textureDef			:TextureDef;
-	var layerCache			:LayerCache;
 	
 	public function new() 
 	{
@@ -91,32 +87,6 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		
 	}
 	
-	//override function readDisplayData() 
-	//{
-		//super.readDisplayData();
-		//
-		//// TODO: add ability to update textureID after Image creation
-		///*trace("CHECK THIS ISN'T CAUSING ISSUES");
-		//if (coreTexture.textureData.placed == 0) {
-			//coreTexture.textureData.placed = 1;
-		//}*/
-		//
-		//if (isStatic == 0 || parentNonStatic) {
-			////color = displayData.color;
-			//renderLayer = displayData.renderLayer;
-			//textureId = displayData.textureId;
-		//}
-	//}
-	
-	//override function updateIsStatic() 
-	//{
-		//super.updateIsStatic();
-		//
-		////if (isStatic == 1 && coreTexture.textureHasChanged) {
-			////isStatic = 0; // If texture has change then set isStatic to false
-		////}
-	//}
-	
 	override public function buildHierarchy() 
 	{
 		HierarchyAssembler.transformActions.push(pushTransform);
@@ -145,4 +115,25 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		HierarchyAssembler.hierarchy.push(this);
 	}
 	
+	public function getBounds():Bounds
+	{
+		bounds.left = Math.POSITIVE_INFINITY;
+		bounds.right = Math.NEGATIVE_INFINITY;
+		bounds.top = Math.NEGATIVE_INFINITY;
+		bounds.bottom = Math.POSITIVE_INFINITY;
+		
+		for (i in 0...quadData.length) 
+		{
+			if (i % 2 == 0){
+				if (bounds.left > quadData[i]) bounds.left = quadData[i];
+				if (bounds.right < quadData[i]) bounds.right = quadData[i];
+			}
+			else {
+				if (bounds.top < quadData[i]) bounds.top = quadData[i];
+				if (bounds.bottom > quadData[i]) bounds.bottom = quadData[i];
+			}
+		}
+		
+		return bounds;
+	}
 }

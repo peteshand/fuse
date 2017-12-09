@@ -142,11 +142,3 @@ class DisplayList
 		staticCount++;
 	}
 }
-
-typedef Unparented =
-{
-	objectId:Int, 
-	displayType:Int, 
-	parentId:Int, 
-	addAtIndex:Int
-}

@@ -3,6 +3,7 @@ import fuse.core.backend.Core;
 import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.displaylist.DisplayList;
 import fuse.utils.GcoArray;
+import fuse.utils.Rect;
 
 /**
     This class is called every frame and is responsible for converting the displaylist hierarchy into a flat array.

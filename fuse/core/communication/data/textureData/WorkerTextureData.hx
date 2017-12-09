@@ -1,7 +1,7 @@
 package fuse.core.communication.data.textureData;
 import fuse.Fuse;
 import fuse.core.communication.data.MemoryBlock;
-import fuse.core.backend.atlas.partition.AtlasPartition;
+//import fuse.core.backend.atlas.partition.AtlasPartition;
 import fuse.utils.Notifier;
 
 /**
@@ -64,7 +64,7 @@ class WorkerTextureData implements ITextureData
 	
 	public var area(get, null):Float;
 	//public var placed:Bool = false;
-	public var partition = new Notifier<AtlasPartition>();
+	//public var partition = new Notifier<AtlasPartition>();
 	
 	public var atlasTextureId(get, set):Int;
 	public var atlasBatchTextureIndex(get, set):Int;

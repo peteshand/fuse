@@ -8,7 +8,7 @@ import fuse.display.DisplayObject;
  */
 class InteractiveObject extends DisplayObject
 {
-
+	
 	public function new() 
 	{
 		super();

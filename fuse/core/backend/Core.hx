@@ -1,13 +1,8 @@
 package fuse.core.backend;
 import fuse.core.backend.texture.CoreTextures;
-import fuse.core.communication.IWorkerComms;
-import fuse.core.backend.atlas.AtlasDrawOrder;
 import fuse.core.backend.displaylist.DisplayList;
-import fuse.core.backend.texture.TextureOrder;
 import fuse.core.backend.texture.TextureRenderBatch;
-import fuse.core.backend.layerCache.LayerCaches;
 import fuse.core.backend.texture.RenderTextureManager;
-import fuse.core.backend.atlas.AtlasPacker;
 
 /**
  * ...
@@ -17,25 +12,14 @@ import fuse.core.backend.atlas.AtlasPacker;
 class Core
 {
 	public static var displayList:DisplayList;
-	// Remove for New Assembler //
-	//public static var assembler:Assembler;
-	
-	public static var atlasPacker:AtlasPacker;
-	public static var atlasDrawOrder:AtlasDrawOrder;
-	
 	public static var textures:CoreTextures;
-	public static var textureOrder:TextureOrder;
 	public static var textureRenderBatch:TextureRenderBatch;
-	
 	public static var renderTextureManager:RenderTextureManager;
-	//public static var workerLayerConstruct:WorkerLayerConstruct;
-	//public static var layerCaches:LayerCaches;
 	
 	@:isVar public static var textureBuildRequiredCount(default, set):Int = 0;
 	
 	public static var textureBuildNextFrame:Bool;
 	public static var textureBuildRequired:Bool;
-	//@:isVar public static var hierarchyBuildRequired(get, set):Bool = true;
 	public static var STAGE_WIDTH:Int;
 	public static var STAGE_HEIGHT:Int;
 	
@@ -49,35 +33,12 @@ class Core
 	{
 		Core.displayList = new DisplayList();
 		
-		// Remove for New Assembler //
-		//Core.assembler = new Assembler();
-		
-		Core.atlasPacker = new AtlasPacker();
-		Core.atlasDrawOrder = new AtlasDrawOrder();
-		//WorkerCore.atlasTextureRenderBatch = new AtlasTextureRenderBatch();
 		
 		Core.textures = new CoreTextures();
-		Core.textureOrder = new TextureOrder();
 		Core.textureRenderBatch = new TextureRenderBatch();
 		
 		Core.renderTextureManager = new RenderTextureManager();
-		//WorkerCore.workerLayerConstruct = new WorkerLayerConstruct();
-		//Core.layerCaches = new LayerCaches();
 	}
-	
-	//static inline function get_hierarchyBuildRequired():Bool 
-	//{
-		//return hierarchyBuildRequired;
-	//}
-	//
-	//static function set_hierarchyBuildRequired(value:Bool):Bool 
-	//{
-		//hierarchyBuildRequired = value;
-		//if (hierarchyBuildRequired) textureBuildRequiredCount = 0;
-		//else textureBuildRequiredCount++;
-		//
-		//return hierarchyBuildRequired;
-	//}
 	
 	static function get_textureBuildRequiredCount():Int 
 	{
@@ -87,7 +48,6 @@ class Core
 	static function set_textureBuildRequiredCount(value:Int):Int 
 	{
 		textureBuildRequiredCount = value;
-		//trace("textureBuildRequiredCount = " + textureBuildRequiredCount);
 		if (textureBuildRequiredCount < 2) textureBuildRequired = true;
 		else textureBuildRequired = false;
 		

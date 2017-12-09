@@ -1,5 +1,6 @@
 package fuse.texture;
 import fuse.utils.AtfData;
+import openfl.display3D.Context3DTextureFormat;
 
 import fuse.utils.AtfData.AtfDataInfo;
 import fuse.texture.Texture;
@@ -28,6 +29,10 @@ class ATFTexture extends Texture
 			throw new Error("Invalid ATF format");
 			return;
 		}
+		if (atfDataInfo.format != Context3DTextureFormat.BGRA) {
+			throw new Error("Only ATF BGRA format supported");
+			return;
+		}
 		
 		this.width = atfDataInfo.width;
 		this.height = atfDataInfo.height;
@@ -37,7 +42,8 @@ class ATFTexture extends Texture
 	
 	override public function upload() 
 	{
-		createNativeTexture();
+		textureBase = nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, false);
+		//createNativeTexture();
 		update(data);
 	}
 	
@@ -50,14 +56,19 @@ class ATFTexture extends Texture
 				throw new Error("Invalid ATF format");
 				return;
 			}
+			if (atfDataInfo.format != Context3DTextureFormat.BGRA) {
+				throw new Error("Only ATF BGRA format supported");
+				return;
+			}
 		}
 		
 		
 		//nativeTexture.uploadFromBitmapData(bitmapData, 0);
 		//OnTextureUploadComplete(null);
 		
-		nativeTexture.addEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
-		nativeTexture.uploadCompressedTextureFromByteArray(data, 0, true);
+		//nativeTexture.addEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
+		nativeTexture.uploadCompressedTextureFromByteArray(data, 0);
+		OnTextureUploadComplete(null);
 	}
 	
 	//public function uploadFromBitmapData(source:BitmapData, miplevel:UInt = 0):Void

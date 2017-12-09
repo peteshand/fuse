@@ -2,7 +2,6 @@ package fuse.core.assembler.atlas.sheet;
 
 import fuse.core.assembler.atlas.partition.AtlasPartition;
 import fuse.core.assembler.atlas.placer.AtlasPartitionPlacer;
-import fuse.core.assembler.atlas.render.AtlasPartitionRenderer;
 import fuse.core.assembler.atlas.textures.AtlasTextures;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.backend.texture.CoreTexture;

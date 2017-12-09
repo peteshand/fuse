@@ -25,7 +25,6 @@ class TextureOrder
 	
 	var textureDefPool:Array<TextureDef> = [];
 	var currentTextureDef:TextureDef;
-	//var drawIndex:Int;
 	var textureData:ITextureData;
 	public var textureDefs = new GcoArray<TextureDef>([]);
 	
@@ -93,11 +92,6 @@ class TextureOrder
 		trace("end");
 	}
 	
-	/*public function addWorkerDisplay(coreDisplay:IWorkerDisplay):Void
-	{
-		currentTextureDef.workerDisplays.push(coreDisplay);
-	}*/
-	
 	function getTextureDef(index:Int):TextureDef
 	{
 		if (textureDefPool.length <= index) {
@@ -126,21 +120,5 @@ class TextureOrder
 			}
 		}
 		return null;
-	}
-	
-	
-}
-
-typedef TextureDef =
-{
-	index:Int,
-	startIndex:Int,
-	textureId:Int,
-	renderTargetId:Int,
-	drawIndex:Int,
-	textureData:ITextureData,
-	numItems:Int,
-	renderBatchDef:RenderBatchDef,
-	renderBatchIndex:Int,
-	textureIndex:Int
+	}	
 }
