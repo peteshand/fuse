@@ -25,8 +25,6 @@ class Core
 	
 	@:isVar public static var isStatic(get, set):Int;
 	
-	
-	
 	public function new() { }
 	
 	static public function init() 

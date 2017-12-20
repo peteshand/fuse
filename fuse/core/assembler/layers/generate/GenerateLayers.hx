@@ -34,7 +34,13 @@ class GenerateLayers
 		for (i in 0...HierarchyAssembler.hierarchy.length) 
 		{
 			var image:CoreImage = HierarchyAssembler.hierarchy[i];
-			isStatic.value = image.isStatic;
+			if (image.coreTexture.textureData.directRender == 1) {
+				isStatic.value = 0;
+			}
+			else {
+				isStatic.value = image.isStatic;
+			}
+			
 			currentLayerBuffer.add(image);
 		}
 	}

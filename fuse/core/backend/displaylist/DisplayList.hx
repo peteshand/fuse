@@ -15,12 +15,11 @@ import fuse.core.utils.Pool;
 class DisplayList
 {
 	public static var hierarchyBuildRequired:Bool = false;
+	var hierarchyChangeCount:Int = 0;
 	
 	public var stage:CoreDisplayObject;
 	var map:Map<Int, CoreDisplayObject> = new Map<Int, CoreDisplayObject>();
 	var transformDataMap:Map<Int, IDisplayData> = new Map<Int, IDisplayData>();
-	
-	var staticCount:Int = 0;
 	
 	public function new() 
 	{
@@ -40,7 +39,7 @@ class DisplayList
 			return;
 		}
 		display.mask = maskDisplay;
-		staticCount = 0;
+		hierarchyChangeCount = 0;
 	}
 	
 	function removeMask(objectId:Int) 
@@ -48,7 +47,7 @@ class DisplayList
 		var display:CoreImage = untyped map.get(objectId);
 		if (display == null) return;
 		display.mask = null;
-		staticCount = 0;
+		hierarchyChangeCount = 0;
 	}
 	
 	public function addChildAt(objectId:Int, displayType:Int, parentId:Int, addAtIndex:Int) 
@@ -71,7 +70,7 @@ class DisplayList
 			stage = display;
 		}
 		
-		staticCount = 0;
+		hierarchyChangeCount = 0;
 	}
 	
 	inline function getDisplayFromPool(displayType:Int):CoreDisplayObject
@@ -115,7 +114,7 @@ class DisplayList
 		transformDataMap.remove(objectId);
 		map.remove(objectId);
 		
-		staticCount = 0;
+		hierarchyChangeCount = 0;
 	}
 	
 	inline function releaseDisplayToPool(display:CoreDisplayObject)
@@ -133,12 +132,12 @@ class DisplayList
 	
 	public function checkForDisplaylistChanges() 
 	{
-		if (staticCount <= 1){
+		if (hierarchyChangeCount <= 1){
 			hierarchyBuildRequired = true;
 		}
 		else {
 			hierarchyBuildRequired = false;
 		}
-		staticCount++;
+		hierarchyChangeCount++;
 	}
 }

@@ -50,6 +50,7 @@ class MovieClip extends Image
 	
 	function set_frame(value:Int):Int 
 	{
+		texture.textureData.directRender = 1;
 		texture.textureData.changeCount++;
 		if (frame == value % textures.length) return value;
 		frame = value % textures.length;

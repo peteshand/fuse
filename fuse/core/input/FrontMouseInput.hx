@@ -19,14 +19,14 @@ class FrontMouseInput
 	var data = new Map<Int, InputData>();
 	
 	var mouseMouseData = new GcoArray<InputData>();
-	var leaveStageMouseEvent:MouseEvent;
+	//var leaveStageMouseEvent:MouseEvent;
 	
 	//var messenger:Messenger<Array<Float>>;
 	//var values:Array<Float> = [];
 	
 	public function new() 
 	{
-		leaveStageMouseEvent = new MouseEvent(MouseEvent.MOUSE_MOVE, true, false, -4000, -4000);
+		//leaveStageMouseEvent = new MouseEvent(MouseEvent.MOUSE_MOVE, true, false, 10000, 10000);
 		//messenger = new Messenger<Array<Float>>(MessageID.MOUSE_POSITION, Float, 2);
 		//messenger.listen(MessageID.MOUSE_POSITION, OnMouseXChange);
 		
@@ -55,7 +55,7 @@ class FrontMouseInput
 	
 	private function OnMouseLeave(e:Event):Void 
 	{
-		OnMouse(leaveStageMouseEvent);
+		//OnMouse(leaveStageMouseEvent);
 	}
 	
 	function OnMouse(e:MouseEvent):Void 
