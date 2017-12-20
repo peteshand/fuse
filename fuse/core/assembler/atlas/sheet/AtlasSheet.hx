@@ -60,6 +60,8 @@ class AtlasSheet
 	
 	static inline function place(coreTexture:CoreTexture) 
 	{
+		if (coreTexture.textureData.directRender == 1) return;
+		
 		var textureData:ITextureData = coreTexture.textureData;
 		var successfulPlacement:Bool = false;
 		// TODO: only place if it hasn't already been placed in the past
