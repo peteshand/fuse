@@ -3,7 +3,7 @@ import fuse.core.input.FrontMouseInput;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.backend.Core;
 import fuse.core.backend.display.CoreImage;
-import fuse.core.input.InputData;
+import fuse.core.input.Touch;
 import fuse.display.geometry.Bounds;
 import fuse.utils.GcoArray;
 import fuse.utils.Notifier;
@@ -16,8 +16,8 @@ import openfl.events.MouseEvent;
  */
 class InputAssembler
 {
-	public static var input = new GcoArray<InputData>([]);
-	public static var collisions = new GcoArray<InputData>([]);
+	public static var input = new GcoArray<Touch>([]);
+	public static var collisions = new GcoArray<Touch>([]);
 	
 	static var objects = new Map<Int, InputAssemblerObject>();
 	
@@ -26,9 +26,9 @@ class InputAssembler
 		
 	}
 	
-	public static function add(mouseData:InputData) 
+	public static function add(touch:Touch) 
 	{
-		input.push(mouseData);
+		input.push(touch);
 	}
 	
 	static public function build() 
@@ -58,8 +58,8 @@ class InputAssembler
 class InputAssemblerObject
 {
 	var index:Int;
-	var over:InputData;
-	var out:InputData;
+	var over:Touch;
+	var out:Touch;
 	
 	public function new(index:Int)
 	{
@@ -68,64 +68,64 @@ class InputAssemblerObject
 		out = { index:index, type:MouseEvent.MOUSE_OUT };
 	}
 	
-	public function test(mouseData:InputData):Void
+	public function test(touch:Touch):Void
 	{
 		var j:Int = HierarchyAssembler.hierarchy.length - 1;
 		while (j >= 0) 
 		{
 			var display:CoreImage = HierarchyAssembler.hierarchy[j];
-			var distance:Float = getDistance(display, mouseData);
+			var distance:Float = getDistance(display, touch);
 			
 			if (distance < display.diagonal) {
-				var triangleSum:Float = getTriangleSum(display, mouseData);
+				var triangleSum:Float = getTriangleSum(display, touch);
 				if (triangleSum <= display.area + 1) {
 					// inside
 					if (!display.over) {
 						display.over = true;
-						DispatchOver(display.objectId, mouseData);
+						DispatchOver(display.objectId, touch);
 					}
 					
-					mouseData.collisionId = display.objectId;
+					touch.collisionId = display.objectId;
 					
-					InputAssembler.collisions.push(mouseData);
+					InputAssembler.collisions.push(touch);
 					j = -1;
 				}
 				else if (display.over){
 					// outside
 					display.over = false;
-					DispatchOut(display.objectId, mouseData);					
+					DispatchOut(display.objectId, touch);					
 				}
 			}
 			else if (display.over){
 				// outside
 				display.over = false;
-				DispatchOut(display.objectId, mouseData);
+				DispatchOut(display.objectId, touch);
 			}
 			
 			j--;
 		}
 	}
 	
-	function getDistance(display:CoreImage, mouseData:InputData) 
+	function getDistance(display:CoreImage, touch:Touch) 
 	{
-		return Math.sqrt(Math.pow(display.displayData.x - mouseData.x, 2) + Math.pow(display.displayData.y - mouseData.y, 2));
+		return Math.sqrt(Math.pow(display.displayData.x - touch.x, 2) + Math.pow(display.displayData.y - touch.y, 2));
 	}
 	
-	function getTriangleSum(display:CoreImage, mouseData:InputData) 
+	function getTriangleSum(display:CoreImage, touch:Touch) 
 	{
-		var t1:Float = triangleArea(mouseData,
+		var t1:Float = triangleArea(touch,
 			display.quadData.bottomLeftX, display.quadData.bottomLeftY,
 			display.quadData.topLeftX, display.quadData.topLeftY
 		);
-		var t2:Float = triangleArea(mouseData,
+		var t2:Float = triangleArea(touch,
 			display.quadData.topLeftX, display.quadData.topLeftY,
 			display.quadData.topRightX, display.quadData.topRightY
 		);
-		var t3:Float = triangleArea(mouseData,
+		var t3:Float = triangleArea(touch,
 			display.quadData.topRightX, display.quadData.topRightY,
 			display.quadData.bottomRightX, display.quadData.bottomRightY
 		);
-		var t4:Float = triangleArea(mouseData,
+		var t4:Float = triangleArea(touch,
 			display.quadData.bottomRightX, display.quadData.bottomRightY,
 			display.quadData.bottomLeftX, display.quadData.bottomLeftY
 		);
@@ -133,10 +133,10 @@ class InputAssemblerObject
 		return t1 + t2 + t3 + t4;
 	}
 	
-	function triangleArea(mouseData:InputData, bx:Float, by:Float, cx:Float, cy:Float):Float
+	function triangleArea(touch:Touch, bx:Float, by:Float, cx:Float, cy:Float):Float
 	{
-		var ax:Float = mouseData.x;
-		var ay:Float = mouseData.y;
+		var ax:Float = touch.x;
+		var ay:Float = touch.y;
 		
 		bx = (bx + 1) / 2 * Core.STAGE_WIDTH;
 		by = (1 - by) / 2 * Core.STAGE_HEIGHT;
@@ -150,28 +150,28 @@ class InputAssemblerObject
 		return Math.sqrt(p * (p - a) * (p - b) * (p - c));
 	}
 	
-	function DispatchOver(displayObjectId:Int, mouseData:InputData) 
+	function DispatchOver(displayObjectId:Int, touch:Touch) 
 	{
-		over.x = mouseData.x;
-		over.y = mouseData.y;
+		over.x = touch.x;
+		over.y = touch.y;
 		over.collisionId = displayObjectId;
 		InputAssembler.collisions.push(over);
 	}
 	
-	function DispatchOut(displayObjectId:Int, mouseData:InputData) 
+	function DispatchOut(displayObjectId:Int, touch:Touch) 
 	{
-		out.x = mouseData.x;
-		out.y = mouseData.y;
+		out.x = touch.x;
+		out.y = touch.y;
 		out.collisionId = displayObjectId;
 		InputAssembler.collisions.push(out);
 	}
 	
-	function withinBounds(bounds:Bounds, mouseData:InputData) 
+	function withinBounds(bounds:Bounds, touch:Touch) 
 	{
-		if ((mouseData.x / Core.STAGE_WIDTH * 2) - 1 > bounds.left && 
-			(mouseData.x / Core.STAGE_WIDTH * 2) - 1 < bounds.right && 
-			1 - (mouseData.y / Core.STAGE_HEIGHT * 2) < bounds.top && 
-			1 - (mouseData.y / Core.STAGE_HEIGHT * 2) > bounds.bottom) {
+		if ((touch.x / Core.STAGE_WIDTH * 2) - 1 > bounds.left && 
+			(touch.x / Core.STAGE_WIDTH * 2) - 1 < bounds.right && 
+			1 - (touch.y / Core.STAGE_HEIGHT * 2) < bounds.top && 
+			1 - (touch.y / Core.STAGE_HEIGHT * 2) > bounds.bottom) {
 				return true;
 		}
 		return false;

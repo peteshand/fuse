@@ -1,6 +1,6 @@
 package fuse.core.backend;
 import fuse.core.input.FrontMouseInput;
-import fuse.core.input.InputData;
+import fuse.core.input.Touch;
 
 import fuse.Fuse;
 import fuse.core.assembler.Assembler;
@@ -107,9 +107,9 @@ class CoreEntryPoint
 		Core.textures.dispose(textureId);
 	}
 	
-	private function OnMouseInput(mouseData:InputData):Void 
+	private function OnMouseInput(touch:Touch):Void 
 	{
-		InputAssembler.add(mouseData);
+		InputAssembler.add(touch);
 	}
 	
 	function OnAddChild(addChildPayload:AddChildMsg) 

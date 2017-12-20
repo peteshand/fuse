@@ -3,7 +3,7 @@ package fuse.display;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
-import fuse.core.input.InputData;
+import fuse.core.input.Touch;
 import fuse.display.Stage;
 import fuse.utils.Color;
 import fuse.Fuse;
@@ -27,11 +27,11 @@ class DisplayObject
 	public var onAddToStage = new Signal1<DisplayObject>();
 	public var onRemoveFromStage = new Signal1<DisplayObject>();
 	
-	public var onPress = new Signal1<InputData>();
-	public var onMove = new Signal1<InputData>();
-	public var onRelease = new Signal1<InputData>();
-	public var onRollover = new Signal1<InputData>();
-	public var onRollout = new Signal1<InputData>();
+	public var onPress = new Signal1<Touch>();
+	public var onMove = new Signal1<Touch>();
+	public var onRelease = new Signal1<Touch>();
+	public var onRollover = new Signal1<Touch>();
+	public var onRollout = new Signal1<Touch>();
 	
 	@:isVar public var parent(default, null):DisplayObjectContainer;
 	@:isVar public var stage(default, null):Stage;
@@ -311,14 +311,14 @@ class DisplayObject
 		
 	}
 	
-	function dispatchInput(mouseData:InputData) 
+	function dispatchInput(touch:Touch) 
 	{
-		switch(mouseData.type) {
-			case MouseEvent.MOUSE_DOWN:	onPress.dispatch(mouseData);
-			case MouseEvent.MOUSE_MOVE:	onMove.dispatch(mouseData);
-			case MouseEvent.MOUSE_UP:	onRelease.dispatch(mouseData);
-			case MouseEvent.MOUSE_OVER:	onRollover.dispatch(mouseData);
-			case MouseEvent.MOUSE_OUT:	onRollout.dispatch(mouseData);
+		switch(touch.type) {
+			case MouseEvent.MOUSE_DOWN:	onPress.dispatch(touch);
+			case MouseEvent.MOUSE_MOVE:	onMove.dispatch(touch);
+			case MouseEvent.MOUSE_UP:	onRelease.dispatch(touch);
+			case MouseEvent.MOUSE_OVER:	onRollover.dispatch(touch);
+			case MouseEvent.MOUSE_OUT:	onRollout.dispatch(touch);
 		}
 	}
 }

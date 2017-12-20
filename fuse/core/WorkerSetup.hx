@@ -1,6 +1,6 @@
 package fuse.core;
 import fuse.core.input.FrontMouseInput;
-import fuse.core.input.InputData;
+import fuse.core.input.Touch;
 
 import flash.events.Event;
 import fuse.Fuse;
@@ -75,26 +75,26 @@ class WorkerSetup
 		workerComm.addListener(MessageType.MOUSE_COLLISION, OnInputCollision);
 	}
 	
-	private function OnInputCollision(mouseData:InputData):Void 
+	private function OnInputCollision(touch:Touch):Void 
 	{
-		//trace([mouseData.type, mouseData.x, mouseData.y]);
-		findDisplay(mouseData, Fuse.current.stage);
+		//trace([touch.type, touch.x, touch.y]);
+		findDisplay(touch, Fuse.current.stage);
 	}
 	
 	// TODO: move into it's own class
-	function findDisplay(mouseData:InputData, display:DisplayObject):Bool
+	function findDisplay(touch:Touch, display:DisplayObject):Bool
 	{
-		if (mouseData.collisionId == display.objectId) {
+		if (touch.collisionId == display.objectId) {
 			//trace("FOUND: " + display);
-			mouseData.target = display;
-			display.dispatchInput(mouseData);
+			touch.target = display;
+			display.dispatchInput(touch);
 			return true;
 		}
 		if (Std.is(display, DisplayObjectContainer)){
 			var d:DisplayObjectContainer = cast (display, DisplayObjectContainer);
 			for (i in 0...d.children.length) 
 			{
-				if (findDisplay(mouseData, d.children[i])) {
+				if (findDisplay(touch, d.children[i])) {
 					return true;
 				}
 			}
@@ -184,11 +184,11 @@ class WorkerSetup
 		}
 	}
 	
-	public function addInput(mouseData:InputData) 
+	public function addInput(touch:Touch) 
 	{
 		for (workerComm in workerComms) 
 		{
-			workerComm.send(MessageType.MOUSE_INPUT, mouseData);
+			workerComm.send(MessageType.MOUSE_INPUT, touch);
 		}
 	}
 	

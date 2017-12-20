@@ -100,8 +100,9 @@ class CoreDisplayObject
 	
 	function popTransform() 
 	{
-		if (isStatic == 0){
-			Graphics.popTransformation();
+		Graphics.popTransformation();
+		
+		if (isStatic == 0){	
 			Graphics.popAlpha();
 		}
 	}

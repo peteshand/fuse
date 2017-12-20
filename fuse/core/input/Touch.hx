@@ -4,7 +4,7 @@ import fuse.display.DisplayObject;
 /**
  * @author P.J.Shand
  */
-typedef InputData =
+typedef Touch =
 {
 	index:Int,
 	?type:String,

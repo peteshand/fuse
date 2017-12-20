@@ -16,9 +16,8 @@ import openfl.events.MouseEvent;
 
 class FrontMouseInput
 {
-	var data = new Map<Int, InputData>();
-	
-	var mouseMouseData = new GcoArray<InputData>();
+	var touchData = new Map<Int, Touch>();
+	var touchDataArray = new GcoArray<Touch>();
 	//var leaveStageMouseEvent:MouseEvent;
 	
 	//var messenger:Messenger<Array<Float>>;
@@ -41,11 +40,11 @@ class FrontMouseInput
 	
 	private function OnTick(e:Event):Void 
 	{
-		for (i in 0...mouseMouseData.length) 
+		for (i in 0...touchDataArray.length) 
 		{
-			Fuse.current.workerSetup.addInput(mouseMouseData[i]);
+			Fuse.current.workerSetup.addInput(touchDataArray[i]);
 		}
-		mouseMouseData.clear();
+		touchDataArray.clear();
 	}
 	
 	function OnMouseXChange(value:Array<Float>) 
@@ -60,19 +59,19 @@ class FrontMouseInput
 	
 	function OnMouse(e:MouseEvent):Void 
 	{
-		var mouseData:InputData = getMouseData(0);
-		mouseData.x = e.stageX;
-		mouseData.y = e.stageY;
-		mouseData.type = e.type;
-		for (i in 0...mouseMouseData.length) 
+		var touch:Touch = getMouseData(0);
+		touch.x = e.stageX;
+		touch.y = e.stageY;
+		touch.type = e.type;
+		for (i in 0...touchDataArray.length) 
 		{
-			if (mouseMouseData[i].index == 0) {
-				mouseMouseData[i] = mouseData;
+			if (touchDataArray[i].index == 0) {
+				touchDataArray[i] = touch;
 				return;
 			}
 		}
 		
-		mouseMouseData.push(mouseData);
+		touchDataArray.push(touch);
 		
 		//values[0] = e.stageX;
 		//values[1] = e.stageY;
@@ -80,14 +79,14 @@ class FrontMouseInput
 		//messenger.send(values);
 	}
 	
-	function getMouseData(index:Int):InputData
+	function getMouseData(index:Int):Touch
 	{
-		var mouseData:InputData = data.get(index);
-		if (mouseData == null) {
-			mouseData = { index:index };
-			data.set(index, mouseData);
+		var touch:Touch = touchData.get(index);
+		if (touch == null) {
+			touch = { index:index };
+			touchData.set(index, touch);
 		}
-		return mouseData;
+		return touch;
 	}
 }
 
