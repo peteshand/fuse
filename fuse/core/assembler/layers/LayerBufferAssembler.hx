@@ -19,7 +19,7 @@ class LayerBufferAssembler
 	
 	static public function build() 
 	{
-		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged) {
+		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged || Fuse.current.conductorData.isStatic == 0) {
 			staticCount = 0;
 		}
 		
