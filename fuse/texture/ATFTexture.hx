@@ -66,9 +66,9 @@ class ATFTexture extends Texture
 		//nativeTexture.uploadFromBitmapData(bitmapData, 0);
 		//OnTextureUploadComplete(null);
 		
-		//nativeTexture.addEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
-		nativeTexture.uploadCompressedTextureFromByteArray(data, 0);
-		OnTextureUploadComplete(null);
+		nativeTexture.addEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
+		nativeTexture.uploadCompressedTextureFromByteArray(data, 0, true);
+		//OnTextureUploadComplete(null);
 	}
 	
 	//public function uploadFromBitmapData(source:BitmapData, miplevel:UInt = 0):Void

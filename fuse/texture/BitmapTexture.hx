@@ -14,11 +14,15 @@ class BitmapTexture extends Texture
 {
 	var bitmapData:BitmapData;
 	
-	public function new(bitmapData:BitmapData, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		this.bitmapData = bitmapData;
-		this.width = bitmapData.width;
-		this.height = bitmapData.height;
+		
+		if (width == null) this.width = bitmapData.width;
+		else this.width = width;
+		
+		if (height == null) this.height = bitmapData.height;
+		else this.height = height;
 		
 		super(queUpload, onTextureUploadCompleteCallback);
 	}
