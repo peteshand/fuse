@@ -90,13 +90,13 @@ class InputAssemblerObject
 					InputAssembler.collisions.push(mouseData);
 					j = -1;
 				}
-				else {
+				else if (display.over){
 					// outside
 					display.over = false;
-					DispatchOut(display.objectId, mouseData);
+					DispatchOut(display.objectId, mouseData);					
 				}
 			}
-			else {
+			else if (display.over){
 				// outside
 				display.over = false;
 				DispatchOut(display.objectId, mouseData);
