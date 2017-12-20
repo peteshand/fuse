@@ -86,6 +86,7 @@ class WorkerSetup
 	{
 		if (mouseData.collisionId == display.objectId) {
 			//trace("FOUND: " + display);
+			mouseData.target = display;
 			display.dispatchInput(mouseData);
 			return true;
 		}
