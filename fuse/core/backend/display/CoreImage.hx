@@ -47,6 +47,8 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	override function calculateTransform() 
 	{
 		isStatic = displayData.isStatic;
+		if (Core.RESIZE) isStatic = 0;
+		
 		displayData.isStatic = 1; // reset static prop
 		
 		if (isStatic == 0) {

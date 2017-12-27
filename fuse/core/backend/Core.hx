@@ -20,8 +20,9 @@ class Core
 	
 	public static var textureBuildNextFrame:Bool;
 	public static var textureBuildRequired:Bool;
-	public static var STAGE_WIDTH:Int;
-	public static var STAGE_HEIGHT:Int;
+	public static var STAGE_WIDTH(default, set):Int;
+	public static var STAGE_HEIGHT(default, set):Int;
+	public static var RESIZE:Bool = false;
 	
 	@:isVar public static var isStatic(get, set):Int;
 	
@@ -62,5 +63,21 @@ class Core
 		if (isStatic == value) return value;
 		isStatic = value;
 		return isStatic;
+	}
+	
+	static function set_STAGE_WIDTH(value:Int):Int 
+	{
+		if (STAGE_WIDTH == value) return value;
+		STAGE_WIDTH = value;
+		RESIZE = true;
+		return STAGE_WIDTH;
+	}
+	
+	static function set_STAGE_HEIGHT(value:Int):Int 
+	{
+		if (STAGE_HEIGHT == value) return value;
+		STAGE_HEIGHT = value;
+		RESIZE = true;
+		return STAGE_HEIGHT;
 	}
 }

@@ -29,5 +29,7 @@ class Assembler
 		VertexWriter.build();
 		
 		InputAssembler.build();
+		
+		Core.RESIZE = false;
 	}
 }

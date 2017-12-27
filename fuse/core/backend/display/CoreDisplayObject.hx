@@ -35,7 +35,7 @@ class CoreDisplayObject
 	
 	public var displayType	:Int;
 	
-	public var over:Bool = false;
+	//public var over:Bool = false;
 	public var area(get, null):Float;
 	public var diagonal(get, null):Float;
 	
@@ -66,6 +66,8 @@ class CoreDisplayObject
 	function calculateTransform() 
 	{
 		isStatic = displayData.isStatic;
+		if (Core.RESIZE) isStatic = 0;
+		
 		displayData.isStatic = 1; // reset static prop
 		
 		if (isStatic == 0) {
@@ -155,7 +157,8 @@ class CoreDisplayObject
 	
 	function get_diagonal():Float 
 	{
-		return Math.sqrt(Math.pow(displayData.width, 2) + Math.pow(displayData.height, 2));
+		return Math.sqrt(Math.pow(quadData.topRightX - quadData.topLeftX, 2) + Math.pow(quadData.bottomLeftY - quadData.topLeftY, 2));
+		//return Math.sqrt(Math.pow(displayData.width, 2) + Math.pow(displayData.height, 2));
 	}
 	
 	//function get_hProps():Array<Float> 
