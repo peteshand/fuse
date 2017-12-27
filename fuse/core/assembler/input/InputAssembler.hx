@@ -76,39 +76,56 @@ class InputAssemblerObject
 			var display:CoreImage = HierarchyAssembler.hierarchy[j];
 			var distance:Float = getDistance(display, touch);
 			
-			if (distance < display.diagonal) {
+			if (distance < display.diagonal * 0.5) {
 				var triangleSum:Float = getTriangleSum(display, touch);
 				if (triangleSum <= display.area + 1) {
+					
 					// inside
-					if (!display.over) {
-						display.over = true;
+					if (touch.targetId != display.objectId) {						
+						if (touch.targetId != -1) {
+							DispatchOut(touch.targetId, touch);	
+						}
+						
+						touch.targetId = display.objectId;
 						DispatchOver(display.objectId, touch);
 					}
 					
 					touch.collisionId = display.objectId;
 					
 					InputAssembler.collisions.push(touch);
-					j = -1;
+					//j = -1;
 				}
-				else if (display.over){
+				else if (touch.targetId == display.objectId){
 					// outside
-					display.over = false;
+					touch.targetId = -1;
 					DispatchOut(display.objectId, touch);					
 				}
 			}
-			else if (display.over){
+			else if (touch.targetId == display.objectId){
 				// outside
-				display.over = false;
+				touch.targetId = -1;
 				DispatchOut(display.objectId, touch);
 			}
-			
 			j--;
 		}
 	}
 	
 	function getDistance(display:CoreImage, touch:Touch) 
 	{
-		return Math.sqrt(Math.pow(display.displayData.x - touch.x, 2) + Math.pow(display.displayData.y - touch.y, 2));
+		return Math.sqrt(
+			Math.pow(display.quadData.middleX - pixelToScreenX(touch.x), 2) + 
+			Math.pow(display.quadData.middleY - pixelToScreenY(touch.y), 2)
+		);
+	} 
+	
+	inline function pixelToScreenX(pixelValue:Float):Float
+	{
+		return ((pixelValue / Fuse.current.stage.stageWidth) - 0.5) * 2;
+	}
+	
+	inline function pixelToScreenY(pixelValue:Float):Float
+	{
+		return ((pixelValue / Fuse.current.stage.stageHeight) - 0.5) * -2;
 	}
 	
 	function getTriangleSum(display:CoreImage, touch:Touch) 

@@ -16,6 +16,9 @@ abstract QuadData(Array<Float>)
 	public var bottomRightX(get, set)	:Float;
 	public var bottomRightY(get, set)	:Float;
 	
+	public var middleX(get, never)		:Float;
+	public var middleY(get, never)		:Float;
+	
 	public function new()
 	{
 		this = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -72,6 +75,16 @@ abstract QuadData(Array<Float>)
 	function get_bottomRightY():Float 
 	{
 		return this[7];
+	}
+	
+	function get_middleX():Float 
+	{
+		return topLeftX + ((topRightX - topLeftX) * 0.5);
+	}
+	
+	function get_middleY():Float 
+	{
+		return topLeftY + ((bottomLeftY - topLeftY) * 0.5);
 	}
 	
 	

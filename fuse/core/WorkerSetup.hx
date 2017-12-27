@@ -114,8 +114,6 @@ class WorkerSetup
 	{
 		if (workerStartCount == WorkerInfo.numberOfWorkers) {
 			onReady.dispatch();
-			
-			Fuse.current.enterFrame.add(OnUpdate);
 		}
 	}
 	
@@ -209,12 +207,6 @@ class WorkerSetup
 				condition.mutex.unlock();
 			}
 		#end
-	}
-	
-	private function OnUpdate():Void 
-	{
-		Fuse.current.conductorData.stageWidth = Fuse.current.stage.stageWidth;
-		Fuse.current.conductorData.stageHeight = Fuse.current.stage.stageHeight;
 	}
 	
 	function OnUpdateReturn(workerPayload:WorkerPayload) 

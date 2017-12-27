@@ -11,5 +11,6 @@ typedef Touch =
 	?x:Float,
 	?y:Float,
 	?collisionId:Null<Int>,
-	?target:DisplayObject
+	?target:DisplayObject,
+	?targetId:Int
 }
