@@ -17,12 +17,17 @@ class WorkerBatchData implements IBatchData
 	static public inline var TEXTURE_ID2:Int = 12;
 	static public inline var TEXTURE_ID3:Int = 14;
 	static public inline var TEXTURE_ID4:Int = 16;
-	static public inline var NUM_TEXTURES:Int = 18;
-	static public inline var NUM_ITEMS:Int = 20;
-	static public inline var WIDTH:Int = 22;
-	static public inline var HEIGHT:Int = 24;
+	static public inline var TEXTURE_ID5:Int = 18;
+	static public inline var TEXTURE_ID6:Int = 20;
+	static public inline var TEXTURE_ID7:Int = 22;
+	static public inline var TEXTURE_ID8:Int = 24;
+	static public inline var NUM_TEXTURES:Int = 26;
+	static public inline var NUM_ITEMS:Int = 28;
+	static public inline var WIDTH:Int = 30;
+	static public inline var HEIGHT:Int = 32;
+	static public inline var SKIP:Int = 34;
 	
-	public static inline var BYTES_PER_ITEM:Int = 26;
+	public static inline var BYTES_PER_ITEM:Int = 36;
 	public static inline var BUFFER_SIZE:Int = 10000;
 	
 	public var memoryBlock:MemoryBlock;
@@ -34,17 +39,21 @@ class WorkerBatchData implements IBatchData
 	@:isVar public var startIndex(get, set):Int;
 	@:isVar public var length(get, set):Int;
 	
-		@:isVar public var textureIds(get, null):Array<Int>;
+	@:isVar public var textureIds(get, null):Array<Int>;
 	@:isVar public var textureId1(get, set):Int;
 	@:isVar public var textureId2(get, set):Int;
 	@:isVar public var textureId3(get, set):Int;
 	@:isVar public var textureId4(get, set):Int;
+	@:isVar public var textureId5(get, set):Int;
+	@:isVar public var textureId6(get, set):Int;
+	@:isVar public var textureId7(get, set):Int;
+	@:isVar public var textureId8(get, set):Int;
 	@:isVar public var numTextures(get, set):Int;
 	@:isVar public var numItems(get, set):Int;
 	@:isVar public var width(get, set):Int;
 	@:isVar public var height(get, set):Int;
-	
-	//public var firstIndex(get, null):Int;
+	@:isVar public var skip(get, set):Int = 0;
+	var _textureIds:Array<Int> = [];
 	
 	public function new(objectId:Int) 
 	{
@@ -60,10 +69,15 @@ class WorkerBatchData implements IBatchData
 	function get_textureId2():Int		{ return memoryBlock.readInt16(TEXTURE_ID2); }
 	function get_textureId3():Int		{ return memoryBlock.readInt16(TEXTURE_ID3); }
 	function get_textureId4():Int		{ return memoryBlock.readInt16(TEXTURE_ID4); }
+	function get_textureId5():Int		{ return memoryBlock.readInt16(TEXTURE_ID5); }
+	function get_textureId6():Int		{ return memoryBlock.readInt16(TEXTURE_ID6); }
+	function get_textureId7():Int		{ return memoryBlock.readInt16(TEXTURE_ID7); }
+	function get_textureId8():Int		{ return memoryBlock.readInt16(TEXTURE_ID8); }
 	function get_numTextures():Int		{ return memoryBlock.readInt16(NUM_TEXTURES); }
 	function get_numItems():Int			{ return memoryBlock.readInt16(NUM_ITEMS); }
 	function get_width():Int			{ return memoryBlock.readInt16(WIDTH); }
 	function get_height():Int			{ return memoryBlock.readInt16(HEIGHT); }
+	function get_skip():Int				{ return memoryBlock.readInt16(SKIP); }
 	
 	
 	function set_renderTargetId(value:Int):Int {
@@ -78,7 +92,15 @@ class WorkerBatchData implements IBatchData
 	
 	function get_textureIds():Array<Int>
 	{
-		return [textureId1, textureId2, textureId3, textureId4];
+		_textureIds[0] = textureId1;
+		_textureIds[1] = textureId2;
+		_textureIds[2] = textureId3;
+		_textureIds[3] = textureId4;
+		_textureIds[4] = textureId5;
+		_textureIds[5] = textureId6;
+		_textureIds[6] = textureId7;
+		_textureIds[7] = textureId8;
+		return _textureIds;
 	}
 	
 	function set_startIndex(value:Int):Int {
@@ -111,6 +133,26 @@ class WorkerBatchData implements IBatchData
 		return value;
 	}
 	
+	function set_textureId5(value:Int):Int {
+		memoryBlock.writeInt16(TEXTURE_ID5, value);
+		return value;
+	}
+	
+	function set_textureId6(value:Int):Int {
+		memoryBlock.writeInt16(TEXTURE_ID6, value);
+		return value;
+	}
+	
+	function set_textureId7(value:Int):Int {
+		memoryBlock.writeInt16(TEXTURE_ID7, value);
+		return value;
+	}
+	
+	function set_textureId8(value:Int):Int {
+		memoryBlock.writeInt16(TEXTURE_ID8, value);
+		return value;
+	}
+	
 	function set_numTextures(value:Int):Int {
 		memoryBlock.writeInt16(NUM_TEXTURES, value);
 		return value;
@@ -128,6 +170,11 @@ class WorkerBatchData implements IBatchData
 	
 	function set_height(value:Int):Int {
 		memoryBlock.writeInt16(HEIGHT, value);
+		return value;
+	}
+	
+	function set_skip(value:Int):Int {
+		memoryBlock.writeInt16(SKIP, value);
 		return value;
 	}
 }

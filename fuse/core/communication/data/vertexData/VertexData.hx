@@ -111,6 +111,7 @@ class VertexData implements IVertexData
 	
 	inline public function setColor(index:Int, value:Color):Void
 	{
+		//writeFloat(INDEX_COLOR + indexOffset(index), value);
 		writeInt32(INDEX_COLOR + indexOffset(index), value);
 	}
 	

@@ -1,15 +1,14 @@
 package fuse.core.communication.data.textureData;
+
 import fuse.Fuse;
 import fuse.core.communication.data.MemoryBlock;
-//import fuse.core.backend.atlas.partition.AtlasPartition;
-import fuse.utils.Notifier;
 
 /**
  * ...
  * @author P.J.Shand
  */
 
-class WorkerTextureData implements ITextureData
+class WorkerTextureData
 {
 	public static var BUFFER_SIZE:Int = 10000;
 	
@@ -63,8 +62,6 @@ class WorkerTextureData implements ITextureData
 	public var directRender(get, set):Int;
 	
 	public var area(get, null):Float;
-	//public var placed:Bool = false;
-	//public var partition = new Notifier<AtlasPartition>();
 	
 	public var atlasTextureId(get, set):Int;
 	public var atlasBatchTextureIndex(get, set):Int;
@@ -143,23 +140,6 @@ class WorkerTextureData implements ITextureData
 		return memoryBlock.readInt16(TEXTURE_DIRECT_RENDER);
 	}
 	
-	
-	/*inline function get_atlasX():Int { 
-		return memoryBlock.readInt16(ATLAS_X);
-	}
-	
-	inline function get_atlasY():Int { 
-		return memoryBlock.readInt16(ATLAS_Y);
-	}
-	
-	inline function get_atlasWidth():Int { 
-		return memoryBlock.readInt16(ATLAS_WIDTH);
-	}
-	
-	inline function get_atlasHeight():Int { 
-		return memoryBlock.readInt16(ATLAS_HEIGHT);
-	}*/
-	
 	inline function get_atlasTextureId():Int { 
 		return memoryBlock.readInt16(ATLAS_TEXTURE_ID);
 	}
@@ -171,6 +151,8 @@ class WorkerTextureData implements ITextureData
 	inline function get_changeCount():Int { 
 		return memoryBlock.readInt16(CHANGE_COUNT);
 	}
+	
+	
 	
 	
 	inline function set_x(value:Int):Int { 
@@ -253,28 +235,6 @@ class WorkerTextureData implements ITextureData
 		return value;
 	}
 	
-	
-	
-	/*inline function set_atlasX(value:Int):Int { 
-		memoryBlock.writeInt16(ATLAS_X, value);
-		return value;
-	}
-	
-	inline function set_atlasY(value:Int):Int { 
-		memoryBlock.writeInt16(ATLAS_Y, value);
-		return value;
-	}
-	
-	inline function set_atlasWidth(value:Int):Int { 
-		memoryBlock.writeInt16(ATLAS_WIDTH, value);
-		return value;
-	}
-	
-	inline function set_atlasHeight(value:Int):Int { 
-		memoryBlock.writeInt16(ATLAS_HEIGHT, value);
-		return value;
-	}*/
-	
 	inline function set_atlasTextureId(value:Int):Int { 
 		memoryBlock.writeInt16(ATLAS_TEXTURE_ID, value);
 		return value;
@@ -295,8 +255,7 @@ class WorkerTextureData implements ITextureData
 		return "textureId = " + textureId + ", atlasIndex = " + atlasTextureId + " - (" + x + ", " + y + ", " + width + ", " + height + ")";
 	}
 	
-	
-	function get_area():Float 
+	inline function get_area():Float 
 	{
 		return this.width * this.height;
 	}

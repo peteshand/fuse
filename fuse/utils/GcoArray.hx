@@ -1,11 +1,12 @@
 package fuse.utils;
-import haxe.ds.ObjectMap;
 
+import haxe.ds.ObjectMap;
 /**
  * ...
  * @author P.J.Shand
  */
 @:forward(sort, splice, insert)
+
 abstract GcoArray<T>(GcoArrayBase<T>)
 {
 	var index(get, never):Int;
@@ -67,7 +68,6 @@ abstract GcoArray<T>(GcoArrayBase<T>)
 	}
 }
 
-
 class GcoArrayBase<T>
 {
 	public var base:Array<T>;
@@ -97,4 +97,8 @@ class GcoArrayBase<T>
 		length++;
 	}
 	
+	public function toString():String
+	{
+		return base.toString();
+	}
 }

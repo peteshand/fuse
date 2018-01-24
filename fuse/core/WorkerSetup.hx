@@ -182,6 +182,17 @@ class WorkerSetup
 		}
 	}
 	
+	public function setTouchable(displayObject:DisplayObject, value:Bool) 
+	{
+		for (workerComm in workerComms) 
+		{
+			workerComm.send(MessageType.SET_TOUCHABLE, { 
+				objectId:displayObject.objectId, 
+				touchable:value
+			} );
+		}
+	}
+	
 	public function addInput(touch:Touch) 
 	{
 		for (workerComm in workerComms) 

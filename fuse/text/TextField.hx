@@ -11,7 +11,7 @@ import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
 import openfl.text.AntiAliasType;
 import openfl.text.GridFitType;
-import openfl.text.TextField;
+import openfl.text.TextField as NativeTextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
@@ -21,13 +21,13 @@ import openfl.text.TextLineMetrics;
  * ...
  * @author P.J.Shand
  */
-class SnapTextField extends Image
+class TextField extends Image
 {
-	static var dirtyPropItems = new GcoArray<SnapTextField>();
+	static var dirtyPropItems = new GcoArray<TextField>();
 	@:isVar var dirtyProp(default, set):Bool = false;
 	@:isVar var dirtySize(default, set):Bool = false;
 	
-	var nativeTextField:TextField;
+	var nativeTextField:NativeTextField;
 	var bitmapdata:BitmapData;
 	var targetWidth:Float;
 	var targetHeight:Float;
@@ -74,7 +74,7 @@ class SnapTextField extends Image
 	
 	public function new() 
 	{
-		nativeTextField = new TextField();
+		nativeTextField = new NativeTextField();
 		this.width = nativeTextField.width;
 		this.height = nativeTextField.height;
 		
@@ -361,7 +361,9 @@ class SnapTextField extends Image
 	{
 		if (dirtyProp != value) {
 			dirtyProp = value;
-			if (dirtyProp) dirtyPropItems.push(this);
+			if (dirtyProp && !dirtySize) {
+				dirtyPropItems.push(this);
+			}
 		}
 		return value;
 	}
@@ -370,7 +372,9 @@ class SnapTextField extends Image
 	{
 		if (dirtySize != value) {
 			dirtySize = value;
-			if (dirtySize) dirtyPropItems.push(this);
+			if (dirtySize && !dirtyProp) {
+				dirtyPropItems.push(this);
+			}
 		}
 		return value;
 	}
@@ -386,25 +390,25 @@ class SnapTextField extends Image
 	
 	public function update():Void
 	{
+		//trace(nativeTextField.text);
+		
 		if (dirtySize == true) {
 			if (bitmapdata != null) bitmapdata.dispose();
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
 			bitmapdata.draw(nativeTextField);
-			trace(nativeTextField.text);
 			if (texture != null) {
 				texture.dispose();
 			}
 			texture = new BitmapTexture(bitmapdata, false);
-			//trace("update texture size");
-			isStatic = 0;
 		}
 		else if (dirtyProp == true) {
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
 			bitmapdata.draw(nativeTextField);
+			//baseBmdTexture.directRender
 			baseBmdTexture.update(bitmapdata);
-			isStatic = 0;
 		}
 		
+		isStatic = 0;
 		dirtySize = false;
 		dirtyProp = false;
 	}

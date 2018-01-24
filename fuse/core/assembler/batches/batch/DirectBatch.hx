@@ -30,9 +30,12 @@ class DirectBatch extends BaseBatch implements IBatch
 		return super.add(renderable, renderTarget, batchType);
 	}
 	
-	public function writeVertex() 
+	public function writeVertex():Bool
 	{
 		setBatchProps();
+		
+		//trace("renderables.length = " + renderables.length);
+		//trace(this);
 		
 		for (i in 0...renderables.length) 
 		{
@@ -40,9 +43,11 @@ class DirectBatch extends BaseBatch implements IBatch
 			//renderables[i].writeVertex();
 			writeLayerVertex(cast renderables[i]);
 		}
+		
+		return true;
 	}
 	
-	function writeLayerVertex(image:CoreImage) 
+	function writeLayerVertex(image:CoreImage)
 	{
 		if (image.displayData.visible == 0) return;
 		
@@ -91,6 +96,8 @@ class DirectBatch extends BaseBatch implements IBatch
 				//vertexData.setXY(2, ResizeX(image.topRight.x),	ResizeY(image.topRight.y));
 				//vertexData.setXY(3, ResizeX(image.bottomRight.x),ResizeY(image.bottomRight.y));
 			//}
+			
+			
 			vertexData.setColor(0, image.displayData.colorBL);
 			vertexData.setColor(1, image.displayData.colorTL);
 			vertexData.setColor(2, image.displayData.colorTR);

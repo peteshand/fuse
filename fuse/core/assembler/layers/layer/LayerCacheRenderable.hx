@@ -10,6 +10,7 @@ import fuse.core.backend.texture.CoreTexture;
  */
 class LayerCacheRenderable implements ICoreRenderable
 {
+	public var objectId:Int = -1;
 	@:isVar public var textureId(get, set):Int = -1;
 	public var coreTexture:CoreTexture;
 	public var textureIndex:Int;

@@ -14,6 +14,10 @@ class BatchTextures
 	public var textureId2(get, null):Int;
 	public var textureId3(get, null):Int;
 	public var textureId4(get, null):Int;
+	public var textureId5(get, null):Int;
+	public var textureId6(get, null):Int;
+	public var textureId7(get, null):Int;
+	public var textureId8(get, null):Int;
 	
 	public function new() 
 	{
@@ -26,7 +30,7 @@ class BatchTextures
 		{
 			if (textureId == textureIds[i]) return i;
 		}
-		if (textureIds.length < 4) {
+		if (textureIds.length < 8) {
 			textureIds.push(textureId);
 			return textureIds.length-1;
 		}
@@ -65,5 +69,29 @@ class BatchTextures
 	{
 		if (textureIds.length <= 3) return 0;
 		return textureIds[3];
+	}
+	
+	inline function get_textureId5():Int 
+	{
+		if (textureIds.length <= 4) return 0;
+		return textureIds[4];
+	}
+	
+	inline function get_textureId6():Int 
+	{
+		if (textureIds.length <= 5) return 0;
+		return textureIds[5];
+	}
+	
+	inline function get_textureId7():Int 
+	{
+		if (textureIds.length <= 6) return 0;
+		return textureIds[6];
+	}
+	
+	inline function get_textureId8():Int 
+	{
+		if (textureIds.length <= 7) return 0;
+		return textureIds[7];
 	}
 }

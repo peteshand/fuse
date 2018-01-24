@@ -54,6 +54,7 @@ class BitmapTexture extends Texture
 	{
 		nativeTexture.removeEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
 		
+		textureData.changeCount++;
 		textureData.placed = 0;
 		Textures.registerTexture(textureId, this);
 		textureData.textureAvailable = 1;

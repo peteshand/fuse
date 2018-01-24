@@ -12,6 +12,7 @@ package fuse.core.backend.displaylist;
 	var DISPLAY_OBJECT = 2;
 	var DISPLAY_OBJECT_CONTAINER = 3;
 	var IMAGE = 4;
-	var QUAD = 5;
+	var MOVIECLIP = 5;
+	var QUAD = 6;
 	
 }

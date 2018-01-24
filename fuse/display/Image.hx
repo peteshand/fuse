@@ -22,7 +22,7 @@ class Image extends DisplayObject
 		super();
 		displayType = DisplayType.IMAGE;
 		this.texture = texture;
-		renderLayer = -1;
+		renderLayer = 0;
 	}
 	
 	inline function set_renderLayer(value:Int):Int 

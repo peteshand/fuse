@@ -47,13 +47,15 @@ class HierarchyAssembler
 		var temp:CoreImage;
 		while (!swapping) {
 			swapping = true;
-			for (i in 0...displayObjects.length-1) {
+			var i:Int = displayObjects.length - 2;
+			while (i >= 0) {
 				if (displayObjects[i].renderLayer > displayObjects[i+1].renderLayer) {
 					temp = displayObjects[i+1];
 					displayObjects[i+1] = displayObjects[i];
 					displayObjects[i] = temp;
 					swapping = false;
 				}
+				i--;
 			}
 		}
 	}

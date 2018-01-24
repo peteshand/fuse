@@ -13,7 +13,7 @@ import fuse.events.FuseEvent;
 import fuse.render.Context3DSetup;
 import fuse.render.Renderer;
 import fuse.core.WorkerSetup;
-import fuse.text.SnapTextField;
+import fuse.text.TextField;
 import openfl.display.Stage3D;
 import openfl.events.Event;
 
@@ -132,7 +132,7 @@ class MainThread extends ThreadBase
 	{
 		if (!setupComplete) return;
 		
-		SnapTextField.updateDirtyTextFields();
+		TextField.updateDirtyTextFields();
 		
 		//trace("Update");
 		workerSetup.lock();
@@ -146,6 +146,7 @@ class MainThread extends ThreadBase
 		else {
 			Fuse.current.staticCount = 0;
 		}
+		
 		if (Fuse.current.staticCount <= 2) {
 			Fuse.current.conductorData.isStatic = 0;
 		}

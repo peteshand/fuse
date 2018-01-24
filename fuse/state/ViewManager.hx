@@ -1,6 +1,7 @@
 package fuse.state;
 import com.imagination.core.managers.state.StateManager;
 import fuse.air.sample.view.fuse.BaseView;
+import fuse.air.sample.view.shell.back.BackBtnView;
 
 /**
  * ...
@@ -31,19 +32,17 @@ class ViewManagerItem
 		stateManager.onActive.add(OnActive);
 		stateManager.onInactive.add(OnInactive);
 		if (stateManager.isActive) {
-			trace("22222");
 			OnActive();
 		}
 	}
 	
 	function OnInactive() 
 	{
-		trace("OnInactive");
+		//trace("OnInactive");
 	}
 	
 	private function OnActive():Void 
 	{
-		trace("OnActive");
 		new ViewCleanup(parent, ViewClass, params);
 	}
 }
@@ -61,14 +60,13 @@ class ViewCleanup
 		this.parent = parent;
 		this.ViewClass = ViewClass;
 		this.params = params;
-		if (params == null) params = [];
+		if (this.params == null) this.params = [];
 		
 		CreateView();
 	}
 	
 	inline function CreateView() 
 	{
-		trace("CreateView: " + ViewClass);
 		currentView = Type.createInstance(ViewClass, params);
 		currentView.transition.onHideComplete.addOnce(OnHideComplete);
 		parent.addChild(currentView);

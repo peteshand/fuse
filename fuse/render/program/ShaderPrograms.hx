@@ -34,6 +34,8 @@ class ShaderPrograms
 			currentProgram.update();
 		}
 		
+		currentProgram.setBaseShader();
+		
 		lastProgram = currentProgram;
 		return currentProgram;
 	}

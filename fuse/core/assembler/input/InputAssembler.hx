@@ -1,4 +1,5 @@
 package fuse.core.assembler.input;
+import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.input.FrontMouseInput;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.backend.Core;
@@ -70,10 +71,11 @@ class InputAssemblerObject
 	
 	public function test(touch:Touch):Void
 	{
-		var j:Int = HierarchyAssembler.hierarchy.length - 1;
+		
+		var j:Int = Touchables.touchables.length - 1;
 		while (j >= 0) 
 		{
-			var display:CoreImage = HierarchyAssembler.hierarchy[j];
+			var display:CoreImage = Touchables.touchables[j];
 			var distance:Float = getDistance(display, touch);
 			
 			if (distance < display.diagonal * 0.5) {

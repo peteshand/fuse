@@ -7,6 +7,8 @@ import fuse.core.communication.data.batchData.IBatchData;
 import fuse.render.program.ShaderPrograms;
 import fuse.render.program.ShaderProgram;
 import fuse.render.program.Context3DProgram;
+import fuse.render.shader.FuseShader;
+import fuse.render.shader.FuseShaders;
 import fuse.render.texture.Context3DTexture;
 import fuse.display.effects.BlendMode;
 import fuse.core.communication.memory.SharedMemory;
@@ -69,7 +71,7 @@ class Renderer
 		shaderPrograms = new ShaderPrograms(context3D);
 		textureRenderBatch = new TextureRenderBatch();
 		
-		BaseShader.init();
+		FuseShader.init();
 		ShaderProgram.init();
 		Textures.init(context3D);
 		
@@ -188,9 +190,19 @@ class Renderer
 			shaderProgram.value = null;
 		}
 		
+		//trace("conductorData.highestNumTextures = " + conductorData.highestNumTextures);
+		FuseShaders.setCurrentShader(conductorData.highestNumTextures);
+		
+		if (conductorData.numberOfBatches > 1){
+			trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
+		}
+		
 		for (i in 0...conductorData.numberOfBatches) 
 		{
+			
 			currentBatchData = textureRenderBatch.getBatchData(i);
+			if (currentBatchData.skip == 1) continue;
+			
 			numItemsInBatch = currentBatchData.numItems;
 			//trace("-- batch " + i);
 			//trace("numItemsInBatch = " + numItemsInBatch);
@@ -198,13 +210,33 @@ class Renderer
 			//if (numItemsInBatch > 1) numItemsInBatch--;
 			
 			if (numItemsInBatch == 0) continue;
-			
+			if (conductorData.highestNumTextures == 0) continue;
 			//trace("batch = " + i);
 			//trace("numItemsInBatch = " + numItemsInBatch);
 			//trace([numItemsInBatch * ShaderProgram.VERTICES_PER_QUAD, numItemsInBatch * ShaderProgram.INDICES_PER_QUAD]);
 			programChanged = false;
 			
+			//if (currentBatchData.renderTargetId == 6){
+				//batchDebug(currentBatchData);
+			//}
+			//trace("conductorData.highestNumTextures = " + conductorData.highestNumTextures);
+			
+			for (j in 0...8) 
+			{
+				if (j < conductorData.highestNumTextures) {
+					context3DTexture.setContextTexture(j, currentBatchData.textureIds[j]);
+				}
+				else {
+					context3DTexture.setContextTexture(j, -1);
+				}
+			}
+			//for (k in conductorData.highestNumTextures...8) 
+			//{
+				//context3DTexture.setContextTexture(k, -1);
+			//}
+			
 			shaderProgram.value = shaderPrograms.getProgram(numItemsInBatch, -1);
+			//FuseShaders.CURRENT_SHADER.value = FuseShaders.getShader(4);
 			
 			//var batchData:IBatchData = textureRenderBatch.getBatchData(i);
 			//trace("conductorData.isStatic = " + conductorData.isStatic);
@@ -217,7 +249,10 @@ class Renderer
 				//trace("currentBatchData.startIndex = " + currentBatchData.startIndex);
 				//trace("currentBatchData.firstIndex = " + currentBatchData.firstIndex);
 				//
-				//vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, numItemsInBatch);
+				//
+				//if (currentBatchData.renderTargetId == 6) {
+					//vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, numItemsInBatch);
+				//}
 				//
 				//trace("quadCount = " + quadCount);
 				shaderProgram.value.vertexbuffer.uploadFromByteArray(
@@ -235,12 +270,17 @@ class Renderer
 			
 			targetTextureId.value = currentBatchData.renderTargetId;
 			
-			//batchDebug(currentBatchData);
 			
-			context3DTexture.setContextTexture(0, currentBatchData.textureId1);
-			context3DTexture.setContextTexture(1, currentBatchData.textureId2);
-			context3DTexture.setContextTexture(2, currentBatchData.textureId3);
-			context3DTexture.setContextTexture(3, currentBatchData.textureId4);
+			
+			
+			//context3DTexture.setContextTexture(0, currentBatchData.textureId1);
+			//context3DTexture.setContextTexture(1, currentBatchData.textureId2);
+			//context3DTexture.setContextTexture(2, currentBatchData.textureId3);
+			//context3DTexture.setContextTexture(3, currentBatchData.textureId4);
+			//context3DTexture.setContextTexture(4, currentBatchData.textureId5);
+			//context3DTexture.setContextTexture(5, currentBatchData.textureId6);
+			//context3DTexture.setContextTexture(6, currentBatchData.textureId7);
+			//context3DTexture.setContextTexture(7, currentBatchData.textureId8);
 			
 			// TODO: move this logic into worker
 			var newBlendMode:Int = 0;
@@ -290,7 +330,7 @@ class Renderer
 	{
 		trace("startIndex      = " + batchData.startIndex);
 		trace("numItemsInBatch = " + batchData.numItems);
-		trace([batchData.textureId1, batchData.textureId2, batchData.textureId3, batchData.textureId4]);
+		trace([batchData.textureId1, batchData.textureId2, batchData.textureId3, batchData.textureId4, batchData.textureId5, batchData.textureId6, batchData.textureId7, batchData.textureId8]);
 		trace("renderTargetId = " + batchData.renderTargetId);
 	}
 	
@@ -327,7 +367,7 @@ class Renderer
 				var INDEX_MU:Float = SharedMemory.memory.readFloat();
 				var INDEX_MV:Float = SharedMemory.memory.readFloat();
 				
-				var INDEX_COLOUR:Int = SharedMemory.memory.readInt();
+				var INDEX_COLOUR:UInt = SharedMemory.memory.readUnsignedInt();
 				
 				var INDEX_Texture:Float = SharedMemory.memory.readFloat();
 				var INDEX_MaskTexture:Float = SharedMemory.memory.readFloat();
@@ -341,11 +381,11 @@ class Renderer
 				
 				trace([INDEX_X, INDEX_Y, INDEX_U, INDEX_V]);
 				trace([INDEX_Texture, INDEX_ALPHA]);
-				trace(StringTools.hex(INDEX_COLOUR));
+				trace("Colour = " + StringTools.hex(INDEX_COLOUR));
 				trace([INDEX_MU, INDEX_MV, INDEX_MaskTexture, INDEX_MASK_BASE_VALUE]);
 				//trace([INDEX_R, INDEX_G, INDEX_B, INDEX_A]);
 				trace("--");
-
+				
 				//trace("INDEX_X = " + INDEX_X);
 				//trace("INDEX_Y = " + INDEX_Y);
 				//trace("INDEX_U = " + INDEX_U);

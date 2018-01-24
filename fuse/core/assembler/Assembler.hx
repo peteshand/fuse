@@ -5,6 +5,7 @@ import fuse.core.assembler.atlas.AtlasBufferAssembler;
 import fuse.core.assembler.input.InputAssembler;
 import fuse.core.assembler.layers.LayerBufferAssembler;
 import fuse.core.assembler.batches.BatchAssembler;
+import fuse.core.assembler.layers.sort.SortLayers;
 import fuse.core.assembler.vertexWriter.VertexWriter;
 import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.Core;
@@ -17,6 +18,11 @@ class Assembler
 {
 	public function new() { }
 	
+	static public function init() 
+	{
+		//SortLayers.init();
+	}
+	
 	public static function update() 
 	{
 		Core.textures.checkForTextureChanges();
@@ -27,9 +33,11 @@ class Assembler
 		LayerBufferAssembler.build();
 		BatchAssembler.build();	
 		VertexWriter.build();
+		BatchAssembler.findMaxNumTextures();
 		
 		InputAssembler.build();
 		
 		Core.RESIZE = false;
+		Fuse.current.conductorData.isStatic = 1;
 	}
 }

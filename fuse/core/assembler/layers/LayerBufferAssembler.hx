@@ -1,4 +1,5 @@
 package fuse.core.assembler.layers;
+//import fuse.core.assembler.layers.changed.LayersHaveChanged;
 import fuse.core.assembler.layers.generate.GenerateLayers;
 import fuse.core.assembler.layers.layer.LayerBuffer;
 import fuse.core.assembler.layers.sort.SortLayers;
@@ -13,20 +14,10 @@ import fuse.utils.GcoArray;
 **/
 class LayerBufferAssembler
 {
-	public static var activeLayers = new GcoArray<LayerBuffer>([]);
-	public static var directLayers = new GcoArray<LayerBuffer>([]);
-	public static var staticCount:Int = 0;
-	
 	static public function build() 
 	{
-		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged || Fuse.current.conductorData.isStatic == 0) {
-			staticCount = 0;
-		}
+		GenerateLayers.build();
+		SortLayers.build();
 		
-		if (staticCount <= 1){
-			GenerateLayers.build();
-			SortLayers.build();
-		}
-		staticCount++;
 	}
 }

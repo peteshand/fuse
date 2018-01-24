@@ -54,7 +54,7 @@ class CoreDisplayObject
 	public function init(objectId:Int) 
 	{
 		this.objectId = objectId;
-		displayData = CommsObjGen.getDisplayData(objectId);
+		displayData = untyped CommsObjGen.getDisplayData(objectId);
 	}
 	
 	public function buildHierarchy() 
@@ -65,13 +65,15 @@ class CoreDisplayObject
 	
 	function calculateTransform() 
 	{
-		isStatic = displayData.isStatic;
-		if (Core.RESIZE) isStatic = 0;
+		setIsStatic();
+		updateTransform();
 		
-		displayData.isStatic = 1; // reset static prop
-		
+	}
+	
+	function updateTransform() 
+	{
 		if (isStatic == 0) {
-			beginSetChildrenIsStatic(false);
+			//beginSetChildrenIsStatic(false);
 			combinedAlpha = Graphics.alpha * displayData.alpha;
 			Graphics.pushAlpha(combinedAlpha);
 			WorkerTransformHelper.update(this);
@@ -80,25 +82,34 @@ class CoreDisplayObject
 		pushTransform();
 	}
 	
+	inline function setIsStatic() 
+	{
+		isStatic = displayData.isStatic;
+		if (Graphics.isStatic == 0) isStatic = 0;
+		else if (Core.RESIZE) isStatic = 0;
+		displayData.isStatic = 1; // reset static prop
+	}
+	
 	inline function pushTransform() 
 	{
-		Graphics.pushTransformation(transformData.localTransform);
+		Graphics.pushTransformation(transformData.localTransform, isStatic);
 		
 		// Not sure if this is used anymore
 		//transformData.globalTransform.setFrom(transformData.localTransform);
 	}
 	
-	function beginSetChildrenIsStatic(value:Bool) 
-	{
-		// CoreInteractiveObject will override
-	}
+	//function beginSetChildrenIsStatic(value:Bool) 
+	//{
+		//// CoreInteractiveObject will override
+	//}
 	
-	function setChildrenIsStatic(value:Bool) 
-	{
-		if (value) {
-			parentNonStatic = true;
-		}
-	}
+	//function setChildrenIsStatic(value:Bool) 
+	//{
+		//if (value) {
+			//parentNonStatic = true;
+			//displayData.isStatic = 0;
+		//}
+	//}
 	
 	function popTransform() 
 	{

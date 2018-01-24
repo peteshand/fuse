@@ -1,4 +1,6 @@
 package fuse.core.backend;
+import fuse.core.assembler.input.Touchables;
+import fuse.core.communication.messageData.TouchableMsg;
 import fuse.core.input.FrontMouseInput;
 import fuse.core.input.Touch;
 
@@ -55,6 +57,7 @@ class CoreEntryPoint
 		workerComms.addListener(MessageType.ADD_TEXTURE, OnAddTexture);
 		workerComms.addListener(MessageType.REMOVE_TEXTURE, OnRemoveTexture);
 		workerComms.addListener(MessageType.MOUSE_INPUT, OnMouseInput);
+		workerComms.addListener(MessageType.SET_TOUCHABLE, OnSetTouchable);
 		
 		index = workerComms.getSharedProperty(WorkerSharedProperties.INDEX);
 		numberOfWorkers = workerComms.getSharedProperty(WorkerSharedProperties.NUMBER_OF_WORKERS);
@@ -66,6 +69,7 @@ class CoreEntryPoint
 		Conductor.onTick.add(OnTick);
 		
 		VertexWriter.init();
+		Assembler.init();
 		
 		workerComms.send(MessageType.WORKER_STARTED);
 	}
@@ -127,6 +131,11 @@ class CoreEntryPoint
 	{
 		var objectId:Int = workerPayload;
 		Core.displayList.removeChild(objectId);
+	}
+	
+	private function OnSetTouchable(payload:TouchableMsg):Void 
+	{
+		Touchables.setTouchable(payload.objectId, payload.touchable);
 	}
 	
 	function OnUpdateMsg(workerPayload:WorkerPayload) 

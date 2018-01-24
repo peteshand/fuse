@@ -42,16 +42,15 @@ class CoreInteractiveObject extends CoreDisplayObject
 		HierarchyAssembler.transformActions.push(popTransform);
 	}
 	
-	
-	
-	override function beginSetChildrenIsStatic(value:Bool) 
-	{
-		for (i in 0...children.length) 
-		{
-			children[i].beginSetChildrenIsStatic(true);
-			children[i].setChildrenIsStatic(true);
-		}
-	}
+	//override function beginSetChildrenIsStatic(value:Bool) 
+	//{
+		//displayData.isStatic = 0;
+		//for (i in 0...children.length) 
+		//{
+			//children[i].beginSetChildrenIsStatic(true);
+			//children[i].setChildrenIsStatic(true);
+		//}
+	//}
 	
 	override public function clone():CoreDisplayObject
 	{

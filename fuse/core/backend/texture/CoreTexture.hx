@@ -36,7 +36,12 @@ class CoreTexture
 		textureAvailable.add(OnTextureAvailableChange);
 		
 		changeCount = new Notifier<Int>(-1);
-		changeCount.add(OnTextureAvailableChange);
+		changeCount.add(OnCountChange);
+	}
+	
+	function OnCountChange() 
+	{
+		OnTextureAvailableChange();
 	}
 	
 	inline function OnTextureAvailableChange() 
@@ -70,6 +75,7 @@ class CoreTexture
 		changeCount.value = textureData.changeCount;
 		textureAvailable.value = textureData.textureAvailable;
 		if (changeAvailable) {
+			changeAvailable = false;
 			return true;
 		}
 		return false;

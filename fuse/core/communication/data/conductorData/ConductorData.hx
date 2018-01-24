@@ -34,8 +34,9 @@ class ConductorData
 	static public inline var STAGE_HEIGHT:Int = 72;
 	static public inline var IS_STATIC:Int = 76;
 	static public inline var NUM_TRIANGLES:Int = 80;
+	static public inline var HIGHEST_NUM_TEXTURES:Int = 84;
 	
-	public static inline var BUFFER_SIZE:Int = 84;
+	public static inline var BUFFER_SIZE:Int = 88;
 	
 	public static var memoryBlock:MemoryBlock;
 	
@@ -63,6 +64,7 @@ class ConductorData
 	@:isVar public var stageHeight(get, set):Int = 0;
 	@:isVar public var isStatic(get, set):Int = 0;
 	@:isVar public var numTriangles(get, set):Int = 0;
+	@:isVar public var highestNumTextures(get, set):Int;
 	
 	public function new() 
 	{
@@ -94,7 +96,8 @@ class ConductorData
 	inline function get_stageWidth():Int				{ return memoryBlock.readInt(STAGE_WIDTH); }
 	inline function get_stageHeight():Int				{ return memoryBlock.readInt(STAGE_HEIGHT); }
 	inline function get_isStatic():Int					{ return memoryBlock.readInt(IS_STATIC); }
-	inline function get_numTriangles():Int					{ return memoryBlock.readInt(NUM_TRIANGLES); }
+	inline function get_numTriangles():Int				{ return memoryBlock.readInt(NUM_TRIANGLES); }
+	inline function get_highestNumTextures():Int		{ return memoryBlock.readInt(HIGHEST_NUM_TEXTURES); }
 	
 	
 	inline function set_frameIndex(value:Int):Int {
@@ -199,6 +202,11 @@ class ConductorData
 	
 	inline function set_numTriangles(value:Int):Int {
 		memoryBlock.writeInt(NUM_TRIANGLES, value);
+		return value;
+	}
+	
+	inline function set_highestNumTextures(value:Int):Int {
+		memoryBlock.writeInt(HIGHEST_NUM_TEXTURES, value);
 		return value;
 	}
 	

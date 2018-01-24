@@ -7,7 +7,7 @@ import fuse.core.communication.data.MemoryBlock;
  * @author P.J.Shand
  */
 
-class WorkerDisplayData implements IDisplayData
+class WorkerDisplayData /*implements IDisplayData*/
 {
 	public static var BUFFER_SIZE:Int = 10000;
 	
@@ -29,10 +29,12 @@ class WorkerDisplayData implements IDisplayData
 	
 	static inline var INDEX_TEXTURE_ID:Int = 60;
 	static inline var INDEX_RENDER_LAYER:Int = 64;
-	static inline var INDEX_IS_STATIC:Int = 68;
-	static inline var INDEX_VISIBLE:Int = 72;
+	static inline var INDEX_VISIBLE:Int = 68;
+	static inline var INDEX_IS_STATIC:Int = 72;
+	static inline var INDEX_IS_MOVING:Int = 76;
+	static inline var INDEX_IS_ROTATING:Int = 80;
 	
-	public static inline var BYTES_PER_ITEM:Int = 76;
+	public static inline var BYTES_PER_ITEM:Int = 84;
 	
 	var memoryBlock:MemoryBlock;
 	
@@ -46,19 +48,21 @@ class WorkerDisplayData implements IDisplayData
 	public var scaleY(get, set):Float;
 	public var rotation(get, set):Float;
 	public var alpha(get, set):Float;
-	public var color(get, set):Int;
-	public var colorTL(get, set):Int;
-	public var colorTR(get, set):Int;
-	public var colorBL(get, set):Int;
-	public var colorBR(get, set):Int;
+	public var color(get, set):UInt;
+	public var colorTL(get, set):UInt;
+	public var colorTR(get, set):UInt;
+	public var colorBL(get, set):UInt;
+	public var colorBR(get, set):UInt;
 	public var textureId(get, set):Int;
 	public var renderLayer(get, set):Int;
 	
-	public var isStatic(get, set):Int;
 	public var visible(get, set):Int;
+	public var isStatic(get, set):Int;
+	public var isMoving(get, set):Int;
+	public var isRotating(get, set):Int;
 	
 	private var _objectId:Int;
-	public var objectId(get, null):Int;
+	public var objectId(get, never):Int;
 	
 	public function new(objectOffset:Null<Int>) 
 	{
@@ -108,23 +112,23 @@ class WorkerDisplayData implements IDisplayData
 		return memoryBlock.readFloat(INDEX_ALPHA);
 	}
 	
-	inline function get_color():Int { 
+	inline function get_color():UInt { 
 		return memoryBlock.readInt(WorkerDisplayData.INDEX_COLOR);
 	}
 	
-	inline function get_colorTL():Int { 
+	inline function get_colorTL():UInt { 
 		return memoryBlock.readInt(WorkerDisplayData.INDEX_COLOR_TL);
 	}
 	
-	inline function get_colorTR():Int { 
+	inline function get_colorTR():UInt { 
 		return memoryBlock.readInt(WorkerDisplayData.INDEX_COLOR_TR);
 	}
 	
-	inline function get_colorBL():Int { 
+	inline function get_colorBL():UInt { 
 		return memoryBlock.readInt(WorkerDisplayData.INDEX_COLOR_BL);
 	}
 	
-	inline function get_colorBR():Int { 
+	inline function get_colorBR():UInt { 
 		return memoryBlock.readInt(WorkerDisplayData.INDEX_COLOR_BR);
 	}
 	
@@ -136,13 +140,20 @@ class WorkerDisplayData implements IDisplayData
 		return memoryBlock.readInt(INDEX_RENDER_LAYER);
 	}
 	
+	inline function get_visible():Int { 
+		return memoryBlock.readByte(INDEX_VISIBLE);
+	}
 	
 	inline function get_isStatic():Int { 
 		return memoryBlock.readByte(INDEX_IS_STATIC);
 	}
 	
-	inline function get_visible():Int { 
-		return memoryBlock.readByte(INDEX_VISIBLE);
+	inline function get_isMoving():Int { 
+		return memoryBlock.readByte(INDEX_IS_MOVING);
+	}
+	
+	inline function get_isRotating():Int { 
+		return memoryBlock.readByte(INDEX_IS_ROTATING);
 	}
 	
 	
@@ -201,27 +212,27 @@ class WorkerDisplayData implements IDisplayData
 		return value;
 	}
 	
-	inline function set_color(value:Int):Int { 
+	inline function set_color(value:UInt):UInt { 
 		memoryBlock.writeInt(INDEX_COLOR, value);
 		return value;
 	}
 	
-	inline function set_colorTL(value:Int):Int { 
+	inline function set_colorTL(value:UInt):UInt { 
 		memoryBlock.writeInt(INDEX_COLOR_TL, value);
 		return value;
 	}
 	
-	inline function set_colorTR(value:Int):Int { 
+	inline function set_colorTR(value:UInt):UInt { 
 		memoryBlock.writeInt(INDEX_COLOR_TR, value);
 		return value;
 	}
 	
-	inline function set_colorBL(value:Int):Int { 
+	inline function set_colorBL(value:UInt):UInt { 
 		memoryBlock.writeInt(INDEX_COLOR_BL, value);
 		return value;
 	}
 	
-	inline function set_colorBR(value:Int):Int { 
+	inline function set_colorBR(value:UInt):UInt { 
 		memoryBlock.writeInt(INDEX_COLOR_BR, value);
 		return value;
 	}
@@ -236,13 +247,25 @@ class WorkerDisplayData implements IDisplayData
 		return value;
 	}
 	
+	inline function set_visible(value:Int):Int { 
+		memoryBlock.writeByte(INDEX_VISIBLE, value);
+		return value;
+	}
+	
 	inline function set_isStatic(value:Int):Int { 
 		memoryBlock.writeByte(INDEX_IS_STATIC, value);
 		return value;
 	}
 	
-	inline function set_visible(value:Int):Int { 
-		memoryBlock.writeByte(INDEX_VISIBLE, value);
+	inline function set_isMoving(value:Int):Int { 
+		memoryBlock.writeByte(INDEX_IS_MOVING, value);
 		return value;
 	}
+	
+	inline function set_isRotating(value:Int):Int { 
+		memoryBlock.writeByte(INDEX_IS_ROTATING, value);
+		return value;
+	}
+	
+	
 }

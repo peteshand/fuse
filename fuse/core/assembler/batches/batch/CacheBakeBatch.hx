@@ -1,4 +1,5 @@
 package fuse.core.assembler.batches.batch;
+import fuse.core.assembler.layers.LayerBufferAssembler;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.assembler.vertexWriter.VertexWriter;
 import fuse.core.backend.Core;
@@ -14,6 +15,9 @@ import fuse.core.communication.data.vertexData.VertexData;
 @:access(fuse.core.backend.display)
 class CacheBakeBatch extends BaseBatch implements IBatch
 {
+	var startVertexIndex:Int = -1;
+	var numRenderables:Int = -1;
+	
 	public function new() 
 	{
 		super();
@@ -30,9 +34,41 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 		return super.add(renderable, renderTarget, batchType);
 	}
 	
-	public function writeVertex() 
+	public function writeVertex():Bool
 	{
+		//trace("hasChanged = " + hasChanged);
+		if (hasChanged == false) {
+			batchData.skip = 1;
+			return false;
+		}
+		
+		trace(this);
+		
+		//if (LayerBufferAssembler.STATE == LayerState.WRITE) return;
+		
+		//trace("batchId = " + batchId);
+		
+		//if (startVertexIndex == VertexWriter.VERTEX_COUNT && numRenderables == renderables.length) {
+			//
+			//return false;
+		//}
+		
+		//trace("startVertexIndex = " + startVertexIndex);
+		//trace("VertexWriter.VERTEX_COUNT = " + VertexWriter.VERTEX_COUNT);
+		//
+		//trace("numRenderables = " + numRenderables);
+		//trace("renderables.length = " + renderables.length);
+		
+		startVertexIndex = VertexWriter.VERTEX_COUNT;
+		numRenderables = renderables.length;
+		
+		
 		setBatchProps();
+		
+		//if (startVertexIndex == VertexWriter.VERTEX_COUNT && numRenderables == renderables.length) {
+			//VertexWriter.VERTEX_COUNT += (VertexData.BYTES_PER_ITEM * renderables.length);
+			//return;
+		//}
 		
 		for (i in 0...renderables.length) 
 		{
@@ -40,13 +76,15 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 			//renderables[i].writeVertex();
 			writeLayerVertex(cast renderables[i]);
 		}
+		
+		return true;
 	}
 	
 	function writeLayerVertex(image:CoreImage) 
 	{
 		if (image.displayData.visible == 0) return;
 		
-		
+		//trace("objectId = " + image.objectId);
 		
 		var vertexData:IVertexData = image.vertexData;
 		var coreTexture:CoreTexture = image.coreTexture;

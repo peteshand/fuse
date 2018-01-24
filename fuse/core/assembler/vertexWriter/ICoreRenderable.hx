@@ -6,6 +6,7 @@ import fuse.core.backend.texture.CoreTexture;
  */
 interface ICoreRenderable 
 {
+	var objectId:Int;
 	var coreTexture:CoreTexture;
 	var textureIndex:Int;
 }

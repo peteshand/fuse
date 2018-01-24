@@ -1,143 +1,39 @@
 package fuse.core.communication.data.displayData;
-import fuse.Fuse;
-import fuse.core.communication.data.MemoryBlock;
 
 /**
  * ...
  * @author P.J.Shand
  */
 
-class DisplayData implements IDisplayData
+class DisplayData
 {
-	@:isVar public var x(get, set):Float = 0;
-	@:isVar public var y(get, set):Float = 0;
-	@:isVar public var width(get, set):Float = 0;
-	@:isVar public var height(get, set):Float = 0;
-	@:isVar public var pivotX(get, set):Float = 0;
-	@:isVar public var pivotY(get, set):Float = 0;
-	@:isVar public var scaleX(get, set):Float = 0;
-	@:isVar public var scaleY(get, set):Float = 0;
-	@:isVar public var rotation(get, set):Float = 0;
-	@:isVar public var alpha(get, set):Float = 0;
-	@:isVar public var color(get, set):Int = 0;
-	@:isVar public var colorTL(get, set):Int = 0;
-	@:isVar public var colorTR(get, set):Int = 0;
-	@:isVar public var colorBL(get, set):Int = 0;
-	@:isVar public var colorBR(get, set):Int = 0;
-	@:isVar public var textureId(get, set):Int = 0;
-	@:isVar public var renderLayer(get, set):Int = 0;
+	public var x:Float = 0;
+	public var y:Float = 0;
+	public var width:Float = 0;
+	public var height:Float = 0;
+	public var pivotX:Float = 0;
+	public var pivotY:Float = 0;
+	public var scaleX:Float = 0;
+	public var scaleY:Float = 0;
+	public var rotation:Float = 0;
+	public var alpha:Float = 0;
+	public var color:UInt = 0;
+	public var colorTL:UInt = 0;
+	public var colorTR:UInt = 0;
+	public var colorBL:UInt = 0;
+	public var colorBR:UInt = 0;
+	public var textureId:Int = 0;
+	public var renderLayer:Int = 0;
 	
-	@:isVar public var isStatic(get, set):Int = 0;
-	@:isVar public var visible(get, set):Int = 0;
+	public var visible:Int = 0;
+	public var isStatic:Int = 0;
+	public var isMoving:Int = 0;
+	public var isRotating:Int = 0;
 	
-	private var _objectId:Int;
-	public var objectId(get, null):Int;
+	public var objectId:Int;
 	
-	public function new(objectOffset:Null<Int>) 
+	public function new(objectOffset:Null<Int>)
 	{
-		_objectId = objectOffset;
-	}
-	
-	inline function get_x():Float { return x; }
-	inline function get_y():Float { return y; }
-	inline function get_width():Float { return width; }
-	inline function get_height():Float { return height; }
-	inline function get_pivotX():Float { return pivotX; }
-	inline function get_pivotY():Float { return pivotY; }
-	inline function get_scaleX():Float { return scaleX; }
-	inline function get_scaleY():Float { return scaleY; }
-	inline function get_rotation():Float { return rotation; }
-	inline function get_alpha():Float { return alpha; }
-	inline function get_color():Int { return color; }
-	inline function get_colorTL():Int { return colorTL; }
-	inline function get_colorTR():Int { return colorTR; }
-	inline function get_colorBL():Int { return colorBL; }
-	inline function get_colorBR():Int { return colorBR; }
-	inline function get_textureId():Int { return textureId; }
-	inline function get_renderLayer():Int { return renderLayer; }
-	inline function get_isStatic():Int { return isStatic; }
-	inline function get_visible():Int { return visible; }
-	
-	
-	inline function get_objectId():Int
-	{
-		return _objectId;
-	}
-	
-	
-	inline function set_x(value:Float):Float { 
-		return x = value;
-	}
-	
-	inline function set_y(value:Float):Float { 
-		return y = value;
-	}
-	
-	inline function set_width(value:Float):Float { 
-		return width = value;
-	}
-	
-	inline function set_height(value:Float):Float { 
-		return height = value;
-	}
-	
-	inline function set_pivotX(value:Float):Float { 
-		return pivotX = value;
-	}
-	
-	inline function set_pivotY(value:Float):Float { 
-		return pivotY = value;
-	}
-	
-	inline function set_scaleX(value:Float):Float { 
-		return scaleX = value;
-	}
-	
-	inline function set_scaleY(value:Float):Float { 
-		return scaleY = value;
-	}
-	
-	inline function set_rotation(value:Float):Float { 
-		return rotation = value;
-	}
-	
-	inline function set_alpha(value:Float):Float { 
-		return alpha = value;
-	}
-	
-	inline function set_color(value:Int):Int {	
-		return color = colorTL = colorTR = colorBL = colorBR = value;
-	}
-	
-	inline function set_colorTL(value:Int):Int { 
-		return colorTL = value;
-	}
-	
-	inline function set_colorTR(value:Int):Int { 
-		return colorTR = value;
-	}
-	
-	inline function set_colorBL(value:Int):Int { 
-		return colorBL = value;
-	}
-	
-	inline function set_colorBR(value:Int):Int { 
-		return colorBR = value;
-	}
-	
-	inline function set_textureId(value:Int):Int { 
-		return textureId = value;
-	}
-	
-	inline function set_renderLayer(value:Int):Int { 
-		return renderLayer = value;
-	}
-	
-	inline function set_isStatic(value:Int):Int { 
-		return isStatic = value;
-	}
-	
-	inline function set_visible(value:Int):Int { 
-		return visible = value;
+		objectId = objectOffset;
 	}
 }

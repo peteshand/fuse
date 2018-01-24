@@ -9,5 +9,5 @@ package fuse.core.assembler.batches.batch;
 	public var ATLAS:String = "atlas";
 	public var CACHE_BAKE:String = "cacheBake";
 	public var DIRECT:String = "direct";
-	public var CACHE_DRAW:String = "cacheDraw";
+	//public var CACHE_DRAW:String = "cacheDraw";
 }

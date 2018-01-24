@@ -3,6 +3,7 @@ import fuse.core.assembler.layers.generate.GenerateLayers;
 import fuse.core.assembler.layers.layer.LayerBuffer;
 import fuse.core.assembler.layers.layer.LayerCacheRenderable;
 import fuse.core.assembler.layers.sort.CustomSort.SortType;
+import fuse.core.backend.display.CoreCacheLayerImage;
 import fuse.utils.GcoArray;
 
 /**
@@ -11,7 +12,10 @@ import fuse.utils.GcoArray;
  */
 class SortLayers
 {
-	static var numLayers:Int = 2;
+	public static var layers = new GcoArray<LayerBuffer>([]);
+	
+	static var numLayers:Int;
+	static var cacheLayerImages:Array<CoreCacheLayerImage>;
 	static private var newDirectLayers = new GcoArray<LayerBuffer>([]);
 	
 	static var SortByStatic2:LayerBuffer -> LayerBuffer -> Int;
@@ -21,6 +25,11 @@ class SortLayers
 	
 	static function __init__() 
 	{
+		numLayers = 2;
+		cacheLayerImages = [];
+		
+		
+		
 		SortByStatic2 = SortByStatic;
 		SortByNumberOfStaticItems2 = SortByNumberOfStaticItems;
 		SortBackToLayerIndex2 = SortBackToLayerIndex;
@@ -28,27 +37,47 @@ class SortLayers
 		customSort = new CustomSort<LayerBuffer>();
 	}
 	
+	static public function init() 
+	{
+		for (i in 0...numLayers) 
+		{
+			cacheLayerImages.push(new CoreCacheLayerImage(6 + i));
+		}
+	}
+	
+	static private function clear() 
+	{
+		SortLayers.layers.clear();
+	}
+	
 	static public function build() 
 	{
+		if (!GenerateLayers.layersGenerated) return;
+		
+		if (cacheLayerImages.length == 0) init();
+		clear();
+		
 		//TestTrace();
 		//
 		// Find largest static layers
 		// * Sort by static
-		//LayerBufferAssembler.directLayers.sort(SortByStatic2);
-		customSort.sort(LayerBufferAssembler.directLayers, "isStatic", SortType.DESCENDING);
+		//GenerateLayers.layers.sort(SortByStatic2);
+		customSort.sort(GenerateLayers.layers, "isStatic", SortType.DESCENDING);
 		
 		//TestTrace();
 		// * Sort by length
-		//LayerBufferAssembler.directLayers.sort(SortByNumberOfStaticItems2);
-		customSort.sort(LayerBufferAssembler.directLayers, "numRenderables", SortType.DESCENDING);
+		//GenerateLayers.layers.sort(SortByNumberOfStaticItems2);
+		customSort.sort(GenerateLayers.layers, "numRenderables", SortType.DESCENDING);
 		//TestTrace();
 		// * Set active static based on position
-		SetActiveBasedOnPosition();
+		if (GenerateLayers.drawCacheLayers){
+			SetActiveBasedOnPosition();
+		}
 		//TestTrace();
 		
 		// Sort back to index
-		//LayerBufferAssembler.directLayers.sort(SortBackToLayerIndex2);
-		customSort.sort(LayerBufferAssembler.directLayers, "index", SortType.ASCENDING);
+		//GenerateLayers.layers.sort(SortBackToLayerIndex2);
+		customSort.sort(GenerateLayers.layers, "index", SortType.ASCENDING);
 		//TestTrace();
 		
 		CombineInactive();
@@ -58,10 +87,10 @@ class SortLayers
 	
 	static private function TestTrace() 
 	{
-		var layers:GcoArray<LayerBuffer> = LayerBufferAssembler.directLayers;
+		var layers:GcoArray<LayerBuffer> = GenerateLayers.layers;
 		for (i in 0...layers.length) 
 		{
-			trace(["image.index = " + layers[i].index, layers[i].isStatic, layers[i].renderables.length, layers[i].active]);
+			trace(["image.index = " + layers[i].index, layers[i].isStatic, layers[i].renderables.length, layers[i].isCacheLayer, layers[i].objectIds()]);
 		}
 		trace("-------");
 	}
@@ -79,33 +108,43 @@ class SortLayers
 	static inline function SetActiveBasedOnPosition() 
 	{
 		var count:Int = 0;
-		for (i in 0...LayerBufferAssembler.directLayers.length) 
+		for (i in 0...GenerateLayers.layers.length) 
 		{
 			if (count >= numLayers) break;
-			if (LayerBufferAssembler.directLayers[i].isStatic == 0) break;
+			if (GenerateLayers.layers[i].isStatic == 0) break;
 			
-			count++;
-			LayerBufferAssembler.directLayers[i].active = true;
 			
-			var activeLayer:LayerBuffer = LayerBufferAssembler.directLayers[i];
+			GenerateLayers.layers[i].isCacheLayer = true;
 			
-			//trace("LayerBufferAssembler.staticCount = " + LayerBufferAssembler.staticCount);
-			if (LayerBufferAssembler.staticCount <= 1) {
-				activeLayer.index = LayerBufferAssembler.activeLayers.length;
-				activeLayer.renderTarget = 6; // TODO: replace with correct textureId	
-				LayerBufferAssembler.activeLayers.push(activeLayer);
-			}
+			var activeLayer:LayerBuffer = GenerateLayers.layers[i];
+			var offset:Int = 6 + SortLayers.layers.length;
+			
 			
 			var cacheLayer:LayerBuffer = activeLayer.clone();
 			cacheLayer.renderTarget = -1;
-			cacheLayer.renderables.push(new LayerCacheRenderable(6));
-			LayerBufferAssembler.directLayers[i] = cacheLayer;
+			//cacheLayer.renderables.push(new LayerCacheRenderable(offset));
 			
-			//var activeLayer:LayerBuffer = LayerBufferAssembler.directLayers[i].clone();
-			//activeLayer.index = LayerBufferAssembler.activeLayers.length;
+			var coreCacheLayerImage:CoreCacheLayerImage = cacheLayerImages[count];
+			coreCacheLayerImage.update();
+			cacheLayer.renderables.push(coreCacheLayerImage);
+			
+			//trace("LayerBufferAssembler.staticCount = " + LayerBufferAssembler.staticCount);
+			
+			// Move layer to top of render que
+			if (GenerateLayers.layersGenerated == true) {
+				activeLayer.index = SortLayers.layers.length;
+				activeLayer.renderTarget = offset; // TODO: replace with correct textureId	
+				SortLayers.layers.push(activeLayer);
+			}
+			
+			
+			GenerateLayers.layers[i] = cacheLayer;
+			
+			//var activeLayer:LayerBuffer = GenerateLayers.layers[i].clone();
+			//activeLayer.index = SortLayers.layers.length;
 			//activeLayer.renderTarget = 7; // TODO: replace with correct textureId
 			
-			
+			count++;
 		}
 	}
 	
@@ -118,10 +157,10 @@ class SortLayers
 	{
 		newDirectLayers.clear();
 		var currentInactiveLayer:LayerBuffer = null;
-		for (i in 0...LayerBufferAssembler.directLayers.length) 
+		for (i in 0...GenerateLayers.layers.length) 
 		{
-			var layer:LayerBuffer = LayerBufferAssembler.directLayers[i];
-			if (layer.active) {
+			var layer:LayerBuffer = GenerateLayers.layers[i];
+			if (layer.isCacheLayer) {
 				currentInactiveLayer = null;
 				newDirectLayers.push(layer);
 			}
@@ -138,7 +177,7 @@ class SortLayers
 			}
 		}
 		
-		LayerBufferAssembler.directLayers.clear();
-		for (k in 0...newDirectLayers.length) LayerBufferAssembler.directLayers.push(newDirectLayers[k]);
+		GenerateLayers.layers.clear();
+		for (k in 0...newDirectLayers.length) GenerateLayers.layers.push(newDirectLayers[k]);
 	}
 }

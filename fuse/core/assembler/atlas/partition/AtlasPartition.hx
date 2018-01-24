@@ -13,6 +13,7 @@ import fuse.core.utils.Pool;
 
 class AtlasPartition implements ICoreRenderable
 {
+	public var objectId:Int = -1;
 	public var active:Bool;
 	public var placed:Bool;
 	

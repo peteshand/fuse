@@ -27,6 +27,7 @@ class DisplayObject
 	public var onAddToStage = new Signal1<DisplayObject>();
 	public var onRemoveFromStage = new Signal1<DisplayObject>();
 	
+	@:isVar public var touchable(get, set):Bool = false;
 	public var onPress = new Signal1<Touch>();
 	public var onMove = new Signal1<Touch>();
 	public var onRelease = new Signal1<Touch>();
@@ -61,7 +62,7 @@ class DisplayObject
 	{
 		var id:Int = DisplayObject.objectIdCount++;
 		//displayData = new WorkerDisplayData(id);
-		displayData = CommsObjGen.getDisplayData(id);
+		displayData = untyped CommsObjGen.getDisplayData(id);
 		
 		objectId = id;
 		
@@ -78,6 +79,8 @@ class DisplayObject
 		isStatic = 0;
 	}
 	
+	
+	inline function get_touchable():Bool { return touchable; }
 	inline function get_x():Float { return x; }
 	inline function get_y():Float { return y; }
 	function get_width():Float { return width; }
@@ -101,9 +104,21 @@ class DisplayObject
 	inline function get_isStatic():Int { return isStatic; }
 	
 	
+	
+	inline function set_touchable(value:Bool):Bool 
+	{
+		if (touchable != value){
+			touchable = value;
+			Fuse.current.workerSetup.setTouchable(this, value);
+			//isStatic = 0;
+		}
+		return value;
+	}
+	
 	inline function set_x(value:Float):Float { 
 		if (x != value){
 			displayData.x = x = value;
+			displayData.isMoving = 1;
 			isStatic = 0;
 		}
 		return value;
@@ -111,6 +126,7 @@ class DisplayObject
 	inline function set_y(value:Float):Float { 
 		if (y != value){
 			displayData.y = y = value;
+			displayData.isMoving = 1;
 			isStatic = 0;
 		}
 		return value;
@@ -119,6 +135,7 @@ class DisplayObject
 	function set_width(value:Float):Float { 
 		if (width != value){
 			displayData.width = width = value;
+			displayData.isMoving = 1;
 			isStatic = 0;
 		}
 		return value;
@@ -127,6 +144,7 @@ class DisplayObject
 	function set_height(value:Float):Float { 
 		if (height != value){
 			displayData.height = height = value;
+			displayData.isMoving = 1;
 			isStatic = 0;
 		}
 		return value;
@@ -135,6 +153,7 @@ class DisplayObject
 	inline function set_pivotX(value:Float):Float { 
 		if (pivotX != value){
 			displayData.pivotX = pivotX = value;
+			displayData.isMoving = 1;
 			isStatic = 0;
 		}
 		return value;
@@ -143,6 +162,7 @@ class DisplayObject
 	inline function set_pivotY(value:Float):Float { 
 		if (pivotY != value){
 			displayData.pivotY = pivotY = value;
+			displayData.isMoving = 1;
 			isStatic = 0;
 		}
 		return value;
@@ -151,6 +171,8 @@ class DisplayObject
 	inline function set_rotation(value:Float):Float { 
 		if (rotation != value){
 			displayData.rotation = rotation = value;
+			displayData.isMoving = 1;
+			displayData.isRotating = 1;
 			isStatic = 0;
 		}
 		return value;
@@ -159,6 +181,7 @@ class DisplayObject
 	inline function set_scaleX(value:Float):Float { 
 		if (scaleX != value){
 			displayData.scaleX = scaleX = value;
+			displayData.isMoving = 1;
 			isStatic = 0;
 		}
 		return value;
@@ -167,6 +190,7 @@ class DisplayObject
 	inline function set_scaleY(value:Float):Float { 
 		if (scaleY != value){
 			displayData.scaleY = scaleY = value;
+			displayData.isMoving = 1;
 			isStatic = 0;
 		}
 		return value;

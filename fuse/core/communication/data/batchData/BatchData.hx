@@ -21,10 +21,16 @@ class BatchData implements IBatchData
 	@:isVar public var textureId2(get, set):Int = 0;
 	@:isVar public var textureId3(get, set):Int = 0;
 	@:isVar public var textureId4(get, set):Int = 0;
+	@:isVar public var textureId5(get, set):Int = 0;
+	@:isVar public var textureId6(get, set):Int = 0;
+	@:isVar public var textureId7(get, set):Int = 0;
+	@:isVar public var textureId8(get, set):Int = 0;
 	@:isVar public var numTextures(get, set):Int = 0;
 	@:isVar public var numItems(get, set):Int = 0;
 	@:isVar public var width(get, set):Int = 0;
 	@:isVar public var height(get, set):Int = 0;
+	@:isVar public var skip(get, set):Int = 0;
+	var _textureIds:Array<Int> = [];
 	
 	public function new(objectId:Int) 
 	{
@@ -39,16 +45,28 @@ class BatchData implements IBatchData
 	function get_textureId2():Int		{ return textureId2; }
 	function get_textureId3():Int		{ return textureId3; }
 	function get_textureId4():Int		{ return textureId4; }
+	function get_textureId5():Int		{ return textureId5; }
+	function get_textureId6():Int		{ return textureId6; }
+	function get_textureId7():Int		{ return textureId7; }
+	function get_textureId8():Int		{ return textureId8; }
 	function get_numTextures():Int		{ return numTextures; }
 	function get_numItems():Int			{ return numItems; }
 	function get_width():Int			{ return width; }
 	function get_height():Int			{ return height; }
+	function get_skip():Int				{ return skip; }
 	
 	function get_textureIds():Array<Int>
 	{
-		return [textureId1, textureId2, textureId3, textureId4];
+		_textureIds[0] = textureId1;
+		_textureIds[1] = textureId2;
+		_textureIds[2] = textureId3;
+		_textureIds[3] = textureId4;
+		_textureIds[4] = textureId5;
+		_textureIds[5] = textureId6;
+		_textureIds[6] = textureId7;
+		_textureIds[7] = textureId8;
+		return _textureIds;
 	}
-	
 	
 	function set_renderTargetId(value:Int):Int {
 		return renderTargetId = value;
@@ -82,6 +100,22 @@ class BatchData implements IBatchData
 		return textureId4 = value;
 	}
 	
+	function set_textureId5(value:Int):Int {
+		return textureId5 = value;
+	}
+	
+	function set_textureId6(value:Int):Int {
+		return textureId6 = value;
+	}
+	
+	function set_textureId7(value:Int):Int {
+		return textureId7 = value;
+	}
+	
+	function set_textureId8(value:Int):Int {
+		return textureId8 = value;
+	}
+	
 	function set_numTextures(value:Int):Int {
 		return numTextures = value;
 	}
@@ -96,5 +130,9 @@ class BatchData implements IBatchData
 	
 	function set_height(value:Int):Int {
 		return height = value;
+	}
+	
+	function set_skip(value:Int):Int {
+		return skip = value;
 	}
 }

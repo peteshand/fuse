@@ -1,6 +1,9 @@
 package fuse.render.program;
 
+import com.imagination.core.type.Notifier;
 import fuse.core.communication.data.vertexData.VertexData;
+import fuse.render.shader.FuseShader;
+import fuse.render.shader.FuseShaders;
 import openfl.Vector;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DBufferUsage;
@@ -26,14 +29,53 @@ class ShaderProgram
 	public var indexbuffer:IndexBuffer3D;
 	public var indices:ByteArray;
 	
-	var baseShader:BaseShader;
+	var baseShader = new Notifier<FuseShader>();
 	var program:Program3D;
 	var numOfQuads:Int;
 	var context3D:Context3D;
 	
+	static var textureChannelData:Vector<Float>;
+	static var posData:Vector<Float>;
+	static var fragmentData:Vector<Float>;
+	
 	static function init():Void
 	{
 		if (BASE_INDICES != null) return;
+		
+		// FRAGMENT
+		fragmentData = Vector.ofArray(
+		[
+			0, 255, 1.0, 2.0
+		]);
+		
+		// VERTEX
+		textureChannelData = Vector.ofArray(
+		[
+			1.0, 0.0, 0.0, 0.0,
+			0.0, 1.0, 0.0, 0.0,
+			0.0, 0.0, 1.0, 0.0,
+			0.0, 0.0, 0.0, 1.0,
+			
+			0.0, 0.0, 0.0, 0.0,
+			0.0, 0.0, 0.0, 0.0,
+			0.0, 0.0, 0.0, 0.0,
+			0.0, 0.0, 0.0, 0.0,
+			
+			0.0, 0.0, 0.0, 0.0,
+			0.0, 0.0, 0.0, 0.0,
+			0.0, 0.0, 0.0, 0.0,
+			0.0, 0.0, 0.0, 0.0,
+			
+			1.0, 0.0, 0.0, 0.0,
+			0.0, 1.0, 0.0, 0.0,
+			0.0, 0.0, 1.0, 0.0,
+			0.0, 0.0, 0.0, 1.0
+		]);
+		
+		posData = Vector.ofArray(
+		[
+			8.0, 0.0, 0.0, 1.0
+		]);
 		
 		BASE_INDICES = new ByteArray();
 		BASE_INDICES.endian = Endian.LITTLE_ENDIAN;
@@ -45,16 +87,15 @@ class ShaderProgram
 		
 		this.context3D = context3D;
 		this.numOfQuads = numOfQuads;
-		baseShader = new BaseShader();
 		
 		indices = ShaderProgram.BASE_INDICES;
 		indices.position = 0;
 		indices.length = numOfQuads * 2;
 		
-		context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, baseShader.fragmentData, 1);
+		context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentData, 1);
 		
-		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, baseShader.textureChannelData, 4);
-		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, baseShader.posData, 1);
+		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, textureChannelData, 16);
+		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 16, posData, 1);
 		
 		for (i in 0...numOfQuads) {
 			indices.writeShort((i * ShaderProgram.VERTICES_PER_QUAD) + 0);
@@ -77,15 +118,30 @@ class ShaderProgram
 		);
 		
 		program = context3D.createProgram();
-		program.upload(baseShader.vertexCode, baseShader.fragmentCode);
+		
+		baseShader.change.add(OnShaderChange);
+		baseShader.value = FuseShaders.currentShader;
 		
 		#if debug
 		debugIndex(indices, numOfQuads, 0);
 		#end
 	}
 	
+	function OnShaderChange() 
+	{
+		program.upload(baseShader.value.vertexCode, baseShader.value.fragmentCode);
+		
+	}
+	
+	//function OnCurrentShaderChange() 
+	//{
+		//baseShader = FuseShaders.CURRENT_SHADER.value;
+		//program.upload(baseShader.vertexCode, baseShader.fragmentCode);
+	//}
+	
 	public function update() 
 	{
+		//FuseShaders.CURRENT_SHADER.change.add(OnCurrentShaderChange);
 		// Vertex x y position x,y
 		context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
 		// RGB-UV x,y | Mask-UV
@@ -94,7 +150,11 @@ class ShaderProgram
 		context3D.setVertexBufferAt(2, vertexbuffer, 6, Context3DVertexBufferFormat.BYTES_4);
 		// RGB-TextureIndex x | Mask-TextureIndex y | Alpha Value z
 		context3D.setVertexBufferAt(3, vertexbuffer, 7, Context3DVertexBufferFormat.FLOAT_4);
-		
+	}
+	
+	public function setBaseShader() 
+	{
+		baseShader.value = FuseShaders.currentShader;
 	}
 	
 	#if debug
@@ -117,6 +177,7 @@ class ShaderProgram
 	
 	public function clear():Void
 	{
+		//FuseShaders.CURRENT_SHADER.change.remove(OnCurrentShaderChange);
 		context3D.setVertexBufferAt(0, null);
 		context3D.setVertexBufferAt(1, null);
 		context3D.setVertexBufferAt(2, null);

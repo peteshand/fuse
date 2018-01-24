@@ -13,15 +13,25 @@ import fuse.utils.GcoArray;
 class BaseBatch
 {
 	var batchTextures:BatchTextures;
-	var batchData:IBatchData;
+	public var batchData:IBatchData;
 	public var index:Int = -1;
 	public var renderables:GcoArray<ICoreRenderable>;
+	public var lastRenderables:GcoArray<ICoreRenderable>;
 	public var renderTarget:Null<Int>;
+	
+	static var count:Int = 0;
+	var batchId:Int;
+	
+	// true if the order of renderables or which renderables are included in the batch have changed
+	public var hasChanged:Bool = false;
+	//public var hasChanged(get, null):Bool;
 	
 	public function new() 
 	{
+		batchId = count++;
 		batchTextures = new BatchTextures();
 		renderables = new GcoArray<ICoreRenderable>([]);
+		lastRenderables = new GcoArray<ICoreRenderable>([]);
 	}
 	
 	public function init(index:Int):Void
@@ -67,19 +77,52 @@ class BaseBatch
 		//batchData.clearRenderTarget =						// Currently not set anywhere
 		//batchData.height = 								// Not sure if this is needed
 		//batchData.length = 								// Not sure if this is needed
+		
+		//trace("renderTarget = " + renderTarget);
+		
+		batchData.skip = 0;
 		batchData.numItems = renderables.length;
 		batchData.numTextures = batchTextures.textureIds.length;
 		batchData.renderTargetId = renderTarget;
 		batchData.startIndex = VertexWriter.VERTEX_COUNT;
+		
+		//trace("batchTextures.textureIds = " + batchTextures.textureIds);
+		
 		batchData.textureId1 = batchTextures.textureId1;
 		batchData.textureId2 = batchTextures.textureId2;
 		batchData.textureId3 = batchTextures.textureId3;
 		batchData.textureId4 = batchTextures.textureId4;
+		batchData.textureId5 = batchTextures.textureId5;
+		batchData.textureId6 = batchTextures.textureId6;
+		batchData.textureId7 = batchTextures.textureId7;
+		batchData.textureId8 = batchTextures.textureId8;
 		//batchData.width = 								// Not sure if this is needed
 	}
 	
 	public function toString():String
 	{
-		return Type.getClassName(Type.getClass(this)) + "\nindex = " + index + "\nrenderTarget = " + renderTarget + " \nbatchTextures = " + batchTextures;
+		return Type.getClassName(Type.getClass(this)) + "\nindex = " + index + "\nrenderTarget = " + renderTarget + " \nbatchTextures = " + batchTextures + " \nnumItems = " + renderables.length;
+	}
+	
+	public function updateHasChanged():Void 
+	{
+		hasChanged = false;
+		if (lastRenderables.length != renderables.length) {
+			hasChanged = true;
+		}
+		else {
+			for (i in 0...renderables.length) 
+			{
+				if (renderables[i] != lastRenderables[i]) {
+					hasChanged = true;
+					break;
+				}
+			}
+		}
+		lastRenderables.clear();
+		for (i in 0...renderables.length) 
+		{
+			lastRenderables.push(renderables[i]);
+		}
 	}
 }

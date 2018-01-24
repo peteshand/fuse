@@ -18,7 +18,7 @@ class DisplayList
 	var hierarchyChangeCount:Int = 0;
 	
 	public var stage:CoreDisplayObject;
-	var map:Map<Int, CoreDisplayObject> = new Map<Int, CoreDisplayObject>();
+	public var map:Map<Int, CoreDisplayObject> = new Map<Int, CoreDisplayObject>();
 	var transformDataMap:Map<Int, IDisplayData> = new Map<Int, IDisplayData>();
 	
 	public function new() 
@@ -75,12 +75,15 @@ class DisplayList
 	
 	inline function getDisplayFromPool(displayType:Int):CoreDisplayObject
 	{
-		if (displayType == DisplayType.STAGE)			return new CoreStage();
-		if (displayType == DisplayType.SPRITE)			return Pool.sprites.request();
-		if (displayType == DisplayType.DISPLAY_OBJECT)	return Pool.displayObjects.request();
-		if (displayType == DisplayType.IMAGE)			return Pool.images.request();
-		if (displayType == DisplayType.QUAD)			return Pool.quads.request();
-		return null;
+		switch displayType {
+			case DisplayType.STAGE:				return new CoreStage();
+			case DisplayType.SPRITE:			return Pool.sprites.request();
+			case DisplayType.DISPLAY_OBJECT:	return Pool.displayObjects.request();
+			case DisplayType.IMAGE:				return Pool.images.request();
+			case DisplayType.MOVIECLIP:			return Pool.movieclips.request();
+			case DisplayType.QUAD:				return Pool.quads.request();
+			default: return null;
+		}
 	}
 	
 	function getParent(parentId:Int):CoreInteractiveObject
@@ -132,7 +135,7 @@ class DisplayList
 	
 	public function checkForDisplaylistChanges() 
 	{
-		if (hierarchyChangeCount <= 1){
+		if (hierarchyChangeCount < 1){
 			hierarchyBuildRequired = true;
 		}
 		else {

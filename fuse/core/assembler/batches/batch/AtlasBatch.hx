@@ -1,6 +1,7 @@
 package fuse.core.assembler.batches.batch;
 
 import fuse.core.assembler.atlas.partition.AtlasPartition;
+import fuse.core.assembler.atlas.sheet.AtlasSheet;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.assembler.vertexWriter.VertexWriter;
 import fuse.core.communication.data.textureData.ITextureData;
@@ -29,7 +30,15 @@ class AtlasBatch extends BaseBatch implements IBatch
 	
 	public function writeVertex() 
 	{
-		batchData.clearRenderTarget = 1;
+		//if (AtlasSheet.shouldClear) {
+			batchData.clearRenderTarget = 1;
+		/*}
+		else {
+			batchData.clearRenderTarget = 0;
+		}*/
+		
+		trace(this);
+		
 		setBatchProps();
 		
 		for (i in 0...renderables.length) 
@@ -38,6 +47,8 @@ class AtlasBatch extends BaseBatch implements IBatch
 			//renderables[i].writeVertex();
 			writePartitionVertex(untyped renderables[i]);
 		}
+		
+		return true;
 	}
 	
 	function writePartitionVertex(partition:AtlasPartition) 

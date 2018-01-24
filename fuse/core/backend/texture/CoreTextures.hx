@@ -17,14 +17,19 @@ class CoreTextures
 	
 	public function checkForTextureChanges():Void 
 	{
-		for (i in 0...textures.length) 
-			if (textures[i].textureHasChanged) count = -1;
+		for (i in 0...textures.length) {
+			if (textures[i].textureHasChanged) {
+				count = -1;
+			}
+		}
 		
 		count++;
 		if (count <= 2) {
 			texturesHaveChanged = true;
 		}
-		texturesHaveChanged = false;
+		else {
+			texturesHaveChanged = false;
+		}
 	}
 	
 	public function create(textureId:Int) 

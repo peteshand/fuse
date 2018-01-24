@@ -60,6 +60,7 @@ class Textures
 	static public function registerTexture(textureId:Int, texture:Texture):Void
 	{
 		if (!textures.exists(textureId)) {
+			//trace("textureId = " + textureId);
 			textures.set(textureId, texture);
 			textureCount++;
 			//trace("textureCount = " + textureCount);
@@ -76,7 +77,11 @@ class Textures
 	static inline public function getTextureBase(textureId:Int):TextureBase
 	{
 		var texture:Texture = getTexture(textureId);
-		if (texture == null) return null;
+		if (texture == null) {
+			//trace("No texture found for textureId: " + textureId);
+			return null;
+		}
+		//if (texture.textureBase == null) trace("texture.textureBase = null");
 		return texture.textureBase;
 	}
 

@@ -16,6 +16,19 @@ import openfl.geom.Point;
 class WorkerTransformHelper
 {
 	static var clearMatrix:FastMatrix3;
+	
+	static var applyRotation:Int;
+	static var applyPosition:Int;
+	static var x:Float;
+	static var y:Float;
+	static var width:Float;
+	static var height:Float;
+	static var scaleX:Float;
+	static var scaleY:Float;
+	static var pivotX:Float;
+	static var pivotY:Float;
+	static var rotation:Float;
+	
 	static function __init__():Void
 	{
 		clearMatrix = FastMatrix3.identity();
@@ -35,20 +48,28 @@ class WorkerTransformHelper
 		//}
 		//Graphics.color = color.value;
 		
-		var applyRotation:Int = 0;
-		var applyPosition:Int = 0;
-		if (coreDisplay.isStatic == 0) applyRotation = 1;
-		if (coreDisplay.isStatic == 0) applyPosition = 1;
+		applyRotation = 0;
+		applyPosition = 0;
 		
-		var x:Float = coreDisplay.displayData.x;
-		var y:Float = coreDisplay.displayData.y;
-		var width:Float = coreDisplay.displayData.width;
-		var height:Float = coreDisplay.displayData.height;
-		var scaleX:Float = coreDisplay.displayData.scaleX;
-		var scaleY:Float = coreDisplay.displayData.scaleY;
-		var pivotX:Float = coreDisplay.displayData.pivotX;
-		var pivotY:Float = coreDisplay.displayData.pivotY;
-		var rotation:Float = coreDisplay.displayData.rotation;
+		
+		if (coreDisplay.displayData.isRotating == 1) {
+			coreDisplay.displayData.isRotating = 0;
+			applyRotation = 1;
+		}
+		if (coreDisplay.displayData.isMoving == 1) {
+			coreDisplay.displayData.isMoving = 0;
+			applyPosition = 1;
+		}
+		
+		x = coreDisplay.displayData.x;
+		y = coreDisplay.displayData.y;
+		width = coreDisplay.displayData.width;
+		height = coreDisplay.displayData.height;
+		scaleX = coreDisplay.displayData.scaleX;
+		scaleY = coreDisplay.displayData.scaleY;
+		pivotX = coreDisplay.displayData.pivotX;
+		pivotY = coreDisplay.displayData.pivotY;
+		rotation = coreDisplay.displayData.rotation;
 		
 		
 		WorkerTransformHelper.clear(coreDisplay.transformData.localTransform);

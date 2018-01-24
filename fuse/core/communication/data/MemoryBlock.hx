@@ -33,7 +33,7 @@ class MemoryBlock
 		return Memory.getFloat(start + offset);
 	}
 	
-	public inline function readInt(offset:Int):Int 
+	public inline function readInt(offset:Int):UInt 
 	{
 		return Memory.getI32(start + offset);
 	}
@@ -55,7 +55,7 @@ class MemoryBlock
 		Memory.setFloat(start + offset, value);
 	}
 	
-	public function writeInt(offset:Int, value:Int):Void 
+	public function writeInt(offset:Int, value:UInt):Void 
 	{
 		Memory.setI32(start + offset, value);
 	}

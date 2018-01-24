@@ -27,9 +27,11 @@ class AtlasBufferAssembler
 	static public function build() 
 	{
 		AtlasSheet.active = false;
+		
 		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged) {
 			AtlasTextures.build();
 			AtlasSheet.build();	
+			trace(["Build Atlas", DisplayList.hierarchyBuildRequired, CoreTextures.texturesHaveChanged]);
 		}
 	}
 }

@@ -17,6 +17,7 @@ class AtlasSheet
 {
 	public static var activePartitions = new GcoArray<AtlasPartition>([]);
 	public static var active:Bool = false;
+	//static var shouldClear:Bool = false;
 	
 	static var availablePartition = new GcoArray<AtlasPartition>([]);
 	static var texturesPerBatch:Int = 4;
@@ -46,21 +47,30 @@ class AtlasSheet
 		}
 	}
 	
-	static public function build() 
+	static public function build(shouldClear:Bool=false) 
 	{
 		active = true;
-		clear();
+		
+		//AtlasSheet.shouldClear = shouldClear;
+		//if (shouldClear) {
+			clear();
+		//}
 		
 		for (i in 0...AtlasTextures.textures.length) 
 		{
-			place(AtlasTextures.textures[i]);
+			/*var successfulPlacement:Bool =*/ place(AtlasTextures.textures[i]);
+			/*if (shouldClear == false && !successfulPlacement) {
+				build(true);
+				return;
+			}*/
 		}
-		//drawActive();
 	}
 	
-	static inline function place(coreTexture:CoreTexture) 
+	static inline function place(coreTexture:CoreTexture)
 	{
-		if (coreTexture.textureData.directRender == 1) return;
+		//if (coreTexture.textureData.directRender == 1) return; // already checked in AtlasTextures
+		
+		//if (coreTexture.textureData.placed == 1) return true;
 		
 		var textureData:ITextureData = coreTexture.textureData;
 		var successfulPlacement:Bool = false;
@@ -112,5 +122,7 @@ class AtlasSheet
 		if (!successfulPlacement) {
 			trace("Failed to place texture in AtlasBuffer, will need to render texture directly; " + coreTexture.textureId);
 		}
+		
+		//return successfulPlacement;
 	}
 }

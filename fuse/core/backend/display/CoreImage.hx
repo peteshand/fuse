@@ -46,15 +46,17 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	override function calculateTransform() 
 	{
-		isStatic = displayData.isStatic;
-		if (Core.RESIZE) isStatic = 0;
-		
-		displayData.isStatic = 1; // reset static prop
+		setIsStatic();
+		updateTransform();
+	}
+	
+	override function updateTransform() 
+	{
+		combinedAlpha = Graphics.alpha * displayData.alpha;
 		
 		if (isStatic == 0) {
 			textureId = displayData.textureId;
 			renderLayer = displayData.renderLayer;
-			combinedAlpha = Graphics.alpha * displayData.alpha;
 			WorkerTransformHelper.update(this);
 		}
 	}
@@ -84,10 +86,10 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		return value;
 	}
 	
-	override function beginSetChildrenIsStatic(value:Bool) 
-	{
-		
-	}
+	//override function beginSetChildrenIsStatic(value:Bool) 
+	//{
+		//
+	//}
 	
 	override public function buildHierarchy() 
 	{

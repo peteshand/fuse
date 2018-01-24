@@ -15,6 +15,7 @@ class LayerBuffer
 	
 	/*Holds all images contained in this layer*/
 	public var renderables = new GcoArray<ICoreRenderable>([]);
+	public var lastRenderables = new GcoArray<ICoreRenderable>([]);
 	
 	/*Defines if the images contained in this layer are static or moving*/
 	public var isStatic:Int;
@@ -27,13 +28,17 @@ class LayerBuffer
 	
 	/*Defines if the layer is static and is active.
 	Because there are a limited number of layer buffers, only the layers with the most images will be active*/
-	public var active:Bool;
+	public var isCacheLayer:Bool;
 	
 	/*Defines if the images have been baked into the layer*/
 	public var baked(get, null):Bool;
 	
 	/*renderImages will equal true if isStatic or baked are false*/  
 	public var renderImages(get, null):Bool;
+	
+	// true if the order of renderables or which renderables are included in the layer have changed
+	//public var _hasChanged:Bool = false;
+	//public var hasChanged(get, null):Bool;
 	
 	public function new() 
 	{
@@ -42,7 +47,7 @@ class LayerBuffer
 	
 	public function init(isStatic:Int, index:Int) 
 	{
-		active = false;
+		isCacheLayer = false;
 		renderTarget = -1;
 		this.isStatic = isStatic;	
 		this.index = index;
@@ -62,7 +67,7 @@ class LayerBuffer
 		//{
 			//c.renderables.push(renderables[i]);
 		//}
-		c.active = active;
+		c.isCacheLayer = isCacheLayer;
 		return c;
 	}
 	
@@ -78,8 +83,43 @@ class LayerBuffer
 	
 	inline function get_renderImages():Bool 
 	{
-		if (!active) return true;
+		if (!isCacheLayer) return true;
 		if (!baked) return true;
 		return false;
 	}
+	
+	public function objectIds():String
+	{
+		var s:String = "[ ";
+		for (i in 0...renderables.length) 
+		{
+			s += renderables[i].objectId;
+			if (i < renderables.length - 1) s += ",";
+		}
+		s += " ]";
+		return s;
+	}
+	
+	//function get_hasChanged():Bool 
+	//{
+		//_hasChanged = false;
+		//if (lastRenderables.length != renderables.length) {
+			//_hasChanged = true;
+		//}
+		//else {
+			//for (i in 0...renderables.length) 
+			//{
+				//if (renderables[i] != lastRenderables[i]) {
+					//_hasChanged = true;
+					//break;
+				//}
+			//}
+		//}
+		//lastRenderables.clear();
+		//for (i in 0...renderables.length) 
+		//{
+			//lastRenderables.push(renderables[i]);
+		//}
+		//return _hasChanged;
+	//}
 }
