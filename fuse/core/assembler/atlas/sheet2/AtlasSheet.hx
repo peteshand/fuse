@@ -1,4 +1,4 @@
-package fuse.core.assembler.atlas.partition;
+package fuse.core.assembler.atlas.sheet2;
 
 import fuse.core.assembler.atlas.partition.AtlasPartition;
 import fuse.core.assembler.atlas.placer.AtlasPartitionPlacer;
