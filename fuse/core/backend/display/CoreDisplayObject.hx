@@ -93,23 +93,7 @@ class CoreDisplayObject
 	inline function pushTransform() 
 	{
 		Graphics.pushTransformation(transformData.localTransform, isStatic);
-		
-		// Not sure if this is used anymore
-		//transformData.globalTransform.setFrom(transformData.localTransform);
 	}
-	
-	//function beginSetChildrenIsStatic(value:Bool) 
-	//{
-		//// CoreInteractiveObject will override
-	//}
-	
-	//function setChildrenIsStatic(value:Bool) 
-	//{
-		//if (value) {
-			//parentNonStatic = true;
-			//displayData.isStatic = 0;
-		//}
-	//}
 	
 	function popTransform() 
 	{
@@ -162,23 +146,10 @@ class CoreDisplayObject
 	function get_area():Float 
 	{
 		return displayData.width * displayData.height;
-		//return (displayData.width / Core.STAGE_WIDTH * 2) * (displayData.height / Core.STAGE_HEIGHT * 2);
-		//return (displayData.width / Core.STAGE_WIDTH) * (displayData.height / Core.STAGE_HEIGHT);
 	}
 	
 	function get_diagonal():Float 
 	{
 		return Math.sqrt(Math.pow(quadData.topRightX - quadData.topLeftX, 2) + Math.pow(quadData.bottomLeftY - quadData.topLeftY, 2));
-		//return Math.sqrt(Math.pow(displayData.width, 2) + Math.pow(displayData.height, 2));
 	}
-	
-	//function get_hProps():Array<Float> 
-	//{
-		//return [bottomLeftX, topLeftX, topRightX, bottomRightX];
-	//}
-	//
-	//function get_vProps():Array<Float> 
-	//{
-		//return [bottomLeftY, topLeftY, topRightY, bottomRightY];
-	//}
 }
