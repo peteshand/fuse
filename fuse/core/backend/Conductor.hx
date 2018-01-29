@@ -6,8 +6,8 @@ import fuse.core.communication.data.conductorData.ConductorData;
 import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.data.WorkerSharedProperties;
-import fuse.core.utils.WorkerInfo;
-import msignal.Signal.Signal0;
+import fuse.info.WorkerInfo;
+import fuse.signal.Signal0;
 import openfl.Lib;
 import openfl.events.Event;
 import openfl.events.TimerEvent;
@@ -108,7 +108,7 @@ class Conductor
 	
 	static private function OnUpdate(e:Event):Void 
 	{
-		#if flash
+		#if air
 			//trace([Conductor.index, "threadActive = " + Conductor.threadActive]);
 			
 			if (WorkerInfo.usingWorkers)

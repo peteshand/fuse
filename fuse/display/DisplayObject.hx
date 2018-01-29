@@ -7,8 +7,8 @@ import fuse.core.input.Touch;
 import fuse.display.Stage;
 import fuse.utils.Color;
 import fuse.Fuse;
-import msignal.Signal.Signal0;
-import msignal.Signal.Signal1;
+import fuse.signal.Signal0;
+import fuse.signal.Signal1;
 import openfl.events.MouseEvent;
 
 @:access(fuse)

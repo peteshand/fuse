@@ -7,8 +7,6 @@ import fuse.core.backend.display.CoreImage;
 import fuse.core.input.Touch;
 import fuse.display.geometry.Bounds;
 import fuse.utils.GcoArray;
-import fuse.utils.Notifier;
-import fuse.utils.Rect;
 import openfl.events.MouseEvent;
 
 /**

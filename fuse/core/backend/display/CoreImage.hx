@@ -9,7 +9,6 @@ import fuse.core.communication.data.vertexData.IVertexData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.utils.Pool;
 import fuse.display.geometry.Bounds;
-import fuse.utils.Rect;
 
 /**
  * ...

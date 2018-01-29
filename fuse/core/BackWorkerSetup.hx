@@ -1,11 +1,11 @@
 package fuse.core;
 
 import fuse.core.backend.CoreEntryPoint;
-import fuse.core.utils.WorkerInfo;
+import fuse.info.WorkerInfo;
 
 import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.WorkerlessComms;
-#if flash
+#if air
 import fuse.core.communication.WorkerComms;
 #end
 /**
@@ -25,7 +25,7 @@ class BackWorkerSetup extends WorkerSetup
 	override public function init():Void
 	{
 		var workerComms:IWorkerComms = null;
-		#if flash
+		#if air
 		if (WorkerInfo.usingWorkers) {
 			workerComms = new WorkerComms();
 		}

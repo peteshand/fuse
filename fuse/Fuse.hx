@@ -4,7 +4,7 @@ import fuse.core.backend.WorkerThread;
 import fuse.core.front.FuseConfig;
 import fuse.core.front.MainThread;
 import fuse.core.messenger.MessageManager;
-import fuse.core.utils.WorkerInfo;
+import fuse.info.WorkerInfo;
 import fuse.display.DisplayObject;
 import fuse.display.Stage;
 import fuse.events.FuseEvent;

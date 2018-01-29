@@ -1,7 +1,7 @@
 package fuse.render;
 
 import fuse.utils.PlayerVersion;
-import msignal.Signal.Signal0;
+import fuse.signal.Signal0;
 import openfl.Lib;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DProfile;
@@ -29,7 +29,7 @@ class Context3DSetup
 	
 	public function new() 
 	{
-		#if flash
+		#if air
 			//if (PlayerVersion.majorMinor >= 25.0) profiles.push(Context3DProfile.ENHANCED);
 			//if (PlayerVersion.majorMinor >= 17.0) profiles.push(Context3DProfile.STANDARD_EXTENDED);
 			if (PlayerVersion.majorMinor >= 16.0) profiles.push(Context3DProfile.STANDARD);
@@ -88,7 +88,7 @@ class Context3DSetup
 			}
 		}
 		else {
-			#if flash
+			#if air
 				sharedContext = true;
 			#end
 			context3D = stage3D.context3D;

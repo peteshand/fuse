@@ -10,7 +10,7 @@ import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.messenger.MessageManager;
 import fuse.core.messenger.Messenger;
-import fuse.core.utils.WorkerInfo;
+import fuse.info.WorkerInfo;
 
 import fuse.core.communication.memory.Memory;
 import openfl.utils.ByteArray;
@@ -73,7 +73,7 @@ class SharedMemory
 		memory = value;
 		memory.length = memorySize + memorySize;
 		
-		#if flash
+		#if air
 			//memory.shareable = true;
 			if (WorkerInfo.isMainThread) {
 				Reflect.setProperty(memory, "shareable", true);

@@ -6,7 +6,7 @@ import flash.events.Event;
 import fuse.Fuse;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.communication.data.conductorData.ConductorData;
-import fuse.core.utils.WorkerInfo;
+import fuse.info.WorkerInfo;
 import fuse.display.DisplayObject;
 import fuse.core.utils.Pool;
 import fuse.display.DisplayObjectContainer;
@@ -15,7 +15,7 @@ import fuse.display.Stage;
 import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.WorkerlessComms;
 
-#if flash
+#if air
 import fuse.core.communication.WorkerComms;
 import flash.system.Worker;
 import flash.concurrent.Condition;
@@ -23,7 +23,7 @@ import flash.concurrent.Mutex;
 #end
 
 import fuse.core.backend.CoreEntryPoint;
-import msignal.Signal.Signal0;
+import fuse.signal.Signal0;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.messageData.WorkerPayload;
 import fuse.core.communication.data.WorkerSharedProperties;
@@ -45,7 +45,7 @@ class WorkerSetup
 	public var onReady = new Signal0();
 	var workerStartCount:Int = 0;
 	
-	#if flash
+	#if air
 	public var condition:Condition;
 	#end
 	
@@ -58,7 +58,7 @@ class WorkerSetup
 	
 	function setProperties(workerComm:IWorkerComms, i:Int) 
 	{
-		#if flash
+		#if air
 		workerComm.setSharedProperty(WorkerSharedProperties.CONDITION, condition);
 		#end
 		
@@ -203,7 +203,7 @@ class WorkerSetup
 	
 	public function lock() 
 	{
-		#if flash
+		#if air
 			if (WorkerInfo.usingWorkers){
 				condition.mutex.lock();
 			}
@@ -212,7 +212,7 @@ class WorkerSetup
 	
 	public function unlock() 
 	{
-		#if flash
+		#if air
 			if (WorkerInfo.usingWorkers) {
 				condition.notifyAll();
 				condition.mutex.unlock();

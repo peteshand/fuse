@@ -4,7 +4,7 @@ import flash.events.Event;
 import flash.system.MessageChannel;
 import flash.system.Worker;
 import flash.system.WorkerDomain;
-import fuse.core.utils.WorkerInfo;
+import fuse.info.WorkerInfo;
 import openfl.Lib;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.data.WorkerMessage;

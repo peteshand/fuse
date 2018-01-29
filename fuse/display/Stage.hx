@@ -4,7 +4,7 @@ import fuse.core.backend.displaylist.DisplayType;
 import fuse.display.Sprite;
 import fuse.display.Quad;
 import fuse.Fuse;
-import msignal.Signal.Signal1;
+import fuse.signal.Signal1;
 
 import openfl.Lib;
 import openfl.events.Event;

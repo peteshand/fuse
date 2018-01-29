@@ -2,7 +2,7 @@ package fuse.core;
 
 import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.WorkerlessComms;
-#if flash
+#if air
 import fuse.core.communication.WorkerComms;
 import flash.system.Worker;
 import flash.concurrent.Condition;
@@ -10,7 +10,7 @@ import flash.concurrent.Mutex;
 #end
 import fuse.core.communication.data.conductorData.ConductorData;
 import fuse.core.communication.memory.SharedMemory;
-import fuse.core.utils.WorkerInfo;
+import fuse.info.WorkerInfo;
 
 /**
  * ...
@@ -29,7 +29,7 @@ class FrontWorkerSetup extends WorkerSetup
 	
 	override public function init():Void
 	{
-		#if flash
+		#if air
 		condition = new Condition(new Mutex());
 		#end
 		
@@ -38,7 +38,7 @@ class FrontWorkerSetup extends WorkerSetup
 		Fuse.current.conductorData.frameIndex = 0;
 		
 		var workerComm:IWorkerComms = null;
-		#if flash
+		#if air
 		if (WorkerInfo.usingWorkers) {
 			for (i in 0...WorkerInfo.numberOfWorkers) 
 			{
@@ -58,7 +58,7 @@ class FrontWorkerSetup extends WorkerSetup
 			setProperties(workerComm, 0);
 			addListeners(workerComm);
 			workerComms.push(workerComm);
-		#if flash
+		#if air
 		}
 		#end
     }

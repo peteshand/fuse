@@ -22,19 +22,42 @@ class Keyboard
 		return keyboardListener;
 	}
 	
-	static public function onRelease(key:Key, callback:Dynamic, parameter:Array<Dynamic>):KeyboardListener
+	static public function onRelease(key:Key, callback:Dynamic, parameter:Array<Dynamic>=null):KeyboardListener
 	{
 		var keyboardListener = new KeyboardListener(key, callback, parameter, KeyState.RELEASE);
 		items.push(keyboardListener);
 		return keyboardListener;
 	}
+	
+	static public function removePress(callback:Dynamic):Void
+	{
+		remove(callback, KeyState.PRESS);
+	}
+	
+	static public function removeRelease(callback:Dynamic):Void
+	{
+		remove(callback, KeyState.RELEASE);
+	}
+	
+	static inline function remove(callback:Dynamic, state:KeyState):Void
+	{
+		var i:Int = items.length - 1;
+		while (i >= 0) 
+		{
+			if (items[i].callback == callback && items[i].keyState == state) {
+				items[i].dispose();
+				items.splice(i, 1);
+			}
+		}
+	}
 }
 
 class KeyboardListener
 {
-	var callback:Dynamic;
-	var key:Key;
-	var keyState:KeyState;
+	@:isVar public var key(default, null):Key;
+	@:isVar public var keyState(default, null):KeyState;
+	@:isVar public var callback(default, null):Dynamic;
+	
 	var parameter:Array<Dynamic>;
 	var _shift:Bool = false;
 	var _ctrl:Bool = false;
@@ -49,6 +72,12 @@ class KeyboardListener
 		
 		if (keyState == KeyState.PRESS) Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, OnKeyDown);
 		if (keyState == KeyState.RELEASE) Lib.current.stage.addEventListener(KeyboardEvent.KEY_UP, OnKeyUp);
+	}
+	
+	public function dispose() 
+	{
+		Lib.current.stage.removeEventListener(KeyboardEvent.KEY_DOWN, OnKeyDown);
+		Lib.current.stage.removeEventListener(KeyboardEvent.KEY_UP, OnKeyUp);
 	}
 	
 	public function shift(value:Bool):KeyboardListener

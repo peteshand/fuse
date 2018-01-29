@@ -8,7 +8,7 @@ import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.communication.data.displayData.WorkerDisplayData;
 import fuse.core.communication.data.textureData.TextureData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
-import fuse.core.utils.WorkerInfo;
+import fuse.info.WorkerInfo;
 
 /**
  * ...

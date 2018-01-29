@@ -1,5 +1,5 @@
 package fuse.state;
-import com.imagination.core.managers.state.StateManager;
+import fuse.utilsSort.state.State;
 import fuse.air.sample.view.fuse.BaseView;
 import fuse.air.sample.view.shell.back.BackBtnView;
 
@@ -11,9 +11,9 @@ class ViewManager
 {
 	public function new() { }
 	
-	public static function define(parent:Dynamic, view:Class<BaseView>, stateManager:StateManager, params:Array<Dynamic>=null):Void 
+	public static function define(parent:Dynamic, view:Class<BaseView>, state:State, params:Array<Dynamic>=null):Void 
 	{
-		new ViewManagerItem(parent, view, stateManager, params);
+		new ViewManagerItem(parent, view, state, params);
 	}
 }
 
@@ -23,15 +23,15 @@ class ViewManagerItem
 	private var ViewClass:Class<BaseView>;
 	private var params:Array<Dynamic>;
 	
-	public function new(parent:Dynamic, ViewClass:Class<BaseView>, stateManager:StateManager, params:Array<Dynamic>=null) 
+	public function new(parent:Dynamic, ViewClass:Class<BaseView>, state:State, params:Array<Dynamic>=null) 
 	{
 		this.parent = parent;
 		this.ViewClass = ViewClass;
 		this.params = params;
 		
-		stateManager.onActive.add(OnActive);
-		stateManager.onInactive.add(OnInactive);
-		if (stateManager.isActive) {
+		state.onActive.add(OnActive);
+		state.onInactive.add(OnInactive);
+		if (state.isActive) {
 			OnActive();
 		}
 	}
@@ -68,7 +68,7 @@ class ViewCleanup
 	inline function CreateView() 
 	{
 		currentView = Type.createInstance(ViewClass, params);
-		currentView.transition.onHideComplete.addOnce(OnHideComplete);
+		currentView.transition.onHideComplete.add(OnHideComplete, false);
 		parent.addChild(currentView);
 	}
 	

@@ -1,9 +1,9 @@
 package fuse.render.program;
 
-import com.imagination.core.type.Notifier;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.render.shader.FuseShader;
 import fuse.render.shader.FuseShaders;
+import fuse.utils.Notifier;
 import openfl.Vector;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DBufferUsage;
@@ -119,7 +119,7 @@ class ShaderProgram
 		
 		program = context3D.createProgram();
 		
-		baseShader.change.add(OnShaderChange);
+		baseShader.add(OnShaderChange);
 		baseShader.value = FuseShaders.currentShader;
 		
 		#if debug

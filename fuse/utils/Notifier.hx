@@ -16,6 +16,7 @@ class Notifier<T>
 	private var _value:T;
 	public var value(get, set):Null<T>;
 	private var callbacks:Array<Void -> Void>;
+	public var requireChange:Bool = true;
 	
 	public function new(?v:T) 
 	{
@@ -34,7 +35,7 @@ class Notifier<T>
 	
 	private inline function set_value(v:Null<T>):Null<T> 
 	{
-		if (_value == v) return v;
+		if (_value == v && requireChange) return v;
 		_value = v;
 		dispatch();
 		return v;
@@ -56,7 +57,13 @@ class Notifier<T>
 		}
 		callbacks.push(value);
 	}
-
+	
+	public function addOnce(value:Void -> Void) 
+	{
+		trace("TODO: add addOnce");
+		add(value);
+	}
+	
 	public function remove(value:Void -> Void):Void
 	{
 		initArray();
@@ -65,6 +72,16 @@ class Notifier<T>
 			if (callbacks[i] == value){
 				callbacks.splice(i, 1);
 			}
+			i--;
+		}
+	}
+	
+	public function removeAll() 
+	{
+		initArray();
+		var i:Int = callbacks.length-1;
+		while (i >= 0){
+			callbacks.splice(i, 1);
 			i--;
 		}
 	}

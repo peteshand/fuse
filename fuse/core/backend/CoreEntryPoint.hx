@@ -15,7 +15,7 @@ import fuse.core.communication.data.conductorData.ConductorData;
 import fuse.core.communication.IWorkerComms;
 import fuse.core.backend.Conductor;
 import fuse.core.communication.messageData.AddChildMsg;
-import fuse.core.utils.WorkerInfo;
+import fuse.info.WorkerInfo;
 import openfl.Lib;
 import openfl.events.Event;
 import openfl.utils.ByteArray;

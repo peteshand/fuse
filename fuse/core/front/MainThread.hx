@@ -17,7 +17,7 @@ import fuse.text.TextField;
 import openfl.display.Stage3D;
 import openfl.events.Event;
 
-import msignal.Signal.Signal0;
+import fuse.signal.Signal0;
 
 import openfl.Lib;
 

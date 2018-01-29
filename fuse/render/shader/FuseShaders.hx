@@ -1,5 +1,4 @@
 package fuse.render.shader;
-import com.imagination.core.type.Notifier;
 
 /**
  * ...

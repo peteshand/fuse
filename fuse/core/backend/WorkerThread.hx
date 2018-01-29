@@ -2,14 +2,14 @@ package fuse.core.backend;
 
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.input.Input;
-import fuse.core.utils.WorkerInfo;
+import fuse.info.WorkerInfo;
 import fuse.core.utils.Pool;
-import msignal.Signal.Signal0;
+import fuse.signal.Signal0;
 import openfl.Lib;
 
 import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.WorkerlessComms;
-#if flash
+#if air
 import fuse.core.communication.WorkerComms;
 #end
 

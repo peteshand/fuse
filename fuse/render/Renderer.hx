@@ -116,7 +116,7 @@ class Renderer
 	{
 		//trace("targetTextureId.value = " + targetTextureId.value);
 		if (targetTextureId.value == -1) {
-			#if flash
+			#if air
 				context3D.setRenderToTexture(null, false, 0, 0, 0);
 			#else
 				context3D.setRenderToBackBuffer();
@@ -300,7 +300,7 @@ class Renderer
 			//trace("numItemsInBatch = " + numItemsInBatch);
 			
 			context3D.drawTriangles(shaderProgram.value.indexbuffer, 0, numItemsInBatch * 2);
-			#if flash
+			#if air
 				itemCount += numItemsInBatch * ShaderProgram.INDICES_PER_QUAD;
 			#else
 				itemCount += numItemsInBatch * ShaderProgram.INDICES_PER_QUAD * 2;
