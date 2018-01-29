@@ -63,6 +63,7 @@ class DisplayObject
 		var id:Int = DisplayObject.objectIdCount++;
 		//displayData = new WorkerDisplayData(id);
 		displayData = untyped CommsObjGen.getDisplayData(id);
+		displayData.isMoving = 1;
 		
 		objectId = id;
 		
