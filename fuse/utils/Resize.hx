@@ -24,7 +24,11 @@ class Resize
 		
 		stage = Lib.current.stage;
 		stage.addEventListener(Event.RESIZE, OnStageResize);
-		stage.addEventListener(Event.FULLSCREEN, OnEnterFullscreen);
+		
+		#if air
+			stage.addEventListener(Event.FULLSCREEN, OnEnterFullscreen);
+		#end
+		
 		OnStageResize(null);
 		
 		Tick.addAt(OnTick, 0);

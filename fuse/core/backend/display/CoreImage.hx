@@ -28,7 +28,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public var renderLayer	:Int = 0;
 	
 	var drawIndex			:Int = -1;
-	var updateUVs			:Int = 0;
+	//var updateUVs			:Bool = false;
 	var renderTarget		:Int = -1;
 	
 	public function new() 
@@ -80,7 +80,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 				coreTexture = Core.textures.register(textureId);
 			}
 			
-			updateUVs = 0;
+			//updateUVs = true;
 		}
 		return value;
 	}
@@ -139,4 +139,6 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		
 		return bounds;
 	}
+	
+	
 }

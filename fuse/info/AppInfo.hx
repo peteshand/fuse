@@ -32,7 +32,7 @@ class AppInfo
 			if (stage == null || stage.window == null) return;
 			
 			appId = stage.window.application.config.packageName;
-			appFilename = stage.window.application.config.name;
+			//appFilename = stage.window.application.config.name;
 			version = stage.window.application.config.version;
 		#end
 	}

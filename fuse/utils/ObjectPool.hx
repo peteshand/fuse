@@ -26,7 +26,11 @@ class ObjectPool<T>
 		//trace(["request counter = " + counter, pool.length]);
 		
 		if (counter == pool.length) {
-			trace("Create New: " + _pooledType);
+			
+			//#if debug
+			//trace("Create New: " + _pooledType);
+			//#end
+			
 			pool[counter] = Type.createInstance(_pooledType, args);
 			//return pool[counter++];
 		}

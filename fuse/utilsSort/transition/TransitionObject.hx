@@ -154,7 +154,11 @@ class TransitionObject implements ITransitionObject
 			var setter:Float -> Void;
 			var plugin:Plugin = TransitionPlugins.getPlugin(target, property, option);
 			if (_hasSetter){
-				var innerSetter:Float->Void = untyped target["set_" + property];
+				#if air
+					var innerSetter:Float->Void = untyped target["set_" + property];
+				#else
+					var innerSetter:Float->Void = Reflect.getProperty(target, property);
+				#end
 				setter = plugin.setter(target, property, innerSetter, option);
 			}else{
 				setter = plugin.prop(target, property, option);
@@ -170,7 +174,11 @@ class TransitionObject implements ITransitionObject
 	function UpdateAutoVis() 
 	{
 		try {
-			visSetter = untyped option.autoVisObject["set_visible"];
+			#if air
+				visSetter = untyped option.autoVisObject["set_visible"];
+			#else
+				visSetter = Reflect.getProperty(option.autoVisObject, "visible");
+			#end
 		} catch ( e : Dynamic ) try {
 			visSetter = function(value:Bool):Bool { return option.autoVisObject.visible = value; };
 		}

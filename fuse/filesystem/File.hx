@@ -1,123 +1,243 @@
 package fuse.filesystem;
 
-#if js
-import openfl.net.SharedObject;
-
-#end
-
+import fuse.info.PlatformInfo;
+import openfl.net.FileFilter;
+import openfl.net.FileReference;
 
 /**
  * ...
- * @author Thomas Byrne
+ * @author P.J.Shand
  */
-#if air
-
-
-	typedef File = flash.filesystem.File;
-	
-	
-#elseif sys
-
-
-	abstract File(String)
+//#if air
+//
+	//typedef File = flash.filesystem.File;	
+	//
+//#elseif js
+	class File extends FileReference
 	{
-		public function new(path:String) 
+		@:isVar public static var applicationDirectory(get, null):File;
+		@:isVar public static var applicationStorageDirectory(get, null):File;
+		@:isVar public static var cacheDirectory(get, null):File;
+		@:isVar public static var desktopDirectory(get, null):File;
+		@:isVar public static var documentsDirectory(get, null):File;
+		@:isVar public static var userDirectory(get, null):File;
+		
+		static function __init__():Void
 		{
-			this = path;
+			applicationDirectory = new File("js://applicationDirectory");
+			applicationStorageDirectory = new File("js://applicationStorageDirectory");
+			cacheDirectory = new File("js://cacheDirectory");
+			desktopDirectory = new File("js://desktopDirectory");
+			documentsDirectory = new File("js://documentsDirectory");
+			userDirectory = new File("js://userDirectory");
 		}
 		
-		public function resolvePath(path:String):File
+		public static var lineEnding(get, never):String;
+		public static var permissionStatus(get, never):String;
+		public static var separator(get, null):String;
+		public static var systemCharset(default, never):String;
+		
+		public var downloaded:Bool;
+		public var exists(default,never):Bool;
+		//public var icon(default,never):flash.desktop.Icon;
+		public var isDirectory(default,never):Bool;
+		public var isHidden(default,never):Bool;
+		public var isPackage(default,never):Bool;
+		public var isSymbolicLink(default,never):Bool;
+		public var nativePath:String;
+		public var parent(default,never):File;
+		public var preventBackup:Bool;
+		public var spaceAvailable(default,never):Float;
+		public var url:String;
+		
+		var path:String;
+		
+		public function new(?path:String) 
 		{
-			return new File(this + "/" + path);
+			super();
+			this.path = path;
+			
 		}
 		
-		public function deleteFile():Void
+		public function browseForDirectory(title:String):Void
 		{
-			sys.FileSystem.deleteFile(this);
+			// TODO: implement
 		}
 		
-		public function deleteDirectory():Void
+		public function browseForOpen(title:String, ?typeFilter:Array<FileFilter>):Void
 		{
-			sys.FileSystem.deleteDirectory(this);
+			// TODO: implement
+		}
+		
+		public function browseForOpenMultiple(title:String, ?typeFilter:Array<FileFilter>):Void
+		{
+			// TODO: implement
+		}
+		
+		public function browseForSave(title:String):Void
+		{
+			// TODO: implement
+		}
+		
+		public function canonicalize():Void
+		{
+			// TODO: implement
+		}
+		
+		public function clone():File
+		{
+			// TODO: implement
+			return null;
+		}
+		
+		public function copyTo(newLocation:flash.net.FileReference, overwrite:Bool=false):Void
+		{
+			// TODO: implement
+		}
+		
+		public function copyToAsync(newLocation:flash.net.FileReference, overwrite:Bool=false):Void
+		{
+			// TODO: implement
 		}
 		
 		public function createDirectory():Void
 		{
-			sys.FileSystem.createDirectory(this);
+			// TODO: implement
+		}
+		
+		public function deleteDirectory(deleteDirectoryContents:Bool=false):Void
+		{
+			// TODO: implement
+		}
+		
+		public function deleteDirectoryAsync(deleteDirectoryContents:Bool=false):Void
+		{
+			// TODO: implement
+		}
+		
+		public function deleteFile():Void
+		{
+			// TODO: implement
+		}
+		
+		public function deleteFileAsync():Void
+		{
+			// TODO: implement
 		}
 		
 		public function getDirectoryListing():Array<File>
 		{
-			return cast sys.FileSystem.readDirectory(this);
+			// TODO: implement
+			return null;
 		}
 		
-		public var exists(get, never):Bool;
-		function get_exists():Bool 
+		public function getDirectoryListingAsync():Void
 		{
-			return sys.FileSystem.exists(this);
+			// TODO: implement
 		}
 		
-		public var isDirectory(get, never):Bool;
-		function get_isDirectory():Bool 
+		public function getRelativePath(ref:flash.net.FileReference, useDotDot:Bool=false):String
 		{
-			return sys.FileSystem.isDirectory(this);
+			// TODO: implement
+			return null;
 		}
 		
-		public var nativePath(get, never):String;
-		function get_nativePath():String 
+		public function moveTo(newLocation:flash.net.FileReference, overwrite:Bool=false):Void
 		{
-			return this;
-		}
-	}
-#elseif js
-	
-	class File
-	{
-		public static var documentsDirectory(get, null):File;
-		
-		@:allow(fuse.filesystem.FileStream)
-		private var sharedObject:SharedObject;
-		private var path:String;
-		public var nativePath(get, null):String;
-		public var exists(get, null):Bool;
-		
-		public function new(path:String) 
-		{
-			this.path = path;
-			init();
+			// TODO: implement
 		}
 		
-		private function init():Void
+		public function moveToAsync(newLocation:flash.net.FileReference, overwrite:Bool=false):Void
 		{
-			if (sharedObject == null) sharedObject = SharedObject.getLocal(path);
+			// TODO: implement
+		}
+		
+		public function moveToTrash():Void
+		{
+			// TODO: implement
+		}
+		
+		public function moveToTrashAsync():Void
+		{
+			// TODO: implement
+		}
+		
+		public function openWithDefaultApplication():Void
+		{
+			// TODO: implement
 		}
 		
 		public function resolvePath(path:String):File
 		{
-			return new File(this.path + "/" + path);
+			return new File(this.path + separator + path);
 		}
 		
-		
-		private function get_nativePath():String 
+		public static function createTempDirectory():File
 		{
-			return path;
+			// TODO: implement
+			return null;
 		}
 		
-		private static function get_documentsDirectory():File 
+		public static function createTempFile():File
 		{
-			return new File("documents/");
+			// TODO: implement
+			return null;
 		}
 		
-		private function get_exists():Bool 
+		public static function getRootDirectories():Array<File>
 		{
-			if (Reflect.getProperty(sharedObject.data, "data") == null) {
-				return false;
-			}
-			else {
-				return true;
-			}
+			// TODO: implement
+			return null;
+		}
+		
+		static function get_applicationDirectory():File 
+		{
+			return applicationDirectory;
+		}
+		
+		static function get_applicationStorageDirectory():File 
+		{
+			return applicationStorageDirectory;
+		}
+		
+		static function get_cacheDirectory():File 
+		{
+			return cacheDirectory;
+		}
+		
+		static function get_desktopDirectory():File 
+		{
+			return desktopDirectory;
+		}
+		
+		static function get_documentsDirectory():File 
+		{
+			return documentsDirectory;
+		}
+		
+		static function get_userDirectory():File 
+		{
+			return userDirectory;
+		}
+		
+		static function get_lineEnding():String 
+		{
+			if (PlatformInfo.platform == Platform.WINDOWS) return String.fromCharCode(0x0D);
+			else if (PlatformInfo.platform == Platform.MAC) return String.fromCharCode(0x0A);
+			else return null;
+		}
+		
+		static function get_permissionStatus():String 
+		{
+			return PermissionStatus.GRANTED;
+		}
+		
+		static function get_separator():String 
+		{
+			// TODO: test on each platform
+			if (PlatformInfo.platform == Platform.WINDOWS) return "\\";
+			else if (PlatformInfo.platform == Platform.MAC) return "/";
+			else return "/";
 		}
 	}
-	
-	
-#end
+//#end

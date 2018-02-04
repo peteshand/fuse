@@ -1,7 +1,8 @@
 package fuse.display;
 
 import fuse.core.backend.displaylist.DisplayType;
-import fuse.texture.ITexture;
+import fuse.texture.AbstractTexture;
+import fuse.texture.IBaseTexture;
 import openfl.errors.Error;
 
 /**
@@ -11,13 +12,13 @@ import openfl.errors.Error;
 @:access(fuse.texture)
 class MovieClip extends Image
 {
-	var textures:Array<ITexture>;
+	var textures:Array<AbstractTexture>;
 	var tick:Int = 0;
 	var normalized:Float = 0;
 	var fsp:Int;
 	@:isVar var frame(get, set):Int = 0;
 	
-	public function new(textures:Array<ITexture>, fsp:Int=24) 
+	public function new(textures:Array<AbstractTexture>, fsp:Int=24) 
 	{
 		this.fsp = fsp;
 		this.textures = textures;
@@ -61,6 +62,7 @@ class MovieClip extends Image
 		frame = value % textures.length;
 		textures[frame].textureData.changeCount++;
 		texture = textures[frame];
+		texture.directRender = true;
 		return frame;
 	}
 	

@@ -1,7 +1,6 @@
 package fuse.state;
 import fuse.utilsSort.state.State;
 import fuse.air.sample.view.fuse.BaseView;
-import fuse.air.sample.view.shell.back.BackBtnView;
 
 /**
  * ...

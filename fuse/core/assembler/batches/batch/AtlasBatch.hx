@@ -1,7 +1,6 @@
 package fuse.core.assembler.batches.batch;
 
 import fuse.core.assembler.atlas.partition.AtlasPartition;
-import fuse.core.assembler.atlas.partition.AtlasPartitions;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.assembler.vertexWriter.VertexWriter;
 import fuse.core.communication.data.textureData.ITextureData;

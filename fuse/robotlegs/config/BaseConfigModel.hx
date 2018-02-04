@@ -1,10 +1,10 @@
 package fuse.robotlegs.config;
 
+import fuse.info.AppInfo;
 import fuse.signal.Signal0;
 import openfl.errors.Error;
 import openfl.geom.Rectangle;
 
-import fuse.utilsSort.app.App;
 import fuse.info.DeviceInfo;
 import fuse.robotlegs.config.model.ConfigData;
 import fuse.robotlegs.config.model.ConfigSettings;
@@ -65,10 +65,10 @@ class BaseConfigModel
 	{
 		if (_storageDirectory==null) {
 			if (DeviceInfo.isIOS) {
-				_storageDirectory = File.applicationStorageDirectory.resolvePath("imagination/" + App.getAppId());
+				_storageDirectory = File.applicationStorageDirectory.resolvePath("imagination/" + AppInfo.appId);
 			}
 			else {
-				_storageDirectory = File.documentsDirectory.resolvePath("imagination/" + App.getAppId());
+				_storageDirectory = File.documentsDirectory.resolvePath("imagination/" + AppInfo.appId);
 			}
 			
 			if (!_storageDirectory.exists) _storageDirectory.createDirectory();

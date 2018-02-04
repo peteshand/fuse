@@ -3,13 +3,13 @@ package fuse.core.front.texture;
 import fuse.core.front.buffers.AtlasBuffers;
 import fuse.core.front.buffers.LayerCacheBuffers;
 import fuse.core.front.texture.upload.TextureUploadQue;
-import fuse.texture.BitmapTexture;
-import fuse.texture.Texture;
+import fuse.texture.BitmapTexture.BaseBitmapTexture;
+import fuse.texture.IBaseTexture;
 import openfl.display.BitmapData;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DTextureFormat;
 import openfl.display3D.textures.TextureBase;
-//import openfl.display3D.textures.Texture as NativeTexture;
+import openfl.display3D.textures.Texture as NativeTexture;
 /**
  * ...
  * @author P.J.Shand
@@ -21,7 +21,7 @@ import openfl.display3D.textures.TextureBase;
 class Textures
 {
 	static private var context3D:Context3D;
-	static private var textures = new Map<Int, Texture>();
+	static private var textures = new Map<Int, IBaseTexture>();
 	static private var blankId:Int;
 	static private var whiteId:Int;
 	static private var textureCount:Int = 0;
@@ -44,20 +44,20 @@ class Textures
 	
 	static private function createDefaultTextures() 
 	{
-		#if debug
+		//#if debug
 		var blank:BitmapData = new BitmapData(512, 512, true, 0x9900FF00);
-		#else
-		var blank:BitmapData = new BitmapData(32, 32, true, 0x00000000);
-		#end
-		var blankTexture:DefaultTexture = new DefaultTexture(blank, false);
+		//#else
+		//var blank:BitmapData = new BitmapData(32, 32, true, 0x00000000);
+		//#end
+		var blankTexture:DefaultTexture = new DefaultTexture(0, blank, false);
 		blankId = blankTexture.textureId;
 		
 		var white:BitmapData = new BitmapData(32, 32, true, 0xFFFFFFFF);
-		var whiteTexture:DefaultTexture = new DefaultTexture(white, false);
+		var whiteTexture:DefaultTexture = new DefaultTexture(1, white, false);
 		whiteId = whiteTexture.textureId;
 	}
 	
-	static public function registerTexture(textureId:Int, texture:Texture):Void
+	static public function registerTexture(textureId:Int, texture:IBaseTexture):Void
 	{
 		if (!textures.exists(textureId)) {
 			//trace("textureId = " + textureId);
@@ -67,7 +67,7 @@ class Textures
 		}
 	}
 	
-	static public function deregisterTexture(textureId:Int, texture:Texture) 
+	static public function deregisterTexture(textureId:Int, texture:IBaseTexture) 
 	{
 		if (textures.exists(textureId)) {
 			textures.remove(textureId);
@@ -76,7 +76,7 @@ class Textures
 		
 	static inline public function getTextureBase(textureId:Int):TextureBase
 	{
-		var texture:Texture = getTexture(textureId);
+		var texture:IBaseTexture = getTexture(textureId);
 		if (texture == null) {
 			//trace("No texture found for textureId: " + textureId);
 			return null;
@@ -85,7 +85,7 @@ class Textures
 		return texture.textureBase;
 	}
 
-	static inline public function getTexture(textureId:Int):Texture
+	static inline public function getTexture(textureId:Int):IBaseTexture
 	{
 		return textures.get(getTextureId(textureId));
 	}
@@ -110,12 +110,12 @@ class Textures
 	}
 }
 
-class DefaultTexture extends BitmapTexture
+class DefaultTexture extends BaseBitmapTexture
 {
-	function new(bitmapData:BitmapData, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	function new(textureId:Int, bitmapData:BitmapData, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		this.persistent = 1;
 		
-		super(bitmapData, queUpload, onTextureUploadCompleteCallback);
+		super(textureId, bitmapData, queUpload, onTextureUploadCompleteCallback);
 	}
 }

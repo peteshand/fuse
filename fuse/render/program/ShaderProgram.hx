@@ -81,7 +81,7 @@ class ShaderProgram
 		BASE_INDICES.endian = Endian.LITTLE_ENDIAN;
 	}
 	
-	public function new(context3D:Context3D, numOfQuads:Int, numTriangles:Int=0) 
+	public function new(context3D:Context3D, numOfQuads:Int) 
 	{
 		ShaderProgram.init();
 		

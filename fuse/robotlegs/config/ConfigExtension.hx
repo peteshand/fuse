@@ -13,7 +13,6 @@ import fuse.robotlegs.config.signals.LoadConfigSignal;
 import fuse.robotlegs.signalMap.api.ISignalCommandMap;
 
 import robotlegs.bender.extensions.matching.InstanceOfType;
-//import robotlegs.bender.extensions.signalCommandMap.api.ISignalCommandMap;
 import robotlegs.bender.framework.api.IContext;
 import robotlegs.bender.framework.api.IExtension;
 import robotlegs.bender.framework.api.IInjector;

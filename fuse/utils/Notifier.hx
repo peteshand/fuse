@@ -33,7 +33,7 @@ class Notifier<T>
 		return _value;
 	}
 	
-	private inline function set_value(v:Null<T>):Null<T> 
+	private function set_value(v:Null<T>):Null<T> 
 	{
 		if (_value == v && requireChange) return v;
 		_value = v;

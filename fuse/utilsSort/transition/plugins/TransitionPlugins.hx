@@ -72,7 +72,11 @@ class DefaultPlugin
 	
 	public static function applyProp(target:Dynamic, prop:String, value:Float) 
 	{
-		untyped target[prop] = value;
+		#if air
+			untyped target[prop] = value;
+		#else
+			Reflect.setProperty(target, prop, value);
+		#end
 	}
 	
 	public static function applySetter(target:Dynamic, innerSetter:Float->Void, value:Float) 
@@ -110,7 +114,11 @@ class IntPlugin
 	}
 	public static function applyProp(target:Dynamic, prop:String, value:Float) 
 	{
-		untyped target[prop] = Math.round(value);
+		#if air
+			untyped target[prop] = Math.round(value);
+		#else
+			Reflect.setProperty(target, prop, Math.round(value));
+		#end
 	}
 }
 
@@ -130,7 +138,11 @@ class AlphaPlugin
 		var autoVisObject = (option.autoVisObject != null ? option.autoVisObject : target);
 		var visSetter:Bool -> Void = null;
 		try {
-			visSetter = untyped option.autoVisObject["set_visible"];
+			#if air
+				visSetter = untyped option.autoVisObject["set_visible"];
+			#else
+				visSetter = untyped Reflect.getProperty(option.autoVisObject, "set_visible");
+			#end
 		}
 		catch (e:Error) {
 			
@@ -140,7 +152,11 @@ class AlphaPlugin
 	
 	public static function applyProp(target:Dynamic, prop:String, value:Float, autoVisObject:Dynamic) 
 	{
-		untyped target[prop] = value;
+		#if air
+			untyped target[prop] = value;
+		#else
+			Reflect.setProperty(target, prop, value);
+		#end
 		if (value == 0) autoVisObject.visible = false;
 		else autoVisObject.visible = true;
 	}

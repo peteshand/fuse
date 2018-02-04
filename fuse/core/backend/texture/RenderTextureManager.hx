@@ -8,7 +8,6 @@ import fuse.core.communication.data.renderTextureData.RenderTextureDrawData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.utils.ObjectPool;
 import fuse.core.utils.Pool;
-import fuse.texture.RenderTexture;
 import fuse.core.backend.display.CoreDisplayObject;
 
 /**

@@ -12,7 +12,7 @@ import fuse.signal.Signal1;
 typedef NativeAppWindows = JsAppWindows;
 typedef NativeAppWindow = fuse.utilsSort.window.JsAppWindows.JsAppWindow;
 @:forward(createSupported, hideSupported, hideAll, closeAll, exit, foreach, lastWindowClosing)
-#else
+#elseif air
 
 typedef NativeAppWindows = AirAppWindows;
 typedef NativeAppWindow = fuse.utilsSort.window.AirAppWindows.AirAppWindow;

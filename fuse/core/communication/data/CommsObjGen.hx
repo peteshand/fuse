@@ -1,4 +1,5 @@
 package fuse.core.communication.data;
+
 import fuse.core.communication.data.batchData.BatchData;
 import fuse.core.communication.data.batchData.IBatchData;
 import fuse.core.communication.data.batchData.WorkerBatchData;

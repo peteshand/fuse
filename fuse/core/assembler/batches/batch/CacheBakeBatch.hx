@@ -116,7 +116,7 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 					vertexData.setMaskUV(3, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvBottom);	// bottom right
 				}
 				
-				image.updateUVs++;
+				//image.updateUVs = false;
 			//}
 			
 			//if (renderTarget == -1) {

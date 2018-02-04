@@ -1,4 +1,5 @@
 package fuse.core.assembler.atlas.sheet2;
+import fuse.core.assembler.atlas.partition.AtlasPartitions;
 import fuse.core.assembler.atlas.textures.AtlasTextures;
 import fuse.core.backend.texture.CoreTexture;
 

@@ -39,10 +39,9 @@ class CoreDisplayObject
 	public var area(get, null):Float;
 	public var diagonal(get, null):Float;
 	
-	
 	var transformData		:TransformData;
 	var parentNonStatic		:Bool;
-	var combinedAlpha		:Float = 1;
+	public var combinedAlpha:Float = 1;
 	
 	public function new() 
 	{
@@ -72,9 +71,10 @@ class CoreDisplayObject
 	
 	function updateTransform() 
 	{
+		combinedAlpha = Graphics.alpha * displayData.alpha;
+		//trace("combinedAlpha = " + combinedAlpha);
 		if (isStatic == 0) {
 			//beginSetChildrenIsStatic(false);
-			combinedAlpha = Graphics.alpha * displayData.alpha;
 			Graphics.pushAlpha(combinedAlpha);
 			WorkerTransformHelper.update(this);
 		}

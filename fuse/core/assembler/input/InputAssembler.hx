@@ -74,38 +74,40 @@ class InputAssemblerObject
 		while (j >= 0) 
 		{
 			var display:CoreImage = Touchables.touchables[j];
-			var distance:Float = getDistance(display, touch);
-			
-			if (distance < display.diagonal * 0.5) {
-				var triangleSum:Float = getTriangleSum(display, touch);
-				if (triangleSum <= display.area + 1) {
-					
-					// inside
-					if (touch.targetId != display.objectId) {						
-						if (touch.targetId != -1) {
-							DispatchOut(touch.targetId, touch);	
+			//if (display.combinedAlpha >= 0.001){
+				var distance:Float = getDistance(display, touch);
+				
+				if (distance < display.diagonal * 0.5) {
+					var triangleSum:Float = getTriangleSum(display, touch);
+					if (triangleSum <= display.area + 1) {
+						
+						// inside
+						if (touch.targetId != display.objectId) {						
+							if (touch.targetId != -1) {
+								DispatchOut(touch.targetId, touch);	
+							}
+							
+							touch.targetId = display.objectId;
+							DispatchOver(display.objectId, touch);
 						}
 						
-						touch.targetId = display.objectId;
-						DispatchOver(display.objectId, touch);
+						touch.collisionId = display.objectId;
+						
+						InputAssembler.collisions.push(touch);
+						//j = -1;
 					}
-					
-					touch.collisionId = display.objectId;
-					
-					InputAssembler.collisions.push(touch);
-					//j = -1;
+					else if (touch.targetId == display.objectId){
+						// outside
+						touch.targetId = -1;
+						DispatchOut(display.objectId, touch);					
+					}
 				}
 				else if (touch.targetId == display.objectId){
 					// outside
 					touch.targetId = -1;
-					DispatchOut(display.objectId, touch);					
+					DispatchOut(display.objectId, touch);
 				}
-			}
-			else if (touch.targetId == display.objectId){
-				// outside
-				touch.targetId = -1;
-				DispatchOut(display.objectId, touch);
-			}
+			//}
 			j--;
 		}
 	}
@@ -169,6 +171,7 @@ class InputAssemblerObject
 	
 	function DispatchOver(displayObjectId:Int, touch:Touch) 
 	{
+		trace("DispatchOver: " + displayObjectId);
 		over.x = touch.x;
 		over.y = touch.y;
 		over.collisionId = displayObjectId;
@@ -177,6 +180,7 @@ class InputAssemblerObject
 	
 	function DispatchOut(displayObjectId:Int, touch:Touch) 
 	{
+		trace("DispatchOut: " + displayObjectId);
 		out.x = touch.x;
 		out.y = touch.y;
 		out.collisionId = displayObjectId;

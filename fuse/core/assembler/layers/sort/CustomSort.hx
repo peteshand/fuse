@@ -24,8 +24,8 @@ class CustomSort<T>
 				var j:Int = arr.length - 1;
 				while (j > i)
 				{
-					var v1 = untyped arr[j - 1][prop];
-					var v2 = untyped arr[j][prop];
+					var v1 = getValue(arr[j - 1], prop);
+					var v2 = getValue(arr[j], prop);
 					
 					if (v1 < v2)
 					{
@@ -43,8 +43,8 @@ class CustomSort<T>
 				var l:Int = arr.length - 1;
 				while (l > k)
 				{
-					var v1 = untyped arr[l - 1][prop];
-					var v2 = untyped arr[l][prop];
+					var v1 = getValue(arr[l - 1], prop);
+					var v2 = getValue(arr[l], prop);
 					
 					if (v1 > v2)
 					{
@@ -58,6 +58,15 @@ class CustomSort<T>
 		}
 		
 		return arr;
+	}
+	
+	inline function getValue(object:Dynamic, prop:String) 
+	{
+		#if air
+			return untyped object[prop];
+		#else
+			return Reflect.getProperty(object, prop);
+		#end
 	}
 }
 

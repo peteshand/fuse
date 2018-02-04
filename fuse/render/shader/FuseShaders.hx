@@ -6,9 +6,14 @@ package fuse.render.shader;
  */
 class FuseShaders
 {
-	static var shaders = new Map<Int, FuseShader>();
-	
+	static var shaders:Map<Int, FuseShader>;
 	public static var currentShader:FuseShader;
+	
+	static function __init__():Void
+	{
+		shaders = new Map<Int, FuseShader>();
+		for (i in 1...8) setCurrentShader(i);
+	}
 	
 	public static function setCurrentShader(numTextures:Int):Void
 	{

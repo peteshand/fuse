@@ -37,7 +37,7 @@ class CoreMovieClip extends CoreImage implements ICoreRenderable
 				coreTexture = Core.textures.register(textureId);
 			}
 			
-			updateUVs = 0;
+			//updateUVs = true;
 		}
 		return value;
 	}

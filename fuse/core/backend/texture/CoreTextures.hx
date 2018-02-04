@@ -11,25 +11,27 @@ class CoreTextures
 	
 	var texturesMap = new Map<Int, CoreTexture>();
 	var textures = new Array<CoreTexture>();
-	var count:Int = 0;
+	//var count:Int = 0;
 	
 	public function new() { }
 	
 	public function checkForTextureChanges():Void 
 	{
+		texturesHaveChanged = false;
 		for (i in 0...textures.length) {
 			if (textures[i].textureHasChanged) {
-				count = -1;
+				//count = -1;
+				texturesHaveChanged = true;
 			}
 		}
 		
-		count++;
-		if (count <= 2) {
-			texturesHaveChanged = true;
-		}
-		else {
-			texturesHaveChanged = false;
-		}
+		//count++;
+		//if (count <= 2) {
+			//texturesHaveChanged = true;
+		//}
+		//else {
+			//texturesHaveChanged = false;
+		//}
 	}
 	
 	public function create(textureId:Int) 
@@ -76,6 +78,13 @@ class CoreTextures
 		for (i in 0...textures.length) 
 		{
 			textures[i].clearTextureChange();
+		}
+	}
+	
+	public function reset() 
+	{
+		for (i in 0...textures.length) {
+			textures[i].uvsHaveChanged = false;
 		}
 	}
 }

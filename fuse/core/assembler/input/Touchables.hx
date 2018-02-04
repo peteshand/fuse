@@ -35,7 +35,6 @@ class Touchables
 					}
 					i--;
 				}
-				touchables.push(coreDisplay);
 			}
 		}
 	}

@@ -13,7 +13,7 @@ import fuse.render.texture.Context3DTexture;
 import fuse.display.effects.BlendMode;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.texture.Textures;
-import fuse.texture.Texture;
+import fuse.texture.IBaseTexture;
 import fuse.utils.FrameBudget;
 import fuse.utils.Notifier;
 import fuse.utils.Color;
@@ -38,7 +38,7 @@ class Renderer
 	var textureRenderBatch:TextureRenderBatch;
 	var context3DTexture:Context3DTexture;
 	var context3DProgram:Context3DProgram;
-	var shaderPrograms:ShaderPrograms;
+	//var shaderPrograms:ShaderPrograms;
 	var conductorData:ConductorData;
 	var context3D:Context3D;
 	var sharedContext:Bool;
@@ -68,7 +68,9 @@ class Renderer
 		conductorData = new ConductorData();
 		context3DTexture = new Context3DTexture(context3D);
 		context3DProgram = new Context3DProgram(context3D);
-		shaderPrograms = new ShaderPrograms(context3D);
+		
+		ShaderPrograms.init(context3D);
+		//shaderPrograms = new ShaderPrograms(context3D);
 		textureRenderBatch = new TextureRenderBatch();
 		
 		FuseShader.init();
@@ -123,12 +125,16 @@ class Renderer
 			#end
 		}
 		else {
-			var texture:Texture = Textures.getTexture(targetTextureId.value);
-			context3D.setRenderToTexture(texture.textureBase, false, 0, 0, 0);
+			var texture:IBaseTexture = Textures.getTexture(targetTextureId.value);
+			#if air
+				context3D.setRenderToTexture(texture.textureBase, false, 0, 0, 0);
+			#else
+				context3D.setRenderToTexture(texture.textureBase, false, 0, 0);
+			#end
 			
 			if (texture._clear || texture._alreadyClear || currentBatchData.clearRenderTarget == 1) {
 				texture._clear = false;
-				context3D.clear(texture.red, texture.green, texture.blue, 0);
+				context3D.clear(texture.clearColour.red, texture.clearColour.green, texture.clearColour.blue, 0);
 			}
 			else {
 				context3D.clear(0, 0, 0, 0, 0, 0, Context3DClearMask.DEPTH);
@@ -168,7 +174,7 @@ class Renderer
 		//if (numItems == 0) return;
 		
 		/*programChanged = false;
-		shaderProgram.value = shaderPrograms.getProgram(numItems, numTriangles);
+		shaderProgram.value = shaderPrograms.getProgram(numItems);
 		
 		var batchData:IBatchData = textureRenderBatch.getBatchData(0);
 		
@@ -193,9 +199,9 @@ class Renderer
 		//trace("conductorData.highestNumTextures = " + conductorData.highestNumTextures);
 		FuseShaders.setCurrentShader(conductorData.highestNumTextures);
 		
-		if (conductorData.numberOfBatches > 1){
-			trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
-		}
+		//if (conductorData.numberOfBatches > 1){
+			//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
+		//}
 		
 		for (i in 0...conductorData.numberOfBatches) 
 		{
@@ -235,7 +241,7 @@ class Renderer
 				//context3DTexture.setContextTexture(k, -1);
 			//}
 			
-			shaderProgram.value = shaderPrograms.getProgram(numItemsInBatch, -1);
+			shaderProgram.value = ShaderPrograms.getProgram(numItemsInBatch);
 			//FuseShaders.CURRENT_SHADER.value = FuseShaders.getShader(4);
 			
 			//var batchData:IBatchData = textureRenderBatch.getBatchData(i);
@@ -317,7 +323,7 @@ class Renderer
 		
 		if (Fuse.current.cleanContext) {
 			context3DTexture.clear();
-			shaderPrograms.clear();
+			ShaderPrograms.clear();
 			context3DProgram.setProgram(null);
 			shaderProgram.value = null;
 			targetTextureId.value = -2;

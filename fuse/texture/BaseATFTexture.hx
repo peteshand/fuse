@@ -3,25 +3,40 @@ import fuse.utils.AtfData;
 import openfl.display3D.Context3DTextureFormat;
 
 import fuse.utils.AtfData.AtfDataInfo;
-import fuse.texture.Texture;
+import fuse.texture.BaseTexture;
 import fuse.core.front.texture.Textures;
-import openfl.display.BitmapData;
 import openfl.errors.Error;
 import openfl.events.Event;
 import openfl.utils.ByteArray;
-//import openfl.display3D.textures.Texture as NativeTexture;
 
 /**
  * ...
  * @author P.J.Shand
  */
+
+@:forward(textureData, nativeTexture, textureBase, textureId, width, height, onUpdate, clearColour, _clear, _alreadyClear, upload, dispose, directRender)
+abstract ATFTexture(AbstractTexture) to Int from Int 
+{
+	var baseATFTexture(get, never):BaseATFTexture;
+	
+	public function new(data:ByteArray, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	{
+		var baseATFTexture = new BaseATFTexture(AbstractTexture.textureIdCount++, data, queUpload, onTextureUploadCompleteCallback);
+		this = new AbstractTexture(baseATFTexture, baseATFTexture.textureId);
+	}
+	
+	function upload():Void										{ baseATFTexture.upload(); 					}
+	function get_baseATFTexture():BaseATFTexture				{ return untyped this.coreTexture; 				}
+	@:to public function toAbstractTexture():AbstractTexture	{ return this; 									}
+}
+
 @:access(fuse)
-class ATFTexture extends Texture
+class BaseATFTexture extends BaseTexture
 {
 	var data:ByteArray;
 	var atfDataInfo:AtfDataInfo;
 	
-	public function new(data:ByteArray, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(textureId:Int, data:ByteArray, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		this.data = data;
 		atfDataInfo = AtfData.getInfo(data);
@@ -34,15 +49,12 @@ class ATFTexture extends Texture
 			return;
 		}
 		
-		this.width = atfDataInfo.width;
-		this.height = atfDataInfo.height;
-		
-		super(queUpload, onTextureUploadCompleteCallback);
+		super(textureId, atfDataInfo.width, atfDataInfo.height, queUpload, onTextureUploadCompleteCallback);
 	}
 	
 	override public function upload() 
 	{
-		textureBase = nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, false);
+		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, false);
 		//createNativeTexture();
 		update(data);
 	}

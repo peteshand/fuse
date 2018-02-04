@@ -55,7 +55,22 @@ class DirectBatch extends BaseBatch implements IBatch
 		var vertexData:IVertexData = image.vertexData;
 		var coreTexture:CoreTexture = image.coreTexture;
 		
-		if (image.isStatic == 0 || image.drawIndex != VertexData.OBJECT_POSITION) {
+		
+		var vertexPositionHasMoved:Bool = image.drawIndex != VertexData.OBJECT_POSITION;
+		//if (vertexPositionHasMoved) {
+			//trace("vertexPositionHasMoved");
+		//}
+		var updateUVs:Bool		= vertexPositionHasMoved || coreTexture.uvsHaveChanged;
+		var updatePosition:Bool	= vertexPositionHasMoved || (image.displayData.isMoving == 1);
+		var updateColour:Bool	= vertexPositionHasMoved || image.isStatic == 0;
+		var updateAlpha:Bool	= vertexPositionHasMoved || image.isStatic == 0;
+		
+		//if (coreTexture.uvsHaveChanged) {
+			//trace("coreTexture.uvsHaveChanged");
+		//}
+		//updateUVs = image.updateUVs && 
+		
+		//if (image.isStatic == 0 || image.drawIndex != VertexData.OBJECT_POSITION) {
 			
 			vertexData.setTexture(image.textureIndex);
 			
@@ -65,8 +80,10 @@ class DirectBatch extends BaseBatch implements IBatch
 				vertexData.setMaskTexture(0);
 			}
 			
-			//if (updateUVs < 5) {
+			//if (updateUVs) {
 				//trace([coreTexture.uvTop, coreTexture.uvBottom]);
+				
+				//trace("updateUVs = " + updateUVs);
 				
 				vertexData.setUV(0, coreTexture.uvLeft,		coreTexture.uvBottom);	// bottom left
 				vertexData.setUV(1, coreTexture.uvLeft,		coreTexture.uvTop);		// top left
@@ -80,15 +97,15 @@ class DirectBatch extends BaseBatch implements IBatch
 					vertexData.setMaskUV(3, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvBottom);	// bottom right
 				}
 				
-				image.updateUVs++;
+				//image.updateUVs = false;
 			//}
 			
-			//if (renderTarget == -1) {
+			if (updatePosition) {
 				vertexData.setXY(0, image.quadData.bottomLeftX,	image.quadData.bottomLeftY);
 				vertexData.setXY(1, image.quadData.topLeftX,	image.quadData.topLeftY);
 				vertexData.setXY(2, image.quadData.topRightX,	image.quadData.topRightY);
 				vertexData.setXY(3, image.quadData.bottomRightX,image.quadData.bottomRightY);
-			//}
+			}
 			//else {
 				//trace("resize");	
 				//vertexData.setXY(0, ResizeX(image.bottomLeft.x),	ResizeY(image.bottomLeft.y));
@@ -97,14 +114,16 @@ class DirectBatch extends BaseBatch implements IBatch
 				//vertexData.setXY(3, ResizeX(image.bottomRight.x),ResizeY(image.bottomRight.y));
 			//}
 			
-			
-			vertexData.setColor(0, image.displayData.colorBL);
-			vertexData.setColor(1, image.displayData.colorTL);
-			vertexData.setColor(2, image.displayData.colorTR);
-			vertexData.setColor(3, image.displayData.colorBR);
-			
-			vertexData.setAlpha(image.combinedAlpha);
-		}
+			if (updateColour){
+				vertexData.setColor(0, image.displayData.colorBL);
+				vertexData.setColor(1, image.displayData.colorTL);
+				vertexData.setColor(2, image.displayData.colorTR);
+				vertexData.setColor(3, image.displayData.colorBR);
+			}
+			if (updateAlpha){
+				vertexData.setAlpha(image.combinedAlpha);
+			}
+		//}
 		
 		image.isStatic = 1;
 		image.drawIndex = VertexData.OBJECT_POSITION;

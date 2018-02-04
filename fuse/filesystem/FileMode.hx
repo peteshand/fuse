@@ -1,28 +1,19 @@
 package fuse.filesystem;
 
-
 /**
  * ...
- * @author Thomas Byrne
+ * @author P.J.Shand
  */
-#if air
-
-
-	typedef FileMode = flash.filesystem.FileMode;
-	
-#elseif js
-	
-	class FileMode
+//#if air
+//
+	//typedef FileMode = flash.filesystem.FileMode;	
+	//
+//#elseif js
+	@:enum abstract FileMode(String) from String to String
 	{
-		public static var APPEND:String = "append";
-		public static var READ:String = "read";
-		public static var UPDATE:String = "update";
-		public static var WRITE:String = "write";
-		
-		public function new()
-		{
-			
-		}
+		public static inline var APPEND:String = "append";
+		public static inline var READ:String = "read";
+		public static inline var UPDATE:String = "update";
+		public static inline var WRITE:String = "write";
 	}
-	
-#end
+//#end

@@ -1,8 +1,7 @@
 package fuse.utilsSort.window;
 
-import com.imagination.util.signals.Signal.Signal1;
-import com.imagination.util.signals.Signal.Signal2;
-import com.imagination.util.window.JsAppWindows.JsAppWindow;
+import fuse.signal.Signal1;
+import fuse.signal.Signal2;
 import fuse.utils.Notifier;
 import js.Browser;
 import js.Lib;
@@ -157,9 +156,9 @@ class JsAppWindow
 			window.addEventListener("blur", onHide);
 		}
 		
-		visible.change.add(onVisibleChange);
-		focused.change.add(onFocusedChange);
-		title.change.add(onTitleChange);
+		visible.add(onVisibleChange);
+		focused.add(onFocusedChange);
+		title.add(onTitleChange);
 	}
 	
 	function onVisibleChange() 

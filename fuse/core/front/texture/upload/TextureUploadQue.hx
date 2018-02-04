@@ -1,5 +1,5 @@
 package fuse.core.front.texture.upload;
-import fuse.texture.ITexture;
+import fuse.texture.IBaseTexture;
 
 /**
  * ...
@@ -9,7 +9,7 @@ import fuse.texture.ITexture;
 @:access(fuse)
 class TextureUploadQue
 {
-	public static var que:Array<ITexture> = [];
+	public static var que:Array<IBaseTexture> = [];
 	
 	public function new() 
 	{
@@ -19,12 +19,12 @@ class TextureUploadQue
 	static public function check() 
 	{
 		if (que.length > 0) {
-			var texture:ITexture = que.shift();
+			var texture:IBaseTexture = que.shift();
 			texture.upload();
 		}
 	}
 	
-	static public function add(texture:ITexture) 
+	static public function add(texture:IBaseTexture) 
 	{
 		que.push(texture);
 	}

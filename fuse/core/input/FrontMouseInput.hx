@@ -75,7 +75,7 @@ class FrontMouseInput
 		
 		//values[0] = e.stageX;
 		//values[1] = e.stageY;
-		//trace("OnMouseMove" + values);
+		//trace("OnMouseMove");
 		//messenger.send(values);
 	}
 	

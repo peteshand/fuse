@@ -36,6 +36,7 @@ class Assembler
 		BatchAssembler.findMaxNumTextures();
 		
 		InputAssembler.build();
+		Core.textures.reset();
 		
 		Core.RESIZE = false;
 		Fuse.current.conductorData.isStatic = 1;

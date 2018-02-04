@@ -13,24 +13,40 @@ import openfl.display3D.Context3DTextureFormat;
  * ...
  * @author P.J.Shand
  */
+
+@:forward(textureData, nativeTexture, textureBase, textureId, width, height, onUpdate, clearColour, _clear, _alreadyClear, upload, dispose, directRender)
+abstract RenderTexture(AbstractTexture) to Int from Int 
+{
+	var baseRenderTexture(get, never):BaseRenderTexture;
+	
+	public function new(width:Int, height:Int, directRender:Bool=true) 
+	{
+		var baseRenderTexture = new BaseRenderTexture(AbstractTexture.textureIdCount++, width, height, directRender);
+		this = new AbstractTexture(baseRenderTexture, baseRenderTexture.textureId);
+	}
+	
+	function upload():Void										{ baseRenderTexture.upload(); 					}
+	function get_baseRenderTexture():BaseRenderTexture			{ return untyped this.coreTexture; 				}
+	@:to public function toAbstractTexture():AbstractTexture	{ return this; 									}
+}
+
+
 @:access(fuse)
-class RenderTexture extends Texture
+class BaseRenderTexture extends BaseTexture
 {
 	static var currentRenderTargetId:Int;
 	static var conductorData:ConductorData;
 	var renderTextureData:IRenderTextureData;
 	var renderTextureDrawData:IRenderTextureDrawData;
 	
-	public function new(width:Int, height:Int) 
+	public function new(textureId:Int, width:Int, height:Int, directRender:Bool=true) 
 	{
 		if (conductorData == null) {
 			conductorData = new ConductorData();
 		}
 		
-		this.width = width;
-		this.height = height;
-		
-		super(false);
+		super(textureId, width, height, false);
+		this.directRender = directRender;
 		
 		renderTextureData = new RenderTextureData(textureId);
 		renderTextureDrawData = new RenderTextureDrawData(0);
@@ -46,7 +62,8 @@ class RenderTexture extends Texture
 	
 	override function upload() 
 	{
-		textureBase = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, true, 0);
+		setTextureData();
+		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, true, 0);
 		
 		clear();
 		

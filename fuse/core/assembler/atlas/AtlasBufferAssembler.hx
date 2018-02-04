@@ -1,8 +1,8 @@
 package fuse.core.assembler.atlas;
 
 import fuse.core.assembler.atlas.partition.AtlasPartition;
-import fuse.core.assembler.atlas.placer.AtlasPartitionPlacer;
 import fuse.core.assembler.atlas.partition.AtlasPartitions;
+import fuse.core.assembler.atlas.placer.AtlasPartitionPlacer;
 import fuse.core.assembler.atlas.sheet.AtlasSheets;
 import fuse.core.assembler.atlas.textures.AtlasTextures;
 import fuse.core.backend.displaylist.DisplayList;
@@ -29,11 +29,14 @@ class AtlasBufferAssembler
 	{
 		AtlasPartitions.active = false;
 		
-		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged) {
+		//trace("DisplayList.hierarchyBuildRequired = " + DisplayList.hierarchyBuildRequired);
+		//trace("CoreTextures.texturesHaveChanged = " + CoreTextures.texturesHaveChanged);
+		
+		if (/*DisplayList.hierarchyBuildRequired || */CoreTextures.texturesHaveChanged) {
 			AtlasTextures.build();
 			AtlasPartitions.build();
 			AtlasSheets.build();
-			trace(["Build Atlas", DisplayList.hierarchyBuildRequired, CoreTextures.texturesHaveChanged]);
+			//trace(["Build Atlas", DisplayList.hierarchyBuildRequired, CoreTextures.texturesHaveChanged]);
 		}
 	}
 }

@@ -2,6 +2,8 @@ package fuse.core.communication.data.textureData;
 
 import fuse.Fuse;
 import fuse.core.communication.data.MemoryBlock;
+import openfl.display3D.textures.Texture;
+import openfl.display3D.textures.TextureBase;
 
 /**
  * ...
@@ -40,39 +42,47 @@ class WorkerTextureData
 	public static inline var BYTES_PER_ITEM:Int = 38;
 	
 	public var memoryBlock:MemoryBlock;
-	public var textureId:Int;
 	
+	// Backend Props
+	public var textureId:Int;
 	public var x(get, set):Int;
 	public var y(get, set):Int;
 	public var width(get, set):Int;
 	public var height(get, set):Int;
 	public var p2Width(get, set):Int;
 	public var p2Height(get, set):Int;
-	
 	public var baseX(get, set):Int;
 	public var baseY(get, set):Int;
 	public var baseWidth(get, set):Int;
 	public var baseHeight(get, set):Int;
 	public var baseP2Width(get, set):Int;
 	public var baseP2Height(get, set):Int;
-	
 	public var textureAvailable(get, set):Int;
 	public var placed(get, set):Int;
 	public var persistent(get, set):Int;
 	public var directRender(get, set):Int;
-	
-	public var area(get, null):Float;
-	
 	public var atlasTextureId(get, set):Int;
 	public var atlasBatchTextureIndex(get, set):Int;
-	
 	public var changeCount(get, set):Int;
+	public var area(get, null):Float;
+	
+	// Shared Props
+	public var nativeTexture:Texture;
+	public var textureBase:TextureBase;
 	
 	public function new(objectOffset:Int) 
 	{
 		textureId = objectOffset;
 		memoryBlock = Fuse.current.sharedMemory.textureDataPool.createMemoryBlock(WorkerTextureData.BYTES_PER_ITEM, objectOffset);
 		atlasTextureId = textureId;
+	}
+	
+	public function dispose():Void
+	{
+		if (textureBase != null) {
+			textureBase.dispose();
+			textureBase = null;
+		}
 	}
 	
 	inline function get_x():Int { 

@@ -11,22 +11,23 @@ import openfl.display3D.Context3D;
  */
 class ShaderPrograms
 {
-	var context3D:Context3D;
-	public var programs = new Map<Int, ShaderProgram>();
-	public var currentProgram:ShaderProgram;
-	public var lastProgram:ShaderProgram;
+	static var context3D:Context3D;
+	public static var programs:Map<Int, ShaderProgram>;
+	public static var currentProgram:ShaderProgram;
+	public static var lastProgram:ShaderProgram;
 	
-	public function new(context3D:Context3D) 
+	static public function init(context3D:Context3D) 
 	{
-		this.context3D = context3D;
-		
+		ShaderPrograms.context3D = context3D;
+		programs = new Map<Int, ShaderProgram>();
+		for (i in 1...8) getProgram(i);
 	}
 	
-	public function getProgram(numItems:Int, numTriangles:Int):ShaderProgram
+	public static function getProgram(numItems:Int):ShaderProgram
 	{
 		currentProgram = programs.get(numItems);
 		if (currentProgram == null) {
-			currentProgram = new ShaderProgram(context3D, numItems, numTriangles);
+			currentProgram = new ShaderProgram(context3D, numItems);
 			programs.set(numItems, currentProgram);
 		}
 		
@@ -40,7 +41,7 @@ class ShaderPrograms
 		return currentProgram;
 	}
 	
-	public function clear():Void
+	public static function clear():Void
 	{
 		if (currentProgram != null) {
 			currentProgram.clear();

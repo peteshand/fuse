@@ -64,10 +64,7 @@ class GenerateLayers
 				for (i in 0...HierarchyAssembler.hierarchy.length) 
 				{
 					var image:CoreImage = HierarchyAssembler.hierarchy[i];
-					if (image.displayData.visible == 0) {
-						// TODO: If not visible then the display probably shouldn't be added to the hierarchy before it gets to this point
-						continue;
-					}
+					if (!imageVisible(image)) continue;
 					
 					isStatic.value = 0;
 					currentLayerBuffer.add(image);
@@ -77,10 +74,7 @@ class GenerateLayers
 				for (i in 0...HierarchyAssembler.hierarchy.length) 
 				{
 					var image:CoreImage = HierarchyAssembler.hierarchy[i];
-					if (image.displayData.visible == 0) {
-						// TODO: If not visible then the display probably shouldn't be added to the hierarchy before it gets to this point
-						continue;
-					}
+					if (!imageVisible(image)) continue;
 					
 					if (image.coreTexture.textureData.directRender == 1) {
 						isStatic.value = 0;
@@ -95,6 +89,15 @@ class GenerateLayers
 			
 			//checkForLayerChanges();
 		}
+	}
+	
+	static private function imageVisible(image:CoreImage) 
+	{
+		if (image.displayData.visible == 0) return false;
+		#if !debug
+			if (image.coreTexture.textureData.textureAvailable == 0) return false;
+		#end
+		return true;
 	}
 	
 	//static private function checkForLayerChanges() 

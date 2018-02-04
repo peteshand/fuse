@@ -3,8 +3,8 @@ package fuse.core.backend.texture;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.communication.data.vertexData.VertexData;
-import fuse.texture.ITexture;
-import fuse.texture.RenderTexture;
+import fuse.texture.IBaseTexture;
+import fuse.texture.BaseRenderTexture;
 import fuse.utils.GcoArray;
 import fuse.utils.Notifier;
 import fuse.core.communication.data.batchData.WorkerBatchData;
@@ -15,7 +15,7 @@ import fuse.core.backend.texture.TextureRenderBatch.RenderBatchDef;
  * @author P.J.Shand
  */
 
-@:access(fuse.texture.RenderTexture)
+@:access(fuse.texture.BaseRenderTexture)
 class TextureOrder
 {
 	public var textureStartIndex:Null<Int>;
@@ -61,14 +61,14 @@ class TextureOrder
 		textureStartIndex = VertexData.basePosition;
 		//trace("textureStartIndex = " + textureStartIndex);
 		textureEndIndex = textureStartIndex + VertexData.BYTES_PER_ITEM;
-		if (this.textureId != textureId || this.renderTargetId != RenderTexture.currentRenderTargetId)
+		if (this.textureId != textureId || this.renderTargetId != BaseRenderTexture.currentRenderTargetId)
 		{
 			//trace("setValues");
 			currentTextureDef = getTextureDef(textureDefs.length);
 			currentTextureDef.startIndex = textureStartIndex;
 			//trace("currentTextureDef.startIndex = " + currentTextureDef.startIndex);
 			currentTextureDef.textureId = this.textureId = textureId;
-			currentTextureDef.renderTargetId = this.renderTargetId = RenderTexture.currentRenderTargetId;
+			currentTextureDef.renderTargetId = this.renderTargetId = BaseRenderTexture.currentRenderTargetId;
 			//trace("currentTextureDef.renderTargetId = " + currentTextureDef.renderTargetId);
 			currentTextureDef.drawIndex = VertexData.OBJECT_POSITION;
 			currentTextureDef.textureData = this.textureData = textureData;

@@ -1,30 +1,52 @@
 package fuse.texture;
 
-import fuse.texture.Texture;
+import fuse.texture.BaseTexture;
 import fuse.core.front.texture.Textures;
 import openfl.display.BitmapData;
 import openfl.events.Event;
-//import openfl.display3D.textures.Texture as NativeTexture;
 /**
  * ...
  * @author P.J.Shand
  */
-@:access(fuse)
-class BitmapTexture extends Texture
+
+@:forward(textureData, nativeTexture, textureBase, textureId, width, height, onUpdate, clearColour, _clear, _alreadyClear, upload, dispose, directRender)
+abstract BitmapTexture(AbstractTexture) to Int from Int 
 {
-	var bitmapData:BitmapData;
+	var baseBitmapTexture(get, never):BaseBitmapTexture;
 	
 	public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
+		this = new AbstractTexture(new BaseBitmapTexture(AbstractTexture.textureIdCount++, bitmapData, width, height, queUpload, onTextureUploadCompleteCallback));
+	}
+	
+	public function update(source:BitmapData)					{ baseBitmapTexture.update(source); 			}
+	function upload():Void										{ baseBitmapTexture.upload(); 					}
+	function get_baseBitmapTexture():BaseBitmapTexture			{ return untyped this.coreTexture; 				}
+	@:to public function toAbstractTexture():AbstractTexture	{ return this; 									}
+}
+
+@:access(fuse)
+class BaseBitmapTexture extends BaseTexture
+{
+	var bitmapData:BitmapData;
+	
+	public function new(textureId:Int, bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	{
 		this.bitmapData = bitmapData;
 		
-		if (width == null) this.width = bitmapData.width;
-		else this.width = width;
+		var w:Int = width;
+		if (width == null) w = bitmapData.width;
 		
-		if (height == null) this.height = bitmapData.height;
-		else this.height = height;
+		var h:Int = height;
+		if (width == null) h = bitmapData.height;
 		
-		super(queUpload, onTextureUploadCompleteCallback);
+		//if (width == null) this.width = bitmapData.width;
+		//else this.width = width;
+		//
+		//if (height == null) this.height = bitmapData.height;
+		//else this.height = height;
+		
+		super(textureId, w, h, queUpload, onTextureUploadCompleteCallback);
 	}
 	
 	override public function upload() 
