@@ -174,9 +174,10 @@ class TransitionObject implements ITransitionObject
 	function UpdateAutoVis() 
 	{
 		try {
-			#if air
+			#if (air || html5)
 				visSetter = untyped option.autoVisObject["set_visible"];
 			#else
+				// TODO: check that this is valid
 				visSetter = Reflect.getProperty(option.autoVisObject, "visible");
 			#end
 		} catch ( e : Dynamic ) try {

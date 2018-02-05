@@ -1,6 +1,7 @@
 package fuse.robotlegs;
 
-import fuse.robotlegs.config.ConfigExtension;
+//import fuse.robotlegs.config.ConfigExtension;
+import fuse.robotlegs.config2.ConfigExtension;
 import fuse.robotlegs.scene.SceneExtension;
 import fuse.robotlegs.signalMap.SignalCommandMapExtension;
 import fuse.robotlegs.window.AppWindowExtension;

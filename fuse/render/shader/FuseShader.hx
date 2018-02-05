@@ -24,7 +24,7 @@ class FuseShader
 	
 	static function init():Void
 	{
-		if (FuseShader.agalMiniAssembler == null) {		
+		if (FuseShader.agalMiniAssembler == null) {
 			FuseShader.agalMiniAssembler = new AGALMiniAssembler();
 			
 			rgbaIndex = [
@@ -83,9 +83,8 @@ class FuseShader
 		
 		var agal:String = "\n";
 			
-			/////////////////////////////////////////////
-			// RGBA from 4 available textures ///////////
-			
+			/////////////////////////////////////////////////////////////////
+			// RGBA from 4 available textures ///////////////////////////////
 			for (j in 0...numTextures) 
 			{
 				agal += "tex ft0, v1.xy, fs" + j + " <2d,clamp,linear>	\n";
@@ -94,6 +93,9 @@ class FuseShader
 				else 		agal += "add ft1, ft1, ft0					\n";
 			}
 			
+			////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////
+			
 			for (j in 0...numTextures) 
 			{
 				agal += "tex ft0, v1.zw, fs" + j + " <2d,clamp,linear>	\n";
@@ -101,50 +103,29 @@ class FuseShader
 				if (j == 0)	agal += "mov ft2, ft0						\n";
 				else 		agal += "add ft2, ft2, ft0					\n";
 			}
-			//for (k in numTextures...8) 
-			//{
-				//agal += "tex ft0, v1.xy, fs" + k + " <2d,clamp,linear>	\n";
-			//}
+			/////////////////////////////////////////////////////////////////
+			/////////////////////////////////////////////////////////////////
 			
-			/////////////////////////////////////////////
-			/////////////////////////////////////////////
 			
-			/////////////////////////////////////////////
-			// Multiply Alpha by Mask Value /////////////
+			/////////////////////////////////////////////////////////////////
+			// Multiply Alpha by Mask Value /////////////////////////////////
 			agal += "add ft2.w, ft2.w, MASK_BASE.1						\n" +
-			"mul ft1.xyzw, ft1.xyzw, ft2.w								\n" +
+			"mul ft1.w, ft1.w, ft2.w									\n";
 			
+			/////////////////////////////////////////////////////////////////
+			/////////////////////////////////////////////////////////////////
 			
+			/////////////////////////////////////////////////////////////////
+			// Add Colour ///////////////////////////////////////////////////
+			agal += "mov ft0, v7										\n" +
+			"mul ft0.w, ft0.w, ft1.w									\n" +
+			"sub ft0.xyz, ONE.3, ft0.xyz								\n" +
+			"mul ft0.xyz, ft0.xyz, ft0.www								\n" +
+			"sub ft1.xyz, ft1.xyz, ft0.xyz								\n";
+			/////////////////////////////////////////////////////////////////
+			/////////////////////////////////////////////////////////////////
 			
-			
-			//"sub ft2.w, ONE.1, ft2.w				\n" + // Invert Mask
-			//"add ft2.w, ft2.w, MASK_BASE.1		\n" + // Add maskBaseValue to mask multiplier value
-			//"mul ft1.w, ft1.w, ft2.w				\n" +
-			//"max ft1, ft1, fc0.z	\n" + // clamp above 0
-			//"min ft1, ft1, fc0.x	\n" + // clamp below 1
-			
-			//"sub ft1.zw, ft1.zw, ft2.xx		\n" + // Test. Sub blue channel from alpha
-			//"mov ft1.w, ft2.x						\n" + // Test. Sub blue channel from alpha
-			
-			/////////////////////////////////////////////
-			// Add Colour ///////////////////////////////
-			//"mov ft0, v7							\n" +
-			//"mul ft0.xyz, ft0.xyz, TWO.3			\n" + // Mul by 2
-			//"sub ft0.xyz, ft0.xyz, ONE.3			\n" + // Subtract 1
-			//"mul ft0.w, ft0.w, ft1.w				\n" +
-			//"mul ft0.xyz, ft0.xyz, ft0.www			\n" +
-			//"add ft1.xyz, ft1.xyz, ft0.xyz			\n" +
-			/////////////////////////////////////////////
-			/////////////////////////////////////////////
-			
-			"mov ft0, v7							\n" +
-			"mul ft0.w, ft0.w, ft1.w				\n" +
-			"sub ft0.xyz, ONE.3, ft0.xyz			\n" +
-			"mul ft0.xyz, ft0.xyz, ft0.www			\n" +
-			"sub ft1.xyz, ft1.xyz, ft0.xyz			\n" +
-			
-			//"mov oc0, ft1							\n" +
-			"mov oc0, ft1";
+			agal += "mov oc0, ft1";
 		
 		for (i in 0...alias.length) 
 		{

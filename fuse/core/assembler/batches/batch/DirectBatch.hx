@@ -61,7 +61,7 @@ class DirectBatch extends BaseBatch implements IBatch
 			//trace("vertexPositionHasMoved");
 		//}
 		var updateUVs:Bool		= vertexPositionHasMoved || coreTexture.uvsHaveChanged;
-		var updatePosition:Bool	= vertexPositionHasMoved || (image.displayData.isMoving == 1);
+		var updatePosition:Bool	= vertexPositionHasMoved || image.isStatic == 0;// (image.displayData.isMoving == 1);
 		var updateColour:Bool	= vertexPositionHasMoved || image.isStatic == 0;
 		var updateAlpha:Bool	= vertexPositionHasMoved || image.isStatic == 0;
 		

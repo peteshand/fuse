@@ -25,6 +25,11 @@ class MovieClip extends Image
 		if (textures == null || textures.length == 0) {
 			throw new Error("One or more textures must be past");
 		}
+		for (i in 0...textures.length) 
+		{
+			textures[i].directRender = true;
+		}
+		
 		super(textures[0]);
 		displayType = DisplayType.MOVIECLIP;
 		
@@ -62,7 +67,6 @@ class MovieClip extends Image
 		frame = value % textures.length;
 		textures[frame].textureData.changeCount++;
 		texture = textures[frame];
-		texture.directRender = true;
 		return frame;
 	}
 	

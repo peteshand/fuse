@@ -26,6 +26,7 @@ class Context3DProgram
 	
 	inline function OnProgramChnge() 
 	{
+		trace("setProgram");
 		context3D.setProgram(currentProgram.value);
 	}
 }

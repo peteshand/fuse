@@ -74,6 +74,7 @@ class Renderer
 		textureRenderBatch = new TextureRenderBatch();
 		
 		FuseShader.init();
+		FuseShaders.init();
 		ShaderProgram.init();
 		Textures.init(context3D);
 		
@@ -132,13 +133,14 @@ class Renderer
 				context3D.setRenderToTexture(texture.textureBase, false, 0, 0);
 			#end
 			
-			if (texture._clear || texture._alreadyClear || currentBatchData.clearRenderTarget == 1) {
+			//if (texture._clear || texture._alreadyClear || currentBatchData.clearRenderTarget == 1) {
 				texture._clear = false;
-				context3D.clear(texture.clearColour.red, texture.clearColour.green, texture.clearColour.blue, 0);
-			}
-			else {
-				context3D.clear(0, 0, 0, 0, 0, 0, Context3DClearMask.DEPTH);
-			}
+				//context3D.clear(texture.clearColour.red, texture.clearColour.green, texture.clearColour.blue, 0);
+				context3D.clear(0, 0, 0, 0);
+			//}
+			//else {
+				//context3D.clear(0, 0, 0, 0, 0, 0, Context3DClearMask.DEPTH);
+			//}
 			
 			//context3D.clear(Math.random(), Math.random(), Math.random(), 1);
 		}
@@ -162,7 +164,7 @@ class Renderer
 	
 	public function begin(clear:Bool = true, clearColor:Color):Void
 	{
-		context3D.clear(clearColor.red, clearColor.green, clearColor.blue, 1);
+		context3D.clear(clearColor.red / 255, clearColor.green / 255, clearColor.blue / 255, 1);
 	}
 	
 	function drawBuffer() 
@@ -304,7 +306,7 @@ class Renderer
 			
 			//if (numItemsInBatch > 1) numItemsInBatch = 1;
 			//trace("numItemsInBatch = " + numItemsInBatch);
-			
+			//trace("drawTriangles");
 			context3D.drawTriangles(shaderProgram.value.indexbuffer, 0, numItemsInBatch * 2);
 			#if air
 				itemCount += numItemsInBatch * ShaderProgram.INDICES_PER_QUAD;
