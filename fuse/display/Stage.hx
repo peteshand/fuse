@@ -5,10 +5,12 @@ import fuse.display.Sprite;
 import fuse.display.Quad;
 import fuse.Fuse;
 import fuse.signal.Signal1;
+import fuse.utils.Resize;
 
 import openfl.Lib;
 import openfl.events.Event;
 
+@:access(fuse.utils.Resize)
 class Stage extends Sprite {
 	
 	var count:Int = 0;
@@ -32,13 +34,13 @@ class Stage extends Sprite {
 		
 		this.name = "stage";
 		
-		Lib.current.stage.addEventListener(Event.RESIZE, OnStageResize);
-		OnStageResize(null);
+		Resize.init();
+		Resize.change.add(OnResize);
+		OnResize();
 	}
 	
-	private function OnStageResize(e:Event):Void 
+	private function OnResize():Void 
 	{
-		/*trace(["OnStageResize", Lib.current.stage.stageWidth, Lib.current.stage.stageHeight]);*/
 		this.stageWidth = Lib.current.stage.stageWidth;
 		this.stageHeight = Lib.current.stage.stageHeight;
 	}

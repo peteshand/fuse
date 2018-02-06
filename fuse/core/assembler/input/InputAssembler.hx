@@ -1,12 +1,14 @@
 package fuse.core.assembler.input;
-import fuse.core.backend.display.CoreDisplayObject;
-import fuse.core.input.FrontMouseInput;
-import fuse.core.assembler.hierarchy.HierarchyAssembler;
-import fuse.core.backend.Core;
-import fuse.core.backend.display.CoreImage;
-import fuse.core.input.Touch;
+
 import fuse.display.geometry.Bounds;
+import fuse.core.backend.display.CoreDisplayObject;
+import fuse.core.assembler.hierarchy.HierarchyAssembler;
+import fuse.core.backend.display.CoreImage;
+import fuse.core.input.FrontMouseInput;
+import fuse.core.backend.Core;
+import fuse.core.input.Touch;
 import fuse.utils.GcoArray;
+
 import openfl.events.MouseEvent;
 
 /**
@@ -171,7 +173,6 @@ class InputAssemblerObject
 	
 	function DispatchOver(displayObjectId:Int, touch:Touch) 
 	{
-		trace("DispatchOver: " + displayObjectId);
 		over.x = touch.x;
 		over.y = touch.y;
 		over.collisionId = displayObjectId;
@@ -180,7 +181,6 @@ class InputAssemblerObject
 	
 	function DispatchOut(displayObjectId:Int, touch:Touch) 
 	{
-		trace("DispatchOut: " + displayObjectId);
 		out.x = touch.x;
 		out.y = touch.y;
 		out.collisionId = displayObjectId;

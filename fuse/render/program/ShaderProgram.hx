@@ -129,6 +129,7 @@ class ShaderProgram
 	
 	function OnShaderChange() 
 	{
+		//trace("Upload Program: " + baseShader.value.numTextures);
 		program.upload(baseShader.value.vertexCode, baseShader.value.fragmentCode);
 		
 	}
