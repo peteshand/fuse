@@ -52,14 +52,17 @@ class Renderer
 	var quadCount:Int;
 	var currentBatchData:IBatchData;
 	
+	var stageSizeHasChanged:Bool = false;
+	var stageWidth = new Notifier<Int>();
+	var stageHeight = new Notifier<Int>();
+	
 	public function new(context3D:Context3D, sharedContext:Bool) 
 	{
 		this.context3D = context3D;
 		this.sharedContext = sharedContext;
 		
 		if (!sharedContext){
-			context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0, false);
-			
+			context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0, false);	
 		}
 		context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
 		//context3D.setScissorRectangle(new Rectangle(0, 0, 1600, 900));
@@ -73,13 +76,16 @@ class Renderer
 		//shaderPrograms = new ShaderPrograms(context3D);
 		textureRenderBatch = new TextureRenderBatch();
 		
-		FuseShader.init();
+		//FuseShader.init();
 		FuseShaders.init();
 		ShaderProgram.init();
 		Textures.init(context3D);
 		
 		targetTextureId.add(OnTargetTextureIdChange);
 		shaderProgram.add(OnShaderProgramChange);
+		
+		stageWidth.add(function():Void	{ stageSizeHasChanged = true; } );
+		stageHeight.add(function():Void { stageSizeHasChanged = true; } );
 	}
 	
 	function OnShaderProgramChange() 
@@ -133,14 +139,14 @@ class Renderer
 				context3D.setRenderToTexture(texture.textureBase, false, 0, 0);
 			#end
 			
-			//if (texture._clear || texture._alreadyClear || currentBatchData.clearRenderTarget == 1) {
+			if (texture._clear || texture._alreadyClear || currentBatchData.clearRenderTarget == 1) {
 				texture._clear = false;
-				//context3D.clear(texture.clearColour.red, texture.clearColour.green, texture.clearColour.blue, 0);
-				context3D.clear(0, 0, 0, 0);
-			//}
-			//else {
-				//context3D.clear(0, 0, 0, 0, 0, 0, Context3DClearMask.DEPTH);
-			//}
+				context3D.clear(texture.clearColour.red, texture.clearColour.green, texture.clearColour.blue, 0);
+				//context3D.clear(0, 0, 0, 0);
+			}
+			else {
+				context3D.clear(0, 0, 0, 0, 0, 0, Context3DClearMask.DEPTH);
+			}
 			
 			//context3D.clear(Math.random(), Math.random(), Math.random(), 1);
 		}
@@ -191,6 +197,15 @@ class Renderer
 		
 		
 		
+		if (!sharedContext) {
+			stageWidth.value = Fuse.current.stage.stageWidth;
+			stageHeight.value = Fuse.current.stage.stageHeight;
+			
+			if (stageSizeHasChanged){
+				context3D.configureBackBuffer(stageWidth.value, stageHeight.value, 0, false);
+			}
+		}
+		
 		var itemCount:Int = 0;
 		quadCount = 0;
 		
@@ -198,7 +213,10 @@ class Renderer
 			shaderProgram.value = null;
 		}
 		
-		//trace("conductorData.highestNumTextures = " + conductorData.highestNumTextures);
+		#if html5
+			conductorData.highestNumTextures = 8;
+		#end
+		
 		FuseShaders.setCurrentShader(conductorData.highestNumTextures);
 		
 		//if (conductorData.numberOfBatches > 1){

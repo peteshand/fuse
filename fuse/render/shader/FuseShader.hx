@@ -13,7 +13,7 @@ class FuseShader
 {
 	var VERTEX_CODE:ByteArray;
 	var FRAGMENT_CODE:ByteArray;
-	var numTextures:Int;
+	public var numTextures:Int;
 	
 	static var agalMiniAssembler:AGALMiniAssembler;
 	static var rgbaIndex:Array<String>;
@@ -110,6 +110,7 @@ class FuseShader
 			/////////////////////////////////////////////////////////////////
 			// Multiply Alpha by Mask Value /////////////////////////////////
 			agal += "add ft2.w, ft2.w, MASK_BASE.1						\n" +
+			//"mul ft1.xyzw, ft1.xyzw, ft2.wwww							\n";
 			"mul ft1.w, ft1.w, ft2.w									\n";
 			
 			/////////////////////////////////////////////////////////////////

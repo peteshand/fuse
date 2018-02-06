@@ -54,9 +54,9 @@ class Resize
 	
 	private static function OnTick(delta:Int):Void 
 	{
-		resizeCount++;
 		if (resizeCount < repeatResizeForXFrames) {
 			change.dispatch();
 		}
+		resizeCount++;
 	}
 }
