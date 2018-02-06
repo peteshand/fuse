@@ -81,7 +81,7 @@ class CoreTexture
 		_uvBottom /= p2Height;
 		
 		if (uvLeft != _uvLeft || uvTop != _uvTop || uvRight != _uvRight || uvBottom != _uvBottom) {
-			trace([uvLeft, _uvLeft, uvTop, _uvTop, uvRight, _uvRight, uvBottom, _uvBottom]);
+			//trace([uvLeft, _uvLeft, uvTop, _uvTop, uvRight, _uvRight, uvBottom, _uvBottom]);
 			uvsHaveChanged = true;
 		}
 		

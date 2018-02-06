@@ -198,6 +198,10 @@ class Renderer
 			shaderProgram.value = null;
 		}
 		
+		#if !air
+			conductorData.highestNumTextures = 8;
+		#end
+		
 		//trace("conductorData.highestNumTextures = " + conductorData.highestNumTextures);
 		FuseShaders.setCurrentShader(conductorData.highestNumTextures);
 		

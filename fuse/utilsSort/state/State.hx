@@ -76,9 +76,9 @@ class State
 		
 		for (key in stateObjects.keys())
 		{
-			var item:StateObject = stateObjects[key];
+			var item:StateObject = stateObjects.get(key);
 			var sceneModelURI = sceneModel.uri;
-			var itemConditionsPass = item.conditionsPass;
+			var itemConditionsPass:Bool = item.conditionsPass;
 			
 			if (item.uri == sceneModelURI && item.ignore) {
 				if (this.conditionsPass && itemConditionsPass) return; // ignore only if conditionsPass

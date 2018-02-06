@@ -21,7 +21,12 @@ class FuseBundle implements IBundle
 	/*============================================================================*/
 	/* Public Functions                                                           */
 	/*============================================================================*/
-
+	
+	public function new()
+	{
+		
+	}
+	
 	/** @inheritDoc **/
 	public function extend(context:IContext):Void
 	{

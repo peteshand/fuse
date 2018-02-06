@@ -115,7 +115,8 @@ class Transition
 	{
 		this.target = target;
 		
-		if (!target) throw new Error("target must not be null");
+		if (target == null) throw new Error("target must not be null");
+		
 		var transitionObject = getTransitionObject(target);
 		transitionObject.onSet.add(UpdateStartValues);
 		transitionObject.set(properties, options);
