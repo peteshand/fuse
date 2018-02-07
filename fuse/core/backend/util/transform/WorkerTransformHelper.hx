@@ -52,12 +52,10 @@ class WorkerTransformHelper
 		applyPosition = 0;
 		
 		
-		if (coreDisplay.displayData.isRotating == 1) {
-			coreDisplay.displayData.isRotating = 0;
+		if (coreDisplay.isRotating == 1) {
 			applyRotation = 1;
 		}
-		if (coreDisplay.displayData.isMoving == 1) {
-			coreDisplay.displayData.isMoving = 0;
+		if (coreDisplay.isMoving == 1) {
 			applyPosition = 1;
 		}
 		

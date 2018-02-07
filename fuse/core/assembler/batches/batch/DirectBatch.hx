@@ -51,17 +51,17 @@ class DirectBatch extends BaseBatch implements IBatch
 	{
 		if (image.displayData.visible == 0) return;
 		
-		
 		var vertexData:IVertexData = image.vertexData;
 		var coreTexture:CoreTexture = image.coreTexture;
 		
-		
 		var vertexPositionHasMoved:Bool = image.drawIndex != VertexData.OBJECT_POSITION;
+		//trace([image.drawIndex, vertexPositionHasMoved]);
+		
 		//if (vertexPositionHasMoved) {
 			//trace("vertexPositionHasMoved");
 		//}
 		var updateUVs:Bool		= vertexPositionHasMoved || coreTexture.uvsHaveChanged;
-		var updatePosition:Bool	= vertexPositionHasMoved || image.isStatic == 0;// (image.displayData.isMoving == 1);
+		var updatePosition:Bool	= vertexPositionHasMoved || image.isMoving == 1;
 		var updateColour:Bool	= vertexPositionHasMoved || image.isStatic == 0;
 		var updateAlpha:Bool	= vertexPositionHasMoved || image.isStatic == 0;
 		

@@ -60,25 +60,25 @@ class CoreTexture
 	
 	public function updateUVData() 
 	{
-		//uvLeft = textureData.x / textureData.p2Width;
-		//uvTop = textureData.y / textureData.p2Height;
-		//uvRight = (textureData.x + textureData.width) / textureData.p2Width;
-		//uvBottom = (textureData.y + textureData.height) / textureData.p2Height;
-		
 		uvsHaveChanged = false;
 		
 		p2Width = textureData.p2Width;
 		p2Height = textureData.p2Height;
 		
-		_uvLeft = _uvRight = textureData.x;
-		_uvTop = _uvBottom = textureData.y;
-		_uvLeft /= p2Width;
-		_uvTop /= p2Height;
+		//_uvLeft = _uvRight = textureData.x;
+		//_uvTop = _uvBottom = textureData.y;
+		//_uvLeft /= p2Width;
+		//_uvTop /= p2Height;
+		//
+		//_uvRight += textureData.width;
+		//_uvBottom += textureData.height;
+		//_uvRight /= p2Width;
+		//_uvBottom /= p2Height;
 		
-		_uvRight += textureData.width;
-		_uvBottom += textureData.height;
-		_uvRight /= p2Width;
-		_uvBottom /= p2Height;
+		_uvLeft = textureData.x / textureData.p2Width;
+		_uvTop = textureData.y / textureData.p2Height;
+		_uvRight = (textureData.x + textureData.width) / textureData.p2Width;
+		_uvBottom = (textureData.y + textureData.height) / textureData.p2Height;
 		
 		if (uvLeft != _uvLeft || uvTop != _uvTop || uvRight != _uvRight || uvBottom != _uvBottom) {
 			//trace([uvLeft, _uvLeft, uvTop, _uvTop, uvRight, _uvRight, uvBottom, _uvBottom]);

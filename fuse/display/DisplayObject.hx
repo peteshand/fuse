@@ -64,6 +64,7 @@ class DisplayObject
 		//displayData = new WorkerDisplayData(id);
 		displayData = untyped CommsObjGen.getDisplayData(id);
 		displayData.isMoving = 1;
+		displayData.isRotating = 1;
 		
 		objectId = id;
 		

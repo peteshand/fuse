@@ -21,6 +21,8 @@ class CoreDisplayObject
 {
 	public var objectId		:Int;
 	public var isStatic		:Int = 0;
+	public var isMoving		:Int;
+	public var isRotating	:Int;
 	
 	public var displayData	:IDisplayData;
 	public var parent		:CoreInteractiveObject;
@@ -88,6 +90,17 @@ class CoreDisplayObject
 		if (Graphics.isStatic == 0) isStatic = 0;
 		else if (Core.RESIZE) isStatic = 0;
 		displayData.isStatic = 1; // reset static prop
+		
+		isMoving = 0;
+		isRotating = 0;
+		
+		if (isStatic == 0) {
+			isMoving = displayData.isMoving;
+			displayData.isMoving = 0;
+			
+			isRotating = displayData.isRotating;
+			displayData.isRotating = 0;
+		}
 	}
 	
 	inline function pushTransform() 
