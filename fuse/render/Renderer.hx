@@ -246,7 +246,7 @@ class Renderer
 			//{
 				//context3DTexture.setContextTexture(k, -1);
 			//}
-			
+			//trace("numItemsInBatch = " + numItemsInBatch);
 			shaderProgram.value = ShaderPrograms.getProgram(numItemsInBatch);
 			//FuseShaders.CURRENT_SHADER.value = FuseShaders.getShader(4);
 			

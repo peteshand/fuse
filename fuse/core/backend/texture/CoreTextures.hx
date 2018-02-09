@@ -61,7 +61,7 @@ class CoreTextures
 	public function register(textureId:Int):CoreTexture
 	{
 		var texture:CoreTexture = texturesMap.get(textureId);
-		texture.activeCount++;
+		if (texture != null) texture.activeCount++;
 		return texture;
 	}
 	

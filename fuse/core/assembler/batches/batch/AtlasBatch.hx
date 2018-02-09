@@ -1,6 +1,6 @@
 package fuse.core.assembler.batches.batch;
 
-import fuse.core.assembler.atlas.partition.AtlasPartition;
+import fuse.core.assembler.atlas.sheet.partition.AtlasPartition;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.assembler.vertexWriter.VertexWriter;
 import fuse.core.communication.data.textureData.ITextureData;
@@ -36,7 +36,7 @@ class AtlasBatch extends BaseBatch implements IBatch
 			batchData.clearRenderTarget = 0;
 		}*/
 		
-		trace(this);
+		//trace(this);
 		
 		setBatchProps();
 		

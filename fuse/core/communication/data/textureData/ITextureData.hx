@@ -27,7 +27,7 @@ typedef ITextureData =
 	public var persistent:Int;
 	public var directRender:Int;
 	public var atlasTextureId:Int;
-	public var atlasBatchTextureIndex:Int;
+	//public var atlasBatchTextureIndex:Int;
 	public var changeCount:Int;	
 	public var area:Float;
 	

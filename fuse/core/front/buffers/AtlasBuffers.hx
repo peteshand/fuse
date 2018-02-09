@@ -53,7 +53,7 @@ class AtlasBuffers
 	
 	static function get_endIndex():Int 
 	{
-		return startIndex + numBuffers;
+		return startIndex + (numBuffers * 2);
 	}
 	
 	public static function getBufferTexture(index:Int):RenderTexture

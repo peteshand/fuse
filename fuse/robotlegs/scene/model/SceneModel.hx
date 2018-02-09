@@ -55,7 +55,7 @@ class SceneModel extends Notifier<String>
 			
 			if (updateHistory) _history.push(v);
 			//activityModel.animating();
-			trace("_value = " + _value);
+			//trace("_value = " + _value);
 			dispatch();
 		}
 		return v;
