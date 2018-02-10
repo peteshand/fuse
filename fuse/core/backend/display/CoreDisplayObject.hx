@@ -54,7 +54,9 @@ class CoreDisplayObject
 	
 	public function init(objectId:Int) 
 	{
+		trace("init: " + objectId);
 		this.objectId = objectId;
+		trace("NEW: " + objectId);
 		displayData = untyped CommsObjGen.getDisplayData(objectId);
 	}
 	
@@ -86,6 +88,7 @@ class CoreDisplayObject
 	
 	inline function setIsStatic() 
 	{
+		if (displayData == null) trace("setIsStatic: " + this.objectId);
 		isStatic = displayData.isStatic;
 		if (Graphics.isStatic == 0) isStatic = 0;
 		else if (Core.RESIZE) isStatic = 0;
@@ -96,6 +99,7 @@ class CoreDisplayObject
 		
 		if (isStatic == 0) {
 			isMoving = displayData.isMoving;
+			if (Graphics.isMoving == 1) isMoving = 1;
 			displayData.isMoving = 0;
 			
 			isRotating = displayData.isRotating;
@@ -105,7 +109,7 @@ class CoreDisplayObject
 	
 	inline function pushTransform() 
 	{
-		Graphics.pushTransformation(transformData.localTransform, isStatic);
+		Graphics.pushTransformation(transformData.localTransform, isStatic, isMoving);
 	}
 	
 	function popTransform() 
@@ -147,7 +151,7 @@ class CoreDisplayObject
 	
 	public function buildHierarchy2()
 	{
-		trace("objectId = " + objectId);
+		trace("buildHierarchy2 = " + objectId);
 	}
 	
 	public function buildTransformActions()
@@ -164,5 +168,53 @@ class CoreDisplayObject
 	function get_diagonal():Float 
 	{
 		return Math.sqrt(Math.pow(quadData.topRightX - quadData.topLeftX, 2) + Math.pow(quadData.bottomLeftY - quadData.topLeftY, 2));
+	}
+	
+	public function clear():Void
+	{
+		//objectId = 0;
+		//isStatic = 0;
+		//isMoving = 1;
+		//isRotating = 1;
+		
+		//displayData = null;
+		//
+		//if (displayData != null){
+			//displayData.x = 0;
+			//displayData.y = 0;
+			//displayData.width = 0;
+			//displayData.height = 0;
+			//displayData.pivotX = 0;
+			//displayData.pivotY = 0;
+			//displayData.scaleX = 0;
+			//displayData.scaleY = 0;
+			//displayData.rotation = 0;
+			//displayData.alpha = 0;
+			//displayData.color = 0x0;
+			//displayData.colorTL = 0x0;
+			//displayData.colorTR = 0x0;
+			//displayData.colorBL = 0x0;
+			//displayData.colorBR = 0x0;
+			////displayData.textureId:Int,
+			//displayData.renderLayer = 0;
+			//displayData.visible = 1;
+			//displayData.isStatic = 0;
+			//displayData.isMoving = 1;
+			//displayData.isRotating = 1;
+		//}
+		
+		//parent = null;
+		
+		//quadData.clear();
+		//bounds.clear();
+		//transformData.clear();
+		//
+		//left = 0;
+		//right = 0;
+		//top = 0;
+		//bottom = 0;
+		//
+		//parentNonStatic = false;
+		//combinedAlpha = 1;
 	}
 }

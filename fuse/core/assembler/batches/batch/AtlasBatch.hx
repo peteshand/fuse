@@ -36,7 +36,7 @@ class AtlasBatch extends BaseBatch implements IBatch
 			batchData.clearRenderTarget = 0;
 		}*/
 		
-		trace(this);
+		//trace(this);
 		
 		setBatchProps();
 		

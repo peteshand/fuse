@@ -20,10 +20,7 @@ import fuse.utils.GcoArray;
 **/
 class AtlasBufferAssembler
 {
-	public function new() 
-	{
-		
-	}
+	public function new() { }
 	
 	static public function build() 
 	{
@@ -32,7 +29,7 @@ class AtlasBufferAssembler
 		//trace("DisplayList.hierarchyBuildRequired = " + DisplayList.hierarchyBuildRequired);
 		//trace("CoreTextures.texturesHaveChanged = " + CoreTextures.texturesHaveChanged);
 		
-		if (/*DisplayList.hierarchyBuildRequired || */CoreTextures.texturesHaveChanged) {
+		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged) {
 			AtlasTextures.build();
 			AtlasPartitions.build();
 			AtlasSheets.build();

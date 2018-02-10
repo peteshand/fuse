@@ -31,6 +31,14 @@ abstract Bounds(Array<Float>)
 		return value;
 	}
 	
+	//public inline function clear() 
+	//{
+		//left = 0;
+		//right = 0;
+		//top = 0;
+		//bottom = 0;
+	//}
+	
 	function get_left():Float { return this[0]; }
 	function get_top():Float { return this[1]; }
 	function get_right():Float { return this[2]; }

@@ -70,60 +70,61 @@ class DirectBatch extends BaseBatch implements IBatch
 		//}
 		//updateUVs = image.updateUVs && 
 		
-		//if (image.isStatic == 0 || image.drawIndex != VertexData.OBJECT_POSITION) {
+		vertexData.setTexture(image.textureIndex);
+		
+		if (image.mask != null) {
+			// TODO: update value to point to correct batch textureIndex
+			vertexData.setMaskTexture(0);
+			//trace("setBatchProps mask: " + image.objectId);
 			
-			vertexData.setTexture(image.textureIndex);
+		}
+		else {
+			vertexData.setMaskTexture(-1);
+		}
+		
+		//if (updateUVs) {
+			//trace([coreTexture.uvTop, coreTexture.uvBottom]);
 			
-			if (image.mask == null) vertexData.setMaskTexture(-1);
-			else {
-				// TODO: update value to point to correct batch textureIndex
-				vertexData.setMaskTexture(0);
+			//trace("updateUVs = " + updateUVs);
+			
+			vertexData.setUV(0, coreTexture.uvLeft,		coreTexture.uvBottom);	// bottom left
+			vertexData.setUV(1, coreTexture.uvLeft,		coreTexture.uvTop);		// top left
+			vertexData.setUV(2, coreTexture.uvRight,	coreTexture.uvTop);		// top right
+			vertexData.setUV(3, coreTexture.uvRight,	coreTexture.uvBottom);	// bottom right
+			
+			if (image.mask != null) {
+				vertexData.setMaskUV(0, image.mask.coreTexture.uvLeft,	image.mask.coreTexture.uvBottom);	// bottom left
+				vertexData.setMaskUV(1, image.mask.coreTexture.uvLeft,	image.mask.coreTexture.uvTop);	// top left
+				vertexData.setMaskUV(2, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvTop);	// top right
+				vertexData.setMaskUV(3, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvBottom);	// bottom right
 			}
 			
-			//if (updateUVs) {
-				//trace([coreTexture.uvTop, coreTexture.uvBottom]);
-				
-				//trace("updateUVs = " + updateUVs);
-				
-				vertexData.setUV(0, coreTexture.uvLeft,		coreTexture.uvBottom);	// bottom left
-				vertexData.setUV(1, coreTexture.uvLeft,		coreTexture.uvTop);		// top left
-				vertexData.setUV(2, coreTexture.uvRight,	coreTexture.uvTop);		// top right
-				vertexData.setUV(3, coreTexture.uvRight,	coreTexture.uvBottom);	// bottom right
-				
-				if (image.mask != null) {
-					vertexData.setMaskUV(0, image.mask.coreTexture.uvLeft,	image.mask.coreTexture.uvBottom);	// bottom left
-					vertexData.setMaskUV(1, image.mask.coreTexture.uvLeft,	image.mask.coreTexture.uvTop);	// top left
-					vertexData.setMaskUV(2, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvTop);	// top right
-					vertexData.setMaskUV(3, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvBottom);	// bottom right
-				}
-				
-				//image.updateUVs = false;
-			//}
-			
-			if (updatePosition) {
-				vertexData.setXY(0, image.quadData.bottomLeftX,	image.quadData.bottomLeftY);
-				vertexData.setXY(1, image.quadData.topLeftX,	image.quadData.topLeftY);
-				vertexData.setXY(2, image.quadData.topRightX,	image.quadData.topRightY);
-				vertexData.setXY(3, image.quadData.bottomRightX,image.quadData.bottomRightY);
-			}
-			//else {
-				//trace("resize");	
-				//vertexData.setXY(0, ResizeX(image.bottomLeft.x),	ResizeY(image.bottomLeft.y));
-				//vertexData.setXY(1, ResizeX(image.topLeft.x),	ResizeY(image.topLeft.y));
-				//vertexData.setXY(2, ResizeX(image.topRight.x),	ResizeY(image.topRight.y));
-				//vertexData.setXY(3, ResizeX(image.bottomRight.x),ResizeY(image.bottomRight.y));
-			//}
-			
-			if (updateColour){
-				vertexData.setColor(0, image.displayData.colorBL);
-				vertexData.setColor(1, image.displayData.colorTL);
-				vertexData.setColor(2, image.displayData.colorTR);
-				vertexData.setColor(3, image.displayData.colorBR);
-			}
-			if (updateAlpha){
-				vertexData.setAlpha(image.combinedAlpha);
-			}
+			//image.updateUVs = false;
 		//}
+		
+		if (updatePosition) {
+			vertexData.setXY(0, 	image.quadData.bottomLeftX,		image.quadData.bottomLeftY);
+			vertexData.setXY(1, 	image.quadData.topLeftX,		image.quadData.topLeftY);
+			vertexData.setXY(2, 	image.quadData.topRightX,		image.quadData.topRightY);
+			vertexData.setXY(3,		image.quadData.bottomRightX,	image.quadData.bottomRightY);
+		}
+		//else {
+			//trace("resize");	
+			//vertexData.setXY(0, ResizeX(image.bottomLeft.x),	ResizeY(image.bottomLeft.y));
+			//vertexData.setXY(1, ResizeX(image.topLeft.x),	ResizeY(image.topLeft.y));
+			//vertexData.setXY(2, ResizeX(image.topRight.x),	ResizeY(image.topRight.y));
+			//vertexData.setXY(3, ResizeX(image.bottomRight.x),ResizeY(image.bottomRight.y));
+		//}
+		
+		if (updateColour){
+			vertexData.setColor(0, image.displayData.colorBL);
+			vertexData.setColor(1, image.displayData.colorTL);
+			vertexData.setColor(2, image.displayData.colorTR);
+			vertexData.setColor(3, image.displayData.colorBR);
+		}
+		if (updateAlpha){
+			vertexData.setAlpha(image.combinedAlpha);
+		}
 		
 		image.isStatic = 1;
 		image.drawIndex = VertexData.OBJECT_POSITION;

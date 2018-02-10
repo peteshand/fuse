@@ -37,6 +37,18 @@ abstract QuadData(Array<Float>)
 		return value;
 	}
 	
+	//public inline function clear() 
+	//{
+		//bottomLeftX = 0;
+		//bottomLeftY = 0;
+		//bottomRightX = 0;
+		//bottomRightY = 0;
+		//topLeftX = 0;
+		//topLeftY = 0;
+		//topRightX = 0;
+		//topRightY = 0;
+	//}
+	
 	function get_bottomLeftX():Float 
 	{
 		return this[0];

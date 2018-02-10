@@ -12,9 +12,11 @@ class Graphics
 {
 	public static var transformation(get, set):FastMatrix3;
 	public static var isStatic(get, never):Int;
+	public static var isMoving(get, never):Int;
 	static public var alpha:Float = 1;
 	static var transformations:GcoArray<FastMatrix3>;
 	static var isStatics:GcoArray<Int>;
+	static var isMovings:GcoArray<Int>;
 	static var alphas:GcoArray<Float>;
 	
 	static var count:Int = 0;
@@ -27,15 +29,19 @@ class Graphics
 		isStatics = new GcoArray<Int>([]);
 		isStatics.push(1);
 		
+		isMovings = new GcoArray<Int>([]);
+		isMovings.push(0);
+		
 		alphas = new GcoArray<Float>([]);
 		alphas.push(1);
 	}
 	
 	public function new() { }
 	
-	public static inline function pushTransformation(transformation:FastMatrix3, isStatic:Int): Void {
+	public static inline function pushTransformation(transformation:FastMatrix3, isStatic:Int, isMoving:Int): Void {
 		transformations.push(transformation);
 		isStatics.push(isStatic);
+		isMovings.push(isMoving);
 	}
 	
 	public static inline function popTransformation(): FastMatrix3 {
@@ -66,5 +72,9 @@ class Graphics
 	
 	private static inline function get_isStatic():Int {
 		return isStatics[isStatics.length - 1];
+	}
+	
+	private static inline function get_isMoving():Int {
+		return isMovings[isMovings.length - 1];
 	}
 }

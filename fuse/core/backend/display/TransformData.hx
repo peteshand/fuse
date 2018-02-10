@@ -18,6 +18,11 @@ class TransformData
 	
 	public function new() 
 	{
+		//clear();
+	//}
+	//
+	//inline public function clear() 
+	//{
 		localTransform = FastMatrix3.identity();
 		globalTransform = FastMatrix3.identity();
 		positionMatrix = FastMatrix3.identity();
