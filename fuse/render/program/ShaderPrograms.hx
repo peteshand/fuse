@@ -21,6 +21,8 @@ class ShaderPrograms
 		ShaderPrograms.context3D = context3D;
 		programs = new Map<Int, ShaderProgram>();
 		for (i in 1...8) getProgram(i);
+		
+		ShaderProgram.init();
 	}
 	
 	public static function getProgram(numItems:Int):ShaderProgram

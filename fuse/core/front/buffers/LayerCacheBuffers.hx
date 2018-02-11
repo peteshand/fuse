@@ -1,5 +1,5 @@
 package fuse.core.front.buffers;
-import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.texture.BaseTexture;
 import fuse.texture.AbstractTexture;
 import fuse.texture.RenderTexture;
@@ -12,7 +12,7 @@ import fuse.texture.RenderTexture;
 @:access(fuse.texture.BaseTexture)
 class LayerCacheBuffers
 {
-	static var startIndex:Int = 6;
+	static var startIndex:Int = 10;
 	static var numBuffers:Int = 2;
 	static var endIndex(get, null):Int;
 	

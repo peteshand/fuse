@@ -29,7 +29,7 @@ class TextureData
 	public var persistent:Int;
 	public var directRender:Int;
 	public var atlasTextureId:Int;
-	public var atlasBatchTextureIndex:Int;
+	//public var atlasBatchTextureIndex:Int;
 	public var changeCount:Int = 0;
 	public var area(get, null):Float;
 	

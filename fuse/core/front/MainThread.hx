@@ -5,7 +5,7 @@ import fuse.core.front.buffers.AtlasBuffers;
 import fuse.core.input.FrontMouseInput;
 import fuse.core.front.buffers.LayerCacheBuffers;
 import fuse.core.communication.memory.SharedMemory;
-import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.input.Input;
 import fuse.display.DisplayObject;
 import fuse.display.Stage;

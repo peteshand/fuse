@@ -46,8 +46,9 @@ class CommsObjGen
 	static public function getDisplayData(id:Int) 
 	{
 		init();
-		var displayData:DisplayData = displayDataGen.get(id);
+		var displayData:IDisplayData = displayDataGen.get(id);
 		displayData.isStatic = 0;
+		//Reflect.setProperty(displayData, "isStatic", 0);
 		return displayData;
 	}	
 	

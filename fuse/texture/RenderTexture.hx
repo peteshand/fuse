@@ -1,6 +1,6 @@
 package fuse.texture;
 
-import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.data.renderTextureData.IRenderTextureData;
 import fuse.core.communication.data.renderTextureData.IRenderTextureDrawData;
 import fuse.core.communication.data.renderTextureData.RenderTextureData;
@@ -35,14 +35,14 @@ abstract RenderTexture(AbstractTexture) to Int from Int
 class BaseRenderTexture extends BaseTexture
 {
 	static var currentRenderTargetId:Int;
-	static var conductorData:ConductorData;
+	static var conductorData:WorkerConductorData;
 	var renderTextureData:IRenderTextureData;
 	var renderTextureDrawData:IRenderTextureDrawData;
 	
 	public function new(textureId:Int, width:Int, height:Int, directRender:Bool=true) 
 	{
 		if (conductorData == null) {
-			conductorData = new ConductorData();
+			conductorData = new WorkerConductorData();
 		}
 		
 		super(textureId, width, height, false);

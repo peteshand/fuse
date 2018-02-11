@@ -1,7 +1,7 @@
 package fuse.core.assembler.vertexWriter;
 import fuse.core.assembler.batches.BatchAssembler;
 import fuse.core.assembler.batches.batch.IBatch;
-import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.utils.GcoArray;
 
@@ -12,11 +12,11 @@ import fuse.utils.GcoArray;
 class VertexWriter
 {
 	public static var VERTEX_COUNT:Int;
-	static var conductorData:ConductorData;
+	static var conductorData:WorkerConductorData;
 	
 	public static function init() 
 	{
-		conductorData = new ConductorData();
+		conductorData = new WorkerConductorData();
 	}
 	
 	static public function build() 

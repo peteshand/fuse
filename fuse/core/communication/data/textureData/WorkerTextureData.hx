@@ -62,7 +62,7 @@ class WorkerTextureData
 	public var persistent(get, set):Int;
 	public var directRender(get, set):Int;
 	public var atlasTextureId(get, set):Int;
-	public var atlasBatchTextureIndex(get, set):Int;
+	//public var atlasBatchTextureIndex(get, set):Int;
 	public var changeCount(get, set):Int;
 	public var area(get, null):Float;
 	
@@ -154,9 +154,9 @@ class WorkerTextureData
 		return memoryBlock.readInt16(ATLAS_TEXTURE_ID);
 	}
 	
-	inline function get_atlasBatchTextureIndex():Int { 
-		return memoryBlock.readInt16(ATLAS_BATCH_TEXTURE_INDEX);
-	}
+	//inline function get_atlasBatchTextureIndex():Int { 
+		//return memoryBlock.readInt16(ATLAS_BATCH_TEXTURE_INDEX);
+	//}
 	
 	inline function get_changeCount():Int { 
 		return memoryBlock.readInt16(CHANGE_COUNT);
@@ -250,10 +250,10 @@ class WorkerTextureData
 		return value;
 	}
 	
-	inline function set_atlasBatchTextureIndex(value:Int):Int { 
-		memoryBlock.writeInt16(ATLAS_BATCH_TEXTURE_INDEX, value);
-		return value;
-	}
+	//inline function set_atlasBatchTextureIndex(value:Int):Int { 
+		//memoryBlock.writeInt16(ATLAS_BATCH_TEXTURE_INDEX, value);
+		//return value;
+	//}
 	
 	inline function set_changeCount(value:Int):Int { 
 		memoryBlock.writeInt16(CHANGE_COUNT, value);

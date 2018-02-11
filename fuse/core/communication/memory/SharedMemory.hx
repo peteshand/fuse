@@ -2,7 +2,7 @@ package fuse.core.communication.memory;
 
 import fuse.core.communication.data.MemoryPool;
 import fuse.core.communication.data.batchData.WorkerBatchData;
-import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.data.displayData.WorkerDisplayData;
 import fuse.core.communication.data.renderTextureData.RenderTextureData;
 import fuse.core.communication.data.renderTextureData.RenderTextureDrawData;
@@ -39,7 +39,7 @@ class SharedMemory
 	{
 		vertexDataPool = CreatePool(VertexData.BUFFER_SIZE * VertexData.BYTES_PER_ITEM);
 		batchDataPool = CreatePool(WorkerBatchData.BUFFER_SIZE * WorkerBatchData.BYTES_PER_ITEM);
-		conductorDataPool = CreatePool(ConductorData.BUFFER_SIZE);
+		conductorDataPool = CreatePool(WorkerConductorData.BUFFER_SIZE);
 		displayDataPool = CreatePool(WorkerDisplayData.BUFFER_SIZE * WorkerDisplayData.BYTES_PER_ITEM);
 		textureDataPool = CreatePool(WorkerTextureData.BUFFER_SIZE * WorkerTextureData.BYTES_PER_ITEM);
 		renderTextureDataPool = CreatePool(RenderTextureData.BUFFER_SIZE * RenderTextureData.BYTES_PER_ITEM);
@@ -72,17 +72,20 @@ class SharedMemory
 	{
 		memory = value;
 		memory.length = memorySize + memorySize;
-		
+		memory.position = 0;
+		memory.endian = Endian.LITTLE_ENDIAN;
 		#if air
 			//memory.shareable = true;
 			if (WorkerInfo.isMainThread) {
 				Reflect.setProperty(memory, "shareable", true);
 			}
+			//if (WorkerInfo.usingWorkers || WorkerInfo.isWorkerThread) {
+				//Memory.select(memory);
+			//}
 		#end
 		
-		memory.position = 0;
-		memory.endian = Endian.LITTLE_ENDIAN;
 		Memory.select(memory);
+		
 		return memory;
 	}
 }

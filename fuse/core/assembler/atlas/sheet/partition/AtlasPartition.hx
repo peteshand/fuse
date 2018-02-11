@@ -1,4 +1,4 @@
-package fuse.core.assembler.atlas.partition;
+package fuse.core.assembler.atlas.sheet.partition;
 
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.backend.Core;
@@ -13,12 +13,11 @@ import fuse.core.utils.Pool;
 
 class AtlasPartition implements ICoreRenderable
 {
+	static var objectCount:Int = 0;
 	public var objectId:Int = -1;
 	public var active:Bool;
 	public var placed:Bool;
 	
-	public var atlasIndex:Int;
-	public var atlasTextureId:Int;
 	public var x:Int;
 	public var y:Int;
 	public var width:Int;
@@ -32,13 +31,11 @@ class AtlasPartition implements ICoreRenderable
 	public var textureIndex:Int;
 	
 	public function new() { 
-		
+		objectId = objectCount++;
 	}
 	
-	public function init(atlasIndex:Int, atlasTextureId:Int, x:Int, y:Int, width:Int, height:Int):AtlasPartition
+	public function init(x:Int, y:Int, width:Int, height:Int):AtlasPartition
 	{
-		this.atlasIndex = atlasIndex;
-		this.atlasTextureId = atlasTextureId;
 		this.x = x;
 		this.y = y;
 		this.width = width;

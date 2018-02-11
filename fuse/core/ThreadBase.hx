@@ -1,5 +1,5 @@
 package fuse.core;
-import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.display.DisplayObject;
 import fuse.display.Stage;
@@ -22,7 +22,7 @@ class ThreadBase extends EventDispatcher
 	public var frameRate(get, set):Float;
 	public var onRender:Signal0;
 	public var workerSetup:WorkerSetup;
-	public var conductorData:ConductorData;
+	public var conductorData:WorkerConductorData;
 	
 	public var staticCount:Int = 0;
 	public var isStatic:Int = 0;

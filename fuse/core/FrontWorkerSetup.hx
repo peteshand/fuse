@@ -8,7 +8,7 @@ import flash.system.Worker;
 import flash.concurrent.Condition;
 import flash.concurrent.Mutex;
 #end
-import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.info.WorkerInfo;
 
@@ -34,7 +34,7 @@ class FrontWorkerSetup extends WorkerSetup
 		#end
 		
 		Fuse.current.sharedMemory = new SharedMemory();
-		Fuse.current.conductorData = new ConductorData();
+		Fuse.current.conductorData = new WorkerConductorData();
 		Fuse.current.conductorData.frameIndex = 0;
 		
 		var workerComm:IWorkerComms = null;

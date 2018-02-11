@@ -13,6 +13,8 @@ class FuseShaders
 	{
 		shaders = new Map<Int, FuseShader>();
 		//for (i in 1...8) setCurrentShader(i);
+		
+		FuseShader.init();
 	}
 	
 	public static function setCurrentShader(numTextures:Int):Void

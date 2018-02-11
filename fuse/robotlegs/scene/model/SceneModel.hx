@@ -55,6 +55,7 @@ class SceneModel extends Notifier<String>
 			
 			if (updateHistory) _history.push(v);
 			//activityModel.animating();
+			//trace("_value = " + _value);
 			dispatch();
 		}
 		return v;
@@ -94,16 +95,20 @@ class SceneModel extends Notifier<String>
 	
 	public function goBack(backNum:Int=1):Void 
 	{
+		trace("backNum = " + backNum);
+		trace("_history.length = " + _history.length);
 		if (_history.length < backNum) {
 			return;
 		}
 		
 		goBackUri = _value;
+		trace(_history);
 		for (i in 0...backNum) 
 		{
 			_history.pop();
 		}
 		
+		trace(_history);
 		uriWithoutHistory = _history[_history.length - 1];
 	}
 	

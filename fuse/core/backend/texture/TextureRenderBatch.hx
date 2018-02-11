@@ -10,11 +10,11 @@ import fuse.core.communication.data.batchData.IBatchData;
 
 class TextureRenderBatch
 {
-	var batchDataArray:Array<IBatchData> = [];
+	static var batchDataArray:Array<IBatchData> = [];
 	
 	public function new() { }
 	
-	public function getBatchData(objectId:Int):IBatchData
+	public static function getBatchData(objectId:Int):IBatchData
 	{
 		if (objectId >= batchDataArray.length) {
 			var batchData:IBatchData = CommsObjGen.getBatchData(objectId);

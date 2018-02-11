@@ -24,7 +24,6 @@ class HierarchyAssembler
 		
 		if (DisplayList.hierarchyBuildRequired)
 		{
-			trace("rebuild");
 			hierarchy.clear();
 			transformActions.clear();
 			

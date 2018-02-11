@@ -1,6 +1,6 @@
 package fuse.core.utils;
 
-import fuse.core.assembler.atlas.partition.AtlasPartition;
+import fuse.core.assembler.atlas.sheet.partition.AtlasPartition;
 import fuse.core.assembler.batches.batch.AtlasBatch;
 //import fuse.core.assembler.batches.batch.CacheDrawBatch;
 import fuse.core.assembler.batches.batch.DirectBatch;

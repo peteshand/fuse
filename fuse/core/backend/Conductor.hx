@@ -2,7 +2,7 @@ package fuse.core.backend;
 
 import flash.display.Sprite;
 import fuse.core.WorkerSetup;
-import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.data.WorkerSharedProperties;
@@ -33,7 +33,7 @@ class Conductor
 	static var condition:Condition;
 	static var isActiveWorker:Bool = false;
 	static private var numberOfWorkers:Int;
-	public static var conductorData:ConductorData;
+	public static var conductorData:WorkerConductorData;
 	static var update:Sprite = new Sprite();
 	
 	public static function init(workerComms:IWorkerComms, index:Int, numberOfWorkers:Int, usingWorkers:Bool) 
@@ -46,7 +46,7 @@ class Conductor
 		Conductor.usingWorkers = usingWorkers;
 		//conductorData.endian = Endian.LITTLE_ENDIAN;
 		
-		conductorData = new ConductorData();
+		conductorData = new WorkerConductorData();
 		/*trace("index = " + index);
 		if (index == 0) {
 			trace("lock");

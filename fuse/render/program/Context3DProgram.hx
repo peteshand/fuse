@@ -10,22 +10,28 @@ import openfl.display3D.Program3D;
  */
 class Context3DProgram
 {
-	var currentProgram = new Notifier<Program3D>();
-	var context3D:Context3D;
+	static var currentProgram = new Notifier<Program3D>();
+	static var context3D:Context3D;
 	
-	public function new(context3D:Context3D) 
+	public static function init(context3D:Context3D) 
 	{
-		this.context3D = context3D;
+		Context3DProgram.context3D = context3D;
 		currentProgram.add(OnProgramChnge);
 	}
 	
-	public inline function setProgram(program:Program3D) 
+	public static inline function setProgram(program:Program3D) 
 	{
 		currentProgram.value = program;
 	}
 	
-	inline function OnProgramChnge() 
+	static public function clear() 
 	{
+		Context3DProgram.setProgram(null);
+	}
+	
+	static inline function OnProgramChnge() 
+	{
+		//trace("setProgram");
 		context3D.setProgram(currentProgram.value);
 	}
 }

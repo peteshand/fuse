@@ -5,7 +5,7 @@ import fuse.core.input.Touch;
 import flash.events.Event;
 import fuse.Fuse;
 import fuse.core.communication.memory.SharedMemory;
-import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.info.WorkerInfo;
 import fuse.display.DisplayObject;
 import fuse.core.utils.Pool;

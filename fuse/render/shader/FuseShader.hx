@@ -22,7 +22,7 @@ class FuseShader
 	public var vertexCode(get, null):ByteArray;
 	public var fragmentCode(get, null):ByteArray;
 	
-	static function init():Void
+	public static function init():Void
 	{
 		if (FuseShader.agalMiniAssembler == null) {
 			FuseShader.agalMiniAssembler = new AGALMiniAssembler();

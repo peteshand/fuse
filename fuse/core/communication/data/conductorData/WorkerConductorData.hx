@@ -7,7 +7,7 @@ import fuse.core.communication.data.MemoryBlock;
  * @author P.J.Shand
  */
 
-class ConductorData
+class WorkerConductorData
 {
 	
 	static public inline var FRAME_INDEX:Int = 0;
@@ -69,7 +69,7 @@ class ConductorData
 	public function new() 
 	{
 		if (memoryBlock == null) {
-			memoryBlock = Fuse.current.sharedMemory.conductorDataPool.createMemoryBlock(ConductorData.BUFFER_SIZE, 0);
+			memoryBlock = Fuse.current.sharedMemory.conductorDataPool.createMemoryBlock(WorkerConductorData.BUFFER_SIZE, 0);
 		}
 	}
 	

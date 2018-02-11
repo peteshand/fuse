@@ -11,7 +11,7 @@ import fuse.core.assembler.vertexWriter.VertexWriter;
 import fuse.core.backend.Core;
 import fuse.core.communication.messageData.AddMaskMsg;
 import fuse.core.communication.memory.SharedMemory;
-import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.IWorkerComms;
 import fuse.core.backend.Conductor;
 import fuse.core.communication.messageData.AddChildMsg;
@@ -43,7 +43,7 @@ class CoreEntryPoint
 		if (Fuse.current.sharedMemory == null) {
 			var memory:ByteArray = workerComms.getSharedProperty(WorkerSharedProperties.CORE_MEMORY);
 			Fuse.current.sharedMemory = new SharedMemory(memory);
-			Fuse.current.conductorData = new ConductorData();
+			Fuse.current.conductorData = new WorkerConductorData();
 		}
 		
 		Core.init();

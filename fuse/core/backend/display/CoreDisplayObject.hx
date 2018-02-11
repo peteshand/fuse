@@ -54,9 +54,9 @@ class CoreDisplayObject
 	
 	public function init(objectId:Int) 
 	{
-		trace("init: " + objectId);
+		//trace("init: " + objectId);
 		this.objectId = objectId;
-		trace("NEW: " + objectId);
+		//trace("NEW: " + objectId);
 		displayData = untyped CommsObjGen.getDisplayData(objectId);
 	}
 	

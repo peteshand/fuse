@@ -1,6 +1,6 @@
 package fuse.core.front.buffers;
 
-import fuse.core.communication.data.conductorData.ConductorData;
+import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.texture.BaseTexture;
 import fuse.texture.AbstractTexture;
 import fuse.texture.RenderTexture;
@@ -53,7 +53,7 @@ class AtlasBuffers
 	
 	static function get_endIndex():Int 
 	{
-		return startIndex + numBuffers;
+		return startIndex + (numBuffers * 2);
 	}
 	
 	public static function getBufferTexture(index:Int):RenderTexture

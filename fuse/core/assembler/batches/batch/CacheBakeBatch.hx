@@ -42,7 +42,7 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 			return false;
 		}
 		
-		trace(this);
+		//trace(this);
 		
 		//if (LayerBufferAssembler.STATE == LayerState.WRITE) return;
 		

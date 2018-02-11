@@ -1,7 +1,8 @@
 package fuse.core.assembler.batches;
 
-import fuse.core.assembler.atlas.partition.AtlasPartition;
-import fuse.core.assembler.atlas.partition.AtlasPartitions;
+import fuse.core.assembler.atlas.sheet.AtlasSheets;
+import fuse.core.assembler.atlas.sheet.partition.AtlasPartition;
+import fuse.core.assembler.atlas.sheet.AtlasSheet;
 import fuse.core.assembler.batches.batch.AtlasBatch;
 import fuse.core.assembler.batches.batch.BatchType;
 import fuse.core.assembler.batches.batch.DirectBatch;
@@ -58,13 +59,13 @@ class BatchAssembler
 	
 	static private function addAtlasRenderables() 
 	{
-		if (AtlasPartitions.activePartitions.length > 0 && AtlasPartitions.active){
+		if (AtlasSheets.partitions.length > 0 && AtlasSheets.active){
 			currentBatchType = BatchType.ATLAS;
 			
-			for (j in 0...AtlasPartitions.activePartitions.length) 
+			for (j in 0...AtlasSheets.partitions.length) 
 			{
-				var atlasPartition:AtlasPartition = AtlasPartitions.activePartitions[j];
-				addRenderable(atlasPartition, atlasPartition.atlasTextureId);
+				var atlasPartition:AtlasPartition = AtlasSheets.partitions[j];
+				addRenderable(atlasPartition, atlasPartition.coreTexture.textureData.atlasTextureId);
 			}
 		}
 	}

@@ -30,7 +30,7 @@ class ShaderProgram
 	public var indices:ByteArray;
 	
 	var baseShader = new Notifier<FuseShader>();
-	var program:Program3D;
+	public var program:Program3D;
 	var numOfQuads:Int;
 	var context3D:Context3D;
 	
@@ -38,7 +38,7 @@ class ShaderProgram
 	static var posData:Vector<Float>;
 	static var fragmentData:Vector<Float>;
 	
-	static function init():Void
+	public static function init():Void
 	{
 		if (BASE_INDICES != null) return;
 		

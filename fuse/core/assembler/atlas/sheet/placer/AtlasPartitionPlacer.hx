@@ -1,6 +1,7 @@
-package fuse.core.assembler.atlas.placer;
+package fuse.core.assembler.atlas.sheet.placer;
 
-import fuse.core.assembler.atlas.partition.AtlasPartition;
+import fuse.core.assembler.atlas.sheet.partition.AtlasPartition;
+import fuse.core.backend.texture.CoreTexture;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.utils.Pool;
 
@@ -18,19 +19,15 @@ class AtlasPartitionPlacer
 		
 	}
 	
-	public static function place(partition:AtlasPartition, textureData:ITextureData):Bool
+	public static function place(partition:AtlasPartition, coreTexture:CoreTexture):Bool
 	{
-		if (textureData.width <= partition.width && textureData.height <= partition.height) {
-			partition.rightPartition = getRightPartition(partition, textureData);
-			partition.bottomPartition = getBottomPartition(partition, textureData);
+		if (coreTexture.textureData.width <= partition.width && coreTexture.textureData.height <= partition.height) {
+			partition.rightPartition = getRightPartition(partition, coreTexture.textureData);
+			partition.bottomPartition = getBottomPartition(partition, coreTexture.textureData);
 			
-			partition.width = textureData.width;
-			partition.height = textureData.height;
-			
-			//if (textureData.partition.value != null) {
-			//	AtlasPartitionPool.release(textureData.partition.value);
-			//}
-			//textureData.partition.value = AtlasPartitionPool.allocate(partition.x, partition.y, partition.width, partition.height);
+			partition.width = coreTexture.textureData.width;
+			partition.height = coreTexture.textureData.height;
+			partition.coreTexture = coreTexture;
 			return true;
 		}
 		return false;
@@ -50,8 +47,6 @@ class AtlasPartitionPlacer
 			else {*/
 				
 				return Pool.atlasPartitions2.request().init(
-					partition.atlasIndex,
-					partition.atlasTextureId,
 					partition.x + textureData.width + padding,
 					partition.y,
 					partition.width - textureData.width - padding,
@@ -82,8 +77,6 @@ class AtlasPartitionPlacer
 			}
 			else {*/
 				return Pool.atlasPartitions2.request().init(
-					partition.atlasIndex,
-					partition.atlasTextureId,
 					partition.x,
 					partition.y + textureData.height + padding,
 					textureData.width,
