@@ -28,6 +28,8 @@ class AtlasPartition implements ICoreRenderable
 	//public var textureData:ITextureData;
 	@:isVar public var textureId(get, set):Int = -1;
 	public var coreTexture:CoreTexture;
+	public var sourceTextureId(get, null):Int;
+	
 	public var textureIndex:Int;
 	
 	public function new() { 
@@ -79,5 +81,17 @@ class AtlasPartition implements ICoreRenderable
 			}
 		}
 		return value;
+	}
+	
+	function get_sourceTextureId():Int 
+	{
+		if (coreTexture.textureData.placed == 0) {
+			trace("use coreTexture.textureId");
+		}
+		else {
+			trace("use atlas as source");
+		}
+		
+		return coreTexture.textureId;
 	}
 }

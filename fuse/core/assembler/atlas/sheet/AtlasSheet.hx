@@ -16,6 +16,9 @@ import fuse.utils.GcoArray;
  */
 class AtlasSheet
 {
+	public var partitions = new GcoArray<AtlasPartition>([]);
+	public var lastFramePartitions = new GcoArray<AtlasPartition>([]);
+	
 	public var activePartitions = new GcoArray<AtlasPartition>([]);
 	//static var shouldClear:Bool = false;
 	
@@ -24,6 +27,7 @@ class AtlasSheet
 	
 	public var index:Int;
 	public var atlasTextureId(get, null):Int;
+	public var lastFramesAtlasTextureId(get, null):Int;
 	
 	var texturesFromLastFrame:Int = 0;
 	
@@ -39,7 +43,17 @@ class AtlasSheet
 	{
 		activePartitions.clear();
 		
+		
 		//initAvailablePartitions();
+		
+		partitions.copyTo(lastFramePartitions);
+		
+		//trace("lastFramePartitions.length = " + lastFramePartitions.length);
+		//for (i in 0...lastFramePartitions.length) 
+		//{
+			//var partition:AtlasPartition = lastFramePartitions[i];
+			//add(partition.coreTexture, partition);
+		//}
 	}
 	
 	function initAvailablePartitions() 
@@ -68,8 +82,8 @@ class AtlasSheet
 		for (i in 0...availablePartition.length) 
 		{
 			var partition:AtlasPartition = availablePartition[i];
-			//if (partition.available){
 			successfulPlacement = AtlasPartitionPlacer.place(partition, coreTexture);
+			
 			
 			//trace("i = " + i);
 			if (successfulPlacement)
@@ -90,6 +104,8 @@ class AtlasSheet
 	
 	public function writeActivePartitions() 
 	{
+		
+		
 		//trace("activePartitions.length = " + activePartitions.length);
 		if (activePartitions.length == 0) return;
 		
@@ -100,19 +116,20 @@ class AtlasSheet
 			
 			
 			textureData.placed = 1;
-			textureData.x = partition.x;
-			textureData.y = partition.y;
-			textureData.width = partition.width;
-			textureData.height = partition.height;
-			textureData.p2Width = Fuse.MAX_TEXTURE_SIZE;
-			textureData.p2Height = Fuse.MAX_TEXTURE_SIZE;
-			textureData.atlasTextureId = atlasTextureId; // renderTarget for image being rendered into atlas buffer
+			textureData.x = partition.x;					// x position to draw on atlas
+			textureData.y = partition.y;					// y position to draw on atlas
+			textureData.width = partition.width;			// width to draw on atlas
+			textureData.height = partition.height;		// height to draw on atlas
+			textureData.p2Width = Fuse.MAX_TEXTURE_SIZE;	// width of target texture
+			textureData.p2Height = Fuse.MAX_TEXTURE_SIZE;	// height of target texture
+			textureData.atlasTextureId = atlasTextureId;	// renderTarget for image being rendered into atlas buffer
 			//textureData.atlasBatchTextureIndex = index;
 			
 			partition.textureId = textureData.textureId;
 			partition.coreTexture.updateUVData();
 			
 			AtlasSheets.partitions.push(partition);
+			partitions.push(partition);
 		}
 		
 		copyLastFrame();
@@ -124,9 +141,7 @@ class AtlasSheet
 	{
 		if (texturesFromLastFrame == 0) return;
 		
-		var renderCount:Int = AtlasSheets.renderCount - 1;
-		
-		frameCopyPartition.textureId = AtlasSheets.startIndex + (index * 2) + (renderCount % 2);
+		frameCopyPartition.textureId = lastFramesAtlasTextureId;
 		if (frameCopyPartition.coreTexture == null) return;
 		
 		frameCopyPartition.coreTexture.textureData.atlasTextureId = atlasTextureId;
@@ -134,8 +149,15 @@ class AtlasSheet
 		
 	}
 	
-	function get_atlasTextureId():Int 
+	inline function get_atlasTextureId():Int 
 	{
 		return AtlasSheets.startIndex + (index * 2) + (AtlasSheets.renderCount % 2);
 	}
+	
+	inline function get_lastFramesAtlasTextureId():Int 
+	{
+		return AtlasSheets.startIndex + (index * 2) + ((AtlasSheets.renderCount - 1) % 2);
+	}
+	
+	
 }

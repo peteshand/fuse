@@ -9,4 +9,6 @@ interface ICoreRenderable
 	var objectId:Int;
 	var coreTexture:CoreTexture;
 	var textureIndex:Int;
+	
+	var sourceTextureId(get, null):Int;
 }

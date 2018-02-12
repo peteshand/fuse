@@ -45,7 +45,7 @@ class BatchAssembler
 		
 		addAtlasRenderables();
 		addLayerRenderables();
-		addDirectAndCacheRenderables();
+		addDirectRenderables();
 		
 		closeBatch();
 		
@@ -84,16 +84,11 @@ class BatchAssembler
 		//}
 	}
 	
-	static private function addDirectAndCacheRenderables() 
+	static private function addDirectRenderables() 
 	{
 		if (GenerateLayers.layers.length > 0) {
 			for (i in 0...GenerateLayers.layers.length) {
-				//if (GenerateLayers.layers[i].active) {
-					//currentBatchType = BatchType.CACHE_DRAW; // draws a single quad to the back buffer
-				//}
-				//else {
-					currentBatchType = BatchType.DIRECT;  // draws renderables directly to back buffer
-				//}
+				currentBatchType = BatchType.DIRECT;  // draws renderables directly to back buffer
 				addRenderables(GenerateLayers.layers[i].renderables, GenerateLayers.layers[i].renderTarget);
 			}
 		}

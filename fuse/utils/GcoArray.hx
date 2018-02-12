@@ -66,6 +66,17 @@ abstract GcoArray<T>(GcoArrayBase<T>)
 		this.length = value;
 		return value;
 	}
+	
+	
+	public inline function copyTo(toArray:GcoArray<T>) 
+	{
+		toArray.clear();
+		for (i in 0...length) 
+		{
+			toArray[i] = this.base[i];
+		}
+	}
+	
 }
 
 class GcoArrayBase<T>

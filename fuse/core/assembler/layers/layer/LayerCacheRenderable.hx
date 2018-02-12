@@ -14,6 +14,7 @@ class LayerCacheRenderable implements ICoreRenderable
 	@:isVar public var textureId(get, set):Int = -1;
 	public var coreTexture:CoreTexture;
 	public var textureIndex:Int;
+	public var sourceTextureId(get, null):Int;
 	
 	public function new(textureId:Int) 
 	{
@@ -36,5 +37,10 @@ class LayerCacheRenderable implements ICoreRenderable
 			}
 		}
 		return value;
+	}
+	
+	function get_sourceTextureId():Int 
+	{
+		return coreTexture.textureId;
 	}
 }

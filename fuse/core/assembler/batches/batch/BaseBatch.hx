@@ -60,7 +60,7 @@ class BaseBatch
 	
 	function getTextureIndex(renderable:ICoreRenderable) 
 	{
-		return batchTextures.getTextureIndex(renderable.coreTexture.textureId);
+		return batchTextures.getTextureIndex(renderable.sourceTextureId);
 	}
 	
 	function renderTargetChanged(renderTarget:Int) 

@@ -131,7 +131,6 @@ class AtlasBatch extends BaseBatch implements IBatch
 		//textureData.atlasTextureId
 		//trace("textureData.textureId = " + textureData.textureId);
 		//vertexData.batchTextureIndex = 0;// textureData.textureId;
-		vertexData.setTexture(0);
 		
 		// don't draw masks while drawing into atlas //
 		vertexData.setMaskTexture(-1);

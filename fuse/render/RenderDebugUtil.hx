@@ -94,4 +94,19 @@ class RenderDebugUtil
 		trace([batchData.textureId1, batchData.textureId2, batchData.textureId3, batchData.textureId4, batchData.textureId5, batchData.textureId6, batchData.textureId7, batchData.textureId8]);
 		trace("renderTargetId = " + batchData.renderTargetId);
 	}
+	
+	public static function debugIndex(numItemsInBatch:Int, startIndex:Int) 
+	{
+		SharedMemory.memory.position = startIndex;
+		for (i in 0...numItemsInBatch) 
+		{
+			var i1:Int = SharedMemory.memory.readShort();
+			var i2:Int = SharedMemory.memory.readShort();
+			var i3:Int = SharedMemory.memory.readShort();
+			var i4:Int = SharedMemory.memory.readShort();
+			var i5:Int = SharedMemory.memory.readShort();
+			var i6:Int = SharedMemory.memory.readShort();
+			trace([i1, i2, i3, i4, i5, i6]);
+		}
+	}
 }

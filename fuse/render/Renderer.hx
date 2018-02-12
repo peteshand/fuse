@@ -33,8 +33,8 @@ class Renderer
 		
 		if (!sharedContext){
 			context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0, false);
-			
 		}
+		
 		context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
 		//context3D.setScissorRectangle(new Rectangle(0, 0, 1600, 900));
 		context3D.setCulling(Context3DTriangleFace.BACK);
@@ -52,43 +52,37 @@ class Renderer
 	
 	public function update() 
 	{
-		Context3DRenderTarget.begin();
-		if (sharedContext) {
-			// context3D.clear will need to be called externally
-			drawBuffer();
-			// context3D.present will need to be called externally
-		}
-		else {
-			begin(true, Fuse.current.stage.color);
-			drawBuffer();
-			end();
-		}
-		
+		begin(true, Fuse.current.stage.color);
+		drawBuffer();
+		end();
 	}
 	
 	public function begin(clear:Bool = true, clearColor:Color):Void
 	{
-		context3D.clear(clearColor.red / 255, clearColor.green / 255, clearColor.blue / 255, 1);
+		if (!sharedContext) {
+			// Doesn't execute if context3D.clear is being handled externally
+			context3D.clear(clearColor.red / 255, clearColor.green / 255, clearColor.blue / 255, 1);
+		}
+		
+		Context3DRenderTarget.begin();
+		
+		if (Fuse.current.cleanContext) {
+			BatchRenderer.clear();
+		}
 	}
 	
 	function drawBuffer() 
 	{
-		if (Fuse.current.cleanContext) {
-			BatchRenderer.clear();
-		}
-		
-		#if !air
-			// Seems to be a bug in non AIR targets where changing the program causes texture bind issues
-			conductorData.highestNumTextures = 8;
-		#end
-		
 		BatchRenderer.begin(conductorData);
 		
 		for (i in 0...conductorData.numberOfBatches) 
 		{
 			BatchRenderer.drawBuffer(i, conductorData, context3D);
 		}
-		
+	}
+	
+	public function end():Void
+	{
 		if (Fuse.current.cleanContext) {
 			Context3DTexture.clear();
 			ShaderPrograms.clear();
@@ -96,25 +90,10 @@ class Renderer
 			BatchRenderer.clear();
 			Context3DRenderTarget.clear();
 		}
+		
+		if (!sharedContext) {
+			// Doesn't execute if context3D.present is being handled externally
+			context3D.present();
+		}
 	}
-	
-	public function end():Void
-	{
-		context3D.present();
-	}
-	
-	//function debugIndex(numItemsInBatch:Int, startIndex:Int) 
-	//{
-		//SharedMemory.memory.position = startIndex;
-		//for (i in 0...numItemsInBatch) 
-		//{
-			//var i1:Int = SharedMemory.memory.readShort();
-			//var i2:Int = SharedMemory.memory.readShort();
-			//var i3:Int = SharedMemory.memory.readShort();
-			//var i4:Int = SharedMemory.memory.readShort();
-			//var i5:Int = SharedMemory.memory.readShort();
-			//var i6:Int = SharedMemory.memory.readShort();
-			//trace([i1, i2, i3, i4, i5, i6]);
-		//}
-	//}
 }

@@ -30,6 +30,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	var drawIndex			:Int = -1;
 	//var updateUVs			:Bool = false;
 	var renderTarget		:Int = -1;
+	public var sourceTextureId(get, null):Int;
 	
 	public function new() 
 	{
@@ -138,6 +139,11 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		}
 		
 		return bounds;
+	}
+	
+	function get_sourceTextureId():Int 
+	{
+		return coreTexture.textureId;
 	}
 	
 	
