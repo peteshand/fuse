@@ -16,7 +16,7 @@ class AtlasSheets
 	public static var numAtlases:Int;
 	public static var startIndex:Int;
 	public static var active:Bool = false;
-	public static var renderCount:Int = 0;
+	
 	
 	static function __init__() 
 	{
@@ -32,7 +32,6 @@ class AtlasSheets
 	
 	static function clear() 
 	{
-		if (partitions.length == 0) return;
 		partitions.clear();
 		
 		for (i in 0...sheets.length) 
@@ -62,7 +61,14 @@ class AtlasSheets
 		{
 			sheets[j].writeActivePartitions();
 		}
-		
-		renderCount++;
+	}
+	
+	static public function closePartitions() 
+	{
+		for (i in 0...partitions.length) 
+		{
+			partitions[i].placed = true;
+			partitions[i].coreTexture.textureData.placed = 1;
+		}
 	}
 }

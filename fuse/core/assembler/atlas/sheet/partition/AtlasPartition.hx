@@ -3,6 +3,7 @@ package fuse.core.assembler.atlas.sheet.partition;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.backend.Core;
 import fuse.core.backend.texture.CoreTexture;
+import fuse.core.backend.util.atlas.AtlasUtils;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.utils.Pool;
 
@@ -31,6 +32,8 @@ class AtlasPartition implements ICoreRenderable
 	public var sourceTextureId(get, null):Int;
 	
 	public var textureIndex:Int;
+	public var lastFramePairPartition:AtlasPartition;
+	public var lastRenderTarget:Int;
 	
 	public function new() { 
 		objectId = objectCount++;
@@ -85,13 +88,14 @@ class AtlasPartition implements ICoreRenderable
 	
 	function get_sourceTextureId():Int 
 	{
-		if (coreTexture.textureData.placed == 0) {
-			trace("use coreTexture.textureId");
+		//if (AtlasUtils.alreadyPlaced(coreTexture.textureData)) {
+		if (lastFramePairPartition != null) {
+			//trace("use atlas as source: " + lastRenderTarget + ", " + coreTexture.textureId);
+			return lastRenderTarget;
 		}
 		else {
-			trace("use atlas as source");
+			//trace("use coreTexture.textureId: " + coreTexture.textureId);
+			return coreTexture.textureId;
 		}
-		
-		return coreTexture.textureId;
 	}
 }

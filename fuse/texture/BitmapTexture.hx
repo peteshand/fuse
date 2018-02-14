@@ -59,11 +59,15 @@ class BaseBitmapTexture extends BaseTexture
 	{
 		this.bitmapData = source;
 		
-		nativeTexture.uploadFromBitmapData(bitmapData, 0);
-		OnTextureUploadComplete(null);
-		
-		//nativeTexture.addEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
-		//nativeTexture.uploadFromBitmapDataAsync(bitmapData, 0);
+		//var uploadFromBitmapDataAsync:BitmapData -> Int -> Void = Reflect.getProperty(nativeTexture, "uploadFromBitmapDataAsync");
+		//if (uploadFromBitmapDataAsync != null) {
+		//	nativeTexture.addEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
+		//	uploadFromBitmapDataAsync(bitmapData, 0);
+		//}
+		//else {
+			nativeTexture.uploadFromBitmapData(bitmapData, 0);
+			OnTextureUploadComplete(null);
+		//}
 	}
 	
 	//public function uploadFromBitmapData(source:BitmapData, miplevel:UInt = 0):Void

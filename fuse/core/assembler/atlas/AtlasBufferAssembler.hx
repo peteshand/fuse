@@ -34,4 +34,9 @@ class AtlasBufferAssembler
 			AtlasSheets.build();
 		}
 	}
+	
+	static public function closePartitions() 
+	{
+		AtlasSheets.closePartitions();
+	}
 }

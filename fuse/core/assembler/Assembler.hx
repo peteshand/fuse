@@ -25,6 +25,8 @@ class Assembler
 	
 	public static function update() 
 	{
+		Fuse.current.conductorData.isStatic = 1;
+		
 		Core.textures.checkForTextureChanges();
 		Core.displayList.checkForDisplaylistChanges();
 		
@@ -34,11 +36,16 @@ class Assembler
 		BatchAssembler.build();	
 		VertexWriter.build();
 		BatchAssembler.findMaxNumTextures();
+		AtlasBufferAssembler.closePartitions();
 		
 		InputAssembler.build();
 		Core.textures.reset();
 		
 		Core.RESIZE = false;
-		Fuse.current.conductorData.isStatic = 1;
+		
+		//if (Fuse.current.conductorData.isStatic == 0){
+			//trace("Fuse.current.conductorData.isStatic = " + Fuse.current.conductorData.isStatic);
+		//}
+		
 	}
 }

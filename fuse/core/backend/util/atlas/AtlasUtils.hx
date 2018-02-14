@@ -13,7 +13,7 @@ class AtlasUtils
 		
 	}
 	
-	public static function alreadyPlaced(textureData:ITextureData) 
+	public static inline function alreadyPlaced(textureData:ITextureData) 
 	{
 		if (textureData.placed == 1) return true;
 		if (textureData.textureAvailable == 0) return true;

@@ -70,12 +70,12 @@ class BaseFileTexture extends BaseTexture
 		super(textureId, 0, 0, queUpload, onTextureUploadCompleteCallback);
 		this.url = url;
 		
-		if (url.indexOf("http") == 0) {
+		//if (url.indexOf("http") == 0) {
 			fileLoader = new RemoteLoader();
-		}
-		else {
-			fileLoader = new FileLoader();
-		}
+		//}
+		//else {
+			//fileLoader = new FileLoader();
+		//}
 		
 		fileLoader.addEventListener(Event.COMPLETE, OnLoadComplete);
 	}

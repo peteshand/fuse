@@ -35,6 +35,7 @@ class AtlasTextures
 		if (coreTexture.textureData.textureAvailable == 0) return; // Texture isn't render yet, default texture will be used instead
 		
 		if (!exists(coreTexture.textureId)) {
+			
 			textures.push(coreTexture);
 		}
 	}

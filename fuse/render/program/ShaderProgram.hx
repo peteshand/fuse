@@ -93,7 +93,6 @@ class ShaderProgram
 		indices.length = numOfQuads * 2;
 		
 		context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentData, 1);
-		
 		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, textureChannelData, 16);
 		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 16, posData, 1);
 		

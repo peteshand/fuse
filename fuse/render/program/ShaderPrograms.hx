@@ -15,18 +15,29 @@ class ShaderPrograms
 	public static var programs:Map<Int, ShaderProgram>;
 	public static var currentProgram:ShaderProgram;
 	public static var lastProgram:ShaderProgram;
+	static var buckets:Array<Int>;
 	
 	static public function init(context3D:Context3D) 
 	{
 		ShaderPrograms.context3D = context3D;
+		
+		buckets = [
+			500,
+			1000,
+			2000,
+			5000,
+			10000
+		];
+		
 		programs = new Map<Int, ShaderProgram>();
-		for (i in 1...8) getProgram(i);
+		for (i in 0...buckets.length) getProgram(buckets[i]);
 		
 		ShaderProgram.init();
 	}
 	
 	public static function getProgram(numItems:Int):ShaderProgram
 	{
+		//var id:Int = getGroupId(numItems);
 		currentProgram = programs.get(numItems);
 		if (currentProgram == null) {
 			currentProgram = new ShaderProgram(context3D, numItems);
@@ -41,6 +52,15 @@ class ShaderPrograms
 		
 		lastProgram = currentProgram;
 		return currentProgram;
+	}
+	
+	public static function getGroupId(numItems:Int) 
+	{
+		for (i in 0...buckets.length) 
+		{
+			if (numItems < buckets[i]) return buckets[i];
+		}
+		return numItems;
 	}
 	
 	public static function clear():Void

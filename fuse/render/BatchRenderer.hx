@@ -54,10 +54,11 @@ class BatchRenderer
 	static public function drawBuffer(batchIndex:Int, conductorData:WorkerConductorData, context3D:Context3D) 
 	{
 		var currentBatchData:IBatchData = TextureRenderBatch.getBatchData(batchIndex);
+		if (currentBatchData == null) return;
 		if (currentBatchData.skip == 1) return;
 		
-		var numItemsInBatch:Int = currentBatchData.numItems;
-		if (numItemsInBatch == 0) return;
+		var numItemsInShaderProgram:Int = ShaderPrograms.getGroupId(currentBatchData.numItems);
+		if (numItemsInShaderProgram == 0) return;
 		if (conductorData.highestNumTextures == 0) return;
 		
 		programChanged = false;
@@ -75,15 +76,16 @@ class BatchRenderer
 		//{
 			//Context3DTexture.setContextTexture(k, -1);
 		//}
-		//trace("numItemsInBatch = " + numItemsInBatch);
-		shaderProgram.value = ShaderPrograms.getProgram(numItemsInBatch);
+		//trace("numItemsInShaderProgram = " + numItemsInShaderProgram);
+		shaderProgram.value = ShaderPrograms.getProgram(numItemsInShaderProgram);
 		//FuseShaders.CURRENT_SHADER.value = FuseShaders.getShader(4);
 		
 		//var batchData:IBatchData = textureRenderBatch.getBatchData(i);
 		//trace("conductorData.isStatic = " + conductorData.isStatic);
 		//trace("programChanged = " + programChanged);
 		
-		if (currentBatchData != null /*&& (conductorData.isStatic == 0 || programChanged)*/) {
+		//trace(["conductorData.isStatic != 1", conductorData.isStatic != 1]);
+		//if (conductorData.isStatic != 1 || programChanged) {
 			
 			//trace("quadCount = " + quadCount);
 			//trace("VertexData.BYTES_PER_ITEM = " + VertexData.BYTES_PER_ITEM);
@@ -92,7 +94,8 @@ class BatchRenderer
 			//
 			//
 			//if (currentBatchData.renderTargetId == 6) {
-				//RenderDebugUtil.vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, numItemsInBatch);
+				//RenderDebugUtil.batchDebug(currentBatchData);
+				//RenderDebugUtil.vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, currentBatchData.numItems);
 			//}
 			//
 			//trace("quadCount = " + quadCount);
@@ -100,12 +103,12 @@ class BatchRenderer
 				SharedMemory.memory, 
 				quadCount * VertexData.BYTES_PER_ITEM,
 				0, 
-				ShaderProgram.VERTICES_PER_QUAD * numItemsInBatch
+				ShaderProgram.VERTICES_PER_QUAD * numItemsInShaderProgram
 			);
 			
-			//trace(ShaderProgram.VERTICES_PER_QUAD * numItemsInBatch);
+			//trace(ShaderProgram.VERTICES_PER_QUAD * numItemsInShaderProgram);
 			
-		}
+		//}
 		
 		Context3DProgram.setProgram(shaderProgram.value.program);
 		
@@ -125,12 +128,12 @@ class BatchRenderer
 		
 		//trace("itemCount = " + itemCount);
 		
-		//if (numItemsInBatch > 1) numItemsInBatch = 1;
-		//trace("numItemsInBatch = " + numItemsInBatch);
+		//if (numItemsInShaderProgram > 1) numItemsInShaderProgram = 1;
+		//trace("numItemsInShaderProgram = " + numItemsInShaderProgram);
 		//trace("drawTriangles");
-		context3D.drawTriangles(shaderProgram.value.indexbuffer, 0, numItemsInBatch * 2);
+		context3D.drawTriangles(shaderProgram.value.indexbuffer, 0, currentBatchData.numItems * 2);
 		
-		quadCount += numItemsInBatch;
+		quadCount += currentBatchData.numItems;
 	}
 	
 	static public function clear() 

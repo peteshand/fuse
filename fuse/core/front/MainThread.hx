@@ -140,19 +140,19 @@ class MainThread extends ThreadBase
 		////////////////////////////////////////////////
 		////////////////////////////////////////////////
 		
-		if (Fuse.current.isStatic == 1) {
-			Fuse.current.staticCount++;
-		}
-		else {
-			Fuse.current.staticCount = 0;
-		}
-		
-		if (Fuse.current.staticCount <= 2) {
-			Fuse.current.conductorData.isStatic = 0;
-		}
-		else {
-			Fuse.current.conductorData.isStatic = 1;
-		}
+		//if (Fuse.current.isStatic == 1) {
+			//Fuse.current.staticCount++;
+		//}
+		//else {
+			//Fuse.current.staticCount = 0;
+		//}
+		//
+		//if (Fuse.current.staticCount <= 2) {
+			//Fuse.current.conductorData.isStatic = 0;
+		//}
+		//else {
+			//Fuse.current.conductorData.isStatic = 1;
+		//}
 		
 		Fuse.current.isStatic = 1;
 		

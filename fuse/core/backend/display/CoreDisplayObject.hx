@@ -78,6 +78,7 @@ class CoreDisplayObject
 		combinedAlpha = Graphics.alpha * displayData.alpha;
 		//trace("combinedAlpha = " + combinedAlpha);
 		if (isStatic == 0) {
+			
 			//beginSetChildrenIsStatic(false);
 			Graphics.pushAlpha(combinedAlpha);
 			WorkerTransformHelper.update(this);
@@ -98,6 +99,8 @@ class CoreDisplayObject
 		isRotating = 0;
 		
 		if (isStatic == 0) {
+			Fuse.current.conductorData.isStatic = 0;
+			
 			isMoving = displayData.isMoving;
 			if (Graphics.isMoving == 1) isMoving = 1;
 			displayData.isMoving = 0;

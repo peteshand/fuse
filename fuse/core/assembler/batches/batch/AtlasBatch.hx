@@ -58,10 +58,26 @@ class AtlasBatch extends BaseBatch implements IBatch
 		
 		/*No longer required*/ //RenderTexture.currentRenderTargetId = textureData.atlasTextureId;
 		
-		var left:Float = textureData.baseX;
-		var top:Float = textureData.baseY;
-		var right:Float = textureData.baseWidth / textureData.baseP2Width;
-		var bottom:Float = textureData.baseHeight / textureData.baseP2Height;
+		var left:Float = 0;
+		var top:Float = 0;
+		var right:Float = 0;
+		var bottom:Float = 0;
+		
+		if (partition.lastFramePairPartition == null) {
+			left = textureData.baseX;
+			top = textureData.baseY;
+			right = textureData.baseWidth / textureData.baseP2Width;
+			bottom = textureData.baseHeight / textureData.baseP2Height;
+		}
+		else {
+			//trace([partition.x, partition.y, partition.width, partition.height]);
+			//trace([partition.lastFramePairPartition.x, partition.lastFramePairPartition.y, partition.lastFramePairPartition.width, partition.lastFramePairPartition.height]);
+			
+			left = partition.lastFramePairPartition.x / Fuse.MAX_TEXTURE_SIZE;
+			top = partition.lastFramePairPartition.y / Fuse.MAX_TEXTURE_SIZE;
+			right = left + (partition.lastFramePairPartition.width / Fuse.MAX_TEXTURE_SIZE);
+			bottom = top + (partition.lastFramePairPartition.height / Fuse.MAX_TEXTURE_SIZE);
+		}
 		
 		// Where to sample from source texture
 		vertexData.setUV(0, left, bottom);	// BOTTOM LEFT

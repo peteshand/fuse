@@ -75,6 +75,7 @@ class BatchAssembler
 		//if (LayerBufferAssembler.STATE == LayerState.BAKE){
 			if (GenerateLayers.layersGenerated == true && SortLayers.layers.length > 0){
 				currentBatchType = BatchType.CACHE_BAKE;  // draws renderables to render texture
+				getNewBatch();
 				for (j in 0...SortLayers.layers.length) {
 					//if (SortLayers.layers[j].hasChanged){
 						addRenderables(SortLayers.layers[j].renderables, SortLayers.layers[j].renderTarget);
@@ -87,8 +88,10 @@ class BatchAssembler
 	static private function addDirectRenderables() 
 	{
 		if (GenerateLayers.layers.length > 0) {
+			currentBatchType = BatchType.DIRECT;  // draws renderables directly to back buffer
+			getNewBatch();
 			for (i in 0...GenerateLayers.layers.length) {
-				currentBatchType = BatchType.DIRECT;  // draws renderables directly to back buffer
+				
 				addRenderables(GenerateLayers.layers[i].renderables, GenerateLayers.layers[i].renderTarget);
 			}
 		}

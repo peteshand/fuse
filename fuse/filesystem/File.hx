@@ -8,11 +8,11 @@ import openfl.net.FileReference;
  * ...
  * @author P.J.Shand
  */
-//#if air
-//
-	//typedef File = flash.filesystem.File;	
-	//
-//#elseif js
+#if air
+
+	typedef File = flash.filesystem.File;	
+	
+#elseif js
 	class File extends FileReference
 	{
 		@:isVar public static var applicationDirectory(get, null):File;
@@ -240,4 +240,4 @@ import openfl.net.FileReference;
 			else return "/";
 		}
 	}
-//#end
+#end
