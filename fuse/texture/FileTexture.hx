@@ -3,7 +3,7 @@ package fuse.texture;
 
 import fuse.core.front.texture.Textures;
 import fuse.loader.ILoader;
-import fuse.loader.FileLoader;
+//import fuse.loader.FileLoader;
 import fuse.loader.RemoteLoader;
 import openfl.display3D.textures.Texture;
 
