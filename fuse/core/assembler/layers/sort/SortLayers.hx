@@ -87,12 +87,12 @@ class SortLayers
 	
 	static private function TestTrace() 
 	{
-		var layers:GcoArray<LayerBuffer> = GenerateLayers.layers;
-		for (i in 0...layers.length) 
-		{
-			trace(["image.index = " + layers[i].index, layers[i].isStatic, layers[i].renderables.length, layers[i].isCacheLayer, layers[i].objectIds()]);
-		}
-		trace("-------");
+		//var layers:GcoArray<LayerBuffer> = GenerateLayers.layers;
+		//for (i in 0...layers.length) 
+		//{
+			//trace(["image.index = " + layers[i].index, layers[i].isStatic, layers[i].renderables.length, layers[i].isCacheLayer, layers[i].objectIds()]);
+		//}
+		//trace("-------");
 	}
 	
 	static inline function SortByStatic(a:LayerBuffer, b:LayerBuffer):Int 

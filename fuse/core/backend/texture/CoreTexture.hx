@@ -16,7 +16,6 @@ class CoreTexture
 	@:isVar public var textureData(get, set):ITextureData;
 	//public var textureData:ITextureData;
 	public var activeCount:Int = 0;
-	var changeAvailable:Bool = false;
 	var textureAvailable:Notifier<Int>;
 	var changeCount:Notifier<Int>;
 	var p2Width:Int;
@@ -34,7 +33,7 @@ class CoreTexture
 	public var uvRight	:Float = 1;
 	public var uvBottom	:Float = 1;
 	
-	public var textureHasChanged(get, null):Bool;
+	public var textureHasChanged:Bool = true;
 	
 	public function new(textureId:Int) 
 	{
@@ -43,7 +42,7 @@ class CoreTexture
 		textureAvailable = new Notifier<Int>(0);
 		textureAvailable.add(OnTextureAvailableChange);
 		
-		changeCount = new Notifier<Int>(0);
+		changeCount = new Notifier<Int>(-1);
 		changeCount.add(OnCountChange);
 	}
 	
@@ -54,8 +53,7 @@ class CoreTexture
 	
 	inline function OnTextureAvailableChange() 
 	{
-		if (textureData.directRender == 1) return;
-		changeAvailable = true;
+		textureHasChanged = true;
 	}
 	
 	public function updateUVData() 
@@ -64,16 +62,6 @@ class CoreTexture
 		
 		p2Width = textureData.p2Width;
 		p2Height = textureData.p2Height;
-		
-		//_uvLeft = _uvRight = textureData.x;
-		//_uvTop = _uvBottom = textureData.y;
-		//_uvLeft /= p2Width;
-		//_uvTop /= p2Height;
-		//
-		//_uvRight += textureData.width;
-		//_uvBottom += textureData.height;
-		//_uvRight /= p2Width;
-		//_uvBottom /= p2Height;
 		
 		_uvLeft = textureData.x / textureData.p2Width;
 		_uvTop = textureData.y / textureData.p2Height;
@@ -91,16 +79,17 @@ class CoreTexture
 		uvBottom = _uvBottom;
 	}
 	
-	inline function get_textureHasChanged():Bool 
+	public function checkForChanges():Void
 	{
+		textureHasChanged = false;
 		changeCount.value = textureData.changeCount;
 		textureAvailable.value = textureData.textureAvailable;
-		if (changeAvailable) {
+		
+		if (textureHasChanged) {
+			textureHasChanged = true;
 			updateUVData();
-			changeAvailable = false;
-			return true;
 		}
-		return false;
+		
 	}
 	
 	inline function get_textureData():ITextureData 
@@ -115,8 +104,8 @@ class CoreTexture
 		return textureData;
 	}
 	
-	public inline function clearTextureChange() 
-	{
-		changeAvailable = false;
-	}
+	//public inline function clearTextureChange() 
+	//{
+		//textureHasChanged = false;
+	//}
 }

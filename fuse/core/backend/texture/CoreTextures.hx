@@ -19,6 +19,8 @@ class CoreTextures
 	{
 		texturesHaveChanged = false;
 		for (i in 0...textures.length) {
+			textures[i].checkForChanges();
+			
 			if (textures[i].textureHasChanged) {
 				//count = -1;
 				texturesHaveChanged = true;
@@ -73,13 +75,13 @@ class CoreTextures
 		}
 	}
 	
-	public function clearTextureChanges() 
-	{
-		for (i in 0...textures.length) 
-		{
-			textures[i].clearTextureChange();
-		}
-	}
+	//public function clearTextureChanges() 
+	//{
+		//for (i in 0...textures.length) 
+		//{
+			//textures[i].clearTextureChange();
+		//}
+	//}
 	
 	public function reset() 
 	{

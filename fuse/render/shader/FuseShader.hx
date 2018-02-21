@@ -74,6 +74,7 @@ class FuseShader
 	public function FRAGMENT_STRING():String 
 	{
 		var alias:Array<AgalAlias> = [];
+		alias.push( { alias:"ZERO.1", value:"fc0.x" } );
 		alias.push( { alias:"TWO.3", value:"fc0.www" } );
 		alias.push( { alias:"ONE.1", value:"fc0.z" } );
 		alias.push( { alias:"ONE.3", value:"fc0.zzz" } );
@@ -115,8 +116,10 @@ class FuseShader
 				else 		agal += "add ft2, ft2, ft0					\n";
 			}
 			// Multiply Alpha by Mask Value /////////////////////////////////
-			agal += "add ft2.w, ft2.w, MASK_BASE.1						\n" +
-			"mul ft1.xyzw, ft1.xyzw, ft2.wwww							\n";
+			
+			agal += "add ft2.w, ft2.w, MASK_BASE.1					\n";
+			agal += "min ft2.w, ft2.w, ONE.1						\n";
+			agal += "mul ft1.xyzw, ft1.xyzw, ft2.wwww				\n";
 			
 			/////////////////////////////////////////////////////////////////
 			/////////////////////////////////////////////////////////////////

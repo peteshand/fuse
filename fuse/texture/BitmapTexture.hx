@@ -79,7 +79,6 @@ class BaseBitmapTexture extends BaseTexture
 	private function OnTextureUploadComplete(e:Event):Void 
 	{
 		nativeTexture.removeEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
-		
 		textureData.changeCount++;
 		textureData.placed = 0;
 		Textures.registerTexture(textureId, this);

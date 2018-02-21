@@ -15,6 +15,14 @@ class RenderDebugUtil
 		
 	}
 	
+	public static function batchDebug(batchData:IBatchData) 
+	{
+		trace("startIndex      = " + batchData.startIndex);
+		trace("numItemsInBatch = " + batchData.numItems);
+		trace([batchData.textureId1, batchData.textureId2, batchData.textureId3, batchData.textureId4, batchData.textureId5, batchData.textureId6, batchData.textureId7, batchData.textureId8]);
+		trace("renderTargetId = " + batchData.renderTargetId);
+	}
+	
 	public static inline function vertexDebug(startIndex:Int, numItems:Int) 
 	{
 		trace("numItems = " + numItems);
@@ -85,14 +93,6 @@ class RenderDebugUtil
 			}
 			//trace("---------------------");
 		}
-	}
-	
-	public static function batchDebug(batchData:IBatchData) 
-	{
-		trace("startIndex      = " + batchData.startIndex);
-		trace("numItemsInBatch = " + batchData.numItems);
-		trace([batchData.textureId1, batchData.textureId2, batchData.textureId3, batchData.textureId4, batchData.textureId5, batchData.textureId6, batchData.textureId7, batchData.textureId8]);
-		trace("renderTargetId = " + batchData.renderTargetId);
 	}
 	
 	public static function debugIndex(numItemsInBatch:Int, startIndex:Int) 

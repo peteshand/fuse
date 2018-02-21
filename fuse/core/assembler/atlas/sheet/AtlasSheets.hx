@@ -21,7 +21,7 @@ class AtlasSheets
 	static function __init__() 
 	{
 		sheets = [];
-		numAtlases = 1;
+		numAtlases = 4;
 		startIndex = 2;
 		
 		for (i in 0...numAtlases) 

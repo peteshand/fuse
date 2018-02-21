@@ -46,7 +46,7 @@ class MessageManager
 		};
 		
 		typeMap.set(typeName, messageTypeInfo);
-		trace("registerType: " + typeName + " - " + typeIndexCount);
+		//trace("registerType: " + typeName + " - " + typeIndexCount);
 		typeIndexCount++;
 		
 	}

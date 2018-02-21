@@ -89,14 +89,12 @@ class CoreDisplayObject
 	
 	inline function setIsStatic() 
 	{
-		if (displayData == null) trace("setIsStatic: " + this.objectId);
 		isStatic = displayData.isStatic;
-		if (Graphics.isStatic == 0) isStatic = 0;
-		else if (Core.RESIZE) isStatic = 0;
-		displayData.isStatic = 1; // reset static prop
-		
 		isMoving = 0;
 		isRotating = 0;
+		
+		if (Graphics.isStatic == 0) isStatic = 0;
+		displayData.isStatic = 1; // reset static prop
 		
 		if (isStatic == 0) {
 			Fuse.current.conductorData.isStatic = 0;
@@ -107,6 +105,12 @@ class CoreDisplayObject
 			
 			isRotating = displayData.isRotating;
 			displayData.isRotating = 0;
+		}
+		
+		if (Core.RESIZE) {
+			isStatic = 0;
+			isMoving = 1;
+			isRotating = 1;
 		}
 	}
 	

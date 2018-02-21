@@ -1,5 +1,6 @@
 package fuse.render;
 
+import fuse.core.PlatformSettings;
 import fuse.core.backend.texture.TextureRenderBatch;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.communication.data.batchData.IBatchData;
@@ -43,15 +44,15 @@ class BatchRenderer
 	
 	static public function begin(conductorData:WorkerConductorData) 
 	{
-		#if !air
+		#if html5
 			// Seems to be a bug in non AIR targets where changing the program causes texture bind issues
-			conductorData.highestNumTextures = 8;
+			conductorData.highestNumTextures = PlatformSettings.MAX_TEXTURES;
 		#end
 		quadCount = 0;
 		FuseShaders.setCurrentShader(conductorData.highestNumTextures);
 	}
 	
-	static public function drawBuffer(batchIndex:Int, conductorData:WorkerConductorData, context3D:Context3D) 
+	static public function drawBuffer(batchIndex:Int, conductorData:WorkerConductorData, context3D:Context3D, traceOutput:Bool) 
 	{
 		var currentBatchData:IBatchData = TextureRenderBatch.getBatchData(batchIndex);
 		if (currentBatchData == null) return;
@@ -72,6 +73,8 @@ class BatchRenderer
 				Context3DTexture.setContextTexture(j, -1);
 			}
 		}
+		
+		//trace("currentBatchData.numItems = " + currentBatchData.numItems);
 		//for (k in conductorData.highestNumTextures...8) 
 		//{
 			//Context3DTexture.setContextTexture(k, -1);
@@ -94,6 +97,7 @@ class BatchRenderer
 			//
 			//
 			//if (currentBatchData.renderTargetId == 6) {
+			//if (traceOutput){
 				//RenderDebugUtil.batchDebug(currentBatchData);
 				//RenderDebugUtil.vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, currentBatchData.numItems);
 			//}

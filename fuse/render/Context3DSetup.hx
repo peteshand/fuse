@@ -98,10 +98,10 @@ class Context3DSetup
 				context3D.enableErrorChecking = false;
 			#end
 			
-			trace("driverInfo = " + context3D.driverInfo);
+			//trace("driverInfo = " + context3D.driverInfo);
 			activeProfile = targetProfile;
 			onComplete.dispatch();
-			trace("context already created, driverInfo = " + context3D.driverInfo);
+			//trace("context already created, driverInfo = " + context3D.driverInfo);
 		}
 	}
 	

@@ -41,7 +41,9 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	override public function init(objectId:Int) 
 	{
 		super.init(objectId);
+		drawIndex = -1;
 		this.textureId = displayData.textureId;
+		
 	}
 	
 	override function calculateTransform() 

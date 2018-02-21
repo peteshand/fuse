@@ -1,5 +1,6 @@
 package fuse.core.front.texture.upload;
 import fuse.texture.IBaseTexture;
+import fuse.utils.FrameBudget;
 
 /**
  * ...
@@ -18,7 +19,11 @@ class TextureUploadQue
 	
 	static public function check() 
 	{
-		if (que.length > 0) {
+		// Upload next texture if:
+		// A: There are textures to upload
+		// B: No more than 50% of the framebudget has been used
+		while (que.length > 0 && FrameBudget.progress < 0.5) 
+		{
 			var texture:IBaseTexture = que.shift();
 			texture.upload();
 		}

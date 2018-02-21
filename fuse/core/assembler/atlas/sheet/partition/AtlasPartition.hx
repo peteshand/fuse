@@ -89,13 +89,14 @@ class AtlasPartition implements ICoreRenderable
 	function get_sourceTextureId():Int 
 	{
 		//if (AtlasUtils.alreadyPlaced(coreTexture.textureData)) {
-		if (lastFramePairPartition != null) {
-			//trace("use atlas as source: " + lastRenderTarget + ", " + coreTexture.textureId);
-			return lastRenderTarget;
-		}
-		else {
+		
+		if (lastFramePairPartition == null) {
 			//trace("use coreTexture.textureId: " + coreTexture.textureId);
 			return coreTexture.textureId;
+		}
+		else {
+			//trace("use atlas as source: " + lastRenderTarget + ", " + coreTexture.textureId);
+			return lastRenderTarget;
 		}
 	}
 }

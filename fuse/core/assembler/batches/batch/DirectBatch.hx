@@ -21,7 +21,12 @@ class DirectBatch extends BaseBatch implements IBatch
 	
 	override function getTextureIndex(renderable:ICoreRenderable) 
 	{
-		return batchTextures.getTextureIndex(renderable.coreTexture.textureData.atlasTextureId);
+		if (renderable.coreTexture.textureData.textureAvailable == 1) {
+			return batchTextures.getTextureIndex(renderable.coreTexture.textureData.atlasTextureId);
+		}
+		else {
+			return batchTextures.getTextureIndex(0);
+		}
 	}
 	
 	override public function add(renderable:ICoreRenderable, renderTarget:Int, batchType:BatchType):Bool
@@ -34,13 +39,9 @@ class DirectBatch extends BaseBatch implements IBatch
 	{
 		setBatchProps();
 		
-		//trace("renderables.length = " + renderables.length);
-		//trace(this);
-		
 		for (i in 0...renderables.length) 
 		{
 			VertexWriter.VERTEX_COUNT += VertexData.BYTES_PER_ITEM;
-			//renderables[i].writeVertex();
 			writeLayerVertex(cast renderables[i]);
 		}
 		
@@ -55,20 +56,11 @@ class DirectBatch extends BaseBatch implements IBatch
 		var coreTexture:CoreTexture = image.coreTexture;
 		
 		var vertexPositionHasMoved:Bool = image.drawIndex != VertexData.OBJECT_POSITION;
-		//trace([image.drawIndex, vertexPositionHasMoved]);
 		
-		//if (vertexPositionHasMoved) {
-			//trace("vertexPositionHasMoved");
-		//}
 		var updateUVs:Bool		= vertexPositionHasMoved || coreTexture.uvsHaveChanged;
 		var updatePosition:Bool	= vertexPositionHasMoved || image.isMoving == 1;
 		var updateColour:Bool	= vertexPositionHasMoved || image.isStatic == 0;
 		var updateAlpha:Bool	= vertexPositionHasMoved || image.isStatic == 0;
-		
-		//if (coreTexture.uvsHaveChanged) {
-			//trace("coreTexture.uvsHaveChanged");
-		//}
-		//updateUVs = image.updateUVs && 
 		
 		vertexData.setTexture(image.textureIndex);
 		

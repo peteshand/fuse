@@ -45,7 +45,7 @@ class Textures
 	static private function createDefaultTextures() 
 	{
 		//#if debug
-		var blank:BitmapData = new BitmapData(512, 512, true, 0x9900FF00);
+		var blank:BitmapData = new BitmapData(512, 512, true, 0x1100FF00);
 		//#else
 		//var blank:BitmapData = new BitmapData(32, 32, true, 0x00000000);
 		//#end
@@ -74,8 +74,10 @@ class Textures
 		}
 	}
 		
-	static inline public function getTextureBase(textureId:Int):TextureBase
+	static inline public function getTextureBase(textureId:Null<Int>):TextureBase
 	{
+		if (textureId == null) return null;
+		
 		var texture:IBaseTexture = getTexture(textureId);
 		if (texture == null) {
 			//trace("No texture found for textureId: " + textureId);
@@ -90,9 +92,10 @@ class Textures
 		return textures.get(getTextureId(textureId));
 	}
 	
-	static public function getTextureId(textureId:Int):Int
+	static public function getTextureId(textureId:Null<Int>):Null<Int>
 	{
 		if (textureId == -1) return -1;
+		if (textureId == null) return null;
 		if (textures.exists(textureId)) return textureId;
 		
 		if (textureId >= AtlasBuffers.startIndex && textureId < AtlasBuffers.endIndex) {

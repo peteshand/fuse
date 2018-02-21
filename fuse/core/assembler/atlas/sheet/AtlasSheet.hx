@@ -47,7 +47,9 @@ class AtlasSheet
 		
 		initAvailablePartitions();
 		
-		partitions.copyTo(lastFramePartitions);
+		if (partitions.length > 0){
+			partitions.copyTo(lastFramePartitions);
+		}
 		partitions.clear();
 		
 		//trace("partitions.length = " + partitions.length);
@@ -81,14 +83,20 @@ class AtlasSheet
 		for (i in 0...availablePartition.length) 
 		{
 			var partition:AtlasPartition = availablePartition[i];
+			partition.lastFramePairPartition = null;
 			
-			partition.lastFramePairPartition = getLastFramePair(coreTexture);
+			
+			//trace("partition.lastFramePairPartition = " + partition.lastFramePairPartition);
 			
 			successfulPlacement = AtlasPartitionPlacer.place(partition, coreTexture);
 			
 			//trace("i = " + i);
 			if (successfulPlacement)
 			{
+				if (!coreTexture.textureHasChanged) {
+					partition.lastFramePairPartition = getLastFramePair(coreTexture);
+				}
+				
 				if (partition.rightPartition != null)	availablePartition.insert(i + 1, partition.rightPartition);
 				if (partition.bottomPartition != null)	availablePartition.insert(i + 1, partition.bottomPartition);
 				activePartitions.push(partition);
@@ -158,6 +166,7 @@ class AtlasSheet
 		var count:Int = 0;
 		for (j in 0...p.length) 
 		{
+			if (p[j].coreTexture.textureHasChanged) return false;
 			if (p[j].lastFramePairPartition != null) count++;
 		}
 		if (count == p.length) return true;

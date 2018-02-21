@@ -36,6 +36,7 @@ class Assembler
 		BatchAssembler.build();	
 		VertexWriter.build();
 		BatchAssembler.findMaxNumTextures();
+		
 		AtlasBufferAssembler.closePartitions();
 		
 		InputAssembler.build();

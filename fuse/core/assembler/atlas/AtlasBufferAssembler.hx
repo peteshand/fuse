@@ -37,6 +37,8 @@ class AtlasBufferAssembler
 	
 	static public function closePartitions() 
 	{
-		AtlasSheets.closePartitions();
+		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged) {
+			AtlasSheets.closePartitions();
+		}
 	}
 }

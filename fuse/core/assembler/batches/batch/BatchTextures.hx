@@ -30,7 +30,7 @@ class BatchTextures
 		{
 			if (textureId == textureIds[i]) return i;
 		}
-		if (textureIds.length < 8) {
+		if (textureIds.length < PlatformSettings.MAX_TEXTURES) {
 			textureIds.push(textureId);
 			return textureIds.length-1;
 		}

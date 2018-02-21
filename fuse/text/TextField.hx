@@ -68,22 +68,22 @@ class TextField extends Image
 	public var textWidth(get, never):Float;
 	public var type(get, set):TextFieldType;
 	public var wordWrap(get, set):Bool;
+	@:isVar public var directRender(get, set):Bool = false;
 	
 	var clearColour:Color = 0x00000000;
 	var baseBmdTexture(get, never):BitmapTexture;
 	
-	public function new() 
+	public function new(width:Int, height:Int) 
 	{
 		nativeTextField = new NativeTextField();
-		this.width = nativeTextField.width;
-		this.height = nativeTextField.height;
 		
+		bitmapdata = new BitmapData(width, height, true, clearColour);
 		dirtySize = false;
 		
-		bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
-		bitmapdata.draw(nativeTextField);
+		super(new BitmapTexture(bitmapdata, width, height, false));
 		
-		super(new BitmapTexture(bitmapdata, false));
+		this.width = nativeTextField.width;// = width;
+		this.height = nativeTextField.height;// = height;
 	}
 	
 	public function appendText(text:String):Void
@@ -390,8 +390,6 @@ class TextField extends Image
 	
 	public function update():Void
 	{
-		//trace(nativeTextField.text);
-		
 		if (dirtySize == true) {
 			if (bitmapdata != null) bitmapdata.dispose();
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
@@ -400,11 +398,11 @@ class TextField extends Image
 				texture.dispose();
 			}
 			texture = new BitmapTexture(bitmapdata, false);
+			texture.directRender = directRender;
 		}
 		else if (dirtyProp == true) {
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
 			bitmapdata.draw(nativeTextField);
-			//baseBmdTexture.directRender
 			baseBmdTexture.update(bitmapdata);
 		}
 		
@@ -416,5 +414,16 @@ class TextField extends Image
 	function get_baseBmdTexture():BitmapTexture 
 	{
 		return untyped texture;
+	}
+	
+	function get_directRender():Bool 
+	{
+		return directRender;
+	}
+	
+	function set_directRender(value:Bool):Bool 
+	{
+		if (texture != null) texture.directRender = value;
+		return directRender = value;
 	}
 }

@@ -8,6 +8,7 @@ import fuse.render.program.ShaderPrograms;
 import fuse.render.shader.FuseShaders;
 import fuse.utils.Color;
 import fuse.Fuse;
+import fuse.utils.Resize;
 
 import openfl.display3D.Context3DTriangleFace;
 import openfl.display3D.Context3DCompareMode;
@@ -32,7 +33,8 @@ class Renderer
 		this.sharedContext = sharedContext;
 		
 		if (!sharedContext){
-			context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0, false);
+			Resize.change.add(OnResize);
+			OnResize();
 		}
 		
 		context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
@@ -48,6 +50,11 @@ class Renderer
 		BatchRenderer.init(context3D);
 		Textures.init(context3D);
 		FuseShaders.init();
+	}
+	
+	function OnResize() 
+	{
+		context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0, false);
 	}
 	
 	public function update() 
@@ -74,11 +81,18 @@ class Renderer
 	function drawBuffer() 
 	{
 		BatchRenderer.begin(conductorData);
-		
+		var traceOutput:Bool = false;
+		//if (conductorData.numberOfBatches > 1){
+			//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
+			//traceOutput = true;
+		//}
 		for (i in 0...conductorData.numberOfBatches) 
 		{
-			BatchRenderer.drawBuffer(i, conductorData, context3D);
+			BatchRenderer.drawBuffer(i, conductorData, context3D, traceOutput);
 		}
+		//if (traceOutput){
+			//trace("-------------------");
+		//}
 	}
 	
 	public function end():Void
