@@ -29,21 +29,13 @@ class AtlasBatch extends BaseBatch implements IBatch
 	
 	public function writeVertex() 
 	{
-		//if (AtlasSheet.shouldClear) {
-			batchData.clearRenderTarget = 1;
-		/*}
-		else {
-			batchData.clearRenderTarget = 0;
-		}*/
-		
-		//trace(this);
+		batchData.clearRenderTarget = 1;
 		
 		setBatchProps();
 		
 		for (i in 0...renderables.length) 
 		{
 			VertexWriter.VERTEX_COUNT += VertexData.BYTES_PER_ITEM;
-			//renderables[i].writeVertex();
 			writePartitionVertex(untyped renderables[i]);
 		}
 		
@@ -52,11 +44,7 @@ class AtlasBatch extends BaseBatch implements IBatch
 	
 	function writePartitionVertex(partition:AtlasPartition) 
 	{
-		//if (partition.placed) return;
-		
-		var textureData:ITextureData = partition.coreTexture.textureData;
-		
-		/*No longer required*/ //RenderTexture.currentRenderTargetId = textureData.atlasTextureId;
+		var textureData:ITextureData = null;
 		
 		var left:Float = 0;
 		var top:Float = 0;
@@ -64,6 +52,8 @@ class AtlasBatch extends BaseBatch implements IBatch
 		var bottom:Float = 0;
 		
 		if (partition.lastFramePairPartition == null) {
+			textureData = partition.coreTexture.textureData;
+			
 			left = textureData.baseX;
 			top = textureData.baseY;
 			right = textureData.baseWidth / textureData.baseP2Width;
@@ -72,6 +62,7 @@ class AtlasBatch extends BaseBatch implements IBatch
 		else {
 			//trace([partition.x, partition.y, partition.width, partition.height]);
 			//trace([partition.lastFramePairPartition.x, partition.lastFramePairPartition.y, partition.lastFramePairPartition.width, partition.lastFramePairPartition.height]);
+			textureData = partition.lastFramePairPartition.coreTexture.textureData;
 			
 			left = partition.lastFramePairPartition.x / Fuse.MAX_TEXTURE_SIZE;
 			top = partition.lastFramePairPartition.y / Fuse.MAX_TEXTURE_SIZE;
@@ -126,58 +117,9 @@ class AtlasBatch extends BaseBatch implements IBatch
 		//}
 		vertexData.setAlpha(1);
 		
-		/*vertexData.setMaskT(0, -1);
-		vertexData.setMaskT(1, -1);
-		vertexData.setMaskT(2, -1);
-		vertexData.setMaskT(3, -1);*/
-		
-		//vertexData.setColor(displayData.color);
-		//vertexData.setAlpha(displayData.alpha);
-		
-		/*trace([vertexData.u1, vertexData.v1]);
-		trace([vertexData.u2, vertexData.v2]);
-		trace([vertexData.u3, vertexData.v3]);
-		trace([vertexData.u4, vertexData.v4]);
-		
-		trace([vertexData.x1, vertexData.y1]);
-		trace([vertexData.x2, vertexData.y2]);
-		trace([vertexData.x3, vertexData.y3]);
-		trace([vertexData.x4, vertexData.y4]);*/
-		
-		//textureData.atlasTextureId
-		//trace("textureData.textureId = " + textureData.textureId);
-		//vertexData.batchTextureIndex = 0;// textureData.textureId;
-		
 		// don't draw masks while drawing into atlas //
 		vertexData.setMaskTexture(-1);
 		///////////////////////////////////////
-		
-		//vertexData.renderBatchIndex = 0;
-		
-		//Core.textureOrder.setValues(textureData.textureId, textureData, true);
-	//}
-	
-	//public function setVertexData(partition:AtlasPartition) 
-	//{
-		//if (partition.placed) return;
-		//partition.placed = true;
-		
-		//var textureData:ITextureData = partition.textureData;
-		
-		//trace("PartitionRenderable VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION);
-		
-		//var renderBatchIndex:Int = Core.textureRenderBatch.getRenderBatchIndex(VertexData.OBJECT_POSITION);
-		//var renderBatchDef:RenderBatchDef = Core.textureRenderBatch.getRenderBatchDef(renderBatchIndex);
-		//var vertexData:IVertexData = new VertexData();
-		
-		//for (i in 0...renderBatchDef.textureIdArray.length) 
-		//{
-			//if (renderBatchDef.textureIdArray[i] == textureData.textureId) {
-				////trace("i = " + i);
-				////vertexData.batchTextureIndex = i;
-				//vertexData.setTexture(i);
-			//}
-		//}
 		
 		vertexData.setTexture(partition.textureIndex);
 		

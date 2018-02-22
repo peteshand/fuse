@@ -44,10 +44,13 @@ class BaseATFTexture extends BaseTexture
 			throw new Error("Invalid ATF format");
 			return;
 		}
-		if (atfDataInfo.format != Context3DTextureFormat.BGRA) {
-			throw new Error("Only ATF BGRA format supported");
-			return;
-		}
+		
+		trace("atfDataInfo.format = " + atfDataInfo.format);
+		
+		//if (atfDataInfo.format != Context3DTextureFormat.BGRA) {
+			//throw new Error("Only ATF BGRA format supported");
+			//return;
+		//}
 		
 		super(textureId, atfDataInfo.width, atfDataInfo.height, queUpload, onTextureUploadCompleteCallback);
 	}

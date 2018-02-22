@@ -21,7 +21,6 @@ class AtlasSheet
 	public var lastFramePartitions = new GcoArray<AtlasPartition>([]);
 	
 	public var activePartitions = new GcoArray<AtlasPartition>([]);
-	//static var shouldClear:Bool = false;
 	
 	var availablePartition = new GcoArray<AtlasPartition>([]);
 	var frameCopyPartition:CoreAtlasCopyFrameImage;
