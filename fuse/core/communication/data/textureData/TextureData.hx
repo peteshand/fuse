@@ -8,6 +8,7 @@ import openfl.display3D.textures.TextureBase;
  * @author P.J.Shand
  */
 
+@:keep
 class TextureData
 {
 	// Backend Props

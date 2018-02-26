@@ -71,7 +71,7 @@ class Context3DTexture
 		var sampler = Textures.getTextureBase(id);
 		contextTextureIds[index].value = sampler;
 		#if html5
-			//var s:Int = sampler;
+			// Hack to get around a bug in lime/openfl where video textures don't update
 			context3D.__samplerDirty |= (1 << untyped sampler);
 		#end
 	}
