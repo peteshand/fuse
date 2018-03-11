@@ -23,7 +23,7 @@ import flash.concurrent.Mutex;
 #end
 
 import fuse.core.backend.CoreEntryPoint;
-import fuse.signal.Signal0;
+import msignal.Signal.Signal0;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.messageData.WorkerPayload;
 import fuse.core.communication.data.WorkerSharedProperties;
@@ -77,7 +77,7 @@ class WorkerSetup
 	
 	private function OnInputCollision(touch:Touch):Void 
 	{
-		//trace([touch.type, touch.x, touch.y]);
+		//trace([touch.type, touch.collisionId, touch.x, touch.y]);
 		findDisplay(touch, Fuse.current.stage);
 	}
 	
@@ -85,7 +85,7 @@ class WorkerSetup
 	function findDisplay(touch:Touch, display:DisplayObject):Bool
 	{
 		if (touch.collisionId == display.objectId) {
-			//trace("FOUND: " + display);
+			//trace("FOUND: " + display.name);
 			touch.target = display;
 			display.dispatchInput(touch);
 			return true;

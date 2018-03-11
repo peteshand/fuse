@@ -3,7 +3,7 @@ package fuse.core.backend.texture;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
-import fuse.utils.Notifier;
+import mantle.notifier.Notifier;
 
 /**
  * ...

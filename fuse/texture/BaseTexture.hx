@@ -5,7 +5,7 @@ import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.front.texture.upload.TextureUploadQue;
 import fuse.core.front.texture.Textures;
-import fuse.signal.Signal0;
+import msignal.Signal.Signal0;
 import fuse.texture.IBaseTexture;
 import fuse.utils.Color;
 import fuse.utils.PowerOfTwo;
@@ -101,7 +101,13 @@ class BaseTexture implements IBaseTexture
 		setTextureData();
 		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, false, 0);
 		#if air
-			uploadFromBitmapDataAsync = untyped textureData.nativeTexture["uploadFromBitmapDataAsync"];
+			try {
+				uploadFromBitmapDataAsync = untyped textureData.nativeTexture["uploadFromBitmapDataAsync"];
+			}
+			catch (e:Dynamic) {
+				
+			}
+			
 		#else
 			uploadFromBitmapDataAsync = Reflect.getProperty(textureData.nativeTexture, "uploadFromBitmapDataAsync");
 		#end

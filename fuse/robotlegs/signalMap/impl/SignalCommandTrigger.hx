@@ -7,10 +7,10 @@
 
 package fuse.robotlegs.signalMap.impl;
 
-import fuse.signal.BaseSignal;
-import fuse.signal.Signal0;
-import fuse.signal.Signal1;
-import fuse.signal.Signal2;
+import msignal.Signal.AnySignal;
+import msignal.Signal.Signal0;
+import msignal.Signal.Signal1;
+import msignal.Signal.Signal2;
 import robotlegs.bender.framework.api.IInjector;
 import robotlegs.bender.extensions.commandCenter.api.ICommandExecutor;
 import robotlegs.bender.extensions.commandCenter.api.ICommandTrigger;
@@ -33,7 +33,7 @@ class SignalCommandTrigger implements ICommandTrigger
 
 	private var _signalClass:Class<Dynamic>;
 
-	private var _signal:BaseSignal<Dynamic>;
+	private var _signal:AnySignal;
 
 	private var _injector:IInjector;
 

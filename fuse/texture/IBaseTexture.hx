@@ -1,11 +1,11 @@
 package fuse.texture;
 
 import fuse.utils.Color;
+import msignal.Signal.Signal0;
 import openfl.display3D.textures.Texture;
 import openfl.display3D.textures.TextureBase;
 
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.signal.Signal0;
 import fuse.texture.BaseTexture;
 import openfl.display.BitmapData;
 

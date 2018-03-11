@@ -3,7 +3,7 @@ import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.assembler.layers.LayerBufferAssembler.LayerState;
 import fuse.core.backend.display.CoreImage;
 import fuse.utils.GcoArray;
-import fuse.utils.Notifier;
+import mantle.notifier.Notifier;
 
 /**
  * ...

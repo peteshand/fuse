@@ -6,6 +6,8 @@ import flash.display.NativeWindowDisplayState;
 import flash.display.NativeWindowResize;
 import flash.ui.Mouse;
 import flash.ui.MouseCursorData;
+import mantle.keyboard.Key;
+import mantle.keyboard.Keyboard;
 
 import openfl.Lib;
 import openfl.Vector;
@@ -13,10 +15,8 @@ import openfl.geom.Point;
 import openfl.net.SharedObject;
 import openfl.ui.MouseCursor;
 
-import fuse.input.keyboard.Key;
-import fuse.input.keyboard.Keyboard;
-import fuse.utils.Notifier;
-import fuse.utils.delay.Delay;
+import mantle.notifier.Notifier;
+import mantle.delay.Delay;
 import fuse.window.AppWindow;
 
 import fuse.robotlegs.window.model.WindowPositionModel;
@@ -106,8 +106,6 @@ class WindowPositionLogic
 	
 	function addListeners() 
 	{
-		
-		
 		Lib.current.stage.addEventListener(MouseEvent.MOUSE_DOWN, OnMouseDown);
 		Lib.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, OnMouseMove);
 		

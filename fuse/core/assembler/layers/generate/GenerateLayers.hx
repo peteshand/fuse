@@ -7,7 +7,7 @@ import fuse.core.backend.displaylist.DisplayList;
 import fuse.core.backend.texture.CoreTextures;
 import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
-import fuse.utils.Notifier;
+import mantle.notifier.Notifier;
 
 /**
  * ...
@@ -64,7 +64,7 @@ class GenerateLayers
 				for (i in 0...HierarchyAssembler.hierarchy.length) 
 				{
 					var image:CoreImage = HierarchyAssembler.hierarchy[i];
-					if (!imageVisible(image)) continue;
+					if (!image.visible) continue;
 					
 					isStatic.value = 0;
 					currentLayerBuffer.add(image);
@@ -74,7 +74,8 @@ class GenerateLayers
 				for (i in 0...HierarchyAssembler.hierarchy.length) 
 				{
 					var image:CoreImage = HierarchyAssembler.hierarchy[i];
-					if (!imageVisible(image)) continue;
+					if (!image.visible) continue;
+					//if (!imageVisible(image)) continue;
 					
 					if (image.coreTexture.textureData.directRender == 1) {
 						isStatic.value = 0;
@@ -91,14 +92,14 @@ class GenerateLayers
 		}
 	}
 	
-	static private function imageVisible(image:CoreImage) 
-	{
-		if (image.displayData.visible == 0) return false;
-		#if !debug
-			if (image.coreTexture.textureData.textureAvailable == 0) return false;
-		#end
-		return true;
-	}
+	//static private function imageVisible(image:CoreImage) 
+	//{
+		//if (image.displayData.visible == 0) return false;
+		//#if !debug
+			//if (image.coreTexture.textureData.textureAvailable == 0) return false;
+		//#end
+		//return true;
+	//}
 	
 	//static private function checkForLayerChanges() 
 	//{	

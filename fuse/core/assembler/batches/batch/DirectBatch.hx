@@ -6,6 +6,7 @@ import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.texture.CoreTexture;
 import fuse.core.communication.data.vertexData.IVertexData;
 import fuse.core.communication.data.vertexData.VertexData;
+import fuse.utils.GcoArray;
 
 /**
  * ...
@@ -14,6 +15,8 @@ import fuse.core.communication.data.vertexData.VertexData;
 @:access(fuse.core.backend.display)
 class DirectBatch extends BaseBatch implements IBatch
 {
+	var renderIndices = new GcoArray<CoreImage>();
+	
 	public function new() 
 	{
 		super();
@@ -50,10 +53,24 @@ class DirectBatch extends BaseBatch implements IBatch
 	
 	function writeLayerVertex(image:CoreImage)
 	{
-		if (image.displayData.visible == 0) return;
+		if (!image.visible || image.combinedAlpha == 0) {
+			image.drawIndex = -1;
+			return;
+		}
+		//if (image.displayData.visible == 0) return;
 		
 		var vertexData:IVertexData = image.vertexData;
 		var coreTexture:CoreTexture = image.coreTexture;
+		
+		
+		//var vertexPositionHasMoved:Bool = false;
+		if (renderIndices[VertexData.OBJECT_POSITION] != image) {
+			if (renderIndices[VertexData.OBJECT_POSITION] != null) {
+				renderIndices[VertexData.OBJECT_POSITION].drawIndex = -1;
+			}
+			renderIndices[VertexData.OBJECT_POSITION] = image;
+			//vertexPositionHasMoved = true;
+		}
 		
 		var vertexPositionHasMoved:Bool = image.drawIndex != VertexData.OBJECT_POSITION;
 		

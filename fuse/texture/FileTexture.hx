@@ -15,7 +15,7 @@ import openfl.events.Event;
  * @author P.J.Shand
  */
 
-@:forward(textureData, nativeTexture, textureBase, textureId, width, height, onUpdate, clearColour, _clear, _alreadyClear, upload, dispose)
+@:forward(textureData, nativeTexture, textureBase, textureId, width, height, onUpdate, clearColour, _clear, _alreadyClear, upload, dispose, directRender)
 abstract FileTexture(AbstractTexture) to Int from Int 
 {
 	static var baseFileTextures = new Map<String, BaseFileTexture>();
@@ -36,7 +36,7 @@ abstract FileTexture(AbstractTexture) to Int from Int
 			textureId = baseFileTexture.textureId;
 		}
 		trace("textureId = " + textureId);
-		this = new AbstractTexture(baseFileTexture, textureId);
+		this = new AbstractTexture(baseFileTexture);
 		trace("this = " + this);
 		trace("this.textureId = " + this.textureId);
 	}

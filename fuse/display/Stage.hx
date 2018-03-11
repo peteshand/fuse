@@ -4,13 +4,12 @@ import fuse.core.backend.displaylist.DisplayType;
 import fuse.display.Sprite;
 import fuse.display.Quad;
 import fuse.Fuse;
-import fuse.signal.Signal1;
-import fuse.utils.Resize;
+import mantle.managers.resize.Resize;
+import msignal.Signal.Signal1;
 
 import openfl.Lib;
 import openfl.events.Event;
 
-@:access(fuse.utils.Resize)
 class Stage extends Sprite {
 	
 	var count:Int = 0;
@@ -34,8 +33,8 @@ class Stage extends Sprite {
 		
 		this.name = "stage";
 		
-		Resize.init();
-		Resize.change.add(OnResize);
+		new Resize(Lib.current.stage);
+		Resize.add(OnResize);
 		OnResize();
 	}
 	

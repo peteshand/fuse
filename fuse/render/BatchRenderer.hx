@@ -13,7 +13,7 @@ import fuse.render.program.ShaderProgram;
 import fuse.render.program.ShaderPrograms;
 import fuse.render.Context3DTexture;
 import fuse.render.shader.FuseShaders;
-import fuse.utils.Notifier;
+import mantle.notifier.Notifier;
 import openfl.display3D.Context3D;
 
 /**
@@ -103,6 +103,7 @@ class BatchRenderer
 			//}
 			//
 			//trace("quadCount = " + quadCount);
+			
 			shaderProgram.value.vertexbuffer.uploadFromByteArray(
 				SharedMemory.memory, 
 				quadCount * VertexData.BYTES_PER_ITEM,

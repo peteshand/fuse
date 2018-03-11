@@ -34,9 +34,11 @@ class HierarchyAssembler
 			OrderByRenderLayers(hierarchy);
 		}
 		
-		for (i in 0...transformActions.length) 
+		var i:Int = 0;
+		while (i < transformActions.length) 
 		{
 			transformActions[i]();
+			i++;
 		}
 	}
 	

@@ -23,7 +23,7 @@ abstract VideoTexture(AbstractTexture) to Int from Int
 	public function new(?width:Int, ?height:Int, netStream:NetStream, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		var baseVideoTexture:BaseVideoTexture = new BaseVideoTexture(AbstractTexture.textureIdCount++, width, height, netStream, onTextureUploadCompleteCallback);
-		this = new AbstractTexture(baseVideoTexture, baseVideoTexture.textureId);
+		this = new AbstractTexture(baseVideoTexture);
 	}
 	
 	function upload():Void										{ baseVideoTexture.upload(); 					}

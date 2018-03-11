@@ -16,7 +16,7 @@ import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.backend.display.CoreImage;
 import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
-import fuse.utils.Notifier;
+import mantle.notifier.Notifier;
 
 /**
     This class is called every frame and is responsible for splitting the data that is feed into the stage3d.

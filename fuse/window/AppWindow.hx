@@ -3,7 +3,7 @@ package fuse.window;
 import flash.display.NativeWindow;
 import flash.display.NativeWindowDisplayState;
 import flash.display.NativeWindowResize;
-import fuse.signal.Signal0;
+import msignal.Signal.Signal0;
 
 /**
  * ...

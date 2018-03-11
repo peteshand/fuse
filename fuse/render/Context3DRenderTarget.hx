@@ -1,7 +1,7 @@
 package fuse.render;
 import fuse.core.front.texture.Textures;
 import fuse.texture.IBaseTexture;
-import fuse.utils.Notifier;
+import mantle.notifier.Notifier;
 import openfl.display3D.Context3D;
 
 /**

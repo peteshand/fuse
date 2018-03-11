@@ -3,7 +3,7 @@ package fuse.render.program;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.render.shader.FuseShader;
 import fuse.render.shader.FuseShaders;
-import fuse.utils.Notifier;
+import mantle.notifier.Notifier;
 import openfl.Vector;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DBufferUsage;

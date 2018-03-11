@@ -1,8 +1,8 @@
 package fuse.robotlegs;
 
 //import fuse.robotlegs.config.ConfigExtension;
-import fuse.robotlegs.config2.ConfigExtension;
-import fuse.robotlegs.scene.SceneExtension;
+//import fuse.robotlegs.config2.ConfigExtension;
+//import fuse.robotlegs.scene.SceneExtension;
 import fuse.robotlegs.signalMap.SignalCommandMapExtension;
 import fuse.robotlegs.window.AppWindowExtension;
 import robotlegs.bender.extensions.display.stage3D.Stage3DStackExtension;
@@ -37,9 +37,9 @@ class FuseBundle implements IBundle
 			
 			FuseIntegrationExtension,
 			FuseStageSyncExtension,
-			ConfigExtension,
-			SceneExtension,
-			AppWindowExtension
+			/*ConfigExtension,*/
+			/*SceneExtension,*/
+			/*AppWindowExtension*/
 			
 		]);
 	}

@@ -1,6 +1,6 @@
 package fuse.robotlegs.window.model;
 
-import fuse.utils.Notifier;
+import mantle.notifier.Notifier;
 
 /**
  * ...

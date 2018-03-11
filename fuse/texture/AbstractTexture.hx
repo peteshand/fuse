@@ -1,6 +1,6 @@
 package fuse.texture;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.signal.Signal0;
+import msignal.Signal.Signal0;
 import fuse.texture.BaseTexture;
 import fuse.utils.Color;
 import openfl.display3D.textures.Texture;
@@ -31,10 +31,9 @@ abstract AbstractTexture(Null<Int>) to Int from Int
 	public var _alreadyClear(get, set):Bool;
 	public var directRender(get, set):Bool;
 	
-	public function new(baseTexture:BaseTexture, textureId:Null<Int>=null) 
+	public function new(baseTexture:BaseTexture) 
 	{
-		if (textureId == null) this = textureIdCount++;
-		else this = textureId;
+		this = baseTexture.textureId;
 		
 		coreTextures.set(this, baseTexture);
 	}

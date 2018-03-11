@@ -14,10 +14,12 @@ class Graphics
 	public static var isStatic(get, never):Int;
 	public static var isMoving(get, never):Int;
 	static public var alpha:Float = 1;
+	static public var visible:Bool = true;
 	static var transformations:GcoArray<FastMatrix3>;
 	static var isStatics:GcoArray<Int>;
 	static var isMovings:GcoArray<Int>;
 	static var alphas:GcoArray<Float>;
+	static var visibles:GcoArray<Bool>;
 	
 	static var count:Int = 0;
 	
@@ -34,6 +36,9 @@ class Graphics
 		
 		alphas = new GcoArray<Float>([]);
 		alphas.push(1);
+		
+		visibles = new GcoArray<Bool>([]);
+		visibles.push(true);
 	}
 	
 	public function new() { }
@@ -50,16 +55,22 @@ class Graphics
 		return ret;
 	}
 	
-	static public function pushAlpha(alpha:Float) 
+	static public function pushAlpha(alpha:Float, visible:Bool) 
 	{
 		Graphics.alpha = alpha;
 		alphas.push(alpha);
+		
+		Graphics.visible = visible;
+		visibles.push(visible);
 	}
 	
 	static public function popAlpha() 
 	{
 		alphas.length = alphas.length - 1;
 		Graphics.alpha = alphas[alphas.length - 1];
+		
+		visibles.length = visibles.length - 1;
+		Graphics.visible = visibles[visibles.length - 1];
 	}
 	
 	private static inline function set_transformation(transformation: FastMatrix3): FastMatrix3 {

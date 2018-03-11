@@ -71,45 +71,47 @@ class InputAssemblerObject
 	
 	public function test(touch:Touch):Void
 	{
-		
 		var j:Int = Touchables.touchables.length - 1;
 		while (j >= 0) 
 		{
 			var display:CoreImage = Touchables.touchables[j];
-			//if (display.combinedAlpha >= 0.001){
+			
+			// TODO: non visible displays should not be in the touchables array //trace(display.visible);
+			if (display.visible)
+			{
 				var distance:Float = getDistance(display, touch);
 				
 				if (distance < display.diagonal * 0.5) {
 					var triangleSum:Float = getTriangleSum(display, touch);
 					if (triangleSum <= display.area + 1) {
 						
-						// inside
-						if (touch.targetId != display.objectId) {						
-							if (touch.targetId != -1) {
-								DispatchOut(touch.targetId, touch);	
+						//if (display.visible){
+							// inside
+							
+							if (touch.targetId != display.objectId) {						
+								if (touch.targetId != -1) {
+									DispatchOut(touch.targetId, touch);	
+								}
+								touch.targetId = display.objectId;
+								DispatchOver(display.objectId, touch);
 							}
 							
-							touch.targetId = display.objectId;
-							DispatchOver(display.objectId, touch);
-						}
-						
-						touch.collisionId = display.objectId;
-						
-						InputAssembler.collisions.push(touch);
-						//j = -1;
+							touch.collisionId = display.objectId;
+							InputAssembler.collisions.push(touch);
+							return;
+							//j = -1;
+						//}
 					}
 					else if (touch.targetId == display.objectId){
 						// outside
-						touch.targetId = -1;
 						DispatchOut(display.objectId, touch);					
 					}
 				}
 				else if (touch.targetId == display.objectId){
 					// outside
-					touch.targetId = -1;
 					DispatchOut(display.objectId, touch);
 				}
-			//}
+			}
 			j--;
 		}
 	}
@@ -181,6 +183,7 @@ class InputAssemblerObject
 	
 	function DispatchOut(displayObjectId:Int, touch:Touch) 
 	{
+		touch.targetId = -1;
 		out.x = touch.x;
 		out.y = touch.y;
 		out.collisionId = displayObjectId;

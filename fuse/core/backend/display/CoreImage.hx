@@ -32,6 +32,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	var renderTarget		:Int = -1;
 	public var sourceTextureId(get, null):Int;
 	
+	
 	public function new() 
 	{
 		super();
@@ -55,6 +56,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	override function updateTransform() 
 	{
 		combinedAlpha = Graphics.alpha * displayData.alpha;
+		visible = Graphics.visible && (displayData.visible == 1);
 		
 		if (isStatic == 0) {
 			textureId = displayData.textureId;
@@ -148,5 +150,20 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		return coreTexture.textureId;
 	}
 	
-	
+	//override function get_visible():Bool 
+	//{
+		//if (!super.get_visible()) {
+			//return false;
+		//}
+		//
+		//if (displayData.visible == 0) {
+			//return false;
+		//}
+		//
+		//// If texture hasn't loaded yet. Not really sure if it's worth keeping this
+		//if (coreTexture.textureData.textureAvailable == 0) {
+			//return false;
+		//}
+		//return true;
+	//}
 }

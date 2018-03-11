@@ -8,7 +8,8 @@ import fuse.render.program.ShaderPrograms;
 import fuse.render.shader.FuseShaders;
 import fuse.utils.Color;
 import fuse.Fuse;
-import fuse.utils.Resize;
+import mantle.managers.resize.Resize;
+import openfl.geom.Rectangle;
 
 import openfl.display3D.Context3DTriangleFace;
 import openfl.display3D.Context3DCompareMode;
@@ -26,19 +27,21 @@ class Renderer
 	var context3D:Context3D;
 	var sharedContext:Bool;
 	var numItemsInBatch:Int;
+	var scissorRectangle:Rectangle;
 	
 	public function new(context3D:Context3D, sharedContext:Bool) 
 	{
 		this.context3D = context3D;
 		this.sharedContext = sharedContext;
 		
+		scissorRectangle = new Rectangle();
+		
 		if (!sharedContext){
-			Resize.change.add(OnResize);
+			Resize.add(OnResize);
 			OnResize();
 		}
 		
 		context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
-		//context3D.setScissorRectangle(new Rectangle(0, 0, 1600, 900));
 		context3D.setCulling(Context3DTriangleFace.BACK);
 		
 		conductorData = new WorkerConductorData();
@@ -50,11 +53,15 @@ class Renderer
 		BatchRenderer.init(context3D);
 		Textures.init(context3D);
 		FuseShaders.init();
+		
+		ShaderPrograms.clear();
 	}
 	
 	function OnResize() 
 	{
 		context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0, false);
+		scissorRectangle.setTo(0, 0, Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight);
+		//context3D.setScissorRectangle(scissorRectangle);
 	}
 	
 	public function update() 
@@ -86,6 +93,7 @@ class Renderer
 			//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
 			//traceOutput = true;
 		//}
+		
 		for (i in 0...conductorData.numberOfBatches) 
 		{
 			BatchRenderer.drawBuffer(i, conductorData, context3D, traceOutput);

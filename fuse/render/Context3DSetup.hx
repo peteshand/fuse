@@ -1,7 +1,7 @@
 package fuse.render;
 
 import fuse.utils.PlayerVersion;
-import fuse.signal.Signal0;
+import msignal.Signal.Signal0;
 import openfl.Lib;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DProfile;

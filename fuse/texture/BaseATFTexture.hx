@@ -22,7 +22,7 @@ abstract ATFTexture(AbstractTexture) to Int from Int
 	public function new(data:ByteArray, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		var baseATFTexture = new BaseATFTexture(AbstractTexture.textureIdCount++, data, queUpload, onTextureUploadCompleteCallback);
-		this = new AbstractTexture(baseATFTexture, baseATFTexture.textureId);
+		this = new AbstractTexture(baseATFTexture);
 	}
 	
 	function upload():Void										{ baseATFTexture.upload(); 					}

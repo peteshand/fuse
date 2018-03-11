@@ -1,10 +1,10 @@
 package fuse.robotlegs.window.logic;
 
+import mantle.keyboard.Key;
+import mantle.keyboard.Keyboard;
 import openfl.Lib;
 import openfl.display.StageDisplayState;
 
-import fuse.input.keyboard.Key;
-import fuse.input.keyboard.Keyboard;
 import fuse.robotlegs.window.model.WindowPositionModel;
 
 /**

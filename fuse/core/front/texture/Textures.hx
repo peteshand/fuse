@@ -60,7 +60,6 @@ class Textures
 	static public function registerTexture(textureId:Int, texture:IBaseTexture):Void
 	{
 		if (!textures.exists(textureId)) {
-			//trace("textureId = " + textureId);
 			textures.set(textureId, texture);
 			textureCount++;
 			//trace("textureCount = " + textureCount);

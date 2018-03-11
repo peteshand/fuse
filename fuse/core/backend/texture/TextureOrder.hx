@@ -6,7 +6,7 @@ import fuse.core.communication.data.vertexData.VertexData;
 import fuse.texture.IBaseTexture;
 import fuse.texture.BaseRenderTexture;
 import fuse.utils.GcoArray;
-import fuse.utils.Notifier;
+import mantle.notifier.Notifier;
 import fuse.core.communication.data.batchData.WorkerBatchData;
 import fuse.core.backend.texture.TextureRenderBatch.RenderBatchDef;
 

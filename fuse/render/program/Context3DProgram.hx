@@ -1,6 +1,6 @@
 package fuse.render.program;
 
-import fuse.utils.Notifier;
+import mantle.notifier.Notifier;
 import openfl.display3D.Context3D;
 import openfl.display3D.Program3D;
 

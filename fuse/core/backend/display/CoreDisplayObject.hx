@@ -44,6 +44,9 @@ class CoreDisplayObject
 	var transformData		:TransformData;
 	var parentNonStatic		:Bool;
 	public var combinedAlpha:Float = 1;
+	public var visible:Bool = false;
+	
+	//public var visible(get, null):Bool;
 	
 	public function new() 
 	{
@@ -76,11 +79,13 @@ class CoreDisplayObject
 	function updateTransform() 
 	{
 		combinedAlpha = Graphics.alpha * displayData.alpha;
+		visible = Graphics.visible && (displayData.visible == 1);
+		Graphics.pushAlpha(combinedAlpha, visible);
 		//trace("combinedAlpha = " + combinedAlpha);
 		if (isStatic == 0) {
 			
 			//beginSetChildrenIsStatic(false);
-			Graphics.pushAlpha(combinedAlpha);
+			
 			WorkerTransformHelper.update(this);
 		}
 		
@@ -122,9 +127,10 @@ class CoreDisplayObject
 	function popTransform() 
 	{
 		Graphics.popTransformation();
+		Graphics.popAlpha();
 		
 		if (isStatic == 0){	
-			Graphics.popAlpha();
+			
 		}
 	}
 	
@@ -224,4 +230,17 @@ class CoreDisplayObject
 		//parentNonStatic = false;
 		//combinedAlpha = 1;
 	}
+	
+	//function get_visible():Bool 
+	//{
+		//if (parent != null && parent.visible == false) {
+			//return false;
+		//}
+		//else {
+			//if (displayData.visible == 0) {
+				//return false;
+			//}
+			//return true;
+		//}
+	//}
 }

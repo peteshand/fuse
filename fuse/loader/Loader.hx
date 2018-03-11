@@ -48,9 +48,9 @@ class Loader extends EventDispatcher implements ILoader
 	{
 		var loaderInfo:LoaderInfo = cast (e.target, LoaderInfo);
 		var content:Bitmap = cast (loaderInfo.content, Bitmap);
-		//bitmapData = content.bitmapData;
-		bitmapData = new BitmapData(content.bitmapData.width, content.bitmapData.height, true, 0x00000000);
-		bitmapData.draw(content.bitmapData);
+		bitmapData = content.bitmapData;
+		//bitmapData = new BitmapData(content.bitmapData.width, content.bitmapData.height, true, 0x00000000);
+		//bitmapData.draw(content.bitmapData);
 		dispatchEvent(e);
 	}
 }

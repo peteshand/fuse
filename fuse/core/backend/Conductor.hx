@@ -7,7 +7,7 @@ import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.data.WorkerSharedProperties;
 import fuse.info.WorkerInfo;
-import fuse.signal.Signal0;
+import msignal.Signal.Signal0;
 import openfl.Lib;
 import openfl.events.Event;
 import openfl.events.TimerEvent;

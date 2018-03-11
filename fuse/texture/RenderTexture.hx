@@ -22,7 +22,7 @@ abstract RenderTexture(AbstractTexture) to Int from Int
 	public function new(width:Int, height:Int, directRender:Bool=true) 
 	{
 		var baseRenderTexture = new BaseRenderTexture(AbstractTexture.textureIdCount++, width, height, directRender);
-		this = new AbstractTexture(baseRenderTexture, baseRenderTexture.textureId);
+		this = new AbstractTexture(baseRenderTexture);
 	}
 	
 	function upload():Void										{ baseRenderTexture.upload(); 					}

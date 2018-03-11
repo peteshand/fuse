@@ -5,7 +5,7 @@ import fuse.core.front.texture.Textures;
 import openfl.display3D.textures.TextureBase;
 
 //#if air||flash
-import fuse.utils.Notifier;
+import mantle.notifier.Notifier;
 /**
  * ...
  * @author P.J.Shand
@@ -40,14 +40,14 @@ class Context3DTexture
 	
 	public static function clear() 
 	{
-		contextTextureId1._value = null;
-		contextTextureId2._value = null;
-		contextTextureId3._value = null;
-		contextTextureId4._value = null;
-		contextTextureId4._value = null;
-		contextTextureId5._value = null;
-		contextTextureId6._value = null;
-		contextTextureId7._value = null;
+		contextTextureId1.value = null;
+		contextTextureId2.value = null;
+		contextTextureId3.value = null;
+		contextTextureId4.value = null;
+		contextTextureId5.value = null;
+		contextTextureId6.value = null;
+		contextTextureId7.value = null;
+		contextTextureId8.value = null;
 	}
 	
 	static function add(notifier:Notifier<TextureBase>, SetContextTexture:Void -> Void) 
@@ -70,6 +70,8 @@ class Context3DTexture
 		var id:Null<Int> = Textures.getTextureId(textureId);
 		var sampler = Textures.getTextureBase(id);
 		contextTextureIds[index].value = sampler;
+		
+		//trace([index, textureId, id]);
 		#if html5
 			// Hack to get around a bug in lime/openfl where video textures don't update
 			context3D.__samplerDirty |= (1 << untyped sampler);
