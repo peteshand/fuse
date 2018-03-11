@@ -73,8 +73,9 @@ class WorkerTransformHelper
 		WorkerTransformHelper.clear(coreDisplay.transformData.localTransform);
 		
 		//WorkerTransformHelper.setScale(localTransform, scaleX, scaleY, base, width, height);
-		WorkerTransformHelper.setScale(coreDisplay.transformData.localTransform, scaleX, scaleY, width, height, width, height);
-		
+		if (scaleX != 1 || scaleY != 1){
+			WorkerTransformHelper.setScale(coreDisplay.transformData.localTransform, scaleX, scaleY, width, height, width, height);
+		}
 		/*if (atlasItem != null && atlasItem.rotation == 90) {
 			WorkerTransformHelper.setPosition(applyPosition, positionMatrix, localTransform, x + atlasItem.height, y);
 			WorkerTransformHelper.setRotation(applyRotation, applyPosition, localTransform, rotMatrix, rotMatrix1, rotMatrix2, rotMatrix3, rotation + atlasItem.rotation);

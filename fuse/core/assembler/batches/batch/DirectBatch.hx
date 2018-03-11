@@ -76,22 +76,31 @@ class DirectBatch extends BaseBatch implements IBatch
 		
 		var updateUVs:Bool		= vertexPositionHasMoved || coreTexture.uvsHaveChanged;
 		var updatePosition:Bool	= vertexPositionHasMoved || image.isMoving == 1;
+		var updateTexture:Bool	= vertexPositionHasMoved || image.textureChanged;
+		var updateMask:Bool		= vertexPositionHasMoved || image.maskChanged;
 		var updateColour:Bool	= vertexPositionHasMoved || image.isStatic == 0;
 		var updateAlpha:Bool	= vertexPositionHasMoved || image.isStatic == 0;
 		
-		vertexData.setTexture(image.textureIndex);
+		image.textureChanged = false;
+		image.maskChanged = false;
 		
-		if (image.mask != null) {
-			// TODO: update value to point to correct batch textureIndex
-			vertexData.setMaskTexture(0);
-			//trace("setBatchProps mask: " + image.objectId);
-			
-		}
-		else {
-			vertexData.setMaskTexture(-1);
+		if (updateTexture){
+			vertexData.setTexture(image.textureIndex);
 		}
 		
-		//if (updateUVs) {
+		if (updateMask){
+			if (image.mask != null) {
+				// TODO: update value to point to correct batch textureIndex
+				vertexData.setMaskTexture(0);
+				//trace("setBatchProps mask: " + image.objectId);
+				
+			}
+			else {
+				vertexData.setMaskTexture(-1);
+			}
+		}
+		
+		if (updateUVs) {
 			//trace([coreTexture.uvTop, coreTexture.uvBottom]);
 			
 			//trace("updateUVs = " + updateUVs);
@@ -109,7 +118,7 @@ class DirectBatch extends BaseBatch implements IBatch
 			}
 			
 			//image.updateUVs = false;
-		//}
+		}
 		
 		if (updatePosition) {
 			vertexData.setXY(0, 	image.quadData.bottomLeftX,		image.quadData.bottomLeftY);

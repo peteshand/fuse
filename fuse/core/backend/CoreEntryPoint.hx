@@ -1,6 +1,7 @@
 package fuse.core.backend;
 import fuse.core.assembler.input.Touchables;
 import fuse.core.communication.messageData.TouchableMsg;
+import fuse.core.communication.messageData.VisibleMsg;
 import fuse.core.input.FrontMouseInput;
 import fuse.core.input.Touch;
 
@@ -52,6 +53,7 @@ class CoreEntryPoint
 		workerComms.addListener(MessageType.ADD_CHILD, OnAddChild);
 		workerComms.addListener(MessageType.ADD_CHILD_AT, OnAddChildAt);
 		workerComms.addListener(MessageType.REMOVE_CHILD, OnRemoveChild);
+		workerComms.addListener(MessageType.VISIBLE_CHANGE, OnVisibleChange);
 		workerComms.addListener(MessageType.ADD_MASK, OnAddMask);
 		workerComms.addListener(MessageType.REMOVE_MASK, OnRemoveMask);
 		workerComms.addListener(MessageType.ADD_TEXTURE, OnAddTexture);
@@ -132,6 +134,12 @@ class CoreEntryPoint
 		var objectId:Int = workerPayload;
 		Core.displayList.removeChild(objectId);
 	}
+	
+	function OnVisibleChange(visibleMsg:VisibleMsg) 
+	{
+		Core.displayList.visibleChange(visibleMsg.objectId, visibleMsg.visible);
+	}
+	
 	
 	private function OnSetTouchable(payload:TouchableMsg):Void 
 	{

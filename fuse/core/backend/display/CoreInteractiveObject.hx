@@ -35,12 +35,12 @@ class CoreInteractiveObject extends CoreDisplayObject
 		child.parent = null;
 	}
 	
-	override public function buildHierarchy() 
-	{
-		HierarchyAssembler.transformActions.push(calculateTransform);
-		for (i in 0...children.length) children[i].buildHierarchy();
-		HierarchyAssembler.transformActions.push(popTransform);
-	}
+	//override public function buildHierarchy() 
+	//{
+		//HierarchyAssembler.transformActions.push(calculateTransform);
+		//for (i in 0...children.length) children[i].buildHierarchy();
+		//HierarchyAssembler.transformActions.push(popTransform);
+	//}
 	
 	//override function beginSetChildrenIsStatic(value:Bool) 
 	//{
@@ -109,15 +109,18 @@ class CoreInteractiveObject extends CoreDisplayObject
 		//for (i in 0...children.length) children[i].buildTransformActions();
 		//popTransform();
 		
-		HierarchyAssembler.transformActions.push(calculateTransform);
-		for (i in 0...children.length) children[i].buildTransformActions();
-		HierarchyAssembler.transformActions.push(popTransform);
+		if (this.visible){
+			HierarchyAssembler.transformActions.push(calculateTransform);
+			for (i in 0...children.length) children[i].buildTransformActions();
+			HierarchyAssembler.transformActions.push(popTransform);
+		}
 	}
 	
 	override public function buildHierarchy2()
 	{
 		// TODO: check if visible and parent is visible
-		
-		for (i in 0...children.length) children[i].buildHierarchy2();
+		if (this.visible){
+			for (i in 0...children.length) children[i].buildHierarchy2();
+		}
 	}
 }

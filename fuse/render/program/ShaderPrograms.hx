@@ -22,9 +22,12 @@ class ShaderPrograms
 		ShaderPrograms.context3D = context3D;
 		
 		buckets = [
+			250,
 			500,
 			1000,
 			2000,
+			3000,
+			4000,
 			5000,
 			10000
 		];

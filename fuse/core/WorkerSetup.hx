@@ -166,6 +166,17 @@ class WorkerSetup
 		}
 	}
 	
+	public function visibleChange(child:DisplayObject, visible:Bool) 
+	{
+		for (workerComm in workerComms) 
+		{
+			workerComm.send(MessageType.VISIBLE_CHANGE, { 
+				objectId:child.objectId, 
+				visible:visible
+			});
+		}
+	}
+	
 	public function addTexture(textureId:Int) 
 	{
 		for (workerComm in workerComms) 

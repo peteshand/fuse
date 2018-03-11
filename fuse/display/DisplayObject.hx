@@ -250,10 +250,15 @@ class DisplayObject
 	{
 		if (this.visible != value){
 			this.visible = value;
-			if (this.visible)	displayData.visible = 1;
-			else				displayData.visible = 0;
+			if (this.visible)	{
+				displayData.visible = 1;
+			}
+			else				{
+				displayData.visible = 0;
+			}
 			isStatic = 0;
 		}
+		Fuse.current.workerSetup.visibleChange(this, displayData.visible == 1);
 		return value;
 	}
 	

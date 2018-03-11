@@ -44,7 +44,7 @@ class CoreDisplayObject
 	var transformData		:TransformData;
 	var parentNonStatic		:Bool;
 	public var combinedAlpha:Float = 1;
-	public var visible:Bool = false;
+	public var visible:Bool = true;
 	
 	//public var visible(get, null):Bool;
 	
@@ -63,11 +63,11 @@ class CoreDisplayObject
 		displayData = untyped CommsObjGen.getDisplayData(objectId);
 	}
 	
-	public function buildHierarchy() 
-	{
-		HierarchyAssembler.transformActions.push(calculateTransform);
-		HierarchyAssembler.transformActions.push(popTransform);
-	}
+	//public function buildHierarchy() 
+	//{
+		//HierarchyAssembler.transformActions.push(calculateTransform);
+		//HierarchyAssembler.transformActions.push(popTransform);
+	//}
 	
 	function calculateTransform() 
 	{
@@ -169,8 +169,10 @@ class CoreDisplayObject
 	
 	public function buildTransformActions()
 	{
-		HierarchyAssembler.transformActions.push(calculateTransform);
-		HierarchyAssembler.transformActions.push(popTransform);
+		if (this.visible){
+			HierarchyAssembler.transformActions.push(calculateTransform);
+			HierarchyAssembler.transformActions.push(popTransform);
+		}
 	}
 	
 	function get_area():Float 

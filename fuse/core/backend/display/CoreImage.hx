@@ -23,8 +23,12 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	public var vertexData	:IVertexData;
 	public var coreTexture	:CoreTexture;
+	public var textureChanged:Bool = false;
+	
 	public var textureIndex	:Int;
-	public var mask			:CoreImage;
+	@:isVar public var mask(default, set):CoreImage;
+	public var maskChanged:Bool = false;
+	
 	public var renderLayer	:Int = 0;
 	
 	var drawIndex			:Int = -1;
@@ -85,6 +89,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 				coreTexture = Core.textures.register(textureId);
 			}
 			
+			textureChanged = true;
 			//updateUVs = true;
 		}
 		return value;
@@ -95,10 +100,10 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		//
 	//}
 	
-	override public function buildHierarchy() 
-	{
-		HierarchyAssembler.transformActions.push(pushTransform);
-	}
+	//override public function buildHierarchy() 
+	//{
+		//HierarchyAssembler.transformActions.push(pushTransform);
+	//}
 	
 	override public function clone():CoreDisplayObject
 	{
@@ -120,7 +125,9 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	override public function buildHierarchy2()
 	{
 		// TODO: check if visible and parent is visible
-		HierarchyAssembler.hierarchy.push(this);
+		if (this.visible){
+			HierarchyAssembler.hierarchy.push(this);
+		}
 	}
 	
 	public function getBounds():Bounds
@@ -148,6 +155,20 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	function get_sourceTextureId():Int 
 	{
 		return coreTexture.textureId;
+	}
+	
+	function get_mask():CoreImage 
+	{
+		return mask;
+	}
+	
+	function set_mask(value:CoreImage):CoreImage 
+	{
+		if (mask != value){
+			mask = value;
+			maskChanged = true;
+		}
+		return mask;
 	}
 	
 	//override function get_visible():Bool 

@@ -26,6 +26,14 @@ class DisplayList
 		
 	}
 	
+	function visibleChange(objectId:Int, visible:Bool) 
+	{
+		var display:CoreDisplayObject = untyped map.get(objectId);
+		if (display == null) return;
+		display.visible = visible;
+		hierarchyChangeCount = 0;
+	}
+	
 	function addMask(objectId:Int, maskId:Int) 
 	{
 		var display:CoreImage = untyped map.get(objectId);

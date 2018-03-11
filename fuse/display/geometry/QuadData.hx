@@ -49,52 +49,52 @@ abstract QuadData(Array<Float>)
 		//topRightY = 0;
 	//}
 	
-	function get_bottomLeftX():Float 
+	inline function get_bottomLeftX():Float 
 	{
 		return this[0];
 	}
 	
-	function get_bottomLeftY():Float 
+	inline function get_bottomLeftY():Float 
 	{
 		return this[1];
 	}
 	
-	function get_topLeftX():Float 
+	inline function get_topLeftX():Float 
 	{
 		return this[2];
 	}
 	
-	function get_topLeftY():Float 
+	inline function get_topLeftY():Float 
 	{
 		return this[3];
 	}
 	
-	function get_topRightX():Float 
+	inline function get_topRightX():Float 
 	{
 		return this[4];
 	}
 	
-	function get_topRightY():Float 
+	inline function get_topRightY():Float 
 	{
 		return this[5];
 	}
 	
-	function get_bottomRightX():Float 
+	inline function get_bottomRightX():Float 
 	{
 		return this[6];
 	}
 	
-	function get_bottomRightY():Float 
+	inline function get_bottomRightY():Float 
 	{
 		return this[7];
 	}
 	
-	function get_middleX():Float 
+	inline function get_middleX():Float 
 	{
 		return topLeftX + ((topRightX - topLeftX) * 0.5);
 	}
 	
-	function get_middleY():Float 
+	inline function get_middleY():Float 
 	{
 		return topLeftY + ((bottomLeftY - topLeftY) * 0.5);
 	}
@@ -103,42 +103,42 @@ abstract QuadData(Array<Float>)
 	
 	
 	
-	function set_bottomLeftX(value:Float):Float 
+	inline function set_bottomLeftX(value:Float):Float 
 	{
 		return this[0] = value;
 	}
 	
-	function set_bottomLeftY(value:Float):Float 
+	inline function set_bottomLeftY(value:Float):Float 
 	{
 		return this[1] = value;
 	}
 	
-	function set_topLeftX(value:Float):Float 
+	inline function set_topLeftX(value:Float):Float 
 	{
 		return this[2] = value;
 	}
 	
-	function set_topLeftY(value:Float):Float 
+	inline function set_topLeftY(value:Float):Float 
 	{
 		return this[3] = value;
 	}
 	
-	function set_topRightX(value:Float):Float 
+	inline function set_topRightX(value:Float):Float 
 	{
 		return this[4] = value;
 	}
 	
-	function set_topRightY(value:Float):Float 
+	inline function set_topRightY(value:Float):Float 
 	{
 		return this[5] = value;
 	}
 	
-	function set_bottomRightX(value:Float):Float 
+	inline function set_bottomRightX(value:Float):Float 
 	{
 		return this[6] = value;
 	}
 	
-	function set_bottomRightY(value:Float):Float 
+	inline function set_bottomRightY(value:Float):Float 
 	{
 		return this[7] = value;
 	}
