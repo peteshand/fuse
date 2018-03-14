@@ -21,7 +21,7 @@ abstract RenderTexture(AbstractTexture) to Int from Int
 	
 	public function new(width:Int, height:Int, directRender:Bool=true) 
 	{
-		var baseRenderTexture = new BaseRenderTexture(AbstractTexture.textureIdCount++, width, height, directRender);
+		var baseRenderTexture = new BaseRenderTexture(width, height, directRender);
 		this = new AbstractTexture(baseRenderTexture);
 	}
 	
@@ -39,13 +39,13 @@ class BaseRenderTexture extends BaseTexture
 	var renderTextureData:IRenderTextureData;
 	var renderTextureDrawData:IRenderTextureDrawData;
 	
-	public function new(textureId:Int, width:Int, height:Int, directRender:Bool=true) 
+	public function new(width:Int, height:Int, directRender:Bool=true) 
 	{
 		if (conductorData == null) {
 			conductorData = new WorkerConductorData();
 		}
 		
-		super(textureId, width, height, false);
+		super(width, height, false);
 		this.directRender = directRender;
 		
 		renderTextureData = new RenderTextureData(textureId);

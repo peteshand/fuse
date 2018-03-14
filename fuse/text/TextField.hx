@@ -1,5 +1,6 @@
 package fuse.text;
 
+import fuse.texture.BaseTexture;
 import fuse.texture.BitmapTexture;
 import fuse.utils.Color;
 import fuse.display.Image;
@@ -71,19 +72,22 @@ class TextField extends Image
 	@:isVar public var directRender(get, set):Bool = false;
 	
 	var clearColour:Color = 0x00000000;
-	var baseBmdTexture(get, never):BitmapTexture;
+	public var baseBmdTexture(get, never):BitmapTexture;
 	
 	public function new(width:Int, height:Int) 
 	{
 		nativeTextField = new NativeTextField();
+		//nativeTextField.width = width;
+		//nativeTextField.height = height;
 		
-		bitmapdata = new BitmapData(width, height, true, clearColour);
+		//bitmapdata = new BitmapData(width, height, true, clearColour);
 		dirtySize = false;
 		
-		super(new BitmapTexture(bitmapdata, width, height, false));
+		super(null);
 		
-		this.width = nativeTextField.width;// = width;
-		this.height = nativeTextField.height;// = height;
+		this.width = width;// nativeTextField.width;// = width;
+		this.height = height;// nativeTextField.height;// = height;
+		//update();
 	}
 	
 	public function appendText(text:String):Void
@@ -395,6 +399,7 @@ class TextField extends Image
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
 			bitmapdata.draw(nativeTextField);
 			if (texture != null) {
+				BaseTexture.overTextureId = texture.textureId;
 				texture.dispose();
 			}
 			texture = new BitmapTexture(bitmapdata, false);

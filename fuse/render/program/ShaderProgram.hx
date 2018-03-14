@@ -109,12 +109,7 @@ class ShaderProgram
 		vertexbuffer = context3D.createVertexBuffer(VERTICES_PER_QUAD * numOfQuads, VertexData.VALUES_PER_VERTEX, Context3DBufferUsage.DYNAMIC_DRAW);
 		indexbuffer = context3D.createIndexBuffer(INDICES_PER_QUAD * numOfQuads, Context3DBufferUsage.STATIC_DRAW);
 		
-		indexbuffer.uploadFromByteArray(
-			indices, 
-			0, 
-			0, 
-			ShaderProgram.INDICES_PER_QUAD * numOfQuads
-		);
+		
 		
 		program = context3D.createProgram();
 		
@@ -150,6 +145,13 @@ class ShaderProgram
 		context3D.setVertexBufferAt(2, vertexbuffer, 6, Context3DVertexBufferFormat.BYTES_4);
 		// RGB-TextureIndex x | Mask-TextureIndex y | Alpha Value z
 		context3D.setVertexBufferAt(3, vertexbuffer, 7, Context3DVertexBufferFormat.FLOAT_4);
+		
+		indexbuffer.uploadFromByteArray(
+			indices, 
+			0, 
+			0, 
+			ShaderProgram.INDICES_PER_QUAD * numOfQuads
+		);
 	}
 	
 	public function setBaseShader() 

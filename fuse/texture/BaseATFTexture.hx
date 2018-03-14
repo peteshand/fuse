@@ -21,7 +21,7 @@ abstract ATFTexture(AbstractTexture) to Int from Int
 	
 	public function new(data:ByteArray, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
-		var baseATFTexture = new BaseATFTexture(AbstractTexture.textureIdCount++, data, queUpload, onTextureUploadCompleteCallback);
+		var baseATFTexture = new BaseATFTexture(data, queUpload, onTextureUploadCompleteCallback);
 		this = new AbstractTexture(baseATFTexture);
 	}
 	
@@ -36,7 +36,7 @@ class BaseATFTexture extends BaseTexture
 	var data:ByteArray;
 	var atfDataInfo:AtfDataInfo;
 	
-	public function new(textureId:Int, data:ByteArray, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(data:ByteArray, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		this.data = data;
 		atfDataInfo = AtfData.getInfo(data);
@@ -52,7 +52,7 @@ class BaseATFTexture extends BaseTexture
 			//return;
 		//}
 		
-		super(textureId, atfDataInfo.width, atfDataInfo.height, queUpload, onTextureUploadCompleteCallback);
+		super(atfDataInfo.width, atfDataInfo.height, queUpload, onTextureUploadCompleteCallback);
 	}
 	
 	override public function upload() 

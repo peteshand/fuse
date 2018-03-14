@@ -24,21 +24,21 @@ abstract FileTexture(AbstractTexture) to Int from Int
 	
 	public function new(url:String, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
-		var textureId:Null<Int> = AbstractTexture.textureIdCount++;
+		//var textureId:Null<Int> = AbstractTexture.textureIdCount++;
 		var baseFileTexture:BaseFileTexture = null;
 		
 		if (!baseFileTextures.exists(url)) {
-			baseFileTexture = new BaseFileTexture(textureId, url, width, height, queUpload, onTextureUploadCompleteCallback);
+			baseFileTexture = new BaseFileTexture(url, width, height, queUpload, onTextureUploadCompleteCallback);
 			baseFileTextures.set(url, baseFileTexture);
 		}
 		else {
 			baseFileTexture = baseFileTextures.get(url);
-			textureId = baseFileTexture.textureId;
+			//textureId = baseFileTexture.textureId;
 		}
-		trace("textureId = " + textureId);
+		//trace("textureId = " + textureId);
 		this = new AbstractTexture(baseFileTexture);
 		trace("this = " + this);
-		trace("this.textureId = " + this.textureId);
+		//trace("this.textureId = " + this.textureId);
 	}
 	
 	private function upload():Void
@@ -65,9 +65,9 @@ class BaseFileTexture extends BaseTexture
 	var bitmapData:BitmapData;
 	var url:String;
 	
-	public function new(textureId:Int, url:String, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(url:String, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
-		super(textureId, 0, 0, queUpload, onTextureUploadCompleteCallback);
+		super(0, 0, queUpload, onTextureUploadCompleteCallback);
 		this.url = url;
 		
 		//if (url.indexOf("http") == 0) {

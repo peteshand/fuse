@@ -13,8 +13,6 @@ import openfl.display3D.textures.TextureBase;
 @:access(fuse.texture2.BaseTexture)
 abstract AbstractTexture(Null<Int>) to Int from Int
 {
-	static public var textureIdCount:Int = 0;
-	
 	static var coreTextures = new Map<Int, BaseTexture>();
 	public var coreTexture(get, never):BaseTexture;
 	

@@ -16,7 +16,7 @@ abstract BitmapTexture(AbstractTexture) to Int from Int
 	
 	public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
-		this = new AbstractTexture(new BaseBitmapTexture(AbstractTexture.textureIdCount++, bitmapData, width, height, queUpload, onTextureUploadCompleteCallback));
+		this = new AbstractTexture(new BaseBitmapTexture(bitmapData, width, height, queUpload, onTextureUploadCompleteCallback));
 	}
 	
 	public function update(source:BitmapData)					{ baseBitmapTexture.update(source); 			}
@@ -30,7 +30,7 @@ class BaseBitmapTexture extends BaseTexture
 {
 	var bitmapData:BitmapData;
 	
-	public function new(textureId:Int, bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		this.bitmapData = bitmapData;
 		
@@ -46,7 +46,7 @@ class BaseBitmapTexture extends BaseTexture
 		//if (height == null) this.height = bitmapData.height;
 		//else this.height = height;
 		
-		super(textureId, w, h, queUpload, onTextureUploadCompleteCallback);
+		super(w, h, queUpload, onTextureUploadCompleteCallback);
 	}
 	
 	override public function upload() 

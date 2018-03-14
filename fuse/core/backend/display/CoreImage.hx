@@ -23,7 +23,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	public var vertexData	:IVertexData;
 	public var coreTexture	:CoreTexture;
-	public var textureChanged:Bool = false;
+	//public var textureChanged:Bool = false;
 	
 	public var textureIndex	:Int;
 	@:isVar public var mask(default, set):CoreImage;
@@ -89,7 +89,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 				coreTexture = Core.textures.register(textureId);
 			}
 			
-			textureChanged = true;
+			//textureChanged = true;
 			//updateUVs = true;
 		}
 		return value;

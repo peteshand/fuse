@@ -59,7 +59,7 @@ class Context3DRenderTarget
 	
 	static public function clear() 
 	{
-		targetTextureId.value = -2;
+		targetTextureId.value = -1;
 	}
 	
 	static function set_value(v:Int):Int 

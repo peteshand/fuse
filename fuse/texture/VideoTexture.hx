@@ -22,7 +22,7 @@ abstract VideoTexture(AbstractTexture) to Int from Int
 	
 	public function new(?width:Int, ?height:Int, netStream:NetStream, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
-		var baseVideoTexture:BaseVideoTexture = new BaseVideoTexture(AbstractTexture.textureIdCount++, width, height, netStream, onTextureUploadCompleteCallback);
+		var baseVideoTexture:BaseVideoTexture = new BaseVideoTexture(width, height, netStream, onTextureUploadCompleteCallback);
 		this = new AbstractTexture(baseVideoTexture);
 	}
 	
@@ -38,12 +38,12 @@ class BaseVideoTexture extends BaseTexture
 	var netStream:NetStream;
 	public var nativeVideoTexture:NativeVideoTexture;
 	
-	public function new(textureId:Int, ?width:Int, ?height:Int, netStream:NetStream, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(?width:Int, ?height:Int, netStream:NetStream, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		this.netStream = netStream;
 		this.netStream.client = { onMetaData: onMetaData };
 		
-		super(textureId, width, height, false, onTextureUploadCompleteCallback, false);
+		super(width, height, false, onTextureUploadCompleteCallback, false);
 		this.directRender = true;
 	}
 	

@@ -42,7 +42,7 @@ class LayerCacheBuffers
 	{
 		LayerCacheBuffers.bufferWidth = bufferWidth;
 		LayerCacheBuffers.bufferHeight = bufferHeight;
-		AbstractTexture.textureIdCount = startIndex + numBuffers;
+		BaseTexture.textureIdCount = startIndex + numBuffers;
 		for (i in startIndex...endIndex) 
 		{
 			create(i);
@@ -54,13 +54,13 @@ class LayerCacheBuffers
 		if (textureId < startIndex || textureId >= startIndex + numBuffers) return;
 		
 		if (!buffers.exists(textureId)){
-			var currentTextureId:Int = AbstractTexture.textureIdCount;
-			AbstractTexture.textureIdCount = textureId;
+			var currentTextureId:Int = BaseTexture.textureIdCount;
+			BaseTexture.textureIdCount = textureId;
 			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight, true);
 			//buffer.green = 0.5;
 			buffer._alreadyClear = true;
 			buffers.set(textureId, buffer);
-			AbstractTexture.textureIdCount = currentTextureId;
+			BaseTexture.textureIdCount = currentTextureId;
 		}
 	}
 	

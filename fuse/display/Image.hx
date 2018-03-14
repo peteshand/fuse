@@ -22,8 +22,8 @@ class Image extends DisplayObject
 	{
 		super();
 		displayType = DisplayType.IMAGE;
+		
 		this.texture = texture;
-		texture.onUpdate.add(OnTextureUpdate);
 		
 		renderLayer = 0;
 	}
@@ -53,12 +53,12 @@ class Image extends DisplayObject
 	
 	function set_texture(value:AbstractTexture):AbstractTexture 
 	{
-		if (value == null) {
-			throw new Error("Texture can not be null");
-		}
+		if (value == null) return null;
 		
 		if (texture != value) {
+			if (texture != null) texture.onUpdate.remove(OnTextureUpdate);
 			texture = value;
+			texture.onUpdate.add(OnTextureUpdate);
 			OnTextureUpdate();
 			displayData.textureId = texture.textureId;
 			isStatic = 0;

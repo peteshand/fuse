@@ -3,6 +3,7 @@ package fuse.core.front.texture;
 import fuse.core.front.buffers.AtlasBuffers;
 import fuse.core.front.buffers.LayerCacheBuffers;
 import fuse.core.front.texture.upload.TextureUploadQue;
+import fuse.texture.BaseTexture;
 import fuse.texture.BitmapTexture.BaseBitmapTexture;
 import fuse.texture.IBaseTexture;
 import openfl.display.BitmapData;
@@ -49,12 +50,14 @@ class Textures
 		//#else
 		//var blank:BitmapData = new BitmapData(32, 32, true, 0x00000000);
 		//#end
-		var blankTexture:DefaultTexture = new DefaultTexture(0, blank, false);
-		blankId = blankTexture.textureId;
+		blankId = BaseTexture.overTextureId = 0;
+		var blankTexture:DefaultTexture = new DefaultTexture(blank, false);
 		
+		whiteId = BaseTexture.overTextureId = 1;
 		var white:BitmapData = new BitmapData(32, 32, true, 0xFFFFFFFF);
-		var whiteTexture:DefaultTexture = new DefaultTexture(1, white, false);
-		whiteId = whiteTexture.textureId;
+		var whiteTexture:DefaultTexture = new DefaultTexture(white, false);
+		
+		BaseTexture.textureIdCount = 2;
 	}
 	
 	static public function registerTexture(textureId:Int, texture:IBaseTexture):Void
@@ -114,10 +117,10 @@ class Textures
 
 class DefaultTexture extends BaseBitmapTexture
 {
-	function new(textureId:Int, bitmapData:BitmapData, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	function new(bitmapData:BitmapData, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		this.persistent = 1;
 		
-		super(textureId, bitmapData, queUpload, onTextureUploadCompleteCallback);
+		super(bitmapData, queUpload, onTextureUploadCompleteCallback);
 	}
 }

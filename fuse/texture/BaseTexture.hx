@@ -24,6 +24,8 @@ import openfl.errors.Error;
 class BaseTexture implements IBaseTexture
 {
 	//static private var textureIdCount:Int = 0;
+	static public var overTextureId:Null<Int>;
+	static public var textureIdCount:Int = 0;
 	
 	var p2Width:Int;
 	var p2Height:Int;
@@ -48,9 +50,15 @@ class BaseTexture implements IBaseTexture
 	public var nativeTexture(get, null):Texture;
 	public var textureBase(get, null):TextureBase;
 	
-	public function new(textureId:Int, width:Int, height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null, p2Texture:Bool=true) 
+	public function new(width:Int, height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null, p2Texture:Bool=true) 
 	{
-		this.textureId = textureId;
+		if (overTextureId == null){
+			this.textureId = BaseTexture.textureIdCount++;
+		}
+		else {
+			this.textureId = BaseTexture.overTextureId;
+			BaseTexture.overTextureId = null;
+		}
 		this.width = width;
 		this.height = height;
 		this.p2Texture = p2Texture;
