@@ -1,7 +1,7 @@
 package fuse.render;
 import fuse.core.communication.data.batchData.IBatchData;
 import fuse.core.communication.memory.SharedMemory;
-import fuse.render.program.ShaderProgram;
+import fuse.render.buffers.Buffer;
 
 /**
  * ...
@@ -41,7 +41,7 @@ class RenderDebugUtil
 		{
 			trace("SharedMemory.memory.position = " + SharedMemory.memory.position);
 			
-			for (k in 0...ShaderProgram.VERTICES_PER_QUAD) 
+			for (k in 0...Buffer.VERTICES_PER_QUAD) 
 			{
 				
 				var INDEX_X:Float = SharedMemory.memory.readFloat();

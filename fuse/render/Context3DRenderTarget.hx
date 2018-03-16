@@ -14,7 +14,7 @@ class Context3DRenderTarget
 	public static var targetTextureId:Notifier<Int>;
 	@:isVar public static var value(default, set):Int;
 	
-	static function init(context3D:Context3D) 
+	public static function init(context3D:Context3D) 
 	{
 		Context3DRenderTarget.context3D = context3D;
 		targetTextureId = new Notifier<Int>(-2);

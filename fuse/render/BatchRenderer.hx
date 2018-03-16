@@ -8,11 +8,10 @@ import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.display.effects.BlendMode;
 import fuse.display.effects.BlendMode.BlendFactors;
-import fuse.render.program.Context3DProgram;
-import fuse.render.program.ShaderProgram;
-import fuse.render.program.ShaderPrograms;
 import fuse.render.Context3DTexture;
-import fuse.render.shader.FuseShaders;
+import fuse.render.buffers.Buffers;
+import fuse.render.shaders.FShader;
+import fuse.render.shaders.FShaders;
 import mantle.notifier.Notifier;
 import openfl.display3D.Context3D;
 
@@ -26,21 +25,21 @@ class BatchRenderer
 	static var currentBlendMode:Int = -1;
 	static private var context3D:Context3D;
 	
-	public static var shaderProgram:Notifier<ShaderProgram>;
+	// ** // public static var shaderProgram:Notifier<ShaderProgram>;
 	public static var quadCount:Int;
 	
 	static public function init(context3D:Context3D) 
 	{
 		BatchRenderer.context3D = context3D;
-		shaderProgram = new Notifier<ShaderProgram>();
-		shaderProgram.add(OnShaderProgramChange);
+		// ** // shaderProgram = new Notifier<ShaderProgram>();
+		// ** // shaderProgram.add(OnShaderProgramChange);
 	}
 	
-	static function OnShaderProgramChange() 
-	{
-		if (shaderProgram.value == null) return;
-		programChanged = true;
-	}
+	// ** // static function OnShaderProgramChange() 
+	// ** // {
+	// ** // 	if (shaderProgram.value == null) return;
+	// ** // 	programChanged = true;
+	// ** // }
 	
 	static public function begin(conductorData:WorkerConductorData) 
 	{
@@ -49,7 +48,7 @@ class BatchRenderer
 			conductorData.highestNumTextures = PlatformSettings.MAX_TEXTURES;
 		#end
 		quadCount = 0;
-		FuseShaders.setCurrentShader(conductorData.highestNumTextures);
+		// ** // FuseShaders.setCurrentShader(conductorData.highestNumTextures);
 	}
 	
 	static public function drawBuffer(batchIndex:Int, conductorData:WorkerConductorData, context3D:Context3D, traceOutput:Bool) 
@@ -58,8 +57,8 @@ class BatchRenderer
 		if (currentBatchData == null) return;
 		if (currentBatchData.skip == 1) return;
 		
-		var numItemsInShaderProgram:Int = ShaderPrograms.getGroupId(currentBatchData.numItems);
-		if (numItemsInShaderProgram == 0) return;
+		// ** // var numItemsInShaderProgram:Int = ShaderPrograms.getGroupId(currentBatchData.numItems);
+		// ** // if (numItemsInShaderProgram == 0) return;
 		if (conductorData.highestNumTextures == 0) return;
 		
 		programChanged = false;
@@ -74,13 +73,17 @@ class BatchRenderer
 			}
 		}
 		
+		
+		var fShader:FShader = FShaders.getShader(conductorData.highestNumTextures);
+		fShader.update();
+		
 		//trace("currentBatchData.numItems = " + currentBatchData.numItems);
 		//for (k in conductorData.highestNumTextures...8) 
 		//{
 			//Context3DTexture.setContextTexture(k, -1);
 		//}
 		//trace("numItemsInShaderProgram = " + numItemsInShaderProgram);
-		shaderProgram.value = ShaderPrograms.getProgram(numItemsInShaderProgram);
+		// ** // shaderProgram.value = ShaderPrograms.getProgram(numItemsInShaderProgram);
 		//FuseShaders.CURRENT_SHADER.value = FuseShaders.getShader(4);
 		
 		//var batchData:IBatchData = textureRenderBatch.getBatchData(i);
@@ -97,25 +100,25 @@ class BatchRenderer
 			//
 			//
 			//if (currentBatchData.renderTargetId == 6) {
-			//if (traceOutput){
-				//RenderDebugUtil.batchDebug(currentBatchData);
-				//RenderDebugUtil.vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, currentBatchData.numItems);
-			//}
+			if (traceOutput){
+				RenderDebugUtil.batchDebug(currentBatchData);
+				RenderDebugUtil.vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, currentBatchData.numItems);
+			}
 			//
 			//trace("quadCount = " + quadCount);
 			
-			shaderProgram.value.vertexbuffer.uploadFromByteArray(
-				SharedMemory.memory, 
-				quadCount * VertexData.BYTES_PER_ITEM,
-				0, 
-				ShaderProgram.VERTICES_PER_QUAD * numItemsInShaderProgram
-			);
+			// ** // shaderProgram.value.vertexbuffer.uploadFromByteArray(
+			// ** // 	SharedMemory.memory, 
+			// ** // 	quadCount * VertexData.BYTES_PER_ITEM,
+			// ** // 	0, 
+			// ** // 	ShaderProgram.VERTICES_PER_QUAD * numItemsInShaderProgram
+			// ** // );
 			
 			//trace(ShaderProgram.VERTICES_PER_QUAD * numItemsInShaderProgram);
 			
 		//}
 		
-		Context3DProgram.setProgram(shaderProgram.value.program);
+		// ** // Context3DProgram.setProgram(shaderProgram.value.program);
 		
 		Context3DRenderTarget.value = currentBatchData.renderTargetId;
 		
@@ -136,13 +139,15 @@ class BatchRenderer
 		//if (numItemsInShaderProgram > 1) numItemsInShaderProgram = 1;
 		//trace("numItemsInShaderProgram = " + numItemsInShaderProgram);
 		//trace("drawTriangles");
-		context3D.drawTriangles(shaderProgram.value.indexbuffer, 0, currentBatchData.numItems * 2);
+		// ** // context3D.drawTriangles(shaderProgram.value.indexbuffer, 0, currentBatchData.numItems * 2);
 		
+		Buffers.currentBuffer.drawTriangles(quadCount * 6, currentBatchData.numItems * 2);
+		//trace("quadCount = " + quadCount);
 		quadCount += currentBatchData.numItems;
 	}
 	
 	static public function clear() 
 	{
-		BatchRenderer.shaderProgram.value = null;
+		// ** // BatchRenderer.shaderProgram.value = null;
 	}
 }

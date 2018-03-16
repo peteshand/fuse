@@ -3,9 +3,9 @@ package fuse.render;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.texture.Textures;
-import fuse.render.program.Context3DProgram;
-import fuse.render.program.ShaderPrograms;
-import fuse.render.shader.FuseShaders;
+import fuse.render.buffers.Buffer;
+import fuse.render.buffers.Buffers;
+import fuse.render.shaders.FShaders;
 import fuse.utils.Color;
 import fuse.Fuse;
 import mantle.managers.resize.Resize;
@@ -19,7 +19,7 @@ import openfl.display3D.Context3D;
  * ...
  * @author P.J.Shand
  */
-@:access(fuse)
+//@:access(fuse)
 class Renderer
 {
 	//var m:Matrix3D = new Matrix3D();
@@ -48,13 +48,16 @@ class Renderer
 		
 		Context3DRenderTarget.init(context3D);
 		Context3DTexture.init(context3D);
-		Context3DProgram.init(context3D);
-		ShaderPrograms.init(context3D);
+		//Context3DProgram.init(context3D);
+		//ShaderPrograms.init(context3D);
 		BatchRenderer.init(context3D);
 		Textures.init(context3D);
-		FuseShaders.init();
+		//FuseShaders.init();
 		
-		ShaderPrograms.clear();
+		Buffers.init(context3D);
+		FShaders.init(context3D);
+		
+		//ShaderPrograms.clear();
 	}
 	
 	function OnResize() 
@@ -78,6 +81,12 @@ class Renderer
 			context3D.clear(clearColor.red / 255, clearColor.green / 255, clearColor.blue / 255, 1);
 		}
 		
+		//trace("conductorData.highestNumTextures = " + conductorData.highestNumTextures);
+		//trace("conductorData.numberOfRenderables = " + conductorData.numberOfRenderables);
+		
+		Buffers.currentBuffer = Buffers.getBuffer(conductorData.numberOfRenderables);
+		Buffers.currentBuffer.update();
+		
 		Context3DRenderTarget.begin();
 		
 		if (Fuse.current.cleanContext) {
@@ -91,7 +100,7 @@ class Renderer
 		var traceOutput:Bool = false;
 		if (conductorData.numberOfBatches > 1){
 			//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
-			traceOutput = true;
+			//traceOutput = true;
 		}
 		
 		for (i in 0...conductorData.numberOfBatches) 
@@ -107,10 +116,13 @@ class Renderer
 	{
 		if (Fuse.current.cleanContext) {
 			Context3DTexture.clear();
-			ShaderPrograms.clear();
-			Context3DProgram.clear();
+			//ShaderPrograms.clear();
+			//Context3DProgram.clear();
 			BatchRenderer.clear();
 			Context3DRenderTarget.clear();
+			
+			Buffers.deactivate();
+			FShaders.deactivate();
 		}
 		
 		if (!sharedContext) {
