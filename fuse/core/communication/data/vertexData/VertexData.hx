@@ -1,6 +1,7 @@
 package fuse.core.communication.data.vertexData;
 
 import fuse.Fuse;
+import fuse.render.shaders.FShader;
 import fuse.utils.Color;
 import fuse.core.communication.memory.Memory;
 
@@ -18,26 +19,52 @@ class VertexData implements IVertexData
 	static var _basePosition:Int = 0;
 	public static var basePosition(get, null):Int = 0;
 	
-	//public static inline var INDEX_XY:Int = 0;
+	
+	
+	
+	// new order
 	public static inline var INDEX_X:Int = 0;
 	public static inline var INDEX_Y:Int = 4;
 	
-	public static inline var INDEX_U:Int = 8;
-	public static inline var INDEX_V:Int = 12;
-	public static inline var INDEX_MU:Int = 16;
-	public static inline var INDEX_MV:Int = 20;
+	public static inline var INDEX_TEXTURE:Int = 8; // *
+	public static inline var INDEX_ALPHA:Int = 12;
+	public static inline var INDEX_U:Int = 16;
+	public static inline var INDEX_V:Int = 20;
 	
 	public static inline var INDEX_COLOR:Int = 24;
 	
-	public static inline var INDEX_TEXTURE:Int = 28;
-	public static inline var INDEX_MASK_TEXTURE:Int = 32;
-	public static inline var INDEX_MASK_BASE_VALUE:Int = 36;
-	public static inline var INDEX_ALPHA:Int = 40;
+	public static inline var INDEX_MU:Int = 28;
+	public static inline var INDEX_MV:Int = 32;
+	public static inline var INDEX_MASK_TEXTURE:Int = 36;
+	public static inline var INDEX_MASK_BASE_VALUE:Int = 40;
+	
+	
+	
+	
+	
+	
+	// old order
+	//public static inline var INDEX_X:Int = 0;
+	//public static inline var INDEX_Y:Int = 4;
+	//
+	//public static inline var INDEX_U:Int = 8;
+	//public static inline var INDEX_V:Int = 12;
+	//public static inline var INDEX_MU:Int = 16;
+	//public static inline var INDEX_MV:Int = 20;
+	//
+	//public static inline var INDEX_COLOR:Int = 24;
+	//
+	//public static inline var INDEX_TEXTURE:Int = 28;
+	//public static inline var INDEX_MASK_TEXTURE:Int = 32;
+	//public static inline var INDEX_MASK_BASE_VALUE:Int = 36;
+	//public static inline var INDEX_ALPHA:Int = 40;
+	
+	
 	
 	public static inline var BYTES_PER_VALUE:Int = 4;
-	public static inline var VALUES_PER_VERTEX:Int = 11;
-	public static inline var BYTES_PER_VERTEX:Int = BYTES_PER_VALUE * VALUES_PER_VERTEX;
-	public static inline var BYTES_PER_ITEM:Int = BYTES_PER_VERTEX * 4;
+	public static var VALUES_PER_VERTEX(get, null):Int = 11;
+	public static var BYTES_PER_VERTEX(get, null):Int;// = BYTES_PER_VALUE * VALUES_PER_VERTEX;
+	public static var BYTES_PER_ITEM:Int = BYTES_PER_VERTEX * 4;
 	
 	public function new() 
 	{
@@ -111,7 +138,6 @@ class VertexData implements IVertexData
 	
 	inline public function setColor(index:Int, value:Color):Void
 	{
-		//writeFloat(INDEX_COLOR + indexOffset(index), value);
 		writeInt32(INDEX_COLOR + indexOffset(index), value);
 	}
 	
@@ -138,6 +164,11 @@ class VertexData implements IVertexData
 		Memory.setI32(VertexData.basePosition + offset, value);
 	}
 	
+	inline function writeInt16(offset:Int, value:UInt):Void
+	{
+		Memory.setI16(VertexData.basePosition + offset, value);
+	}
+	
 	static inline function get_OBJECT_POSITION():Int 
 	{
 		return VertexData.OBJECT_POSITION;
@@ -153,5 +184,18 @@ class VertexData implements IVertexData
 	static inline function get_basePosition():Int 
 	{
 		return _basePosition;
+	}
+	
+	static inline function get_BYTES_PER_VERTEX():Int 
+	{
+		return VALUES_PER_VERTEX * BYTES_PER_VALUE;
+		//if (FShader.ENABLE_MASKS) return INDEX_MASK_BASE_VALUE + BYTES_PER_VALUE;
+		//else return INDEX_COLOR + BYTES_PER_VALUE;
+	}
+	
+	static inline function get_VALUES_PER_VERTEX():Int 
+	{
+		if (FShader.ENABLE_MASKS) return 11;
+		else return INDEX_COLOR + 7;
 	}
 }

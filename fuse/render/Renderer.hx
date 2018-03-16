@@ -54,6 +54,11 @@ class Renderer
 		Textures.init(context3D);
 		//FuseShaders.init();
 		
+		trace("supports8kTexture = " + Reflect.getProperty(Context3D, "supports8kTexture"));
+		trace("supports8kTexture = " + Reflect.getProperty(context3D, "supports8kTexture"));
+		trace("supports8kTexture = " + Reflect.field(Context3D, "supports8kTexture"));
+		trace("supports8kTexture = " + Reflect.field(context3D, "supports8kTexture"));
+		
 		Buffers.init(context3D);
 		FShaders.init(context3D);
 		

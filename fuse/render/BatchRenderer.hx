@@ -75,7 +75,7 @@ class BatchRenderer
 		
 		
 		var fShader:FShader = FShaders.getShader(conductorData.highestNumTextures);
-		fShader.update();
+		fShader.update(currentBatchData.renderTargetId == -1);
 		
 		//trace("currentBatchData.numItems = " + currentBatchData.numItems);
 		//for (k in conductorData.highestNumTextures...8) 

@@ -1,5 +1,6 @@
 package fuse.display;
 
+import fuse.camera.Camera2D;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.display.Sprite;
 import fuse.display.Quad;
@@ -20,6 +21,7 @@ class Stage extends Sprite {
 	
 	public var onDisplayAdded = new Signal1<DisplayObject>();
 	public var onDisplayRemoved = new Signal1<DisplayObject>();
+	public var camera = new Camera2D();
 	
 	public function new() 
 	{	

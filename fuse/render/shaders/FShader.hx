@@ -15,6 +15,8 @@ import openfl.utils.ByteArray;
  */
 class FShader
 {
+	public static inline var ENABLE_MASKS:Bool = true;
+	
 	static var textureChannelData:Vector<Float>;
 	static var posData:Vector<Float>;
 	static var cameraData:Vector<Float>;
@@ -82,15 +84,20 @@ class FShader
 		}
 	}
 	
-	public function update() 
+	public function update(move:Bool=false) 
 	{
 		setProgram.value = true;
-		//cameraData[0] += 0.0001;
-		
-		
+		if (move) {
+			cameraData[0] = -Fuse.current.stage.camera.x / (Lib.current.stage.stageWidth / 2);
+			cameraData[1] = Fuse.current.stage.camera.y / (Lib.current.stage.stageHeight / 2);
+		}
+		else {
+			cameraData[0] = 0;
+			cameraData[1] = 0;
+		}
 		
 		//context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 17, matrix3D);
-		//context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 17, cameraData, 1);
+		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 17, cameraData, 1);
 	}
 	
 	public function deactivate() 
@@ -100,43 +107,76 @@ class FShader
 	
 	function vertexString():String 
 	{
-		//"m44 op, va0, vc0\n"
-		var agal:String = "";
-		//agal += "add va0, va0, vc17			\n";// set x and y pos to vt0 + camera position
-		agal += "mov vt0.zw, vc16.zw		\n"; // set z and w pos to vt0
-		agal += "mov vt0.xy, va0.xy			\n"; // set x and y pos to vt0
-		//agal += "add vt0.xy, vt0.xy, vc17.xy	\n"; // set x and y pos to vt0
+		var alias:Array<AgalAlias> = [];
+		alias.push( { value:"va0.x", alias:"INDEX_X" } );
+		alias.push( { value:"va0.y", alias:"INDEX_Y" } );
 		
-		//agal += "m44 op, vt0, vc17 			\n"; // pos to clipspace
-		//agal += "m44 vc0, va17, vc0 		\n"; // pos to clipspace
-		agal += "mov op, vt0				\n"; // set vt0 to clipspace
-		agal += "mov v1, va1				\n"; // + // copy RGB-UV && Mask-UVc
+		alias.push( { value:"va1.x", alias:"INDEX_TEXTURE" } );
+		alias.push( { value:"va1.y", alias:"INDEX_ALPHA" } );
+		alias.push( { value:"va1.zzzz", alias:"INDEX_U" } );
+		alias.push( { value:"va1.w", alias:"INDEX_V" } );
+		
+		alias.push( { value:"va2.zyxw", alias:"INDEX_COLOR" } );
+		
+		alias.push( { value:"va3.x", alias:"INDEX_MU" } );
+		alias.push( { value:"va3.y", alias:"INDEX_MV" } );
+		alias.push( { value:"va3.z", alias:"INDEX_MASK_TEXTURE" } );
+		alias.push( { value:"va3.w", alias:"INDEX_MASK_BASE_VALUE" } );
+		
+		alias.push( { value:"vc17", alias:"CAMERA_POSITION" } );
+		
+		var agal:String = "";
+		agal += "mov vt0.zw, vc16.zw				\n"; // set z and w pos to vt0
+		agal += "mov vt0.x, INDEX_X					\n"; // set x and y pos to vt0
+		agal += "mov vt0.y, INDEX_Y					\n"; // set x and y pos to vt0
+		
+		agal += "add vt0.x, vt0.x, CAMERA_POSITION.x	\n"; // set x and y pos to vt0
+		agal += "add vt0.y, vt0.y, CAMERA_POSITION.y	\n"; // set x and y pos to vt0
+		
+		agal += "mov op, vt0						\n"; // set vt0 to clipspace
+		
+		agal += "mov v1.xyzw, INDEX_U				\n";
+		agal += "mov v1.y, INDEX_V					\n";
+		agal += "mov vt1.x, INDEX_TEXTURE			\n";
+		agal += "mov vt1.w, INDEX_ALPHA				\n";
+		
+		agal += "mov vt2, vc[vt1.x]					\n"; // set textureIndex alpha multipliers
+		agal += "sub vt2, vt2, vt1.wwww 			\n"; // substract inverted alpha from textureIndex alpha
+		agal += "max vt2, vt2, vc16.z				\n"; // clamp above 0 // NEED TO SWITCH TO vc16
+		agal += "min vt2, vt2, vc16.w				\n"; // clamp below 1 // NEED TO SWITCH TO vc16
+		agal += "mov v2, vt2						\n"; // copy RGB-TextureIndex with alpha multipliers into v2
+		
+		agal += "add vt1.x, vt1.x, vc16.x			\n"; // Add offset (8) to index
+		agal += "mov vt3, vc[vt1.x]					\n"; // set textureIndex alpha multipliers
+		agal += "sub vt3, vt3, vt1.wwww 			\n"; // substract inverted alpha from textureIndex alpha
+		agal += "max vt3, vt3, vc16.z				\n"; // clamp above 0 // NEED TO SWITCH TO vc16
+		agal += "min vt3, vt3, vc16.w				\n"; // clamp below 1 // NEED TO SWITCH TO vc16
+		agal += "mov v3, vt3						\n"; // copy RGB-TextureIndex with alpha multipliers into v2
 			
-		agal += "mov vt1, va3				\n"; // copy RGB-TextureIndex | Mask-TextureIndex | Alpha Value
+		agal += "mov v7.xyzw, INDEX_COLOR			\n"; // copy tint colour data and flip Red and Blue
+		
+		if (FShader.ENABLE_MASKS){
+		// Mask stuff
+			agal += "mov v1.z, INDEX_MU					\n";
+			agal += "mov v1.w, INDEX_MV					\n";
 			
-		agal += "mov vt2, vc[vt1.x]			\n"; // set textureIndex alpha multipliers
-		agal += "sub vt2, vt2, vt1.wwww 	\n"; // substract inverted alpha from textureIndex alpha
-		agal += "max vt2, vt2, vc16.z		\n"; // clamp above 0 // NEED TO SWITCH TO vc16
-		agal += "min vt2, vt2, vc16.w		\n"; // clamp below 1 // NEED TO SWITCH TO vc16
-		agal += "mov v2, vt2				\n"; // copy RGB-TextureIndex with alpha multipliers into v2
+			agal += "mov vt1.y, INDEX_MASK_TEXTURE		\n";
+			agal += "mov vt1.z, INDEX_MASK_BASE_VALUE	\n";
 			
-		agal += "add vt1.x, vt1.x, vc16.x	\n"; // Add offset (8) to index
-		agal += "mov vt3, vc[vt1.x]			\n"; // set textureIndex alpha multipliers
-		agal += "sub vt3, vt3, vt1.wwww 	\n"; // substract inverted alpha from textureIndex alpha
-		agal += "max vt3, vt3, vc16.z		\n"; // clamp above 0 // NEED TO SWITCH TO vc16
-		agal += "min vt3, vt3, vc16.w		\n"; // clamp below 1 // NEED TO SWITCH TO vc16
-		agal += "mov v3, vt3				\n"; // copy RGB-TextureIndex with alpha multipliers into v2
-			
-		agal += "mov v7.xyzw, va2.zyxw		\n"; // copy tint colour data and flip Red and Blue
-			
-		agal += "mov vt4, vc[vt1.y]			\n"; // set mask textureIndex alpha multipliers
-		agal += "mov v4, vt4				\n"; // 
-			
-		agal += "add vt1.y, vt1.y, vc16.x	\n"; // Add offset (8) to index
-		agal += "mov vt5, vc[vt1.y]			\n"; // set mask textureIndex alpha multipliers
-		agal += "mov v5, vt5				\n"; // 
-			
-		agal += "mov v6.xyzw, vt1.zzzz		\n";// copy maskBaseValue into v6
+			agal += "mov vt4, vc[vt1.y]					\n"; // set mask textureIndex alpha multipliers
+			agal += "mov v4, vt4						\n"; // 
+				
+			agal += "add vt1.y, vt1.y, vc16.x			\n"; // Add offset (8) to index
+			agal += "mov vt5, vc[vt1.y]					\n"; // set mask textureIndex alpha multipliers
+			agal += "mov v5, vt5						\n"; // 
+				
+			agal += "mov v6.xyzw, vt1.zzzz				\n";// copy maskBaseValue into v6
+		}
+		
+		for (i in 0...alias.length) 
+		{
+			agal = agal.split(alias[i].alias).join(alias[i].value);
+		}
 		
 		return agal;
 	}
@@ -176,21 +216,23 @@ class FShader
 			/////////////////////////////////////////////////////////////////
 			/////////////////////////////////////////////////////////////////
 			
+			
 			/////////////////////////////////////////////////////////////////
-			/////////////////////////////////////////////////////////////////
-			for (j in 0...numTextures) 
-			{
-				agal += "tex ft0, v1.zw, fs" + j + " <2d,clamp,linear>	\n";
-				agal += "mul ft0.w, ft0.w, " + maskIndex[j] + 		"	\n";
-				if (j == 0)	agal += "mov ft2, ft0						\n";
-				else 		agal += "add ft2, ft2, ft0					\n";
+			// Mark from 4 available textures ///////////////////////////////
+			if (FShader.ENABLE_MASKS){
+				for (j in 0...numTextures) 
+				{
+					agal += "tex ft0, v1.zw, fs" + j + " <2d,clamp,linear>	\n";
+					agal += "mul ft0.w, ft0.w, " + maskIndex[j] + 		"	\n";
+					if (j == 0)	agal += "mov ft2, ft0						\n";
+					else 		agal += "add ft2, ft2, ft0					\n";
+				}
+				// Multiply Alpha by Mask Value /////////////////////////////////
+				
+				agal += "add ft2.w, ft2.w, MASK_BASE.1						\n";
+				agal += "min ft2.w, ft2.w, ONE.1							\n";
+				agal += "mul ft1.xyzw, ft1.xyzw, ft2.wwww					\n";
 			}
-			// Multiply Alpha by Mask Value /////////////////////////////////
-			
-			agal += "add ft2.w, ft2.w, MASK_BASE.1					\n";
-			agal += "min ft2.w, ft2.w, ONE.1						\n";
-			agal += "mul ft1.xyzw, ft1.xyzw, ft2.wwww				\n";
-			
 			/////////////////////////////////////////////////////////////////
 			/////////////////////////////////////////////////////////////////
 			

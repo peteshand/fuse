@@ -1,6 +1,7 @@
 package fuse.render.buffers;
 
 import fuse.core.communication.memory.SharedMemory;
+import fuse.render.shaders.FShader;
 import mantle.notifier.Notifier;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DBufferUsage;
@@ -25,9 +26,19 @@ class Buffer
 	
 	var vertexbuffer:VertexBuffer3D;
 	var indexbuffer:IndexBuffer3D;
+	var bufferCount:Int;
+	var bufferPosition:Int;
+	var formatLength = new Map<Context3DVertexBufferFormat, Int>();
 	
 	public function new(context3D:Context3D, numOfQuads:Int) 
 	{
+		formatLength.set(Context3DVertexBufferFormat.BYTES_4, 1);
+		formatLength.set(Context3DVertexBufferFormat.FLOAT_1, 1);
+		formatLength.set(Context3DVertexBufferFormat.FLOAT_2, 2);
+		formatLength.set(Context3DVertexBufferFormat.FLOAT_3, 3);
+		formatLength.set(Context3DVertexBufferFormat.FLOAT_4, 4);
+		
+		
 		this.numOfQuads = numOfQuads;
 		this.context3D = context3D;
 		trace("numOfQuads = " + numOfQuads);
@@ -53,12 +64,38 @@ class Buffer
 	
 	public function activate():Void
 	{
-		context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_2); // Vertex x y position x,y
-		context3D.setVertexBufferAt(1, vertexbuffer, 2, Context3DVertexBufferFormat.FLOAT_4); // RGB-UV x,y | Mask-UV
-		context3D.setVertexBufferAt(2, vertexbuffer, 6, Context3DVertexBufferFormat.BYTES_4); // Tint Colour RGBA x,y,z,w
-		context3D.setVertexBufferAt(3, vertexbuffer, 7, Context3DVertexBufferFormat.FLOAT_4); // RGB-TextureIndex x | Mask-TextureIndex y | Alpha Value z
+		// new order
+		bufferCount = 0;
+		bufferPosition = 0;
+		
+		addToVertexBuffer(Context3DVertexBufferFormat.FLOAT_2); // INDEX_X, INDEX_Y
+		addToVertexBuffer(Context3DVertexBufferFormat.FLOAT_4); // INDEX_TEXTURE, INDEX_ALPHA, INDEX_U, INDEX_V
+		addToVertexBuffer(Context3DVertexBufferFormat.BYTES_4); // INDEX_COLOR
+		if (FShader.ENABLE_MASKS){
+			addToVertexBuffer(Context3DVertexBufferFormat.FLOAT_4); // INDEX_MU, INDEX_MV, INDEX_MASK_TEXTURE, INDEX_MASK_BASE_VALUE
+		}
+		
+		//context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_2); // INDEX_X, INDEX_Y
+		//context3D.setVertexBufferAt(1, vertexbuffer, 2, Context3DVertexBufferFormat.FLOAT_4); // INDEX_TEXTURE, INDEX_ALPHA, INDEX_U, INDEX_V
+		//context3D.setVertexBufferAt(2, vertexbuffer, 6, Context3DVertexBufferFormat.BYTES_4); // INDEX_COLOR
+		//
+		//if (FShader.ENABLE_MASKS){
+			//context3D.setVertexBufferAt(3, vertexbuffer, 7, Context3DVertexBufferFormat.FLOAT_4); // INDEX_MU, INDEX_MV, INDEX_MASK_TEXTURE, INDEX_MASK_BASE_VALUE
+		//}
+		// old order
+		//context3D.setVertexBufferAt(0, vertexbuffer, 0, Context3DVertexBufferFormat.FLOAT_2); // INDEX_X, INDEX_Y
+		//context3D.setVertexBufferAt(1, vertexbuffer, 2, Context3DVertexBufferFormat.FLOAT_4); // INDEX_U, INDEX_V, INDEX_MU, INDEX_MV
+		//context3D.setVertexBufferAt(2, vertexbuffer, 6, Context3DVertexBufferFormat.BYTES_4); // INDEX_COLOR
+		//context3D.setVertexBufferAt(3, vertexbuffer, 7, Context3DVertexBufferFormat.FLOAT_4); // INDEX_TEXTURE, INDEX_MASK_TEXTURE, INDEX_MASK_BASE_VALUE, INDEX_ALPHA
 		
 		updateIndices();
+	}
+	
+	function addToVertexBuffer(bufferFormat:Context3DVertexBufferFormat) 
+	{
+		context3D.setVertexBufferAt(bufferCount, vertexbuffer, bufferPosition, bufferFormat);
+		bufferPosition += formatLength.get(bufferFormat);
+		bufferCount++;
 	}
 	
 	inline function updateIndices() 

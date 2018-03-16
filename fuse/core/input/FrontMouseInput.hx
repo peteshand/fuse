@@ -60,8 +60,8 @@ class FrontMouseInput
 	function OnMouse(e:MouseEvent):Void 
 	{
 		var touch:Touch = getMouseData(0);
-		touch.x = e.stageX;
-		touch.y = e.stageY;
+		touch.x = e.stageX + Fuse.current.stage.camera.x;
+		touch.y = e.stageY + Fuse.current.stage.camera.y;
 		touch.type = e.type;
 		for (i in 0...touchDataArray.length) 
 		{
