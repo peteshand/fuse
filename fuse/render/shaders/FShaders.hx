@@ -16,6 +16,10 @@ class FShaders
 	{
 		FShaders.context3D = context3D;
 		shaders = new Map<Int, FShader>();
+		for (i in 0...8) 
+		{
+			getShader(i+1);
+		}
 	}
 	
 	public function new() 

@@ -11,6 +11,7 @@ import fuse.utils.FrameBudget;
 class TextureUploadQue
 {
 	public static var que:Array<IBaseTexture> = [];
+	static var count:Int;
 	
 	public function new() 
 	{
@@ -21,11 +22,17 @@ class TextureUploadQue
 	{
 		// Upload next texture if:
 		// A: There are textures to upload
-		// B: No more than 50% of the framebudget has been used
-		while (que.length > 0 && FrameBudget.progress < 0.5) 
+		// B: No more than 50% of the framebudget has been used, or No textures have been updated in current frame
+		count = 0;
+		
+		//trace("FrameBudget.progress = " + FrameBudget.progress);
+		
+		while (que.length > 0 && (FrameBudget.progress < 0.5 || count == 0)) 
 		{
+			//trace(count);
 			var texture:IBaseTexture = que.shift();
 			texture.upload();
+			count++;
 		}
 	}
 	

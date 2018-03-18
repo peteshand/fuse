@@ -19,6 +19,8 @@ class Buffers
 		Buffers.context3D = context3D;
 		
 		buckets = [
+			50,
+			100,
 			250,
 			500,
 			1000,
@@ -37,20 +39,20 @@ class Buffers
 	
 	public static function getBuffer(numItems:Int):Buffer
 	{
-		var id:Int = getGroupId(numItems);
+		var bufferSize:Int = getGroupBufferSize(numItems); // numItems;// 
 		
 		lastBuffer = currentBuffer;
 		
-		currentBuffer = buffers.get(id);
+		currentBuffer = buffers.get(bufferSize);
 		if (currentBuffer == null) {
-			currentBuffer = new Buffer(context3D, id);
-			buffers.set(id, currentBuffer);
+			currentBuffer = new Buffer(context3D, bufferSize);
+			buffers.set(bufferSize, currentBuffer);
 		}
 		
 		if (currentBuffer != lastBuffer) {
-			if (lastBuffer != null) {
-				currentBuffer.deactivate();
-			}
+			//if (lastBuffer != null) {
+				//currentBuffer.deactivate();
+			//}
 			if (currentBuffer != null) {
 				currentBuffer.activate();
 			}
@@ -59,7 +61,7 @@ class Buffers
 		return currentBuffer;
 	}
 	
-	public static function getGroupId(numItems:Int) 
+	public static function getGroupBufferSize(numItems:Int) 
 	{
 		for (i in 0...buckets.length) 
 		{

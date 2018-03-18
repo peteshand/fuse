@@ -2,6 +2,7 @@ package fuse.core.assembler.atlas.sheet;
 import fuse.core.assembler.atlas.sheet.partition.AtlasPartition;
 import fuse.core.assembler.atlas.sheet.AtlasSheet;
 import fuse.core.assembler.atlas.textures.AtlasTextures;
+import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
 
 /**

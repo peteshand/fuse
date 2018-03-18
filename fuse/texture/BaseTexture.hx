@@ -71,6 +71,8 @@ class BaseTexture implements IBaseTexture
 		
 		if (queUpload) TextureUploadQue.add(this);
 		else upload();
+		
+		Fuse.current.conductorData.frontIsStatic = 0;
 	}
 	
 	function setTextureData() 

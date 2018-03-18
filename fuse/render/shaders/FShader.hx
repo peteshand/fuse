@@ -61,7 +61,7 @@ class FShader
 	{
 		this.context3D = context3D;
 		this.numTextures = numTextures;
-		
+		trace("numTextures = " + numTextures);
 		vertexCode = agalMiniAssembler.assemble(Context3DProgramType.VERTEX, vertexString());
 		fragmentCode = agalMiniAssembler.assemble(Context3DProgramType.FRAGMENT, fragmentString());
 		
@@ -87,17 +87,22 @@ class FShader
 	public function update(move:Bool=false) 
 	{
 		setProgram.value = true;
-		if (move) {
-			cameraData[0] = -Fuse.current.stage.camera.x / (Lib.current.stage.stageWidth / 2);
-			cameraData[1] = Fuse.current.stage.camera.y / (Lib.current.stage.stageHeight / 2);
+		if (Fuse.current.conductorData.backIsStatic == 0){
+			if (Fuse.current.stage.camera.hasUpdate){
+				if (move) {
+					cameraData[0] = -Fuse.current.stage.camera.x / (Lib.current.stage.stageWidth / 2);
+					cameraData[1] = Fuse.current.stage.camera.y / (Lib.current.stage.stageHeight / 2);
+				}
+				else {
+					cameraData[0] = 0;
+					cameraData[1] = 0;
+				}
+				//context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 17, matrix3D);
+				context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 17, cameraData, 1);
+				
+				Fuse.current.stage.camera.hasUpdate = false;
+			}
 		}
-		else {
-			cameraData[0] = 0;
-			cameraData[1] = 0;
-		}
-		
-		//context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 17, matrix3D);
-		context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 17, cameraData, 1);
 	}
 	
 	public function deactivate() 

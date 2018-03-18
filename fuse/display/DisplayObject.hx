@@ -249,6 +249,7 @@ class DisplayObject
 	function set_visible(value:Bool):Bool 
 	{
 		if (this.visible != value){
+			isStatic = 0;
 			this.visible = value;
 			if (this.visible)	{
 				displayData.visible = 1;
@@ -256,9 +257,8 @@ class DisplayObject
 			else				{
 				displayData.visible = 0;
 			}
-			isStatic = 0;
+			Fuse.current.workerSetup.visibleChange(this, displayData.visible == 1);
 		}
-		Fuse.current.workerSetup.visibleChange(this, displayData.visible == 1);
 		return value;
 	}
 	
@@ -288,12 +288,19 @@ class DisplayObject
 	
 	inline function set_isStatic(value:Int):Int 
 	{
+		
 		//if (isStatic != value) {
+			
 			displayData.isStatic = isStatic = value;
+			
 			if (value == 0) {
-				Fuse.current.isStatic = 0;
+				Fuse.current.conductorData.frontIsStatic = 0;
+				//trace("frontIsStatic = " + Fuse.current.conductorData.frontIsStatic);
 			}
 		//}
+		
+		
+		
 		return isStatic;
 	}
 	

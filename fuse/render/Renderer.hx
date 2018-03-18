@@ -54,10 +54,10 @@ class Renderer
 		Textures.init(context3D);
 		//FuseShaders.init();
 		
-		trace("supports8kTexture = " + Reflect.getProperty(Context3D, "supports8kTexture"));
-		trace("supports8kTexture = " + Reflect.getProperty(context3D, "supports8kTexture"));
-		trace("supports8kTexture = " + Reflect.field(Context3D, "supports8kTexture"));
-		trace("supports8kTexture = " + Reflect.field(context3D, "supports8kTexture"));
+		//trace("supports8kTexture = " + Reflect.getProperty(Context3D, "supports8kTexture"));
+		//trace("supports8kTexture = " + Reflect.getProperty(context3D, "supports8kTexture"));
+		//trace("supports8kTexture = " + Reflect.field(Context3D, "supports8kTexture"));
+		//trace("supports8kTexture = " + Reflect.field(context3D, "supports8kTexture"));
 		
 		Buffers.init(context3D);
 		FShaders.init(context3D);
@@ -88,6 +88,8 @@ class Renderer
 		
 		//trace("conductorData.highestNumTextures = " + conductorData.highestNumTextures);
 		//trace("conductorData.numberOfRenderables = " + conductorData.numberOfRenderables);
+		
+		if (conductorData.numberOfRenderables == 0) return;
 		
 		Buffers.currentBuffer = Buffers.getBuffer(conductorData.numberOfRenderables);
 		Buffers.currentBuffer.update();

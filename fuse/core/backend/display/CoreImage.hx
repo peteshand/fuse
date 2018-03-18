@@ -63,6 +63,9 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		visible = Graphics.visible && (displayData.visible == 1);
 		
 		if (isStatic == 0) {
+			
+			//Fuse.current.conductorData.backIsStatic = 0;
+			
 			textureId = displayData.textureId;
 			renderLayer = displayData.renderLayer;
 			WorkerTransformHelper.update(this);

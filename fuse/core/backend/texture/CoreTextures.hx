@@ -27,6 +27,10 @@ class CoreTextures
 			}
 		}
 		
+		if (texturesHaveChanged) {
+			Fuse.current.conductorData.backIsStatic = 0;
+		}
+		
 		//count++;
 		//if (count <= 2) {
 			//texturesHaveChanged = true;

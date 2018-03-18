@@ -96,10 +96,22 @@ class AtlasSheet
 					partition.lastFramePairPartition = getLastFramePair(coreTexture);
 				}
 				
-				if (partition.rightPartition != null)	availablePartition.insert(i + 1, partition.rightPartition);
-				if (partition.bottomPartition != null)	availablePartition.insert(i + 1, partition.bottomPartition);
+				//if (partition.rightPartition != null)	availablePartition.insert(i + 1, partition.rightPartition);
+				//if (partition.bottomPartition != null)	availablePartition.insert(i + 1, partition.bottomPartition);
+				//activePartitions.push(partition);
+				//availablePartition.splice(i, 1);
+				var added:Bool = false;
+				if (partition.rightPartition != null)	{
+					availablePartition[i] = partition.rightPartition;
+					added = true;
+				}
+				if (partition.bottomPartition != null)	{
+					if (added) availablePartition.push(partition.bottomPartition);
+					else availablePartition[i] = partition.bottomPartition;
+					added = true;
+				}
 				activePartitions.push(partition);
-				availablePartition.splice(i, 1);
+				if (!added) availablePartition.splice(i, 1);
 				return true;
 			}
 		}

@@ -6,11 +6,13 @@ import fuse.core.front.texture.upload.TextureUploadQue;
 import fuse.texture.BaseTexture;
 import fuse.texture.BitmapTexture.BaseBitmapTexture;
 import fuse.texture.IBaseTexture;
+import openfl.Lib;
 import openfl.display.BitmapData;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DTextureFormat;
 import openfl.display3D.textures.TextureBase;
 import openfl.display3D.textures.Texture as NativeTexture;
+import openfl.events.Event;
 /**
  * ...
  * @author P.J.Shand
@@ -35,10 +37,10 @@ class Textures
 		
 		createDefaultTextures();
 		
-		Fuse.current.enterFrame.add(OnTick);
+		Lib.current.addEventListener(Event.ENTER_FRAME, OnTick);
 	}
 	
-	static private function OnTick() 
+	static private function OnTick(e:Event) 
 	{
 		TextureUploadQue.check();
 	}
@@ -66,6 +68,8 @@ class Textures
 			textures.set(textureId, texture);
 			textureCount++;
 			//trace("textureCount = " + textureCount);
+			Fuse.current.conductorData.frontIsStatic = 0;
+			//Fuse.current.conductorData.backIsStatic = 0;
 		}
 	}
 	

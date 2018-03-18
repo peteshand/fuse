@@ -25,7 +25,7 @@ class ThreadBase extends EventDispatcher
 	public var conductorData:WorkerConductorData;
 	
 	public var staticCount:Int = 0;
-	public var isStatic:Int = 0;
+	//public var frontIsStatic:Int = 0;
 	public var cleanContext:Bool = false;
 	public var root:DisplayObject;
 	

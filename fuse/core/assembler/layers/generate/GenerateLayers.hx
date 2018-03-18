@@ -40,7 +40,9 @@ class GenerateLayers
 	
 	static public function build() 
 	{
-		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged || Fuse.current.conductorData.isStatic == 0) {
+		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged || Fuse.current.conductorData.frontIsStatic == 0) {
+			//Fuse.current.conductorData.backIsStatic = 0;
+			//trace("1");
 			generationStaticCount = 0;
 			GenerateLayers.layersGenerated = true;
 			GenerateLayers.drawCacheLayers = false;

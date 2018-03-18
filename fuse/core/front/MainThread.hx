@@ -125,12 +125,16 @@ class MainThread extends ThreadBase
 	
 	private function Update(e:Event):Void 
 	{
+		
 		process();
 	}
 	
 	public function process():Void
 	{
+		//trace("process start");
 		if (!setupComplete) return;
+		
+		Fuse.current.conductorData.frontIsStatic = 1;
 		
 		TextField.updateDirtyTextFields();
 		
@@ -154,10 +158,22 @@ class MainThread extends ThreadBase
 			//Fuse.current.conductorData.isStatic = 1;
 		//}
 		
-		Fuse.current.isStatic = 1;
+		//conductorData.frontIsStatic = Fuse.current.frontIsStatic;
+		
+		
 		
 		////////////////////////////////////////////////
 		////////////////////////////////////////////////
+		
+		
+		if (Fuse.current.cleanContext) {
+			conductorData.backIsStatic = 0;
+			//trace("4");
+		}
+		
+		//trace("conductorData.frontIsStatic = " + conductorData.frontIsStatic);
+		//trace("conductorData.backIsStatic = " + conductorData.backIsStatic);
+		
 		
 		if (renderer != null) {
 			renderer.update();
@@ -176,8 +192,13 @@ class MainThread extends ThreadBase
 			//stage.forceRedraw();
 		}
 		
+		//trace("OnTick");
 		Fuse.current.enterFrame.dispatch();
 		
 		workerSetup.unlock();
+		
+		//trace("process end");
+		
+		//Fuse.current.conductorData.backIsStatic = 1;
 	}
 }

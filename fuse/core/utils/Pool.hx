@@ -26,7 +26,6 @@ class Pool
 	public static var atlasBatches:ObjectPool<AtlasBatch>;
 	public static var cacheBakeBatches:ObjectPool<CacheBakeBatch>;
 	public static var directBatches:ObjectPool<DirectBatch>;
-	//public static var cacheDrawBatches:ObjectPool<CacheDrawBatch>;
 	
 	public static var atlasPartitions2:ObjectPool<AtlasPartition>;
 	public static var displayObjects:ObjectPool<CoreDisplayObject>;
@@ -42,7 +41,6 @@ class Pool
 		atlasBatches = new ObjectPool<AtlasBatch>(AtlasBatch, 0, []);
 		cacheBakeBatches = new ObjectPool<CacheBakeBatch>(CacheBakeBatch, 0, []);
 		directBatches = new ObjectPool<DirectBatch>(DirectBatch, 0, []);
-		//cacheDrawBatches = new ObjectPool<CacheDrawBatch>(CacheDrawBatch, 0, []);
 		
 		atlasPartitions2 = new ObjectPool<AtlasPartition>(AtlasPartition, 0, []);
 		

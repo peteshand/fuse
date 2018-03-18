@@ -46,7 +46,8 @@ class AtlasPartitionPlacer
 			}
 			else {*/
 				
-				return Pool.atlasPartitions2.request().init(
+				//return Pool.atlasPartitions2.request().
+				return new AtlasPartition().init(
 					partition.x + textureData.width + padding,
 					partition.y,
 					partition.width - textureData.width - padding,
@@ -76,7 +77,8 @@ class AtlasPartitionPlacer
 				);
 			}
 			else {*/
-				return Pool.atlasPartitions2.request().init(
+				//return Pool.atlasPartitions2.request().init(
+				return new AtlasPartition().init(
 					partition.x,
 					partition.y + textureData.height + padding,
 					textureData.width,

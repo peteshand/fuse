@@ -32,11 +32,13 @@ class WorkerConductorData
 	
 	static public inline var STAGE_WIDTH:Int = 68;
 	static public inline var STAGE_HEIGHT:Int = 72;
-	static public inline var IS_STATIC:Int = 76;
-	static public inline var NUM_TRIANGLES:Int = 80;
-	static public inline var HIGHEST_NUM_TEXTURES:Int = 84;
+	//static public inline var IS_STATIC:Int = 76;
+	static public inline var FRONT_IS_STATIC:Int = 80;
+	static public inline var BACK_IS_STATIC:Int = 84;
+	static public inline var NUM_TRIANGLES:Int = 88;
+	static public inline var HIGHEST_NUM_TEXTURES:Int = 92;
 	
-	public static inline var BUFFER_SIZE:Int = 88;
+	public static inline var BUFFER_SIZE:Int = 96;
 	
 	public static var memoryBlock:MemoryBlock;
 	
@@ -62,7 +64,11 @@ class WorkerConductorData
 	
 	@:isVar public var stageWidth(get, set):Int = 0;
 	@:isVar public var stageHeight(get, set):Int = 0;
-	@:isVar public var isStatic(get, set):Int = 0;
+	//@:isVar public var isStatic(get, set):Int = 0;
+	var _frontIsStatic:Int = 0;
+	@:isVar public var frontIsStatic(get, set):Int = 0;
+	var _backIsStatic:Int = 0;
+	@:isVar public var backIsStatic(get, set):Int = 0;
 	@:isVar public var numTriangles(get, set):Int = 0;
 	@:isVar public var highestNumTextures(get, set):Int;
 	
@@ -95,7 +101,9 @@ class WorkerConductorData
 	
 	inline function get_stageWidth():Int				{ return memoryBlock.readInt(STAGE_WIDTH); }
 	inline function get_stageHeight():Int				{ return memoryBlock.readInt(STAGE_HEIGHT); }
-	inline function get_isStatic():Int					{ return memoryBlock.readInt(IS_STATIC); }
+	//inline function get_isStatic():Int					{ return memoryBlock.readInt(IS_STATIC); }
+	inline function get_frontIsStatic():Int				{ return memoryBlock.readInt(FRONT_IS_STATIC); }
+	inline function get_backIsStatic():Int				{ return memoryBlock.readInt(BACK_IS_STATIC); }
 	inline function get_numTriangles():Int				{ return memoryBlock.readInt(NUM_TRIANGLES); }
 	inline function get_highestNumTextures():Int		{ return memoryBlock.readInt(HIGHEST_NUM_TEXTURES); }
 	
@@ -195,8 +203,22 @@ class WorkerConductorData
 		return value;
 	}
 	
-	inline function set_isStatic(value:Int):Int {
-		memoryBlock.writeInt(IS_STATIC, value);
+	//inline function set_isStatic(value:Int):Int {
+		//memoryBlock.writeInt(IS_STATIC, value);
+		//return value;
+	//}
+	
+	inline function set_frontIsStatic(value:Int):Int {
+		if (value == _frontIsStatic) return value;
+		_frontIsStatic = value;
+		memoryBlock.writeInt(FRONT_IS_STATIC, value);
+		return value;
+	}
+	
+	inline function set_backIsStatic(value:Int):Int {
+		if (value == _backIsStatic) return value;
+		_backIsStatic = value;
+		memoryBlock.writeInt(BACK_IS_STATIC, value);
 		return value;
 	}
 	

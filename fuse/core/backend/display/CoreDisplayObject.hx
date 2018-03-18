@@ -102,7 +102,9 @@ class CoreDisplayObject
 		displayData.isStatic = 1; // reset static prop
 		
 		if (isStatic == 0) {
-			Fuse.current.conductorData.isStatic = 0;
+			//Fuse.current.conductorData.frontIsStatic = 0;
+			
+			Fuse.current.conductorData.backIsStatic = 0;
 			
 			isMoving = displayData.isMoving;
 			if (Graphics.isMoving == 1) isMoving = 1;

@@ -149,6 +149,12 @@ class DisplayList
 		else {
 			hierarchyBuildRequired = false;
 		}
+		
+		if (hierarchyChangeCount < 2){
+			Fuse.current.conductorData.backIsStatic = 0;
+		}
+		//trace("hierarchyChangeCount = " + hierarchyChangeCount);
+		
 		hierarchyChangeCount++;
 	}
 }

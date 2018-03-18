@@ -25,7 +25,21 @@ class Assembler
 	
 	public static function update() 
 	{
-		Fuse.current.conductorData.isStatic = 1;
+		//trace("Assembler start");
+		//Fuse.current.conductorData.isStatic = 1;
+		
+		//if (Fuse.current.conductorData.frontIsStatic == 1) {
+			//Fuse.current.conductorData.backIsStatic = 1;
+		//}
+		//Fuse.current.conductorData.backIsStatic = Fuse.current.conductorData.frontIsStatic;
+		Fuse.current.conductorData.backIsStatic = 1;
+		
+		//trace("backIsStatic = " + Fuse.current.conductorData.backIsStatic);
+		//trace("frontIsStatic = " + Fuse.current.conductorData.frontIsStatic);
+		//if (Fuse.current.conductorData.frontIsStatic == 0) {
+			//Fuse.current.conductorData.backIsStatic = 0;
+			//trace("1");
+		//}
 		
 		Core.textures.checkForTextureChanges();
 		Core.displayList.checkForDisplaylistChanges();
@@ -48,5 +62,9 @@ class Assembler
 			//trace("Fuse.current.conductorData.isStatic = " + Fuse.current.conductorData.isStatic);
 		//}
 		
+		
+		//Fuse.current.conductorData.frontIsStatic = 1;
+		//trace("frontIsStatic = " + Fuse.current.conductorData.frontIsStatic);
+		//trace("Assembler end");
 	}
 }
