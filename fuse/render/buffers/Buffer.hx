@@ -104,19 +104,19 @@ class Buffer
 	
 	public inline function update():Void
 	{
-		updateVertices();
+		if (Fuse.current.conductorData.changeAvailable == 1) {
+			updateVertices();
+		}
 	}
 	
 	inline function updateVertices() 
-	{
-		if (Fuse.current.conductorData.backIsStatic == 0){
-			vertexbuffer.uploadFromByteArray(
-				SharedMemory.memory, 
-				0,
-				0, 
-				Buffer.VERTICES_PER_QUAD * bufferSize
-			);
-		}
+	{		
+		vertexbuffer.uploadFromByteArray(
+			SharedMemory.memory, 
+			0,
+			0, 
+			Buffer.VERTICES_PER_QUAD * bufferSize
+		);
 	}
 	
 	public function drawTriangles(firstIndex:Int = 0, numTriangles:Int = -1):Void 

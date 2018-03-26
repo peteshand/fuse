@@ -134,7 +134,8 @@ class MainThread extends ThreadBase
 		//trace("process start");
 		if (!setupComplete) return;
 		
-		Fuse.current.conductorData.frontIsStatic = 1;
+		Fuse.current.conductorData.frontStaticCount++;
+		workerSetup.sendQue();
 		
 		TextField.updateDirtyTextFields();
 		

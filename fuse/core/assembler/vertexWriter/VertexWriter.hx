@@ -26,6 +26,7 @@ class VertexWriter
 		var numItems:Int = 0;
 		var batches:GcoArray<IBatch> = BatchAssembler.batches;
 		var numBatches:Int = 0;
+		
 		for (i in 0...batches.length) 
 		{
 			

@@ -7,6 +7,8 @@ import fuse.core.input.Touch;
 import fuse.display.Stage;
 import fuse.utils.Color;
 import fuse.Fuse;
+import mantle.notifier.Notifier;
+import mantle.notifier.SNotifier;
 import msignal.Signal.Signal0;
 import msignal.Signal.Signal1;
 import openfl.events.MouseEvent;
@@ -55,16 +57,32 @@ class DisplayObject
 	
 	//@:isVar public var blendMode(get, set):BlendMode;
 	@:isVar public var layerIndex(get, set):Null<Int> = null;
-	@:isVar public var isStatic(get, set):Int;
+	//@:isVar var isRotating(default, set):Int = 1;
+	//@:isVar var isMoving(default, set):Int = 1;
+	//@:isVar var isStatic(default, set):Int = 0;
 	public var displayType:DisplayType = DisplayType.DISPLAY_OBJECT;
+	
+	// var updateUVs:Bool = false;
+	var updateTexture:Bool = false; // only used for Images
+	// var updateMask:Bool = false;
+	//var updateAll:Bool = true;
+	var updatePosition:Bool = true;
+	var updateRotation:Bool = true;
+	var updateColour:Bool = true;
+	var updateVisible:Bool = true;
+	var updateAlpha:Bool = true;
 	
 	public function new()
 	{
+		//isRotating.add(OnRotationChange);
+		//isMoving.add(OnMovingChange);
+		//isStatic.add(OnStaticChange);
+		
 		var id:Int = DisplayObject.objectIdCount++;
 		//displayData = new WorkerDisplayData(id);
 		displayData = untyped CommsObjGen.getDisplayData(id);
-		displayData.isMoving = 1;
-		displayData.isRotating = 1;
+		//isMoving = 1;
+		//isRotating = 1;
 		
 		objectId = id;
 		
@@ -78,8 +96,55 @@ class DisplayObject
 		
 		layerIndex = 0;
 		
-		isStatic = 0;
+		//isStatic = 0;
+		
+		
 	}
+	
+	
+	public function resetMovement() 
+	{
+		//trace("clearMovement");
+		//isRotating = 0;
+		//isMoving = 0;
+		//isStatic = 1;
+		
+		//updateUVs = false;
+		//updateTexture = false;
+		//updateMask = false;
+		//updateAll = false;
+		updatePosition = false;
+		updateRotation = false;
+		updateColour = false;
+		updateVisible = false;
+		updateAlpha = false;
+		updateTexture = false;
+	}
+	
+	//function OnRotationChange() 
+	//{
+		//if (isRotating == 1) isMoving = 1;
+		//SendToBackend();
+	//}
+	//
+	//function OnMovingChange() 
+	//{
+		//if (isStatic == 1) isStatic = 0;
+		//SendToBackend();
+	//}
+	//
+	//function OnStaticChange() 
+	//{
+		//if (isStatic == 0) {
+			//Fuse.current.conductorData.frontIsStatic = 0;
+		//}
+		//SendToBackend();
+	//}
+	//
+	//function SendToBackend() 
+	//{
+		//Fuse.current.workerSetup.setStatic(this);
+	//}
 	
 	
 	inline function get_touchable():Bool { return touchable; }
@@ -103,7 +168,8 @@ class DisplayObject
 	
 	//inline function get_blendMode():BlendMode { return blendMode; }
 	inline function get_layerIndex():Null<Int> { return layerIndex; }
-	inline function get_isStatic():Int { return isStatic; }
+	//inline function get_isStatic():Int { return isStatic; }
+	//inline function get_isMoving():Int { return isMoving; }
 	
 	
 	
@@ -120,16 +186,18 @@ class DisplayObject
 	inline function set_x(value:Float):Float { 
 		if (x != value){
 			displayData.x = x = value;
-			displayData.isMoving = 1;
-			isStatic = 0;
+			updatePosition = true;
+			//isMoving = 1;
+			updateStaticBackend();
 		}
 		return value;
 	}
 	inline function set_y(value:Float):Float { 
 		if (y != value){
 			displayData.y = y = value;
-			displayData.isMoving = 1;
-			isStatic = 0;
+			updatePosition = true;
+			//isMoving = 1;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -137,8 +205,9 @@ class DisplayObject
 	function set_width(value:Float):Float { 
 		if (width != value){
 			displayData.width = width = value;
-			displayData.isMoving = 1;
-			isStatic = 0;
+			updatePosition = true;
+			//isMoving = 1;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -146,8 +215,9 @@ class DisplayObject
 	function set_height(value:Float):Float { 
 		if (height != value){
 			displayData.height = height = value;
-			displayData.isMoving = 1;
-			isStatic = 0;
+			updatePosition = true;
+			//isMoving = 1;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -155,8 +225,9 @@ class DisplayObject
 	inline function set_pivotX(value:Float):Float { 
 		if (pivotX != value){
 			displayData.pivotX = pivotX = value;
-			displayData.isMoving = 1;
-			isStatic = 0;
+			updatePosition = true;
+			//isMoving = 1;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -164,8 +235,9 @@ class DisplayObject
 	inline function set_pivotY(value:Float):Float { 
 		if (pivotY != value){
 			displayData.pivotY = pivotY = value;
-			displayData.isMoving = 1;
-			isStatic = 0;
+			updatePosition = true;
+			//isMoving = 1;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -173,9 +245,12 @@ class DisplayObject
 	inline function set_rotation(value:Float):Float { 
 		if (rotation != value){
 			displayData.rotation = rotation = value;
-			displayData.isMoving = 1;
-			displayData.isRotating = 1;
-			isStatic = 0;
+			//trace("rotation = " + value);
+			
+			updatePosition = true;
+			updateRotation = true;
+			//isRotating = 1;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -183,8 +258,9 @@ class DisplayObject
 	inline function set_scaleX(value:Float):Float { 
 		if (scaleX != value){
 			displayData.scaleX = scaleX = value;
-			displayData.isMoving = 1;
-			isStatic = 0;
+			updatePosition = true;
+			//isMoving = 1;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -192,8 +268,9 @@ class DisplayObject
 	inline function set_scaleY(value:Float):Float { 
 		if (scaleY != value){
 			displayData.scaleY = scaleY = value;
-			displayData.isMoving = 1;
-			isStatic = 0;
+			updatePosition = true;
+			//isMoving = 1;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -201,7 +278,9 @@ class DisplayObject
 	function set_color(value:Color):Color { 
 		if (color != value){
 			displayData.color = color = colorTL = colorTR = colorBL = colorBR = value;
-			isStatic = 0;
+			updateColour = true;
+			//isStatic = 0;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -209,7 +288,9 @@ class DisplayObject
 	function set_colorTL(value:Color):Color { 
 		if (colorTL != value){
 			displayData.colorTL = colorTL = value;
-			isStatic = 0;
+			updateColour = true;
+			//isStatic = 0;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -217,7 +298,9 @@ class DisplayObject
 	function set_colorTR(value:Color):Color { 
 		if (colorTR != value){
 			displayData.colorTR = colorTR = value;
-			isStatic = 0;
+			updateColour = true;
+			//isStatic = 0;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -225,7 +308,9 @@ class DisplayObject
 	function set_colorBL(value:Color):Color { 
 		if (colorBL != value){
 			displayData.colorBL = colorBL = value;
-			isStatic = 0;
+			updateColour = true;
+			//isStatic = 0;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -233,15 +318,26 @@ class DisplayObject
 	function set_colorBR(value:Color):Color { 
 		if (colorBR != value){
 			displayData.colorBR = colorBR = value;
-			isStatic = 0;
+			updateColour = true;
+			//isStatic = 0;
+			updateStaticBackend();
 		}
 		return value;
 	}
 	
 	inline function set_alpha(value:Float):Float { 
-		if (alpha != value){
+		value = Math.round(value * 100) / 100;
+		if (alpha != value) {
+			//trace(["send update: " + alpha, value]);	
 			displayData.alpha = alpha = value;
-			isStatic = 0;
+			
+			//if (isStatic != 0) {
+				//trace([this, "alpha = " + alpha]);
+			//}
+			updateAlpha = true;
+			//isStatic = 0;
+			updateStaticBackend();
+			
 		}
 		return value;
 	}
@@ -249,7 +345,6 @@ class DisplayObject
 	function set_visible(value:Bool):Bool 
 	{
 		if (this.visible != value){
-			isStatic = 0;
 			this.visible = value;
 			if (this.visible)	{
 				displayData.visible = 1;
@@ -257,7 +352,10 @@ class DisplayObject
 			else				{
 				displayData.visible = 0;
 			}
+			updateVisible = true;
+			updateStaticBackend();
 			Fuse.current.workerSetup.visibleChange(this, displayData.visible == 1);
+			//isStatic = 0;
 		}
 		return value;
 	}
@@ -286,24 +384,6 @@ class DisplayObject
 		return value;
 	}
 	
-	inline function set_isStatic(value:Int):Int 
-	{
-		
-		//if (isStatic != value) {
-			
-			displayData.isStatic = isStatic = value;
-			
-			if (value == 0) {
-				Fuse.current.conductorData.frontIsStatic = 0;
-				//trace("frontIsStatic = " + Fuse.current.conductorData.frontIsStatic);
-			}
-		//}
-		
-		
-		
-		return isStatic;
-	}
-	
 	function setStage(value:Stage):Stage 
 	{
 		if (stage != value) {
@@ -315,6 +395,9 @@ class DisplayObject
 			if (stage != null) {
 				stage.onDisplayAdded.dispatch(this);
 				onAddToStage.dispatch(this);
+				//this.isRotating = 1; // set isRotating, isMoving and isStatic
+				
+				
 			}
 			else onRemoveFromStage.dispatch(this);
 		}
@@ -339,10 +422,10 @@ class DisplayObject
 		else setStage(parent.stage);
 	}
 	
-	function forceRedraw():Void
-	{
-		this.isStatic = 0;
-	}
+	//function forceRedraw():Void
+	//{
+		//this.isStatic = 0;
+	//}
 	
 	public function dispose():Void
 	{
@@ -358,5 +441,10 @@ class DisplayObject
 			case MouseEvent.MOUSE_OVER:	onRollover.dispatch(touch);
 			case MouseEvent.MOUSE_OUT:	onRollout.dispatch(touch);
 		}
+	}
+	
+	inline function updateStaticBackend():Void
+	{
+		Fuse.current.workerSetup.setStatic(this);
 	}
 }

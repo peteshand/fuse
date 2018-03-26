@@ -20,7 +20,8 @@ class InputAssembler
 	public static var input = new GcoArray<Touch>([]);
 	public static var collisions = new GcoArray<Touch>([]);
 	
-	static var objects = new Map<Int, InputAssemblerObject>();
+	//static var objects = new Map<Int, InputAssemblerObject>();
+	static var objects = new Array<InputAssemblerObject>();
 	
 	public function new() 
 	{
@@ -46,19 +47,27 @@ class InputAssembler
 	
 	static private function getInput(index:Int):InputAssemblerObject
 	{
-		var object:InputAssemblerObject = objects.get(index);
-		if (object == null) {
-			object = new InputAssemblerObject(index);
-			objects.set(index, object);
+		for (i in 0...objects.length) 
+		{
+			if (objects[i].index == index) return objects[i];
 		}
+		var object:InputAssemblerObject = new InputAssemblerObject(index);
+		objects.push(object);
 		return object;
+		
+		//var object:InputAssemblerObject = objects.get(index);
+		//if (object == null) {
+			//object = new InputAssemblerObject(index);
+			//objects.set(index, object);
+		//}
+		//return object;
 	}
 	
 }
 
 class InputAssemblerObject
 {
-	var index:Int;
+	public var index:Int;
 	var over:Touch;
 	var out:Touch;
 	
@@ -90,10 +99,14 @@ class InputAssemblerObject
 							
 							if (touch.targetId != display.objectId) {						
 								if (touch.targetId != -1) {
+									//trace("Out");
 									DispatchOut(touch.targetId, touch);	
+									
 								}
 								touch.targetId = display.objectId;
+								//trace("Over");
 								DispatchOver(display.objectId, touch);
+								
 							}
 							
 							touch.collisionId = display.objectId;
@@ -104,11 +117,13 @@ class InputAssemblerObject
 					}
 					else if (touch.targetId == display.objectId){
 						// outside
+						//trace("Out");
 						DispatchOut(display.objectId, touch);					
 					}
 				}
 				else if (touch.targetId == display.objectId){
 					// outside
+					//trace("Out");
 					DispatchOut(display.objectId, touch);
 				}
 			}

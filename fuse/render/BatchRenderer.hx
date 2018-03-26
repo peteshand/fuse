@@ -102,7 +102,7 @@ class BatchRenderer
 			//if (currentBatchData.renderTargetId == 6) {
 			if (traceOutput){
 				RenderDebugUtil.batchDebug(currentBatchData);
-				RenderDebugUtil.vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, currentBatchData.numItems);
+				//RenderDebugUtil.vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, currentBatchData.numItems);
 			}
 			//
 			//trace("quadCount = " + quadCount);

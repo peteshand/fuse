@@ -84,14 +84,14 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 	{
 		if (image.displayData.visible == 0) return;
 		
-		//trace("objectId = " + image.objectId);
+		trace("objectId = " + image.objectId);
 		
 		var vertexData:IVertexData = image.vertexData;
 		var coreTexture:CoreTexture = image.coreTexture;
 		
-		if (image.isStatic == 1 || image.drawIndex != VertexData.OBJECT_POSITION) {
+		//if (image.updateAny == false || image.drawIndex != VertexData.OBJECT_POSITION) {
 			
-			//trace("bake to cache layer");
+			trace("bake to cache layer");
 			
 			vertexData.setTexture(image.textureIndex);
 			
@@ -138,10 +138,12 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 			vertexData.setColor(2, image.displayData.colorTR);
 			vertexData.setColor(3, image.displayData.colorBR);
 			
-			vertexData.setAlpha(image.combinedAlpha);
-		}
+			vertexData.setAlpha(image.alpha);
+		//}
 		
-		image.isStatic = 1;
+		//image.updateAll = false;
+		image.setUpdates(false);
+		
 		image.drawIndex = VertexData.OBJECT_POSITION;
 		VertexData.OBJECT_POSITION++;
 		image.parentNonStatic = false;
@@ -149,11 +151,13 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 	
 	function ResizeX(value:Float):Float
 	{
+		//return value;
 		return ((value + 1) * (Fuse.current.stage.stageWidth / Fuse.MAX_TEXTURE_SIZE)) - 1;
 	}
 	
 	function ResizeY(value:Float):Float
 	{
+		//return value;
 		return ((value - 1) * (Fuse.current.stage.stageHeight / Fuse.MAX_TEXTURE_SIZE)) + 1;
 	}
 }

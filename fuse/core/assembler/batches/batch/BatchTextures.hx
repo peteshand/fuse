@@ -1,5 +1,6 @@
 package fuse.core.assembler.batches.batch;
 
+import fuse.core.assembler.batches.batch.BatchTextures;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.utils.GcoArray;
 
@@ -45,6 +46,14 @@ class BatchTextures
 	public function clear() 
 	{
 		textureIds.clear();
+	}
+	
+	public function copyFrom(copyFrom:BatchTextures) 
+	{
+		for (i in 0...copyFrom.textureIds.length) 
+		{
+			textureIds[i] = copyFrom.textureIds[i];
+		}
 	}
 	
 	inline function get_textureId1():Int 

@@ -45,7 +45,11 @@ class DisplayObjectContainer extends InteractiveObject
 			
 			//applyPosition = 1;
 			//applyRotation = 1;
-			isStatic = 0;
+			//updateAll = true;
+			updatePosition = true;
+			updateRotation = true;
+			updateStaticBackend();
+			//isStatic = 0;
 		/*}
 		else {
 			//trace("Wait for upload");

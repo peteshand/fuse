@@ -19,7 +19,8 @@ class CoreCacheLayerImage extends CoreImage
 		displayData.scaleY = 1;
 		displayData.alpha = 1;
 		displayData.color = 0x33FF0000;
-		displayData.isStatic = 0;
+		//displayData.isStatic = 0;
+		updatePosition = updateTexture = true;
 		displayData.textureId = this.textureId = textureId;
 		displayData.visible = 1;
 		
@@ -31,7 +32,7 @@ class CoreCacheLayerImage extends CoreImage
 	
 	public function update() 
 	{
-		this.isStatic = 0;
+		updatePosition = updateTexture = true;
 		
 		this.quadData.bottomLeftY = -minY();
 		this.quadData.topRightX = maxX();

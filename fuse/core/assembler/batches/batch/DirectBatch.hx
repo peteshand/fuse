@@ -17,6 +17,7 @@ import fuse.utils.GcoArray;
 class DirectBatch extends BaseBatch implements IBatch
 {
 	var renderIndices = new GcoArray<CoreImage>();
+	var numItems:Int;
 	
 	public function new() 
 	{
@@ -43,18 +44,23 @@ class DirectBatch extends BaseBatch implements IBatch
 	{
 		setBatchProps();
 		
+		numItems = 0;
+		
+		//trace("renderables.length = " + renderables.length);
 		for (i in 0...renderables.length) 
 		{
 			VertexWriter.VERTEX_COUNT += VertexData.BYTES_PER_ITEM;
 			writeLayerVertex(cast renderables[i]);
 		}
 		
+		batchData.numItems = numItems;
+		
 		return true;
 	}
 	
 	function writeLayerVertex(image:CoreImage)
 	{
-		if (!image.visible || image.combinedAlpha == 0) {
+		if (!image.visible || image.alpha == 0) {
 			image.drawIndex = -1;
 			return;
 		}
@@ -76,16 +82,30 @@ class DirectBatch extends BaseBatch implements IBatch
 		var vertexPositionHasMoved:Bool = image.drawIndex != VertexData.OBJECT_POSITION;
 		
 		var updateUVs:Bool		= vertexPositionHasMoved || coreTexture.uvsHaveChanged;
-		var updatePosition:Bool	= vertexPositionHasMoved || image.isMoving == 1;
-		var updateTexture:Bool	= vertexPositionHasMoved || true;// image.textureChanged;
+		var updatePosition:Bool	= vertexPositionHasMoved || image.updatePosition;
+		var updateTexture:Bool	= vertexPositionHasMoved || image.updateTexture;// || image.textureChanged;
 		var updateMask:Bool		= vertexPositionHasMoved || image.maskChanged;
-		var updateColour:Bool	= vertexPositionHasMoved || image.isStatic == 0;
-		var updateAlpha:Bool	= vertexPositionHasMoved || image.isStatic == 0;
+		var updateColour:Bool	= vertexPositionHasMoved || image.updateColour;
+		var updateAlpha:Bool	= vertexPositionHasMoved || image.updateAlpha;
 		
+		//if (VertexData.OBJECT_POSITION < 10){
+			//trace([
+				//"\n updateUVs = " + updateUVs,
+				//"\n updatePosition = " + updatePosition,
+				//"\n updateTexture = " + updateTexture,
+				//"\n updateMask = " + updateMask,
+				//"\n updateColour = " + updateColour,
+				//"\n updateAlpha = " + updateAlpha,
+				//"\n image.updatePosition = " + image.updatePosition,
+				//"\n image.updateAny = " + image.updateAny,
+				//"\n image.drawIndex = " + image.drawIndex,
+				//"\n VertexData.OBJECT_POSITION = " + VertexData.OBJECT_POSITION
+			//]);
+		//}
 		//image.textureChanged = false;
 		image.maskChanged = false;
 		
-		if (updateTexture){
+		if (updateTexture){ // currently issues when texture index order changes
 			vertexData.setTexture(image.textureIndex);
 		}
 		
@@ -144,13 +164,17 @@ class DirectBatch extends BaseBatch implements IBatch
 			vertexData.setColor(3, image.displayData.colorBR);
 		}
 		if (updateAlpha){
-			vertexData.setAlpha(image.combinedAlpha);
+			vertexData.setAlpha(image.alpha);
 		}
 		
-		image.isStatic = 1;
+		image.setUpdates(false);
+		
 		image.drawIndex = VertexData.OBJECT_POSITION;
 		VertexData.OBJECT_POSITION++;
 		image.parentNonStatic = false;
+		
+		numItems++;
+		//trace([image.isRotating, image.isMoving, image.isStatic]);
 	}
 	
 	function ResizeX(value:Float):Float

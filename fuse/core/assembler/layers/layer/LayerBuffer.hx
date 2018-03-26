@@ -3,6 +3,7 @@ import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.backend.display.CoreImage;
 import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
+import mantle.notifier.Notifier;
 
 /**
  * ...
@@ -18,7 +19,8 @@ class LayerBuffer
 	public var lastRenderables = new GcoArray<ICoreRenderable>([]);
 	
 	/*Defines if the images contained in this layer are static or moving*/
-	public var isStatic:Int;
+	public var updateAll:Bool;
+	public var isStatic(get, null):Int;
 	
 	/*Defines where to render layer content*/
 	public var renderTarget:Int = -1;
@@ -33,7 +35,7 @@ class LayerBuffer
 	/*Defines if the images have been baked into the layer*/
 	public var baked(get, null):Bool;
 	
-	/*renderImages will equal true if isStatic or baked are false*/  
+	/*renderImages will equal true if update is true or baked is false*/  
 	public var renderImages(get, null):Bool;
 	
 	// true if the order of renderables or which renderables are included in the layer have changed
@@ -45,11 +47,11 @@ class LayerBuffer
 		
 	}
 	
-	public function init(isStatic:Int, index:Int) 
+	public function init(updateAll:Bool, index:Int) 
 	{
 		isCacheLayer = false;
 		renderTarget = -1;
-		this.isStatic = isStatic;	
+		this.updateAll = updateAll;	
 		this.index = index;
 		renderables.clear();
 	}
@@ -62,7 +64,7 @@ class LayerBuffer
 	public function clone():LayerBuffer
 	{
 		var c:LayerBuffer = Pool.layerBufferes.request();
-		c.init(isStatic, index);
+		c.init(updateAll, index);
 		//for (i in 0...renderables.length) 
 		//{
 			//c.renderables.push(renderables[i]);
@@ -98,6 +100,12 @@ class LayerBuffer
 		}
 		s += " ]";
 		return s;
+	}
+	
+	function get_isStatic():Int 
+	{
+		if (updateAll) return 0;
+		else return 1;
 	}
 	
 	//function get_hasChanged():Bool 

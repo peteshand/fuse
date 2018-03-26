@@ -5,6 +5,7 @@ import fuse.core.backend.display.CoreInteractiveObject;
 import fuse.core.backend.display.CoreStage;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
+import fuse.core.communication.messageData.StaticData;
 import fuse.core.utils.Pool;
 
 /**
@@ -14,7 +15,7 @@ import fuse.core.utils.Pool;
 
 class DisplayList
 {
-	public static var hierarchyBuildRequired:Bool = false;
+	public static var hierarchyBuildRequired:Bool = true;
 	var hierarchyChangeCount:Int = 0;
 	
 	public var stage:CoreDisplayObject;
@@ -70,6 +71,7 @@ class DisplayList
 		display.init(objectId);
 		
 		if (parent != null) {
+			//trace("add display: " + objectId);
 			parent.addChildAt(display, addAtIndex);
 		}
 		map.set(display.objectId, display);
@@ -143,18 +145,37 @@ class DisplayList
 	
 	public function checkForDisplaylistChanges() 
 	{
-		if (hierarchyChangeCount < 1){
+		if (hierarchyChangeCount < 2){
 			hierarchyBuildRequired = true;
+			Fuse.current.conductorData.backIsStatic = 0;
 		}
 		else {
 			hierarchyBuildRequired = false;
 		}
 		
-		if (hierarchyChangeCount < 2){
-			Fuse.current.conductorData.backIsStatic = 0;
-		}
-		//trace("hierarchyChangeCount = " + hierarchyChangeCount);
-		
 		hierarchyChangeCount++;
+	}
+	
+	public function setStatic(payload:StaticData) 
+	{
+		//trace("payload.objectId = " + payload.objectId);
+		var display:CoreDisplayObject = untyped map.get(payload.objectId);
+		if (display == null) return;
+		//display.isStatic = payload.isStatic;
+		//display.isMoving = payload.isMoving;
+		//display.isRotating = payload.isRotating;
+		
+		//display.updateAll = payload.updateAll;
+		display.updateAny = payload.updateAny;
+		display.updatePosition = payload.updatePosition;
+		display.updateRotation = payload.updateRotation;
+		display.updateColour = payload.updateColour;
+		display.updateVisible = payload.updateVisible;
+		display.updateAlpha = payload.updateAlpha;
+		display.updateTexture = payload.updateTexture;
+		
+		//trace(["setStatic:", display.isRotating, display.isMoving, display.isStatic]);
+		
+		//Fuse.current.conductorData.backIsStatic = 0;
 	}
 }

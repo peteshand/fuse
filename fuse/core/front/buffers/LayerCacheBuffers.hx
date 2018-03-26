@@ -12,8 +12,8 @@ import fuse.texture.RenderTexture;
 @:access(fuse.texture.BaseTexture)
 class LayerCacheBuffers
 {
-	static var startIndex:Int = 10;
-	static var numBuffers:Int = 2;
+	public static inline var startIndex:Int = 10;
+	public static inline var numBuffers:Int = 2;
 	static var endIndex(get, null):Int;
 	
 	static var bufferWidth:Int;

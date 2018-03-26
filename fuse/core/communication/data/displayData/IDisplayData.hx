@@ -50,8 +50,8 @@ typedef IDisplayData =
 	objectId:Int,
 	textureId:Int,
 	renderLayer:Int,
-	visible:Int,
+	visible:Int/*,
 	isStatic:Int,
 	isMoving:Int,
-	isRotating:Int
+	isRotating:Int*/
 }

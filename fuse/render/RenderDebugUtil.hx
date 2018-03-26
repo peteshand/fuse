@@ -80,12 +80,13 @@ class RenderDebugUtil
 				//var INDEX_B:Float = SharedMemory.memory.readFloat();
 				//var INDEX_A:Float = SharedMemory.memory.readFloat();
 				
-				//trace([INDEX_Texture, Math.floor(1024 * (1 + INDEX_X)), Math.floor(2048 - ((1 + INDEX_Y) * 1024))]);
-				
-				trace([1024 * (1 + INDEX_X), 2048 - ((1 + INDEX_Y) * 1024), INDEX_U, INDEX_V]);
-				trace([INDEX_Texture, INDEX_ALPHA]);
-				trace("Colour = " + StringTools.hex(INDEX_COLOUR));
-				trace([INDEX_MU, INDEX_MV, INDEX_MaskTexture, INDEX_MASK_BASE_VALUE]);
+				if (k == 0){
+					trace([INDEX_Texture, Math.floor(1024 * (1 + INDEX_X)), Math.floor(2048 - ((1 + INDEX_Y) * 1024))]);
+				}
+				//trace([1024 * (1 + INDEX_X), 2048 - ((1 + INDEX_Y) * 1024), INDEX_U, INDEX_V]);
+				//trace([INDEX_Texture, INDEX_ALPHA]);
+				//trace("Colour = " + StringTools.hex(INDEX_COLOUR));
+				//trace([INDEX_MU, INDEX_MV, INDEX_MaskTexture, INDEX_MASK_BASE_VALUE]);
 				//trace([INDEX_R, INDEX_G, INDEX_B, INDEX_A]);
 				//trace("--");
 				

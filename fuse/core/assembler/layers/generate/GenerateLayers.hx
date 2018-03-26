@@ -21,27 +21,26 @@ class GenerateLayers
 	public static var layersGenerated:Bool = false;
 	public static var drawCacheLayers:Bool = false;
 	static var generationStaticCount:Int = 0;
-	static var generateCacheAfterXFrames:Int = 120;
-	static var isStatic:Notifier<Int>;
+	static var generateCacheAfterXFrames:Int = 60;
+	static var update:Notifier<Null<Bool>>;
 	static var currentLayerBuffer:LayerBuffer;
 	
 	static function __init__() 
 	{
-		isStatic = new Notifier<Int>();
-		isStatic.add(OnStaticChange);
+		update = new Notifier<Null<Bool>>();
+		update.add(OnStaticChange);
 	}
 	
 	static function clear() 
 	{
-		isStatic.value = -1;
+		update.value = null;
 		GenerateLayers.layers.clear();
 		Pool.layerBufferes.forceReuse();
 	}
 	
 	static public function build() 
 	{
-		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged || Fuse.current.conductorData.frontIsStatic == 0) {
-			//Fuse.current.conductorData.backIsStatic = 0;
+		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged || Fuse.current.conductorData.frontStaticCount == 0) {
 			//trace("1");
 			generationStaticCount = 0;
 			GenerateLayers.layersGenerated = true;
@@ -68,7 +67,7 @@ class GenerateLayers
 					var image:CoreImage = HierarchyAssembler.hierarchy[i];
 					if (!image.visible) continue;
 					
-					isStatic.value = 0;
+					update.value = false;
 					currentLayerBuffer.add(image);
 				}
 			}
@@ -80,10 +79,11 @@ class GenerateLayers
 					//if (!imageVisible(image)) continue;
 					
 					if (image.coreTexture.textureData.directRender == 1) {
-						isStatic.value = 0;
+						update.value = false;
 					}
 					else {
-						isStatic.value = image.isStatic;
+						update.value = image.updateAny;
+						//trace("image.update = " + image.update);
 					}
 					
 					currentLayerBuffer.add(image);
@@ -92,6 +92,11 @@ class GenerateLayers
 			
 			//checkForLayerChanges();
 		}
+		
+		//trace("GenerateLayers.layers = " + GenerateLayers.layers.length);
+		//trace("GenerateLayers.layersGenerated = " + GenerateLayers.layersGenerated);
+		//trace("GenerateLayers.drawCacheLayers = " + GenerateLayers.drawCacheLayers);
+		
 	}
 	
 	//static private function imageVisible(image:CoreImage) 
@@ -112,7 +117,7 @@ class GenerateLayers
 		//else if (layers.length >= 1) {
 			//for (j in 0...layers.length) 
 			//{
-				//if (lastLayers[j].isStatic != layers[j].isStatic || lastLayers[j].renderables[0].objectId != layers[j].renderables[0].objectId) {
+				//if (lastLayers[j].update != layers[j].update || lastLayers[j].renderables[0].objectId != layers[j].renderables[0].objectId) {
 					//hasChanged = true;
 					//break;
 				//}
@@ -128,10 +133,10 @@ class GenerateLayers
 	
 	static private function OnStaticChange() 
 	{
-		if (isStatic.value == -1) return;
+		if (update.value == null) return;
 		
 		currentLayerBuffer = Pool.layerBufferes.request();
-		currentLayerBuffer.init(isStatic.value, GenerateLayers.layers.length);
+		currentLayerBuffer.init(update.value, GenerateLayers.layers.length);
 		GenerateLayers.layers.push(currentLayerBuffer);
 	}
 }

@@ -27,7 +27,7 @@ class HierarchyAssembler
 			hierarchy.clear();
 			transformActions.clear();
 			
-			Core.displayList.stage.buildHierarchy2();
+			Core.displayList.stage.buildHierarchy();
 			
 			Core.displayList.stage.buildTransformActions();
 			

@@ -404,6 +404,7 @@ class TextField extends Image
 			}
 			texture = new BitmapTexture(bitmapdata, false);
 			texture.directRender = directRender;
+			//trace("update: " + texture.textureId);
 		}
 		else if (dirtyProp == true) {
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
@@ -411,7 +412,8 @@ class TextField extends Image
 			baseBmdTexture.update(bitmapdata);
 		}
 		
-		isStatic = 0;
+		//isStatic = 0;
+		//updateAll = true;
 		dirtySize = false;
 		dirtyProp = false;
 	}

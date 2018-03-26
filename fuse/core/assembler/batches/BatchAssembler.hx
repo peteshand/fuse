@@ -73,7 +73,7 @@ class BatchAssembler
 	static private function addLayerRenderables() 
 	{
 		//if (LayerBufferAssembler.STATE == LayerState.BAKE){
-			if (GenerateLayers.layersGenerated == true && SortLayers.layers.length > 0){
+			if (GenerateLayers.layersGenerated == true && SortLayers.layers.length > 0) {
 				currentBatchType = BatchType.CACHE_BAKE;  // draws renderables to render texture
 				getNewBatch();
 				for (j in 0...SortLayers.layers.length) {

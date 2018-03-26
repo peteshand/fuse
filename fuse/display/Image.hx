@@ -32,7 +32,11 @@ class Image extends DisplayObject
 	{
 		if (renderLayer != value){
 			displayData.renderLayer = renderLayer = value;
-			isStatic = 0;
+			//isStatic = 0;
+			//updateAll = true;
+			updatePosition = true;
+			updateRotation = true;
+			updateStaticBackend();
 		}
 		return value;
 	}
@@ -61,7 +65,10 @@ class Image extends DisplayObject
 			texture.onUpdate.add(OnTextureUpdate);
 			OnTextureUpdate();
 			displayData.textureId = texture.textureId;
-			isStatic = 0;
+			//isStatic = 0;
+			updateTexture = true;
+			//updateAll = true;
+			updateStaticBackend();
 		}
 		return value;
 	}

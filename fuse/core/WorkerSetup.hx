@@ -1,6 +1,8 @@
 package fuse.core;
+import fuse.core.communication.messageData.StaticData;
 import fuse.core.input.FrontMouseInput;
 import fuse.core.input.Touch;
+import fuse.utils.GcoArray;
 
 import flash.events.Event;
 import fuse.Fuse;
@@ -38,9 +40,12 @@ import fuse.core.communication.data.WorkerSharedProperties;
 @:access(fuse)
 class WorkerSetup
 {
-	private var workerComms:Array<IWorkerComms> = [];
-	
+	var touchables = new Map<Int, DisplayObject>();
+	var workerComms:Array<IWorkerComms> = [];
+	//var staticChanges = new Map<Int, DisplayObject>();
+	var staticChanges = new GcoArray<DisplayObject>();
 	var count:Int = 0;
+	var staticData:StaticData = { };
 	
 	public var onReady = new Signal0();
 	var workerStartCount:Int = 0;
@@ -78,31 +83,37 @@ class WorkerSetup
 	private function OnInputCollision(touch:Touch):Void 
 	{
 		//trace([touch.type, touch.collisionId, touch.x, touch.y]);
-		findDisplay(touch, Fuse.current.stage);
+		
+		var display:DisplayObject = touchables.get(touch.collisionId);
+		if (display == null) return;
+		touch.target = display;
+		display.dispatchInput(touch);
+		
+		//findDisplay(touch, Fuse.current.stage);
 	}
 	
 	// TODO: move into it's own class
-	function findDisplay(touch:Touch, display:DisplayObject):Bool
-	{
-		if (touch.collisionId == display.objectId) {
-			//trace("FOUND: " + display.name);
-			touch.target = display;
-			display.dispatchInput(touch);
-			return true;
-		}
-		if (Std.is(display, DisplayObjectContainer)){
-			var d:DisplayObjectContainer = cast (display, DisplayObjectContainer);
-			for (i in 0...d.children.length) 
-			{
-				if (findDisplay(touch, d.children[i])) {
-					return true;
-				}
-			}
-		}
-		
-		return false;
-		
-	}
+	//function findDisplay(touch:Touch, display:DisplayObject):Bool
+	//{
+		//if (touch.collisionId == display.objectId) {
+			////trace("FOUND: " + display.name);
+			//touch.target = display;
+			//display.dispatchInput(touch);
+			//return true;
+		//}
+		//if (Std.is(display, DisplayObjectContainer)){
+			//var d:DisplayObjectContainer = cast (display, DisplayObjectContainer);
+			//for (i in 0...d.children.length) 
+			//{
+				//if (findDisplay(touch, d.children[i])) {
+					//return true;
+				//}
+			//}
+		//}
+		//
+		//return false;
+		//
+	//}
 	
 	private function OnWorkerStarted(workerPayload:WorkerPayload):Void 
 	{
@@ -119,23 +130,17 @@ class WorkerSetup
 	
 	public function addMask(display:DisplayObject, mask:DisplayObject) 
 	{
-		for (workerComm in workerComms) 
-		{
-			var maskId:Int = -1;
-			if (mask != null) maskId = mask.objectId;
-			workerComm.send(MessageType.ADD_MASK, { 
-				objectId:display.objectId, 
-				maskId:maskId
-			} );
-		}
+		var maskId:Int = -1;
+		if (mask != null) maskId = mask.objectId;
+		send(MessageType.ADD_MASK, { 
+			objectId:display.objectId, 
+			maskId:maskId
+		} );
 	}
 	
 	public function removeMask(display:DisplayObject) 
 	{
-		for (workerComm in workerComms) 
-		{
-			workerComm.send(MessageType.REMOVE_MASK, display.objectId);
-		}
+		send(MessageType.REMOVE_MASK, display.objectId);
 	}
 	
 	public function addChild(child:DisplayObject, parent:DisplayObject) 
@@ -145,70 +150,71 @@ class WorkerSetup
 	
 	public function addChildAt(child:DisplayObject, addAtIndex:Int, parent:DisplayObject) 
 	{
-		for (workerComm in workerComms) 
-		{
-			var parentId:Int = -1;
-			if (parent != null) parentId = parent.objectId;
-			workerComm.send(MessageType.ADD_CHILD, { 
-				objectId:child.objectId, 
-				displayType:child.displayType, 
-				parentId:parentId, 
-				addAtIndex:addAtIndex
-			} );
-		}
+		var parentId:Int = -1;
+		if (parent != null) parentId = parent.objectId;
+		send(MessageType.ADD_CHILD, { 
+			objectId:child.objectId, 
+			displayType:child.displayType, 
+			parentId:parentId, 
+			addAtIndex:addAtIndex
+		} );
+		setStatic(child);
 	}
 	
 	public function removeChild(child:DisplayObject) 
 	{
-		for (workerComm in workerComms) 
-		{
-			workerComm.send(MessageType.REMOVE_CHILD, child.objectId);
-		}
+		send(MessageType.REMOVE_CHILD, child.objectId);
 	}
 	
 	public function visibleChange(child:DisplayObject, visible:Bool) 
 	{
-		for (workerComm in workerComms) 
-		{
-			workerComm.send(MessageType.VISIBLE_CHANGE, { 
-				objectId:child.objectId, 
-				visible:visible
-			});
-		}
+		send(MessageType.VISIBLE_CHANGE, { 
+			objectId:child.objectId, 
+			visible:visible
+		});
 	}
 	
 	public function addTexture(textureId:Int) 
 	{
-		for (workerComm in workerComms) 
-		{
-			workerComm.send(MessageType.ADD_TEXTURE, textureId);
-		}
+		send(MessageType.ADD_TEXTURE, textureId);
 	}
 	
 	public function removeTexture(textureId:Int) 
 	{
-		for (workerComm in workerComms) 
-		{
-			workerComm.send(MessageType.REMOVE_TEXTURE, textureId);
-		}
+		send(MessageType.REMOVE_TEXTURE, textureId);
 	}
 	
 	public function setTouchable(displayObject:DisplayObject, value:Bool) 
 	{
-		for (workerComm in workerComms) 
-		{
-			workerComm.send(MessageType.SET_TOUCHABLE, { 
-				objectId:displayObject.objectId, 
-				touchable:value
-			} );
-		}
+		if (value) touchables.set(displayObject.objectId, displayObject);
+		else touchables.remove(displayObject.objectId);
+		
+		send(MessageType.SET_TOUCHABLE, { 
+			objectId:displayObject.objectId, 
+			touchable:value
+		} );
 	}
 	
 	public function addInput(touch:Touch) 
 	{
+		send(MessageType.MOUSE_INPUT, touch);
+	}
+	
+	public function setStatic(displayObject:DisplayObject) 
+	{
+		Fuse.current.conductorData.frontStaticCount = 0;
+		staticChanges[displayObject.objectId] = displayObject;
+		//Fuse.current.conductorData.backIsStatic = 0;
+		//staticChanges.set(displayObject.objectId, displayObject);
+		//staticChanges.push(displayObject);
+		//trace("1 staticChanges.length = " + staticChanges.length);
+	}
+	
+	inline function send(name:String, payload:WorkerPayload = null) 
+	{
 		for (workerComm in workerComms) 
 		{
-			workerComm.send(MessageType.MOUSE_INPUT, touch);
+			workerComm.send(name, payload);
 		}
 	}
 	
@@ -229,6 +235,32 @@ class WorkerSetup
 				condition.mutex.unlock();
 			}
 		#end
+	}
+	
+	public function sendQue() 
+	{
+		//trace("sendQue: " + staticChanges.length);
+		for (i in 0...staticChanges.length) 
+		{
+			var displayObject:DisplayObject = staticChanges[i];
+			if (displayObject == null) continue;
+			
+			staticData.objectId = displayObject.objectId;
+			staticData.updateAny = displayObject.updatePosition || displayObject.updateRotation || displayObject.updateColour || displayObject.updateVisible || displayObject.updateAlpha || displayObject.updateTexture;
+			staticData.updatePosition = displayObject.updatePosition;
+			staticData.updateRotation = displayObject.updateRotation;
+			staticData.updateColour = displayObject.updateColour;
+			staticData.updateVisible = displayObject.updateVisible;
+			staticData.updateAlpha = displayObject.updateAlpha;
+			staticData.updateTexture = displayObject.updateTexture;
+			
+			send(MessageType.SET_STATIC, staticData);
+			
+			displayObject.resetMovement();
+			staticChanges[i] = null;
+		}
+		staticChanges.length = 0;
+		
 	}
 	
 	function OnUpdateReturn(workerPayload:WorkerPayload) 

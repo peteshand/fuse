@@ -15,7 +15,7 @@ class VertexData implements IVertexData
 	@:isVar public static var OBJECT_POSITION(get, set):Int = 0;
 	public static var BUFFER_SIZE:Int = 10000;
 	
-	static var poolStartPosition:Int;
+	static var poolStartPosition(get, null):Int;
 	static var _basePosition:Int = 0;
 	public static var basePosition(get, null):Int = 0;
 	
@@ -68,7 +68,7 @@ class VertexData implements IVertexData
 	
 	public function new() 
 	{
-		poolStartPosition = Fuse.current.sharedMemory.vertexDataPool.start;
+		//poolStartPosition = Fuse.current.sharedMemory.vertexDataPool.start;
 	}
 	
 	inline public function setXY(index:Int, x:Float, y:Float):Void 
@@ -197,5 +197,10 @@ class VertexData implements IVertexData
 	{
 		if (FShader.ENABLE_MASKS) return 11;
 		else return INDEX_COLOR + 7;
+	}
+	
+	static inline function get_poolStartPosition():Int 
+	{
+		return Fuse.current.sharedMemory.vertexDataPool.start;
 	}
 }

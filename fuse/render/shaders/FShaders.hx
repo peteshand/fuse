@@ -15,6 +15,9 @@ class FShaders
 	static public function init(context3D:Context3D) 
 	{
 		FShaders.context3D = context3D;
+		
+		FShader.init();
+		
 		shaders = new Map<Int, FShader>();
 		for (i in 0...8) 
 		{

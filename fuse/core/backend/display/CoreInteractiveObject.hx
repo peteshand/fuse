@@ -116,11 +116,10 @@ class CoreInteractiveObject extends CoreDisplayObject
 		}
 	}
 	
-	override public function buildHierarchy2()
+	override public function buildHierarchy()
 	{
-		// TODO: check if visible and parent is visible
-		if (this.visible){
-			for (i in 0...children.length) children[i].buildHierarchy2();
+		if (displayData.visible == 1){
+			for (i in 0...children.length) children[i].buildHierarchy();
 		}
 	}
 }

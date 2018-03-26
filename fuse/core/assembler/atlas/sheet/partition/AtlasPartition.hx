@@ -28,10 +28,10 @@ class AtlasPartition implements ICoreRenderable
 	public var bottomPartition:AtlasPartition;
 	//public var textureData:ITextureData;
 	@:isVar public var textureId(get, set):Int = -1;
+	@:isVar public var textureIndex(get, set):Int;
 	public var coreTexture:CoreTexture;
 	public var sourceTextureId(get, null):Int;
 	
-	public var textureIndex:Int;
 	public var lastFramePairPartition:AtlasPartition;
 	public var lastRenderTarget:Int;
 	
@@ -98,5 +98,15 @@ class AtlasPartition implements ICoreRenderable
 			//trace("use atlas as source: " + lastRenderTarget + ", " + coreTexture.textureId);
 			return lastRenderTarget;
 		}
+	}
+	
+	function get_textureIndex():Int 
+	{
+		return textureIndex;
+	}
+	
+	function set_textureIndex(value:Int):Int 
+	{
+		return textureIndex = value;
 	}
 }

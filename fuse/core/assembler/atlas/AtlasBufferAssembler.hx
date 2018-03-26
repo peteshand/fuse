@@ -26,9 +26,6 @@ class AtlasBufferAssembler
 	{
 		AtlasSheets.active = false;
 		
-		//trace("DisplayList.hierarchyBuildRequired = " + DisplayList.hierarchyBuildRequired);
-		//trace("CoreTextures.texturesHaveChanged = " + CoreTextures.texturesHaveChanged);
-		
 		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged) {
 			AtlasTextures.build();
 			AtlasSheets.build();

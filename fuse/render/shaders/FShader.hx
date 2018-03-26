@@ -33,7 +33,7 @@ class FShader
 	var fragmentCode:ByteArray;
 	var setProgram = new Notifier<Bool>();
 	
-	public static function __init__():Void
+	public static function init():Void
 	{
 		
 		// FRAGMENT
@@ -61,7 +61,6 @@ class FShader
 	{
 		this.context3D = context3D;
 		this.numTextures = numTextures;
-		trace("numTextures = " + numTextures);
 		vertexCode = agalMiniAssembler.assemble(Context3DProgramType.VERTEX, vertexString());
 		fragmentCode = agalMiniAssembler.assemble(Context3DProgramType.FRAGMENT, fragmentString());
 		

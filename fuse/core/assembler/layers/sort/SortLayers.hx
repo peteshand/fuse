@@ -4,6 +4,7 @@ import fuse.core.assembler.layers.layer.LayerBuffer;
 import fuse.core.assembler.layers.layer.LayerCacheRenderable;
 import fuse.core.assembler.layers.sort.CustomSort.SortType;
 import fuse.core.backend.display.CoreCacheLayerImage;
+import fuse.core.front.buffers.LayerCacheBuffers;
 import fuse.utils.GcoArray;
 
 /**
@@ -14,7 +15,6 @@ class SortLayers
 {
 	public static var layers = new GcoArray<LayerBuffer>([]);
 	
-	static var numLayers:Int;
 	static var cacheLayerImages:Array<CoreCacheLayerImage>;
 	static private var newDirectLayers = new GcoArray<LayerBuffer>([]);
 	
@@ -25,10 +25,7 @@ class SortLayers
 	
 	static function __init__() 
 	{
-		numLayers = 2;
 		cacheLayerImages = [];
-		
-		
 		
 		SortByStatic2 = SortByStatic;
 		SortByNumberOfStaticItems2 = SortByNumberOfStaticItems;
@@ -39,9 +36,10 @@ class SortLayers
 	
 	static public function init() 
 	{
-		for (i in 0...numLayers) 
+		
+		for (i in 0...LayerCacheBuffers.numBuffers) 
 		{
-			cacheLayerImages.push(new CoreCacheLayerImage(6 + i));
+			cacheLayerImages.push(new CoreCacheLayerImage(LayerCacheBuffers.startIndex + i));
 		}
 	}
 	
@@ -95,9 +93,25 @@ class SortLayers
 		//trace("-------");
 	}
 	
-	static inline function SortByStatic(a:LayerBuffer, b:LayerBuffer):Int 
+	static inline function SortByStatic(l1:LayerBuffer, l2:LayerBuffer):Int 
 	{
-		return Math.floor(b.isStatic - a.isStatic);
+		//0 1 = -1
+		//1 0 = 1
+		//0 0 = 0
+		//1 1 = 0
+		//
+		//false true
+		//true false
+		//false false
+		//true true
+		
+		var a:Int = 0;
+		var b:Int = 0;
+		if (l1.updateAll) a = 1;
+		if (l2.updateAll) b = 1;
+		
+		
+		return Math.floor(b - a);
 	}
 	
 	static inline function SortByNumberOfStaticItems(a:LayerBuffer, b:LayerBuffer):Int
@@ -110,14 +124,16 @@ class SortLayers
 		var count:Int = 0;
 		for (i in 0...GenerateLayers.layers.length) 
 		{
-			if (count >= numLayers) break;
-			if (GenerateLayers.layers[i].isStatic == 0) break;
+			if (count >= LayerCacheBuffers.numBuffers) break;
+			
+			
+			if (GenerateLayers.layers[i].updateAll) break;
 			
 			
 			GenerateLayers.layers[i].isCacheLayer = true;
 			
 			var activeLayer:LayerBuffer = GenerateLayers.layers[i];
-			var offset:Int = 6 + SortLayers.layers.length;
+			var offset:Int = LayerCacheBuffers.startIndex + SortLayers.layers.length;
 			
 			
 			var cacheLayer:LayerBuffer = activeLayer.clone();

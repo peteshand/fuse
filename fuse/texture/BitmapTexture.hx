@@ -57,8 +57,7 @@ class BaseBitmapTexture extends BaseTexture
 	
 	public function update(source:BitmapData) 
 	{
-		Fuse.current.conductorData.frontIsStatic = 0;
-		
+		//trace("update: " + this.textureId);
 		this.bitmapData = source;
 		
 		//var uploadFromBitmapDataAsync:BitmapData -> Int -> Void = Reflect.getProperty(nativeTexture, "uploadFromBitmapDataAsync");
@@ -85,6 +84,9 @@ class BaseBitmapTexture extends BaseTexture
 		textureData.placed = 0;
 		Textures.registerTexture(textureId, this);
 		textureData.textureAvailable = 1;
+		
+		Fuse.current.conductorData.frontStaticCount = 0;
+		
 		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 	}
 }

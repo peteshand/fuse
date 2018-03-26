@@ -47,8 +47,6 @@ class AtlasSheets
 		
 		clear();
 		
-		//trace("AtlasTextures.textures.length = " + AtlasTextures.textures.length);
-		
 		for (k in 0...AtlasTextures.textures.length) 
 		{
 			for (i in 0...sheets.length) 

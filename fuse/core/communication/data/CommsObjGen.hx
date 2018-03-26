@@ -47,8 +47,8 @@ class CommsObjGen
 	{
 		init();
 		var displayData:IDisplayData = displayDataGen.get(id);
-		displayData.isStatic = 0;
-		displayData.isMoving = 1;
+		//displayData.isStatic = 0;
+		//displayData.isMoving = 1;
 		return displayData;
 	}	
 	

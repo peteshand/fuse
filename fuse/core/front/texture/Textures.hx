@@ -68,8 +68,7 @@ class Textures
 			textures.set(textureId, texture);
 			textureCount++;
 			//trace("textureCount = " + textureCount);
-			Fuse.current.conductorData.frontIsStatic = 0;
-			//Fuse.current.conductorData.backIsStatic = 0;
+			Fuse.current.conductorData.frontStaticCount = 0;
 		}
 	}
 	

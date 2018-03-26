@@ -4,6 +4,7 @@ import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
 import mantle.notifier.Notifier;
+import msignal.Signal.Signal0;
 
 /**
  * ...
@@ -34,6 +35,7 @@ class CoreTexture
 	public var uvBottom	:Float = 1;
 	
 	public var textureHasChanged:Bool = true;
+	public var onTextureChange = new Signal0();
 	
 	public function new(textureId:Int) 
 	{
@@ -88,8 +90,9 @@ class CoreTexture
 		if (textureHasChanged) {
 			textureHasChanged = true;
 			updateUVData();
+			onTextureChange.dispatch();
+			//trace("change: " + this.textureId);
 		}
-		
 	}
 	
 	inline function get_textureData():ITextureData 

@@ -20,9 +20,6 @@ import openfl.geom.Point;
 class CoreDisplayObject
 {
 	public var objectId		:Int;
-	public var isStatic		:Int = 0;
-	public var isMoving		:Int;
-	public var isRotating	:Int;
 	
 	public var displayData	:IDisplayData;
 	public var parent		:CoreInteractiveObject;
@@ -41,18 +38,40 @@ class CoreDisplayObject
 	public var area(get, null):Float;
 	public var diagonal(get, null):Float;
 	
-	var transformData		:TransformData;
+	public var transformData:TransformData;
 	var parentNonStatic		:Bool;
-	public var combinedAlpha:Float = 1;
+	public var alpha:Float = 1;
 	public var visible:Bool = true;
 	
 	//public var visible(get, null):Bool;
+	//public var updateUVs:Bool = false;
+	//public var updateTexture:Bool = false;
+	//public var updateMask:Bool = false;
+	//public var updateAll:Bool = true;
+	public var updatePosition:Bool = true;
+	public var updateRotation:Bool = true;
+	public var updateColour:Bool = true;
+	public var updateVisible:Bool = false;
+	public var updateAlpha:Bool = true;
+	public var updateTexture:Bool = true;
+	public var updateAny:Bool = true;
 	
 	public function new() 
 	{
 		bounds = new Bounds();
 		quadData = new QuadData();
 		transformData = new TransformData();
+	}
+	
+	public function setUpdates(value:Bool) 
+	{
+		this.updatePosition = value;
+		this.updateRotation = value;
+		this.updateColour = value;
+		this.updateVisible = value;
+		this.updateAlpha = value;
+		this.updateTexture = value;
+		this.updateAny = value;
 	}
 	
 	public function init(objectId:Int) 
@@ -63,77 +82,61 @@ class CoreDisplayObject
 		displayData = untyped CommsObjGen.getDisplayData(objectId);
 	}
 	
-	//public function buildHierarchy() 
-	//{
-		//HierarchyAssembler.transformActions.push(calculateTransform);
-		//HierarchyAssembler.transformActions.push(popTransform);
-	//}
-	
 	function calculateTransform() 
 	{
-		setIsStatic();
+		checkUpdates();
 		updateTransform();
-		
 	}
 	
 	function updateTransform() 
 	{
-		combinedAlpha = Graphics.alpha * displayData.alpha;
-		visible = Graphics.visible && (displayData.visible == 1);
-		Graphics.pushAlpha(combinedAlpha, visible);
-		//trace("combinedAlpha = " + combinedAlpha);
-		if (isStatic == 0) {
+		alpha = Graphics.parent.alpha * displayData.alpha;
+		visible = Graphics.parent.visible && (displayData.visible == 1);
+		//Graphics.pushAlpha(alpha, visible);
+		
+		//trace("alpha = " + alpha);
+		
+		if (updateAny == true) {
+			Fuse.current.conductorData.backIsStatic = 0;
+		}
+		
+		if (updatePosition) {
 			
 			//beginSetChildrenIsStatic(false);
-			
+			//trace("moving");
 			WorkerTransformHelper.update(this);
 		}
 		
 		pushTransform();
 	}
 	
-	inline function setIsStatic() 
+	inline function checkUpdates() 
 	{
-		isStatic = displayData.isStatic;
-		isMoving = 0;
-		isRotating = 0;
-		
-		if (Graphics.isStatic == 0) isStatic = 0;
-		displayData.isStatic = 1; // reset static prop
-		
-		if (isStatic == 0) {
-			//Fuse.current.conductorData.frontIsStatic = 0;
-			
-			Fuse.current.conductorData.backIsStatic = 0;
-			
-			isMoving = displayData.isMoving;
-			if (Graphics.isMoving == 1) isMoving = 1;
-			displayData.isMoving = 0;
-			
-			isRotating = displayData.isRotating;
-			displayData.isRotating = 0;
+		if (Graphics.parent.updateAny) updateAny = true;
+		if (updateAny){
+			if (Graphics.parent.updatePosition) updatePosition = true;
+			if (Graphics.parent.updateRotation) updateRotation = true;
+			if (Graphics.parent.updateColour) updateColour = true;
+			if (Graphics.parent.updateVisible) updateVisible = true;
+			if (Graphics.parent.updateAlpha) updateAlpha = true;
+			if (Graphics.parent.updateTexture) updateTexture = true;
 		}
 		
 		if (Core.RESIZE) {
-			isStatic = 0;
-			isMoving = 1;
-			isRotating = 1;
+			updatePosition = true;
+			updateAny = true;
 		}
 	}
 	
 	inline function pushTransform() 
 	{
-		Graphics.pushTransformation(transformData.localTransform, isStatic, isMoving);
+		Graphics.push(this);
 	}
 	
 	function popTransform() 
 	{
-		Graphics.popTransformation();
-		Graphics.popAlpha();
-		
-		if (isStatic == 0){	
-			
-		}
+		Graphics.pop();
+		setUpdates(false);
 	}
 	
 	public function clone():CoreDisplayObject
@@ -164,9 +167,9 @@ class CoreDisplayObject
 	// New Assembler ///////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 	
-	public function buildHierarchy2()
+	public function buildHierarchy()
 	{
-		trace("buildHierarchy2 = " + objectId);
+		
 	}
 	
 	public function buildTransformActions()
@@ -232,19 +235,6 @@ class CoreDisplayObject
 		//bottom = 0;
 		//
 		//parentNonStatic = false;
-		//combinedAlpha = 1;
+		//alpha = 1;
 	}
-	
-	//function get_visible():Bool 
-	//{
-		//if (parent != null && parent.visible == false) {
-			//return false;
-		//}
-		//else {
-			//if (displayData.visible == 0) {
-				//return false;
-			//}
-			//return true;
-		//}
-	//}
 }

@@ -13,6 +13,7 @@ class CoreStage extends CoreInteractiveObject
 	public function new() 
 	{
 		super();
+		setUpdates(false);
 	}
 	
 	override public function clone():CoreDisplayObject

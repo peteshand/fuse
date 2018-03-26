@@ -25,7 +25,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public var coreTexture	:CoreTexture;
 	//public var textureChanged:Bool = false;
 	
-	public var textureIndex	:Int;
+	@:isVar public var textureIndex(get, set):Int;
 	@:isVar public var mask(default, set):CoreImage;
 	public var maskChanged:Bool = false;
 	
@@ -36,66 +36,79 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	var renderTarget		:Int = -1;
 	public var sourceTextureId(get, null):Int;
 	
-	
 	public function new() 
 	{
 		super();
 		vertexData = new VertexData();
 	}
 	
-	override public function init(objectId:Int) 
-	{
-		super.init(objectId);
-		drawIndex = -1;
-		this.textureId = displayData.textureId;
-		
-	}
-	
 	override function calculateTransform() 
 	{
-		setIsStatic();
+		checkUpdates();
 		updateTransform();
 	}
 	
 	override function updateTransform() 
 	{
-		combinedAlpha = Graphics.alpha * displayData.alpha;
-		visible = Graphics.visible && (displayData.visible == 1);
+		alpha = Graphics.parent.alpha * displayData.alpha;
+		visible = Graphics.parent.visible && (displayData.visible == 1);
 		
-		if (isStatic == 0) {
+		//trace("updateAny = " + updateAny);
+		if (updateAny) {
+			Fuse.current.conductorData.backIsStatic = 0;
+		}
+		
+		//trace([isRotating, isMoving, isStatic]);
+		
+		if (updateTexture || updateVisible) textureId = displayData.textureId;
+		
+		if (updatePosition) {
 			
-			//Fuse.current.conductorData.backIsStatic = 0;
-			
-			textureId = displayData.textureId;
 			renderLayer = displayData.renderLayer;
 			WorkerTransformHelper.update(this);
 		}
 	}
 	
-	override function popTransform() 
+	//override function popTransform() 
+	//{
+		//
+	//}
+	
+	override public function buildTransformActions()
 	{
-		
+		if (this.visible){
+			HierarchyAssembler.transformActions.push(calculateTransform);
+			//HierarchyAssembler.transformActions.push(popTransform);
+		}
 	}
 	
 	inline function get_textureId():Int { return textureId; }
 	
-	function set_textureId(value:Int):Int { 
+	function set_textureId(value:Int):Int {
 		if (textureId != value){
 			textureId = value;
 			
 			if (coreTexture != null && textureId == -1) {
+				coreTexture.onTextureChange.remove(OnTextureChange);
 				Core.textures.deregister(coreTexture.textureData.textureId);
 				coreTexture = null;
 			}
 			
 			if (coreTexture == null || coreTexture.textureData.textureId != textureId) {
 				coreTexture = Core.textures.register(textureId);
+				if (coreTexture != null) coreTexture.onTextureChange.add(OnTextureChange);
 			}
 			
+			setUpdates(true);
 			//textureChanged = true;
 			//updateUVs = true;
 		}
 		return value;
+	}
+	
+	function OnTextureChange() 
+	{
+		updateTexture = true;
 	}
 	
 	//override function beginSetChildrenIsStatic(value:Bool) 
@@ -125,10 +138,9 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	// New Assembler ///////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////
 	
-	override public function buildHierarchy2()
+	override public function buildHierarchy()
 	{
-		// TODO: check if visible and parent is visible
-		if (this.visible){
+		if (displayData.visible == 1){
 			HierarchyAssembler.hierarchy.push(this);
 		}
 	}
@@ -172,6 +184,19 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 			maskChanged = true;
 		}
 		return mask;
+	}
+	
+	function get_textureIndex():Int 
+	{
+		return textureIndex;
+	}
+	
+	function set_textureIndex(value:Int):Int 
+	{
+		if (textureIndex != value) {
+			updateTexture = true;
+		}
+		return textureIndex = value;
 	}
 	
 	//override function get_visible():Bool 

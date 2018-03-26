@@ -82,6 +82,7 @@ class BaseBatch
 		//trace("renderTarget = " + renderTarget);
 		
 		batchData.skip = 0;
+		
 		batchData.numItems = renderables.length;
 		batchData.numTextures = batchTextures.textureIds.length;
 		batchData.renderTargetId = renderTarget;

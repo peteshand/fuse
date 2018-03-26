@@ -1,5 +1,6 @@
 package fuse.core.backend;
 import fuse.core.assembler.input.Touchables;
+import fuse.core.communication.messageData.StaticData;
 import fuse.core.communication.messageData.TouchableMsg;
 import fuse.core.communication.messageData.VisibleMsg;
 import fuse.core.input.FrontMouseInput;
@@ -60,6 +61,7 @@ class CoreEntryPoint
 		workerComms.addListener(MessageType.REMOVE_TEXTURE, OnRemoveTexture);
 		workerComms.addListener(MessageType.MOUSE_INPUT, OnMouseInput);
 		workerComms.addListener(MessageType.SET_TOUCHABLE, OnSetTouchable);
+		workerComms.addListener(MessageType.SET_STATIC, OnSetStatic);
 		
 		index = workerComms.getSharedProperty(WorkerSharedProperties.INDEX);
 		numberOfWorkers = workerComms.getSharedProperty(WorkerSharedProperties.NUMBER_OF_WORKERS);
@@ -144,6 +146,11 @@ class CoreEntryPoint
 	private function OnSetTouchable(payload:TouchableMsg):Void 
 	{
 		Touchables.setTouchable(payload.objectId, payload.touchable);
+	}
+	
+	private function OnSetStatic(payload:StaticData):Void 
+	{
+		Core.displayList.setStatic(payload);
 	}
 	
 	function OnUpdateMsg(workerPayload:WorkerPayload) 
