@@ -177,7 +177,14 @@ class MainThread extends ThreadBase
 		
 		
 		if (renderer != null) {
-			renderer.update();
+			if (Fuse.skipUnchangedFrames) {
+				if (Fuse.current.conductorData.changeAvailable == 1) {
+					renderer.update();
+				}
+			}
+			else {
+				renderer.update();
+			}
 		}
 		
 		dimensionChange = false;

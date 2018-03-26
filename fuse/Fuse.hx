@@ -31,6 +31,8 @@ class Fuse extends EventDispatcher
 	public static var current(default, null):ThreadBase;
 	public var stage:Stage;
 	
+	public static var skipUnchangedFrames:Bool = true;
+	
 	public function new(rootClass:Class<DisplayObject>, fuseConfig:FuseConfig, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
 	{	
 		MessageManager.init();

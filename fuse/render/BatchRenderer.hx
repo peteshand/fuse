@@ -43,10 +43,6 @@ class BatchRenderer
 	
 	static public function begin(conductorData:WorkerConductorData) 
 	{
-		#if html5
-			// Seems to be a bug in non AIR targets where changing the program causes texture bind issues
-			conductorData.highestNumTextures = PlatformSettings.MAX_TEXTURES;
-		#end
 		quadCount = 0;
 		// ** // FuseShaders.setCurrentShader(conductorData.highestNumTextures);
 	}
