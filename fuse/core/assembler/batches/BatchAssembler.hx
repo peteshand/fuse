@@ -152,4 +152,21 @@ class BatchAssembler
 		
 		Fuse.current.conductorData.highestNumTextures = highestNumTextures;
 	}
+	
+	static public function clearNonDirect() 
+	{
+		var i:Int = batches.length - 1;
+		while (i >= 0)
+		{
+			if (!Std.is(batches[i], DirectBatch)) {
+				trace("clearNonDirect: is not direct batch");
+				batches.splice(i, 1);
+			}
+			else {
+				
+				trace("clearNonDirect: is direct batch");
+			}
+			i--;
+		}
+	}
 }

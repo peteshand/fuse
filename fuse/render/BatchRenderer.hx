@@ -6,6 +6,7 @@ import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.communication.data.batchData.IBatchData;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
+import fuse.core.front.buffers.AtlasBuffers;
 import fuse.display.effects.BlendMode;
 import fuse.display.effects.BlendMode.BlendFactors;
 import fuse.render.Context3DTexture;
@@ -57,8 +58,11 @@ class BatchRenderer
 		// ** // if (numItemsInShaderProgram == 0) return;
 		if (conductorData.highestNumTextures == 0) return;
 		
-		programChanged = false;
 		
+		AtlasBuffers.setBufferIndexState(currentBatchData.renderTargetId);
+		//conductorData.highestNumTextures = 8;
+		
+		programChanged = false;
 		for (j in 0...8) 
 		{
 			if (j < conductorData.highestNumTextures) {
@@ -98,7 +102,7 @@ class BatchRenderer
 			//if (currentBatchData.renderTargetId == 6) {
 			if (traceOutput){
 				RenderDebugUtil.batchDebug(currentBatchData);
-				//RenderDebugUtil.vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, currentBatchData.numItems);
+				RenderDebugUtil.vertexDebug(quadCount * VertexData.BYTES_PER_ITEM, currentBatchData.numItems);
 			}
 			//
 			//trace("quadCount = " + quadCount);
@@ -115,7 +119,6 @@ class BatchRenderer
 		//}
 		
 		// ** // Context3DProgram.setProgram(shaderProgram.value.program);
-		
 		Context3DRenderTarget.value = currentBatchData.renderTargetId;
 		
 		// TODO: move this logic into worker
@@ -136,8 +139,12 @@ class BatchRenderer
 		//trace("numItemsInShaderProgram = " + numItemsInShaderProgram);
 		//trace("drawTriangles");
 		// ** // context3D.drawTriangles(shaderProgram.value.indexbuffer, 0, currentBatchData.numItems * 2);
-		
-		Buffers.currentBuffer.drawTriangles(quadCount * 6, currentBatchData.numItems * 2);
+		#if (air||flash)
+			var firstIndex = quadCount * 6;
+		#else
+			var firstIndex = quadCount * 6 * 2;
+		#end
+		Buffers.currentBuffer.drawTriangles(firstIndex, currentBatchData.numItems * 2);
 		//trace("quadCount = " + quadCount);
 		quadCount += currentBatchData.numItems;
 	}

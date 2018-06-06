@@ -227,6 +227,11 @@ class WorkerSetup
 		#end
 	}
 	
+	public function update() 
+	{
+		send(MessageType.UPDATE, null);
+	}
+	
 	public function unlock() 
 	{
 		#if air

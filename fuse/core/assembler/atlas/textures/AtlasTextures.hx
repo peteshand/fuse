@@ -31,6 +31,12 @@ class AtlasTextures
 		}
 		
 		//trace("textures.length = " + textures.length);
+		
+		textures.sort(function(t1:CoreTexture, t2:CoreTexture):Int {
+			if (t1.textureData.height < t2.textureData.height) return 1;
+			else if (t1.textureData.height > t2.textureData.height) return -1;
+			else return 0;
+		});
 	}
 	
 	static inline function add(coreTexture:CoreTexture) 

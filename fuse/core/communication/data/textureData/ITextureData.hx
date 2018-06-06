@@ -29,7 +29,8 @@ typedef ITextureData =
 	public var atlasTextureId:Int;
 	//public var atlasBatchTextureIndex:Int;
 	public var changeCount:Int;	
-	public var area:Float;
+	//public var area:Float;
+	public var area(get, null):Float;
 	
 	// Shared Props
 	public var nativeTexture:Texture;

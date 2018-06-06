@@ -17,7 +17,7 @@ class RenderDebugUtil
 	
 	public static function batchDebug(batchData:IBatchData) 
 	{
-		trace("startIndex      = " + batchData.startIndex);
+		//trace("startIndex      = " + batchData.startIndex);
 		trace("numItemsInBatch = " + batchData.numItems);
 		trace([batchData.textureId1, batchData.textureId2, batchData.textureId3, batchData.textureId4, batchData.textureId5, batchData.textureId6, batchData.textureId7, batchData.textureId8]);
 		trace("renderTargetId = " + batchData.renderTargetId);
@@ -39,7 +39,7 @@ class RenderDebugUtil
 		
 		for (j in 0...numItems) 
 		{
-			trace("SharedMemory.memory.position = " + SharedMemory.memory.position);
+			//trace("SharedMemory.memory.position = " + SharedMemory.memory.position);
 			
 			for (k in 0...Buffer.VERTICES_PER_QUAD) 
 			{
@@ -121,7 +121,7 @@ class RenderDebugUtil
 			var i4:Int = SharedMemory.memory.readShort();
 			var i5:Int = SharedMemory.memory.readShort();
 			var i6:Int = SharedMemory.memory.readShort();
-			trace([i1, i2, i3, i4, i5, i6]);
+			//trace([i1, i2, i3, i4, i5, i6]);
 		}
 	}
 }

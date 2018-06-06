@@ -57,7 +57,6 @@ class BaseBitmapTexture extends BaseTexture
 	
 	public function update(source:BitmapData) 
 	{
-		//trace("update: " + this.textureId);
 		this.bitmapData = source;
 		
 		//var uploadFromBitmapDataAsync:BitmapData -> Int -> Void = Reflect.getProperty(nativeTexture, "uploadFromBitmapDataAsync");

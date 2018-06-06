@@ -111,15 +111,15 @@ class DirectBatch extends BaseBatch implements IBatch
 		
 		if (FShader.ENABLE_MASKS){
 			if (updateMask){
-				if (image.mask != null) {
-					// TODO: update value to point to correct batch textureIndex
-					vertexData.setMaskTexture(0);
-					//trace("setBatchProps mask: " + image.objectId);
-					
-				}
-				else {
+				//if (image.mask != null) {
+					//// TODO: update value to point to correct batch textureIndex
+					//vertexData.setMaskTexture(0);
+					////trace("setBatchProps mask: " + image.objectId);
+					//
+				//}
+				//else {
 					vertexData.setMaskTexture(-1);
-				}
+				//}
 			}
 		}
 		
@@ -133,12 +133,12 @@ class DirectBatch extends BaseBatch implements IBatch
 			vertexData.setUV(2, coreTexture.uvRight,	coreTexture.uvTop);		// top right
 			vertexData.setUV(3, coreTexture.uvRight,	coreTexture.uvBottom);	// bottom right
 			
-			if (FShader.ENABLE_MASKS && image.mask != null) {
-				vertexData.setMaskUV(0, image.mask.coreTexture.uvLeft,	image.mask.coreTexture.uvBottom);	// bottom left
-				vertexData.setMaskUV(1, image.mask.coreTexture.uvLeft,	image.mask.coreTexture.uvTop);	// top left
-				vertexData.setMaskUV(2, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvTop);	// top right
-				vertexData.setMaskUV(3, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvBottom);	// bottom right
-			}
+			//if (FShader.ENABLE_MASKS && image.mask != null) {
+				//vertexData.setMaskUV(0, image.mask.coreTexture.uvLeft,	image.mask.coreTexture.uvBottom);	// bottom left
+				//vertexData.setMaskUV(1, image.mask.coreTexture.uvLeft,	image.mask.coreTexture.uvTop);	// top left
+				//vertexData.setMaskUV(2, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvTop);	// top right
+				//vertexData.setMaskUV(3, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvBottom);	// bottom right
+			//}
 			
 			//image.updateUVs = false;
 		}

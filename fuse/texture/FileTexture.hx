@@ -37,7 +37,6 @@ abstract FileTexture(AbstractTexture) to Int from Int
 		}
 		//trace("textureId = " + textureId);
 		this = new AbstractTexture(baseFileTexture);
-		trace("this = " + this);
 		//trace("this.textureId = " + this.textureId);
 	}
 	
@@ -67,15 +66,16 @@ class BaseFileTexture extends BaseTexture
 	
 	public function new(url:String, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
-		super(0, 0, queUpload, onTextureUploadCompleteCallback);
-		this.url = url;
-		
 		//if (url.indexOf("http") == 0) {
 			fileLoader = new RemoteLoader();
 		//}
 		//else {
 			//fileLoader = new FileLoader();
 		//}
+		
+		this.url = url;
+		
+		super(0, 0, queUpload, onTextureUploadCompleteCallback);
 		
 		fileLoader.addEventListener(Event.COMPLETE, OnLoadComplete);
 	}

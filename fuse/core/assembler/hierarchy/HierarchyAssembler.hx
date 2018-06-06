@@ -10,6 +10,7 @@ import fuse.utils.GcoArray;
 **/
 class HierarchyAssembler
 {
+	public static var renderIndex:Int = 0;
 	public static var hierarchy = new GcoArray<CoreImage>([]);
 	public static var transformActions = new GcoArray<Void -> Void>([]);
 	
@@ -27,6 +28,7 @@ class HierarchyAssembler
 			hierarchy.clear();
 			transformActions.clear();
 			
+			HierarchyAssembler.renderIndex = 0;
 			Core.displayList.stage.buildHierarchy();
 			
 			Core.displayList.stage.buildTransformActions();

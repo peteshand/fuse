@@ -12,33 +12,24 @@ import fuse.core.backend.Core;
 import fuse.core.backend.displaylist.DisplayList;
 import fuse.core.backend.texture.CoreTextures;
 import fuse.utils.GcoArray;
+import mantle.notifier.Notifier;
 
 /**
     This class is called every frame and is responsible for assembling stage3d display data.
 **/
 class Assembler
 {
+	static var backIsStatic = new Notifier<Int>();
+	
 	public function new() { }
 	
 	static public function init() 
 	{
-		//SortLayers.init();
+		backIsStatic.add(OnBackIsStaticChange);
 	}
 	
 	public static function update() 
 	{
-		//trace("Assembler start");
-		//Fuse.current.conductorData.isStatic = 1;
-		
-		//if (Fuse.current.conductorData.frontIsStatic == 1) {
-			//Fuse.current.conductorData.backIsStatic = 1;
-		//}
-		//Fuse.current.conductorData.backIsStatic = Fuse.current.conductorData.frontIsStatic;
-		
-		//trace("backIsStatic = " + Fuse.current.conductorData.backIsStatic);
-		//trace("frontStaticCount = " + Fuse.current.conductorData.frontStaticCount);
-		
-		
 		if (Fuse.current.conductorData.backIsStatic == 0 || Fuse.current.conductorData.frontStaticCount <= 0) {
 			Fuse.current.conductorData.changeAvailable = 1;
 		}
@@ -54,9 +45,20 @@ class Assembler
 		HierarchyAssembler.build();
 		AtlasBufferAssembler.build();
 		
+		/*var a:Array<Dynamic> = [
+			Fuse.current.conductorData.changeAvailable,
+			Fuse.current.conductorData.backIsStatic,
+			Fuse.current.conductorData.frontStaticCount,
+			HierarchyAssembler.hierarchy.length, 
+			DisplayList.hierarchyBuildRequired,
+			CoreTextures.texturesHaveChanged,
+			Fuse.current.conductorData.backIsStatic
+		];
+		trace(a);*/
 		//trace("HierarchyAssembler.hierarchy.length = " + HierarchyAssembler.hierarchy.length);
 		//trace("DisplayList.hierarchyBuildRequired = " + DisplayList.hierarchyBuildRequired);
 		//trace("CoreTextures.texturesHaveChanged = " + CoreTextures.texturesHaveChanged);
+		//trace("Fuse.current.conductorData.backIsStatic = " + Fuse.current.conductorData.backIsStatic);
 		
 		if (Fuse.current.conductorData.backIsStatic == 0){
 			LayerBufferAssembler.build();
@@ -64,6 +66,7 @@ class Assembler
 			VertexWriter.build();
 			BatchAssembler.findMaxNumTextures();
 		}
+		backIsStatic.value = Fuse.current.conductorData.backIsStatic;
 		
 		AtlasBufferAssembler.closePartitions();
 		
@@ -72,13 +75,24 @@ class Assembler
 		
 		Core.RESIZE = false;
 		
-		//if (Fuse.current.conductorData.isStatic == 0){
-			//trace("Fuse.current.conductorData.isStatic = " + Fuse.current.conductorData.isStatic);
-		//}
-		
-		
-		//Fuse.current.conductorData.frontIsStatic = 1;
-		//trace("frontIsStatic = " + Fuse.current.conductorData.frontIsStatic);
-		//trace("Assembler end");
+		if (Fuse.current.conductorData.backIsStatic == 0 || Fuse.current.conductorData.frontStaticCount <= 0) {
+			Fuse.current.conductorData.changeAvailable = 1;
+		}
+	}
+	
+	static function OnBackIsStaticChange()
+	{
+		if (Fuse.current.conductorData.backIsStatic == 1){
+			//trace("switch to static");
+			//BatchAssembler.clearNonDirect();
+			
+			//VertexWriter.build();
+			//BatchAssembler.findMaxNumTextures();
+			
+			LayerBufferAssembler.build();
+			BatchAssembler.build();	
+			VertexWriter.build();
+			BatchAssembler.findMaxNumTextures();
+		}
 	}
 }

@@ -139,37 +139,11 @@ class MainThread extends ThreadBase
 		
 		TextField.updateDirtyTextFields();
 		
-		//trace("Update");
 		workerSetup.lock();
-		
-		////////////////////////////////////////////////
-		////////////////////////////////////////////////
-		
-		//if (Fuse.current.isStatic == 1) {
-			//Fuse.current.staticCount++;
-		//}
-		//else {
-			//Fuse.current.staticCount = 0;
-		//}
-		//
-		//if (Fuse.current.staticCount <= 2) {
-			//Fuse.current.conductorData.isStatic = 0;
-		//}
-		//else {
-			//Fuse.current.conductorData.isStatic = 1;
-		//}
-		
-		//conductorData.frontIsStatic = Fuse.current.frontIsStatic;
-		
-		
-		
-		////////////////////////////////////////////////
-		////////////////////////////////////////////////
-		
-		
+		workerSetup.update();
 		if (Fuse.current.cleanContext) {
 			conductorData.backIsStatic = 0;
-			//trace("4");
+			//trace("4");W
 		}
 		
 		//trace("conductorData.frontIsStatic = " + conductorData.frontIsStatic);
@@ -177,14 +151,14 @@ class MainThread extends ThreadBase
 		
 		
 		if (renderer != null) {
-			if (Fuse.skipUnchangedFrames) {
+			/*if (Fuse.skipUnchangedFrames) {
 				if (Fuse.current.conductorData.changeAvailable == 1) {
 					renderer.update();
 				}
 			}
-			else {
+			else {*/
 				renderer.update();
-			}
+			//}
 		}
 		
 		dimensionChange = false;

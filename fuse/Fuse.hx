@@ -9,9 +9,11 @@ import fuse.display.DisplayObject;
 import fuse.display.Stage;
 import fuse.events.FuseEvent;
 import fuse.utils.FrameBudget;
+import openfl.Lib;
 import openfl.display.Stage3D;
 import openfl.display3D.Context3DProfile;
 import openfl.display3D.Context3DRenderMode;
+import openfl.events.Event;
 import openfl.events.EventDispatcher;
 
 /**
@@ -46,6 +48,15 @@ class Fuse extends EventDispatcher
 			workerThread = new WorkerThread();
 			//workerThread.init();
 		}
+		
+		Lib.current.stage.addEventListener(Event.ENTER_FRAME, function(e:Event):Void
+		{
+			FrameBudget.startFrame();
+		}, false, 1000);
+		Lib.current.stage.addEventListener(Event.EXIT_FRAME, function(e:Event):Void
+		{
+			FrameBudget.endFrame();
+		}, false, 1000);
 		super();
 	}
 	
@@ -71,7 +82,6 @@ class Fuse extends EventDispatcher
 	
 	public function process() 
 	{
-		FrameBudget.startFrame();
 		mainThread.process();
 	}
 	

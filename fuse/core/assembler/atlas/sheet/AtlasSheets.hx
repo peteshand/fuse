@@ -55,6 +55,7 @@ class AtlasSheets
 				if (successfulPlacement) {
 					break;
 				}
+				trace("failed to bake to atlas " + i);
 			}
 		}
 		

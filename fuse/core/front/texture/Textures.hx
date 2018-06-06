@@ -24,7 +24,7 @@ import openfl.events.Event;
 class Textures
 {
 	static private var context3D:Context3D;
-	static private var textures = new Map<Int, IBaseTexture>();
+	static public var textures = new Map<Int, IBaseTexture>();
 	static private var blankId:Int;
 	static private var whiteId:Int;
 	static private var textureCount:Int = 0;
@@ -48,7 +48,7 @@ class Textures
 	static private function createDefaultTextures() 
 	{
 		//#if debug
-		var blank:BitmapData = new BitmapData(512, 512, true, 0x1100FF00);
+		var blank:BitmapData = new BitmapData(512, 512, true, 0x990000FF);
 		//#else
 		//var blank:BitmapData = new BitmapData(32, 32, true, 0x00000000);
 		//#end

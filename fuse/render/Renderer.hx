@@ -108,7 +108,7 @@ class Renderer
 		//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
 		if (conductorData.numberOfBatches > 1){
 			//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
-			traceOutput = true;
+			//traceOutput = true;
 		}
 		
 		for (i in 0...conductorData.numberOfBatches) 

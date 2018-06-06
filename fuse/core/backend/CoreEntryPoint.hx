@@ -156,5 +156,6 @@ class CoreEntryPoint
 	function OnUpdateMsg(workerPayload:WorkerPayload) 
 	{
 		workerComms.send(MessageType.UPDATE_RETURN);
+		//OnTick();
 	}
 }

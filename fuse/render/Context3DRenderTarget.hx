@@ -3,6 +3,7 @@ import fuse.core.front.texture.Textures;
 import fuse.texture.IBaseTexture;
 import mantle.notifier.Notifier;
 import openfl.display3D.Context3D;
+import openfl.display3D.textures.TextureBase;
 
 /**
  * ...
@@ -29,7 +30,8 @@ class Context3DRenderTarget
 	static function OnTargetTextureIdChange() 
 	{
 		//trace("targetTextureId.value = " + targetTextureId.value);
-		if (targetTextureId.value == -1) {
+		if (targetTextureId.value < -1) return;
+		else if (targetTextureId.value == -1) {
 			#if air
 				context3D.setRenderToTexture(null, false, 0, 0, 0);
 			#else

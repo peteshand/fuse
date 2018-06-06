@@ -4,6 +4,7 @@ import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.texture.BaseTexture;
 import fuse.texture.AbstractTexture;
 import fuse.texture.RenderTexture;
+import mantle.notifier.Notifier;
 
 /**
  * ...
@@ -21,6 +22,8 @@ class AtlasBuffers
 	static var bufferHeight:Int;
 	static var buffers = new Map<Int, RenderTexture>();
 	
+	public static var states:Array<Notifier<Null<Int>>> = [];
+	
 	public function new() 
 	{
 		
@@ -33,6 +36,8 @@ class AtlasBuffers
 		BaseTexture.textureIdCount = startIndex + numBuffers;
 		for (i in startIndex...endIndex) 
 		{
+			if (i % 2 == 0) 
+			states.push(new Notifier<Null<Int>>());
 			create(i);
 		}
 	}
@@ -41,7 +46,7 @@ class AtlasBuffers
 	{
 		if (textureId < startIndex || textureId >= startIndex + numBuffers) return;
 		
-		if (!buffers.exists(textureId)){
+		if (!buffers.exists(textureId)) {
 			var currentTextureId:Int = BaseTexture.textureIdCount;
 			BaseTexture.textureIdCount = textureId;
 			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight, true);
@@ -62,5 +67,14 @@ class AtlasBuffers
 		var id:Int = startIndex + index;
 		create(id);
 		return buffers.get(id);
+	}
+	
+	static public function setBufferIndexState(renderTargetId:Int) 
+	{
+		if (renderTargetId >= 2 && renderTargetId < 10) {
+			var index:Int = Math.floor((renderTargetId - 2) / 2);
+			var state:Int = (renderTargetId - 2) % 2;
+			states[index].value = state;
+		}
 	}
 }
