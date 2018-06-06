@@ -81,12 +81,19 @@ class InputAssemblerObject
 	public function test(touch:Touch):Void
 	{
 		var j:Int = Touchables.touchables.length - 1;
+		
+		Touchables.touchables.sort(function(i1:CoreImage, i2:CoreImage):Int
+		{
+			if (i1.drawIndex > i2.drawIndex) return 1;
+			else if (i1.drawIndex < i2.drawIndex) return -1;
+			else return 0;
+		});
+		
 		while (j >= 0) 
 		{
 			var display:CoreImage = Touchables.touchables[j];
-			
 			// TODO: non visible displays should not be in the touchables array //trace(display.visible);
-			if (display.visible)
+			if (display.drawIndex > -1)
 			{
 				var distance:Float = getDistance(display, touch);
 				

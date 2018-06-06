@@ -31,7 +31,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	public var renderLayer	:Int = 0;
 	
-	var drawIndex			:Int = -1;
+	public var drawIndex	:Int = -1;
 	//var updateUVs			:Bool = false;
 	var renderTarget		:Int = -1;
 	public var sourceTextureId(get, null):Int;
@@ -62,7 +62,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		
 		if (updateTexture || updateVisible) textureId = displayData.textureId;
 		
-		if (updatePosition) {
+		if (updatePosition || updateVisible) {
 			
 			renderLayer = displayData.renderLayer;
 			WorkerTransformHelper.update(this);
