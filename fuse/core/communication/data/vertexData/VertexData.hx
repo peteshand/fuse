@@ -41,26 +41,6 @@ class VertexData implements IVertexData
 	
 	
 	
-	
-	
-	// old order
-	//public static inline var INDEX_X:Int = 0;
-	//public static inline var INDEX_Y:Int = 4;
-	//
-	//public static inline var INDEX_U:Int = 8;
-	//public static inline var INDEX_V:Int = 12;
-	//public static inline var INDEX_MU:Int = 16;
-	//public static inline var INDEX_MV:Int = 20;
-	//
-	//public static inline var INDEX_COLOR:Int = 24;
-	//
-	//public static inline var INDEX_TEXTURE:Int = 28;
-	//public static inline var INDEX_MASK_TEXTURE:Int = 32;
-	//public static inline var INDEX_MASK_BASE_VALUE:Int = 36;
-	//public static inline var INDEX_ALPHA:Int = 40;
-	
-	
-	
 	public static inline var BYTES_PER_VALUE:Int = 4;
 	public static var VALUES_PER_VERTEX(get, null):Int = 11;
 	public static var BYTES_PER_VERTEX(get, null):Int;// = BYTES_PER_VALUE * VALUES_PER_VERTEX;

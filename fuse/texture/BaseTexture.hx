@@ -46,6 +46,7 @@ class BaseTexture implements IBaseTexture
 	//public var nativeTexture:NativeTexture;
 	@:isVar public var directRender(get, set):Bool = false;
 	public var onUpdate = new Signal0();
+	public var onUpload = new Signal0();
 	
 	public var nativeTexture(get, null):Texture;
 	public var textureBase(get, null):TextureBase;

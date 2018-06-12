@@ -107,27 +107,4 @@ class LayerBuffer
 		if (updateAll) return 0;
 		else return 1;
 	}
-	
-	//function get_hasChanged():Bool 
-	//{
-		//_hasChanged = false;
-		//if (lastRenderables.length != renderables.length) {
-			//_hasChanged = true;
-		//}
-		//else {
-			//for (i in 0...renderables.length) 
-			//{
-				//if (renderables[i] != lastRenderables[i]) {
-					//_hasChanged = true;
-					//break;
-				//}
-			//}
-		//}
-		//lastRenderables.clear();
-		//for (i in 0...renderables.length) 
-		//{
-			//lastRenderables.push(renderables[i]);
-		//}
-		//return _hasChanged;
-	//}
 }

@@ -87,5 +87,6 @@ class BaseBitmapTexture extends BaseTexture
 		Fuse.current.conductorData.frontStaticCount = 0;
 		
 		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
+		onUpload.dispatch();
 	}
 }

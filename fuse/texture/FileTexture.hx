@@ -112,5 +112,6 @@ class BaseFileTexture extends BaseTexture
 		Textures.registerTexture(textureId, this);
 		textureData.textureAvailable = 1;
 		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
+		onUpload.dispatch();
 	}
 }

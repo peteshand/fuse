@@ -12,7 +12,7 @@ import openfl.errors.Error;
 @:access(fuse.texture)
 class MovieClip extends Image
 {
-	var textures:Array<AbstractTexture>;
+	var textures(default, set):Array<AbstractTexture>;
 	var tick:Int = 0;
 	var normalized:Float = 0;
 	var fsp:Int;
@@ -21,22 +21,18 @@ class MovieClip extends Image
 	public function new(textures:Array<AbstractTexture>, fsp:Int=24) 
 	{
 		this.fsp = fsp;
-		this.textures = textures;
 		if (textures == null || textures.length == 0) {
 			throw new Error("One or more textures must be past");
 		}
-		for (i in 0...textures.length) 
-		{
-			textures[i].directRender = true;
-		}
+		this.textures = textures;
 		
 		super(textures[0]);
 		displayType = DisplayType.MOVIECLIP;
 		
-		start();
+		play();
 	}
 	
-	public function start() 
+	public function play() 
 	{
 		Fuse.current.enterFrame.add(OnTick);
 	}
@@ -65,6 +61,7 @@ class MovieClip extends Image
 		if (frame == value % textures.length) return value;
 		texture.textureData.changeCount++;
 		frame = value % textures.length;
+		textures[frame].directRender = true;
 		textures[frame].textureData.changeCount++;
 		texture = textures[frame];
 		return frame;
@@ -74,5 +71,16 @@ class MovieClip extends Image
 	{
 		Fuse.current.enterFrame.remove(OnTick);
 		super.dispose();
+	}
+	
+	function set_textures(value:Array<AbstractTexture>):Array<AbstractTexture> 
+	{
+		textures = value;
+		for (i in 0...textures.length) 
+		{
+			textures[i].directRender = true;
+		}
+		
+		return textures;
 	}
 }

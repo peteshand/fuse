@@ -1,7 +1,6 @@
 package fuse.core.assembler.layers.sort;
 import fuse.core.assembler.layers.generate.GenerateLayers;
 import fuse.core.assembler.layers.layer.LayerBuffer;
-import fuse.core.assembler.layers.layer.LayerCacheRenderable;
 import fuse.core.assembler.layers.sort.CustomSort.SortType;
 import fuse.core.backend.display.CoreCacheLayerImage;
 import fuse.core.front.buffers.LayerCacheBuffers;

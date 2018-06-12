@@ -40,6 +40,10 @@ class GenerateLayers
 	
 	static public function build() 
 	{
+		//trace("DisplayList.hierarchyBuildRequired = " + DisplayList.hierarchyBuildRequired);
+		//trace("CoreTextures.texturesHaveChanged = " + CoreTextures.texturesHaveChanged);
+		//trace("Fuse.current.conductorData.frontStaticCount = " + Fuse.current.conductorData.frontStaticCount);
+		
 		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged || Fuse.current.conductorData.frontStaticCount <= 1) {
 			//trace("1");
 			generationStaticCount = 0;
@@ -95,41 +99,8 @@ class GenerateLayers
 		
 		//trace("GenerateLayers.layers = " + GenerateLayers.layers.length);
 		//trace("GenerateLayers.layersGenerated = " + GenerateLayers.layersGenerated);
-		//trace("GenerateLayers.drawCacheLayers = " + GenerateLayers.drawCacheLayers);
-		
+		//trace("GenerateLayers.drawCacheLayers = " + GenerateLayers.drawCacheLayers);	
 	}
-	
-	//static private function imageVisible(image:CoreImage) 
-	//{
-		//if (image.displayData.visible == 0) return false;
-		//#if !debug
-			//if (image.coreTexture.textureData.textureAvailable == 0) return false;
-		//#end
-		//return true;
-	//}
-	
-	//static private function checkForLayerChanges() 
-	//{	
-		//var hasChanged:Bool = false;
-		//if (layers.length != lastLayers.length) {
-			//hasChanged = true;
-		//}
-		//else if (layers.length >= 1) {
-			//for (j in 0...layers.length) 
-			//{
-				//if (lastLayers[j].update != layers[j].update || lastLayers[j].renderables[0].objectId != layers[j].renderables[0].objectId) {
-					//hasChanged = true;
-					//break;
-				//}
-			//}
-		//}
-		//
-		//lastLayers.clear();
-		//for (i in 0...layers.length) 
-		//{
-			//lastLayers[i] = layers[i];
-		//}
-	//}
 	
 	static private function OnStaticChange() 
 	{
