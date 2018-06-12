@@ -15,6 +15,7 @@ import mantle.notifier.Notifier;
  */
 class GenerateLayers
 {
+	static var baseLayers = new Array<LayerBuffer>();
 	public static var layers = new GcoArray<LayerBuffer>([]);
 	//public static var lastLayers = new GcoArray<LayerBuffer>([]);
 	
@@ -35,7 +36,7 @@ class GenerateLayers
 	{
 		update.value = null;
 		GenerateLayers.layers.clear();
-		Pool.layerBufferes.forceReuse();
+		//Pool.layerBufferes.forceReuse();
 	}
 	
 	static public function build() 
@@ -44,6 +45,23 @@ class GenerateLayers
 		//trace("CoreTextures.texturesHaveChanged = " + CoreTextures.texturesHaveChanged);
 		//trace("Fuse.current.conductorData.frontStaticCount = " + Fuse.current.conductorData.frontStaticCount);
 		
+		clear();
+		
+		for (i in 0...HierarchyAssembler.hierarchy.length) 
+		{
+			var image:CoreImage = HierarchyAssembler.hierarchy[i];
+			if (!image.visible) continue;
+			if (image.coreTexture.textureData.directRender == 1) {
+				update.value = false;
+			}
+			else {
+				update.value = image.updateAny;
+			}
+			currentLayerBuffer.add(image);
+		}
+		trace('layers.length = ' + layers.length);
+		
+		/*
 		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged || Fuse.current.conductorData.frontStaticCount <= 1) {
 			//trace("1");
 			generationStaticCount = 0;
@@ -96,7 +114,7 @@ class GenerateLayers
 			
 			//checkForLayerChanges();
 		}
-		
+		*/
 		//trace("GenerateLayers.layers = " + GenerateLayers.layers.length);
 		//trace("GenerateLayers.layersGenerated = " + GenerateLayers.layersGenerated);
 		//trace("GenerateLayers.drawCacheLayers = " + GenerateLayers.drawCacheLayers);	
@@ -106,8 +124,15 @@ class GenerateLayers
 	{
 		if (update.value == null) return;
 		
-		currentLayerBuffer = Pool.layerBufferes.request();
+		//currentLayerBuffer = Pool.layerBufferes.request();
+		currentLayerBuffer = getLayerBuffer(GenerateLayers.layers.length);
 		currentLayerBuffer.init(update.value, GenerateLayers.layers.length);
 		GenerateLayers.layers.push(currentLayerBuffer);
+	}
+	
+	static private function getLayerBuffer(index:Int) 
+	{
+		if (baseLayers.length <= index) baseLayers.push(new LayerBuffer());
+		return baseLayers[index];
 	}
 }

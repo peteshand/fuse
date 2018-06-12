@@ -17,7 +17,7 @@ class LayerBufferAssembler
 	static public function build() 
 	{
 		GenerateLayers.build();
-		SortLayers.build();
+		//SortLayers.build();
 		
 	}
 }
