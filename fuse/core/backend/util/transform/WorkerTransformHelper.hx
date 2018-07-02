@@ -1,10 +1,12 @@
 package fuse.core.backend.util.transform;
 
+import fuse.core.backend.display.TransformData;
 import fuse.display.geometry.QuadData;
 import fuse.utils.MatrixUtils;
 import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.backend.displaylist.Graphics;
 import fuse.math.FastMatrix3;
+import haxe.Json;
 import openfl.geom.Point;
 
 /**
@@ -19,6 +21,15 @@ class WorkerTransformHelper
 	
 	//static var applyRotation:Int;
 	//static var applyPosition:Int;
+	static var coreDisplay:CoreDisplayObject;
+	static var localTransform:FastMatrix3;
+	static var transformData:TransformData;
+	static var quadData:QuadData;
+	
+	static var parentNonStatic:Bool;
+	static var updateRotation:Bool;
+	static var updatePosition:Bool;
+	
 	static var x:Float;
 	static var y:Float;
 	static var width:Float;
@@ -28,9 +39,16 @@ class WorkerTransformHelper
 	static var pivotX:Float;
 	static var pivotY:Float;
 	static var rotation:Float;
+	static var temp:Float;
+	static var temp1:Float;
+	static var temp2:Float;
+	static var tempPoint = new Point();
+	static var tempArray:Array<Float>;
+	static var PI:Float;
 	
 	static function __init__():Void
 	{
+		PI = Math.PI;
 		clearMatrix = FastMatrix3.identity();
 	}
 	
@@ -39,7 +57,7 @@ class WorkerTransformHelper
 		
 	}
 	
-	public static inline function update(coreDisplay:CoreDisplayObject) 
+	public static function update(coreDisplay:CoreDisplayObject) 
 	{
 		//if (alpha != Graphics.opacity) {
 			
@@ -59,30 +77,40 @@ class WorkerTransformHelper
 			//applyPosition = 1;
 		//}
 		
-		x = coreDisplay.displayData.x;
-		y = coreDisplay.displayData.y;
-		width = coreDisplay.displayData.width;
-		height = coreDisplay.displayData.height;
-		scaleX = coreDisplay.displayData.scaleX;
-		scaleY = coreDisplay.displayData.scaleY;
-		pivotX = coreDisplay.displayData.pivotX;
-		pivotY = coreDisplay.displayData.pivotY;
-		rotation = coreDisplay.displayData.rotation;
+		WorkerTransformHelper.coreDisplay = coreDisplay;
+		WorkerTransformHelper.localTransform = coreDisplay.transformData.localTransform;
+		WorkerTransformHelper.quadData = coreDisplay.quadData;
 		
-		WorkerTransformHelper.clear(coreDisplay.transformData.localTransform);
+		WorkerTransformHelper.x = coreDisplay.displayData.x;
+		WorkerTransformHelper.y = coreDisplay.displayData.y;
+		WorkerTransformHelper.width = coreDisplay.displayData.width;
+		WorkerTransformHelper.height = coreDisplay.displayData.height;
+		WorkerTransformHelper.scaleX = coreDisplay.displayData.scaleX;
+		WorkerTransformHelper.scaleY = coreDisplay.displayData.scaleY;
+		WorkerTransformHelper.pivotX = coreDisplay.displayData.pivotX;
+		WorkerTransformHelper.pivotY = coreDisplay.displayData.pivotY;
+		WorkerTransformHelper.rotation = coreDisplay.displayData.rotation;
 		
+		//trace(Json.stringify(coreDisplay.displayData));
 		
+		localTransform.setFrom(clearMatrix);
+		
+		WorkerTransformHelper.parentNonStatic = coreDisplay.parentNonStatic;
+		WorkerTransformHelper.updateRotation = coreDisplay.updateRotation;
+		WorkerTransformHelper.updatePosition = coreDisplay.updatePosition;
+		
+		WorkerTransformHelper.transformData = coreDisplay.transformData;
 		
 		//WorkerTransformHelper.setScale(localTransform, scaleX, scaleY, base, width, height);
 		if (scaleX != 1 || scaleY != 1){
-			WorkerTransformHelper.setScale(coreDisplay.transformData.localTransform, scaleX, scaleY, width, height, width, height);
+			WorkerTransformHelper.setScale(/*localTransform, scaleX, scaleY, width, height, width, height*/);
 		}
 		/*if (atlasItem != null && atlasItem.rotation == 90) {
 			WorkerTransformHelper.setPosition(coreDisplay.isMoving, positionMatrix, localTransform, x + atlasItem.height, y);
 			WorkerTransformHelper.setRotation(coreDisplay.isRotating, coreDisplay.isMoving, localTransform, rotMatrix, rotMatrix1, rotMatrix2, rotMatrix3, rotation + atlasItem.rotation);
 		}
 		else {*/
-			WorkerTransformHelper.setPosition(coreDisplay.parentNonStatic, coreDisplay.updatePosition, coreDisplay.transformData.positionMatrix, coreDisplay.transformData.localTransform, x, y);
+			WorkerTransformHelper.setPosition();
 			
 			//if (coreDisplay.isRotating == 1) {
 				//trace("coreDisplay.isRotating = " + coreDisplay.isRotating);
@@ -90,44 +118,52 @@ class WorkerTransformHelper
 				//trace("rotation = " + rotation);
 			//}
 			
-			WorkerTransformHelper.setRotation(coreDisplay.parentNonStatic, coreDisplay.updateRotation, coreDisplay.updatePosition, coreDisplay.transformData.localTransform, coreDisplay.transformData.rotMatrix, coreDisplay.transformData.rotMatrix1, coreDisplay.transformData.rotMatrix2, coreDisplay.transformData.rotMatrix3, rotation);
+			WorkerTransformHelper.setRotation(/*coreDisplay.parentNonStatic, coreDisplay.updateRotation, coreDisplay.updatePosition, localTransform, coreDisplay.transformData.rotMatrix, coreDisplay.transformData.rotMatrix1, coreDisplay.transformData.rotMatrix2, coreDisplay.transformData.rotMatrix3, rotation*/);
 		//}
 		
-		Graphics.transformation.multmat(coreDisplay.transformData.localTransform);
+		
+		//trace(localTransform);
+		Graphics.transformation.multmat(localTransform);
 		// Move into pushTransform function
 		//if (push) {
-			////Graphics.pushTransformation(Graphics.transformation.multmat(coreDisplay.transformData.localTransform));
-			//Graphics.pushTransformation(coreDisplay.transformData.localTransform);
+			////Graphics.pushTransformation(Graphics.transformation.multmat(localTransform));
+			//Graphics.pushTransformation(localTransform);
 		//}
-		//coreDisplay.transformData.globalTransform.setFrom(coreDisplay.transformData.localTransform);
+		//coreDisplay.transformData.globalTransform.setFrom(localTransform);
 		
-		multvecs(
-			coreDisplay.quadData, coreDisplay.transformData.localTransform,
-			pivotX, pivotY, width, height
-		);
+		//multvecs(
+			//coreDisplay.quadData, localTransform,
+			//pivotX, pivotY, width, height
+		//);
+	//}
+	//
+	//inline static function multvecs(quadData:QuadData, localTransform:FastMatrix3, pivotX:Float, pivotY:Float, width:Float, height:Float) 
+	//{
+		multvec(quadData, localTransform, -pivotX, -pivotY + height);			// 0, 1
+		quadData.bottomLeftX = tempPoint.x;
+		quadData.bottomLeftY = tempPoint.y;
+		
+		multvec(quadData, localTransform, -pivotX, -pivotY);					// 2, 3
+		quadData.topLeftX = tempPoint.x;
+		quadData.topLeftY = tempPoint.y;
+		
+		multvec(quadData, localTransform, -pivotX + width, -pivotY);			// 4, 5
+		quadData.topRightX = tempPoint.x;
+		quadData.topRightY = tempPoint.y;
+		
+		multvec(quadData, localTransform, -pivotX + width, -pivotY + height);	// 6, 7
+		quadData.bottomRightX = tempPoint.x;
+		quadData.bottomRightY = tempPoint.y;
 	}
 	
-	public static inline function multvecs(quadData:QuadData, localTransform:FastMatrix3, pivotX:Float, pivotY:Float, width:Float, height:Float) 
+	static function multvec(quadData:QuadData, localTransform:FastMatrix3, x: Float, y:Float):Void
 	{
-		multvec(quadData, 0, 1, localTransform, -pivotX, -pivotY + height);
-		multvec(quadData, 2, 3, localTransform, -pivotX, -pivotY);
-		multvec(quadData, 4, 5, localTransform, -pivotX + width, -pivotY);
-		multvec(quadData, 6, 7, localTransform, -pivotX + width, -pivotY + height);
+		temp = localTransform._02 * x + localTransform._12 * y + localTransform._22;
+		tempPoint.x = transformX((localTransform._00 * x + localTransform._10 * y + localTransform._20) / temp);
+		tempPoint.y = transformY((localTransform._01 * x + localTransform._11 * y + localTransform._21) / temp);
 	}
 	
-	public static inline function multvec(quadData:QuadData, outputX:Int, outputY:Int, localTransform:FastMatrix3, x: Float, y:Float):Void untyped
-	{
-		var w:Float = localTransform._02 * x + localTransform._12 * y + localTransform._22;
-		quadData[outputX] = transformX((localTransform._00 * x + localTransform._10 * y + localTransform._20) / w);
-		quadData[outputY] = transformY((localTransform._01 * x + localTransform._11 * y + localTransform._21) / w);
-	}
-	
-	public inline static function clear(localTransform:FastMatrix3) 
-	{
-		localTransform.setFrom(clearMatrix);
-	}
-	
-	public inline static function setScale(localTransform:FastMatrix3, scaleX:Float, scaleY:Float, textureWidth:Float, textureHeight:Float, width:Float, height:Float) 
+	inline static function setScale(/*localTransform:FastMatrix3, scaleX:Float, scaleY:Float, textureWidth:Float, textureHeight:Float, width:Float, height:Float*/) 
 	{
 		/*if (base != null) {
 			localTransform._00 = scaleX * (width / textureWidth);
@@ -139,29 +175,30 @@ class WorkerTransformHelper
 		//}
 	}
 	
-	public inline static function setPosition(parentNonStatic:Bool, applyPosition:Bool, positionMatrix:FastMatrix3, localTransform:FastMatrix3, x:Float, y:Float) 
+	inline static function setPosition() 
 	{
-		if (applyPosition || parentNonStatic) MatrixUtils.translation(positionMatrix, x, y);
-		localTransform = positionMatrix.multmat(localTransform);
+		if (updatePosition || parentNonStatic) MatrixUtils.translation(transformData.positionMatrix, x, y);
+		transformData.positionMatrix.multmat(localTransform);
 	}
 	
-	public inline static function setRotation(parentNonStatic:Bool, applyRotation:Bool, applyPosition:Bool, localTransform:FastMatrix3, rotMatrix:FastMatrix3, rotMatrix1:FastMatrix3, rotMatrix2:FastMatrix3, rotMatrix3:FastMatrix3, rotation:Float) 
+	inline static function setRotation(/*parentNonStatic:Bool, updateRotation:Bool, updatePosition:Bool, localTransform:FastMatrix3, rotMatrix:FastMatrix3, rotMatrix1:FastMatrix3, rotMatrix2:FastMatrix3, rotMatrix3:FastMatrix3, rotation:Float*/) 
 	{
-		if (applyRotation || parentNonStatic) {
-			if (applyPosition || parentNonStatic){
-				rotMatrix1 = MatrixUtils.translation(rotMatrix1, localTransform._20, localTransform._21);
-				rotMatrix2 = MatrixUtils.rotateMatrix(rotMatrix2, rotation / 180 * Math.PI);
-				rotMatrix3 = MatrixUtils.translation(rotMatrix3, -localTransform._20, -localTransform._21);
-				MatrixUtils.multMatrix(rotMatrix1, rotMatrix2, rotMatrix);
-				MatrixUtils.multMatrix(rotMatrix, rotMatrix3, rotMatrix);
+		if (updateRotation || parentNonStatic) {
+			temp1 = rotation / 180 * PI;
+			if (updatePosition || parentNonStatic){
+				MatrixUtils.translation(transformData.rotMatrix1, localTransform._20, localTransform._21);
+				MatrixUtils.rotateMatrix(transformData.rotMatrix2, temp1);
+				MatrixUtils.translation(transformData.rotMatrix3, -localTransform._20, -localTransform._21);
+				MatrixUtils.multMatrix(transformData.rotMatrix1, transformData.rotMatrix2, transformData.rotMatrix);
+				MatrixUtils.multMatrix(transformData.rotMatrix, transformData.rotMatrix3, transformData.rotMatrix);
 			}
 			else {
-				rotMatrix2 = MatrixUtils.rotateMatrix(rotMatrix2, rotation / 180 * Math.PI);
-				MatrixUtils.multMatrix(rotMatrix1, rotMatrix2, rotMatrix);
-				MatrixUtils.multMatrix(rotMatrix, rotMatrix3, rotMatrix);
+				MatrixUtils.rotateMatrix(transformData.rotMatrix2, temp1);
+				MatrixUtils.multMatrix(transformData.rotMatrix1, transformData.rotMatrix2, transformData.rotMatrix);
+				MatrixUtils.multMatrix(transformData.rotMatrix, transformData.rotMatrix3, transformData.rotMatrix);
 			}
 		}
-		localTransform = rotMatrix.multmat(localTransform);
+		transformData.rotMatrix.multmat(localTransform);
 	}
 	
 	static inline function transformX(x:Float):Float 

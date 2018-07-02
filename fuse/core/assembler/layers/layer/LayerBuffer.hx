@@ -19,7 +19,7 @@ class LayerBuffer
 	var renderablesIndex:Int = 0;
 	var renderables1 = new GcoArray<ICoreRenderable>([]);
 	var renderables2 = new GcoArray<ICoreRenderable>([]);
-	var renderablesArray:Array<GcoArray<ICoreRenderable>> = [];
+	var renderablesArray:Array<GcoArray<ICoreRenderable>>;
 	//public var lastRenderables = new GcoArray<ICoreRenderable>([]);
 	
 	/*Defines if the images contained in this layer are static or moving*/
@@ -48,7 +48,7 @@ class LayerBuffer
 	
 	public function new() 
 	{
-		
+		renderablesArray = [renderables1, renderables2];
 	}
 	
 	public function init(updateAll:Bool, index:Int) 

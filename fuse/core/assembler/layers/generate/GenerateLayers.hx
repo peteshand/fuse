@@ -50,16 +50,17 @@ class GenerateLayers
 		for (i in 0...HierarchyAssembler.hierarchy.length) 
 		{
 			var image:CoreImage = HierarchyAssembler.hierarchy[i];
-			if (!image.visible) continue;
-			if (image.coreTexture.textureData.directRender == 1) {
-				update.value = false;
-			}
-			else {
+			if (!image.visible && !image.isMask) continue;
+			//if (image.coreTexture.textureData.directRender == 1) {
+				//update.value = false;
+			//}
+			//else {
+				//trace("image.updateAny = " + image.updateAny);
 				update.value = image.updateAny;
-			}
+			//}
 			currentLayerBuffer.add(image);
 		}
-		trace('layers.length = ' + layers.length);
+		//trace('layers.length = ' + layers.length);
 		
 		/*
 		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged || Fuse.current.conductorData.frontStaticCount <= 1) {

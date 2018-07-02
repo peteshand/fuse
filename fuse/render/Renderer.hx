@@ -3,9 +3,12 @@ package fuse.render;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.texture.Textures;
+import fuse.render.batch.BatchRenderer;
 import fuse.render.buffers.Buffer;
 import fuse.render.buffers.Buffers;
 import fuse.render.shaders.FShaders;
+import fuse.render.target.Context3DRenderTarget;
+import fuse.render.texture.Context3DTexture;
 import fuse.utils.Color;
 import fuse.Fuse;
 import mantle.managers.resize.Resize;
@@ -28,6 +31,7 @@ class Renderer
 	var sharedContext:Bool;
 	var numItemsInBatch:Int;
 	var scissorRectangle:Rectangle;
+	var batchRenderers:Array<BatchRenderer> = [];
 	
 	public function new(context3D:Context3D, sharedContext:Bool) 
 	{
@@ -50,7 +54,7 @@ class Renderer
 		Context3DTexture.init(context3D);
 		//Context3DProgram.init(context3D);
 		//ShaderPrograms.init(context3D);
-		BatchRenderer.init(context3D);
+		//BatchRenderer.init(context3D);
 		Textures.init(context3D);
 		//FuseShaders.init();
 		
@@ -97,7 +101,7 @@ class Renderer
 		Context3DRenderTarget.begin();
 		
 		if (Fuse.current.cleanContext) {
-			BatchRenderer.clear();
+			clearBatches();
 		}
 	}
 	
@@ -113,11 +117,21 @@ class Renderer
 		
 		for (i in 0...conductorData.numberOfBatches) 
 		{
-			BatchRenderer.drawBuffer(i, conductorData, context3D, traceOutput);
+			var batchRenderer:BatchRenderer = getBatchRenderer(i);
+			batchRenderer.drawBuffer(i, conductorData, context3D, traceOutput);
+			//BatchRenderer.drawBuffer(i, conductorData, context3D, traceOutput);
 		}
 		//if (traceOutput){
 			//trace("-------------------");
 		//}
+	}
+	
+	function getBatchRenderer(index:Int) 
+	{
+		if (batchRenderers.length <= index) {
+			batchRenderers[index] = new BatchRenderer(index, context3D);
+		}
+		return batchRenderers[index];
 	}
 	
 	public function end():Void
@@ -126,7 +140,9 @@ class Renderer
 			Context3DTexture.clear();
 			//ShaderPrograms.clear();
 			//Context3DProgram.clear();
-			BatchRenderer.clear();
+			//BatchRenderer.clear();
+			clearBatches();
+			
 			Context3DRenderTarget.clear();
 			
 			Buffers.deactivate();
@@ -136,6 +152,14 @@ class Renderer
 		if (!sharedContext) {
 			// Doesn't execute if context3D.present is being handled externally
 			context3D.present();
+		}
+	}
+	
+	function clearBatches() 
+	{
+		for (i in 0...batchRenderers.length) 
+		{
+			batchRenderers[i].clear();
 		}
 	}
 }

@@ -50,9 +50,9 @@ class Buffers
 		}
 		
 		if (currentBuffer != lastBuffer) {
-			//if (lastBuffer != null) {
-				//currentBuffer.deactivate();
-			//}
+			if (lastBuffer != null) {
+				lastBuffer.deactivate();
+			}
 			if (currentBuffer != null) {
 				currentBuffer.activate();
 			}

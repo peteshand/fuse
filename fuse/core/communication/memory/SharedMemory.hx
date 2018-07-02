@@ -4,6 +4,7 @@ import fuse.core.communication.data.MemoryPool;
 import fuse.core.communication.data.batchData.WorkerBatchData;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.data.displayData.WorkerDisplayData;
+import fuse.core.communication.data.rangeData.WorkerRangeData;
 import fuse.core.communication.data.renderTextureData.RenderTextureData;
 import fuse.core.communication.data.renderTextureData.RenderTextureDrawData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
@@ -28,6 +29,7 @@ class SharedMemory
 	
 	public var vertexDataPool:MemoryPool;
 	public var batchDataPool:MemoryPool;
+	public var vertexRangePool:MemoryPool;
 	public var conductorDataPool:MemoryPool;
 	public var displayDataPool:MemoryPool;
 	public var textureDataPool:MemoryPool;
@@ -39,6 +41,7 @@ class SharedMemory
 	{
 		vertexDataPool = CreatePool(VertexData.BUFFER_SIZE * VertexData.BYTES_PER_ITEM);
 		batchDataPool = CreatePool(WorkerBatchData.BUFFER_SIZE * WorkerBatchData.BYTES_PER_ITEM);
+		vertexRangePool = CreatePool(WorkerRangeData.BUFFER_SIZE * WorkerRangeData.BYTES_PER_ITEM);
 		conductorDataPool = CreatePool(WorkerConductorData.BUFFER_SIZE);
 		displayDataPool = CreatePool(WorkerDisplayData.BUFFER_SIZE * WorkerDisplayData.BYTES_PER_ITEM);
 		textureDataPool = CreatePool(WorkerTextureData.BUFFER_SIZE * WorkerTextureData.BYTES_PER_ITEM);

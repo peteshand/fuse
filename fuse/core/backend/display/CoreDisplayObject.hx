@@ -54,7 +54,7 @@ class CoreDisplayObject
 	public var updateVisible:Bool = false;
 	public var updateAlpha:Bool = true;
 	public var updateTexture:Bool = true;
-	public var updateAny:Bool = true;
+	@:isVar public var updateAny(get, set):Bool = true;
 	
 	public function new() 
 	{
@@ -90,6 +90,8 @@ class CoreDisplayObject
 	
 	function updateTransform() 
 	{
+		
+		
 		alpha = Graphics.parent.alpha * displayData.alpha;
 		visible = Graphics.parent.visible && (displayData.visible == 1);
 		//Graphics.pushAlpha(alpha, visible);
@@ -236,5 +238,15 @@ class CoreDisplayObject
 		//
 		//parentNonStatic = false;
 		//alpha = 1;
+	}
+	
+	function get_updateAny():Bool 
+	{
+		return updateAny;
+	}
+	
+	function set_updateAny(value:Bool):Bool 
+	{
+		return updateAny = value;
 	}
 }

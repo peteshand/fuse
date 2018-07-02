@@ -10,7 +10,7 @@ import fuse.core.input.Input;
 import fuse.display.DisplayObject;
 import fuse.display.Stage;
 import fuse.events.FuseEvent;
-import fuse.render.Context3DSetup;
+import fuse.render.setup.Context3DSetup;
 import fuse.render.Renderer;
 import fuse.core.WorkerSetup;
 import fuse.text.TextField;

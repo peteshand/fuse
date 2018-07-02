@@ -1,4 +1,4 @@
-package fuse.render;
+package fuse.render.setup;
 
 import fuse.utils.PlayerVersion;
 import msignal.Signal.Signal0;

@@ -2,6 +2,7 @@ package fuse.core.backend.display;
 
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
+import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.displaylist.Graphics;
 import fuse.core.backend.texture.CoreTexture;
 import fuse.core.backend.util.transform.WorkerTransformHelper;
@@ -29,6 +30,9 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	@:isVar public var mask(default, set):CoreImage;
 	public var maskChanged:Bool = false;
 	
+	public var isMask:Bool = false;
+	public var maskOf:Array<CoreImage> = [];
+	
 	public var renderLayer	:Int = 0;
 	
 	public var drawIndex	:Int = -1;
@@ -36,11 +40,20 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	var renderTarget		:Int = -1;
 	public var sourceTextureId(get, null):Int;
 	
+	var count:Int = 0;
+	
 	public function new() 
 	{
 		super();
 		vertexData = new VertexData();
 	}
+	
+	override public function init(objectId:Int) 
+	{
+		super.init(objectId);
+		textureId = displayData.textureId;
+	}
+	
 	
 	override function calculateTransform() 
 	{
@@ -51,7 +64,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	override function updateTransform() 
 	{
 		alpha = Graphics.parent.alpha * displayData.alpha;
-		visible = Graphics.parent.visible && (displayData.visible == 1);
+		visible = (Graphics.parent.visible && (displayData.visible == 1));
 		
 		//trace("updateAny = " + updateAny);
 		if (updateAny) {
@@ -62,9 +75,10 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		
 		if (updateTexture || updateVisible) textureId = displayData.textureId;
 		
-		if (updatePosition || updateVisible) {
+		if (updatePosition || updateVisible || this.isMask) {
 			
 			renderLayer = displayData.renderLayer;
+			
 			WorkerTransformHelper.update(this);
 		}
 	}
@@ -76,7 +90,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	override public function buildTransformActions()
 	{
-		if (this.visible){
+		if (this.visible || this.isMask){
 			HierarchyAssembler.transformActions.push(calculateTransform);
 			//HierarchyAssembler.transformActions.push(popTransform);
 		}
@@ -108,7 +122,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	function OnTextureChange() 
 	{
-		updateTexture = true;
+		updateAny = updateTexture = true;
 	}
 	
 	//override function beginSetChildrenIsStatic(value:Bool) 
@@ -140,7 +154,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	override public function buildHierarchy()
 	{
-		if (displayData.visible == 1){
+		if (displayData.visible == 1 || this.isMask){
 			HierarchyAssembler.hierarchy.push(this);
 		}
 	}
@@ -152,17 +166,17 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		bounds.top = Math.NEGATIVE_INFINITY;
 		bounds.bottom = Math.POSITIVE_INFINITY;
 		
-		for (i in 0...quadData.length) 
-		{
-			if (i % 2 == 0){
-				if (bounds.left > quadData[i]) bounds.left = quadData[i];
-				if (bounds.right < quadData[i]) bounds.right = quadData[i];
-			}
-			else {
-				if (bounds.top < quadData[i]) bounds.top = quadData[i];
-				if (bounds.bottom > quadData[i]) bounds.bottom = quadData[i];
-			}
-		}
+		//for (i in 0...quadData.length) 
+		//{
+			//if (i % 2 == 0){
+				//if (bounds.left > quadData[i]) bounds.left = quadData[i];
+				//if (bounds.right < quadData[i]) bounds.right = quadData[i];
+			//}
+			//else {
+				//if (bounds.top < quadData[i]) bounds.top = quadData[i];
+				//if (bounds.bottom > quadData[i]) bounds.bottom = quadData[i];
+			//}
+		//}
 		
 		return bounds;
 	}
@@ -181,9 +195,40 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	{
 		if (mask != value){
 			mask = value;
+			value.addMaskOf(this);
 			maskChanged = true;
 		}
 		return mask;
+	}
+	
+	function addMaskOf(coreImage:CoreImage) 
+	{
+		maskOf.push(coreImage);
+		isMask = true;
+	}
+	
+	function removeMaskOf(coreImage:CoreImage) 
+	{
+		var i:Int = maskOf.length - 1;
+		while (i >= 0) 
+		{
+			if (maskOf[i] == coreImage) {
+				maskOf.splice(i, 1);
+			}
+			i--;
+		}
+		if (maskOf.length == 0) isMask = false;
+	}
+	
+	override function set_updateAny(value:Bool):Bool 
+	{
+		updateAny = value;
+		for (i in 0...maskOf.length) 
+		{
+			maskOf[i].updateAny = true;
+			maskOf[i].maskChanged = true;
+		}
+		return updateAny;
 	}
 	
 	function get_textureIndex():Int 
@@ -198,21 +243,4 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		}
 		return textureIndex = value;
 	}
-	
-	//override function get_visible():Bool 
-	//{
-		//if (!super.get_visible()) {
-			//return false;
-		//}
-		//
-		//if (displayData.visible == 0) {
-			//return false;
-		//}
-		//
-		//// If texture hasn't loaded yet. Not really sure if it's worth keeping this
-		//if (coreTexture.textureData.textureAvailable == 0) {
-			//return false;
-		//}
-		//return true;
-	//}
 }

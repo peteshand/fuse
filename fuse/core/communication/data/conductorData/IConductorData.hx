@@ -28,5 +28,6 @@ typedef IConductorData =
 	frontIsStatic:Int,
 	backIsStatic:Int,
 	numTriangles:Int,
-	highestNumTextures:Int
+	highestNumTextures:Int,
+	numRanges:Int
 }

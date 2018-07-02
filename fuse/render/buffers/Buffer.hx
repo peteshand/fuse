@@ -1,5 +1,7 @@
 package fuse.render.buffers;
 
+import fuse.core.communication.data.CommsObjGen;
+import fuse.core.communication.data.rangeData.IRangeData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.render.shaders.FShader;
 import mantle.notifier.Notifier;
@@ -63,6 +65,7 @@ class Buffer
 	
 	public function activate():Void
 	{
+		//trace("activate: " + bufferSize);
 		// new order
 		bufferCount = 0;
 		bufferPosition = 0;
@@ -75,6 +78,7 @@ class Buffer
 		}
 		
 		updateIndices();
+		updateVertices(0, bufferSize);
 	}
 	
 	function addToVertexBuffer(bufferFormat:Context3DVertexBufferFormat) 
@@ -96,6 +100,7 @@ class Buffer
 	
 	public function deactivate():Void
 	{
+		//trace("deactivate: " + bufferSize);
 		context3D.setVertexBufferAt(0, null);
 		context3D.setVertexBufferAt(1, null);
 		context3D.setVertexBufferAt(2, null);
@@ -104,18 +109,29 @@ class Buffer
 	
 	public inline function update():Void
 	{
+		#if (air||flash)
+			var numRanges:Int = Fuse.current.conductorData.numRanges;
+			for (i in 0...numRanges) 
+			{
+				var rangeData:IRangeData = CommsObjGen.getRangeData(i);
+				//trace([i, bufferSize, rangeData.start, rangeData.length]);
+				if (i < 2) updateVertices(rangeData.start, rangeData.length);
+			}
+		#else
 		if (Fuse.current.conductorData.changeAvailable == 1) {
-			updateVertices();
+			updateVertices(0, bufferSize);
 		}
+		#end
 	}
 	
-	inline function updateVertices() 
+	inline function updateVertices(start:Int, length:Int) 
 	{		
+		//trace([bufferSize, VertexData.BYTES_PER_ITEM * start, Buffer.VERTICES_PER_QUAD * start, Buffer.VERTICES_PER_QUAD * length]);
 		vertexbuffer.uploadFromByteArray(
 			SharedMemory.memory, 
-			0,
-			0, 
-			Buffer.VERTICES_PER_QUAD * bufferSize
+			VertexData.BYTES_PER_ITEM * start,
+			Buffer.VERTICES_PER_QUAD * start, 
+			Buffer.VERTICES_PER_QUAD * length
 		);
 	}
 	

@@ -80,15 +80,9 @@ class InputAssemblerObject
 	
 	public function test(touch:Touch):Void
 	{
+		Touchables.touchables.sort(sortTouchables);
+		
 		var j:Int = Touchables.touchables.length - 1;
-		
-		Touchables.touchables.sort(function(i1:CoreImage, i2:CoreImage):Int
-		{
-			if (i1.drawIndex > i2.drawIndex) return 1;
-			else if (i1.drawIndex < i2.drawIndex) return -1;
-			else return 0;
-		});
-		
 		while (j >= 0) 
 		{
 			var display:CoreImage = Touchables.touchables[j];
@@ -136,6 +130,13 @@ class InputAssemblerObject
 			}
 			j--;
 		}
+	}
+	
+	function sortTouchables(i1:CoreImage, i2:CoreImage):Int
+	{
+		if (i1.drawIndex > i2.drawIndex) return 1;
+		else if (i1.drawIndex < i2.drawIndex) return -1;
+		else return 0;
 	}
 	
 	function getDistance(display:CoreImage, touch:Touch) 

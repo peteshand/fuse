@@ -1,6 +1,7 @@
 package fuse.core.assembler.vertexWriter;
 import fuse.core.assembler.batches.BatchAssembler;
 import fuse.core.assembler.batches.batch.IBatch;
+import fuse.core.assembler.vertexWriter.prep.PrepLayersForBatching;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.utils.GcoArray;
@@ -29,11 +30,9 @@ class VertexWriter
 		
 		for (i in 0...batches.length) 
 		{
-			
 			var active:Bool = batches[i].writeVertex();
 			if (active) {
-				numItems += batches[i].renderables.length;
-				
+				numItems += batches[i].renderables.length;		
 			}
 			numBatches++;
 		}
@@ -41,6 +40,7 @@ class VertexWriter
 		//trace("batches.length = " + batches.length);
 		conductorData.numberOfBatches = numBatches;
 		conductorData.numberOfRenderables = numItems;
+		
+		PrepLayersForBatching.build();
 	}
-	
 }

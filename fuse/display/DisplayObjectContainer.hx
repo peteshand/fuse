@@ -100,4 +100,13 @@ class DisplayObjectContainer extends InteractiveObject
 		if (children == null) return 0;
 		return children.length;
 	}
+	
+	override function set_mask(value:Image):Image 
+	{
+		for (i in 0...children.length) 
+		{
+			children[i].mask = value;
+		}
+		return value;
+	}
 }

@@ -7,6 +7,9 @@ import fuse.core.communication.data.displayData.DisplayData;
 import fuse.core.communication.data.displayData.WorkerDisplayData;
 import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.communication.data.displayData.WorkerDisplayData;
+import fuse.core.communication.data.rangeData.IRangeData;
+import fuse.core.communication.data.rangeData.RangeData;
+import fuse.core.communication.data.rangeData.WorkerRangeData;
 import fuse.core.communication.data.textureData.TextureData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.info.WorkerInfo;
@@ -20,6 +23,7 @@ class CommsObjGen
 {
 	static var displayDataGen:ObjGen<Dynamic>;
 	static var batchDataGen:ObjGen<Dynamic>;
+	static var rangeDataGen:ObjGen<Dynamic>;
 	static var textureDataGen:ObjGen<Dynamic>;
 	
 	public function new() 
@@ -34,11 +38,13 @@ class CommsObjGen
 		if (WorkerInfo.usingWorkers) {
 			displayDataGen = new ObjGen<IDisplayData>(WorkerDisplayData);
 			batchDataGen = new ObjGen<IBatchData>(WorkerBatchData);
+			rangeDataGen = new ObjGen<IRangeData>(WorkerRangeData);
 			textureDataGen = new ObjGen<IBatchData>(WorkerTextureData);
 		}
 		else {
 			displayDataGen = new ObjGen<IDisplayData>(DisplayData);
 			batchDataGen = new ObjGen<IBatchData>(BatchData);
+			rangeDataGen = new ObjGen<IRangeData>(RangeData);
 			textureDataGen = new ObjGen<IBatchData>(TextureData);
 		}
 	}	
@@ -56,6 +62,12 @@ class CommsObjGen
 	{
 		init();
 		return batchDataGen.get(id);
+	}	
+	
+	static public function getRangeData(id:Int) 
+	{
+		init();
+		return rangeDataGen.get(id);
 	}	
 	
 	static public function getTextureData(id:Int) 

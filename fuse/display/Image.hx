@@ -16,7 +16,6 @@ class Image extends DisplayObject
 {
 	@:isVar public var texture(default, set):AbstractTexture;
 	@:isVar public var renderLayer(default, set):Int;
-	@:isVar public var mask(default, set):Image;
 	
 	public function new(texture:AbstractTexture) 
 	{
@@ -41,8 +40,9 @@ class Image extends DisplayObject
 		return value;
 	}
 	
-	inline function set_mask(value:Image):Image 
+	override function set_mask(value:Image):Image 
 	{
+		if (this == value) return value;
 		if (mask != value) {
 			mask = value;
 			if (mask == null) {

@@ -54,6 +54,7 @@ class DisplayObject
 	@:isVar public var colorBR(get, set):Color = 0x0;
 	@:isVar public var alpha(get, set):Float = 0;
 	@:isVar public var visible(get, set):Bool = false;
+	@:isVar public var mask(default, set):Image;
 	
 	//@:isVar public var blendMode(get, set):BlendMode;
 	@:isVar public var layerIndex(get, set):Null<Int> = null;
@@ -446,5 +447,10 @@ class DisplayObject
 	inline function updateStaticBackend():Void
 	{
 		Fuse.current.workerSetup.setStatic(this);
+	}
+	
+	function set_mask(value:Image):Image 
+	{
+		return value;
 	}
 }

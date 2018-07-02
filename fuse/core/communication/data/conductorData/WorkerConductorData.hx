@@ -37,8 +37,9 @@ class WorkerConductorData
 	static public inline var BACK_IS_STATIC:Int = 84;
 	static public inline var NUM_TRIANGLES:Int = 88;
 	static public inline var HIGHEST_NUM_TEXTURES:Int = 92;
+	static public inline var NUM_RANGES:Int = 96;
 	
-	public static inline var BUFFER_SIZE:Int = 96;
+	public static inline var BUFFER_SIZE:Int = 98;
 	
 	public static var memoryBlock:MemoryBlock;
 	
@@ -75,6 +76,7 @@ class WorkerConductorData
 	
 	@:isVar public var numTriangles(get, set):Int = 0;
 	@:isVar public var highestNumTextures(get, set):Int;
+	@:isVar public var numRanges(get, set):Int;
 	
 	public function new() 
 	{
@@ -111,6 +113,7 @@ class WorkerConductorData
 	inline function get_backIsStatic():Int				{ return memoryBlock.readInt(BACK_IS_STATIC); }
 	inline function get_numTriangles():Int				{ return memoryBlock.readInt(NUM_TRIANGLES); }
 	inline function get_highestNumTextures():Int		{ return memoryBlock.readInt(HIGHEST_NUM_TEXTURES); }
+	inline function get_numRanges():Int					{ return memoryBlock.readInt16(NUM_RANGES); }
 	
 	
 	inline function set_frameIndex(value:Int):Int {
@@ -239,6 +242,8 @@ class WorkerConductorData
 		return value;
 	}
 	
-	
-	
+	inline function set_numRanges(value:Int):Int {
+		memoryBlock.writeInt16(NUM_RANGES, value);
+		return value;
+	}
 }

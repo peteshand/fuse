@@ -60,7 +60,7 @@ class DirectBatch extends BaseBatch implements IBatch
 	
 	function writeLayerVertex(image:CoreImage)
 	{
-		if (!image.visible || image.alpha == 0) {
+		if (!image.visible || image.alpha == 0 || image.isMask) {
 			image.drawIndex = -1;
 			return;
 		}
@@ -109,38 +109,60 @@ class DirectBatch extends BaseBatch implements IBatch
 			vertexData.setTexture(image.textureIndex);
 		}
 		
-		if (FShader.ENABLE_MASKS){
+		if (FShader.ENABLE_MASKS) {
 			if (updateMask){
-				//if (image.mask != null) {
-					//// TODO: update value to point to correct batch textureIndex
-					//vertexData.setMaskTexture(0);
-					////trace("setBatchProps mask: " + image.objectId);
-					//
-				//}
-				//else {
+				if (image.mask != null) {
+					vertexData.setMaskTexture(image.mask.textureIndex);
+					//trace("setBatchProps mask: " + image.objectId);
+				}
+				else {
 					vertexData.setMaskTexture(-1);
-				//}
+				}
 			}
 		}
 		
 		if (updateUVs) {
 			//trace([coreTexture.uvTop, coreTexture.uvBottom]);
-			
 			//trace("updateUVs = " + updateUVs);
-			
 			vertexData.setUV(0, coreTexture.uvLeft,		coreTexture.uvBottom);	// bottom left
 			vertexData.setUV(1, coreTexture.uvLeft,		coreTexture.uvTop);		// top left
 			vertexData.setUV(2, coreTexture.uvRight,	coreTexture.uvTop);		// top right
 			vertexData.setUV(3, coreTexture.uvRight,	coreTexture.uvBottom);	// bottom right
-			
-			//if (FShader.ENABLE_MASKS && image.mask != null) {
-				//vertexData.setMaskUV(0, image.mask.coreTexture.uvLeft,	image.mask.coreTexture.uvBottom);	// bottom left
-				//vertexData.setMaskUV(1, image.mask.coreTexture.uvLeft,	image.mask.coreTexture.uvTop);	// top left
-				//vertexData.setMaskUV(2, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvTop);	// top right
-				//vertexData.setMaskUV(3, image.mask.coreTexture.uvRight,	image.mask.coreTexture.uvBottom);	// bottom right
-			//}
-			
 			//image.updateUVs = false;
+		}
+		
+		if (FShader.ENABLE_MASKS && image.mask != null) {
+			
+			//trace(image.mask.quadData);
+			//trace(image.quadData);
+			var offsetBottomLeftX:Float = calcOffsetX(image.mask.quadData.bottomLeftX, image.quadData.bottomLeftX, image);
+			var offsetBottomLeftY:Float = calcOffsetY(image.quadData.bottomLeftY, image.mask.quadData.bottomLeftY, image);
+			var offsetTopLeftX:Float = calcOffsetX(image.mask.quadData.topLeftX, image.quadData.topLeftX, image);
+			var offsetTopLeftY:Float = calcOffsetY(image.quadData.topLeftY, image.mask.quadData.topLeftY, image);
+			var offsetTopRightX:Float = calcOffsetX(image.mask.quadData.topRightX, image.quadData.topRightX, image);
+			var offsetTopRightY:Float = calcOffsetY(image.quadData.topRightY, image.mask.quadData.topRightY, image);
+			var offsetBottomRightX:Float = calcOffsetX(image.mask.quadData.bottomRightX, image.quadData.bottomRightX, image);
+			var offsetBottomRightY:Float = calcOffsetY(image.quadData.bottomRightY, image.mask.quadData.bottomRightY, image);
+			
+			var rot = image.mask.displayData.rotation / 180 * Math.PI;
+			var offsetBottomLeftX2:Float = (offsetBottomLeftX * -Math.cos(rot)) + (offsetBottomLeftY * Math.sin(rot));
+			var offsetBottomLeftY2:Float = (offsetBottomLeftX * Math.sin(rot)) + (offsetBottomLeftY * Math.cos(rot));
+			var offsetTopLeftX2:Float = (offsetTopLeftX * -Math.cos(rot)) + (offsetTopLeftY * Math.sin(rot));
+			var offsetTopLeftY2:Float =  (offsetTopLeftX * Math.sin(rot)) + (offsetTopLeftY * Math.cos(rot));
+			var offsetTopRightX2:Float = (offsetTopRightX * -Math.cos(rot)) + (offsetTopRightY * Math.sin(rot));
+			var offsetTopRightY2:Float =  (offsetTopRightX * Math.sin(rot)) + (offsetTopRightY * Math.cos(rot));
+			var offsetBottomRightX2:Float = (offsetBottomRightX * -Math.cos(rot)) + (offsetBottomRightY * Math.sin(rot));
+			var offsetBottomRightY2:Float =  (offsetBottomRightX * Math.sin(rot)) + (offsetBottomRightY * Math.cos(rot));
+			
+			//trace([image.mask.coreTexture.uvLeft - offsetBottomLeftX2,	image.mask.coreTexture.uvBottom - offsetBottomLeftY2]);
+			//trace([image.mask.coreTexture.uvLeft - offsetTopLeftX2,	image.mask.coreTexture.uvTop - offsetTopLeftY2]);
+			//trace([image.mask.coreTexture.uvRight - offsetTopRightX2, image.mask.coreTexture.uvTop - offsetTopRightY2]);
+			//trace([image.mask.coreTexture.uvRight - offsetBottomRightX2, image.mask.coreTexture.uvBottom - offsetBottomRightY2]);
+			
+			vertexData.setMaskUV(0, image.mask.coreTexture.uvLeft - offsetBottomLeftX2,	image.mask.coreTexture.uvBottom - offsetBottomLeftY2);	// bottom left
+			vertexData.setMaskUV(1, image.mask.coreTexture.uvLeft - offsetTopLeftX2,	image.mask.coreTexture.uvTop - offsetTopLeftY2);	// top left
+			vertexData.setMaskUV(2, image.mask.coreTexture.uvRight - offsetTopRightX2, image.mask.coreTexture.uvTop - offsetTopRightY2);	// top right
+			vertexData.setMaskUV(3, image.mask.coreTexture.uvRight - offsetBottomRightX2, image.mask.coreTexture.uvBottom - offsetBottomRightY2);	// bottom right
 		}
 		
 		if (updatePosition) {
@@ -177,13 +199,13 @@ class DirectBatch extends BaseBatch implements IBatch
 		//trace([image.isRotating, image.isMoving, image.isStatic]);
 	}
 	
-	function ResizeX(value:Float):Float
+	function calcOffsetX(maskPosX:Float, posX:Float, image:CoreImage) 
 	{
-		return ((value + 1) * (Fuse.current.stage.stageWidth / Fuse.MAX_TEXTURE_SIZE)) - 1;
+		return (posX - maskPosX) * 0.5 * Fuse.current.stage.stageWidth / image.mask.coreTexture.textureData.p2Width / image.mask.displayData.scaleX;
 	}
 	
-	function ResizeY(value:Float):Float
+	function calcOffsetY(posY:Float, maskPosY:Float, image:CoreImage) 
 	{
-		return ((value - 1) * (Fuse.current.stage.stageHeight / Fuse.MAX_TEXTURE_SIZE)) + 1;
+		return (posY - maskPosY) * 0.5 * Fuse.current.stage.stageHeight / image.mask.coreTexture.textureData.p2Height / image.mask.displayData.scaleY;
 	}
 }

@@ -23,8 +23,6 @@ class AtlasTextures
 	{
 		clear();
 		
-		//trace("HierarchyAssembler.hierarchy.length = " + HierarchyAssembler.hierarchy.length);
-		
 		for (i in 0...HierarchyAssembler.hierarchy.length) 
 		{
 			add(HierarchyAssembler.hierarchy[i].coreTexture);

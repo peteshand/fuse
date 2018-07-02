@@ -2,6 +2,7 @@ package fuse.core.assembler.layers;
 //import fuse.core.assembler.layers.changed.LayersHaveChanged;
 import fuse.core.assembler.layers.generate.GenerateLayers;
 import fuse.core.assembler.layers.layer.LayerBuffer;
+import fuse.core.assembler.vertexWriter.prep.PrepLayersForBatching;
 import fuse.core.assembler.layers.sort.SortLayers;
 import fuse.core.backend.displaylist.DisplayList;
 import fuse.core.backend.texture.CoreTextures;
@@ -17,7 +18,6 @@ class LayerBufferAssembler
 	static public function build() 
 	{
 		GenerateLayers.build();
-		//SortLayers.build();
-		
+		SortLayers.build();
 	}
 }
