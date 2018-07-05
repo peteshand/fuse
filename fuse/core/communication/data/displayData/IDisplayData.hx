@@ -1,4 +1,5 @@
 package fuse.core.communication.data.displayData;
+import fuse.display.BlendMode;
 import fuse.utils.Color;
 
 
@@ -50,7 +51,10 @@ typedef IDisplayData =
 	objectId:Int,
 	textureId:Int,
 	renderLayer:Int,
-	visible:Int/*,
+	visible:Int,
+	blendMode:Int
+	/*,
+	public var blendMode:BlendMode;
 	isStatic:Int,
 	isMoving:Int,
 	isRotating:Int*/

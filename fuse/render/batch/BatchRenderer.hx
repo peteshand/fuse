@@ -7,8 +7,7 @@ import fuse.core.communication.data.batchData.IBatchData;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.buffers.AtlasBuffers;
-import fuse.display.effects.BlendMode;
-import fuse.display.effects.BlendMode.BlendFactors;
+import fuse.render.blendMode.Context3DBlendMode;
 import fuse.render.texture.Context3DTexture;
 import fuse.render.buffers.Buffers;
 import fuse.render.debug.RenderDebugUtil;
@@ -83,13 +82,15 @@ class BatchRenderer
 		// ** // Context3DProgram.setProgram(shaderProgram.value.program);
 		Context3DRenderTarget.value = currentBatchData.renderTargetId;
 		
+		Context3DBlendMode.blendMode.value = currentBatchData.blendMode;
+		
 		// TODO: move this logic into worker
-		var newBlendMode:Int = 0;
-		if (currentBlendMode != newBlendMode) {
-			currentBlendMode = newBlendMode;
-			var blendFactors:BlendFactors = BlendMode.getBlendFactors(currentBlendMode);
-			context3D.setBlendFactors(blendFactors.sourceFactor, blendFactors.destinationFactor);
-		}
+		//var newBlendMode:Int = 0;
+		//if (currentBlendMode != newBlendMode) {
+			//currentBlendMode = newBlendMode;
+			//var blendFactors:BlendFactors = BlendMode.getBlendFactors(currentBlendMode);
+			//context3D.setBlendFactors(blendFactors.sourceFactor, blendFactors.destinationFactor);
+		//}
 		
 		#if (air||flash)
 			var firstIndex = quadCount * 6;

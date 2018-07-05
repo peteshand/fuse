@@ -16,6 +16,7 @@ class Image extends DisplayObject
 {
 	@:isVar public var texture(default, set):AbstractTexture;
 	@:isVar public var renderLayer(default, set):Int;
+	@:isVar public var blendMode(get, set):BlendMode;
 	
 	public function new(texture:AbstractTexture) 
 	{
@@ -77,5 +78,21 @@ class Image extends DisplayObject
 	{
 		this.width = texture.width;
 		this.height = texture.height;
+	}
+	
+	function get_blendMode():BlendMode 
+	{
+		return blendMode;
+	}
+	
+	function set_blendMode(value:BlendMode):BlendMode 
+	{
+		if (blendMode != value) {
+			displayData.blendMode = blendMode = value;
+			//updateBlend = true; // new param needed?
+			updateColour = true;
+			updateStaticBackend();
+		}
+		return value;
 	}
 }

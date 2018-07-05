@@ -18,6 +18,7 @@ class BaseBatch
 	public var renderables:GcoArray<ICoreRenderable>;
 	public var lastRenderables:GcoArray<ICoreRenderable>;
 	public var renderTarget:Null<Int>;
+	public var blendMode:Null<Int> = null;
 	
 	static var count:Int = 0;
 	var batchId:Int;
@@ -50,8 +51,10 @@ class BaseBatch
 		var textureIndex:Int = getTextureIndex(renderable);
 		//trace("textureIndex = " + textureIndex);
 		if (textureIndex == -1) return false;
-		
 		renderable.textureIndex = textureIndex;
+		
+		if (blendMode != null && blendMode != renderable.blendMode) return false;
+		blendMode = renderable.blendMode;
 		
 		if (renderTargetChanged(renderTarget)) return false;
 		
@@ -89,6 +92,8 @@ class BaseBatch
 		batchData.startIndex = VertexWriter.VERTEX_COUNT;
 		
 		//trace("batchTextures.textureIds = " + batchTextures.textureIds);
+		
+		batchData.blendMode = blendMode;
 		
 		batchData.textureId1 = batchTextures.textureId1;
 		batchData.textureId2 = batchTextures.textureId2;

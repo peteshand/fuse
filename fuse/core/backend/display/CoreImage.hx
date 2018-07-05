@@ -33,6 +33,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public var isMask:Bool = false;
 	public var maskOf:Array<CoreImage> = [];
 	
+	public var blendMode	:Int = 0;
 	public var renderLayer	:Int = 0;
 	
 	public var drawIndex	:Int = -1;
@@ -72,7 +73,9 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		}
 		
 		//trace([isRotating, isMoving, isStatic]);
-		
+		if (updateColour) {
+			blendMode = displayData.blendMode;
+		}
 		if (updateTexture || updateVisible) textureId = displayData.textureId;
 		
 		if (updatePosition || updateVisible || this.isMask) {

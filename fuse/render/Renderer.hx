@@ -4,6 +4,7 @@ import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.texture.Textures;
 import fuse.render.batch.BatchRenderer;
+import fuse.render.blendMode.Context3DBlendMode;
 import fuse.render.buffers.Buffer;
 import fuse.render.buffers.Buffers;
 import fuse.render.shaders.FShaders;
@@ -63,6 +64,7 @@ class Renderer
 		//trace("supports8kTexture = " + Reflect.field(Context3D, "supports8kTexture"));
 		//trace("supports8kTexture = " + Reflect.field(context3D, "supports8kTexture"));
 		
+		Context3DBlendMode.init(context3D);
 		Buffers.init(context3D);
 		FShaders.init(context3D);
 		

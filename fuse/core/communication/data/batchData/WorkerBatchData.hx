@@ -13,21 +13,23 @@ class WorkerBatchData implements IBatchData
 	static public inline var CLEAR_RENDER_TARGET:Int = 4;
 	static public inline var START_INDEX:Int = 6;
 	static public inline var LENGTH_INDEX:Int = 8;
-	static public inline var TEXTURE_ID1:Int = 10;
-	static public inline var TEXTURE_ID2:Int = 12;
-	static public inline var TEXTURE_ID3:Int = 14;
-	static public inline var TEXTURE_ID4:Int = 16;
-	static public inline var TEXTURE_ID5:Int = 18;
-	static public inline var TEXTURE_ID6:Int = 20;
-	static public inline var TEXTURE_ID7:Int = 22;
-	static public inline var TEXTURE_ID8:Int = 24;
-	static public inline var NUM_TEXTURES:Int = 26;
-	static public inline var NUM_ITEMS:Int = 28;
-	static public inline var WIDTH:Int = 30;
-	static public inline var HEIGHT:Int = 32;
-	static public inline var SKIP:Int = 34;
 	
-	public static inline var BYTES_PER_ITEM:Int = 36;
+	static public inline var BLEND_MODE_INDEX:Int = 10;
+	static public inline var TEXTURE_ID1:Int = 12;
+	static public inline var TEXTURE_ID2:Int = 14;
+	static public inline var TEXTURE_ID3:Int = 16;
+	static public inline var TEXTURE_ID4:Int = 18;
+	static public inline var TEXTURE_ID5:Int = 20;
+	static public inline var TEXTURE_ID6:Int = 22;
+	static public inline var TEXTURE_ID7:Int = 24;
+	static public inline var TEXTURE_ID8:Int = 26;
+	static public inline var NUM_TEXTURES:Int = 28;
+	static public inline var NUM_ITEMS:Int = 30;
+	static public inline var WIDTH:Int = 32;
+	static public inline var HEIGHT:Int = 34;
+	static public inline var SKIP:Int = 36;
+	
+	public static inline var BYTES_PER_ITEM:Int = 38;
 	public static inline var BUFFER_SIZE:Int = 10000;
 	
 	public var memoryBlock:MemoryBlock;
@@ -38,6 +40,7 @@ class WorkerBatchData implements IBatchData
 	@:isVar public var clearRenderTarget(get, set):Int;
 	@:isVar public var startIndex(get, set):Int;
 	@:isVar public var length(get, set):Int;
+	@:isVar public var blendMode(get, set):Int;
 	
 	@:isVar public var textureIds(get, null):Array<Int>;
 	@:isVar public var textureId1(get, set):Int;
@@ -64,6 +67,8 @@ class WorkerBatchData implements IBatchData
 	function get_renderTargetId():Int	{ return memoryBlock.readInt(RENDER_TARGET_ID); }
 	function get_clearRenderTarget():Int	{ return memoryBlock.readInt16(CLEAR_RENDER_TARGET); }
 	function get_startIndex():Int		{ return memoryBlock.readInt16(START_INDEX); }
+	
+	function get_blendMode():Int		{ return memoryBlock.readInt16(BLEND_MODE_INDEX); }
 	function get_length():Int			{ return memoryBlock.readInt16(LENGTH_INDEX); }
 	function get_textureId1():Int		{ return memoryBlock.readInt16(TEXTURE_ID1); }
 	function get_textureId2():Int		{ return memoryBlock.readInt16(TEXTURE_ID2); }
@@ -110,6 +115,11 @@ class WorkerBatchData implements IBatchData
 	
 	function set_length(value:Int):Int {
 		memoryBlock.writeInt16(LENGTH_INDEX, value);
+		return value;
+	}
+	
+	function set_blendMode(value:Int):Int {
+		memoryBlock.writeInt16(BLEND_MODE_INDEX, value);
 		return value;
 	}
 	

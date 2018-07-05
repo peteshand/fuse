@@ -10,6 +10,6 @@ interface ICoreRenderable
 	var coreTexture:CoreTexture;
 	//var textureIndex:Int;
 	var textureIndex(get, set):Int;
-	
+	var blendMode:Int;
 	var sourceTextureId(get, null):Int;
 }
