@@ -96,20 +96,22 @@ class MainThread extends ThreadBase
 	
 	function OnContextCreated() 
 	{
-		//Fuse.current.cleanContext = context3DSetup.sharedContext;
-		
-		this.stage = fuse.stage = new Stage();
 		renderer = new Renderer(context3DSetup.context3D, context3DSetup.sharedContext);
-		
 		AtlasBuffers.init(Fuse.MAX_TEXTURE_SIZE, Fuse.MAX_TEXTURE_SIZE);
 		LayerCacheBuffers.init(Fuse.MAX_TEXTURE_SIZE, Fuse.MAX_TEXTURE_SIZE);
-		
-		root = Type.createInstance(rootClass, []);
-		root.stage = fuse.stage;
-		
-		stage.addChild(root);
-		
 		setupComplete = true;
+		
+		if (Std.is(root, Stage)) {
+			root = Type.createInstance(rootClass, []);
+			this.stage = fuse.stage = untyped root;
+		}
+		else {
+			this.stage = new Stage();
+			root = Type.createInstance(rootClass, []);
+		}
+		stage.addChild(root);
+		renderer.resize();
+		
 		dispatchEvent(new Event(FuseEvent.ROOT_CREATED));
 	}
 	
@@ -136,8 +138,6 @@ class MainThread extends ThreadBase
 		
 		Fuse.current.conductorData.frontStaticCount++;
 		workerSetup.sendQue();
-		
-		TextField.updateDirtyTextFields();
 		
 		workerSetup.lock();
 		workerSetup.update();
@@ -174,7 +174,6 @@ class MainThread extends ThreadBase
 			//stage.forceRedraw();
 		}
 		
-		//trace("OnTick");
 		Fuse.current.enterFrame.dispatch();
 		
 		workerSetup.unlock();

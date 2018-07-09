@@ -12,7 +12,7 @@ import openfl.errors.Error;
 @:access(fuse.texture)
 class MovieClip extends Image
 {
-	var textures(default, set):Array<AbstractTexture>;
+	public var textures(default, set):Array<AbstractTexture>;
 	var tick:Int = 0;
 	var normalized:Float = 0;
 	var fsp:Int;

@@ -62,6 +62,7 @@ class DisplayList
 	public function addChildAt(objectId:Int, displayType:Int, parentId:Int, addAtIndex:Int) 
 	{
 		var parent:CoreInteractiveObject = getParent(parentId);
+		
 		if (parent == null && objectId != 0) {
 			return;
 		}
@@ -71,7 +72,6 @@ class DisplayList
 		display.init(objectId);
 		
 		if (parent != null) {
-			//trace("add display: " + objectId);
 			parent.addChildAt(display, addAtIndex);
 		}
 		map.set(display.objectId, display);
@@ -158,14 +158,9 @@ class DisplayList
 	
 	public function setStatic(payload:StaticData) 
 	{
-		//trace("payload.objectId = " + payload.objectId);
 		var display:CoreDisplayObject = untyped map.get(payload.objectId);
 		if (display == null) return;
-		//display.isStatic = payload.isStatic;
-		//display.isMoving = payload.isMoving;
-		//display.isRotating = payload.isRotating;
 		
-		//display.updateAll = payload.updateAll;
 		display.updateAny = payload.updateAny;
 		display.updatePosition = payload.updatePosition;
 		display.updateRotation = payload.updateRotation;
@@ -173,9 +168,5 @@ class DisplayList
 		display.updateVisible = payload.updateVisible;
 		display.updateAlpha = payload.updateAlpha;
 		display.updateTexture = payload.updateTexture;
-		
-		//trace(["setStatic:", display.isRotating, display.isMoving, display.isStatic]);
-		
-		//Fuse.current.conductorData.backIsStatic = 0;
 	}
 }

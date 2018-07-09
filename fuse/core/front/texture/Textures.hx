@@ -48,7 +48,7 @@ class Textures
 	static private function createDefaultTextures() 
 	{
 		//#if debug
-		var blank:BitmapData = new BitmapData(512, 512, true, 0x990000FF);
+		var blank:BitmapData = new BitmapData(512, 512, true, 0x9900FF00);
 		//#else
 		//var blank:BitmapData = new BitmapData(32, 32, true, 0x00000000);
 		//#end

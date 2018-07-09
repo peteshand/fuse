@@ -51,7 +51,9 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	override public function init(objectId:Int) 
 	{
+		trace("init: " + objectId);
 		super.init(objectId);
+		trace("displayData.textureId = " + displayData.textureId);
 		textureId = displayData.textureId;
 	}
 	
@@ -102,9 +104,10 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	inline function get_textureId():Int { return textureId; }
 	
 	function set_textureId(value:Int):Int {
+		trace("value = " + value);
 		if (textureId != value){
 			textureId = value;
-			
+			trace("textureId = " + textureId);
 			if (coreTexture != null && textureId == -1) {
 				coreTexture.onTextureChange.remove(OnTextureChange);
 				Core.textures.deregister(coreTexture.textureData.textureId);
@@ -120,6 +123,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 			//textureChanged = true;
 			//updateUVs = true;
 		}
+		trace("coreTexture = " + coreTexture);
 		return value;
 	}
 	
@@ -157,7 +161,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	override public function buildHierarchy()
 	{
-		if (displayData.visible == 1 || this.isMask){
+		if (displayData.visible == 1 || this.isMask) {
 			HierarchyAssembler.hierarchy.push(this);
 		}
 	}

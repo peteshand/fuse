@@ -80,7 +80,6 @@ class DisplayObjectContainer extends InteractiveObject
 	override function setParent(value:DisplayObjectContainer):Void 
 	{
 		super.setParent(value);
-		
 		if (parent != null) {
 			for (i in 0...children.length) children[i].setParent(this);
 		}

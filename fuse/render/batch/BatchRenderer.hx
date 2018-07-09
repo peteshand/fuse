@@ -53,6 +53,7 @@ class BatchRenderer
 		// ** // if (numItemsInShaderProgram == 0) return;
 		if (conductorData.highestNumTextures == 0) return;
 		
+//		trace("numItems = " + currentBatchData.numItems);
 		//trace("startIndex = " + currentBatchData.startIndex);
 		//trace("quadCount = " + quadCount);
 		//trace(quadCount * VertexData.BYTES_PER_ITEM);

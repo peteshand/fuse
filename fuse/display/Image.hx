@@ -5,6 +5,7 @@ import fuse.display.DisplayObject;
 import fuse.display.Image;
 import fuse.texture.IBaseTexture;
 import fuse.texture.AbstractTexture;
+import fuse.utils.Align;
 import openfl.errors.Error;
 
 
@@ -78,6 +79,7 @@ class Image extends DisplayObject
 	{
 		this.width = texture.width;
 		this.height = texture.height;
+		updateAlignment();
 	}
 	
 	function get_blendMode():BlendMode 

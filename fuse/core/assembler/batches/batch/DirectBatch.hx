@@ -130,7 +130,7 @@ class DirectBatch extends BaseBatch implements IBatch
 			vertexData.setUV(3, coreTexture.uvRight,	coreTexture.uvBottom);	// bottom right
 			//image.updateUVs = false;
 		}
-		
+		trace("image.mask = " + image.mask);
 		if (FShader.ENABLE_MASKS && image.mask != null) {
 			
 			//trace(image.mask.quadData);

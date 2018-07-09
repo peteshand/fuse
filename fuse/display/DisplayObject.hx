@@ -5,6 +5,7 @@ import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.input.Touch;
 import fuse.display.Stage;
+import fuse.utils.Align;
 import fuse.utils.Color;
 import fuse.Fuse;
 import mantle.notifier.Notifier;
@@ -57,10 +58,6 @@ class DisplayObject
 	@:isVar public var mask(default, set):Image;
 	
 	//@:isVar public var blendMode(get, set):BlendMode;
-	@:isVar public var layerIndex(get, set):Null<Int> = null;
-	//@:isVar var isRotating(default, set):Int = 1;
-	//@:isVar var isMoving(default, set):Int = 1;
-	//@:isVar var isStatic(default, set):Int = 0;
 	public var displayType:DisplayType = DisplayType.DISPLAY_OBJECT;
 	
 	// var updateUVs:Bool = false;
@@ -73,8 +70,12 @@ class DisplayObject
 	var updateVisible:Bool = true;
 	var updateAlpha:Bool = true;
 	
+	var horizontalAlign:Align;
+	var verticalAlign:Align;
+	
 	public function new()
 	{
+		stage = Fuse.current.stage;
 		//isRotating.add(OnRotationChange);
 		//isMoving.add(OnMovingChange);
 		//isStatic.add(OnStaticChange);
@@ -94,8 +95,6 @@ class DisplayObject
 		visible = true;
 		
 		displayData.textureId = -1;
-		
-		layerIndex = 0;
 		
 		//isStatic = 0;
 		
@@ -166,12 +165,6 @@ class DisplayObject
 	
 	inline function get_alpha():Float { return alpha; }
 	function get_visible():Bool { return visible; }
-	
-	//inline function get_blendMode():BlendMode { return blendMode; }
-	inline function get_layerIndex():Null<Int> { return layerIndex; }
-	//inline function get_isStatic():Int { return isStatic; }
-	//inline function get_isMoving():Int { return isMoving; }
-	
 	
 	
 	inline function set_touchable(value:Bool):Bool 
@@ -361,30 +354,6 @@ class DisplayObject
 		return value;
 	}
 	
-	//inline function set_blendMode(value:BlendMode):BlendMode { 
-		//if (blendMode != value){
-			///*displayData.blendMode =*/ blendMode = value;
-			//shaderPipeline = BlendModeUtil.applyBlend(blendMode);
-			//isStatic = 0;
-		//}
-		//return value;
-	//}
-	
-	//override function set_objectId(value:Int):Int 
-	//{
-		//return displayData.objectId = value;
-	//}
-	
-	inline function set_layerIndex(value:Null<Int>):Null<Int> { 
-		if (layerIndex != value){
-			//if (layerIndex != null) Kea.current.logic.displayList.removeLayerIndex(layerIndex);
-			layerIndex = value;
-			//Kea.current.logic.displayList.addLayerIndex(layerIndex);
-			//isStatic = 0;
-		}
-		return value;
-	}
-	
 	function setStage(value:Stage):Stage 
 	{
 		if (stage != value) {
@@ -407,20 +376,28 @@ class DisplayObject
 	
 	function setParent(parent:DisplayObjectContainer):Void 
 	{
-		if (this.parent == parent) return;
+		if (this.parent == parent) {
+			Fuse.current.workerSetup.removeChild(this);
+			onRemove.dispatch(this);
+		}
 		this.parent = parent;
-		
 		if (parent != null && parent.stage != null) {
-			Fuse.current.workerSetup.addChild(this, parent);
-			onAdd.dispatch(this);
+			if (this != parent){
+				Fuse.current.workerSetup.addChild(this, parent);
+				onAdd.dispatch(this);
+			}
 		}
 		else {
 			Fuse.current.workerSetup.removeChild(this);
 			onRemove.dispatch(this);
 		}
 		
-		if (parent == null) setStage(null);
-		else setStage(parent.stage);
+		if (parent == null) {
+			setStage(null);
+		}
+		else {
+			setStage(parent.stage);
+		}
 	}
 	
 	//function forceRedraw():Void
@@ -452,5 +429,26 @@ class DisplayObject
 	function set_mask(value:Image):Image 
 	{
 		return value;
+	}
+	
+	public function alignPivot(horizontalAlign:Align = Align.CENTER, verticalAlign:Align = Align.CENTER) 
+	{
+		this.verticalAlign = verticalAlign;
+		this.horizontalAlign = horizontalAlign;
+		updateAlignment();
+	}
+	
+	function updateAlignment() 
+	{
+		if (verticalAlign != null) {
+			if (verticalAlign == Align.TOP) pivotY = 0;
+			if (verticalAlign == Align.BOTTOM) pivotY = height;
+			if (verticalAlign == Align.CENTER) pivotY = height / 2;
+		}
+		if (horizontalAlign != null) {
+			if (horizontalAlign == Align.LEFT) pivotX = 0;
+			if (horizontalAlign == Align.RIGHT) pivotX = width;
+			if (horizontalAlign == Align.CENTER) pivotX = width / 2;
+		}
 	}
 }

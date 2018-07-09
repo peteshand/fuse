@@ -2,12 +2,14 @@ package fuse.text;
 
 import fuse.texture.BaseTexture;
 import fuse.texture.BitmapTexture;
+import fuse.utils.Align;
 import fuse.utils.Color;
 import fuse.display.Image;
 import fuse.texture.IBaseTexture;
 import fuse.utils.GcoArray;
 import fuse.utils.PowerOfTwo;
 import lime.text.UTF8String;
+import mantle.time.EnterFrame;
 import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
 import openfl.text.AntiAliasType;
@@ -24,9 +26,27 @@ import openfl.text.TextLineMetrics;
  */
 class TextField extends Image
 {
-	static var dirtyPropItems = new GcoArray<TextField>();
+	static var dirtyItems:GcoArray<TextField>;
+	
+	static function init():Void
+	{
+		if (dirtyItems != null) return;
+		dirtyItems = new GcoArray<TextField>();
+		EnterFrame.add(updateDirtyTextFields);
+	}
+	
+	static function updateDirtyTextFields() 
+	{
+		for (i in 0...dirtyItems.length) 
+		{
+			dirtyItems[i].update();
+		}
+		dirtyItems.clear();
+	}
+	
 	@:isVar var dirtyProp(default, set):Bool = false;
 	@:isVar var dirtySize(default, set):Bool = false;
+	@:isVar var dirty(default, set):Bool = false;
 	
 	var nativeTextField:NativeTextField;
 	var bitmapdata:BitmapData;
@@ -76,6 +96,7 @@ class TextField extends Image
 	
 	public function new(width:Int, height:Int) 
 	{
+		TextField.init();
 		nativeTextField = new NativeTextField();
 		//nativeTextField.width = width;
 		//nativeTextField.height = height;
@@ -87,7 +108,8 @@ class TextField extends Image
 		
 		this.width = width;// nativeTextField.width;// = width;
 		this.height = height;// nativeTextField.height;// = height;
-		//update();
+		
+		update();
 	}
 	
 	public function appendText(text:String):Void
@@ -365,9 +387,7 @@ class TextField extends Image
 	{
 		if (dirtyProp != value) {
 			dirtyProp = value;
-			if (dirtyProp && !dirtySize) {
-				dirtyPropItems.push(this);
-			}
+			if (dirtyProp) this.dirty = true;
 		}
 		return value;
 	}
@@ -376,20 +396,18 @@ class TextField extends Image
 	{
 		if (dirtySize != value) {
 			dirtySize = value;
-			if (dirtySize && !dirtyProp) {
-				dirtyPropItems.push(this);
-			}
+			if (dirtySize) this.dirty = true;
 		}
 		return value;
 	}
 	
-	static function updateDirtyTextFields() 
+	function set_dirty(value:Bool):Bool 
 	{
-		for (i in 0...dirtyPropItems.length) 
-		{
-			dirtyPropItems[i].update();
+		if (dirty != value) {
+			dirty = value;
+			dirtyItems.push(this);
 		}
-		dirtyPropItems.clear();
+		return value;
 	}
 	
 	public function update():Void
@@ -415,6 +433,7 @@ class TextField extends Image
 		//updateAll = true;
 		dirtySize = false;
 		dirtyProp = false;
+		dirty = false;
 	}
 	
 	function get_baseBmdTexture():BitmapTexture 
@@ -431,5 +450,19 @@ class TextField extends Image
 	{
 		if (texture != null) texture.directRender = value;
 		return directRender = value;
+	}
+	
+	override function updateAlignment() 
+	{
+		if (verticalAlign != null) {
+			if (verticalAlign == Align.TOP) pivotY = 0;
+			if (verticalAlign == Align.BOTTOM) pivotY = textHeight;
+			if (verticalAlign == Align.CENTER) pivotY = textHeight / 2;
+		}
+		if (horizontalAlign != null) {
+			if (horizontalAlign == Align.LEFT) pivotX = 0;
+			if (horizontalAlign == Align.RIGHT) pivotX = textWidth;
+			if (horizontalAlign == Align.CENTER) pivotX = textWidth / 2;
+		}
 	}
 }

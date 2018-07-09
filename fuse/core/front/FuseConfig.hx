@@ -9,6 +9,6 @@ typedef FuseConfig =
 	?useCacheLayers:Null<Bool>,
 	?debugTextureAtlas:Null<Bool>,
 	?debugSkipRender:Null<Bool>,
-	frameRate:Int
-	
+	?frameRate:Int,
+	?autoStart:Null<Bool>
 }

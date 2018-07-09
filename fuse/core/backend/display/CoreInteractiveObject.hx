@@ -118,7 +118,7 @@ class CoreInteractiveObject extends CoreDisplayObject
 	
 	override public function buildHierarchy()
 	{
-		if (displayData.visible == 1){
+		if (displayData.visible == 1) {
 			for (i in 0...children.length) children[i].buildHierarchy();
 		}
 	}

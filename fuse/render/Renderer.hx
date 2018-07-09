@@ -42,8 +42,8 @@ class Renderer
 		scissorRectangle = new Rectangle();
 		
 		if (!sharedContext){
-			Resize.add(OnResize);
-			OnResize();
+			Resize.add(resize);
+			resize();
 		}
 		
 		context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
@@ -71,9 +71,10 @@ class Renderer
 		//ShaderPrograms.clear();
 	}
 	
-	function OnResize() 
+	public function resize() 
 	{
-		context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0, false);
+		if (Fuse.current.stage == null) return;
+		context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0, true);
 		scissorRectangle.setTo(0, 0, Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight);
 		//context3D.setScissorRectangle(scissorRectangle);
 	}

@@ -202,7 +202,7 @@ class FShader
 			// RGBA from 4 available textures ///////////////////////////////
 			for (j in 0...numTextures) 
 			{
-				agal += "tex ft0, v1.xy, fs" + j + " <2d,clamp,linear>	\n";
+				agal += "tex ft0, v1.xy, fs" + j + " <2d,clamp,nearest>	\n";
 				agal += "mul ft0.xyzw, ft0.xyzw, " + rgbaIndex[j] + "	\n";
 				if (j == 0)	agal += "mov ft1, ft0						\n";
 				else 		agal += "add ft1, ft1, ft0					\n";
@@ -226,7 +226,7 @@ class FShader
 			if (FShader.ENABLE_MASKS){
 				for (j in 0...numTextures) 
 				{
-					agal += "tex ft0, v1.zw, fs" + j + " <2d,clamp,linear>	\n";
+					agal += "tex ft0, v1.zw, fs" + j + " <2d,clamp,nearest>	\n";
 					agal += "mul ft0.w, ft0.w, " + maskIndex[j] + 		"	\n";
 					if (j == 0)	agal += "mov ft2, ft0						\n";
 					else 		agal += "add ft2, ft2, ft0					\n";

@@ -35,7 +35,7 @@ class Fuse extends EventDispatcher
 	
 	public static var skipUnchangedFrames:Bool = true;
 	
-	public function new(rootClass:Class<DisplayObject>, fuseConfig:FuseConfig, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
+	public function new(rootClass:Class<DisplayObject>, fuseConfig:FuseConfig=null, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
 	{	
 		MessageManager.init();
 		
@@ -58,6 +58,13 @@ class Fuse extends EventDispatcher
 			FrameBudget.endFrame();
 		}, false, 1000);
 		super();
+		
+		if (fuseConfig.autoStart == true) {
+			this.addEventListener(FuseEvent.ROOT_CREATED, function(e:Event) {
+				this.start();
+			});
+			this.init();
+		}
 	}
 	
 	public function init():Void

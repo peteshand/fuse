@@ -59,6 +59,7 @@ class FrontMouseInput
 	
 	function OnMouse(e:MouseEvent):Void 
 	{
+		if (Fuse.current.stage == null) return;
 		var touch:Touch = getMouseData(0);
 		touch.x = e.stageX + Fuse.current.stage.camera.x;
 		touch.y = e.stageY + Fuse.current.stage.camera.y;

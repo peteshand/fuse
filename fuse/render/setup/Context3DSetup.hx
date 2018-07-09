@@ -24,7 +24,7 @@ class Context3DSetup
 	var stage3D:Stage3D;
 	var profiles:Array<Context3DProfile> = [];
 	var renderMode:Context3DRenderMode;
-	var targetProfile:Context3DProfile;
+	var targetProfile:Context3DProfile = Context3DProfile.BASELINE;
 	var targetProfiles:Array<Context3DProfile>;
 	
 	public function new() 
