@@ -145,7 +145,7 @@ class CoreEntryPoint
 	
 	private function OnSetTouchable(payload:TouchableMsg):Void 
 	{
-		Touchables.setTouchable(payload.objectId, payload.touchable);
+		Touchables.setTouchable(payload);
 	}
 	
 	private function OnSetStatic(payload:StaticData):Void 

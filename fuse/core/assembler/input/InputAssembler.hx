@@ -1,9 +1,9 @@
 package fuse.core.assembler.input;
 
+import fuse.core.utils.Calc;
 import fuse.display.geometry.Bounds;
 import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
-import fuse.core.backend.display.CoreImage;
 import fuse.core.input.FrontMouseInput;
 import fuse.core.backend.Core;
 import fuse.core.input.Touch;
@@ -83,15 +83,13 @@ class InputAssemblerObject
 		Touchables.touchables.sort(sortTouchables);
 		
 		var j:Int = Touchables.touchables.length - 1;
-		while (j >= 0) 
+		while (j >= 0)
 		{
-			var display:CoreImage = Touchables.touchables[j];
+			var display:CoreDisplayObject = Touchables.touchables[j];
 			// TODO: non visible displays should not be in the touchables array //trace(display.visible);
-			if (display.drawIndex > -1)
+			if (display.visible == true)
 			{
-				var distance:Float = getDistance(display, touch);
-				
-				if (distance < display.diagonal * 0.5) {
+				if (display.insideBounds(touch.x, touch.y)) {
 					var triangleSum:Float = getTriangleSum(display, touch);
 					if (triangleSum <= display.area + 1) {
 						
@@ -132,32 +130,25 @@ class InputAssemblerObject
 		}
 	}
 	
-	function sortTouchables(i1:CoreImage, i2:CoreImage):Int
+	function sortTouchables(i1:CoreDisplayObject, i2:CoreDisplayObject):Int
 	{
-		if (i1.drawIndex > i2.drawIndex) return 1;
-		else if (i1.drawIndex < i2.drawIndex) return -1;
+		// TODO: take into account renderLayerIndex
+		if (i1.hierarchyIndex > i2.hierarchyIndex) return 1;
+		else if (i1.hierarchyIndex < i2.hierarchyIndex) return -1;
 		else return 0;
 	}
 	
-	function getDistance(display:CoreImage, touch:Touch) 
+	function getDistance(display:CoreDisplayObject, touch:Touch) 
 	{
 		return Math.sqrt(
-			Math.pow(display.quadData.middleX - pixelToScreenX(touch.x), 2) + 
-			Math.pow(display.quadData.middleY - pixelToScreenY(touch.y), 2)
+			Math.pow(display.quadData.middleX - Calc.pixelToScreenX(touch.x), 2) + 
+			Math.pow(display.quadData.middleY - Calc.pixelToScreenY(touch.y), 2)
 		);
 	} 
 	
-	inline function pixelToScreenX(pixelValue:Float):Float
-	{
-		return ((pixelValue / Fuse.current.stage.stageWidth) - 0.5) * 2;
-	}
 	
-	inline function pixelToScreenY(pixelValue:Float):Float
-	{
-		return ((pixelValue / Fuse.current.stage.stageHeight) - 0.5) * -2;
-	}
 	
-	function getTriangleSum(display:CoreImage, touch:Touch) 
+	function getTriangleSum(display:CoreDisplayObject, touch:Touch) 
 	{
 		var t1:Float = triangleArea(touch,
 			display.quadData.bottomLeftX, display.quadData.bottomLeftY,

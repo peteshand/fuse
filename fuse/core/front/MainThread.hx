@@ -106,7 +106,7 @@ class MainThread extends ThreadBase
 			this.stage = fuse.stage = untyped root;
 		}
 		else {
-			this.stage = new Stage();
+			this.stage = fuse.stage = new Stage();
 			root = Type.createInstance(rootClass, []);
 		}
 		stage.addChild(root);

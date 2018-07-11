@@ -45,13 +45,11 @@ class BaseBitmapTexture extends BaseTexture
 		//
 		//if (height == null) this.height = bitmapData.height;
 		//else this.height = height;
-		trace("a2");
 		super(w, h, queUpload, onTextureUploadCompleteCallback);
 	}
 	
 	override public function upload() 
 	{
-		trace("a3");
 		createNativeTexture();
 		update(bitmapData);
 	}
@@ -66,7 +64,6 @@ class BaseBitmapTexture extends BaseTexture
 		//	uploadFromBitmapDataAsync(bitmapData, 0);
 		//}
 		//else {
-			trace("a4");
 			nativeTexture.uploadFromBitmapData(bitmapData, 0);
 			OnTextureUploadComplete(null);
 		//}

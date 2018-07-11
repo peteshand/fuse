@@ -7,6 +7,7 @@ import openfl.display.BitmapData;
 import openfl.display3D.Context3DTextureFormat;
 import openfl.errors.Error;
 import openfl.events.Event;
+import openfl.events.NetStatusEvent;
 import openfl.net.NetStream;
 import openfl.utils.ByteArray;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
@@ -42,9 +43,21 @@ class BaseVideoTexture extends BaseTexture
 	{
 		this.netStream = netStream;
 		this.netStream.client = { onMetaData: onMetaData };
+		this.netStream.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
 		
 		super(width, height, false, onTextureUploadCompleteCallback, false);
 		this.directRender = true;
+	}
+	
+	private function OnEvent(e:NetStatusEvent):Void 
+	{
+		var info:NetStatusInfo = e.info;
+		if (info.code == "NetStream.Buffer.Empty") {
+			//nativeVideoTexture.addEventListener(TEXTURE_READY, function(e:Event) {
+				textureData.textureAvailable = 1;
+			//});
+			//nativeVideoTexture.attachNetStream(netStream);
+		}
 	}
 	
 	public function onMetaData(videoMetaData:VideoMetaData) 
@@ -90,4 +103,10 @@ typedef VideoMetaData =
 	height:Int,
 	duration:Float,
 	videoframerate:Int
+}
+
+typedef NetStatusInfo = 
+{
+	level:String,
+	code:String
 }

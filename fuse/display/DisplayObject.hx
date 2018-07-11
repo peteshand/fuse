@@ -8,6 +8,7 @@ import fuse.display.Stage;
 import fuse.utils.Align;
 import fuse.utils.Color;
 import fuse.Fuse;
+import fuse.utils.drag.DragUtil;
 import mantle.notifier.Notifier;
 import mantle.notifier.SNotifier;
 import msignal.Signal.Signal0;
@@ -72,6 +73,7 @@ class DisplayObject
 	
 	var horizontalAlign:Align;
 	var verticalAlign:Align;
+	var dragUtil:DragUtil;
 	
 	public function new()
 	{
@@ -450,5 +452,17 @@ class DisplayObject
 			if (horizontalAlign == Align.RIGHT) pivotX = width;
 			if (horizontalAlign == Align.CENTER) pivotX = width / 2;
 		}
+	}
+	
+	
+	public function startDrag() 
+	{
+		if (dragUtil == null) dragUtil = new DragUtil(this);
+		dragUtil.startDrag();
+	}
+	
+	public function stopDrag() 
+	{
+		dragUtil.stopDrag();
 	}
 }

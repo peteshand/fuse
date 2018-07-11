@@ -42,7 +42,7 @@ class CoreDisplayObject
 	var parentNonStatic		:Bool;
 	public var alpha:Float = 1;
 	public var visible:Bool = true;
-	
+	public var hierarchyIndex:Int = -1;
 	//public var visible(get, null):Bool;
 	//public var updateUVs:Bool = false;
 	//public var updateTexture:Bool = false;
@@ -176,7 +176,8 @@ class CoreDisplayObject
 	
 	public function buildTransformActions()
 	{
-		if (this.visible){
+		if (this.visible) {
+			hierarchyIndex = HierarchyAssembler.transformActions.length;
 			HierarchyAssembler.transformActions.push(calculateTransform);
 			HierarchyAssembler.transformActions.push(popTransform);
 		}
@@ -248,5 +249,11 @@ class CoreDisplayObject
 	function set_updateAny(value:Bool):Bool 
 	{
 		return updateAny = value;
+	}
+	
+	public function insideBounds(x:Float, y:Float) 
+	{
+		// TODO: implement
+		return false;
 	}
 }

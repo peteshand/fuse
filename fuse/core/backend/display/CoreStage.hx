@@ -1,5 +1,6 @@
 package fuse.core.backend.display;
 
+import fuse.core.utils.Calc;
 import fuse.core.utils.Pool;
 
 /**
@@ -24,5 +25,10 @@ class CoreStage extends CoreInteractiveObject
 	override public function recursiveReleaseToPool()
 	{
 		
+	}
+	
+	override public function insideBounds(x:Float, y:Float) 
+	{
+		return true;
 	}
 }

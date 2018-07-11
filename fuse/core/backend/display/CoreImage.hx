@@ -8,6 +8,7 @@ import fuse.core.backend.texture.CoreTexture;
 import fuse.core.backend.util.transform.WorkerTransformHelper;
 import fuse.core.communication.data.vertexData.IVertexData;
 import fuse.core.communication.data.vertexData.VertexData;
+import fuse.core.utils.Calc;
 import fuse.core.utils.Pool;
 import fuse.display.geometry.Bounds;
 
@@ -51,9 +52,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	override public function init(objectId:Int) 
 	{
-		trace("init: " + objectId);
 		super.init(objectId);
-		trace("displayData.textureId = " + displayData.textureId);
 		textureId = displayData.textureId;
 	}
 	
@@ -95,7 +94,8 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	override public function buildTransformActions()
 	{
-		if (this.visible || this.isMask){
+		if (this.visible || this.isMask) {
+			hierarchyIndex = HierarchyAssembler.transformActions.length;
 			HierarchyAssembler.transformActions.push(calculateTransform);
 			//HierarchyAssembler.transformActions.push(popTransform);
 		}
@@ -104,10 +104,8 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	inline function get_textureId():Int { return textureId; }
 	
 	function set_textureId(value:Int):Int {
-		trace("value = " + value);
 		if (textureId != value){
 			textureId = value;
-			trace("textureId = " + textureId);
 			if (coreTexture != null && textureId == -1) {
 				coreTexture.onTextureChange.remove(OnTextureChange);
 				Core.textures.deregister(coreTexture.textureData.textureId);
@@ -123,7 +121,6 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 			//textureChanged = true;
 			//updateUVs = true;
 		}
-		trace("coreTexture = " + coreTexture);
 		return value;
 	}
 	
@@ -186,6 +183,17 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		//}
 		
 		return bounds;
+	}
+	
+	override public function insideBounds(x:Float, y:Float) 
+	{
+		var distance:Float = Math.sqrt(
+			Math.pow(quadData.middleX - Calc.pixelToScreenX(x), 2) + 
+			Math.pow(quadData.middleY - Calc.pixelToScreenY(y), 2)
+		);
+		
+		if (distance < diagonal * 0.5) return true;
+		return false;
 	}
 	
 	function get_sourceTextureId():Int 

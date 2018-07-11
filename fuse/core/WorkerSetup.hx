@@ -82,7 +82,10 @@ class WorkerSetup
 	
 	private function OnInputCollision(touch:Touch):Void 
 	{
-		//trace([touch.type, touch.collisionId, touch.x, touch.y]);
+		//if (touch.type != "mouseMove") {
+			//trace([touch.type, touch.collisionId, touch.x, touch.y]);
+		//}
+		
 		
 		var display:DisplayObject = touchables.get(touch.collisionId);
 		if (display == null) return;
@@ -191,6 +194,7 @@ class WorkerSetup
 		
 		send(MessageType.SET_TOUCHABLE, { 
 			objectId:displayObject.objectId, 
+			displayType:displayObject.displayType, 
 			touchable:value
 		} );
 	}

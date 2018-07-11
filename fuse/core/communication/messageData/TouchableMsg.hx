@@ -6,5 +6,6 @@ package fuse.core.communication.messageData;
 typedef TouchableMsg =
 {
 	objectId:Int,
+	displayType:Int,
 	touchable:Bool
 }

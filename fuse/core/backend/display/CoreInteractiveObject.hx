@@ -109,7 +109,8 @@ class CoreInteractiveObject extends CoreDisplayObject
 		//for (i in 0...children.length) children[i].buildTransformActions();
 		//popTransform();
 		
-		if (this.visible){
+		if (this.visible) {
+			hierarchyIndex = HierarchyAssembler.transformActions.length;
 			HierarchyAssembler.transformActions.push(calculateTransform);
 			for (i in 0...children.length) children[i].buildTransformActions();
 			HierarchyAssembler.transformActions.push(popTransform);

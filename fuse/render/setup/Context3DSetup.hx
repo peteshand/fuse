@@ -108,13 +108,13 @@ class Context3DSetup
 	private function OnContentCreated(e:Event):Void 
 	{
 		context3D = stage3D.context3D;
-		trace("context3D = " + context3D);
+		//trace("context3D = " + context3D);
 		
 		if (renderMode == Context3DRenderMode.AUTO && context3D.driverInfo != null && context3D.driverInfo.indexOf("Software") != -1) {
 			moveToNextProfile();
 		}
 		else {
-			trace("driverInfo = " + context3D.driverInfo);
+			//trace("driverInfo = " + context3D.driverInfo);
 			activeProfile = targetProfile;
 			onComplete.dispatch();
 		}

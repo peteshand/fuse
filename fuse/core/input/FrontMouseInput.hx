@@ -16,7 +16,7 @@ import openfl.events.MouseEvent;
 
 class FrontMouseInput
 {
-	var touchData = new Map<Int, Touch>();
+	var touchData = new Map<String, Touch>();
 	var touchDataArray = new GcoArray<Touch>();
 	//var leaveStageMouseEvent:MouseEvent;
 	
@@ -29,13 +29,11 @@ class FrontMouseInput
 		//messenger = new Messenger<Array<Float>>(MessageID.MOUSE_POSITION, Float, 2);
 		//messenger.listen(MessageID.MOUSE_POSITION, OnMouseXChange);
 		
+		Lib.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, OnMouse, false, 100);
 		Lib.current.stage.addEventListener(MouseEvent.MOUSE_DOWN, OnMouse);
-		Lib.current.stage.addEventListener(MouseEvent.MOUSE_MOVE, OnMouse);
 		Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, OnMouse);
 		Lib.current.stage.addEventListener(Event.MOUSE_LEAVE, OnMouseLeave);
 		Lib.current.stage.addEventListener(Event.ENTER_FRAME, OnTick);
-		
-		
 	}
 	
 	private function OnTick(e:Event):Void 
@@ -60,32 +58,21 @@ class FrontMouseInput
 	function OnMouse(e:MouseEvent):Void 
 	{
 		if (Fuse.current.stage == null) return;
-		var touch:Touch = getMouseData(0);
+		var id:String = e.type + 0;
+		var touch:Touch = getMouseData(0, id);
 		touch.x = e.stageX + Fuse.current.stage.camera.x;
 		touch.y = e.stageY + Fuse.current.stage.camera.y;
 		touch.type = e.type;
-		for (i in 0...touchDataArray.length) 
-		{
-			if (touchDataArray[i].index == 0) {
-				touchDataArray[i] = touch;
-				return;
-			}
-		}
 		
 		touchDataArray.push(touch);
-		
-		//values[0] = e.stageX;
-		//values[1] = e.stageY;
-		//trace("OnMouseMove");
-		//messenger.send(values);
 	}
 	
-	function getMouseData(index:Int):Touch
+	function getMouseData(index:Int, id:String):Touch
 	{
-		var touch:Touch = touchData.get(index);
+		var touch:Touch = touchData.get(id);
 		if (touch == null) {
 			touch = { index:index };
-			touchData.set(index, touch);
+			touchData.set(id, touch);
 		}
 		return touch;
 	}

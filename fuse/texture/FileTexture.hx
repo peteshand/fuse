@@ -15,6 +15,7 @@ import openfl.events.Event;
  * @author P.J.Shand
  */
 
+@:keep
 @:forward(textureData, nativeTexture, textureBase, textureId, width, height, onUpdate, clearColour, _clear, _alreadyClear, upload, dispose, directRender)
 abstract FileTexture(AbstractTexture) to Int from Int 
 {

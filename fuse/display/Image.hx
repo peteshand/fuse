@@ -1,6 +1,7 @@
 package fuse.display;
 
 import fuse.core.backend.displaylist.DisplayType;
+import fuse.core.front.texture.Textures;
 import fuse.display.DisplayObject;
 import fuse.display.Image;
 import fuse.texture.IBaseTexture;
@@ -59,8 +60,7 @@ class Image extends DisplayObject
 	
 	function set_texture(value:AbstractTexture):AbstractTexture 
 	{
-		if (value == null) return null;
-		
+		if (value == null) value = untyped Textures.blankTexture;
 		if (texture != value) {
 			if (texture != null) texture.onUpdate.remove(OnTextureUpdate);
 			texture = value;

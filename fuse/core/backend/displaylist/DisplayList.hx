@@ -19,8 +19,8 @@ class DisplayList
 	var hierarchyChangeCount:Int = 0;
 	
 	public var stage:CoreDisplayObject;
-	public var map:Map<Int, CoreDisplayObject> = new Map<Int, CoreDisplayObject>();
-	var transformDataMap:Map<Int, IDisplayData> = new Map<Int, IDisplayData>();
+	public var map = new Map<Int, CoreDisplayObject>();
+	//var transformDataMap = new Map<Int, IDisplayData>();
 	
 	public function new() 
 	{
@@ -67,20 +67,29 @@ class DisplayList
 			return;
 		}
 		
-		var display:CoreDisplayObject = getDisplayFromPool(displayType);
+		var display:CoreDisplayObject = getDisplay(objectId, displayType);
 		display.displayType = displayType;
 		display.init(objectId);
 		
 		if (parent != null) {
 			parent.addChildAt(display, addAtIndex);
 		}
-		map.set(display.objectId, display);
 		
 		if (objectId == 0) {
 			stage = display;
 		}
 		
 		hierarchyChangeCount = 0;
+	}
+	
+	public function getDisplay(objectId:Int, displayType:Int):CoreDisplayObject
+	{
+		var display:CoreDisplayObject = map.get(objectId);
+		if (display == null) {
+			display = getDisplayFromPool(displayType);
+			map.set(objectId, display);
+		}
+		return display;
 	}
 	
 	inline function getDisplayFromPool(displayType:Int):CoreDisplayObject
@@ -122,10 +131,10 @@ class DisplayList
 			display.parent.removeChild(display);
 		}
 		
-		releaseDisplayToPool(display);
-		
-		transformDataMap.remove(objectId);
-		map.remove(objectId);
+		// TODO: add dispose function that releases and removes from map
+		//releaseDisplayToPool(display);
+		//transformDataMap.remove(objectId);
+		//map.remove(objectId);
 		
 		hierarchyChangeCount = 0;
 	}
