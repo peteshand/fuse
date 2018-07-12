@@ -52,7 +52,7 @@ class Image extends DisplayObject
 				Fuse.current.workerSetup.removeMask(this);
 			}
 			else {
-				Fuse.current.workerSetup.addMask(this, mask);
+				Fuse.current.workerSetup.addMask(this, this.displayType, mask, mask.displayType);
 			}
 		}
 		return mask;
@@ -62,9 +62,9 @@ class Image extends DisplayObject
 	{
 		if (value == null) value = untyped Textures.blankTexture;
 		if (texture != value) {
-			if (texture != null) texture.onUpdate.remove(OnTextureUpdate);
+			if (texture != null) texture.removeChangeListener(this);
 			texture = value;
-			texture.onUpdate.add(OnTextureUpdate);
+			texture.addChangeListener(this);
 			OnTextureUpdate();
 			displayData.textureId = texture.textureId;
 			//isStatic = 0;

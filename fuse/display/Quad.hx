@@ -13,13 +13,12 @@ class Quad extends Image
 {
 	public function new(width:Int, height:Int, colour:Color=0xFFFFFFFF) 
 	{
-		super(null);
+		super(untyped Textures.whiteTexture);
 		
 		this.color = colour;
 		this.width = width;
 		this.height = height;
 		
 		displayType = DisplayType.QUAD;
-		displayData.textureId = Textures.whiteId;
 	}
 }

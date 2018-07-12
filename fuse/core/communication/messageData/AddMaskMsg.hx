@@ -7,5 +7,7 @@ package fuse.core.communication.messageData;
 typedef AddMaskMsg =
 {
 	objectId:Int,
-	maskId:Int
+	displayType:Int, 
+	maskId:Int, 
+	maskDisplayType:Int
 }

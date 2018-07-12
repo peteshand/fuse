@@ -31,6 +31,11 @@ class VideoPlayer
 		netStream.play(url);
 	}
 	
+	public function stop() 
+	{
+		netStream.close();
+	}
+	
 	private function OnEvent(e:NetStatusEvent):Void 
 	{
 		var info:NetStatusInfo = e.info;

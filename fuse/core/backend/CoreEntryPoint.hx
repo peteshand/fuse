@@ -96,7 +96,7 @@ class CoreEntryPoint
 	
 	function OnAddMask(addChildPayload:AddMaskMsg) 
 	{
-		Core.displayList.addMask(addChildPayload.objectId, addChildPayload.maskId);
+		Core.displayList.addMask(addChildPayload);
 	}
 	
 	function OnRemoveMask(workerPayload:WorkerPayload) 

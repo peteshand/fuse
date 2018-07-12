@@ -1,5 +1,6 @@
 package fuse.texture;
 import fuse.core.communication.data.textureData.ITextureData;
+import fuse.display.Image;
 import msignal.Signal.Signal0;
 import fuse.texture.BaseTexture;
 import fuse.utils.Color;
@@ -53,4 +54,14 @@ abstract AbstractTexture(Null<Int>) to Int from Int
 	
 	private function upload():Void			{	coreTexture.upload();							}
 	public function dispose():Void			{	coreTexture.dispose();							}
+	
+	public function addChangeListener(image:Image) 
+	{
+		coreTexture.dependantDisplays.set(image.objectId, image);
+	}
+	
+	public function removeChangeListener(image:Image) 
+	{
+		coreTexture.dependantDisplays.remove(image.objectId);
+	}
 }

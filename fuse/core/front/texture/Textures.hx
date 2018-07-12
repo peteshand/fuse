@@ -29,6 +29,7 @@ class Textures
 	static private var blankId:Int;
 	static private var whiteId:Int;
 	static private var textureCount:Int = 0;
+	static public var whiteTexture:DefaultTexture;
 	static public var blankTexture:DefaultTexture;
 	
 	public function new() { }
@@ -55,7 +56,7 @@ class Textures
 		
 		whiteId = BaseTexture.overTextureId = 1;
 		var white:BitmapData = new BitmapData(32, 32, true, 0xFFFFFFFF);
-		var whiteTexture:DefaultTexture = new DefaultTexture(white, false);
+		whiteTexture = new DefaultTexture(white, false);
 		
 		BaseTexture.textureIdCount = 2;
 	}
@@ -72,6 +73,10 @@ class Textures
 	
 	static public function deregisterTexture(textureId:Int, texture:IBaseTexture) 
 	{
+		if (textureId == 0) {
+			trace("deregisterTexture: " + textureId);
+		}
+		
 		if (textures.exists(textureId)) {
 			textures.remove(textureId);
 		}
@@ -132,5 +137,10 @@ class BaseDefaultTexture extends BaseBitmapTexture
 		this.persistent = 1;
 		
 		super(bitmapData, queUpload, onTextureUploadCompleteCallback);
+	}
+	
+	override public function dispose():Void
+	{
+		// Can't dispose DefaultTexture
 	}
 }

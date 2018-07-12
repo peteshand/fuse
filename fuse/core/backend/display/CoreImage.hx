@@ -107,24 +107,22 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		if (textureId != value){
 			textureId = value;
 			if (coreTexture != null && textureId == -1) {
-				coreTexture.onTextureChange.remove(OnTextureChange);
+				coreTexture.removeChangeListener(this);
 				Core.textures.deregister(coreTexture.textureData.textureId);
 				coreTexture = null;
 			}
 			
 			if (coreTexture == null || coreTexture.textureData.textureId != textureId) {
 				coreTexture = Core.textures.register(textureId);
-				if (coreTexture != null) coreTexture.onTextureChange.add(OnTextureChange);
+				if (coreTexture != null) coreTexture.addChangeListener(this);
 			}
 			
 			setUpdates(true);
-			//textureChanged = true;
-			//updateUVs = true;
 		}
 		return value;
 	}
 	
-	function OnTextureChange() 
+	public function OnTextureChange() 
 	{
 		updateAny = updateTexture = true;
 	}

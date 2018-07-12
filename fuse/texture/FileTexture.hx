@@ -58,7 +58,7 @@ abstract FileTexture(AbstractTexture) to Int from Int
 	}
 }
 
-
+@:access(fuse.texture.FileTexture)
 class BaseFileTexture extends BaseTexture
 {
 	var fileLoader:ILoader;
@@ -114,5 +114,11 @@ class BaseFileTexture extends BaseTexture
 		textureData.textureAvailable = 1;
 		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		onUpload.dispatch();
+	}
+	
+	override public function dispose():Void
+	{
+		super.dispose();
+		FileTexture.baseFileTextures.remove(url);
 	}
 }

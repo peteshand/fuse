@@ -5,6 +5,7 @@ import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.front.texture.upload.TextureUploadQue;
 import fuse.core.front.texture.Textures;
+import fuse.display.Image;
 import msignal.Signal.Signal0;
 import fuse.texture.IBaseTexture;
 import fuse.utils.Color;
@@ -42,14 +43,14 @@ class BaseTexture implements IBaseTexture
 	public var height:Null<Int>;
 	
 	public var clearColour:Color = 0;
-	//public var textureBase:TextureBase;
-	//public var nativeTexture:NativeTexture;
 	@:isVar public var directRender(get, set):Bool = false;
 	public var onUpdate = new Signal0();
 	public var onUpload = new Signal0();
 	
 	public var nativeTexture(get, null):Texture;
 	public var textureBase(get, null):TextureBase;
+	
+	public var dependantDisplays = new Map<Int, Image>();
 	
 	public function new(width:Int, height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null, p2Texture:Bool=true) 
 	{
@@ -74,6 +75,11 @@ class BaseTexture implements IBaseTexture
 		else upload();
 		
 		Fuse.current.conductorData.frontStaticCount = 0;
+		
+		onUpdate.add(function() {
+			for (image in dependantDisplays.iterator()) 
+				image.OnTextureUpdate();
+		});
 	}
 	
 	function setTextureData() 
@@ -132,9 +138,12 @@ class BaseTexture implements IBaseTexture
 	
 	public function dispose():Void
 	{
+		if (textureId <= 1) {
+			// Can't dispose default textures
+			return;
+		}
 		Fuse.current.workerSetup.removeTexture(textureId);
 		Textures.deregisterTexture(textureId, this);
-		
 		textureData.dispose();
 	}
 	

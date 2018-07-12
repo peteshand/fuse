@@ -81,6 +81,8 @@ class Renderer
 	
 	public function update() 
 	{
+		if (context3D.driverInfo == "Disposed") return;
+		
 		begin(true, Fuse.current.stage.color);
 		drawBuffer();
 		end();

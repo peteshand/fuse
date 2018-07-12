@@ -1,5 +1,6 @@
 package fuse.core.backend.texture;
 
+import fuse.core.backend.display.CoreImage;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
@@ -36,6 +37,7 @@ class CoreTexture
 	
 	public var textureHasChanged:Bool = true;
 	public var onTextureChange = new Signal0();
+	var dependantDisplays = new Map<Int, CoreImage>();
 	
 	public function new(textureId:Int) 
 	{
@@ -46,6 +48,11 @@ class CoreTexture
 		
 		changeCount = new Notifier<Int>(-1);
 		changeCount.add(OnCountChange);
+		
+		onTextureChange.add(function() {
+			for (image in dependantDisplays.iterator()) 
+				image.OnTextureChange();
+		});
 	}
 	
 	function OnCountChange() 
@@ -93,6 +100,16 @@ class CoreTexture
 			onTextureChange.dispatch();
 			//trace("change: " + this.textureId);
 		}
+	}
+	
+	public function addChangeListener(coreImage:CoreImage) 
+	{
+		dependantDisplays.set(coreImage.objectId, coreImage);
+	}
+	
+	public function removeChangeListener(coreImage:CoreImage) 
+	{
+		dependantDisplays.remove(coreImage.objectId);
 	}
 	
 	inline function get_textureData():ITextureData 

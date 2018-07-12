@@ -93,6 +93,7 @@ class TextField extends Image
 	
 	var clearColour:Color = 0x00000000;
 	public var baseBmdTexture(get, never):BitmapTexture;
+	var initialized:Bool = false;
 	
 	public function new(width:Int, height:Int) 
 	{
@@ -412,16 +413,17 @@ class TextField extends Image
 	
 	public function update():Void
 	{
-		if (dirtySize == true) {
+		if (!initialized || dirtySize == true) {
 			if (bitmapdata != null) bitmapdata.dispose();
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
 			bitmapdata.draw(nativeTextField);
-			if (texture != null) {
+			if (texture != null && texture.textureId > 1) {
 				BaseTexture.overTextureId = texture.textureId;
 				texture.dispose();
 			}
 			texture = new BitmapTexture(bitmapdata, false);
 			texture.directRender = directRender;
+			initialized = true;
 		}
 		else if (dirtyProp == true) {
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
@@ -464,5 +466,11 @@ class TextField extends Image
 			if (horizontalAlign == Align.RIGHT) pivotX = textWidth;
 			if (horizontalAlign == Align.CENTER) pivotX = textWidth / 2;
 		}
+	}
+	
+	override public function dispose():Void
+	{
+		super.dispose();
+		texture.dispose();
 	}
 }

@@ -32,11 +32,11 @@ class DisplayObject
 	public var onRemoveFromStage = new Signal1<DisplayObject>();
 	
 	@:isVar public var touchable(get, set):Bool = false;
-	public var onPress = new Signal1<Touch>();
-	public var onMove = new Signal1<Touch>();
-	public var onRelease = new Signal1<Touch>();
-	public var onRollover = new Signal1<Touch>();
-	public var onRollout = new Signal1<Touch>();
+	public var onPress(get, null):Signal1<Touch>;
+	public var onMove(get, null):Signal1<Touch>;
+	public var onRelease(get, null):Signal1<Touch>;
+	public var onRollover(get, null):Signal1<Touch>;
+	public var onRollout(get, null):Signal1<Touch>;
 	
 	@:isVar public var parent(default, null):DisplayObjectContainer;
 	@:isVar public var stage(default, null):Stage;
@@ -464,5 +464,35 @@ class DisplayObject
 	public function stopDrag() 
 	{
 		dragUtil.stopDrag();
+	}
+	
+	function get_onPress():Signal1<Touch> 
+	{
+		if (onPress == null) onPress = new Signal1<Touch>();
+		return onPress;
+	}
+	
+	function get_onMove():Signal1<Touch> 
+	{
+		if (onMove == null) onMove = new Signal1<Touch>();
+		return onMove;
+	}
+	
+	function get_onRelease():Signal1<Touch> 
+	{
+		if (onRelease == null) onRelease = new Signal1<Touch>();
+		return onRelease;
+	}
+	
+	function get_onRollover():Signal1<Touch> 
+	{
+		if (onRollover == null) onRollover = new Signal1<Touch>();
+		return onRollover;
+	}
+	
+	function get_onRollout():Signal1<Touch> 
+	{
+		if (onRollout == null) onRollout = new Signal1<Touch>();
+		return onRollout;
 	}
 }

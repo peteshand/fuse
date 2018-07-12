@@ -131,13 +131,15 @@ class WorkerSetup
 		}
 	}
 	
-	public function addMask(display:DisplayObject, mask:DisplayObject) 
+	public function addMask(display:DisplayObject, displayType:Int, mask:DisplayObject, maskDisplayType:Int) 
 	{
 		var maskId:Int = -1;
 		if (mask != null) maskId = mask.objectId;
 		send(MessageType.ADD_MASK, { 
 			objectId:display.objectId, 
-			maskId:maskId
+			displayType:displayType, 
+			maskId:maskId, 
+			maskDisplayType:maskDisplayType
 		} );
 	}
 	

@@ -5,6 +5,7 @@ import fuse.core.backend.display.CoreInteractiveObject;
 import fuse.core.backend.display.CoreStage;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
+import fuse.core.communication.messageData.AddMaskMsg;
 import fuse.core.communication.messageData.StaticData;
 import fuse.core.utils.Pool;
 
@@ -35,16 +36,16 @@ class DisplayList
 		hierarchyChangeCount = 0;
 	}
 	
-	function addMask(objectId:Int, maskId:Int) 
+	function addMask(payload:AddMaskMsg) //objectId:Int, displayType:Int, maskId:Int, maskDisplayType:Int
 	{
-		var display:CoreImage = untyped map.get(objectId);
+		var display:CoreImage = untyped getDisplay(payload.objectId, payload.displayType);//map.get(objectId);
 		if (display == null) {
-			trace("displayObject much be added to the stage before it can have a mask attached to it");
+			trace("displayObject must be added to the stage before it can have a mask attached to it");
 			return;
 		}
-		var maskDisplay:CoreImage = untyped map.get(maskId);
+		var maskDisplay:CoreImage = untyped getDisplay(payload.maskId, payload.maskDisplayType);//map.get(maskId);
 		if (maskDisplay == null) {
-			trace("mask displayObject much be added to the stage before it can be attached to a displayObject");
+			trace("mask displayObject must be added to the stage before it can be attached to a displayObject");
 			return;
 		}
 		display.mask = maskDisplay;
