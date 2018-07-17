@@ -92,7 +92,7 @@ class Renderer
 	{
 		if (!sharedContext) {
 			// Doesn't execute if context3D.clear is being handled externally
-			context3D.clear(clearColor.red / 255, clearColor.green / 255, clearColor.blue / 255, 1);
+			context3D.clear(clearColor.red / 255, clearColor.green / 255, clearColor.blue / 255, clearColor.alpha / 255);
 		}
 		
 		//trace("conductorData.highestNumTextures = " + conductorData.highestNumTextures);

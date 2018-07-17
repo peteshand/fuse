@@ -159,7 +159,7 @@ class DisplayObject
 	inline function get_rotation():Float { return rotation; }
 	inline function get_scaleX():Float { return scaleX; }
 	inline function get_scaleY():Float { return scaleY; }
-	inline function get_color():Color { return colorTL; }
+	function get_color():Color { return colorTL; }
 	inline function get_colorTL():Color { return colorTL; }
 	inline function get_colorTR():Color { return colorTR; }
 	inline function get_colorBL():Color { return colorBL; }

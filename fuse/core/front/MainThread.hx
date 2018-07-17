@@ -67,6 +67,7 @@ class MainThread extends ThreadBase
 		index = count++;
 		
 		this.rootClass = rootClass;
+		if (fuseConfig == null) fuseConfig = { };
 		this.fuseConfig = fuseConfig;
 		this.stage3D = stage3D;
 		this.renderMode = renderMode;
@@ -109,6 +110,9 @@ class MainThread extends ThreadBase
 			this.stage = fuse.stage = new Stage();
 			root = Type.createInstance(rootClass, []);
 		}
+		this.stage.configure(fuseConfig);
+		if (fuseConfig.color != null) stage.color = fuseConfig.color;
+		//if (fuseConfig.transparent != null) stage.transparent = fuseConfig.transparent;
 		stage.addChild(root);
 		renderer.resize();
 		
@@ -127,7 +131,6 @@ class MainThread extends ThreadBase
 	
 	private function Update(e:Event):Void 
 	{
-		
 		process();
 	}
 	

@@ -10,5 +10,7 @@ typedef FuseConfig =
 	?debugTextureAtlas:Null<Bool>,
 	?debugSkipRender:Null<Bool>,
 	?frameRate:Int,
-	?autoStart:Null<Bool>
+	?autoStart:Null<Bool>,
+	?color:Null<UInt>,
+	?transparent:Null<Bool>
 }

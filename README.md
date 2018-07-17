@@ -1,5 +1,8 @@
 # Fuse Framework
 
+## Disclaimer ##
+This library is currently in an alpha stage of development. As a result APIs may change or even be removed without warning. 
+
 ## What is Fuse ##
 Fuse (Code named Kea during initial development) is a Haxe based hardware accelerated displaylist style 2d rendering library and application framework. With a focus on real world performance, particularly when dealing with applications were there are a lot of display objects that are often static.
 
@@ -26,6 +29,9 @@ Up to 8 Textures are able to be drawn within a single draw call. This is accompl
 
 ### Limited Draw Calls ###
 Coupling Atlas Buffering and Texture Batching it becomes very easy to achieve single draw call frames. The only exception is when new or updated textures are being drawn into the Atlas Buffers or when a Layer Buffers is being updated.
+
+### Lightweight Alpha Masking ###
+Masking has been implemented within the base fuse fragment shader. This enables image to image alpha masking with no additional draw calls and at almost no extra performance hit.
 
 ## Supported Platforms ##
 There are plans to support the following platforms with the possibilities of adding more in the future:

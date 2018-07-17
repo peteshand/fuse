@@ -1,0 +1,14 @@
+{
+	"name": "fuse",
+	"url": "https://github.com/peteshand/fuse",
+	"license": "MIT",
+	"tags": [],
+	"description": "Fuse is a Haxe based hardware accelerated displaylist style 2d rendering library",
+	"version": "0.0.0",
+	"releasenote": "",
+	"contributors": [ "p.j.shand" ],
+	"dependencies": {
+		"openfl": "",
+		"msignal": ""
+	}
+}

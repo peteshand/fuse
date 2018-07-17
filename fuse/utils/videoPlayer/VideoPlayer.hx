@@ -33,6 +33,7 @@ class VideoPlayer
 	
 	public function stop() 
 	{
+		netStream.pause();
 		netStream.close();
 	}
 	

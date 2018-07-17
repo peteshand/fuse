@@ -2,9 +2,11 @@ package fuse.display;
 
 import fuse.camera.Camera2D;
 import fuse.core.backend.displaylist.DisplayType;
+import fuse.core.front.FuseConfig;
 import fuse.display.Sprite;
 import fuse.display.Quad;
 import fuse.Fuse;
+import fuse.utils.Color;
 import mantle.managers.resize.Resize;
 import msignal.Signal.Signal1;
 
@@ -23,9 +25,14 @@ class Stage extends Sprite {
 	public var onDisplayRemoved = new Signal1<DisplayObject>();
 	public var camera = new Camera2D();
 	
+	//var stageColor:Color = 0xFF000000;
+	//public var transparent:Bool;
+	
 	public function new() 
 	{	
 		super();
+		
+		
 		
 		this.setStage(this);
 		
@@ -38,6 +45,32 @@ class Stage extends Sprite {
 		new Resize(Lib.current.stage);
 		Resize.add(OnResize);
 		OnResize();
+	}
+	
+	function configure(fuseConfig:FuseConfig) 
+	{
+		#if html5
+			var configColor:UInt = Lib.current.stage.window.config.background;
+			var bgColor:String = "#";
+			if (fuseConfig.transparent) {
+				trace("A");
+				var c:Color = Lib.current.stage.window.config.background;
+				var c2:Color = 0x0;
+				c2.alpha = c.red;
+				c2.red = c.green;
+				c2.green = c.blue;
+				c2.blue = c.alpha;
+				trace([c2.red, c2.green, c2.blue, c2.alpha]);
+				bgColor += StringTools.hex(c2, 8);
+			}
+			else {
+				trace("B");
+				bgColor += StringTools.hex(Lib.current.stage.window.config.background, 6);
+			}
+			
+			trace("bgColor = " + bgColor);
+			Lib.current.stage.window.config.element.style.background = bgColor;
+		#end
 	}
 	
 	private function OnResize():Void 
@@ -63,4 +96,14 @@ class Stage extends Sprite {
 		}
 		return value;
 	}
+	
+	//override function set_color(value:Color):Color { 
+		//return stageColor = value;
+	//}
+	//
+	//override function get_color():Color { 
+		//if (transparent) stageColor.alpha = 0;
+		//else stageColor.alpha = 0xFF;
+		//return stageColor;
+	//}
 }

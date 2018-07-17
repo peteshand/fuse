@@ -63,8 +63,8 @@ class BaseVideoTexture extends BaseTexture
 	public function onMetaData(videoMetaData:VideoMetaData) 
 	{
 		// TODO: need to be able to update width/height in backend texture
-		this.width = videoMetaData.width;
-		this.height = videoMetaData.height;
+		if (this.width == 0) this.width = videoMetaData.width;
+		if (this.height == 0) this.height = videoMetaData.height;
 		setTextureData();
 	}
 	
