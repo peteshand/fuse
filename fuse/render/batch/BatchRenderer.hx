@@ -47,13 +47,14 @@ class BatchRenderer
 	{
 		var currentBatchData:IBatchData = TextureRenderBatch.getBatchData(batchIndex);
 		if (currentBatchData == null) return;
+		//trace("skip = " + currentBatchData.skip);
 		if (currentBatchData.skip == 1) return;
 		
 		// ** // var numItemsInShaderProgram:Int = ShaderPrograms.getGroupId(currentBatchData.numItems);
 		// ** // if (numItemsInShaderProgram == 0) return;
 		if (conductorData.highestNumTextures == 0) return;
+		//trace("numItems = " + currentBatchData.numItems);
 		
-//		trace("numItems = " + currentBatchData.numItems);
 		//trace("startIndex = " + currentBatchData.startIndex);
 		//trace("quadCount = " + quadCount);
 		//trace(quadCount * VertexData.BYTES_PER_ITEM);

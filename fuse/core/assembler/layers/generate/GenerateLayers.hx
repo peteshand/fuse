@@ -19,8 +19,8 @@ class GenerateLayers
 	public static var layers = new GcoArray<LayerBuffer>([]);
 	//public static var lastLayers = new GcoArray<LayerBuffer>([]);
 	
-	public static var layersGenerated:Bool = false;
-	public static var drawCacheLayers:Bool = false;
+	public static var layersGenerated:Bool = true;
+	public static var drawCacheLayers:Bool = true;
 	static var generationStaticCount:Int = 0;
 	static var generateCacheAfterXFrames:Int = 60;
 	static var update:Notifier<Null<Bool>>;
@@ -35,6 +35,10 @@ class GenerateLayers
 	static function clear() 
 	{
 		update.value = null;
+		for (i in 0...GenerateLayers.layers.length) 
+		{
+			GenerateLayers.layers[i].nextFrame();
+		}
 		GenerateLayers.layers.clear();
 		//Pool.layerBufferes.forceReuse();
 	}
@@ -60,7 +64,6 @@ class GenerateLayers
 			//}
 			currentLayerBuffer.add(image);
 		}
-		//trace('layers.length = ' + layers.length);
 		
 		/*
 		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged || Fuse.current.conductorData.frontStaticCount <= 1) {

@@ -10,7 +10,6 @@ import fuse.utils.Color;
 import fuse.Fuse;
 import fuse.utils.drag.DragUtil;
 import mantle.notifier.Notifier;
-import mantle.notifier.SNotifier;
 import msignal.Signal.Signal0;
 import msignal.Signal.Signal1;
 import openfl.events.MouseEvent;

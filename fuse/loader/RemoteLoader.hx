@@ -1,4 +1,5 @@
 package fuse.loader;
+
 import flash.net.URLRequest;
 
 /**
@@ -7,7 +8,13 @@ import flash.net.URLRequest;
  */
 class RemoteLoader extends Loader
 {
-
+	public static function init()
+	{
+		#if (air||flash)
+		new RemoteLoader().load("");
+		#end
+	}
+	
 	public function new() 
 	{
 		super();

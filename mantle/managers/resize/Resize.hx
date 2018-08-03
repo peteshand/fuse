@@ -14,7 +14,7 @@ class Resize
 {
 	private static var repeatResizeForXFrames:Int = 4;
 	private static var resizeCount:Int = 0;
-	private static var onResize:Signal0;
+	private static var onResize:Signal0 = new Signal0();
 	static var stage:Stage;
 	
 	public function new(stage:Stage) 
@@ -22,7 +22,6 @@ class Resize
 		if (Resize.stage != null) return;
 		Resize.stage = stage;
 		
-		if (onResize == null) onResize = new Signal0();
 		OnStageResize(null);
 		
 		EnterFrame.addAt(OnTick, 0);

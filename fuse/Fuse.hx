@@ -38,6 +38,7 @@ class Fuse extends EventDispatcher
 	public function new(rootClass:Class<DisplayObject>, fuseConfig:FuseConfig=null, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
 	{	
 		MessageManager.init();
+		if (fuseConfig == null) fuseConfig = { };
 		
 		if (WorkerInfo.isMainThread) {
 			mainThread = new MainThread(this, rootClass, fuseConfig, stage3D, renderMode, profile);

@@ -19,6 +19,7 @@ class BaseBatch
 	public var lastRenderables:GcoArray<ICoreRenderable>;
 	public var renderTarget:Null<Int>;
 	public var blendMode:Null<Int> = null;
+	public var active(get, null):Bool;
 	
 	static var count:Int = 0;
 	var batchId:Int;
@@ -131,5 +132,10 @@ class BaseBatch
 		{
 			lastRenderables.push(renderables[i]);
 		}
+	}
+	
+	function get_active():Bool 
+	{
+		return true;
 	}
 }

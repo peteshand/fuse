@@ -2,6 +2,7 @@ package fuse.loader;
 import flash.events.EventDispatcher;
 import openfl.display.BitmapData;
 import openfl.events.Event;
+import openfl.events.IOErrorEvent;
 
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
@@ -37,6 +38,13 @@ class Loader extends EventDispatcher implements ILoader
 		
 		loader = new NativeLoader();
 		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, OnLoadComplete);
+		loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, OnError);
+	}
+	
+	private function OnError(e:IOErrorEvent):Void 
+	{
+		//trace(e);
+		//dispatchEvent(e);
 	}
 	
 	public function load(url:String):Void

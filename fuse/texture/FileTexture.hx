@@ -3,6 +3,7 @@ package fuse.texture;
 
 import fuse.core.front.texture.Textures;
 import fuse.loader.ILoader;
+import openfl.events.IOErrorEvent;
 //import fuse.loader.FileLoader;
 import fuse.loader.RemoteLoader;
 import openfl.display3D.textures.Texture;
@@ -17,13 +18,14 @@ import openfl.events.Event;
 
 @:keep
 @:forward(textureData, nativeTexture, textureBase, textureId, width, height, onUpdate, clearColour, _clear, _alreadyClear, upload, dispose, directRender)
+@:access(fuse.texture.BaseTexture)
 abstract FileTexture(AbstractTexture) to Int from Int 
 {
 	static var baseFileTextures = new Map<String, BaseFileTexture>();
 	
 	var baseFileTexture(get, never):BaseFileTexture;
 	
-	public function new(url:String, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(url:String, ?width:Int, ?height:Int, ?queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		//var textureId:Null<Int> = AbstractTexture.textureIdCount++;
 		var baseFileTexture:BaseFileTexture = null;
@@ -34,7 +36,7 @@ abstract FileTexture(AbstractTexture) to Int from Int
 		}
 		else {
 			baseFileTexture = baseFileTextures.get(url);
-			//textureId = baseFileTexture.textureId;
+			onTextureUploadCompleteCallback(); // will fail if the texture hasn't actually loaded
 		}
 		//trace("textureId = " + textureId);
 		this = new AbstractTexture(baseFileTexture);
@@ -79,6 +81,12 @@ class BaseFileTexture extends BaseTexture
 		super(0, 0, queUpload, onTextureUploadCompleteCallback);
 		
 		fileLoader.addEventListener(Event.COMPLETE, OnLoadComplete);
+		fileLoader.addEventListener(IOErrorEvent.IO_ERROR, OnError);
+	}
+	
+	private function OnError(e:IOErrorEvent):Void 
+	{
+		
 	}
 	
 	override public function upload() 

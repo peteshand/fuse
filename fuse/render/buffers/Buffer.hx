@@ -21,6 +21,8 @@ class Buffer
 {
 	public static var VERTICES_PER_QUAD:Int = 4;
 	public static var INDICES_PER_QUAD:Int = 6;
+	static var COUNT:Int = 0;
+	var objectId:Int;
 	
 	var context3D:Context3D;
 	var bufferSize:Int;
@@ -40,7 +42,7 @@ class Buffer
 		formatLength.set(Context3DVertexBufferFormat.FLOAT_3, 3);
 		formatLength.set(Context3DVertexBufferFormat.FLOAT_4, 4);
 		
-		
+		this.objectId = COUNT++;
 		this.bufferSize = bufferSize;
 		this.context3D = context3D;
 		
@@ -109,13 +111,15 @@ class Buffer
 	
 	public inline function update():Void
 	{
+		//trace("TODO: re-enable");
 		#if (air||flash)
 			var numRanges:Int = Fuse.current.conductorData.numRanges;
+			//trace("numRanges = " + numRanges);
 			for (i in 0...numRanges) 
 			{
 				var rangeData:IRangeData = CommsObjGen.getRangeData(i);
 				//trace([i, bufferSize, rangeData.start, rangeData.length]);
-				if (i < 2) updateVertices(rangeData.start, rangeData.length);
+				/*if (i < 2)*/ updateVertices(rangeData.start, rangeData.length);
 			}
 		#else
 		if (Fuse.current.conductorData.changeAvailable == 1) {
@@ -125,7 +129,8 @@ class Buffer
 	}
 	
 	inline function updateVertices(start:Int, length:Int) 
-	{		
+	{
+		//trace([objectId, start, length]);
 		//trace([bufferSize, VertexData.BYTES_PER_ITEM * start, Buffer.VERTICES_PER_QUAD * start, Buffer.VERTICES_PER_QUAD * length]);
 		vertexbuffer.uploadFromByteArray(
 			SharedMemory.memory, 

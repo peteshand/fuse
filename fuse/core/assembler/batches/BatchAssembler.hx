@@ -134,7 +134,9 @@ class BatchAssembler
 		if (currentBatch == null) return;
 		if (currentBatch.renderables.length > 0) {
 			currentBatch.updateHasChanged();
-			batches.push(currentBatch);
+			if (currentBatch.active){
+				batches.push(currentBatch);
+			}
 		}
 	}
 	

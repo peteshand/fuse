@@ -14,18 +14,22 @@ class LayerBuffer
 	/*Defines the layer index*/
 	public var index:Int;
 	
-	/*Holds all images contained in this layer*/
+	var renderablesData = new RenderablesData();
 	public var renderables(get, null):GcoArray<ICoreRenderable>;
-	var renderablesIndex:Int = 0;
-	var renderables1 = new GcoArray<ICoreRenderable>([]);
-	var renderables2 = new GcoArray<ICoreRenderable>([]);
-	var renderablesArray:Array<GcoArray<ICoreRenderable>>;
-	//public var lastRenderables = new GcoArray<ICoreRenderable>([]);
+	/*Holds all images contained in this layer*/
+	//public var renderables(get, null):GcoArray<ICoreRenderable>;
+	//var lastRenderables(get, null):GcoArray<ICoreRenderable>;
+	//var renderablesIndex(default, set):Int = 0;
+	//var activeIndex:Int = 0;
+	//var inactiveIndex:Int = 0;
+	//var renderables1 = new GcoArray<ICoreRenderable>([]);
+	//var renderables2 = new GcoArray<ICoreRenderable>([]);
+	//var renderablesArray:Array<GcoArray<ICoreRenderable>>;
 	
 	/*Defines if the images contained in this layer are static or moving*/
 	public var updateAll:Bool;
 	public var isStatic(get, null):Int;
-	
+	public var hasChanged(get, null):Bool;
 	/*Defines where to render layer content*/
 	public var renderTarget:Int = -1;
 	
@@ -48,7 +52,7 @@ class LayerBuffer
 	
 	public function new() 
 	{
-		renderablesArray = [renderables1, renderables2];
+		
 	}
 	
 	public function init(updateAll:Bool, index:Int) 
@@ -57,12 +61,17 @@ class LayerBuffer
 		renderTarget = -1;
 		this.updateAll = updateAll;	
 		this.index = index;
-		renderables.clear();
+		renderablesData.renderables.clear();
+	}
+	
+	public function nextFrame() 
+	{
+		renderablesData.renderablesIndex++;
 	}
 	
 	public function add(image:CoreImage) 
 	{
-		renderables.push(image);
+		renderablesData.renderables.push(image);
 	}
 	
 	public function clone():LayerBuffer
@@ -79,7 +88,7 @@ class LayerBuffer
 	
 	inline function get_numRenderables():Int 
 	{
-		return renderables.length;
+		return renderablesData.renderables.length;
 	}
 	
 	inline function get_baked():Bool 
@@ -94,17 +103,17 @@ class LayerBuffer
 		return false;
 	}
 	
-	public function objectIds():String
-	{
-		var s:String = "[ ";
-		for (i in 0...renderables.length) 
-		{
-			s += renderables[i].objectId;
-			if (i < renderables.length - 1) s += ",";
-		}
-		s += " ]";
-		return s;
-	}
+	//public function objectIds():String
+	//{
+		//var s:String = "[ ";
+		//for (i in 0...renderablesData.renderables.length) 
+		//{
+			//s += renderablesData.renderables[i].objectId;
+			//if (i < renderablesData.renderables.length - 1) s += ",";
+		//}
+		//s += " ]";
+		//return s;
+	//}
 	
 	function get_isStatic():Int 
 	{
@@ -112,8 +121,50 @@ class LayerBuffer
 		else return 1;
 	}
 	
+	function get_hasChanged():Bool 
+	{
+		return hasChanged;
+	}
+	
 	function get_renderables():GcoArray<ICoreRenderable> 
 	{
-		return renderablesArray[renderablesIndex];
+		return renderablesData.renderables;
+	}
+	
+}
+
+class RenderablesData
+{
+	public var renderables(get, null):GcoArray<ICoreRenderable>;
+	public var lastRenderables(get, null):GcoArray<ICoreRenderable>;
+	public var renderablesIndex(default, set):Int = 0;
+	var activeIndex:Int = 0;
+	var inactiveIndex:Int = 0;
+	var renderablesArray:Array<GcoArray<ICoreRenderable>>;
+	
+	public function new() 
+	{
+		renderablesArray = [
+			new GcoArray<ICoreRenderable>([]),  
+			new GcoArray<ICoreRenderable>([])
+		];
+	}
+	
+	inline function get_renderables():GcoArray<ICoreRenderable> 
+	{
+		return renderablesArray[activeIndex];
+	}
+	
+	inline function get_lastRenderables():GcoArray<ICoreRenderable> 
+	{
+		return renderablesArray[inactiveIndex];
+	}
+	
+	function set_renderablesIndex(value:Int):Int 
+	{
+		renderablesIndex = value;
+		activeIndex = renderablesIndex % 2;
+		inactiveIndex = (renderablesIndex + 1) % 2;
+		return renderablesIndex;
 	}
 }

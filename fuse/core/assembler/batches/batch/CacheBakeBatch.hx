@@ -80,18 +80,23 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 		return true;
 	}
 	
+	override function get_active():Bool 
+	{
+		return hasChanged;
+	}
+	
 	function writeLayerVertex(image:CoreImage) 
 	{
 		if (image.displayData.visible == 0) return;
 		
-		trace("objectId = " + image.objectId);
+		//trace("objectId = " + image.objectId);
 		
 		var vertexData:IVertexData = image.vertexData;
 		var coreTexture:CoreTexture = image.coreTexture;
 		
 		//if (image.updateAny == false || image.drawIndex != VertexData.OBJECT_POSITION) {
 			
-			trace("bake to cache layer");
+			//trace("bake to cache layer");
 			
 			vertexData.setTexture(image.textureIndex);
 			

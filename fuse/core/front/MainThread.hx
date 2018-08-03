@@ -10,6 +10,7 @@ import fuse.core.input.Input;
 import fuse.display.DisplayObject;
 import fuse.display.Stage;
 import fuse.events.FuseEvent;
+import fuse.loader.RemoteLoader;
 import fuse.render.setup.Context3DSetup;
 import fuse.render.Renderer;
 import fuse.core.WorkerSetup;
@@ -74,7 +75,7 @@ class MainThread extends ThreadBase
 		this.profile = profile;
 		//this.frameRate = fuseConfig.frameRate;
 		
-		
+		RemoteLoader.init();
 	}
 	
 	public function init():Void
@@ -152,16 +153,19 @@ class MainThread extends ThreadBase
 		//trace("conductorData.frontIsStatic = " + conductorData.frontIsStatic);
 		//trace("conductorData.backIsStatic = " + conductorData.backIsStatic);
 		
-		
 		if (renderer != null) {
-			/*if (Fuse.skipUnchangedFrames) {
+			#if air
+			if (Fuse.skipUnchangedFrames) {
 				if (Fuse.current.conductorData.changeAvailable == 1) {
 					renderer.update();
 				}
 			}
-			else {*/
+			else {
 				renderer.update();
-			//}
+			}
+			#else
+				renderer.update();
+			#end
 		}
 		
 		dimensionChange = false;

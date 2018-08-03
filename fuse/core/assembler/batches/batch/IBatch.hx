@@ -14,6 +14,7 @@ interface IBatch
 	var renderTarget:Null<Int>;
 	var renderables:GcoArray<ICoreRenderable>;
 	var hasChanged:Bool;
+	var active(get, null):Bool;
 	
 	function init(index:Int):Void;
 	function add(renderable:ICoreRenderable, renderTarget:Int, batchType:BatchType):Bool;
