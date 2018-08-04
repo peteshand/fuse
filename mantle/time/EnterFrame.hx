@@ -7,6 +7,8 @@ import mantle.notifier.Notifier;
 #if flash
 import flash.Lib;
 import flash.events.Event;
+#else
+import openfl.Lib;
 #end
 /**
  * ...
@@ -56,10 +58,8 @@ class EnterFrame
 		}
 		
 		#if (!flash)
-			application = Application.current;
 			if (running.value) {
-				if (application != null) Timer.delay(OnTick, Std.int(1000 / application.frameRate));
-				else Timer.delay(OnTick, Std.int(1000 / 60));
+				Timer.delay(OnTick, Std.int(1000 / Lib.current.stage.frameRate));
 			}
 		#end
 	}

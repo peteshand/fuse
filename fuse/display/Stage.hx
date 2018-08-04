@@ -13,6 +13,10 @@ import msignal.Signal.Signal1;
 import openfl.Lib;
 import openfl.events.Event;
 
+#if html5
+import js.Browser;
+#end
+
 class Stage extends Sprite {
 	
 	var count:Int = 0;
@@ -50,7 +54,7 @@ class Stage extends Sprite {
 	function configure(fuseConfig:FuseConfig) 
 	{
 		#if html5
-			var configColor:UInt = Lib.current.stage.window.config.background;
+			/*var configColor:UInt = Lib.current.stage.window.config.background;
 			var bgColor:String = "#";
 			if (fuseConfig.transparent) {
 				trace("A");
@@ -69,7 +73,10 @@ class Stage extends Sprite {
 			}
 			
 			trace("bgColor = " + bgColor);
-			Lib.current.stage.window.config.element.style.background = bgColor;
+			//Lib.current.stage.window.config.element.style.background = bgColor;
+			Lib.current.stage.window.element.style.setProperty("background", bgColor);*/
+			trace("TODO: fix set background color");
+			Reflect.setProperty(Browser.window, "stageWindow", Lib.current.stage.window);
 		#end
 	}
 	

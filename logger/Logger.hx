@@ -1,4 +1,4 @@
-package;
+package logger;
 import mantle.util.log.Log;
 import haxe.macro.Context;
 import haxe.macro.Expr;

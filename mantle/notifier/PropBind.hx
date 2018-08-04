@@ -1,7 +1,7 @@
 package mantle.notifier;
-import msignal.Signal.Signal0;
 
-using Logger;
+import msignal.Signal.Signal0;
+using logger.Logger;
 /**
  * ...
  * @author Thomas Byrne
@@ -105,7 +105,7 @@ class PropBind
 		try{
 			value = Reflect.getProperty(source, sourceProp);
 		}catch (e:Dynamic){
-			warn("Error thrown in getter for binding " + sourceProp + " on object " + source);
+			Logger.warn(this, "Error thrown in getter for binding " + sourceProp + " on object " + source);
 			return;
 		}
 		for (prop in targets.keys()){
@@ -114,7 +114,7 @@ class PropBind
 				try{
 					Reflect.setProperty(target, prop, value);
 				}catch (e:Dynamic){
-					warn("Error thrown in setter for binding " + prop + " on object " + target);
+					Logger.warn(this, "Error thrown in setter for binding " + prop + " on object " + target);
 				}
 			}
 		}

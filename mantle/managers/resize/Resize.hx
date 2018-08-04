@@ -45,7 +45,9 @@ class Resize
 	
 	public static function add(listener:Void -> Void):Slot0
 	{
-		return onResize.add(listener);
+		var slot0:Slot0 = onResize.add(listener);
+		listener();
+		return slot0;
 	}
 	
 	public static function addOnce(listener:Void -> Void):Slot0

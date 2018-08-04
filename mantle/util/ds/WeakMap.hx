@@ -73,6 +73,12 @@ class WeakMap<K: { },V> implements haxe.Constraints.IMap<K,V>
 		var res:String = cast(innerMap);
 		return res;
 	}
+
+	public function copy() : haxe.Constraints.IMap<K, V> {
+		var copied = new WeakMap();
+		for(key in keys()) copied.set(key, get(key));
+		return copied;
+	}
 	
 }
 @:native("WeakMap")
