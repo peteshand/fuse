@@ -4,11 +4,10 @@ import haxe.Timer;
 import lime.app.Application;
 import mantle.notifier.Notifier;
 
-#if flash
-import flash.Lib;
-import flash.events.Event;
-#else
+#if openfl
 import openfl.Lib;
+import openfl.display.Stage;
+import openfl.events.Event;
 #end
 /**
  * ...
@@ -19,31 +18,36 @@ class EnterFrame
 	private static var callbacks:Array<Void->Void>;
 	private static var running:Notifier<Bool>;
 	static private var application:Application;
-	
+	static var fps:Float = 60;
+
 	static function __init__() 
 	{
 		callbacks = new Array<Void->Void>();
 		running = new Notifier<Bool>(false);
-		running.add(OnRunningChange);
+		
+		Timer.delay(function() {
+			running.add(OnRunningChange);
+			OnRunningChange();
+		}, 1);
 	}
 	
 	static function OnRunningChange() 
 	{
-		if (running.value) {
-			#if flash
-				Lib.current.stage.addEventListener(Event.ENTER_FRAME, Update);
-			#else
+		#if openfl
+			var stage:Stage = Lib.current.stage;
+			if (running.value) {
+				stage.addEventListener(Event.ENTER_FRAME, Update);
+			} else {
+				stage.removeEventListener(Event.ENTER_FRAME, Update);
+			}
+		#else 
+			if (running.value) {
 				OnTick();
-			#end
-		}
-		else {
-			#if flash
-				Lib.current.stage.removeEventListener(Event.ENTER_FRAME, Update);
-			#end
-		}
+			}
+		#end
 	}
 	
-	#if flash
+	#if openfl
 	static private inline function Update(e:Event):Void 
 	{
 		OnTick();
@@ -57,9 +61,9 @@ class EnterFrame
 			callbacks[i]();
 		}
 		
-		#if (!flash)
+		#if (!openfl)
 			if (running.value) {
-				Timer.delay(OnTick, Std.int(1000 / Lib.current.stage.frameRate));
+				Timer.delay(OnTick, Std.int(1000 / fps));
 			}
 		#end
 	}

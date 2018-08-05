@@ -82,7 +82,7 @@ class BaseKeyCommand extends Command
 	
 	/*private function GoFullScreen():Void 
 	{
-		#if air3
+		#if air
 			contextView.view.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 			
 			if (contextView.view.stage.nativeWindow != null) {	//seems to be null on the tablet		

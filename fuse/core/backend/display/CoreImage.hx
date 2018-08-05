@@ -11,7 +11,7 @@ import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.utils.Calc;
 import fuse.core.utils.Pool;
 import fuse.display.geometry.Bounds;
-
+import fuse.core.assembler.batches.batch.BatchType;
 /**
  * ...
  * @author P.J.Shand
@@ -38,6 +38,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public var renderLayer	:Int = 0;
 	
 	public var drawIndex	:Int = -1;
+	public var batchType	:BatchType = null;
 	//var updateUVs			:Bool = false;
 	var renderTarget		:Int = -1;
 	public var sourceTextureId(get, null):Int;

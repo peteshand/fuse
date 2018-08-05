@@ -29,6 +29,7 @@ class AtlasBatch extends BaseBatch implements IBatch
 	
 	public function writeVertex() 
 	{
+		//trace("hasChanged = " + hasChanged);
 		batchData.clearRenderTarget = 1;
 		
 		setBatchProps();

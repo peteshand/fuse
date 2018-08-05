@@ -17,7 +17,6 @@ class GenerateLayers
 {
 	static var baseLayers = new Array<LayerBuffer>();
 	public static var layers = new GcoArray<LayerBuffer>([]);
-	//public static var lastLayers = new GcoArray<LayerBuffer>([]);
 	
 	public static var layersGenerated:Bool = true;
 	public static var drawCacheLayers:Bool = true;
@@ -35,12 +34,7 @@ class GenerateLayers
 	static function clear() 
 	{
 		update.value = null;
-		for (i in 0...GenerateLayers.layers.length) 
-		{
-			GenerateLayers.layers[i].nextFrame();
-		}
 		GenerateLayers.layers.clear();
-		//Pool.layerBufferes.forceReuse();
 	}
 	
 	static public function build() 

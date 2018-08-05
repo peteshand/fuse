@@ -42,6 +42,7 @@ class DirectBatch extends BaseBatch implements IBatch
 	
 	public function writeVertex():Bool
 	{
+		//trace("hasChanged = " + hasChanged);
 		setBatchProps();
 		
 		numItems = 0;
@@ -79,7 +80,8 @@ class DirectBatch extends BaseBatch implements IBatch
 			//vertexPositionHasMoved = true;
 		}
 		
-		var vertexPositionHasMoved:Bool = image.drawIndex != VertexData.OBJECT_POSITION;
+		var batchTypeHasChanged:Bool = image.batchType != BatchType.DIRECT;
+		var vertexPositionHasMoved:Bool = (image.drawIndex != VertexData.OBJECT_POSITION) || batchTypeHasChanged;
 		
 		var updateUVs:Bool		= vertexPositionHasMoved || coreTexture.uvsHaveChanged;
 		var updatePosition:Bool	= vertexPositionHasMoved || image.updatePosition;
@@ -192,6 +194,7 @@ class DirectBatch extends BaseBatch implements IBatch
 		image.setUpdates(false);
 		
 		image.drawIndex = VertexData.OBJECT_POSITION;
+		image.batchType = BatchType.DIRECT;
 		VertexData.OBJECT_POSITION++;
 		image.parentNonStatic = false;
 		

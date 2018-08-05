@@ -4,7 +4,7 @@ import openfl.display3D.Context3D;
 import fuse.core.front.texture.Textures;
 import openfl.display3D.textures.TextureBase;
 
-//#if air||flash
+//#if air
 import mantle.notifier.Notifier;
 /**
  * ...

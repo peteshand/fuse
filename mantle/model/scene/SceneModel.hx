@@ -58,7 +58,7 @@ class SceneModel extends BaseNotifier<String>
 				for(handler in _setHandlers) handler(_value);
 			}
 			if (updateHistory) _history.push(v);
-			activityModel.animating();
+			if (activityModel != null) activityModel.animating();
 			this.dispatch();
 		}
 		return v;

@@ -85,6 +85,16 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 		return hasChanged;
 	}
 	
+	override function get_hasChanged():Bool
+	{
+		return true;
+	}
+	
+	/*override public function updateHasChanged():Void 
+	{
+		hasChanged = true;
+	}*/
+	
 	function writeLayerVertex(image:CoreImage) 
 	{
 		if (image.displayData.visible == 0) return;
@@ -150,6 +160,7 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 		image.setUpdates(false);
 		
 		image.drawIndex = VertexData.OBJECT_POSITION;
+		image.batchType = BatchType.CACHE_BAKE;
 		VertexData.OBJECT_POSITION++;
 		image.parentNonStatic = false;
 	}

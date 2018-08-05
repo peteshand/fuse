@@ -66,7 +66,7 @@ class AirFullscreenCommand extends Command
 	
 	private function GoFullScreen():Void 
 	{
-		#if air3
+		#if air
 			try {
 				contextView.view.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
 			}

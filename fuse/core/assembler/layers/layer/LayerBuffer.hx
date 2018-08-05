@@ -61,12 +61,7 @@ class LayerBuffer
 		renderTarget = -1;
 		this.updateAll = updateAll;	
 		this.index = index;
-		renderablesData.renderables.clear();
-	}
-	
-	public function nextFrame() 
-	{
-		renderablesData.renderablesIndex++;
+		renderablesData.nextFrame();
 	}
 	
 	public function add(image:CoreImage) 
@@ -78,10 +73,6 @@ class LayerBuffer
 	{
 		var c:LayerBuffer = Pool.layerBufferes.request();
 		c.init(updateAll, index);
-		//for (i in 0...renderables.length) 
-		//{
-			//c.renderables.push(renderables[i]);
-		//}
 		c.isCacheLayer = isCacheLayer;
 		return c;
 	}
@@ -130,17 +121,18 @@ class LayerBuffer
 	{
 		return renderablesData.renderables;
 	}
-	
 }
 
 class RenderablesData
 {
 	public var renderables(get, null):GcoArray<ICoreRenderable>;
 	public var lastRenderables(get, null):GcoArray<ICoreRenderable>;
-	public var renderablesIndex(default, set):Int = 0;
+	var renderablesIndex(default, set):Int = 0;
 	var activeIndex:Int = 0;
-	var inactiveIndex:Int = 0;
+	var inactiveIndex:Int = 1;
 	var renderablesArray:Array<GcoArray<ICoreRenderable>>;
+	
+	public var hasChanged(get, null):Bool;
 	
 	public function new() 
 	{
@@ -148,6 +140,12 @@ class RenderablesData
 			new GcoArray<ICoreRenderable>([]),  
 			new GcoArray<ICoreRenderable>([])
 		];
+	}
+	
+	public function nextFrame() 
+	{
+		this.renderablesIndex++;
+		renderables.clear();
 	}
 	
 	inline function get_renderables():GcoArray<ICoreRenderable> 
@@ -166,5 +164,21 @@ class RenderablesData
 		activeIndex = renderablesIndex % 2;
 		inactiveIndex = (renderablesIndex + 1) % 2;
 		return renderablesIndex;
+	}
+	
+	function get_hasChanged():Bool 
+	{
+		if (lastRenderables.length != renderables.length) {
+			return true;
+		}
+		else {
+			for (i in 0...renderables.length) 
+			{
+				if (renderables[i] != lastRenderables[i]) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

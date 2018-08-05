@@ -53,6 +53,8 @@ class BatchRenderer
 		// ** // var numItemsInShaderProgram:Int = ShaderPrograms.getGroupId(currentBatchData.numItems);
 		// ** // if (numItemsInShaderProgram == 0) return;
 		if (conductorData.highestNumTextures == 0) return;
+		if (currentBatchData.numItems == 0) return;
+		
 		//trace("numItems = " + currentBatchData.numItems);
 		
 		//trace("startIndex = " + currentBatchData.startIndex);

@@ -53,7 +53,7 @@ class BatchAssembler
 		//trace("batches.length = " + batches.length);
 		//for (k in 0...batches.length) 
 		//{
-			//trace(batches[k]);
+		//	trace(batches[k]);
 		//}
 	}
 	
@@ -124,7 +124,6 @@ class BatchAssembler
 			case BatchType.ATLAS:		currentBatch = Pool.atlasBatches.request();
 			case BatchType.CACHE_BAKE:	currentBatch = Pool.cacheBakeBatches.request();
 			case BatchType.DIRECT:		currentBatch = Pool.directBatches.request();
-			//case BatchType.CACHE_DRAW:	currentBatch = Pool.cacheDrawBatches.request();
 		}
 		currentBatch.init(batches.length);
 	}
@@ -133,8 +132,7 @@ class BatchAssembler
 	{
 		if (currentBatch == null) return;
 		if (currentBatch.renderables.length > 0) {
-			currentBatch.updateHasChanged();
-			if (currentBatch.active){
+			if (currentBatch.hasChanged){
 				batches.push(currentBatch);
 			}
 		}

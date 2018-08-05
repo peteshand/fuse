@@ -9,7 +9,7 @@ import motion.easing.IEasing;
 import motion.easing.Quad;
 import msignal.Signal.Signal0;
 
-using Logger;
+using logger.Logger;
 
 #if swc
 	import flash.errors.Error;

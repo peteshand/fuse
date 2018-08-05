@@ -1,5 +1,6 @@
 package fuse.core.assembler.batches.batch;
 
+import fuse.core.assembler.layers.layer.LayerBuffer.RenderablesData;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.assembler.vertexWriter.VertexWriter;
 import fuse.core.communication.data.CommsObjGen;
@@ -15,8 +16,13 @@ class BaseBatch
 	var batchTextures:BatchTextures;
 	public var batchData:IBatchData;
 	public var index:Int = -1;
-	public var renderables:GcoArray<ICoreRenderable>;
-	public var lastRenderables:GcoArray<ICoreRenderable>;
+	
+	var renderablesData = new RenderablesData();
+	public var renderables(get, null):GcoArray<ICoreRenderable>;
+	
+	//public var renderables:GcoArray<ICoreRenderable>;
+	//public var lastRenderables:GcoArray<ICoreRenderable>;
+	
 	public var renderTarget:Null<Int>;
 	public var blendMode:Null<Int> = null;
 	public var active(get, null):Bool;
@@ -25,15 +31,15 @@ class BaseBatch
 	var batchId:Int;
 	
 	// true if the order of renderables or which renderables are included in the batch have changed
-	public var hasChanged:Bool = false;
-	//public var hasChanged(get, null):Bool;
+	//public var hasChanged:Bool = false;
+	public var hasChanged(get, null):Bool;
 	
 	public function new() 
 	{
 		batchId = count++;
 		batchTextures = new BatchTextures();
-		renderables = new GcoArray<ICoreRenderable>([]);
-		lastRenderables = new GcoArray<ICoreRenderable>([]);
+		//renderables = new GcoArray<ICoreRenderable>([]);
+		//lastRenderables = new GcoArray<ICoreRenderable>([]);
 	}
 	
 	public function init(index:Int):Void
@@ -42,6 +48,7 @@ class BaseBatch
 		renderables.clear();
 		batchTextures.clear();
 		if (this.index == index) return;
+		this.nextFrame();
 		
 		this.index = index;
 		batchData = CommsObjGen.getBatchData(index);
@@ -112,8 +119,9 @@ class BaseBatch
 		return Type.getClassName(Type.getClass(this)) + "\nindex = " + index + "\nrenderTarget = " + renderTarget + " \nbatchTextures = " + batchTextures + " \nnumItems = " + renderables.length;
 	}
 	
-	public function updateHasChanged():Void 
+	/*public function updateHasChanged():Void 
 	{
+		
 		hasChanged = false;
 		if (lastRenderables.length != renderables.length) {
 			hasChanged = true;
@@ -132,6 +140,21 @@ class BaseBatch
 		{
 			lastRenderables.push(renderables[i]);
 		}
+	}*/
+	
+	public function nextFrame():Void
+	{
+		renderablesData.nextFrame();
+	}
+	
+	function get_hasChanged():Bool
+	{
+		return renderablesData.hasChanged;
+	}
+	
+	function get_renderables():GcoArray<ICoreRenderable> 
+	{
+		return renderablesData.renderables;
 	}
 	
 	function get_active():Bool 

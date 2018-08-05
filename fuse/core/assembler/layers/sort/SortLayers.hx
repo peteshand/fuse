@@ -121,13 +121,11 @@ class SortLayers
 	static inline function SetActiveBasedOnPosition() 
 	{
 		var count:Int = 0;
+		
 		for (i in 0...GenerateLayers.layers.length) 
 		{
 			if (count >= LayerCacheBuffers.numBuffers) break;
-			
-			
 			if (GenerateLayers.layers[i].updateAll) break;
-			
 			
 			GenerateLayers.layers[i].isCacheLayer = true;
 			
