@@ -1,14 +1,11 @@
 package fuse.display;
 
+import fuse.shader.IShader;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.front.texture.Textures;
 import fuse.display.DisplayObject;
-import fuse.display.Image;
-import fuse.texture.IBaseTexture;
 import fuse.texture.AbstractTexture;
-import fuse.utils.Align;
-import openfl.errors.Error;
-
+import openfl.geom.ColorTransform;
 
 /**
  * ...
@@ -18,8 +15,9 @@ class Image extends DisplayObject
 {
 	@:isVar public var texture(default, set):AbstractTexture;
 	@:isVar public var renderLayer(default, set):Int;
-	@:isVar public var blendMode(get, set):BlendMode;
-	
+	@:isVar public var blendMode(default, set):BlendMode;
+	var shaders:Array<IShader> = [];
+
 	public function new(texture:AbstractTexture) 
 	{
 		super();
@@ -82,11 +80,6 @@ class Image extends DisplayObject
 		updateAlignment();
 	}
 	
-	function get_blendMode():BlendMode 
-	{
-		return blendMode;
-	}
-	
 	function set_blendMode(value:BlendMode):BlendMode 
 	{
 		if (blendMode != value) {
@@ -96,5 +89,15 @@ class Image extends DisplayObject
 			updateStaticBackend();
 		}
 		return value;
+	}
+
+	public function addShader(shader:IShader):Void
+	{
+		shaders.push(shader);
+		var shaderId:Int = 0;
+		for (i in 0...shaders.length) {
+			shaderId += shaders[i].objectId;
+		}
+		displayData.shaderId = shaderId;
 	}
 }

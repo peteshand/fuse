@@ -19,10 +19,10 @@ class FShaders
 		FShader.init();
 		
 		shaders = new Map<Int, FShader>();
-		for (i in 0...8) 
+		/*for (i in 0...8) 
 		{
-			getShader(i+1);
-		}
+			getShader(i+1, 0);
+		}*/
 	}
 	
 	public function new() 
@@ -30,18 +30,20 @@ class FShaders
 		
 	}
 	
-	public static function getShader(numTextures:Int):FShader
+	public static function getShader(numTextures:Int, shaderId:Int):FShader
 	{
 		lastShader = currentShader;
+
+		var id:Int = numTextures + Math.floor(numTextures * shaderId);
 		
-		currentShader = shaders.get(numTextures);
+		currentShader = shaders.get(id);
 		
 		if (lastShader != currentShader && lastShader != null) {
 			lastShader.deactivate();
 		}
 		if (currentShader == null) {
-			currentShader = new FShader(context3D, numTextures);
-			shaders.set(numTextures, currentShader);
+			currentShader = new FShader(context3D, numTextures, shaderId);
+			shaders.set(id, currentShader);
 		}
 		
 		return currentShader;

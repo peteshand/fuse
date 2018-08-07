@@ -1,11 +1,9 @@
 package fuse.render.batch;
 
-import fuse.core.PlatformSettings;
 import fuse.core.backend.texture.TextureRenderBatch;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.communication.data.batchData.IBatchData;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
-import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.buffers.AtlasBuffers;
 import fuse.render.blendMode.Context3DBlendMode;
 import fuse.render.texture.Context3DTexture;
@@ -14,7 +12,6 @@ import fuse.render.debug.RenderDebugUtil;
 import fuse.render.shaders.FShader;
 import fuse.render.shaders.FShaders;
 import fuse.render.target.Context3DRenderTarget;
-import mantle.notifier.Notifier;
 import openfl.display3D.Context3D;
 
 /**
@@ -75,7 +72,8 @@ class BatchRenderer
 		}
 		
 		
-		var fShader:FShader = FShaders.getShader(conductorData.highestNumTextures);
+		var fShader:FShader = FShaders.getShader(currentBatchData.numTextures, currentBatchData.shaderId);
+		//fShader.shaderId = currentBatchData.shaderId;
 		fShader.update(currentBatchData.renderTargetId == -1);
 		
 		if (traceOutput){

@@ -15,21 +15,23 @@ class WorkerBatchData implements IBatchData
 	static public inline var LENGTH_INDEX:Int = 8;
 	
 	static public inline var BLEND_MODE_INDEX:Int = 10;
-	static public inline var TEXTURE_ID1:Int = 12;
-	static public inline var TEXTURE_ID2:Int = 14;
-	static public inline var TEXTURE_ID3:Int = 16;
-	static public inline var TEXTURE_ID4:Int = 18;
-	static public inline var TEXTURE_ID5:Int = 20;
-	static public inline var TEXTURE_ID6:Int = 22;
-	static public inline var TEXTURE_ID7:Int = 24;
-	static public inline var TEXTURE_ID8:Int = 26;
-	static public inline var NUM_TEXTURES:Int = 28;
-	static public inline var NUM_ITEMS:Int = 30;
-	static public inline var WIDTH:Int = 32;
-	static public inline var HEIGHT:Int = 34;
-	static public inline var SKIP:Int = 36;
+	static public inline var SHADER_ID_INDEX:Int = 12;
 	
-	public static inline var BYTES_PER_ITEM:Int = 38;
+	static public inline var TEXTURE_ID1:Int = 14;
+	static public inline var TEXTURE_ID2:Int = 16;
+	static public inline var TEXTURE_ID3:Int = 18;
+	static public inline var TEXTURE_ID4:Int = 20;
+	static public inline var TEXTURE_ID5:Int = 22;
+	static public inline var TEXTURE_ID6:Int = 24;
+	static public inline var TEXTURE_ID7:Int = 26;
+	static public inline var TEXTURE_ID8:Int = 28;
+	static public inline var NUM_TEXTURES:Int = 30;
+	static public inline var NUM_ITEMS:Int = 32;
+	static public inline var WIDTH:Int = 34;
+	static public inline var HEIGHT:Int = 36;
+	static public inline var SKIP:Int = 38;
+	
+	public static inline var BYTES_PER_ITEM:Int = 40;
 	public static inline var BUFFER_SIZE:Int = 10000;
 	
 	public var memoryBlock:MemoryBlock;
@@ -41,6 +43,7 @@ class WorkerBatchData implements IBatchData
 	@:isVar public var startIndex(get, set):Int;
 	@:isVar public var length(get, set):Int;
 	@:isVar public var blendMode(get, set):Int;
+	@:isVar public var shaderId(get, set):Int;
 	
 	@:isVar public var textureIds(get, null):Array<Int>;
 	@:isVar public var textureId1(get, set):Int;
@@ -69,6 +72,8 @@ class WorkerBatchData implements IBatchData
 	function get_startIndex():Int		{ return memoryBlock.readInt16(START_INDEX); }
 	
 	function get_blendMode():Int		{ return memoryBlock.readInt16(BLEND_MODE_INDEX); }
+	function get_shaderId():Int			{ return memoryBlock.readInt16(SHADER_ID_INDEX); }
+
 	function get_length():Int			{ return memoryBlock.readInt16(LENGTH_INDEX); }
 	function get_textureId1():Int		{ return memoryBlock.readInt16(TEXTURE_ID1); }
 	function get_textureId2():Int		{ return memoryBlock.readInt16(TEXTURE_ID2); }
@@ -120,6 +125,11 @@ class WorkerBatchData implements IBatchData
 	
 	function set_blendMode(value:Int):Int {
 		memoryBlock.writeInt16(BLEND_MODE_INDEX, value);
+		return value;
+	}
+	
+	function set_shaderId(value:Int):Int {
+		memoryBlock.writeInt16(SHADER_ID_INDEX, value);
 		return value;
 	}
 	

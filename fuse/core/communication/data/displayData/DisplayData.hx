@@ -28,6 +28,8 @@ class DisplayData
 	public var visible:Int = 0;
 	public var blendMode:Int = 0;
 	
+	public var shaderId:Int = 0;
+
 	public var isStatic:Int = 0;
 	public var isMoving:Int = 0;
 	public var isRotating:Int = 0;

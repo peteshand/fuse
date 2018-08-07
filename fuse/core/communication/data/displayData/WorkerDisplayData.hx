@@ -31,11 +31,14 @@ class WorkerDisplayData /*implements IDisplayData*/
 	static inline var INDEX_RENDER_LAYER:Int = 64;
 	static inline var INDEX_VISIBLE:Int = 68;
 	static inline var INDEX_BLEND_MODE:Int = 72;
-	static inline var INDEX_IS_STATIC:Int = 76;
-	static inline var INDEX_IS_MOVING:Int = 80;
-	static inline var INDEX_IS_ROTATING:Int = 84;
 	
-	public static inline var BYTES_PER_ITEM:Int = 88;
+	static inline var INDEX_SHADER_ID:Int = 76;
+	
+	static inline var INDEX_IS_STATIC:Int = 80;
+	static inline var INDEX_IS_MOVING:Int = 84;
+	static inline var INDEX_IS_ROTATING:Int = 88;
+	
+	public static inline var BYTES_PER_ITEM:Int = 92;
 	
 	var memoryBlock:MemoryBlock;
 	
@@ -60,6 +63,8 @@ class WorkerDisplayData /*implements IDisplayData*/
 	public var visible(get, set):Int;
 	public var blendMode(get, set):Int;
 	
+	public var shaderId(get, set):Int;
+
 	public var isStatic(get, set):Int;
 	public var isMoving(get, set):Int;
 	public var isRotating(get, set):Int;
@@ -150,6 +155,9 @@ class WorkerDisplayData /*implements IDisplayData*/
 	inline function get_blendMode():Int { 
 		return memoryBlock.readByte(INDEX_BLEND_MODE);
 	}
+	
+	inline function get_shaderId():Int { return memoryBlock.readInt(INDEX_SHADER_ID); }
+	
 	
 	inline function get_isStatic():Int { 
 		return memoryBlock.readByte(INDEX_IS_STATIC);
@@ -263,6 +271,8 @@ class WorkerDisplayData /*implements IDisplayData*/
 		memoryBlock.writeByte(INDEX_BLEND_MODE, value);
 		return value;
 	}
+	
+	inline function set_shaderId(value:Int):Int { memoryBlock.writeInt(INDEX_SHADER_ID, value); return value; }
 	
 	inline function set_isStatic(value:Int):Int { 
 		memoryBlock.writeByte(INDEX_IS_STATIC, value);

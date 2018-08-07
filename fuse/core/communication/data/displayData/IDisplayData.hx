@@ -52,7 +52,9 @@ typedef IDisplayData =
 	textureId:Int,
 	renderLayer:Int,
 	visible:Int,
-	blendMode:Int
+	blendMode:Int,
+
+	shaderId:Int,
 	/*,
 	public var blendMode:BlendMode;
 	isStatic:Int,

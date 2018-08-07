@@ -35,6 +35,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public var maskOf:Array<CoreImage> = [];
 	
 	public var blendMode	:Int = 0;
+	public var shaderId		:Int = 0;
 	public var renderLayer	:Int = 0;
 	
 	public var drawIndex	:Int = -1;
@@ -73,6 +74,8 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		if (updateAny) {
 			Fuse.current.conductorData.backIsStatic = 0;
 		}
+
+		shaderId = displayData.shaderId;
 		
 		//trace([isRotating, isMoving, isStatic]);
 		if (updateColour) {

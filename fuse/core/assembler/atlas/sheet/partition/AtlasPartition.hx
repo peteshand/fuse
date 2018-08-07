@@ -19,7 +19,7 @@ class AtlasPartition implements ICoreRenderable
 	public var active:Bool;
 	public var placed:Bool;
 	public var blendMode:Int = 0;
-	
+	public var shaderId:Int = 0;
 	public var x:Int;
 	public var y:Int;
 	public var width:Int;

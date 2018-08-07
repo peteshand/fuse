@@ -10,6 +10,7 @@ interface IBatchData
 	public var clearRenderTarget(get, set):Int;
 	public var startIndex(get, set):Int;
 	public var blendMode(get, set):Int;
+	public var shaderId(get, set):Int;
 	public var textureIds(get, null):Array<Int>;
 	public var textureId1(get, set):Int;
 	public var textureId2(get, set):Int;

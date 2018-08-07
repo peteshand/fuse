@@ -25,6 +25,7 @@ class BaseBatch
 	
 	public var renderTarget:Null<Int>;
 	public var blendMode:Null<Int> = null;
+	public var shaderId:Null<Int> = null;
 	public var active(get, null):Bool;
 	
 	static var count:Int = 0;
@@ -63,6 +64,9 @@ class BaseBatch
 		
 		if (blendMode != null && blendMode != renderable.blendMode) return false;
 		blendMode = renderable.blendMode;
+
+		if (shaderId != null && shaderId != renderable.shaderId) return false;
+		shaderId = renderable.shaderId;
 		
 		if (renderTargetChanged(renderTarget)) return false;
 		
@@ -102,6 +106,7 @@ class BaseBatch
 		//trace("batchTextures.textureIds = " + batchTextures.textureIds);
 		
 		batchData.blendMode = blendMode;
+		batchData.shaderId = shaderId;
 		
 		batchData.textureId1 = batchTextures.textureId1;
 		batchData.textureId2 = batchTextures.textureId2;

@@ -1,4 +1,8 @@
 package fuse.render.shaders;
+
+import fuse.shader.BaseShader;
+import fuse.shader.ColorTransformShader;
+import fuse.shader.IShader;
 import mantle.notifier.Notifier;
 import openfl.Lib;
 import openfl.Vector;
@@ -13,6 +17,7 @@ import openfl.utils.ByteArray;
  * ...
  * @author P.J.Shand
  */
+ @:access(fuse.shader.BaseShader)
 class FShader
 {
 	public static inline var ENABLE_MASKS:Bool = true;
@@ -20,6 +25,7 @@ class FShader
 	static var textureChannelData:Vector<Float>;
 	static var posData:Vector<Float>;
 	static var cameraData:Vector<Float>;
+	//static var colorTransform:Vector<Float>;
 	static var fragmentData:Vector<Float>;
 	
 	static var agalMiniAssembler:AGALMiniAssembler;
@@ -32,12 +38,15 @@ class FShader
 	var vertexCode:ByteArray;
 	var fragmentCode:ByteArray;
 	var setProgram = new Notifier<Bool>();
-	
+	public var shaderId:Int = 0;
+	static var shaders:Array<IShader> = [];
+
 	public static function init():Void
 	{
-		
+		//colorTransform = new ColorTransformShader(1, 0, 0);
 		// FRAGMENT
-		fragmentData = Vector.ofArray([0, 255, 1.0, 2.0]);
+		fragmentData = Vector.ofArray([0, 255, 1.0, -1.0]);
+		//colorTransform = Vector.ofArray([1.0, 0.0, 0.0, 1.0, 0.0, 0.25, 0.25, 0.0]);
 		
 		// VERTEX
 		posData = Vector.ofArray([8.0, 0.0, 0.0, 1.0]);
@@ -57,17 +66,23 @@ class FShader
 		maskIndex = ["v4.x", "v4.y", "v4.z", "v4.w","v5.x", "v5.y", "v5.z", "v5.w"];
 	}
 	
-	public function new(context3D:Context3D, numTextures:Int) 
+	public function new(context3D:Context3D, numTextures:Int, shaderId:Int) 
 	{
 		this.context3D = context3D;
 		this.numTextures = numTextures;
+		this.shaderId = shaderId;
+	}
+
+	function createAndUploadShaderProgram()
+	{
+		if (program != null) return;
+
+		program = context3D.createProgram();
 		vertexCode = agalMiniAssembler.assemble(Context3DProgramType.VERTEX, vertexString());
 		fragmentCode = agalMiniAssembler.assemble(Context3DProgramType.FRAGMENT, fragmentString());
-		
-		program = context3D.createProgram();
 		program.upload(vertexCode, fragmentCode);
-		
 		setProgram.add(OnProgramConstantsChange);
+		OnProgramConstantsChange();
 	}
 	
 	function OnProgramConstantsChange() 
@@ -99,8 +114,21 @@ class FShader
 				//context3D.setProgramConstantsFromMatrix(Context3DProgramType.VERTEX, 17, matrix3D);
 				context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 17, cameraData, 1);
 				
+				
 				Fuse.current.stage.camera.hasUpdate = false;
 			}
+			//colorTransform = BaseShader.map.get(1);
+			trace("shaderId = " + shaderId);
+			shaders = BaseShader.getShaders(shaderId);
+
+			createAndUploadShaderProgram();
+
+			for (i in 0...shaders.length) {
+				shaders[i].activate(context3D);
+			}
+			//trace("1 colorTransform = " + colorTransform);
+			//if (colorTransform != null) colorTransform.activate(context3D);
+			//context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, colorTransform, 2);
 		}
 	}
 	
@@ -189,11 +217,14 @@ class FShader
 	{
 		var alias:Array<AgalAlias> = [];
 		alias.push( { alias:"ZERO.1", value:"fc0.x" } );
-		alias.push( { alias:"TWO.3", value:"fc0.www" } );
+		alias.push( { alias:"ZERO.4", value:"fc0.xxxx" } );
 		alias.push( { alias:"ONE.1", value:"fc0.z" } );
 		alias.push( { alias:"ONE.3", value:"fc0.zzz" } );
 		alias.push( { alias:"ONE.4", value:"fc0.zzzz" } );
+		alias.push( { alias:"NEG_ONE.4", value:"fc0.wwwww" } );
 		alias.push( { alias:"MASK_BASE.1", value:"v6.z" } );
+		alias.push( { alias:"COLOR_TRANSFORM_MULTIPLIER", value:"fc1" } );
+		alias.push( { alias:"COLOR_TRANSFORM_OFFSET", value:"fc2" } );
 		
 		
 		var agal:String = "\n";
@@ -240,6 +271,19 @@ class FShader
 			/////////////////////////////////////////////////////////////////
 			/////////////////////////////////////////////////////////////////
 			
+			//agal += "mul ft1, ft1, COLOR_TRANSFORM_MULTIPLIER				\n";
+			
+			//agal += "min ft1, ft1, ONE.4									\n";
+			//agal += "min ft1, NEG_ONE.4, ft1								\n";
+
+			//agal += "add ft1, ft1, COLOR_TRANSFORM_OFFSET					\n";
+			
+			//trace("2 colorTransform = " + colorTransform);
+			//if (colorTransform != null) agal += colorTransform.fragmentString();
+			for (i in 0...shaders.length) {
+				agal += shaders[i].fragmentString();
+			}
+
 			agal += "mov oc0, ft1";
 		
 		for (i in 0...alias.length) 

@@ -16,7 +16,8 @@ class BatchData implements IBatchData
 	@:isVar public var startIndex(get, set):Int = 0;
 	@:isVar public var length(get, set):Int = 0;
 	@:isVar public var blendMode(get, set):Int = 0;
-	
+	@:isVar public var shaderId(get, set):Int = 0;
+
 	public var textureIds(get, null):Array<Int>;
 	@:isVar public var textureId1(get, set):Int = 0;
 	@:isVar public var textureId2(get, set):Int = 0;
@@ -42,7 +43,8 @@ class BatchData implements IBatchData
 	function get_clearRenderTarget():Int{ return clearRenderTarget; }
 	function get_startIndex():Int		{ return startIndex; }
 	function get_length():Int			{ return length; }
-	function get_blendMode():Int			{ return blendMode; }
+	function get_blendMode():Int		{ return blendMode; }
+	function get_shaderId():Int			{ return shaderId; }
 	
 	function get_textureId1():Int		{ return textureId1; }
 	function get_textureId2():Int		{ return textureId2; }
@@ -89,6 +91,10 @@ class BatchData implements IBatchData
 	
 	function set_blendMode(value:Int):Int {
 		return blendMode = value;
+	}
+
+	function set_shaderId(value:Int):Int {
+		return shaderId = value;
 	}
 	
 	function set_textureId1(value:Int):Int {
