@@ -1,4 +1,5 @@
 package mantle.util.fs;
+
 import haxe.io.Bytes;
 import haxe.io.BytesData;
 import openfl.utils.ByteArray;
@@ -18,8 +19,8 @@ import mantle.util.EventListenerTracker;
 	import flash.filesystem.File as FlFile;
 	import flash.filesystem.FileStream;
 	import flash.filesystem.FileMode;
-	import flash.events.Event;
-	import flash.events.IOErrorEvent;
+	import openfl.events.Event;
+	import openfl.events.IOErrorEvent;
 	
 	class FileTools
 	{
@@ -75,7 +76,7 @@ import mantle.util.EventListenerTracker;
 		{
 			temp.nativePath = path;
 			var stream:FileStream =  new FileStream();
-			var listenerTracker:EventListenerTracker = new EventListenerTracker(stream);
+			var listenerTracker:EventListenerTracker = new EventListenerTracker(untyped stream);
 			listenerTracker.addEventListener(Event.COMPLETE, readSuccessHandler.bind(_, stream, listenerTracker, onComplete) );
 			listenerTracker.addEventListener(IOErrorEvent.IO_ERROR, readFailHandler.bind(_, stream, listenerTracker, onFail) );
 			stream.openAsync(temp, FileMode.READ);
@@ -133,7 +134,7 @@ import mantle.util.EventListenerTracker;
 				temp.nativePath = path;
 				confirmParent(temp);
 				var stream:FileStream =  new FileStream();
-				var listenerTracker:EventListenerTracker = new EventListenerTracker(stream);
+				var listenerTracker:EventListenerTracker = new EventListenerTracker(untyped stream);
 				listenerTracker.addEventListener(Event.CLOSE, writeSuccessHandler.bind(_, listenerTracker, onComplete) );
 				listenerTracker.addEventListener(IOErrorEvent.IO_ERROR, writeFailHandler.bind(_, listenerTracker, onFail) );
 				stream.openAsync(temp, FileMode.WRITE);
@@ -166,7 +167,7 @@ import mantle.util.EventListenerTracker;
 				temp.nativePath = path;
 				confirmParent(temp);
 				var stream:FileStream =  new FileStream();
-				var listenerTracker:EventListenerTracker = new EventListenerTracker(stream);
+				var listenerTracker:EventListenerTracker = new EventListenerTracker(untyped stream);
 				listenerTracker.addEventListener(Event.CLOSE, writeSuccessHandler.bind(_, listenerTracker, onComplete) );
 				listenerTracker.addEventListener(IOErrorEvent.IO_ERROR, writeFailHandler.bind(_, listenerTracker, onFail) );
 				stream.openAsync(temp, FileMode.WRITE);

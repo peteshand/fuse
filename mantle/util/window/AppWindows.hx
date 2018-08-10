@@ -6,17 +6,16 @@ import msignal.Signal.Signal1;
  */
 
 #if js
-
 typedef NativeAppWindows = JsAppWindows;
 typedef NativeAppWindow = mantle.util.window.JsAppWindows.JsAppWindow;
 @:forward(createSupported, hideSupported, hideAll, closeAll, exit, foreach, lastWindowClosing)
-#else
-
+#elseif air
 typedef NativeAppWindows = AirAppWindows;
 typedef NativeAppWindow = mantle.util.window.AirAppWindows.AirAppWindow;
 @:forward(createSupported, hideSupported, hideAll, closeAll, exit, foreach, lastWindowClosing)
 #end
 
+#if (js||air)
 abstract AppWindows(NativeAppWindows) from NativeAppWindows
 {
 
@@ -73,3 +72,4 @@ typedef MouseInfo =
 	stageY:Float,
 	shift:Bool,
 }
+#end

@@ -1,3 +1,4 @@
+#if air
 package mantle.util.window;
 import mantle.notifier.Notifier;
 import mantle.util.app.App;
@@ -372,3 +373,4 @@ class AirAppWindow
 		onResize.dispatch();
 	}
 }
+#end

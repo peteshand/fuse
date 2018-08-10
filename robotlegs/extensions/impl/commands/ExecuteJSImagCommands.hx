@@ -2,7 +2,7 @@ package robotlegs.extensions.impl.commands;
 
 import robotlegs.extensions.impl.commands.fullscreen.HTMLFullscreenCommand;
 import robotlegs.extensions.impl.commands.ExecuteImagCommands;
-import robotlegs.extensions.impl.signals.startup.ConfigReadySignal;
+import robotlegs.extensions.impl.signals.startup.InitializeAppSignal;
 import robotlegs.bender.framework.api.IConfig;
 
 /**
@@ -20,7 +20,7 @@ class ExecuteJSImagCommands extends ExecuteImagCommands implements IConfig
 	
 	override public function configure():Void
 	{
-		commandMap.map(ConfigReadySignal).toCommand(HTMLFullscreenCommand).once();
+		commandMap.map(InitializeAppSignal).toCommand(HTMLFullscreenCommand).once();
 		
 		super.configure();
 	}

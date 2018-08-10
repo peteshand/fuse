@@ -1,26 +1,12 @@
 package robotlegs.extensions.impl.services.config;
 
-import mantle.definitions.Storage;
 import mantle.delay.Delay;
-import mantle.util.app.App;
-import mantle.util.fs.FileTools;
-import mantle.util.fs.Files;
-import flash.errors.Error;
-import haxe.Json;
-import robotlegs.extensions.impl.model.config2.Locations;
 import robotlegs.extensions.impl.utils.json.JsonFormatter;
-
-import mantle.util.fs.File;
-import mantle.util.fs.FileMode;
-import mantle.util.fs.FileStream;
-
-import openfl.Assets;
-import robotlegs.extensions.api.model.config.IConfigModel;
-import robotlegs.extensions.impl.model.config2.ConfigData;
-import robotlegs.extensions.impl.model.config2.ConfigSettings;
-
-using Logger;
-
+import haxe.Json;
+#if (air && !mobile)
+	import mantle.util.fs.File;
+	import fuse.filesystem.FileTools;
+#end
 /**
  * ...
  * @author P.J.Shand
@@ -126,7 +112,7 @@ class ConfigSaveService
 			var json:Dynamic = Json.parse(savedContent);
 			return true;
 		}
-		catch (e:Error) {
+		catch (e:Dynamic) {
 			//trace("config save failed because the output can't be json parsed: " + e);
 		}
 		return false;

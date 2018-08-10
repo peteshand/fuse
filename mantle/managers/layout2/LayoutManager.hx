@@ -1,11 +1,9 @@
 package mantle.managers.layout2;
 import mantle.managers.layout2.items.ITransformObject;
-import mantle.managers.layout2.items.TransformObject;
 import mantle.managers.layout2.settings.LayoutSettings;
 import flash.display.Stage;
 import openfl.geom.Rectangle;
-import openfl.Lib;
-import starling.display.Image;
+import mantle.managers.layout2.items.TransformObject;
 
 /**
  * ...
@@ -65,3 +63,7 @@ class LayoutManager
 		return assetDimensions.width / assetDimensions.height;
 	}
 }
+
+#if starling
+
+#end

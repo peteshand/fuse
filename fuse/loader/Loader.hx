@@ -1,5 +1,6 @@
 package fuse.loader;
-import flash.events.EventDispatcher;
+
+import openfl.events.EventDispatcher;
 import openfl.display.BitmapData;
 import openfl.events.Event;
 import openfl.events.IOErrorEvent;

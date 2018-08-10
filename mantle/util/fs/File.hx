@@ -1,6 +1,6 @@
 package mantle.util.fs;
 
-#if js
+#if (js||flash)
 import openfl.net.SharedObject;
 
 #end
@@ -72,19 +72,20 @@ import openfl.net.SharedObject;
 			return this;
 		}
 	}
-#elseif js
+#elseif (js||flash)
 	
 	class File
 	{
 		public static var documentsDirectory(get, null):File;
+		public static var applicationDirectory(get, null):File;
 		
 		@:allow(mantle.util.fs.FileStream)
 		private var sharedObject:SharedObject;
 		private var path:String;
-		public var nativePath(get, null):String;
+		public var nativePath(get, never):String;
 		public var exists(get, null):Bool;
 		
-		public function new(path:String) 
+		public function new(path:String="") 
 		{
 			this.path = path;
 			init();
@@ -109,6 +110,11 @@ import openfl.net.SharedObject;
 		private static function get_documentsDirectory():File 
 		{
 			return new File("documents/");
+		}
+		
+		private static function get_applicationDirectory():File 
+		{
+			return new File("applicationDirectory/");
 		}
 		
 		private function get_exists():Bool 

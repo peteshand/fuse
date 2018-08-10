@@ -24,7 +24,7 @@ class Storage
 	
 	public static function __init__():Void
 	{
-		#if flash
+		#if air
 			configSeedDirectory = File.applicationDirectory.resolvePath("config");
 			
 			appStorageDir = File.documentsDirectory.resolvePath(".appStorage");

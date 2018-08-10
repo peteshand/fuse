@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.commands.logging;
 
-#if flash
+#if air
 	import mantle.util.log.air.DefaultAirDesktopLog;
 #elseif html5
 	import mantle.util.log.js.DefaultJsLog;
@@ -27,7 +27,7 @@ class SetupLoggingCommand extends Command
 	{
 		if (configModel==null) return;
 		if (configModel.logErrors) {
-			#if (flash&&!mobile)
+			#if (air&&!mobile)
 				DefaultAirDesktopLog.install(contextView.view, null);
 			#elseif html5
 				DefaultJsLog.install();

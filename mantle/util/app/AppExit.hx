@@ -1,29 +1,26 @@
 package mantle.util.app;
-import mantle.util.window.AppWindows;
+
 import mantle.delay.Delay;
-import mantle.util.window.AppWindows.AppWindow;
+
 
 #if openfl
 import openfl.Lib;
 import openfl.display.Stage;
 #end
 
-#if flash
+#if air
 import flash.desktop.NativeApplication;
-import flash.events.Event;
-
 #elseif js
 import js.html.Event;
-
 #end
 
+import openfl.events.Event;
 
 /**
  * ...
  * @author P.J.Shand
  */
 @:allow(mantle.util.app.App)
-@:allow(mantle.util.window.AppWindows)
 class AppExit
 {
 	static private var exitConfirmers:Array<ExitConfirmer> = [];
@@ -43,7 +40,9 @@ class AppExit
 	{
 		if (isSetup) return;
 		isSetup = true;
+		#if (js||air)
 		App.windows.lastWindowClosing.add(onLastWindowClosing);
+		#end
 	}
 	
 	static private function onLastWindowClosing(cancel:Void->Void) : Void
@@ -112,7 +111,9 @@ class AppExit
 			if (exitCleanups.length == 0){
 				finaliseExit(exitCode);
 			}else{
+				#if (air||js)
 				App.windows.hideAll();
+				#end
 				awaitingCleanups = exitCleanups.length;
 				for (cleanup in exitCleanups){
 					cleanup(exitCode, onCleanupDone.bind(exitCode));
@@ -145,8 +146,10 @@ class AppExit
 	static private function finaliseExit(exitCode:Int) 
 	{
 		ignoreExit = true;
+		#if (js||air)
 		App.windows.closeAll();
 		App.windows.exit(exitCode);
+		#end
 		ignoreExit = false;
 		callingExit = false;
 	}

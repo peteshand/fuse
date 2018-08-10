@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.commands.stageSetup;
 
-import mantle.managers.layout2.LayoutManager;
+
 import mantle.managers.resize.Resize;
 import flash.display.Stage;
 import flash.display.StageAlign;
@@ -8,6 +8,9 @@ import flash.display.StageScaleMode;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;
 
+#if starling
+	import mantle.managers.layout2.LayoutManager;
+#end
 /**
  * ...
  * @author P.J.Shand

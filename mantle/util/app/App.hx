@@ -1,7 +1,7 @@
 package mantle.util.app;
 import mantle.notifier.Notifier;
 import mantle.util.app.AppExit.ExitContinue;
-import mantle.util.window.AppWindows;
+
 import haxe.macro.Compiler;
 import haxe.macro.Context;
 import haxe.xml.Fast;
@@ -10,26 +10,27 @@ import haxe.xml.Fast;
 #if openfl
 import openfl.Lib;
 import openfl.display.Stage;
+import openfl.events.Event;
 #end
 
 #if air
 import mantle.util.window.AirAppWindows;
-#end
-
-#if flash
 import flash.desktop.NativeApplication;
-import flash.events.Event;
-
 #elseif js
 import js.html.Event;
+#end
 
+#if (air||js)
+import mantle.util.window.AppWindows;
 #end
 
 /**
  * ...
  * @author Thomas Byrne
  */
+ #if air
 @:access(mantle.util.window.AirAppWindows)
+#end
 class App
 {
 	@:isVar static public var focused(get, null):Notifier<Bool>;
@@ -44,6 +45,7 @@ class App
 	static private var version:String;
 	static private var appFilename:String;
 	
+	#if (air||js)
 	static public var windows(get, null):AppWindows;
 	static function get_windows():AppWindows 
 	{
@@ -57,6 +59,7 @@ class App
 		setup();
 		return nativeWindows;
 	}
+	#end
 	
 	#if js
 	@:isVar static public var appElement(get, null):js.html.Element;
@@ -94,14 +97,17 @@ class App
 		
 		focused = new Notifier(false);
 		
-		App.nativeWindows = new NativeAppWindows();
-		App.windows.foreach(onWindowAdd, onWindowRemove);
+		#if (air||js)
+			App.nativeWindows = new NativeAppWindows();
+			App.windows.foreach(onWindowAdd, onWindowRemove);
+		#end
 		
 		checkManifest();
 		
 		AppExit.setup();
 	}
 	
+	#if (air||js)
 	static private function onWindowRemove(window:AppWindow) 
 	{
 		window.focused.add(onWindowFocusChanged);
@@ -124,6 +130,7 @@ class App
 		}
 		App.focused.value = focused;
 	}
+	#end
 	
 	static public function exit(errorCode:Int = 0) 
 	{
@@ -151,7 +158,7 @@ class App
 		AppExit.removeExitCleanup(handler);
 	}*/
 	
-	#if flash
+	#if air
 	static public function getAppExe() 
 	{
 		if (appExe != null) return appExe;
@@ -172,7 +179,7 @@ class App
 		if (appId != null) return;
 		
 		
-		#if flash
+		#if air
 		var appXml:Xml = Xml.parse(flash.desktop.NativeApplication.nativeApplication.applicationDescriptor.toXMLString());
 		var idNode = appXml.firstChild().elementsNamed("id");
 		while(idNode.hasNext()){
@@ -194,9 +201,9 @@ class App
 			var stage:Stage = Lib.current.stage;
 			if (stage == null || stage.window == null) return;
 			
-			appId = stage.window.application.config.packageName;
-			appFilename = stage.window.application.config.name;
-			version = stage.window.application.config.version;
+			//appId = stage.window.application.config.packageName;
+			//appFilename = stage.window.application.config.name;
+			//version = stage.window.application.config.version;
 		#end
 		
 	}

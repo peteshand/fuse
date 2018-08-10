@@ -71,7 +71,7 @@ class ConfigLoadService
 							var exists = flagsModel.match(flag);
 							//trace(key + " key: flagsModel.match(" + flag + ") = " + exists);
 							if (exists) {
-								var value:Dynamic = untyped property[flag];
+								var value:Dynamic = untyped Reflect.getProperty(property, flag);
 								//trace(key + " - " + flag + " = " + value);
 								setProp(key, value);
 								match = true;
@@ -79,7 +79,7 @@ class ConfigLoadService
 							}
 						}
 						if (!match){
-							var value:Dynamic = untyped property["default"];
+							var value:Dynamic = untyped Reflect.getProperty(property, "default");
 							//trace("value = " + value);
 							setProp(key, value);
 						}

@@ -9,7 +9,7 @@ import motion.easing.IEasing;
 import motion.easing.Quad;
 import msignal.Signal.Signal0;
 
-using logger.Logger;
+using Logger;
 
 #if swc
 	import flash.errors.Error;
@@ -159,7 +159,12 @@ class TransitionObject implements ITransitionObject
 			var setter:Float -> Void;
 			//var plugin:Plugin = TransitionPlugins.getPlugin(property);
 			if (_hasSetter){
-				var innerSetter:Float->Void = untyped target["set_" + property];
+				#if cpp
+					var innerSetter:Float->Void = untyped Reflect.getProperty(target, "set_" + property);
+				#else 
+					var innerSetter:Float->Void = untyped target["set_" + property];
+				#end
+				
 				setter = getSetter(target, property, innerSetter, option);
 			}else{
 				setter = getProp(target, property, option);
@@ -177,7 +182,12 @@ class TransitionObject implements ITransitionObject
 	{
 		var _hasSetter = hasSetter(option.autoVisObject, "visible");
 		if (_hasSetter){
-			var innerSetter:Bool->Void = untyped target["set_visible"];
+			#if cpp
+				var innerSetter:Float->Void = untyped Reflect.getProperty(target, "set_visible");
+			#else 
+				var innerSetter:Bool->Void = untyped target["set_visible"];
+			#end
+			
 			visSetter = getSetter(target, "visible", innerSetter, option);
 		}else {
 			var hasProp:Bool = hasSetter(option.autoVisObject, "visible", "");
@@ -328,7 +338,11 @@ class TransitionObject implements ITransitionObject
 	
 	public function applyProp(target:Dynamic, prop:String, value:Dynamic) 
 	{
-		untyped target[prop] = value;
+		#if cpp
+			untyped Reflect.setProperty(target, prop, value);
+		#else 
+			untyped target[prop] = value;
+		#end
 	}
 	
 	public function applySetter(target:Dynamic, innerSetter:Dynamic->Void, value:Dynamic) 

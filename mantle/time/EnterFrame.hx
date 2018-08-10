@@ -19,16 +19,25 @@ class EnterFrame
 	private static var running:Notifier<Bool>;
 	static private var application:Application;
 	static var fps:Float = 60;
+	static var initialized:Bool = false;
 
-	static function __init__() 
+	static function init() 
 	{
+		if (initialized) return;
+		
 		callbacks = new Array<Void->Void>();
 		running = new Notifier<Bool>(false);
 		
-		Timer.delay(function() {
-			running.add(OnRunningChange);
-			OnRunningChange();
-		}, 1);
+		try {
+			Timer.delay(function() {
+				running.add(OnRunningChange);
+				OnRunningChange();
+			}, 1);
+			initialized = true;
+		}
+		catch (e:Dynamic) {
+			//trace(e);
+		}
 	}
 	
 	static function OnRunningChange() 
@@ -70,12 +79,14 @@ class EnterFrame
 	
 	static public function add(callback:Void->Void):Void 
 	{
+		EnterFrame.init();
 		running.value = true;
 		callbacks.push(callback);
 	}
 	
 	static public function addAt(callback:Void->Void, index:Int):Void 
 	{
+		EnterFrame.init();
 		running.value = true;
 		callbacks.insert(index, callback);
 	}

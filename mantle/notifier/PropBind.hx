@@ -1,7 +1,7 @@
 package mantle.notifier;
 
 import msignal.Signal.Signal0;
-using logger.Logger;
+using Logger;
 /**
  * ...
  * @author Thomas Byrne

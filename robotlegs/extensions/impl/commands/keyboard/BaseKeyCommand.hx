@@ -45,7 +45,7 @@ class BaseKeyCommand extends Command
 	
 	function TestCriticalError() 
 	{
-		criticalError("Critical Error Test");
+		//criticalError("Critical Error Test");
 	}
 	
 	/*function SaveLocationToConfig() 

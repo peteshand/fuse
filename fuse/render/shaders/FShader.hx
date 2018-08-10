@@ -118,7 +118,7 @@ class FShader
 				Fuse.current.stage.camera.hasUpdate = false;
 			}
 			//colorTransform = BaseShader.map.get(1);
-			trace("shaderId = " + shaderId);
+			//trace("shaderId = " + shaderId);
 			shaders = BaseShader.getShaders(shaderId);
 
 			createAndUploadShaderProgram();
