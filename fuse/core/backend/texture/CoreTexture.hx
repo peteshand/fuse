@@ -112,9 +112,6 @@ class CoreTexture
 		uvTop = _uvTop;
 		uvRight = _uvRight;
 		uvBottom = _uvBottom;
-
-		trace([activeData.x, activeData.offsetU, p2Width, activeData.scaleU]);
-		trace([uvLeft, uvTop, uvRight, uvBottom]);
 	}
 	
 	public function checkForChanges():Void
