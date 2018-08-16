@@ -3,8 +3,6 @@ package fuse.core.assembler.input;
 import fuse.core.utils.Calc;
 import fuse.display.geometry.Bounds;
 import fuse.core.backend.display.CoreDisplayObject;
-import fuse.core.assembler.hierarchy.HierarchyAssembler;
-import fuse.core.input.FrontMouseInput;
 import fuse.core.backend.Core;
 import fuse.core.input.Touch;
 import fuse.utils.GcoArray;
