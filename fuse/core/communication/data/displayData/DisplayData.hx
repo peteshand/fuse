@@ -38,6 +38,15 @@ class DisplayData
 	
 	public var objectId:ObjectId;
 	
+	public var bottomLeftX:Float;
+	public var bottomLeftY:Float;
+	public var topLeftX:Float;
+	public var topLeftY:Float;
+	public var topRightX:Float;
+	public var topRightY:Float;
+	public var bottomRightX:Float;
+	public var bottomRightY:Float;
+	
 	public function new(objectOffset:Null<Int>)
 	{
 		objectId = objectOffset;

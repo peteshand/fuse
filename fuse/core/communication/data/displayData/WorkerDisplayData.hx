@@ -72,6 +72,15 @@ class WorkerDisplayData /*implements IDisplayData*/
 	private var _objectId:Int;
 	public var objectId(get, never):Int;
 	
+	public var bottomLeftX:Float;
+	public var bottomLeftY:Float;
+	public var topLeftX:Float;
+	public var topLeftY:Float;
+	public var topRightX:Float;
+	public var topRightY:Float;
+	public var bottomRightX:Float;
+	public var bottomRightY:Float;
+	
 	public function new(objectOffset:Null<Int>) 
 	{
 		if (objectOffset != null) {

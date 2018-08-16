@@ -1,5 +1,6 @@
 package fuse.core.backend.util.transform;
 
+import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.backend.display.TransformData;
 import fuse.display.geometry.QuadData;
 import fuse.utils.MatrixUtils;
@@ -22,6 +23,7 @@ class WorkerTransformHelper
 	//static var applyRotation:Int;
 	//static var applyPosition:Int;
 	static var coreDisplay:CoreDisplayObject;
+	static var displayData:IDisplayData;
 	static var localTransform:FastMatrix3;
 	static var transformData:TransformData;
 	static var quadData:QuadData;
@@ -80,6 +82,7 @@ class WorkerTransformHelper
 		WorkerTransformHelper.coreDisplay = coreDisplay;
 		WorkerTransformHelper.localTransform = coreDisplay.transformData.localTransform;
 		WorkerTransformHelper.quadData = coreDisplay.quadData;
+		WorkerTransformHelper.displayData = coreDisplay.displayData;
 		
 		WorkerTransformHelper.x = coreDisplay.displayData.x;
 		WorkerTransformHelper.y = coreDisplay.displayData.y;
@@ -139,24 +142,24 @@ class WorkerTransformHelper
 	//
 	//inline static function multvecs(quadData:QuadData, localTransform:FastMatrix3, pivotX:Float, pivotY:Float, width:Float, height:Float) 
 	//{
-		multvec(quadData, localTransform, -pivotX, -pivotY + height);			// 0, 1
-		quadData.bottomLeftX = tempPoint.x;
-		quadData.bottomLeftY = tempPoint.y;
+		multvec(localTransform, -pivotX, -pivotY + height);			// 0, 1
+		displayData.bottomLeftX = quadData.bottomLeftX = tempPoint.x;
+		displayData.bottomLeftY = quadData.bottomLeftY = tempPoint.y;
 		
-		multvec(quadData, localTransform, -pivotX, -pivotY);					// 2, 3
-		quadData.topLeftX = tempPoint.x;
-		quadData.topLeftY = tempPoint.y;
+		multvec(localTransform, -pivotX, -pivotY);					// 2, 3
+		displayData.topLeftX = quadData.topLeftX = tempPoint.x;
+		displayData.topLeftY = quadData.topLeftY = tempPoint.y;
 		
-		multvec(quadData, localTransform, -pivotX + width, -pivotY);			// 4, 5
-		quadData.topRightX = tempPoint.x;
-		quadData.topRightY = tempPoint.y;
+		multvec(localTransform, -pivotX + width, -pivotY);			// 4, 5
+		displayData.topRightX = quadData.topRightX = tempPoint.x;
+		displayData.topRightY = quadData.topRightY = tempPoint.y;
 		
-		multvec(quadData, localTransform, -pivotX + width, -pivotY + height);	// 6, 7
-		quadData.bottomRightX = tempPoint.x;
-		quadData.bottomRightY = tempPoint.y;
+		multvec(localTransform, -pivotX + width, -pivotY + height);	// 6, 7
+		displayData.bottomRightX = quadData.bottomRightX = tempPoint.x;
+		displayData.bottomRightY = quadData.bottomRightY = tempPoint.y;
 	}
 	
-	static function multvec(quadData:QuadData, localTransform:FastMatrix3, x: Float, y:Float):Void
+	static function multvec(localTransform:FastMatrix3, x: Float, y:Float):Void
 	{
 		temp = localTransform._02 * x + localTransform._12 * y + localTransform._22;
 		tempPoint.x = transformX((localTransform._00 * x + localTransform._10 * y + localTransform._20) / temp);

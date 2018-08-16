@@ -1,5 +1,6 @@
 package fuse.text;
 
+import openfl.display.StageQuality;
 import fuse.texture.BaseTexture;
 import fuse.texture.BitmapTexture;
 import fuse.utils.Align;
@@ -416,7 +417,7 @@ class TextField extends Image
 		if (!initialized || dirtySize == true) {
 			if (bitmapdata != null) bitmapdata.dispose();
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
-			bitmapdata.draw(nativeTextField);
+			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
 			var textureId:Null<Int> = null;
 			if (texture != null && texture.objectId > 1) {
 				textureId = texture.objectId;
@@ -428,7 +429,7 @@ class TextField extends Image
 		}
 		else if (dirtyProp == true) {
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
-			bitmapdata.draw(nativeTextField);
+			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
 			baseBmdTexture.update(bitmapdata);
 		}
 		
