@@ -14,7 +14,7 @@ import openfl.events.Event;
  * @author P.J.Shand
  */
 
-class FileTexture extends BaseTexture
+class ImageTexture extends BaseTexture
 {
 	var fileLoader:ILoader;
 	var bitmapData:BitmapData;
@@ -80,6 +80,6 @@ class FileTexture extends BaseTexture
 	override public function dispose():Void
 	{
 		super.dispose();
-		//FileTexture.baseFileTextures.remove(url);
+		//ImageTexture.baseFileTextures.remove(url);
 	}
 }
