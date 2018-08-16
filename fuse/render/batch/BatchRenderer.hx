@@ -60,7 +60,8 @@ class BatchRenderer
 		
 		AtlasBuffers.setBufferIndexState(currentBatchData.renderTargetId);
 		//conductorData.highestNumTextures = 8;
-		
+		//trace("conductorData.highestNumTextures = " + conductorData.highestNumTextures);
+		//trace("currentBatchData.numTextures = " + currentBatchData.numTextures);
 		for (j in 0...8) 
 		{
 			if (j < conductorData.highestNumTextures) {
@@ -71,8 +72,10 @@ class BatchRenderer
 			}
 		}
 		
-		
-		var fShader:FShader = FShaders.getShader(currentBatchData.numTextures, currentBatchData.shaderId);
+		// TODO: update shader to use number of textures in each batch
+		//var fShader:FShader = FShaders.getShader(currentBatchData.numTextures, currentBatchData.shaderId);
+
+		var fShader:FShader = FShaders.getShader(conductorData.highestNumTextures, currentBatchData.shaderId);
 		//fShader.shaderId = currentBatchData.shaderId;
 		fShader.update(currentBatchData.renderTargetId == -1);
 		

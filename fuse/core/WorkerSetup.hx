@@ -183,6 +183,13 @@ class WorkerSetup
 	{
 		send(MessageType.ADD_TEXTURE, textureId);
 	}
+
+	public function updateTexture(textureId:Int) 
+	{
+		send(MessageType.UPDATE_TEXTURE, textureId);
+	}
+
+	
 	
 	public function removeTexture(textureId:Int) 
 	{

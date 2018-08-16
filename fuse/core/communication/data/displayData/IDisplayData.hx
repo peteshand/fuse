@@ -1,8 +1,7 @@
 package fuse.core.communication.data.displayData;
 import fuse.display.BlendMode;
 import fuse.utils.Color;
-
-
+import fuse.texture.TextureId;
 /**
  * @author P.J.Shand
  */
@@ -49,7 +48,7 @@ typedef IDisplayData =
 	colorBL:UInt,
 	colorBR:UInt,
 	objectId:Int,
-	textureId:Int,
+	textureId:TextureId,
 	renderLayer:Int,
 	visible:Int,
 	blendMode:Int,

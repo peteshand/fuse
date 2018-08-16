@@ -9,21 +9,19 @@ import fuse.utils.Align;
 import fuse.utils.Color;
 import fuse.Fuse;
 import fuse.utils.drag.DragUtil;
-import mantle.notifier.Notifier;
-import msignal.Signal.Signal0;
 import msignal.Signal.Signal1;
 import openfl.events.MouseEvent;
+import fuse.utils.ObjectId;
 
 @:access(fuse)
 class DisplayObject
 {
 	static var objectIdCount:Int = 0;
-	public var objectId:Int;
+	public var objectId:ObjectId;
 	public var displayData:IDisplayData;
 	public var name:String;
 	
 	//public var onAdd = new Signal0();
-	
 	
 	public var onAdd = new Signal1<DisplayObject>();
 	public var onRemove = new Signal1<DisplayObject>();
@@ -105,21 +103,11 @@ class DisplayObject
 	
 	public function resetMovement() 
 	{
-		//trace("clearMovement");
-		//isRotating = 0;
-		//isMoving = 0;
-		//isStatic = 1;
-		
-		//updateUVs = false;
-		//updateTexture = false;
-		//updateMask = false;
-		//updateAll = false;
 		updatePosition = false;
 		updateRotation = false;
 		updateColour = false;
 		updateVisible = false;
 		updateAlpha = false;
-		updateTexture = false;
 	}
 	
 	//function OnRotationChange() 
@@ -357,21 +345,17 @@ class DisplayObject
 	
 	function setStage(value:Stage):Stage 
 	{
-		if (stage != value) {
-			if (stage != null && value == null) {
-				stage.onDisplayRemoved.dispatch(this);
-			}
-			stage = value;
-			
-			if (stage != null) {
-				stage.onDisplayAdded.dispatch(this);
-				onAddToStage.dispatch(this);
-				//this.isRotating = 1; // set isRotating, isMoving and isStatic
-				
-				
-			}
-			else onRemoveFromStage.dispatch(this);
+		if (stage != null && value == null) {
+			stage.onDisplayRemoved.dispatch(this);
 		}
+		stage = value;
+		
+		if (stage != null) {
+			stage.onDisplayAdded.dispatch(this);
+			onAddToStage.dispatch(this);
+			//this.isRotating = 1; // set isRotating, isMoving and isStatic
+		}
+		else onRemoveFromStage.dispatch(this);
 		return stage;
 	}
 	

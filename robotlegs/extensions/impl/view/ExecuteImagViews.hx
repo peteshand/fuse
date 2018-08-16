@@ -1,5 +1,6 @@
 package robotlegs.extensions.impl.view;
 
+import org.swiftsuspenders.utils.DescribedType;
 import mantle.view.ISceneView;
 import mantle.view.SceneViewMediator;
 import robotlegs.extensions.api.model.config.IConfigModel;
@@ -11,9 +12,8 @@ import robotlegs.bender.framework.api.IInjector;
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class ExecuteImagViews implements IConfig 
+class ExecuteImagViews implements DescribedType implements IConfig 
 {
 	@inject public var injector:IInjector;
 	@inject public var configModel:IConfigModel;

@@ -10,6 +10,7 @@ import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.model.config2.ConfigSummary;
 import robotlegs.extensions.impl.model.config2.Locations;
 import robotlegs.extensions.impl.utils.config.ConfigUtil;
+import org.swiftsuspenders.utils.DescribedType;
 
 #if !html5
 import mantle.util.fs.File;
@@ -20,8 +21,7 @@ import mantle.util.fs.File;
  * @author P.J.Shand
  */
 @:keepSub
-@:rtti
-class BaseConfigModel 
+class BaseConfigModel implements DescribedType 
 {
 	public var configSummary:ConfigSummary;
 	

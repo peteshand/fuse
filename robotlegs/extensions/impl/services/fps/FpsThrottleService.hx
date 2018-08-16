@@ -5,14 +5,13 @@ import robotlegs.bender.extensions.contextView.ContextView;
 import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
 import robotlegs.extensions.impl.model.fps.FPSThrottleModel;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
 @:keepSub
-@:rtti
-class FpsThrottleService
+class FpsThrottleService implements DescribedType
 {
 	@inject public var contextView:ContextView;
 	@inject public var activityModel:ActivityModel;

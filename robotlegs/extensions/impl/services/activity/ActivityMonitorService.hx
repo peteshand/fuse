@@ -8,14 +8,14 @@ import openfl.events.MouseEvent;
 import openfl.events.TouchEvent;
 import robotlegs.bender.extensions.contextView.ContextView;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
+import org.swiftsuspenders.utils.DescribedType;
 
 /**
  * ...
  * @author P.J.Shand
  */
 @:keepSub
-@:rtti
-class ActivityMonitorService 
+class ActivityMonitorService implements DescribedType 
 {
 	@inject public var contextView:ContextView;
 	@inject public var activityModel:ActivityModel;

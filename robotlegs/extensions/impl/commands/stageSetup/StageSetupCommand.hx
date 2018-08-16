@@ -7,7 +7,7 @@ import flash.display.StageAlign;
 import flash.display.StageScaleMode;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;
-
+import org.swiftsuspenders.utils.DescribedType;
 #if starling
 	import mantle.managers.layout2.LayoutManager;
 #end
@@ -15,9 +15,9 @@ import robotlegs.bender.extensions.contextView.ContextView;
  * ...
  * @author P.J.Shand
  */
-@:rtti
+
 @:keepSub
-class StageSetupCommand extends Command 
+class StageSetupCommand extends Command
 {
 	@inject public var contextView:ContextView;
 	

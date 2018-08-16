@@ -1,5 +1,7 @@
 package fuse.core.backend.display;
 
+import fuse.core.backend.displaylist.DisplayType;
+import fuse.utils.ObjectId;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.backend.displaylist.Graphics;
 import fuse.core.backend.util.transform.WorkerTransformHelper;
@@ -8,7 +10,6 @@ import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.utils.Pool;
 import fuse.display.geometry.Bounds;
 import fuse.display.geometry.QuadData;
-import openfl.geom.Point;
 
 /**
  * ...
@@ -19,7 +20,7 @@ import openfl.geom.Point;
 @:access(fuse)
 class CoreDisplayObject
 {
-	public var objectId		:Int;
+	public var objectId		:ObjectId;
 	
 	public var displayData	:IDisplayData;
 	public var parent		:CoreInteractiveObject;
@@ -32,7 +33,7 @@ class CoreDisplayObject
 	public var top			:Float = 0;
 	public var bottom		:Float = 0;
 	
-	public var displayType	:Int;
+	public var displayType	:DisplayType;
 	
 	//public var over:Bool = false;
 	public var area(get, null):Float;
@@ -43,11 +44,7 @@ class CoreDisplayObject
 	public var alpha:Float = 1;
 	public var visible:Bool = true;
 	public var hierarchyIndex:Int = -1;
-	//public var visible(get, null):Bool;
-	//public var updateUVs:Bool = false;
-	//public var updateTexture:Bool = false;
-	//public var updateMask:Bool = false;
-	//public var updateAll:Bool = true;
+	
 	public var updatePosition:Bool = true;
 	public var updateRotation:Bool = true;
 	public var updateColour:Bool = true;
@@ -70,15 +67,12 @@ class CoreDisplayObject
 		this.updateColour = value;
 		this.updateVisible = value;
 		this.updateAlpha = value;
-		this.updateTexture = value;
 		this.updateAny = value;
 	}
 	
 	public function init(objectId:Int) 
 	{
-		//trace("init: " + objectId);
 		this.objectId = objectId;
-		//trace("NEW: " + objectId);
 		displayData = untyped CommsObjGen.getDisplayData(objectId);
 	}
 	

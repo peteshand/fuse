@@ -5,14 +5,13 @@ import flash.events.InvokeEvent;
 import openfl.errors.Error;
 import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.utils.types.CastUtils;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class CommandLineArgsConfigLogic
+class CommandLineArgsConfigLogic implements DescribedType
 {
 	@inject public var configModel:IConfigModel;
 	

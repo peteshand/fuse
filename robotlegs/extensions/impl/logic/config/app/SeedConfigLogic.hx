@@ -11,14 +11,13 @@ import openfl.Assets;
 import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigLoadService;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class SeedConfigLogic
+class SeedConfigLogic implements DescribedType
 {
 	var seedJson:String;
 	@inject public var configModel:IConfigModel;

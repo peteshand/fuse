@@ -26,7 +26,6 @@ import robotlegs.extensions.impl.logic.flags.compile.CompileDefineFlagsLogic;
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
 class ConfigCommand extends Command 
 {

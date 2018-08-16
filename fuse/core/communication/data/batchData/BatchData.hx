@@ -1,6 +1,8 @@
 package fuse.core.communication.data.batchData;
+
 import fuse.Fuse;
 import fuse.core.communication.data.MemoryBlock;
+import fuse.utils.ObjectId;
 
 /**
  * ...
@@ -9,7 +11,7 @@ import fuse.core.communication.data.MemoryBlock;
 
 class BatchData implements IBatchData
 {
-	var objectId:Int;
+	var objectId:ObjectId;
 	
 	@:isVar public var renderTargetId(get, set):Int = 0;
 	@:isVar public var clearRenderTarget(get, set):Int;

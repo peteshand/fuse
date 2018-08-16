@@ -1,5 +1,8 @@
 package mantle.model.scene;
 
+#if robotlegs
+import org.swiftsuspenders.utils.DescribedType;
+#end
 import mantle.managers.transition.Transition;
 import mantle.notifier.Notifier;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
@@ -7,9 +10,7 @@ import robotlegs.extensions.impl.model.activity.ActivityModel;
  * ...
  * @author P.J.Shand
  */
-@:rtti
-@:keepSub
-class SceneModel extends BaseNotifier<String>
+class SceneModel extends BaseNotifier<String> #if robotlegs implements DescribedType #end
 {
 	@inject public var activityModel:ActivityModel;
 	static public var instance:SceneModel;

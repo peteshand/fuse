@@ -15,13 +15,9 @@ import robotlegs.bender.extensions.commandCenter.dsl.ICommandUnmapper;
 import robotlegs.bender.extensions.commandCenter.impl.CommandTriggerMap;
 import robotlegs.bender.framework.api.IContext;
 import robotlegs.bender.framework.api.ILogger;
+import org.swiftsuspenders.utils.DescribedType;
 
-/**
- * @private
- */
-@:rtti
-@:keepSub
-class SignalCommandMap implements ISignalCommandMap
+class SignalCommandMap implements DescribedType implements ISignalCommandMap
 {
 
 	/*============================================================================*/

@@ -1,19 +1,15 @@
 package robotlegs.extensions.impl.services.timeout;
 
-import mantle.notifier.Notifier;
-import mantle.delay.Delay;
-import robotlegs.bender.extensions.contextView.ContextView;
 import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
 import robotlegs.extensions.impl.model.timeout.TimeoutModel;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
 @:keepSub
-@:rtti
-class TimeoutService 
+class TimeoutService implements DescribedType 
 {
 	@inject public var activityModel:ActivityModel;
 	@inject public var timeoutModel:TimeoutModel;

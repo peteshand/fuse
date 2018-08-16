@@ -1,12 +1,14 @@
 package fuse.core.communication.data.rangeData;
 
+import fuse.utils.ObjectId;
+
 /**
  * ...
  * @author P.J.Shand
  */
 class RangeData implements IRangeData
 {
-	var objectId:Int;
+	var objectId:ObjectId;
 	@:isVar public var start(get, set):Int;
 	@:isVar public var length(get, set):Int;
 	

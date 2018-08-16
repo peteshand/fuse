@@ -1,7 +1,6 @@
 package fuse.core.front.buffers;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.texture.BaseTexture;
-import fuse.texture.AbstractTexture;
 import fuse.texture.RenderTexture;
 
 /**
@@ -54,13 +53,10 @@ class LayerCacheBuffers
 		if (textureId < startIndex || textureId >= startIndex + numBuffers) return;
 		
 		if (!buffers.exists(textureId)){
-			var currentTextureId:Int = BaseTexture.textureIdCount;
-			BaseTexture.textureIdCount = textureId;
-			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight, true);
+			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight, true, textureId);
 			//buffer.green = 0.5;
 			buffer._alreadyClear = true;
 			buffers.set(textureId, buffer);
-			BaseTexture.textureIdCount = currentTextureId;
 		}
 	}
 	

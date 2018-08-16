@@ -14,48 +14,31 @@ import openfl.display3D.Context3DTextureFormat;
  * @author P.J.Shand
  */
 
-@:forward(textureData, nativeTexture, textureBase, textureId, width, height, onUpdate, clearColour, _clear, _alreadyClear, upload, dispose, directRender)
-abstract RenderTexture(AbstractTexture) to Int from Int 
-{
-	var baseRenderTexture(get, never):BaseRenderTexture;
-	
-	public function new(width:Int, height:Int, directRender:Bool=true) 
-	{
-		var baseRenderTexture = new BaseRenderTexture(width, height, directRender);
-		this = new AbstractTexture(baseRenderTexture);
-	}
-	
-	function upload():Void										{ baseRenderTexture.upload(); 					}
-	function get_baseRenderTexture():BaseRenderTexture			{ return untyped this.coreTexture; 				}
-	@:to public function toAbstractTexture():AbstractTexture	{ return this; 									}
-}
-
-
 @:access(fuse)
-class BaseRenderTexture extends BaseTexture
+class RenderTexture extends BaseTexture
 {
 	static var currentRenderTargetId:Int;
 	static var conductorData:WorkerConductorData;
 	var renderTextureData:IRenderTextureData;
 	var renderTextureDrawData:IRenderTextureDrawData;
 	
-	public function new(width:Int, height:Int, directRender:Bool=true) 
+	public function new(width:Int, height:Int, directRender:Bool=true, overTextureId:Null<Int>=null) 
 	{
 		if (conductorData == null) {
 			conductorData = new WorkerConductorData();
 		}
 		
-		super(width, height, false);
+		super(width, height, false, null, true, overTextureId);
 		this.directRender = directRender;
 		
-		renderTextureData = new RenderTextureData(textureId);
+		renderTextureData = new RenderTextureData(objectId);
 		renderTextureDrawData = new RenderTextureDrawData(0);
 	}
 	
 	public function draw(display:DisplayObject) 
 	{
 		RenderTextureDrawData.OBJECT_POSITION = conductorData.renderTextureCountIndex++;
-		renderTextureDrawData.renderTextureId = textureId;
+		renderTextureDrawData.renderTextureId = objectId;
 		renderTextureDrawData.displayObjectId = display.objectId;
 		
 	}
@@ -63,11 +46,11 @@ class BaseRenderTexture extends BaseTexture
 	override function upload() 
 	{
 		setTextureData();
-		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, true, 0);
+		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(textureData.p2Width, textureData.p2Height, Context3DTextureFormat.BGRA, true, 0);
 		
 		clear();
 		
-		Textures.registerTexture(textureId, this);
+		Textures.registerTexture(objectId, this);
 		textureData.textureAvailable = 1;
 	}
 	

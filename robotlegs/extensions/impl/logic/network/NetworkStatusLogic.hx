@@ -5,14 +5,13 @@ import flash.net.URLLoader;
 import flash.net.URLRequest;
 import robotlegs.extensions.impl.model.network.NetworkStatusModel;
 import robotlegs.extensions.impl.utils.net.ListenerUtil;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class NetworkStatusLogic
+class NetworkStatusLogic implements DescribedType
 {
 	@inject public var networkStatusModel:NetworkStatusModel;
 	var loader:URLLoader;

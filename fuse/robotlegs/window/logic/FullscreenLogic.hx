@@ -1,5 +1,6 @@
 package fuse.robotlegs.window.logic;
 
+import org.swiftsuspenders.utils.DescribedType;
 import mantle.keyboard.Key;
 import mantle.keyboard.Keyboard;
 import openfl.Lib;
@@ -12,8 +13,7 @@ import fuse.robotlegs.window.model.WindowPositionModel;
  * @author P.J.Shand
  */
 
-@:rtti
-class FullscreenLogic 
+class FullscreenLogic implements DescribedType 
 {
 	@inject public var windowPositionModel:WindowPositionModel;
 	

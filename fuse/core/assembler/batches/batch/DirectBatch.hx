@@ -1,7 +1,6 @@
 package fuse.core.assembler.batches.batch;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.assembler.vertexWriter.VertexWriter;
-import fuse.core.backend.Core;
 import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.texture.CoreTexture;
 import fuse.core.communication.data.vertexData.IVertexData;
@@ -27,7 +26,7 @@ class DirectBatch extends BaseBatch implements IBatch
 	override function getTextureIndex(renderable:ICoreRenderable) 
 	{
 		if (renderable.coreTexture.textureData.textureAvailable == 1) {
-			return batchTextures.getTextureIndex(renderable.coreTexture.textureData.atlasTextureId);
+			return batchTextures.getTextureIndex(renderable.coreTexture.textureData.atlasData.textureId);
 		}
 		else {
 			return batchTextures.getTextureIndex(0);
@@ -122,7 +121,6 @@ class DirectBatch extends BaseBatch implements IBatch
 				}
 			}
 		}
-		
 		if (updateUVs) {
 			//trace([coreTexture.uvTop, coreTexture.uvBottom]);
 			//trace("updateUVs = " + updateUVs);
@@ -204,11 +202,11 @@ class DirectBatch extends BaseBatch implements IBatch
 	
 	function calcOffsetX(maskPosX:Float, posX:Float, image:CoreImage) 
 	{
-		return (posX - maskPosX) * 0.5 * Fuse.current.stage.stageWidth / image.mask.coreTexture.textureData.p2Width / image.mask.displayData.scaleX;
+		return (posX - maskPosX) * 0.5 * Fuse.current.stage.stageWidth / image.mask.coreTexture.textureData.activeData.p2Width / image.mask.displayData.scaleX;
 	}
 	
 	function calcOffsetY(posY:Float, maskPosY:Float, image:CoreImage) 
 	{
-		return (posY - maskPosY) * 0.5 * Fuse.current.stage.stageHeight / image.mask.coreTexture.textureData.p2Height / image.mask.displayData.scaleY;
+		return (posY - maskPosY) * 0.5 * Fuse.current.stage.stageHeight / image.mask.coreTexture.textureData.activeData.p2Height / image.mask.displayData.scaleY;
 	}
 }

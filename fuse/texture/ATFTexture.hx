@@ -14,24 +14,8 @@ import openfl.utils.ByteArray;
  * @author P.J.Shand
  */
 
-@:forward(textureData, nativeTexture, textureBase, textureId, width, height, onUpdate, clearColour, _clear, _alreadyClear, upload, dispose, directRender)
-abstract ATFTexture(AbstractTexture) to Int from Int 
-{
-	var baseATFTexture(get, never):BaseATFTexture;
-	
-	public function new(data:ByteArray, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
-	{
-		var baseATFTexture = new BaseATFTexture(data, queUpload, onTextureUploadCompleteCallback);
-		this = new AbstractTexture(baseATFTexture);
-	}
-	
-	function upload():Void										{ baseATFTexture.upload(); 					}
-	function get_baseATFTexture():BaseATFTexture				{ return untyped this.coreTexture; 				}
-	@:to public function toAbstractTexture():AbstractTexture	{ return this; 									}
-}
-
 @:access(fuse)
-class BaseATFTexture extends BaseTexture
+class ATFTexture extends BaseTexture
 {
 	var data:ByteArray;
 	var atfDataInfo:AtfDataInfo;

@@ -1,10 +1,6 @@
 package fuse.robotlegs;
 
-//import fuse.robotlegs.config.ConfigExtension;
-//import fuse.robotlegs.config2.ConfigExtension;
-//import fuse.robotlegs.scene.SceneExtension;
 import fuse.robotlegs.signalMap.SignalCommandMapExtension;
-import fuse.robotlegs.window.AppWindowExtension;
 import robotlegs.bender.extensions.display.stage3D.Stage3DStackExtension;
 import robotlegs.bender.extensions.display.stage3D.fuse.FuseIntegrationExtension;
 import robotlegs.bender.extensions.display.stage3D.fuse.FuseStageSyncExtension;

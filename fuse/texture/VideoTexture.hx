@@ -11,29 +11,13 @@ import openfl.events.NetStatusEvent;
 import openfl.net.NetStream;
 import openfl.utils.ByteArray;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
+import mantle.time.EnterFrame;
 /**
  * ...
  * @author P.J.Shand
  */
-
-@:forward(textureData, nativeTexture, textureBase, textureId, width, height, onUpdate, clearColour, _clear, _alreadyClear, upload, dispose)
-abstract VideoTexture(AbstractTexture) to Int from Int 
-{
-	var baseVideoTexture(get, never):BaseVideoTexture;
-	
-	public function new(?width:Int, ?height:Int, netStream:NetStream, onTextureUploadCompleteCallback:Void -> Void = null) 
-	{
-		var baseVideoTexture:BaseVideoTexture = new BaseVideoTexture(width, height, netStream, onTextureUploadCompleteCallback);
-		this = new AbstractTexture(baseVideoTexture);
-	}
-	
-	function upload():Void										{ baseVideoTexture.upload(); 					}
-	function get_baseVideoTexture():BaseVideoTexture			{ return untyped this.coreTexture; 				}
-	@:to public function toAbstractTexture():AbstractTexture	{ return this; 									}
-}
-
 @:access(fuse)
-class BaseVideoTexture extends BaseTexture
+class VideoTexture extends BaseTexture
 {
 	static inline var TEXTURE_READY:String = "textureReady";
 	var netStream:NetStream;
@@ -52,6 +36,7 @@ class BaseVideoTexture extends BaseTexture
 	private function OnEvent(e:NetStatusEvent):Void 
 	{
 		var info:NetStatusInfo = e.info;
+		trace(info.code);
 		if (info.code == "NetStream.Buffer.Empty") {
 			//nativeVideoTexture.addEventListener(TEXTURE_READY, function(e:Event) {
 				textureData.textureAvailable = 1;
@@ -74,7 +59,7 @@ class BaseVideoTexture extends BaseTexture
 		//createNativeTexture();
 		
 		/*textureBase =*/ //nativeVideoTexture = Textures.context3D.createVideoTexture();
-		
+		trace("create video texture");
 		nativeVideoTexture = Textures.context3D.createVideoTexture();
 		
 		textureData.textureBase = nativeVideoTexture;
@@ -87,13 +72,26 @@ class BaseVideoTexture extends BaseTexture
 	
 	private function OnTextureUploadComplete(e:Event):Void 
 	{
+		trace("TEXTURE_READY");
 		nativeVideoTexture.removeEventListener(TEXTURE_READY, OnTextureUploadComplete);
-		
+		EnterFrame.add(onTick);
+
 		textureData.placed = 0;
-		Textures.registerTexture(textureId, this);
+		Textures.registerTexture(objectId, this);
 		textureData.textureAvailable = 1;
 		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		onUpload.dispatch();
+	}
+
+	override public function dispose()
+	{
+		super.dispose();
+		EnterFrame.remove(onTick);
+	}
+
+	function onTick()
+	{
+		this.textureData.changeCount++;
 	}
 }
 

@@ -3,7 +3,7 @@ package fuse.core.backend.texture;
 import fuse.core.backend.display.CoreImage;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.core.communication.data.textureData.WorkerTextureData;
+import fuse.core.communication.data.textureData.TextureSizeData;
 import mantle.notifier.Notifier;
 import msignal.Signal.Signal0;
 
@@ -16,7 +16,6 @@ class CoreTexture
 {
 	public var textureId:Int;
 	@:isVar public var textureData(get, set):ITextureData;
-	//public var textureData:ITextureData;
 	public var activeCount:Int = 0;
 	var textureAvailable:Notifier<Int>;
 	var changeCount:Notifier<Int>;
@@ -43,6 +42,10 @@ class CoreTexture
 	{
 		this.textureId = textureId;
 		textureData = CommsObjGen.getTextureData(textureId);
+		
+		
+		//copyBaseValues();
+
 		textureAvailable = new Notifier<Int>(0);
 		textureAvailable.add(OnTextureAvailableChange);
 		
@@ -50,9 +53,31 @@ class CoreTexture
 		changeCount.add(OnCountChange);
 		
 		onTextureChange.add(function() {
-			for (image in dependantDisplays.iterator()) 
-				image.OnTextureChange();
+			for (key in dependantDisplays.keys()) {
+				var image = dependantDisplays.get(key);
+				if (image != null) image.OnTextureChange();
+			}
 		});
+	}
+
+	public function update()
+	{
+		copyBaseValues();
+	}
+	
+	function copyBaseValues()
+	{
+		textureData.baseData.x = textureData.x;
+		textureData.baseData.y = textureData.y;
+		textureData.baseData.width = textureData.width;
+		textureData.baseData.height = textureData.height;
+		textureData.baseData.p2Width = textureData.p2Width;
+		textureData.baseData.p2Height = textureData.p2Height;
+		
+		textureData.atlasData.offsetU = textureData.offsetU;
+		textureData.atlasData.offsetV = textureData.offsetV;
+		textureData.atlasData.scaleU = textureData.scaleU;
+		textureData.atlasData.scaleV = textureData.scaleV;
 	}
 	
 	function OnCountChange() 
@@ -69,13 +94,14 @@ class CoreTexture
 	{
 		uvsHaveChanged = false;
 		
-		p2Width = textureData.p2Width;
-		p2Height = textureData.p2Height;
+		var activeData:TextureSizeData = textureData.activeData;
+		p2Width = activeData.p2Width;
+		p2Height = activeData.p2Height;
 		
-		_uvLeft = textureData.x / textureData.p2Width;
-		_uvTop = textureData.y / textureData.p2Height;
-		_uvRight = (textureData.x + textureData.width) / textureData.p2Width;
-		_uvBottom = (textureData.y + textureData.height) / textureData.p2Height;
+		_uvLeft = (activeData.x + activeData.offsetU) / p2Width;
+		_uvTop = (activeData.y + activeData.offsetV) / p2Height;
+		_uvRight = (activeData.x + (activeData.width * activeData.scaleU) + activeData.offsetU) / p2Width;
+		_uvBottom = (activeData.y + (activeData.height * activeData.scaleV) + activeData.offsetV) / p2Height;
 		
 		if (uvLeft != _uvLeft || uvTop != _uvTop || uvRight != _uvRight || uvBottom != _uvBottom) {
 			//trace([uvLeft, _uvLeft, uvTop, _uvTop, uvRight, _uvRight, uvBottom, _uvBottom]);
@@ -86,6 +112,9 @@ class CoreTexture
 		uvTop = _uvTop;
 		uvRight = _uvRight;
 		uvBottom = _uvBottom;
+
+		trace([activeData.x, activeData.offsetU, p2Width, activeData.scaleU]);
+		trace([uvLeft, uvTop, uvRight, uvBottom]);
 	}
 	
 	public function checkForChanges():Void
@@ -123,9 +152,4 @@ class CoreTexture
 		updateUVData();
 		return textureData;
 	}
-	
-	//public inline function clearTextureChange() 
-	//{
-		//textureHasChanged = false;
-	//}
 }

@@ -1,12 +1,14 @@
 package fuse.core.assembler.vertexWriter;
+
 import fuse.core.backend.texture.CoreTexture;
+import fuse.utils.ObjectId;
 
 /**
  * @author P.J.Shand
  */
 interface ICoreRenderable 
 {
-	var objectId:Int;
+	var objectId:ObjectId;
 	var coreTexture:CoreTexture;
 	var textureIndex(get, set):Int;
 	var blendMode:Int;

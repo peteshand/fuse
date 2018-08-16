@@ -13,6 +13,8 @@ import openfl.display3D.VertexBuffer3D;
 import fuse.core.communication.data.vertexData.VertexData;
 import openfl.utils.ByteArray;
 import openfl.utils.Endian;
+import fuse.utils.ObjectId;
+
 /**
  * ...
  * @author P.J.Shand
@@ -22,7 +24,7 @@ class Buffer
 	public static var VERTICES_PER_QUAD:Int = 4;
 	public static var INDICES_PER_QUAD:Int = 6;
 	static var COUNT:Int = 0;
-	var objectId:Int;
+	var objectId:ObjectId;
 	
 	var context3D:Context3D;
 	var bufferSize:Int;

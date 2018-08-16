@@ -10,14 +10,13 @@ import openfl.errors.Error;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.model.flags.FlagsModel;
 import robotlegs.extensions.impl.utils.json.JsonFormatter;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class AppFlagsLogic
+class AppFlagsLogic implements DescribedType
 {
 	@inject public var flagsModel:FlagsModel;
 	

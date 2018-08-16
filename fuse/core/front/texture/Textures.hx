@@ -1,19 +1,14 @@
 package fuse.core.front.texture;
 
+import openfl.Lib;
 import fuse.core.front.buffers.AtlasBuffers;
 import fuse.core.front.buffers.LayerCacheBuffers;
 import fuse.core.front.texture.upload.TextureUploadQue;
-import fuse.texture.AbstractTexture;
-import fuse.texture.BaseTexture;
-import fuse.texture.BitmapTexture.BaseBitmapTexture;
-import fuse.texture.IBaseTexture;
-import openfl.Lib;
 import openfl.display.BitmapData;
 import openfl.display3D.Context3D;
-import openfl.display3D.Context3DTextureFormat;
 import openfl.display3D.textures.TextureBase;
-import openfl.display3D.textures.Texture as NativeTexture;
 import openfl.events.Event;
+import fuse.texture.IBaseTexture;
 /**
  * ...
  * @author P.J.Shand
@@ -26,8 +21,8 @@ class Textures
 {
 	static private var context3D:Context3D;
 	static public var textures = new Map<Int, IBaseTexture>();
-	static private var blankId:Int;
-	static private var whiteId:Int;
+	static private var blankId:Int = 0;
+	static private var whiteId:Int = 1;
 	static private var textureCount:Int = 0;
 	static public var whiteTexture:DefaultTexture;
 	static public var blankTexture:DefaultTexture;
@@ -51,14 +46,11 @@ class Textures
 	static private function createDefaultTextures() 
 	{
 		var blank:BlankBmd = new BlankBmd();
-		blankId = BaseTexture.overTextureId = 0;
 		blankTexture = new DefaultTexture(blank, false);
-		
-		whiteId = BaseTexture.overTextureId = 1;
-		var white:BitmapData = new BitmapData(32, 32, true, 0xFFFFFFFF);
+		//trace("blankTexture.textureId = " + blankTexture.textureId);
+		var white:BitmapData = new BitmapData(8, 8, true, 0xFFFFFFFF);
 		whiteTexture = new DefaultTexture(white, false);
-		
-		BaseTexture.textureIdCount = 2;
+		//trace("whiteTexture.textureId = " + whiteTexture.textureId);
 	}
 	
 	static public function registerTexture(textureId:Int, texture:IBaseTexture):Void
@@ -118,29 +110,5 @@ class Textures
 		}
 		// still can't find textureId, default to blankId
 		return blankId;
-	}
-}
-
-abstract DefaultTexture(AbstractTexture) to Int from Int 
-{
-	function new(bitmapData:BitmapData, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
-	{
-		var baseFileTexture:BaseDefaultTexture = new BaseDefaultTexture(bitmapData, queUpload, onTextureUploadCompleteCallback);
-		this = new AbstractTexture(baseFileTexture);
-	}
-}
-
-class BaseDefaultTexture extends BaseBitmapTexture
-{
-	public function new(bitmapData:BitmapData, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
-	{
-		this.persistent = 1;
-		
-		super(bitmapData, queUpload, onTextureUploadCompleteCallback);
-	}
-	
-	override public function dispose():Void
-	{
-		// Can't dispose DefaultTexture
 	}
 }

@@ -1,8 +1,6 @@
 package fuse.core.assembler.batches.batch;
-import fuse.core.assembler.layers.LayerBufferAssembler;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.assembler.vertexWriter.VertexWriter;
-import fuse.core.backend.Core;
 import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.texture.CoreTexture;
 import fuse.core.communication.data.vertexData.IVertexData;
@@ -25,7 +23,7 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 	
 	override function getTextureIndex(renderable:ICoreRenderable) 
 	{
-		return batchTextures.getTextureIndex(renderable.coreTexture.textureData.atlasTextureId);
+		return batchTextures.getTextureIndex(renderable.coreTexture.textureData.atlasData.textureId);
 	}
 	
 	override public function add(renderable:ICoreRenderable, renderTarget:Int, batchType:BatchType):Bool

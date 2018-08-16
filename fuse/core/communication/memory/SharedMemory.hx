@@ -10,10 +10,8 @@ import fuse.core.communication.data.renderTextureData.RenderTextureDrawData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.messenger.MessageManager;
-import fuse.core.messenger.Messenger;
-import fuse.info.WorkerInfo;
-
 import fuse.core.communication.memory.Memory;
+import fuse.info.WorkerInfo;
 import openfl.utils.ByteArray;
 import openfl.utils.Endian;
 

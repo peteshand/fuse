@@ -6,15 +6,14 @@ import haxe.Json;
 import openfl.errors.Error;
 import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.model.flags.FlagsModel;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
 
-@:rtti
 @:keepSub
-class ConfigLoadService 
+class ConfigLoadService implements DescribedType 
 {
 	@inject public var configModel:IConfigModel;
 	@inject public var flagsModel:FlagsModel;

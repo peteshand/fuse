@@ -1,14 +1,13 @@
 package robotlegs.extensions.impl.signals.startup;
 
 import msignal.Signal.Signal0;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class InitializeAppSignal extends Signal0
+class InitializeAppSignal extends Signal0 implements DescribedType
 {
 	
 	public function new() 

@@ -1,6 +1,7 @@
 package fuse.shader;
 
 import openfl.display3D.Context3D;
+import fuse.utils.ObjectId;
 
 /**
  * ...
@@ -8,7 +9,7 @@ import openfl.display3D.Context3D;
  */
 interface IShader 
 {
-    var objectId:Int;
+    var objectId:ObjectId;
     private var hasChanged:Bool;
 	function activate(context3D:Context3D):Void;
     function deactivate(context3D:Context3D):Void;

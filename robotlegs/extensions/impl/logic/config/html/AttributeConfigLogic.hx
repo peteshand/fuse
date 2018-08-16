@@ -3,15 +3,14 @@ import haxe.Json;
 import mantle.util.app.App;
 import js.Browser;
 import robotlegs.extensions.api.model.config.IConfigModel;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
 
-@:rtti
 @:keepSub
-class AttributeConfigLogic
+class AttributeConfigLogic implements DescribedType
 {
 	@inject public var configModel:IConfigModel;
 	

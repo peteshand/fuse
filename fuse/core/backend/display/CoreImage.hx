@@ -2,7 +2,6 @@ package fuse.core.backend.display;
 
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
-import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.displaylist.Graphics;
 import fuse.core.backend.texture.CoreTexture;
 import fuse.core.backend.util.transform.WorkerTransformHelper;
@@ -50,6 +49,12 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	{
 		super();
 		vertexData = new VertexData();
+	}
+	
+	override public function setUpdates(value:Bool) 
+	{
+		super.setUpdates(value);
+		this.updateTexture = value;
 	}
 	
 	override public function init(objectId:Int) 
@@ -112,11 +117,11 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 			textureId = value;
 			if (coreTexture != null && textureId == -1) {
 				coreTexture.removeChangeListener(this);
-				Core.textures.deregister(coreTexture.textureData.textureId);
+				Core.textures.deregister(coreTexture.textureData.baseData.textureId);
 				coreTexture = null;
 			}
 			
-			if (coreTexture == null || coreTexture.textureData.textureId != textureId) {
+			if (coreTexture == null || coreTexture.textureData.baseData.textureId != textureId) {
 				coreTexture = Core.textures.register(textureId);
 				if (coreTexture != null) coreTexture.addChangeListener(this);
 			}

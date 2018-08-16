@@ -12,8 +12,8 @@ class BlankBmd extends BitmapData
 
 	public function new() 
 	{
-		var _w:Int = 32;
-		var _h:Int = 32;
+		var _w:Int = 8;
+		var _h:Int = 8;
 		var color:UInt = 0x00000000;
 		#if debug
 			_w = 512;

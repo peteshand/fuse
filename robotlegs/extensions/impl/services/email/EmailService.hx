@@ -6,14 +6,13 @@ import openfl.net.URLLoader;
 import openfl.net.URLRequest;
 import openfl.net.URLRequestMethod;
 import openfl.net.URLVariables;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class EmailService 
+class EmailService implements DescribedType 
 {
 	private var serverScript:String = "";
 	private var emails:Array<String> = [];

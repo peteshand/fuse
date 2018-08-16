@@ -1,24 +1,25 @@
 package fuse.display;
 
+import fuse.texture.IBaseTexture;
 import fuse.shader.IShader;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.front.texture.Textures;
 import fuse.display.DisplayObject;
-import fuse.texture.AbstractTexture;
 import openfl.geom.ColorTransform;
 
 /**
  * ...
  * @author P.J.Shand
  */
+ @:access(fuse.texture)
 class Image extends DisplayObject
 {
-	@:isVar public var texture(default, set):AbstractTexture;
+	@:isVar public var texture(default, set):IBaseTexture;
 	@:isVar public var renderLayer(default, set):Int;
 	@:isVar public var blendMode(default, set):BlendMode;
 	var shaders:Array<IShader> = [];
 
-	public function new(texture:AbstractTexture) 
+	public function new(texture:IBaseTexture) 
 	{
 		super();
 		displayType = DisplayType.IMAGE;
@@ -56,15 +57,15 @@ class Image extends DisplayObject
 		return mask;
 	}
 	
-	function set_texture(value:AbstractTexture):AbstractTexture 
+	function set_texture(value:IBaseTexture):IBaseTexture 
 	{
-		if (value == null) value = untyped Textures.blankTexture;
+		if (value == null) value = Textures.blankTexture;
 		if (texture != value) {
 			if (texture != null) texture.removeChangeListener(this);
 			texture = value;
 			texture.addChangeListener(this);
 			OnTextureUpdate();
-			displayData.textureId = texture.textureId;
+			displayData.textureId = texture.objectId;
 			//isStatic = 0;
 			updateTexture = true;
 			//updateAll = true;
@@ -99,5 +100,11 @@ class Image extends DisplayObject
 			shaderId += shaders[i].objectId;
 		}
 		displayData.shaderId = shaderId;
+	}
+
+	override public function resetMovement() 
+	{
+		super.resetMovement();
+		updateTexture = false;
 	}
 }

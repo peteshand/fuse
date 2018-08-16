@@ -20,6 +20,7 @@ class MessageType
 	static public inline var MAIN_THREAD_TICK:String = "mainThreadTick";
 	static public inline var WORKER_STARTED:String = "workerStarted";
 	static public inline var ADD_TEXTURE:String = "addTexture";
+	static public inline var UPDATE_TEXTURE:String = "updateTexture";
 	static public inline var REMOVE_TEXTURE:String = "removeTexture";
 	//static public inline var ADD_TEXTURE:String = "addTexture";
 	static public inline var MOUSE_INPUT:String = "mouseInput";

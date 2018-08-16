@@ -3,6 +3,7 @@ package robotlegs.extensions.impl.services.config;
 import mantle.delay.Delay;
 import robotlegs.extensions.impl.utils.json.JsonFormatter;
 import haxe.Json;
+import org.swiftsuspenders.utils.DescribedType;
 #if (air && !mobile)
 	import mantle.util.fs.File;
 	import fuse.filesystem.FileTools;
@@ -11,9 +12,8 @@ import haxe.Json;
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class ConfigSaveService 
+class ConfigSaveService implements DescribedType
 {
 	//var configFile:File;
 	//@inject public var configModel:IConfigModel;

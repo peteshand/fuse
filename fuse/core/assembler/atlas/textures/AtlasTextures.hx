@@ -31,8 +31,8 @@ class AtlasTextures
 		//trace("textures.length = " + textures.length);
 		
 		textures.sort(function(t1:CoreTexture, t2:CoreTexture):Int {
-			if (t1.textureData.height < t2.textureData.height) return 1;
-			else if (t1.textureData.height > t2.textureData.height) return -1;
+			if (t1.textureData.activeData.height < t2.textureData.activeData.height) return 1;
+			else if (t1.textureData.activeData.height > t2.textureData.activeData.height) return -1;
 			else return 0;
 		});
 	}
@@ -45,7 +45,8 @@ class AtlasTextures
 			//trace("texture isn't available: " + coreTexture.textureId);
 			return; // Texture isn't render yet, default texture will be used instead
 		}
-		
+		//trace("width = " + coreTexture.textureData.activeData.width);
+		//trace("textureAvailable = " + coreTexture.textureData.textureAvailable);
 		if (!exists(coreTexture.textureId)) {
 			//trace("texture available: " + coreTexture.textureId);
 			textures.push(coreTexture);

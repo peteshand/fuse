@@ -1,10 +1,8 @@
 package fuse.display;
 
 import fuse.core.backend.displaylist.DisplayType;
-import fuse.display.DisplayObject;
-import fuse.Fuse;
+import fuse.display.DisplayObjectContainer;
 
-@:access(kha)
 class Sprite extends DisplayObjectContainer
 {
 	public function new() {

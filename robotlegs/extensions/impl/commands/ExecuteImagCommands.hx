@@ -19,14 +19,13 @@ import robotlegs.extensions.impl.signals.startup.InitializeAppSignal;
 import robotlegs.bender.extensions.signalCommandMap.api.ISignalCommandMap;
 import robotlegs.bender.framework.api.IConfig;
 import robotlegs.bender.framework.api.IInjector;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class ExecuteImagCommands implements IConfig 
+class ExecuteImagCommands implements DescribedType implements IConfig 
 {
 	@inject public var commandMap:ISignalCommandMap;
 	@inject public var injector:IInjector;

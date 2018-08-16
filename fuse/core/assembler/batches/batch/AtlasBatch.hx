@@ -6,7 +6,6 @@ import fuse.core.assembler.vertexWriter.VertexWriter;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.vertexData.IVertexData;
 import fuse.core.communication.data.vertexData.VertexData;
-import openfl.geom.Point;
 
 /**
  * ...
@@ -55,10 +54,10 @@ class AtlasBatch extends BaseBatch implements IBatch
 		if (partition.lastFramePairPartition == null) {
 			textureData = partition.coreTexture.textureData;
 			
-			left = textureData.baseX;
-			top = textureData.baseY;
-			right = textureData.baseWidth / textureData.baseP2Width;
-			bottom = textureData.baseHeight / textureData.baseP2Height;
+			left = textureData.x;
+			top = textureData.y;
+			right = textureData.width / textureData.p2Width;
+			bottom = textureData.height / textureData.p2Height;
 		}
 		else {
 			//trace([partition.x, partition.y, partition.width, partition.height]);

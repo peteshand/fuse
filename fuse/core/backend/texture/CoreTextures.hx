@@ -49,6 +49,12 @@ class CoreTextures
 		}
 	}
 	
+	public function update(textureId:Int) 
+	{
+		var texture:CoreTexture = texturesMap.get(textureId);
+		if (texture != null) texture.update();
+	}
+	
 	public function dispose(textureId:Int):Void
 	{
 		if (texturesMap.exists(textureId)) {

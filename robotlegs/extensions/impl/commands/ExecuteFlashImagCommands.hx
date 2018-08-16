@@ -15,9 +15,8 @@ import robotlegs.bender.framework.api.IConfig;
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class ExecuteFlashImagCommands extends ExecuteImagCommands implements IConfig 
+class ExecuteFlashImagCommands extends ExecuteImagCommands  implements IConfig 
 {
 	public function new() 
 	{

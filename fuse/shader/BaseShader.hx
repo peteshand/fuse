@@ -1,6 +1,7 @@
 package fuse.shader;
 
 import openfl.display3D.Context3D;
+import fuse.utils.ObjectId;
 
 class BaseShader implements IShader
 {
@@ -25,7 +26,7 @@ class BaseShader implements IShader
         return shaders;
     }
 
-    public var objectId:Int;
+    public var objectId:ObjectId;
     var hasChanged:Bool = false;
 
     public function new()

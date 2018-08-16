@@ -2,7 +2,8 @@ package fuse.core.communication.data.textureData;
 
 import openfl.display3D.textures.Texture;
 import openfl.display3D.textures.TextureBase;
-
+import fuse.texture.TextureId;
+import fuse.utils.ObjectId;
 /**
  * ...
  * @author P.J.Shand
@@ -12,24 +13,30 @@ import openfl.display3D.textures.TextureBase;
 class TextureData
 {
 	// Backend Props
-	public var textureId:Int;
-	public var x:Int;
-	public var y:Int;
-	public var width:Int;
-	public var height:Int;
-	public var p2Width:Int;
-	public var p2Height:Int;
-	public var baseX:Int;
-	public var baseY:Int;
-	public var baseWidth:Int;
-	public var baseHeight:Int;
-	public var baseP2Width:Int;
-	public var baseP2Height:Int;
+	//public var objectId:ObjectId;
+	//public var textureId:TextureId;
+
+	public var activeData:TextureSizeData; // points to the active TextureSizeData
+	public var baseData:TextureSizeData; // stores data about the source texture
+	public var atlasData:TextureSizeData; // stores data about the dynamic texture atlas
+
+	public var x:Int = 0;
+	public var y:Int = 0;
+	public var width:Int = 1;
+	public var height:Int = 1;
+	public var p2Width:Int = 1;
+	public var p2Height:Int = 1;
+
+	public var offsetU:Float = 0;
+	public var offsetV:Float = 0;
+	public var scaleU:Float = 1;
+	public var scaleV:Float = 1;
+
 	public var textureAvailable:Int;
 	public var placed:Int;
 	public var persistent:Int;
 	public var directRender:Int;
-	public var atlasTextureId:Int;
+	//public var atlasTextureId:Int;
 	//public var atlasBatchTextureIndex:Int;
 	public var changeCount:Int = 0;
 	public var area(get, null):Float;
@@ -40,18 +47,27 @@ class TextureData
 	
 	public function new(objectOffset:Int) 
 	{
-		textureId = objectOffset;
-		atlasTextureId = textureId;
+		//baseData = { textureId:0, x:0, y:0, width:1, height:1, p2Width:1, p2Height:1, offsetU:0.1, offsetV:0.1, scaleU:0.8, scaleV:0.8 };
+		baseData = { textureId:0, x:0, y:0, width:1, height:1, p2Width:1, p2Height:1, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
+		atlasData = { textureId:0, x:0, y:0, width:1, height:1, p2Width:1, p2Height:1, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
+
+		activeData = baseData;
+		baseData.textureId = objectOffset;
+		atlasData.textureId = objectOffset;
+		textureAvailable = 0;
+		//objectId = objectOffset;
+		//atlasTextureId = objectId;
+		
 	}
 	
 	public function toString():String
 	{
-		return "textureId = " + textureId + ", atlasIndex = " + atlasTextureId + " - (" + x + ", " + y + ", " + width + ", " + height + ")";
+		return "objectId = " + baseData.textureId + ", atlasIndex = " + atlasData.textureId + " - (" + activeData.x + ", " + activeData.y + ", " + activeData.width + ", " + activeData.height + ")";
 	}
 	
 	function get_area():Float 
 	{
-		return this.width * this.height;
+		return activeData.width * activeData.height;
 	}
 	
 	public function dispose():Void

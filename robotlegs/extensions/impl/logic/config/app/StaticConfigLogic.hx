@@ -10,14 +10,13 @@ import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigLoadService;
 import robotlegs.extensions.impl.utils.json.JsonFormatter;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class StaticConfigLogic
+class StaticConfigLogic implements DescribedType
 {
 	@inject public var configModel:IConfigModel;
 	@inject public var configLoadService:ConfigLoadService;

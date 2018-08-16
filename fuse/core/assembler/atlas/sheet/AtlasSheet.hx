@@ -2,13 +2,9 @@ package fuse.core.assembler.atlas.sheet;
 
 import fuse.core.assembler.atlas.sheet.partition.AtlasPartition;
 import fuse.core.assembler.atlas.sheet.placer.AtlasPartitionPlacer;
-import fuse.core.assembler.atlas.textures.AtlasTextures;
-import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.backend.display.CoreAtlasCopyFrameImage;
 import fuse.core.backend.texture.CoreTexture;
-import fuse.core.backend.util.atlas.AtlasUtils;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
 
 /**
@@ -66,7 +62,7 @@ class AtlasSheet
 		availablePartition.push(
 			//Pool.atlasPartitions2.request()
 			new AtlasPartition()
-			.init(0, 0, Fuse.MAX_TEXTURE_SIZE, Fuse.MAX_TEXTURE_SIZE)
+			.init(1, 1, Fuse.MAX_TEXTURE_SIZE - 2, Fuse.MAX_TEXTURE_SIZE - 2)
 		);
 	}
 	
@@ -88,7 +84,6 @@ class AtlasSheet
 			//trace("partition.lastFramePairPartition = " + partition.lastFramePairPartition);
 			
 			successfulPlacement = AtlasPartitionPlacer.place(partition, coreTexture);
-			
 			//trace("i = " + i);
 			if (successfulPlacement)
 			{
@@ -148,17 +143,20 @@ class AtlasSheet
 			
 			
 			//textureData.placed = 1;
-			textureData.x = partition.x;					// x position to draw on atlas
-			textureData.y = partition.y;					// y position to draw on atlas
-			textureData.width = partition.width;			// width to draw on atlas
-			textureData.height = partition.height;			// height to draw on atlas
-			textureData.p2Width = Fuse.MAX_TEXTURE_SIZE;	// width of target texture
-			textureData.p2Height = Fuse.MAX_TEXTURE_SIZE;	// height of target texture
-			textureData.atlasTextureId = atlasTextureId;	// renderTarget for image being rendered into atlas buffer
+			textureData.atlasData.x = partition.x;					// x position to draw on atlas
+			textureData.atlasData.y = partition.y;					// y position to draw on atlas
+			textureData.atlasData.width = partition.width;			// width to draw on atlas
+			textureData.atlasData.height = partition.height;			// height to draw on atlas
+			textureData.atlasData.p2Width = Fuse.MAX_TEXTURE_SIZE;	// width of target texture
+			textureData.atlasData.p2Height = Fuse.MAX_TEXTURE_SIZE;	// height of target texture
+			trace("atlasTextureId = " + atlasTextureId);
+			textureData.atlasData.textureId = atlasTextureId;	// renderTarget for image being rendered into atlas buffer
 			//textureData.atlasBatchTextureIndex = index;
 			
+			textureData.activeData = textureData.atlasData;
+
 			partition.lastRenderTarget = lastFramesAtlasTextureId;
-			partition.textureId = textureData.textureId;
+			partition.textureId = textureData.baseData.textureId;
 			partition.coreTexture.updateUVData();
 			
 			AtlasSheets.partitions.push(partition);

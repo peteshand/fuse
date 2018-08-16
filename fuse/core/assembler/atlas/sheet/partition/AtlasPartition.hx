@@ -3,9 +3,7 @@ package fuse.core.assembler.atlas.sheet.partition;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.backend.Core;
 import fuse.core.backend.texture.CoreTexture;
-import fuse.core.backend.util.atlas.AtlasUtils;
-import fuse.core.communication.data.textureData.ITextureData;
-import fuse.core.utils.Pool;
+import fuse.utils.ObjectId;
 
 /**
  * ...
@@ -15,7 +13,7 @@ import fuse.core.utils.Pool;
 class AtlasPartition implements ICoreRenderable
 {
 	static var objectCount:Int = 0;
-	public var objectId:Int = -1;
+	public var objectId:ObjectId = -1;
 	public var active:Bool;
 	public var placed:Bool;
 	public var blendMode:Int = 0;
@@ -76,11 +74,11 @@ class AtlasPartition implements ICoreRenderable
 			textureId = value;
 			
 			if (coreTexture != null && textureId == -1) {
-				Core.textures.deregister(coreTexture.textureData.textureId);
+				Core.textures.deregister(coreTexture.textureData.baseData.textureId);
 				coreTexture = null;
 			}
 			
-			if (coreTexture == null || coreTexture.textureData.textureId != textureId) {
+			if (coreTexture == null || coreTexture.textureData.baseData.textureId != textureId) {
 				coreTexture = Core.textures.register(textureId);
 			}
 		}

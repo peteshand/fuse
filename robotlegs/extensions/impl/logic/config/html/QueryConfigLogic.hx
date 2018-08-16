@@ -1,14 +1,13 @@
 package robotlegs.extensions.impl.logic.config.html;
 import js.Browser;
 import robotlegs.extensions.api.model.config.IConfigModel;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class QueryConfigLogic
+class QueryConfigLogic implements DescribedType
 {
 	@inject public var configModel:IConfigModel;
 	

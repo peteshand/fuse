@@ -2,21 +2,14 @@ package fuse.core.assembler.batches;
 
 import fuse.core.assembler.atlas.sheet.AtlasSheets;
 import fuse.core.assembler.atlas.sheet.partition.AtlasPartition;
-import fuse.core.assembler.atlas.sheet.AtlasSheet;
-import fuse.core.assembler.batches.batch.AtlasBatch;
 import fuse.core.assembler.batches.batch.BatchType;
 import fuse.core.assembler.batches.batch.DirectBatch;
 import fuse.core.assembler.batches.batch.IBatch;
-import fuse.core.assembler.batches.batch.CacheBakeBatch;
-import fuse.core.assembler.layers.LayerBufferAssembler;
 import fuse.core.assembler.layers.generate.GenerateLayers;
-import fuse.core.assembler.layers.layer.LayerBuffer;
 import fuse.core.assembler.layers.sort.SortLayers;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
-import fuse.core.backend.display.CoreImage;
 import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
-import mantle.notifier.Notifier;
 
 /**
     This class is called every frame and is responsible for splitting the data that is feed into the stage3d.
@@ -65,7 +58,7 @@ class BatchAssembler
 			for (j in 0...AtlasSheets.partitions.length) 
 			{
 				var atlasPartition:AtlasPartition = AtlasSheets.partitions[j];
-				addRenderable(atlasPartition, atlasPartition.coreTexture.textureData.atlasTextureId);
+				addRenderable(atlasPartition, atlasPartition.coreTexture.textureData.atlasData.textureId);
 			}
 		}
 	}

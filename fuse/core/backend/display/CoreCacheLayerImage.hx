@@ -12,6 +12,8 @@ class CoreCacheLayerImage extends CoreImage
 	{
 		super();
 		
+		//trace("textureId = " + textureId);
+
 		displayData = new DisplayData( -1);
 		displayData.width = Fuse.MAX_TEXTURE_SIZE;
 		displayData.height = Fuse.MAX_TEXTURE_SIZE;
@@ -28,6 +30,8 @@ class CoreCacheLayerImage extends CoreImage
 		this.quadData.topLeftX = -1;
 		this.quadData.topLeftY = 1;
 		this.quadData.topRightY = 1;
+
+		//trace("this.coreTexture = " + this.coreTexture);
 	}
 	
 	public function update() 

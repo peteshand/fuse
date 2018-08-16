@@ -2,7 +2,6 @@ package fuse.texture;
 
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.front.texture.upload.TextureUploadQue;
 import fuse.core.front.texture.Textures;
 import fuse.display.Image;
@@ -15,7 +14,7 @@ import openfl.display.BitmapData;
 import openfl.display3D.textures.TextureBase;
 import openfl.display3D.textures.Texture;
 import openfl.display3D.Context3DTextureFormat;
-import openfl.errors.Error;
+import fuse.utils.ObjectId;
 
 /**
  * ...
@@ -24,52 +23,65 @@ import openfl.errors.Error;
 @:access(fuse)
 class BaseTexture implements IBaseTexture
 {
-	//static private var textureIdCount:Int = 0;
-	static public var overTextureId:Null<Int>;
-	static public var textureIdCount:Int = 0;
+	static var coreTextures = new Map<Int, BaseTexture>();
+	public var coreTexture(get, never):BaseTexture;
+
+	static var objectIdCount:Int = 0;
+	static var textureIdCount:Int = 0;
 	
-	var p2Width:Int;
-	var p2Height:Int;
-	public var _clear:Bool = false;
-	public var _alreadyClear:Bool = false;
-	public var textureData:ITextureData;
 	var onTextureUploadCompleteCallback:Void-> Void;
 	var persistent:Int;
 	var p2Texture:Bool;
 	var uploadFromBitmapDataAsync:BitmapData -> UInt -> Void;
 	
-	public var textureId:Int;
+	public var objectId:ObjectId;
+	//public var textureId:TextureId;
+	public var textureData:ITextureData;
 	public var width:Null<Int>;
 	public var height:Null<Int>;
-	
-	public var clearColour:Color = 0;
-	@:isVar public var directRender(get, set):Bool = false;
+
 	public var onUpdate = new Signal0();
 	public var onUpload = new Signal0();
-	
 	public var nativeTexture(get, null):Texture;
 	public var textureBase(get, null):TextureBase;
-	
 	public var dependantDisplays = new Map<Int, Image>();
+	public var clearColour:Color = 0;
+	public var _clear:Bool = false;
+	public var _alreadyClear:Bool = false;
 	
-	public function new(width:Int, height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null, p2Texture:Bool=true) 
+	@:isVar public var directRender(get, set):Bool = false;
+	
+	public function new(width:Int, height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null, p2Texture:Bool=true, overTextureId:Null<Int>=null) 
 	{
-		if (overTextureId == null){
-			this.textureId = BaseTexture.textureIdCount++;
-		}
+		//objectId = BaseTexture.objectIdCount++;
+
+		if (overTextureId == null) this.objectId = BaseTexture.objectIdCount++;
 		else {
-			this.textureId = BaseTexture.overTextureId;
-			BaseTexture.overTextureId = null;
+			this.objectId = overTextureId;
+			if (BaseTexture.objectIdCount <= overTextureId) {
+				BaseTexture.objectIdCount = overTextureId + 1; 
+			}
 		}
+
+		/*if (overTextureId == null) this.textureId = BaseTexture.textureIdCount++;
+		else {
+			this.textureId = overTextureId;
+			if (BaseTexture.textureIdCount < overTextureId) {
+				BaseTexture.textureIdCount = overTextureId + 1; 
+			}
+		}*/
+
+		//if (overTextureId == null) this.textureId = BaseTexture.textureIdCount++;
+		//else this.textureId = overTextureId;
+
 		this.width = width;
 		this.height = height;
 		this.p2Texture = p2Texture;
 		this.onTextureUploadCompleteCallback = onTextureUploadCompleteCallback;
-		//textureId = textureIdCount++;
-		textureData = CommsObjGen.getTextureData(textureId);
+		textureData = CommsObjGen.getTextureData(objectId);
 		
-		setTextureData();
-		Fuse.current.workerSetup.addTexture(textureId);
+		//setTextureData();
+		Fuse.current.workerSetup.addTexture(objectId);
 		
 		if (queUpload) TextureUploadQue.add(this);
 		else upload();
@@ -80,43 +92,41 @@ class BaseTexture implements IBaseTexture
 			for (image in dependantDisplays.iterator()) 
 				image.OnTextureUpdate();
 		});
+
+		coreTextures.set(this.objectId, this);
 	}
 	
 	function setTextureData() 
 	{
-		if (p2Texture){
-			p2Width = PowerOfTwo.getNextPowerOfTwo(width);
-			p2Height = PowerOfTwo.getNextPowerOfTwo(height);
-		}
-		else {
-			p2Width = width;
-			p2Height = height;
-		}
-		
 		textureData.x = 0;
 		textureData.y = 0;
 		textureData.width = width;
 		textureData.height = height;
-		textureData.p2Width = p2Width;
-		textureData.p2Height = p2Height;
-		
-		textureData.baseX = 0;
-		textureData.baseY = 0;
-		textureData.baseWidth = width;
-		textureData.baseHeight = height;
-		textureData.baseP2Width = p2Width;
-		textureData.baseP2Height = p2Height;
+
+		if (p2Texture){
+			textureData.p2Width = PowerOfTwo.getNextPowerOfTwo(width);
+			textureData.p2Height = PowerOfTwo.getNextPowerOfTwo(height);
+		}
+		else {
+			textureData.p2Width = width;
+			textureData.p2Height = height;
+		}
+
+		textureData.offsetU = 0;
+		textureData.offsetV = 0;
+		textureData.scaleU = 1;
+		textureData.scaleV = 1;
 		
 		textureData.textureAvailable = 0;
 		textureData.persistent = persistent;
-		
+		Fuse.current.workerSetup.updateTexture(objectId);
 		onUpdate.dispatch();
 	}
 	
 	public function createNativeTexture()
 	{
 		setTextureData();
-		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, false, 0);
+		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(textureData.p2Width, textureData.p2Height, Context3DTextureFormat.BGRA, false, 0);
 		#if air
 			try {
 				uploadFromBitmapDataAsync = untyped textureData.nativeTexture["uploadFromBitmapDataAsync"];
@@ -133,30 +143,18 @@ class BaseTexture implements IBaseTexture
 	
 	public function upload() 
 	{
-		throw new Error("This function should be overriden");
+		throw "This function should be overriden";
 	}
 	
 	public function dispose():Void
 	{
-		if (textureId <= 1) {
+		if (objectId <= 1) {
 			// Can't dispose default textures
 			return;
 		}
-		Fuse.current.workerSetup.removeTexture(textureId);
-		Textures.deregisterTexture(textureId, this);
+		Fuse.current.workerSetup.removeTexture(objectId);
+		Textures.deregisterTexture(objectId, this);
 		textureData.dispose();
-	}
-	
-	
-	
-	function get_textureBase() 
-	{
-		return textureData.textureBase;
-	}
-	
-	function get_directRender():Bool 
-	{
-		return directRender;
 	}
 	
 	function set_directRender(value:Bool):Bool 
@@ -168,8 +166,18 @@ class BaseTexture implements IBaseTexture
 		return directRender;
 	}
 	
-	function get_nativeTexture():Texture 
+	function get_textureBase():TextureBase	{ return textureData.textureBase;		}
+	function get_directRender():Bool		{ return directRender;					}
+	function get_nativeTexture():Texture	{ return textureData.nativeTexture;		}
+	function get_coreTexture():BaseTexture	{ return coreTextures.get(objectId);	}
+
+	public function addChangeListener(image:Image) 
 	{
-		return textureData.nativeTexture;
+		coreTexture.dependantDisplays.set(image.objectId, image);
+	}
+	
+	public function removeChangeListener(image:Image) 
+	{
+		coreTexture.dependantDisplays.remove(image.objectId);
 	}
 }

@@ -1,7 +1,6 @@
 package fuse.display;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.front.texture.Textures;
-import fuse.display.DisplayObject;
 import fuse.utils.Color;
 
 /**
@@ -13,7 +12,7 @@ class Quad extends Image
 {
 	public function new(width:Int, height:Int, colour:Color=0xFFFFFFFF) 
 	{
-		super(untyped Textures.whiteTexture);
+		super(Textures.whiteTexture);
 		
 		this.color = colour;
 		this.width = width;

@@ -1,5 +1,7 @@
 package fuse.core.communication.data.rangeData;
 
+import fuse.utils.ObjectId;
+
 /**
  * ...
  * @author P.J.Shand
@@ -13,7 +15,7 @@ class WorkerRangeData implements IRangeData
 	public static inline var BUFFER_SIZE:Int = 10000;
 	
 	public var memoryBlock:MemoryBlock;
-	var objectId:Int;
+	var objectId:ObjectId;
 	
 	@:isVar public var start(get, set):Int;
 	@:isVar public var length(get, set):Int;

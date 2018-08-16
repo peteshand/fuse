@@ -9,28 +9,12 @@ import openfl.events.Event;
  * @author P.J.Shand
  */
 
-@:forward(textureData, nativeTexture, textureBase, textureId, width, height, onUpdate, clearColour, _clear, _alreadyClear, upload, dispose, directRender)
-abstract BitmapTexture(AbstractTexture) to Int from Int 
-{
-	var baseBitmapTexture(get, never):BaseBitmapTexture;
-	
-	public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
-	{
-		this = new AbstractTexture(new BaseBitmapTexture(bitmapData, width, height, queUpload, onTextureUploadCompleteCallback));
-	}
-	
-	public function update(source:BitmapData)					{ baseBitmapTexture.update(source); 			}
-	function upload():Void										{ baseBitmapTexture.upload(); 					}
-	function get_baseBitmapTexture():BaseBitmapTexture			{ return untyped this.coreTexture; 				}
-	@:to public function toAbstractTexture():AbstractTexture	{ return this; 									}
-}
-
 @:access(fuse)
-class BaseBitmapTexture extends BaseTexture
+class BitmapTexture extends BaseTexture
 {
 	var bitmapData:BitmapData;
 	
-	public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null, overTextureId:Null<Int>=null) 
 	{
 		this.bitmapData = bitmapData;
 		
@@ -40,12 +24,7 @@ class BaseBitmapTexture extends BaseTexture
 		var h:Int = height;
 		if (width == null) h = bitmapData.height;
 		
-		//if (width == null) this.width = bitmapData.width;
-		//else this.width = width;
-		//
-		//if (height == null) this.height = bitmapData.height;
-		//else this.height = height;
-		super(w, h, queUpload, onTextureUploadCompleteCallback);
+		super(w, h, queUpload, onTextureUploadCompleteCallback, true, overTextureId);
 	}
 	
 	override public function upload() 
@@ -80,7 +59,7 @@ class BaseBitmapTexture extends BaseTexture
 		nativeTexture.removeEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
 		textureData.changeCount++;
 		textureData.placed = 0;
-		Textures.registerTexture(textureId, this);
+		Textures.registerTexture(objectId, this);
 		textureData.textureAvailable = 1;
 		
 		Fuse.current.conductorData.frontStaticCount = 0;

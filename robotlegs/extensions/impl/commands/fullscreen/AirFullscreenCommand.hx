@@ -10,14 +10,12 @@ import openfl.errors.Error;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;
 import robotlegs.extensions.api.model.config.IConfigModel;
-	
 /**
  * ...
  * @author Thomas Byrne
  */
-@:rtti
 @:keepSub
-class AirFullscreenCommand extends Command 
+class AirFullscreenCommand extends Command
 {
 	@inject public var contextView:ContextView;
 	@inject("optional=true") public var configModel:IConfigModel;

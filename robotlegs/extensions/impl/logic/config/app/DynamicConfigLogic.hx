@@ -13,14 +13,13 @@ import robotlegs.extensions.impl.logic.config.app.StaticConfigLogic.EmptyConfig;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigSaveService;
 import robotlegs.extensions.impl.utils.json.JsonFormatter;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class DynamicConfigLogic
+class DynamicConfigLogic implements DescribedType
 {
 	@inject public var configModel:IConfigModel;
 	@inject public var configSaveService:ConfigSaveService;

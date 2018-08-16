@@ -417,11 +417,12 @@ class TextField extends Image
 			if (bitmapdata != null) bitmapdata.dispose();
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
 			bitmapdata.draw(nativeTextField);
-			if (texture != null && texture.textureId > 1) {
-				BaseTexture.overTextureId = texture.textureId;
+			var textureId:Null<Int> = null;
+			if (texture != null && texture.objectId > 1) {
+				textureId = texture.objectId;
 				texture.dispose();
 			}
-			texture = new BitmapTexture(bitmapdata, false);
+			texture = new BitmapTexture(bitmapdata, false, null, textureId);
 			texture.directRender = directRender;
 			initialized = true;
 		}

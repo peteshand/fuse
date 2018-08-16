@@ -58,6 +58,7 @@ class CoreEntryPoint
 		workerComms.addListener(MessageType.ADD_MASK, OnAddMask);
 		workerComms.addListener(MessageType.REMOVE_MASK, OnRemoveMask);
 		workerComms.addListener(MessageType.ADD_TEXTURE, OnAddTexture);
+		workerComms.addListener(MessageType.UPDATE_TEXTURE, OnUpdateTexture);
 		workerComms.addListener(MessageType.REMOVE_TEXTURE, OnRemoveTexture);
 		workerComms.addListener(MessageType.MOUSE_INPUT, OnMouseInput);
 		workerComms.addListener(MessageType.SET_TOUCHABLE, OnSetTouchable);
@@ -105,9 +106,14 @@ class CoreEntryPoint
 		Core.displayList.removeMask(objectId);
 	}
 	
-	private function OnAddTexture(textureId:Int):Void 
+	function OnAddTexture(textureId:Int):Void 
 	{
 		Core.textures.create(textureId);
+	}
+
+	function OnUpdateTexture(textureId:Int):Void 
+	{
+		Core.textures.update(textureId);
 	}
 	
 	private function OnRemoveTexture(textureId:Int):Void 

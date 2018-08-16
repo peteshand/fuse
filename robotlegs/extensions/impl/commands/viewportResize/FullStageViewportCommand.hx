@@ -6,15 +6,14 @@ import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;
 import robotlegs.bender.extensions.display.base.api.IViewport;
 import robotlegs.extensions.api.model.config.IConfigModel;
-
+import org.swiftsuspenders.utils.DescribedType;
 
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class FullStageViewportCommand extends Command 
+class FullStageViewportCommand extends Command
 {
 	@inject public var viewport:IViewport;
 	@inject public var contextView:ContextView;

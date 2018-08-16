@@ -5,14 +5,13 @@ import msignal.Signal.Signal0;
 import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigSaveService;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class SaveActiveConfigLogic
+class SaveActiveConfigLogic implements DescribedType
 {
 	@inject public var configModel:IConfigModel;
 	@inject public var configSaveService:ConfigSaveService;

@@ -4,14 +4,13 @@ import haxe.Json;
 import mantle.util.app.App;
 import js.Browser;
 import robotlegs.extensions.impl.model.flags.FlagsModel;
-
+import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...
  * @author P.J.Shand
  */
-@:rtti
 @:keepSub
-class HtmlFlagsLogic
+class HtmlFlagsLogic implements DescribedType
 {
 	@inject public var flagsModel:FlagsModel;
 	

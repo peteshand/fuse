@@ -1,5 +1,7 @@
 package fuse.core.communication.data.displayData;
 
+import fuse.utils.ObjectId;
+
 /**
  * ...
  * @author P.J.Shand
@@ -34,7 +36,7 @@ class DisplayData
 	public var isMoving:Int = 0;
 	public var isRotating:Int = 0;
 	
-	public var objectId:Int;
+	public var objectId:ObjectId;
 	
 	public function new(objectOffset:Null<Int>)
 	{
