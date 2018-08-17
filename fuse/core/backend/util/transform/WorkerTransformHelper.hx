@@ -7,7 +7,6 @@ import fuse.utils.MatrixUtils;
 import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.backend.displaylist.Graphics;
 import fuse.math.FastMatrix3;
-import haxe.Json;
 import openfl.geom.Point;
 
 /**
