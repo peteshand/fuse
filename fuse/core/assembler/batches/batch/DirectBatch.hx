@@ -61,6 +61,7 @@ class DirectBatch extends BaseBatch implements IBatch
 	function writeLayerVertex(image:CoreImage)
 	{
 		if (!image.visible || image.alpha == 0 || image.isMask) {
+			image.setUpdates(false);
 			image.drawIndex = -1;
 			return;
 		}
