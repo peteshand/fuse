@@ -97,19 +97,26 @@ class Context3DSetup
 			#else
 				context3D.enableErrorChecking = false;
 			#end
-			
 			//trace("driverInfo = " + context3D.driverInfo);
 			activeProfile = targetProfile;
 			onComplete.dispatch();
 			//trace("context already created, driverInfo = " + context3D.driverInfo);
 		}
+
+		
 	}
 	
 	private function OnContentCreated(e:Event):Void 
 	{
 		context3D = stage3D.context3D;
 		//trace("context3D = " + context3D);
-		
+		#if debug
+			context3D.enableErrorChecking = true;
+		#else
+			context3D.enableErrorChecking = false;
+		#end
+		//trace("context3D.enableErrorChecking = " + context3D.enableErrorChecking);
+
 		if (renderMode == Context3DRenderMode.AUTO && context3D.driverInfo != null && context3D.driverInfo.indexOf("Software") != -1) {
 			moveToNextProfile();
 		}
