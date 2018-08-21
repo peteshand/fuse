@@ -11,6 +11,7 @@ import fuse.Fuse;
 import fuse.utils.drag.DragUtil;
 import msignal.Signal.Signal1;
 import openfl.events.MouseEvent;
+import openfl.events.TouchEvent;
 import fuse.utils.ObjectId;
 
 @:access(fuse)
@@ -86,7 +87,7 @@ class DisplayObject
 		//isRotating = 1;
 		
 		objectId = id;
-		
+		trace("objectId = " + objectId);
 		scaleX = 1;
 		scaleY = 1;
 		color = 0x00000000;
@@ -397,7 +398,11 @@ class DisplayObject
 	
 	function dispatchInput(touch:Touch) 
 	{
+		// TODO: combine Touch and Mouse keys
 		switch(touch.type) {
+			case TouchEvent.TOUCH_BEGIN:onPress.dispatch(touch);
+			case TouchEvent.TOUCH_MOVE:	onMove.dispatch(touch);
+			case TouchEvent.TOUCH_END:	onRelease.dispatch(touch);
 			case MouseEvent.MOUSE_DOWN:	onPress.dispatch(touch);
 			case MouseEvent.MOUSE_MOVE:	onMove.dispatch(touch);
 			case MouseEvent.MOUSE_UP:	onRelease.dispatch(touch);

@@ -89,7 +89,8 @@ class CoreEntryPoint
 		
 		for (i in 0...InputAssembler.collisions.length) 
 		{
-			workerComms.send(MessageType.MOUSE_COLLISION, InputAssembler.collisions[i]);
+			var touch:Touch = InputAssembler.collisions[i];
+			workerComms.send(MessageType.MOUSE_COLLISION, touch);
 		}
 	}
 	

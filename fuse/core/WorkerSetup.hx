@@ -81,41 +81,11 @@ class WorkerSetup
 	
 	private function OnInputCollision(touch:Touch):Void 
 	{
-		//if (touch.type != "mouseMove") {
-			//trace([touch.type, touch.collisionId, touch.x, touch.y]);
-		//}
-		
-		
 		var display:DisplayObject = touchables.get(touch.collisionId);
 		if (display == null) return;
 		touch.target = display;
 		display.dispatchInput(touch);
-		
-		//findDisplay(touch, Fuse.current.stage);
 	}
-	
-	// TODO: move into it's own class
-	//function findDisplay(touch:Touch, display:DisplayObject):Bool
-	//{
-		//if (touch.collisionId == display.objectId) {
-			////trace("FOUND: " + display.name);
-			//touch.target = display;
-			//display.dispatchInput(touch);
-			//return true;
-		//}
-		//if (Std.is(display, DisplayObjectContainer)){
-			//var d:DisplayObjectContainer = cast (display, DisplayObjectContainer);
-			//for (i in 0...d.children.length) 
-			//{
-				//if (findDisplay(touch, d.children[i])) {
-					//return true;
-				//}
-			//}
-		//}
-		//
-		//return false;
-		//
-	//}
 	
 	private function OnWorkerStarted(workerPayload:WorkerPayload):Void 
 	{

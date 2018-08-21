@@ -7,6 +7,7 @@ import fuse.display.DisplayObject;
 typedef Touch =
 {
 	index:Int,
+	id:String,
 	?type:String,
 	?x:Float,
 	?y:Float,

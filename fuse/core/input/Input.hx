@@ -23,9 +23,9 @@ class Input
 	public function new() 
 	{
 		var stage:Stage = Lib.current.stage;
-		stage.addEventListener(MouseEvent.MOUSE_MOVE, OnMouse, false, 100);
-		stage.addEventListener(MouseEvent.MOUSE_DOWN, OnMouse);
-		stage.addEventListener(MouseEvent.MOUSE_UP, OnMouse);
+		//stage.addEventListener(MouseEvent.MOUSE_MOVE, OnMouse, false, 100);
+		//stage.addEventListener(MouseEvent.MOUSE_DOWN, OnMouse);
+		//stage.addEventListener(MouseEvent.MOUSE_UP, OnMouse);
 		stage.addEventListener(TouchEvent.TOUCH_MOVE, OnTouch, false, 100);
 		stage.addEventListener(TouchEvent.TOUCH_BEGIN, OnTouch);
 		stage.addEventListener(TouchEvent.TOUCH_END, OnTouch);
@@ -37,6 +37,7 @@ class Input
 	{
 		for (i in 0...touchDataArray.length) 
 		{
+			trace([touchDataArray[i].type,touchDataArray[i].index]);
 			Fuse.current.workerSetup.addInput(touchDataArray[i]);
 		}
 		touchDataArray.clear();
@@ -84,7 +85,7 @@ class Input
 	{
 		var touch:Touch = touchData.get(id);
 		if (touch == null) {
-			touch = { index:index };
+			touch = { index:index, id:id };
 			touchData.set(id, touch);
 		}
 		return touch;

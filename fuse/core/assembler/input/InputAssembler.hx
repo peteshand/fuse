@@ -37,19 +37,19 @@ class InputAssembler
 		
 		for (i in 0...input.length) 
 		{
-			getInput(input[i].index).test(input[i]);
+			getInput(input[i].id, input[i].index).test(input[i]);
 		}
 		
 		input.clear();
 	}
 	
-	static private function getInput(index:Int):InputAssemblerObject
+	static private function getInput(id:String, index:Int):InputAssemblerObject
 	{
 		for (i in 0...objects.length) 
 		{
-			if (objects[i].index == index) return objects[i];
+			if (objects[i].id == id) return objects[i];
 		}
-		var object:InputAssemblerObject = new InputAssemblerObject(index);
+		var object:InputAssemblerObject = new InputAssemblerObject(id, index);
 		objects.push(object);
 		return object;
 		
@@ -65,15 +65,15 @@ class InputAssembler
 
 class InputAssemblerObject
 {
-	public var index:Int;
+	public var id:String;
 	var over:Touch;
 	var out:Touch;
 	
-	public function new(index:Int)
+	public function new(id:String, index:Int)
 	{
-		this.index = index;
-		over = { index:index, type:MouseEvent.MOUSE_OVER };
-		out = { index:index, type:MouseEvent.MOUSE_OUT };
+		this.id = id;
+		over = { id:id, index:index, type:MouseEvent.MOUSE_OVER };
+		out = { id:id, index:index, type:MouseEvent.MOUSE_OUT };
 	}
 	
 	public function test(touch:Touch):Void
@@ -88,43 +88,31 @@ class InputAssemblerObject
 			if (display.visible == true)
 			{
 				var releaseOutside:Bool = touch.type == "mouseUp" && touch.targetId == display.objectId;
-				//if (display.insideBounds(touch.x, touch.y) || releaseOutside) {
-					
-					var triangleSum:Float = getTriangleSum(display, touch);
-					if (triangleSum <= display.area + 1 || releaseOutside) {
+				
+				var triangleSum:Float = getTriangleSum(display, touch);
+				if (triangleSum <= display.area + 1 || releaseOutside) {
+					if (touch.targetId != display.objectId) {						
+						if (touch.targetId != -1) {
+							//trace("Out");
+							DispatchOut(touch.targetId, touch);	
+							
+						}
+						touch.targetId = display.objectId;
+						//trace("Over");
+						DispatchOver(display.objectId, touch);
 						
-						//if (display.visible){
-							// inside
-							
-							if (touch.targetId != display.objectId) {						
-								if (touch.targetId != -1) {
-									//trace("Out");
-									DispatchOut(touch.targetId, touch);	
-									
-								}
-								touch.targetId = display.objectId;
-								//trace("Over");
-								DispatchOver(display.objectId, touch);
-								
-							}
-							
-							touch.collisionId = display.objectId;
-							InputAssembler.collisions.push(touch);
-							return;
-							//j = -1;
-						//}
 					}
-					else if (touch.targetId == display.objectId){
-						// outside
-						//trace("Out");
-						DispatchOut(display.objectId, touch);					
-					}
-				//}
-				//else if (touch.targetId == display.objectId){
+					
+					touch.collisionId = display.objectId;
+					
+					InputAssembler.collisions.push(touch);
+					return;
+				}
+				else if (touch.targetId == display.objectId){
 					// outside
 					//trace("Out");
-					//DispatchOut(display.objectId, touch);
-				//}
+					DispatchOut(display.objectId, touch);					
+				}
 			}
 			j--;
 		}
