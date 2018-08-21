@@ -1,15 +1,11 @@
 package fuse.texture;
 
+import openfl.net.NetConnection;
 import fuse.texture.BaseTexture;
 import fuse.core.front.texture.Textures;
-import haxe.Json;
-import openfl.display.BitmapData;
-import openfl.display3D.Context3DTextureFormat;
-import openfl.errors.Error;
 import openfl.events.Event;
 import openfl.events.NetStatusEvent;
 import openfl.net.NetStream;
-import openfl.utils.ByteArray;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
 import mantle.time.EnterFrame;
 /**
@@ -20,17 +16,40 @@ import mantle.time.EnterFrame;
 class VideoTexture extends BaseTexture
 {
 	static inline var TEXTURE_READY:String = "textureReady";
-	var netStream:NetStream;
+	public var netStream:NetStream;
 	public var nativeVideoTexture:NativeVideoTexture;
-	
-	public function new(?width:Int, ?height:Int, netStream:NetStream, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public var loop:Bool = false;
+	var url:String;
+
+	public function new(url:String) 
 	{
-		this.netStream = netStream;
-		this.netStream.client = { onMetaData: onMetaData };
-		this.netStream.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
+		var nc:NetConnection = new NetConnection();
+		nc.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
+		nc.connect(null);
+		netStream = new NetStream(nc);
+		netStream.client = { onMetaData: onMetaData };
+		netStream.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
 		
-		super(width, height, false, onTextureUploadCompleteCallback, false);
+		super(512, 512, false, null, false);
 		this.directRender = true;
+
+		if (url != null) play(url);
+	}
+
+	public function play(url:String) 
+	{
+		this.url = url;
+		netStream.play(url);
+	}
+
+	public function stop()
+	{
+		netStream.close();
+	}
+
+	public function pause()
+	{
+		netStream.pause();
 	}
 	
 	private function OnEvent(e:NetStatusEvent):Void 

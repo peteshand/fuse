@@ -1,6 +1,5 @@
 package fuse.core;
 import fuse.core.communication.messageData.StaticData;
-import fuse.core.input.FrontMouseInput;
 import fuse.core.input.Touch;
 import fuse.utils.GcoArray;
 

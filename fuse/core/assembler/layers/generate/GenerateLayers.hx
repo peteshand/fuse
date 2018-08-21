@@ -53,7 +53,6 @@ class GenerateLayers
 				//update.value = false;
 			//}
 			//else {
-				//trace("image.updateAny = " + image.updateAny);
 				update.value = image.updateAny;
 			//}
 			currentLayerBuffer.add(image);

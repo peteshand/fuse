@@ -49,7 +49,7 @@ class ExecuteImagCommands implements DescribedType implements IConfig
 		
 		commandMap.map(InitializeAppSignal).toCommand(StageSetupCommand).once();
 		//commandMap.map(InitializeAppSignal).toCommand(SetupAssetsCommand).once();
-		commandMap.map(InitializeAppSignal).toCommand(SetupLoggingCommand).once();
+		//commandMap.map(InitializeAppSignal).toCommand(SetupLoggingCommand).once();
 		commandMap.map(InitializeAppSignal).toCommand(BaseKeyCommand).once();
 		
 		//commandMap.map(ConfigReadySignal).toCommand(SetupLayoutCommand).once();

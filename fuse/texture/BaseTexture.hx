@@ -42,6 +42,7 @@ class BaseTexture implements IBaseTexture
 
 	public var onUpdate = new Signal0();
 	public var onUpload = new Signal0();
+	
 	public var nativeTexture(get, null):Texture;
 	public var textureBase(get, null):TextureBase;
 	public var dependantDisplays = new Map<Int, Image>();

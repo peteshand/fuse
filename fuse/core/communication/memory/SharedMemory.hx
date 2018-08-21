@@ -1,5 +1,6 @@
 package fuse.core.communication.memory;
 
+import fuse.info.WorkerInfo;
 import fuse.core.communication.data.MemoryPool;
 import fuse.core.communication.data.batchData.WorkerBatchData;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
@@ -11,7 +12,6 @@ import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.messenger.MessageManager;
 import fuse.core.communication.memory.Memory;
-import fuse.info.WorkerInfo;
 import openfl.utils.ByteArray;
 import openfl.utils.Endian;
 
@@ -48,7 +48,7 @@ class SharedMemory
 		messageDataPool = CreatePool(MessageManager.BUFFER_SIZE);
 		
 		if (memory == null) {
-			SharedMemory.memory = new ByteArray();
+			SharedMemory.memory = new ByteArrayData();
 		}
 		else {
 			SharedMemory.memory = memory;
