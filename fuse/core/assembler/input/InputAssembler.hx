@@ -87,9 +87,11 @@ class InputAssemblerObject
 			// TODO: non visible displays should not be in the touchables array //trace(display.visible);
 			if (display.visible == true)
 			{
-				if (display.insideBounds(touch.x, touch.y)) {
+				var releaseOutside:Bool = touch.type == "mouseUp" && touch.targetId == display.objectId;
+				//if (display.insideBounds(touch.x, touch.y) || releaseOutside) {
+					
 					var triangleSum:Float = getTriangleSum(display, touch);
-					if (triangleSum <= display.area + 1) {
+					if (triangleSum <= display.area + 1 || releaseOutside) {
 						
 						//if (display.visible){
 							// inside
@@ -117,12 +119,12 @@ class InputAssemblerObject
 						//trace("Out");
 						DispatchOut(display.objectId, touch);					
 					}
-				}
-				else if (touch.targetId == display.objectId){
+				//}
+				//else if (touch.targetId == display.objectId){
 					// outside
 					//trace("Out");
-					DispatchOut(display.objectId, touch);
-				}
+					//DispatchOut(display.objectId, touch);
+				//}
 			}
 			j--;
 		}
