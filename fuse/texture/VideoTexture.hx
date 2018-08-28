@@ -19,7 +19,10 @@ class VideoTexture extends BaseTexture
 	public var netStream:NetStream;
 	public var nativeVideoTexture:NativeVideoTexture;
 	public var loop:Bool = false;
+	public var duration:Null<Float>;
 	var url:String;
+	public var time(get, null):Float;
+	var paused:Bool = false;
 
 	public function new(url:String) 
 	{
@@ -36,19 +39,30 @@ class VideoTexture extends BaseTexture
 		if (url != null) play(url);
 	}
 
-	public function play(url:String) 
+	public function play(url:String=null) 
 	{
-		this.url = url;
-		netStream.play(url);
+		if (paused) {
+			netStream.togglePause();
+		} else {
+			if (url == null && this.url != null) url = this.url;
+			duration = null;
+			this.url = url;
+			paused = false;
+			netStream.play(url);
+		}
+		
 	}
 
 	public function stop()
 	{
+		paused = false;
 		netStream.close();
 	}
 
 	public function pause()
 	{
+		//netStream.togglePause();
+		paused = true;
 		netStream.pause();
 	}
 	
@@ -69,6 +83,7 @@ class VideoTexture extends BaseTexture
 		// TODO: need to be able to update width/height in backend texture
 		if (this.width == 0) this.width = videoMetaData.width;
 		if (this.height == 0) this.height = videoMetaData.height;
+		duration = videoMetaData.duration;
 		setTextureData();
 	}
 	
@@ -111,6 +126,11 @@ class VideoTexture extends BaseTexture
 	function onTick()
 	{
 		this.textureData.changeCount++;
+	}
+
+	function get_time():Float
+	{
+		return netStream.time;
 	}
 }
 

@@ -71,12 +71,14 @@ class FShader
 		this.context3D = context3D;
 		this.numTextures = numTextures;
 		this.shaderId = shaderId;
+
+		shaders = BaseShader.getShaders(shaderId);
+		createAndUploadShaderProgram();
 	}
 
 	function createAndUploadShaderProgram()
 	{
-		if (program != null) return;
-
+		//if (program != null) return;
 		program = context3D.createProgram();
 		vertexCode = agalMiniAssembler.assemble(Context3DProgramType.VERTEX, vertexString());
 		fragmentCode = agalMiniAssembler.assemble(Context3DProgramType.FRAGMENT, fragmentString());
@@ -101,7 +103,8 @@ class FShader
 	public function update(move:Bool=false) 
 	{
 		setProgram.value = true;
-		if (Fuse.current.conductorData.backIsStatic == 0){
+		//trace("Fuse.current.conductorData.backIsStatic: " + Fuse.current.conductorData.backIsStatic);
+		//if (Fuse.current.conductorData.backIsStatic == 0){
 			if (Fuse.current.stage.camera.hasUpdate){
 				if (move) {
 					cameraData[0] = -Fuse.current.stage.camera.x / (Lib.current.stage.stageWidth / 2);
@@ -119,9 +122,7 @@ class FShader
 			}
 			//colorTransform = BaseShader.map.get(1);
 			//trace("shaderId = " + shaderId);
-			shaders = BaseShader.getShaders(shaderId);
-
-			createAndUploadShaderProgram();
+			
 
 			for (i in 0...shaders.length) {
 				shaders[i].activate(context3D);
@@ -129,7 +130,7 @@ class FShader
 			//trace("1 colorTransform = " + colorTransform);
 			//if (colorTransform != null) colorTransform.activate(context3D);
 			//context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, colorTransform, 2);
-		}
+		//}
 	}
 	
 	public function deactivate() 

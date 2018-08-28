@@ -64,7 +64,7 @@ class BatchRenderer
 		//trace("currentBatchData.numTextures = " + currentBatchData.numTextures);
 		for (j in 0...8) 
 		{
-			if (j < conductorData.highestNumTextures) {
+			if (j < currentBatchData.numTextures) {
 				Context3DTexture.setContextTexture(j, currentBatchData.textureIds[j]);
 			}
 			else {
@@ -73,9 +73,12 @@ class BatchRenderer
 		}
 		
 		// TODO: update shader to use number of textures in each batch
-		//var fShader:FShader = FShaders.getShader(currentBatchData.numTextures, currentBatchData.shaderId);
+		var fShader:FShader = FShaders.getShader(currentBatchData.numTextures, currentBatchData.shaderId);
 
-		var fShader:FShader = FShaders.getShader(conductorData.highestNumTextures, currentBatchData.shaderId);
+		//trace("currentBatchData.numTextures = " + currentBatchData.numTextures);
+		//trace("conductorData.highestNumTextures = " + conductorData.highestNumTextures);
+
+		//var fShader:FShader = FShaders.getShader(conductorData.highestNumTextures, currentBatchData.shaderId);
 		//fShader.shaderId = currentBatchData.shaderId;
 		fShader.update(currentBatchData.renderTargetId == -1);
 		
