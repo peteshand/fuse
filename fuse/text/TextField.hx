@@ -373,6 +373,7 @@ class TextField extends Image
 	
 	override function set_width(value:Float):Float
 	{
+		super.set_width(value);
 		nativeTextField.width = value;
 		targetWidth = nativeTextField.width;
 		var _textureWidth:Int = PowerOfTwo.getNextPowerOfTwo(Math.floor(targetWidth));
@@ -380,7 +381,7 @@ class TextField extends Image
 			textureWidth = _textureWidth;
 			dirtySize = true;
 		}
-		super.set_width(textureWidth);
+		
 		
 		trace("textureWidth: " + textureWidth);
 		
