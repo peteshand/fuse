@@ -91,7 +91,7 @@ class Input {
 	function getMouseData(index:Int, id:String):Touch {
 		var touch:Touch = touchData.get(id);
 		if (touch == null) {
-			touch = {index: index};
+			touch = { index: index, id:id };
 			touchData.set(id, touch);
 		}
 		return touch;
