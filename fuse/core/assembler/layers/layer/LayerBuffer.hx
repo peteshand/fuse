@@ -9,6 +9,7 @@ import mantle.notifier.Notifier;
  * ...
  * @author P.J.Shand
  */
+@:keepSub
 class LayerBuffer
 {
 	/*Defines the layer index*/

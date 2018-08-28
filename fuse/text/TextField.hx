@@ -373,7 +373,6 @@ class TextField extends Image
 	
 	override function set_width(value:Float):Float
 	{
-		super.set_width(value);
 		nativeTextField.width = value;
 		targetWidth = nativeTextField.width;
 		var _textureWidth:Int = PowerOfTwo.getNextPowerOfTwo(Math.floor(targetWidth));
@@ -381,6 +380,10 @@ class TextField extends Image
 			textureWidth = _textureWidth;
 			dirtySize = true;
 		}
+		super.set_width(textureWidth);
+		
+		trace("textureWidth: " + textureWidth);
+		
 		dirtyProp = true;
 		return value;
 	}
@@ -416,6 +419,7 @@ class TextField extends Image
 	{
 		if (!initialized || dirtySize == true) {
 			if (bitmapdata != null) bitmapdata.dispose();
+			trace([this.width, this.textureWidth, this.nativeTextField.width]);
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
 			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
 			var textureId:Null<Int> = null;
@@ -423,11 +427,13 @@ class TextField extends Image
 				textureId = texture.objectId;
 				texture.dispose();
 			}
+			trace("create new texture");
 			texture = new BitmapTexture(bitmapdata, false, null, textureId);
 			texture.directRender = directRender;
 			initialized = true;
 		}
 		else if (dirtyProp == true) {
+			trace("redraw texture");
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
 			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
 			baseBmdTexture.update(bitmapdata);
