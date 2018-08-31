@@ -81,7 +81,7 @@ class WorkerSetup
 	
 	private function OnInputCollision(touch:Touch):Void 
 	{
-		var display:DisplayObject = touchables.get(touch.collisionId);
+		var display:DisplayObject = touchables.get(touch.targetId);
 		if (display == null) return;
 		touch.target = display;
 		display.dispatchInput(touch);

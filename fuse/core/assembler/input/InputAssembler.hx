@@ -32,23 +32,21 @@ class InputAssembler
 	static public function build() 
 	{
 		collisions.clear();
-		trace("input.length = " + input.length);
 		for (i in 0...input.length) 
 		{
-			getInput(input[i].id, input[i].index).test(input[i]);
+			getInput(input[i].index).test(input[i]);
 		}
 		
 		input.clear();
 	}
 	
-	static private function getInput(id:String, index:Int):InputAssemblerObject
+	static private function getInput(index:Int):InputAssemblerObject
 	{
-		trace("id = " + id);
 		for (i in 0...objects.length) 
 		{
-			if (objects[i].id == id) return objects[i];
+			if (objects[i].index == index) return objects[i];
 		}
-		var object:InputAssemblerObject = new InputAssemblerObject(id, index);
+		var object:InputAssemblerObject = new InputAssemblerObject(index);
 		objects.push(object);
 		return object;
 		
@@ -64,21 +62,15 @@ class InputAssembler
 
 class InputAssemblerObject
 {
-	public var id:String;
-	var over:Touch;
-	var out:Touch;
+	public var index:Int;
 	
-	public function new(id:String, index:Int)
+	public function new(index:Int)
 	{
-		this.id = id;
-		over = { id:id, index:index, type:TouchType.OVER };
-		out = { id:id, index:index, type:TouchType.OUT };
+		this.index = index;
 	}
 	
 	public function test(touch:Touch):Void
 	{
-		
-
 		Touchables.touchables.sort(sortTouchables);
 		
 		var j:Int = Touchables.touchables.length - 1;
@@ -87,19 +79,47 @@ class InputAssemblerObject
 			testDisplay(Touchables.touchables[j], touch);
 			j--;
 		}
-
 		testDisplay(Touchables.stage, touch);
 	}
 
 	function testDisplay(display:CoreDisplayObject, touch:Touch)
 	{
 		if (display == null) return;
+		if (display.visible == false) return;
+
+		var triangleSum:Float = getTriangleSum(display, touch);
+		if (triangleSum > display.area + 1) { 
+			// if outside bounds return only if not stage
+			if (display.displayType != 0) {
+				if (touch.targetId == display.objectId) {
+					touch.targetId = null;
+					display.onOut.index = touch.index;
+					display.onOut.x = touch.x;
+					display.onOut.y = touch.y;
+					InputAssembler.collisions.push(display.onOut);
+				}
+				return; 
+			}
+		}
+		
+		if (display.displayType != 0) {
+			if (touch.targetId == null) {
+				display.onOver.index = touch.index;
+				display.onOver.x = touch.x;
+				display.onOver.y = touch.y;
+				InputAssembler.collisions.push(display.onOver);
+			}
+		}
+		var displayTouch:Touch = getDisplayTouch(display, touch);
+		InputAssembler.collisions.push(displayTouch);
+	}
+
+	/*function testDisplay(display:CoreDisplayObject, touch:Touch)
+	{
+		if (display == null) return;
 		// TODO: non visible displays should not be in the touchables array //trace(display.visible);
 		if (display.visible == true)
 		{
-
-			//var displayTouch:Touch = getDisplayTouch(display, touch);
-
 			var releaseOutside:Bool = touch.type == "mouseUp" && touch.targetId == display.objectId;
 			
 			var triangleSum:Float = getTriangleSum(display, touch);
@@ -107,36 +127,51 @@ class InputAssemblerObject
 				if (touch.targetId != display.objectId) {						
 					if (touch.targetId != -1) {
 						//trace("Out");
-						DispatchOut(touch.targetId, touch);	
+						DispatchOut(display, touch.targetId, touch);	
 						
 					}
 					touch.targetId = display.objectId;
 					//trace("Over");
-					DispatchOver(display.objectId, touch);
+					DispatchOver(display,display.objectId, touch);
 					
 				}
 				
-				touch.collisionId = display.objectId;
+				//touch.collisionId = display.objectId;
 				
-				InputAssembler.collisions.push(touch);
+				var displayTouch:Touch = getDisplayTouch(display, touch);
+
+				InputAssembler.collisions.push(displayTouch);
 				return;
 			}
 			else if (touch.targetId == display.objectId){
 				// outside
 				//trace("Out");
-				DispatchOut(display.objectId, touch);					
+				DispatchOut(display, display.objectId, touch);					
 			}
 		}
-	}
+	}*/
 
 	function getDisplayTouch(display:CoreDisplayObject, touch:Touch):Touch
 	{
-		return null;
-		/*switch touch.type {
-			case pattern1: case-body-expression-1;
-			case pattern2: case-body-expression-2;
-			default: default-expression;
-		}*/
+		var displayTouch:Touch = null;
+		switch touch.type {
+			case TouchType.MOVE: displayTouch = display.onMove;
+			case TouchType.PRESS: displayTouch = display.onPress;	
+			case TouchType.RELEASE: displayTouch = display.onRelease;
+			default: displayTouch = null;
+		}
+		
+		if (displayTouch == null) return null;
+
+		displayTouch.index = touch.index;
+		displayTouch.x = touch.x;
+		displayTouch.y = touch.y;
+
+		if (display.displayType != 0) {
+			touch.targetId = display.objectId;
+		}
+		
+		return displayTouch;
 	}
 	
 	function sortTouchables(i1:CoreDisplayObject, i2:CoreDisplayObject):Int
@@ -194,23 +229,6 @@ class InputAssemblerObject
 		var c:Float = Math.sqrt(Math.pow(cx - ax, 2) + Math.pow(cy - ay, 2));
 		var p:Float = (a + b + c) / 2;
 		return Math.sqrt(p * (p - a) * (p - b) * (p - c));
-	}
-	
-	function DispatchOver(displayObjectId:Int, touch:Touch) 
-	{
-		over.x = touch.x;
-		over.y = touch.y;
-		over.collisionId = displayObjectId;
-		InputAssembler.collisions.push(over);
-	}
-	
-	function DispatchOut(displayObjectId:Int, touch:Touch) 
-	{
-		touch.targetId = -1;
-		out.x = touch.x;
-		out.y = touch.y;
-		out.collisionId = displayObjectId;
-		InputAssembler.collisions.push(out);
 	}
 	
 	function withinBounds(bounds:Bounds, touch:Touch) 

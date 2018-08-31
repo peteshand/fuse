@@ -1,5 +1,6 @@
 package fuse.core.backend.display;
 
+import fuse.core.input.TouchType;
 import fuse.core.input.Touch;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.utils.ObjectId;
@@ -40,11 +41,11 @@ class CoreDisplayObject
 	public var area(get, null):Float;
 	public var diagonal(get, null):Float;
 
-	public var onPress:Touch;
-	public var onRelease:Touch;
-	public var onMove:Touch;
-	public var onOver:Touch;
-	public var onUut:Touch;
+	@:isVar public var onPress(get, null):Touch;
+	@:isVar public var onRelease(get, null):Touch;
+	@:isVar public var onMove(get, null):Touch;
+	@:isVar public var onOver(get, null):Touch;
+	@:isVar public var onOut(get, null):Touch;
 	
 	public var transformData:TransformData;
 	var parentNonStatic		:Bool;
@@ -193,6 +194,12 @@ class CoreDisplayObject
 	{
 		return Math.sqrt(Math.pow(quadData.topRightX - quadData.topLeftX, 2) + Math.pow(quadData.bottomLeftY - quadData.topLeftY, 2));
 	}
+
+	function get_onPress():Touch { if (onPress == null)		onPress =	{ targetId:objectId, type:TouchType.PRESS };	return onPress; }
+	function get_onRelease():Touch { if (onRelease == null)	onRelease =	{ targetId:objectId, type:TouchType.RELEASE };	return onRelease; }
+	function get_onMove():Touch { if (onMove == null)		onMove =	{ targetId:objectId, type:TouchType.MOVE };		return onMove; }
+	function get_onOver():Touch { if (onOver == null)		onOver =	{ targetId:objectId, type:TouchType.OVER };		return onOver; }
+	function get_onOut():Touch { if (onOut == null)			onOut =		{ targetId:objectId, type:TouchType.OUT };		return onOut; }
 	
 	public function clear():Void
 	{
