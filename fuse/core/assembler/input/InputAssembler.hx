@@ -76,17 +76,20 @@ class InputAssemblerObject
 		var j:Int = Touchables.touchables.length - 1;
 		while (j >= 0)
 		{
-			testDisplay(Touchables.touchables[j], touch);
+			if (testDisplay(Touchables.touchables[j], touch)) {
+				// hit display
+				j = -1;
+			}
 			j--;
 		}
 		testDisplay(Touchables.stage, touch);
 	}
 
-	function testDisplay(display:CoreDisplayObject, touch:Touch)
+	function testDisplay(display:CoreDisplayObject, touch:Touch):Bool
 	{
-		if (display == null) return;
-		if (display.visible == false) return;
-
+		if (display == null) return false;
+		if (display.visible == false) return false;
+		
 		var triangleSum:Float = getTriangleSum(display, touch);
 		if (triangleSum > display.area + 1) { 
 			// if outside bounds return only if not stage
@@ -98,7 +101,7 @@ class InputAssemblerObject
 					display.onOut.y = touch.y;
 					InputAssembler.collisions.push(display.onOut);
 				}
-				return; 
+				return false; 
 			}
 		}
 		
@@ -112,6 +115,7 @@ class InputAssemblerObject
 		}
 		var displayTouch:Touch = getDisplayTouch(display, touch);
 		InputAssembler.collisions.push(displayTouch);
+		return true;
 	}
 
 	/*function testDisplay(display:CoreDisplayObject, touch:Touch)
