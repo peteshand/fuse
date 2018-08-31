@@ -43,7 +43,7 @@ class Stage extends Sprite {
 		displayType = DisplayType.STAGE;
 		//this.parentId = -1;
 		Fuse.current.workerSetup.addChild(this, null);
-		
+		this.touchable = true;
 		this.name = "stage";
 		
 		new Resize(Lib.current.stage);

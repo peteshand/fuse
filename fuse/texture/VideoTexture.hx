@@ -23,6 +23,7 @@ class VideoTexture extends BaseTexture
 	var url:String;
 	public var time(get, null):Float;
 	var paused:Bool = false;
+	var videoMetaData:VideoMetaData;
 
 	public function new(url:String) 
 	{
@@ -48,6 +49,7 @@ class VideoTexture extends BaseTexture
 			duration = null;
 			this.url = url;
 			paused = false;
+			videoMetaData = null;
 			netStream.play(url);
 		}
 		
@@ -65,11 +67,17 @@ class VideoTexture extends BaseTexture
 		paused = true;
 		netStream.pause();
 	}
+
+	public function seek(offset:Float)
+	{
+		trace("offset:" + offset);
+		netStream.seek(offset);
+	}
 	
 	private function OnEvent(e:NetStatusEvent):Void 
 	{
 		var info:NetStatusInfo = e.info;
-		trace(info.code);
+		//trace(info.code);
 		if (info.code == "NetStream.Buffer.Empty") {
 			//nativeVideoTexture.addEventListener(TEXTURE_READY, function(e:Event) {
 				textureData.textureAvailable = 1;
@@ -80,6 +88,10 @@ class VideoTexture extends BaseTexture
 	
 	public function onMetaData(videoMetaData:VideoMetaData) 
 	{
+		if (this.videoMetaData != null) return;
+
+		this.videoMetaData = videoMetaData;
+		trace("onMetaData");
 		// TODO: need to be able to update width/height in backend texture
 		if (this.width == 0) this.width = videoMetaData.width;
 		if (this.height == 0) this.height = videoMetaData.height;

@@ -1,5 +1,6 @@
 package fuse.display;
 
+import fuse.core.input.TouchType;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
@@ -87,7 +88,6 @@ class DisplayObject
 		//isRotating = 1;
 		
 		objectId = id;
-		trace("objectId = " + objectId);
 		scaleX = 1;
 		scaleY = 1;
 		color = 0x00000000;
@@ -309,8 +309,10 @@ class DisplayObject
 		return value;
 	}
 	
-	inline function set_alpha(value:Float):Float { 
+	function set_alpha(value:Float):Float { 
 		value = Math.round(value * 100) / 100;
+		if (value < 0) value = 0;
+		if (value > 1) value = 1;
 		if (alpha != value) {
 			//trace(["send update: " + alpha, value]);	
 			displayData.alpha = alpha = value;
@@ -399,7 +401,7 @@ class DisplayObject
 	function dispatchInput(touch:Touch) 
 	{
 		// TODO: combine Touch and Mouse keys
-		switch(touch.type) {
+		/*switch(touch.type) {
 			case TouchEvent.TOUCH_BEGIN:onPress.dispatch(touch);
 			case TouchEvent.TOUCH_MOVE:	onMove.dispatch(touch);
 			case TouchEvent.TOUCH_END:	onRelease.dispatch(touch);
@@ -408,7 +410,22 @@ class DisplayObject
 			case MouseEvent.MOUSE_UP:	onRelease.dispatch(touch);
 			case MouseEvent.MOUSE_OVER:	onRollover.dispatch(touch);
 			case MouseEvent.MOUSE_OUT:	onRollout.dispatch(touch);
-		}
+		} */
+
+		if (touch.type == TouchType.MOVE)			onMove.dispatch(touch);
+		else if (touch.type == TouchType.PRESS)		onPress.dispatch(touch);
+		else if (touch.type == TouchType.RELEASE)	onRelease.dispatch(touch);
+		else if (touch.type == TouchType.OVER)		onRollover.dispatch(touch);
+		else if (touch.type == TouchType.OUT)		onRollout.dispatch(touch);
+		
+		/*switch(touch.type) {
+			case TouchType.PRESS:	onPress.dispatch(touch);
+			case TouchType.MOVE:	onMove.dispatch(touch);
+			case TouchType.RELEASE:	onRelease.dispatch(touch);
+			case TouchType.OVER:	onRollover.dispatch(touch);
+			case TouchType.OUT:		onRollout.dispatch(touch);
+		}*/
+		
 	}
 	
 	inline function updateStaticBackend():Void

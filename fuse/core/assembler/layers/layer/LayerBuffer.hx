@@ -62,6 +62,10 @@ class LayerBuffer
 		renderTarget = -1;
 		this.updateAll = updateAll;	
 		this.index = index;
+	}
+
+	public function nextFrame()
+	{
 		renderablesData.nextFrame();
 	}
 	

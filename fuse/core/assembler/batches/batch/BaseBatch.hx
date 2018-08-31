@@ -48,8 +48,9 @@ class BaseBatch
 		renderTarget = null;
 		renderables.clear();
 		batchTextures.clear();
-		if (this.index == index) return;
 		this.nextFrame();
+		if (this.index == index) return;
+		
 		
 		this.index = index;
 		batchData = CommsObjGen.getBatchData(index);

@@ -1,4 +1,5 @@
 package fuse.core.assembler.input;
+import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.backend.Core;
 import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.backend.display.CoreImage;
@@ -13,12 +14,19 @@ class Touchables
 {
 	public static var touchables = new Array<CoreDisplayObject>();
 	public static var touchablesMap = new Map<Int, CoreDisplayObject>();
+	public static var stage:CoreDisplayObject;
 	
 	public function new() { }
 	
 	static public function setTouchable(payload:TouchableMsg) 
 	{
 		var coreDisplay:CoreDisplayObject = Core.displayList.getDisplay(payload.objectId, payload.displayType);
+		if (coreDisplay.displayType == DisplayType.STAGE) {
+			if (payload.touchable) stage = coreDisplay;
+			else stage = null;
+			return;
+		}
+
 		if (payload.touchable) {
 			if (!touchablesMap.exists(payload.objectId)) {
 				touchablesMap.set(payload.objectId, coreDisplay);

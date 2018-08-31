@@ -45,6 +45,8 @@ class GenerateLayers
 		
 		clear();
 		
+		//trace(Fuse.current.conductorData.frontStaticCount);
+		
 		for (i in 0...HierarchyAssembler.hierarchy.length) 
 		{
 			var image:CoreImage = HierarchyAssembler.hierarchy[i];
@@ -53,7 +55,8 @@ class GenerateLayers
 				//update.value = false;
 			//}
 			//else {
-				update.value = image.updateAny;
+				// setting this to true all the time effectively disables lay caching
+				update.value = true;//image.updateAny;
 			//}
 			currentLayerBuffer.add(image);
 		}
@@ -124,10 +127,11 @@ class GenerateLayers
 		//currentLayerBuffer = Pool.layerBufferes.request();
 		currentLayerBuffer = getLayerBuffer(GenerateLayers.layers.length);
 		currentLayerBuffer.init(update.value, GenerateLayers.layers.length);
+		currentLayerBuffer.nextFrame();
 		GenerateLayers.layers.push(currentLayerBuffer);
 	}
 	
-	static private function getLayerBuffer(index:Int) 
+	static public function getLayerBuffer(index:Int) 
 	{
 		if (baseLayers.length <= index) baseLayers.push(new LayerBuffer());
 		return baseLayers[index];

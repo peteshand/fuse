@@ -383,7 +383,7 @@ class TextField extends Image
 		}
 		
 		
-		trace("textureWidth: " + textureWidth);
+		//trace("textureWidth: " + textureWidth);
 		
 		dirtyProp = true;
 		return value;
@@ -420,7 +420,7 @@ class TextField extends Image
 	{
 		if (!initialized || dirtySize == true) {
 			if (bitmapdata != null) bitmapdata.dispose();
-			trace([this.width, this.textureWidth, this.nativeTextField.width]);
+			//trace([this.width, this.textureWidth, this.nativeTextField.width]);
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
 			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
 			var textureId:Null<Int> = null;
@@ -428,13 +428,13 @@ class TextField extends Image
 				textureId = texture.objectId;
 				texture.dispose();
 			}
-			trace("create new texture");
+			//trace("create new texture");
 			texture = new BitmapTexture(bitmapdata, false, null, textureId);
 			texture.directRender = directRender;
 			initialized = true;
 		}
 		else if (dirtyProp == true) {
-			trace("redraw texture");
+			//trace("redraw texture");
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
 			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
 			baseBmdTexture.update(bitmapdata);

@@ -1,5 +1,6 @@
 package fuse.core.assembler.input;
 
+import fuse.core.input.TouchType;
 import fuse.core.utils.Calc;
 import fuse.display.geometry.Bounds;
 import fuse.core.backend.display.CoreDisplayObject;
@@ -21,10 +22,7 @@ class InputAssembler
 	//static var objects = new Map<Int, InputAssemblerObject>();
 	static var objects = new Array<InputAssemblerObject>();
 	
-	public function new() 
-	{
-		
-	}
+	public function new() { }
 	
 	public static function add(touch:Touch) 
 	{
@@ -34,7 +32,7 @@ class InputAssembler
 	static public function build() 
 	{
 		collisions.clear();
-		
+		trace("input.length = " + input.length);
 		for (i in 0...input.length) 
 		{
 			getInput(input[i].id, input[i].index).test(input[i]);
@@ -45,6 +43,7 @@ class InputAssembler
 	
 	static private function getInput(id:String, index:Int):InputAssemblerObject
 	{
+		trace("id = " + id);
 		for (i in 0...objects.length) 
 		{
 			if (objects[i].id == id) return objects[i];
@@ -72,50 +71,72 @@ class InputAssemblerObject
 	public function new(id:String, index:Int)
 	{
 		this.id = id;
-		over = { id:id, index:index, type:MouseEvent.MOUSE_OVER };
-		out = { id:id, index:index, type:MouseEvent.MOUSE_OUT };
+		over = { id:id, index:index, type:TouchType.OVER };
+		out = { id:id, index:index, type:TouchType.OUT };
 	}
 	
 	public function test(touch:Touch):Void
 	{
+		
+
 		Touchables.touchables.sort(sortTouchables);
 		
 		var j:Int = Touchables.touchables.length - 1;
 		while (j >= 0)
 		{
-			var display:CoreDisplayObject = Touchables.touchables[j];
-			// TODO: non visible displays should not be in the touchables array //trace(display.visible);
-			if (display.visible == true)
-			{
-				var releaseOutside:Bool = touch.type == "mouseUp" && touch.targetId == display.objectId;
-				
-				var triangleSum:Float = getTriangleSum(display, touch);
-				if (triangleSum <= display.area + 1 || releaseOutside) {
-					if (touch.targetId != display.objectId) {						
-						if (touch.targetId != -1) {
-							//trace("Out");
-							DispatchOut(touch.targetId, touch);	
-							
-						}
-						touch.targetId = display.objectId;
-						//trace("Over");
-						DispatchOver(display.objectId, touch);
-						
-					}
-					
-					touch.collisionId = display.objectId;
-					
-					InputAssembler.collisions.push(touch);
-					return;
-				}
-				else if (touch.targetId == display.objectId){
-					// outside
-					//trace("Out");
-					DispatchOut(display.objectId, touch);					
-				}
-			}
+			testDisplay(Touchables.touchables[j], touch);
 			j--;
 		}
+
+		testDisplay(Touchables.stage, touch);
+	}
+
+	function testDisplay(display:CoreDisplayObject, touch:Touch)
+	{
+		if (display == null) return;
+		// TODO: non visible displays should not be in the touchables array //trace(display.visible);
+		if (display.visible == true)
+		{
+
+			//var displayTouch:Touch = getDisplayTouch(display, touch);
+
+			var releaseOutside:Bool = touch.type == "mouseUp" && touch.targetId == display.objectId;
+			
+			var triangleSum:Float = getTriangleSum(display, touch);
+			if (display.displayType == 0 || triangleSum <= display.area + 1 || releaseOutside) {
+				if (touch.targetId != display.objectId) {						
+					if (touch.targetId != -1) {
+						//trace("Out");
+						DispatchOut(touch.targetId, touch);	
+						
+					}
+					touch.targetId = display.objectId;
+					//trace("Over");
+					DispatchOver(display.objectId, touch);
+					
+				}
+				
+				touch.collisionId = display.objectId;
+				
+				InputAssembler.collisions.push(touch);
+				return;
+			}
+			else if (touch.targetId == display.objectId){
+				// outside
+				//trace("Out");
+				DispatchOut(display.objectId, touch);					
+			}
+		}
+	}
+
+	function getDisplayTouch(display:CoreDisplayObject, touch:Touch):Touch
+	{
+		return null;
+		/*switch touch.type {
+			case pattern1: case-body-expression-1;
+			case pattern2: case-body-expression-2;
+			default: default-expression;
+		}*/
 	}
 	
 	function sortTouchables(i1:CoreDisplayObject, i2:CoreDisplayObject):Int

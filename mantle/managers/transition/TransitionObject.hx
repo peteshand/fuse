@@ -281,7 +281,6 @@ class TransitionObject implements ITransitionObject
 			if (uCorrectedValue > 1) uCorrectedValue = 1;
 			
 			var value = uStartValue + ((uEndValue - uStartValue) * uCorrectedValue);
-			
 			#if flash
 				uProp.setter(value);
 			#else

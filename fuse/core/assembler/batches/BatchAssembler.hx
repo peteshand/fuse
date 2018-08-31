@@ -125,7 +125,8 @@ class BatchAssembler
 	{
 		if (currentBatch == null) return;
 		if (currentBatch.renderables.length > 0) {
-			if (currentBatch.hasChanged){
+			var hasChanged = currentBatch.hasChanged;
+			if (hasChanged){
 				batches.push(currentBatch);
 			}
 		}

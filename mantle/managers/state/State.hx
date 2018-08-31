@@ -108,7 +108,6 @@ class State extends BaseNotifier<Bool> implements IState
 	{
 		var _value1:Bool = checkWithPolicy(standardConsitions, conditionPolicy);
 		var _value2:Bool = checkWithPolicy(untyped sceneConditions, ConditionPolicy.SCENE);
-		if (sceneConditions.length == 0) _value2 = false;
 		this.value = _value1 && _value2;
 	}
 	

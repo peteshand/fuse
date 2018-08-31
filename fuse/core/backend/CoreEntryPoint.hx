@@ -81,7 +81,6 @@ class CoreEntryPoint {
 		// Core.assembler.update();
 
 		Assembler.update();
-
 		for (i in 0...InputAssembler.collisions.length) {
 			workerComms.send(MessageType.MOUSE_COLLISION, InputAssembler.collisions[i]);
 		}

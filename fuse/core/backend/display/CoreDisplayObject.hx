@@ -1,5 +1,6 @@
 package fuse.core.backend.display;
 
+import fuse.core.input.Touch;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.utils.ObjectId;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
@@ -38,6 +39,12 @@ class CoreDisplayObject
 	//public var over:Bool = false;
 	public var area(get, null):Float;
 	public var diagonal(get, null):Float;
+
+	public var onPress:Touch;
+	public var onRelease:Touch;
+	public var onMove:Touch;
+	public var onOver:Touch;
+	public var onUut:Touch;
 	
 	public var transformData:TransformData;
 	var parentNonStatic		:Bool;

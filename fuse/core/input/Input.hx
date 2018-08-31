@@ -19,11 +19,25 @@ import fuse.utils.GcoArray;
 class Input {
 	var touchData = new Map<String, Touch>();
 	var touchDataArray = new GcoArray<Touch>();
+	var touchMap = new Map<String, TouchType>();
+	var mouseMap = new Map<String, TouchType>();
 
 	public function new() {
 		trace("Multitouch.supportsTouchEvents = " + Multitouch.supportsTouchEvents);
 		Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 
+		touchMap.set(TouchEvent.TOUCH_MOVE, TouchType.MOVE);
+		touchMap.set(TouchEvent.TOUCH_BEGIN, TouchType.PRESS);
+		touchMap.set(TouchEvent.TOUCH_END, TouchType.RELEASE);
+		//touchMap.set(TouchEvent.TOUCH_OVER, TouchType.OVER);
+		//touchMap.set(TouchEvent.TOUCH_OUT, TouchType.OUT);
+		
+		mouseMap.set(MouseEvent.MOUSE_MOVE, TouchType.MOVE);
+		mouseMap.set(MouseEvent.MOUSE_DOWN, TouchType.PRESS);
+		mouseMap.set(MouseEvent.MOUSE_UP, TouchType.RELEASE);
+		//mouseMap.set(MouseEvent.MOUSE_OVER, TouchType.OVER);
+		//mouseMap.set(MouseEvent.MOUSE_OUT, TouchType.OUT);
+		
 		var stage:Stage = Lib.current.stage;
 		if (Multitouch.supportsTouchEvents) {
 			stage.addEventListener(TouchEvent.TOUCH_MOVE, OnTouch, false, 100);
@@ -68,7 +82,7 @@ class Input {
 		var touch:Touch = getMouseData(e.touchPointID, id);
 		touch.x = e.stageX + Fuse.current.stage.camera.x;
 		touch.y = e.stageY + Fuse.current.stage.camera.y;
-		touch.type = e.type;
+		touch.type = touchMap.get(e.type);
 
 		touchDataArray.push(touch);
 	}
@@ -83,7 +97,7 @@ class Input {
 		var touch:Touch = getMouseData(0, id);
 		touch.x = e.stageX + Fuse.current.stage.camera.x;
 		touch.y = e.stageY + Fuse.current.stage.camera.y;
-		touch.type = e.type;
+		touch.type = mouseMap.get(e.type);
 
 		touchDataArray.push(touch);
 	}
