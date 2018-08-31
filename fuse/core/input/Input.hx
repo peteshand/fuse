@@ -55,9 +55,6 @@ class Input {
 
 	private function OnTick(e:Event):Void {
 		for (i in 0...touchDataArray.length) {
-			if (touchDataArray[i].type != TouchType.MOVE) {
-				trace(touchDataArray[i].type);
-			}
 			Fuse.current.workerSetup.addInput(touchDataArray[i]);
 		}
 		touchDataArray.clear();
@@ -72,16 +69,12 @@ class Input {
 	}
 
 	function OnTouch(e:TouchEvent):Void {
-		trace(e.type);
 		if (Fuse.current.stage == null)
 			return;
 		var type:String = e.type;
 		if (type == TouchEvent.TOUCH_END)
 			type = TouchEvent.TOUCH_BEGIN; // share TOUCH_BEGIN and TOUCH_END id
 		var id:String = type + e.touchPointID;
-		if (e.type == TouchEvent.TOUCH_BEGIN) {
-			trace(id);
-		}
 		var touch:Touch = getTouchItem(id, e.touchPointID);
 		touch.x = e.stageX + Fuse.current.stage.camera.x;
 		touch.y = e.stageY + Fuse.current.stage.camera.y;
