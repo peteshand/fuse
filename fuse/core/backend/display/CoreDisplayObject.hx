@@ -252,4 +252,13 @@ class CoreDisplayObject
 		// TODO: implement
 		return false;
 	}
+
+	public function absoluteVis():Bool
+	{
+		if (visible == false) return false;
+
+		if (parent != null) return parent.absoluteVis();
+
+		return true;
+	}
 }

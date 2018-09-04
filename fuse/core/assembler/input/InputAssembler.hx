@@ -88,7 +88,7 @@ class InputAssemblerObject
 	function testDisplay(display:CoreDisplayObject, touch:Touch):Bool
 	{
 		if (display == null) return false;
-		if (display.visible == false) return false;
+		if (display.absoluteVis() == false) return false;
 		
 		var triangleSum:Float = getTriangleSum(display, touch);
 		if (triangleSum > display.area + 1) { 
