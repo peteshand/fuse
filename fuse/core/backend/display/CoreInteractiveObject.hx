@@ -1,4 +1,5 @@
 package fuse.core.backend.display;
+import fuse.core.backend.displaylist.Graphics;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.utils.Pool;
 
@@ -34,23 +35,6 @@ class CoreInteractiveObject extends CoreDisplayObject
 		children.remove(child);
 		child.parent = null;
 	}
-	
-	//override public function buildHierarchy() 
-	//{
-		//HierarchyAssembler.transformActions.push(calculateTransform);
-		//for (i in 0...children.length) children[i].buildHierarchy();
-		//HierarchyAssembler.transformActions.push(popTransform);
-	//}
-	
-	//override function beginSetChildrenIsStatic(value:Bool) 
-	//{
-		//displayData.isStatic = 0;
-		//for (i in 0...children.length) 
-		//{
-			//children[i].beginSetChildrenIsStatic(true);
-			//children[i].setChildrenIsStatic(true);
-		//}
-	//}
 	
 	override public function clone():CoreDisplayObject
 	{
@@ -99,16 +83,10 @@ class CoreInteractiveObject extends CoreDisplayObject
 		return numChildren;
 	}
 	
-	////////////////////////////////////////////////////////////////
-	// New Assembler ///////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-	
 	override public function buildTransformActions() // new verion of buildHierarchy
 	{
-		//pushTransform();
-		//for (i in 0...children.length) children[i].buildTransformActions();
-		//popTransform();
-		
+		visible = (Graphics.parent.visible && (displayData.visible == 1));
+
 		if (this.visible) {
 			hierarchyIndex = HierarchyAssembler.transformActions.length;
 			HierarchyAssembler.transformActions.push(calculateTransform);

@@ -96,17 +96,13 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		}
 	}
 	
-	//override function popTransform() 
-	//{
-		//
-	//}
-	
 	override public function buildTransformActions()
 	{
+		visible = (Graphics.parent.visible && (displayData.visible == 1));
+
 		if (this.visible || this.isMask) {
 			hierarchyIndex = HierarchyAssembler.transformActions.length;
 			HierarchyAssembler.transformActions.push(calculateTransform);
-			//HierarchyAssembler.transformActions.push(popTransform);
 		}
 	}
 	
@@ -135,16 +131,6 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	{
 		updateAny = updateTexture = true;
 	}
-	
-	//override function beginSetChildrenIsStatic(value:Bool) 
-	//{
-		//
-	//}
-	
-	//override public function buildHierarchy() 
-	//{
-		//HierarchyAssembler.transformActions.push(pushTransform);
-	//}
 	
 	override public function clone():CoreDisplayObject
 	{
