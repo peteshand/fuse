@@ -6,7 +6,7 @@ import fuse.texture.BitmapTexture;
 import fuse.utils.Align;
 import fuse.utils.Color;
 import fuse.display.Image;
-import fuse.texture.IBaseTexture;
+import fuse.texture.ITexture;
 import fuse.utils.GcoArray;
 import fuse.utils.PowerOfTwo;
 import lime.text.UTF8String;

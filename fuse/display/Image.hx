@@ -2,7 +2,7 @@ package fuse.display;
 
 import fuse.geom.Rectangle;
 import fuse.shader.IShader;
-import fuse.texture.IBaseTexture;
+import fuse.texture.ITexture;
 import fuse.display.DisplayObject;
 import fuse.core.front.texture.Textures;
 import fuse.core.backend.displaylist.DisplayType;
@@ -14,13 +14,13 @@ import fuse.core.backend.displaylist.DisplayType;
 @:access(fuse.texture)
 class Image extends DisplayObject
 {
-	@:isVar public var texture(default, set):IBaseTexture;
+	@:isVar public var texture(default, set):ITexture;
 	@:isVar public var renderLayer(default, set):Int;
 	@:isVar public var blendMode(default, set):BlendMode;
 	@:isVar public var bounds(get, never):Rectangle;
 	var shaders:Array<IShader> = [];
 
-	public function new(texture:IBaseTexture) 
+	public function new(texture:ITexture) 
 	{
 		super();
 		displayType = DisplayType.IMAGE;
@@ -96,7 +96,7 @@ class Image extends DisplayObject
 		return mask;
 	}
 	
-	function set_texture(value:IBaseTexture):IBaseTexture 
+	function set_texture(value:ITexture):ITexture 
 	{
 		if (value == null) value = Textures.blankTexture;
 		if (texture != value) {

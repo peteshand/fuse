@@ -1,6 +1,6 @@
 package fuse.render.target;
 import fuse.core.front.texture.Textures;
-import fuse.texture.IBaseTexture;
+import fuse.texture.ITexture;
 import mantle.notifier.Notifier;
 import openfl.display3D.Context3D;
 import openfl.display3D.textures.TextureBase;
@@ -39,7 +39,7 @@ class Context3DRenderTarget
 			#end
 		}
 		else {
-			var texture:IBaseTexture = Textures.getTexture(targetTextureId.value);
+			var texture:ITexture = Textures.getTexture(targetTextureId.value);
 			#if air
 				context3D.setRenderToTexture(texture.textureBase, false, 0, 0, 0);
 			#else

@@ -9,7 +9,7 @@ import fuse.texture.BaseTexture;
 
 class SubTexture extends BaseTexture
 {
-    public function new(parentTexture:IBaseTexture, frame:FrameData)
+    public function new(parentTexture:ITexture, frame:FrameData)
     {
         super(frame.sourceSize.w, frame.sourceSize.h, false, null, true, parentTexture.textureId);
     }

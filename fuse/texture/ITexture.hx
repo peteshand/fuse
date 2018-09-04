@@ -11,7 +11,7 @@ import fuse.core.communication.data.textureData.ITextureData;
 /**
  * @author P.J.Shand
  */
-interface IBaseTexture 
+interface ITexture 
 {
 	var textureData:ITextureData;
 	var nativeTexture(get, null):Texture;

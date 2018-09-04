@@ -3,7 +3,7 @@ package fuse.core.backend.texture;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.WorkerTextureData;
 import fuse.core.communication.data.vertexData.VertexData;
-import fuse.texture.IBaseTexture;
+import fuse.texture.ITexture;
 import fuse.texture.BaseRenderTexture;
 import fuse.utils.GcoArray;
 import mantle.notifier.Notifier;

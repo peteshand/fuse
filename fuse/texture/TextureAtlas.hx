@@ -7,16 +7,16 @@ import fuse.texture.atlas.AtlasData
  */
 class TextureAtlas
 {
-	var parent:IBaseTexture;
+	var parent:ITexture;
 	var data:AtlasData;
-	var subTextures = new Map<String, IBaseTexture>();
-	public function new(texture:IBaseTexture, data:AtlasData) 
+	var subTextures = new Map<String, ITexture>();
+	public function new(texture:ITexture, data:AtlasData) 
 	{
 		this.parent = texture;
 		this.data = data;
 	}
 
-	public function getTexture(name:String):IBaseTexture
+	public function getTexture(name:String):ITexture
 	{
 		for (i in 0...data.frames.length) {
 			var frame = data.frames[i];
@@ -32,7 +32,7 @@ class TextureAtlas
 		return null;
 	}
 
-	public function getTextures(prefix:String):IBaseTexture
+	public function getTextures(prefix:String):ITexture
 	{
 		return null;
 	}

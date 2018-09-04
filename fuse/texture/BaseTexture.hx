@@ -6,7 +6,7 @@ import fuse.core.front.texture.upload.TextureUploadQue;
 import fuse.core.front.texture.Textures;
 import fuse.display.Image;
 import msignal.Signal.Signal0;
-import fuse.texture.IBaseTexture;
+import fuse.texture.ITexture;
 import fuse.utils.Color;
 import fuse.utils.PowerOfTwo;
 import openfl.display.BitmapData;
@@ -20,7 +20,7 @@ import fuse.utils.ObjectId;
  * @author P.J.Shand
  */
 @:access(fuse)
-class BaseTexture implements IBaseTexture {
+class BaseTexture implements ITexture {
 	static var coreTextures = new Map<Int, BaseTexture>();
 
 	public var coreTexture(get, never):BaseTexture;
