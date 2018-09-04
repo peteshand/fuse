@@ -180,6 +180,7 @@ class TransitionObject implements ITransitionObject
 	
 	function UpdateAutoVis() 
 	{
+		if (option.autoVisObject == null) return;
 		var _hasSetter = hasSetter(option.autoVisObject, "visible");
 		if (_hasSetter){
 			#if cpp
