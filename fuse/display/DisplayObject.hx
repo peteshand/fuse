@@ -445,6 +445,18 @@ class DisplayObject
 		updateAlignment();
 	}
 	
+	public function alignPivotX(horizontalAlign:Align = Align.CENTER) 
+	{
+		this.horizontalAlign = horizontalAlign;
+		updateAlignment();
+	}
+	
+	public function alignPivotY(verticalAlign:Align = Align.CENTER) 
+	{
+		this.verticalAlign = verticalAlign;
+		updateAlignment();
+	}
+	
 	function updateAlignment() 
 	{
 		if (verticalAlign != null) {
