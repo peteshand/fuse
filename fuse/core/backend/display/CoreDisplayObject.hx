@@ -92,22 +92,14 @@ class CoreDisplayObject
 	
 	function updateTransform() 
 	{
-		
-		
 		alpha = Graphics.parent.alpha * displayData.alpha;
 		visible = Graphics.parent.visible && (displayData.visible == 1);
-		//Graphics.pushAlpha(alpha, visible);
-		
-		//trace("alpha = " + alpha);
 		
 		if (updateAny == true) {
 			Fuse.current.conductorData.backIsStatic = 0;
 		}
 		
 		if (updatePosition) {
-			
-			//beginSetChildrenIsStatic(false);
-			//trace("moving");
 			WorkerTransformHelper.update(this);
 		}
 		
@@ -166,10 +158,6 @@ class CoreDisplayObject
 	{
 		return Pool.displayObjects.request();
 	}
-	
-	////////////////////////////////////////////////////////////////
-	// New Assembler ///////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
 	
 	public function buildHierarchy()
 	{

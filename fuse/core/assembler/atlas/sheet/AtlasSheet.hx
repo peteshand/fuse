@@ -149,7 +149,7 @@ class AtlasSheet
 			textureData.atlasData.height = partition.height;			// height to draw on atlas
 			textureData.atlasData.p2Width = Fuse.MAX_TEXTURE_SIZE;	// width of target texture
 			textureData.atlasData.p2Height = Fuse.MAX_TEXTURE_SIZE;	// height of target texture
-			trace("atlasTextureId = " + atlasTextureId);
+			//trace("atlasTextureId = " + atlasTextureId);
 			textureData.atlasData.textureId = atlasTextureId;	// renderTarget for image being rendered into atlas buffer
 			//textureData.atlasBatchTextureIndex = index;
 			
