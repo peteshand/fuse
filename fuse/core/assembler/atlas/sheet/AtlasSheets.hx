@@ -47,6 +47,7 @@ class AtlasSheets
 		
 		clear();
 		
+		var failCount:Int = 0;
 		for (k in 0...AtlasTextures.textures.length) 
 		{
 			for (i in 0...sheets.length) 
@@ -55,8 +56,12 @@ class AtlasSheets
 				if (successfulPlacement) {
 					break;
 				}
-				trace("failed to bake to atlas " + i);
+				failCount++;
+				//trace("failed to bake to atlas " + i);
 			}
+		}
+		if (failCount > 0) {
+			trace("failed to place " + failCount + " textures into atlas buffers");
 		}
 		
 		for (j in 0...sheets.length) 

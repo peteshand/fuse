@@ -111,9 +111,9 @@ class AtlasSheet
 			}
 		}
 		
-		if (!successfulPlacement) {
-			trace("Failed to place texture in AtlasBuffer, will need to render texture directly; " + coreTexture.textureId);
-		}
+		//if (!successfulPlacement) {
+		//	trace("Failed to place texture in AtlasBuffer, will need to render texture directly; " + coreTexture.textureId);
+		//}
 		return false;
 	}
 	

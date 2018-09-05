@@ -53,16 +53,16 @@ class AtlasBatch extends BaseBatch implements IBatch
 		
 		if (partition.lastFramePairPartition == null) {
 			textureData = partition.coreTexture.textureData;
-			
+			partition.coreTexture.rotate = partition.rotate;
+
 			left = textureData.x;
 			top = textureData.y;
 			right = textureData.width / textureData.p2Width;
 			bottom = textureData.height / textureData.p2Height;
 		}
 		else {
-			//trace([partition.x, partition.y, partition.width, partition.height]);
-			//trace([partition.lastFramePairPartition.x, partition.lastFramePairPartition.y, partition.lastFramePairPartition.width, partition.lastFramePairPartition.height]);
 			textureData = partition.lastFramePairPartition.coreTexture.textureData;
+			partition.rotate = false;
 			
 			left = partition.lastFramePairPartition.x / Fuse.MAX_TEXTURE_SIZE;
 			top = partition.lastFramePairPartition.y / Fuse.MAX_TEXTURE_SIZE;
@@ -82,27 +82,36 @@ class AtlasBatch extends BaseBatch implements IBatch
 		var offsetX:Float = -mulX;
 		var offsetY:Float = -mulY;
 		
-		var bottomLeftX:Float = partition.x;
-		var bottomLeftY:Float = partition.y + partition.height;
+		var bottomLeftX:Float = (partition.x + offsetX) / mulX;
+		var bottomLeftY:Float = (-partition.y - partition.height - offsetY) / mulY;
 		
-		var topLeftX:Float = partition.x;
-		var topLeftY:Float = partition.y;
+		var topLeftX:Float = (partition.x + offsetX) / mulX;
+		var topLeftY:Float = (-partition.y - offsetY) / mulY;
 		
-		var topRightX:Float = partition.x + partition.width;
-		var topRightY:Float = partition.y;
+		var topRightX:Float = (partition.x + partition.width + offsetX) / mulX;
+		var topRightY:Float = (-partition.y - offsetY) / mulY;
 		
-		var bottomRightX:Float = partition.x + partition.width;
-		var bottomRightY:Float = partition.y + partition.height;
+		var bottomRightX:Float = (partition.x + partition.width + offsetX) / mulX;
+		var bottomRightY:Float = (-partition.y - partition.height - offsetY) / mulY;
 		
 		//trace([(bottomLeft.x + offsetX) / mulX,	(-bottomLeft.y - offsetY) / mulY]);
 		//trace([(topLeft.x + offsetX) / mulX,		(-topLeft.y - offsetY) / mulY]);
 		//trace([(topRight.x + offsetX) / mulX,		(-topRight.y - offsetY) / mulY]);
 		//trace([(bottomRight.x + offsetX) / mulX,	(-bottomRight.y - offsetY) / mulY]);
+		//
+
+		if (partition.rotate) {
+			vertexData.setXY(0, bottomRightX,	bottomRightY);
+			vertexData.setXY(1, bottomLeftX,	bottomLeftY);
+			vertexData.setXY(2, topLeftX,		topLeftY);
+			vertexData.setXY(3, topRightX,		topRightY);
+		} else {
+			vertexData.setXY(0, bottomLeftX,	bottomLeftY);
+			vertexData.setXY(1, topLeftX,		topLeftY);
+			vertexData.setXY(2, topRightX,		topRightY);
+			vertexData.setXY(3, bottomRightX,	bottomRightY);
+		}
 		
-		vertexData.setXY(0, (bottomLeftX + offsetX) / mulX,		(-bottomLeftY - offsetY) / mulY);
-		vertexData.setXY(1, (topLeftX + offsetX) / mulX,		(-topLeftY - offsetY) / mulY);
-		vertexData.setXY(2, (topRightX + offsetX) / mulX,		(-topRightY - offsetY) / mulY);
-		vertexData.setXY(3, (bottomRightX + offsetX) / mulX,	(-bottomRightY - offsetY) / mulY);
 		
 		vertexData.setColor(0, 0x0);
 		vertexData.setColor(1, 0x0);

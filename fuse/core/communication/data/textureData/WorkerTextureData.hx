@@ -41,6 +41,8 @@ class WorkerTextureData
 	
 	public var memoryBlock:MemoryBlock;
 	
+	//public var rotate:Bool = false;
+	
 	// Backend Props
 	//public var objectId:ObjectId;
 	//public var textureId:TextureId;

@@ -21,7 +21,9 @@ class CoreTexture
 	var changeCount:Notifier<Int>;
 	var p2Width:Int;
 	var p2Height:Int;
-	
+
+	public var rotate:Bool = false;
+
 	public var uvsHaveChanged:Bool = true;
 	
 	public var _uvLeft	:Float = 0;
@@ -40,6 +42,7 @@ class CoreTexture
 	
 	public function new(textureId:Int) 
 	{
+		trace("new core texture");
 		this.textureId = textureId;
 		textureData = CommsObjGen.getTextureData(textureId);
 		

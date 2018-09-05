@@ -167,10 +167,19 @@ class DirectBatch extends BaseBatch implements IBatch
 		}
 		
 		if (updatePosition) {
-			vertexData.setXY(0, 	image.quadData.bottomLeftX,		image.quadData.bottomLeftY);
-			vertexData.setXY(1, 	image.quadData.topLeftX,		image.quadData.topLeftY);
-			vertexData.setXY(2, 	image.quadData.topRightX,		image.quadData.topRightY);
-			vertexData.setXY(3,		image.quadData.bottomRightX,	image.quadData.bottomRightY);
+
+			if (coreTexture.rotate) {
+				vertexData.setXY(0, 	image.quadData.topLeftX,		image.quadData.topLeftY);
+				vertexData.setXY(1, 	image.quadData.topRightX,		image.quadData.topRightY);
+				vertexData.setXY(2,		image.quadData.bottomRightX,	image.quadData.bottomRightY);
+				vertexData.setXY(3, 	image.quadData.bottomLeftX,		image.quadData.bottomLeftY);
+				
+			} else {
+				vertexData.setXY(0, 	image.quadData.bottomLeftX,		image.quadData.bottomLeftY);
+				vertexData.setXY(1, 	image.quadData.topLeftX,		image.quadData.topLeftY);
+				vertexData.setXY(2, 	image.quadData.topRightX,		image.quadData.topRightY);
+				vertexData.setXY(3,		image.quadData.bottomRightX,	image.quadData.bottomRightY);
+			}
 		}
 		//else {
 			//trace("resize");	

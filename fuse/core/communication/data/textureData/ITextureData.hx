@@ -11,7 +11,7 @@ typedef ITextureData =
 	// Backend Props
 	//public var objectId:ObjectId;
 	//public var textureId:TextureId;
-
+	//public var rotate:Bool;
 	public var activeData:TextureSizeData; // points to the active TextureSizeData
 	public var baseData:TextureSizeData; // stores data about the source texture
 	public var atlasData:TextureSizeData; // stores data about the dynamic texture atlas

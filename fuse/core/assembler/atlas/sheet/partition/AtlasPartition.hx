@@ -22,6 +22,7 @@ class AtlasPartition implements ICoreRenderable
 	public var y:Int;
 	public var width:Int;
 	public var height:Int;
+	public var rotate:Bool;
 	
 	public var rightPartition:AtlasPartition;
 	public var bottomPartition:AtlasPartition;
@@ -54,6 +55,7 @@ class AtlasPartition implements ICoreRenderable
 	{
 		active = false;
 		placed = false;
+		rotate = false;
 		
 		rightPartition = null;
 		bottomPartition = null;
