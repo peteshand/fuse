@@ -61,7 +61,7 @@ class Image extends DisplayObject
 		_bounds.height = _bounds2.y - _bounds.y;
 		
 		_bounds.x = (_bounds.x + 1) * stage.stageWidth / 2;
-		_bounds.y = ((_bounds.y + _bounds.height) - 1) * stage.stageHeight / 2;
+		_bounds.y = ((_bounds.y + _bounds.height) - 1) * stage.stageHeight / -2;
 		_bounds.width = _bounds.width * stage.stageWidth / 2;
 		_bounds.height = _bounds.height * stage.stageHeight / 2;
 		
@@ -145,5 +145,31 @@ class Image extends DisplayObject
 	{
 		super.resetMovement();
 		updateTexture = false;
+	}
+
+	public function clone()
+	{
+		var _clone = new Image(this.texture);
+		_clone.renderLayer = this.renderLayer;
+		_clone.blendMode = this.blendMode;
+		_clone.name = this.name;
+		_clone.x = this.x;
+		_clone.y = this.y;
+		_clone.width = this.width;
+		_clone.height = this.height;
+		_clone.pivotX = this.pivotX;
+		_clone.pivotY = this.pivotY;
+		_clone.rotation = this.rotation;
+		_clone.scaleX = this.scaleX;
+		_clone.scaleY = this.scaleY;
+		_clone.color = this.color;
+		_clone.colorTL = this.colorTL;
+		_clone.colorTR = this.colorTR;
+		_clone.colorBL = this.colorBL;
+		_clone.colorBR = this.colorBR;
+		_clone.alpha = this.alpha;
+		_clone.visible = this.visible;
+		_clone.mask = this.mask;
+		return _clone;
 	}
 }
