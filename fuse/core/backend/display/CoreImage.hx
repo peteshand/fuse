@@ -72,8 +72,8 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	override function updateTransform() 
 	{
-		alpha = Graphics.parent.alpha * displayData.alpha;
-		visible = (Graphics.parent.visible && (displayData.visible == 1));
+		alpha = parent.alpha * displayData.alpha;
+		visible = (parent.visible && (displayData.visible == 1));
 		
 		//trace("updateAny = " + updateAny);
 		if (updateAny) {
@@ -98,7 +98,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	override public function buildTransformActions()
 	{
-		visible = (Graphics.parent.visible && (displayData.visible == 1));
+		visible = (parent.visible && (displayData.visible == 1));
 
 		if (this.visible || this.isMask) {
 			hierarchyIndex = HierarchyAssembler.transformActions.length;
