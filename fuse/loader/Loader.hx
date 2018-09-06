@@ -27,7 +27,8 @@ class Loader extends EventDispatcher implements ILoader
 	#end
 	
 	public var bitmapData:BitmapData;
-	
+	var currentURL:String;
+
 	public function new() 
 	{
 		super();
@@ -44,13 +45,13 @@ class Loader extends EventDispatcher implements ILoader
 	
 	private function OnError(e:IOErrorEvent):Void 
 	{
-		//trace(e);
+		trace(e + ", " + currentURL);
 		//dispatchEvent(e);
 	}
 	
 	public function load(url:String):Void
 	{
-		
+		currentURL = url;
 	}
 	
 	function OnLoadComplete(e:Event):Void
