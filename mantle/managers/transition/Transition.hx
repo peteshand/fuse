@@ -61,8 +61,6 @@ class Transition
 	var tween:GenericActuator<Transition>;
 	@:isVar public var value(get, set):Float = 0;
 	
-	//public var state = new Notifier<String>(null);
-	
 	public var startHidden:Bool = true;
 	
 	static public inline var SHOW:String = "show";
@@ -71,7 +69,6 @@ class Transition
 	
 	public function new(showTime:Float = 1, hideTime:Float = 1, showDelay:Float = 0, hideDelay:Float = 0, startHidden:Bool = true) 
 	{
-		//TransitionPlugins.installStandard();
 		this.showTime = showTime;
 		this.hideTime = hideTime;
 		this.showDelay = showDelay;
@@ -94,7 +91,10 @@ class Transition
 	function OnProgressChange() 
 	{
 		if (value == 0) this.showing = true;
-		else if (value <= -1 || value >= 1) this.showing = false;
+		else if (value <= -1 || value >= 1) {
+			this.showing = false;
+			
+		}
 		
 		if (value < -1) value = -1;
 		else if (value > 1) value = 1;
@@ -143,8 +143,7 @@ class Transition
 		var transitionObject = getTransitionObject(target);
 		transitionObject.onSet.add(UpdateStartValues);
 		transitionObject.set(properties, options);
-		
-		OnProgressChange();
+		transitionObject.update(value);
 		
 		return transitionObject;
 	}
@@ -193,16 +192,16 @@ class Transition
 			queue(Show);
 			return;
 		}
-		
 		if (showing == true) return;
 		if (showing == null) {
 			ShowJump();
 			showing = true;
 			return;
 		}
-		showing = true;
 		
-		if(progress.value == 1) this.value = -1;
+		if(progress.value == 1) {
+			this.value = -1;
+		}
 		
 		KillDelays();
 		isTweening.value = true;
@@ -226,18 +225,18 @@ class Transition
 	
 	private function ShowTween():Void 
 	{
-		PrivateShowOnStart();
 		Actuate.stop(this);
 		if (tween != null) {
 			Actuate.unload(tween);
 		}
 		tween = Actuate.tween(this, showTime, { value:0 } ).onUpdate(PrivateShowOnUpdate).onComplete(PrivateShowOnComplete).ease(linearEaseNone);
+		PrivateShowOnStart();
 	}
 	
 	private function ShowJump():Void 
 	{
-		PrivateShowOnStart();
 		progress.value = 0;
+		PrivateShowOnStart();
 		PrivateShowOnUpdate();
 		PrivateShowOnComplete();
 	}
@@ -248,7 +247,6 @@ class Transition
 			queue(Hide);
 			return;
 		}
-		
 		if (showing == false) return;
 		if (showing == null) {
 			HideJump();
@@ -299,18 +297,18 @@ class Transition
 	
 	private function HideTween():Void
 	{
-		PrivateHideOnStart();
 		Actuate.stop(this);
 		if (tween != null){
 			Actuate.unload(tween);
 		}
 		tween = Actuate.tween(this, hideTime, { value:1 } ).onUpdate(PrivateHideOnUpdate).onComplete(PrivateHideOnComplete).ease(linearEaseNone);
+		PrivateHideOnStart();
 	}
 	
 	private function HideJump():Void 
 	{
-		PrivateHideOnStart();
 		progress.value = 1;
+		PrivateHideOnStart();
 		PrivateHideOnUpdate();
 		PrivateHideOnComplete();
 	}
@@ -319,6 +317,7 @@ class Transition
 	
 	private function PrivateShowOnStart():Void 
 	{
+		showing = true;
 		transitioningIn.value = true;
 		for (i in 0...transitionObjects.length) transitionObjects[i].showBegin();
 		onShowStart.dispatch();
