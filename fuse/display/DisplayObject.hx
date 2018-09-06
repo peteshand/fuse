@@ -395,7 +395,7 @@ class DisplayObject
 	
 	public function dispose():Void
 	{
-		
+		this.touchable = false;
 	}
 	
 	function dispatchInput(touch:Touch) 

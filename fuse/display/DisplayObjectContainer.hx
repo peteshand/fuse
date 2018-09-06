@@ -108,4 +108,13 @@ class DisplayObjectContainer extends InteractiveObject
 		}
 		return value;
 	}
+
+	override public function dispose():Void
+	{
+		super.dispose();
+		for (i in 0...children.length) 
+		{
+			children[i].dispose();
+		}
+	}
 }
