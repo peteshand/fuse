@@ -22,7 +22,7 @@ class CoreTexture
 	var p2Width:Int;
 	var p2Height:Int;
 
-	public var rotate:Bool = false;
+	@:isVar public var rotate(default, set):Bool = false;
 
 	public var uvsHaveChanged:Bool = true;
 	
@@ -65,6 +65,7 @@ class CoreTexture
 	public function update()
 	{
 		copyBaseValues();
+		updateUVData();
 	}
 	
 	function copyBaseValues()
@@ -91,19 +92,33 @@ class CoreTexture
 	{
 		textureHasChanged = true;
 	}
+
+	function set_rotate(value:Bool):Bool
+	{
+		if (rotate == value) return value;
+		rotate = value;
+		updateUVData();
+		return rotate;
+	}
 	
 	public function updateUVData() 
 	{
-		uvsHaveChanged = false;
-		
 		var activeData:TextureSizeData = textureData.activeData;
 		p2Width = activeData.p2Width;
 		p2Height = activeData.p2Height;
 		
-		_uvLeft = (activeData.x + activeData.offsetU) / p2Width;
-		_uvTop = (activeData.y + activeData.offsetV) / p2Height;
-		_uvRight = (activeData.x + (activeData.width * activeData.scaleU) + activeData.offsetU) / p2Width;
-		_uvBottom = (activeData.y + (activeData.height * activeData.scaleV) + activeData.offsetV) / p2Height;
+		if (this.rotate) {
+			_uvLeft = (activeData.x + activeData.offsetV) / p2Width;
+			_uvTop = (activeData.y + (activeData.height * (1 - activeData.scaleU)) + activeData.offsetU) / p2Height;
+			_uvRight = (activeData.x + (activeData.width * activeData.scaleV) + activeData.offsetV) / p2Width;
+			_uvBottom = (activeData.y + (activeData.height) + activeData.offsetU) / p2Height;
+		} else {
+			_uvLeft = (activeData.x + activeData.offsetU) / p2Width;
+			_uvTop = (activeData.y + activeData.offsetV) / p2Height;
+			_uvRight = (activeData.x + (activeData.width * activeData.scaleU) + activeData.offsetU) / p2Width;
+			_uvBottom = (activeData.y + (activeData.height * activeData.scaleV) + activeData.offsetV) / p2Height;
+		}
+		
 		
 		if (uvLeft != _uvLeft || uvTop != _uvTop || uvRight != _uvRight || uvBottom != _uvBottom) {
 			//trace([uvLeft, _uvLeft, uvTop, _uvTop, uvRight, _uvRight, uvBottom, _uvBottom]);
@@ -123,7 +138,7 @@ class CoreTexture
 		textureAvailable.value = textureData.textureAvailable;
 		
 		if (textureHasChanged) {
-			textureHasChanged = true;
+			//textureHasChanged = true;
 			updateUVData();
 			onTextureChange.dispatch();
 			//trace("change: " + this.textureId);

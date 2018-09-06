@@ -48,6 +48,11 @@ class BaseTexture implements ITexture {
 	public var _alreadyClear:Bool = false;
 	@:isVar public var directRender(get, set):Bool = false;
 
+	@:isVar public var offsetU(default, set):Float = 0;
+	@:isVar public var offsetV(default, set):Float = 0;
+	@:isVar public var scaleU(default, set):Float = 1;
+	@:isVar public var scaleV(default, set):Float = 1;
+
 	public function new(width:Int, height:Int, queUpload:Bool = true, onTextureUploadCompleteCallback:Void->Void = null, p2Texture:Bool = true,
 			overTextureId:Null<Int> = null) {
 		// objectId = BaseTexture.objectIdCount++;
@@ -109,11 +114,11 @@ class BaseTexture implements ITexture {
 			textureData.p2Width = width;
 			textureData.p2Height = height;
 		}
-
-		textureData.offsetU = 0;
-		textureData.offsetV = 0;
-		textureData.scaleU = 1;
-		textureData.scaleV = 1;
+		
+		textureData.offsetU = offsetU;
+		textureData.offsetV = offsetV;
+		textureData.scaleU = scaleU;
+		textureData.scaleV = scaleV;
 
 		textureData.textureAvailable = 0;
 		textureData.persistent = persistent;
@@ -182,5 +187,37 @@ class BaseTexture implements ITexture {
 
 	public function removeChangeListener(image:Image) {
 		coreTexture.dependantDisplays.remove(image.objectId);
+	}
+
+	function set_offsetU(value:Float):Float
+	{
+		textureData.offsetU = offsetU = value;
+		Fuse.current.workerSetup.updateTexture(objectId);
+		//textureData.changeCount++;
+		return offsetU;
+	}
+
+	function set_offsetV(value:Float):Float
+	{
+		textureData.offsetV = offsetV = value;
+		Fuse.current.workerSetup.updateTexture(objectId);
+		//textureData.changeCount++;
+		return offsetV;
+	}
+
+	function set_scaleU(value:Float):Float
+	{
+		textureData.scaleU = scaleU = value;
+		Fuse.current.workerSetup.updateTexture(objectId);
+		//textureData.changeCount++;
+		return scaleU;
+	}
+
+	function set_scaleV(value:Float):Float
+	{
+		textureData.scaleV = scaleV = value;
+		Fuse.current.workerSetup.updateTexture(objectId);
+		//textureData.changeCount++;
+		return scaleV;
 	}
 }

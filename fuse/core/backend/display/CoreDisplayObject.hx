@@ -175,6 +175,7 @@ class CoreDisplayObject
 	
 	function get_area():Float 
 	{
+		if (displayData == null) return 0;
 		return displayData.width * displayData.height;
 	}
 	
