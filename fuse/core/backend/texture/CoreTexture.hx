@@ -42,7 +42,6 @@ class CoreTexture
 	
 	public function new(textureId:Int) 
 	{
-		trace("new core texture");
 		this.textureId = textureId;
 		textureData = CommsObjGen.getTextureData(textureId);
 		

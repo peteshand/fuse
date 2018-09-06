@@ -29,7 +29,6 @@ class SceneViewMediator extends Mediator
 			state = view.state;
 			state.attachTransition(view.transition);
 			var active:Bool = state.check();
-			trace([view, active]);
 			if (active) {
 				view.transition.value = -1;
 				view.transition.Show();
