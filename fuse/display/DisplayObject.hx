@@ -11,8 +11,6 @@ import fuse.utils.Color;
 import fuse.Fuse;
 import fuse.utils.drag.DragUtil;
 import msignal.Signal.Signal1;
-import openfl.events.MouseEvent;
-import openfl.events.TouchEvent;
 import fuse.utils.ObjectId;
 
 @:access(fuse)
@@ -462,12 +460,12 @@ class DisplayObject
 		if (verticalAlign != null) {
 			if (verticalAlign == Align.TOP) pivotY = 0;
 			if (verticalAlign == Align.BOTTOM) pivotY = height;
-			if (verticalAlign == Align.CENTER) pivotY = height / 2;
+			if (verticalAlign == Align.CENTER) pivotY = Math.round(height / 2);
 		}
 		if (horizontalAlign != null) {
 			if (horizontalAlign == Align.LEFT) pivotX = 0;
 			if (horizontalAlign == Align.RIGHT) pivotX = width;
-			if (horizontalAlign == Align.CENTER) pivotX = width / 2;
+			if (horizontalAlign == Align.CENTER) pivotX = Math.round(width / 2);
 		}
 	}
 	
