@@ -76,6 +76,13 @@ class DisplayObjectContainer extends InteractiveObject
 		}
 		//isStatic = 0;
 	}
+
+	public function setChildIndex(child:DisplayObject, index:Int):Void
+	{
+		this.updatePosition = true;
+		this.updateRotation = true;
+		Fuse.current.workerSetup.setChildIndex(child, index, this);
+	}
 	
 	override function setParent(value:DisplayObjectContainer):Void 
 	{

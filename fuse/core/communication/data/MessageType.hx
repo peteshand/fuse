@@ -14,7 +14,9 @@ class MessageType
 	static public inline var REMOVE_MASK:String = "removeMask";
 	static public inline var ADD_CHILD:String = "addDisplay";
 	static public inline var ADD_CHILD_AT:String = "addDisplayAt";
+	static public inline var SET_CHILD_INDEX:String = "setChildIndex";
 	static public inline var REMOVE_CHILD:String = "removeDisplay";
+	
 	static public inline var VISIBLE_CHANGE:String = "visibleChange";
 	static public inline var SET_TOUCHABLE:String = "setTouchable";
 	static public inline var MAIN_THREAD_TICK:String = "mainThreadTick";

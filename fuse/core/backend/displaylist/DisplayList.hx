@@ -82,6 +82,17 @@ class DisplayList
 		
 		hierarchyChangeCount = 0;
 	}
+
+	public function setChildIndex(objectId:Int, displayType:Int, parentId:Int, index:Int)
+	{
+		var parent:CoreInteractiveObject = getParent(parentId);
+		if (parent == null) return;
+		var display:CoreDisplayObject = getDisplay(objectId, displayType);
+		var currentIndex:Int = parent.children.indexOf(display);
+		parent.children.splice(currentIndex, 1);
+		parent.children.insert(index, display);
+		hierarchyChangeCount = 0;
+	}
 	
 	public function getDisplay(objectId:Int, displayType:Int):CoreDisplayObject
 	{

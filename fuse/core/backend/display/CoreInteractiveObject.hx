@@ -10,7 +10,7 @@ import fuse.core.utils.Pool;
 
 class CoreInteractiveObject extends CoreDisplayObject
 {
-	var children:Array<CoreDisplayObject> = [];
+	public var children:Array<CoreDisplayObject> = [];
 	public var numChildren(get, null):Int;
 	
 	public function new() 

@@ -11,6 +11,7 @@ import fuse.core.assembler.input.InputAssembler;
 import fuse.core.assembler.vertexWriter.VertexWriter;
 import fuse.core.backend.Core;
 import fuse.core.communication.messageData.AddMaskMsg;
+import fuse.core.communication.messageData.SetChildIndexMsg;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.IWorkerComms;
@@ -47,6 +48,7 @@ class CoreEntryPoint {
 		workerComms.addListener(MessageType.UPDATE, OnUpdateMsg);
 		workerComms.addListener(MessageType.ADD_CHILD, OnAddChild);
 		workerComms.addListener(MessageType.ADD_CHILD_AT, OnAddChildAt);
+		workerComms.addListener(MessageType.SET_CHILD_INDEX, OnSetChildIndex);
 		workerComms.addListener(MessageType.REMOVE_CHILD, OnRemoveChild);
 		workerComms.addListener(MessageType.VISIBLE_CHANGE, OnVisibleChange);
 		workerComms.addListener(MessageType.ADD_MASK, OnAddMask);
@@ -116,9 +118,14 @@ class CoreEntryPoint {
 		OnAddChildAt(addChildPayload);
 	}
 
-	function OnAddChildAt(addChildPayload:AddChildMsg) {
-		Core.displayList.addChildAt(addChildPayload.objectId, addChildPayload.displayType, addChildPayload.parentId, addChildPayload.addAtIndex);
+	function OnAddChildAt(payload:AddChildMsg) {
+		Core.displayList.addChildAt(payload.objectId, payload.displayType, payload.parentId, payload.addAtIndex);
 	}
+
+	function OnSetChildIndex(payload:SetChildIndexMsg) {
+		Core.displayList.setChildIndex(payload.objectId, payload.displayType, payload.parentId, payload.index);
+	}
+	
 
 	function OnRemoveChild(workerPayload:WorkerPayload) {
 		var objectId:Int = workerPayload;

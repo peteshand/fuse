@@ -134,6 +134,18 @@ class WorkerSetup
 		} );
 		setStatic(child);
 	}
+
+	public function setChildIndex(child:DisplayObject, index:Int, parent:DisplayObjectContainer):Void
+	{
+		var parentId:Int = parent.objectId;
+		send(MessageType.SET_CHILD_INDEX, { 
+			objectId:child.objectId, 
+			displayType:child.displayType, 
+			parentId:parentId, 
+			index:index
+		} );
+		setStatic(parent);
+	}
 	
 	public function removeChild(child:DisplayObject) 
 	{
