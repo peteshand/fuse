@@ -1,5 +1,6 @@
 package fuse.core.backend.display;
 
+import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.utils.Pool;
 
@@ -15,6 +16,7 @@ class CoreSprite extends CoreInteractiveObject
 	public function new() 
 	{
 		super();
+		this.displayType = DisplayType.SPRITE;
 	}
 	
 	override public function clone():CoreDisplayObject

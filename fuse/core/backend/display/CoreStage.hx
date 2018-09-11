@@ -1,5 +1,7 @@
 package fuse.core.backend.display;
 
+import fuse.core.backend.displaylist.DisplayType;
+import fuse.core.backend.util.transform.WorkerTransformHelper;
 import fuse.core.utils.Calc;
 import fuse.core.utils.Pool;
 
@@ -15,6 +17,7 @@ class CoreStage extends CoreInteractiveObject
 	{
 		super();
 		setUpdates(false);
+		this.displayType = DisplayType.STAGE;
 	}
 	
 	override public function clone():CoreDisplayObject
@@ -30,5 +33,21 @@ class CoreStage extends CoreInteractiveObject
 	override public function insideBounds(x:Float, y:Float) 
 	{
 		return true;
+	}
+
+	override function updateTransform() 
+	{
+		alpha = displayData.alpha;
+		visible = displayData.visible == 1;
+		
+		if (updateAny == true) {
+			Fuse.current.conductorData.backIsStatic = 0;
+		}
+		
+		if (updatePosition) {
+			WorkerTransformHelper.update(this);
+		}
+		
+		pushTransform();
 	}
 }

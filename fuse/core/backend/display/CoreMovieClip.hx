@@ -1,5 +1,6 @@
 package fuse.core.backend.display;
 
+import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 
 /**
@@ -14,6 +15,7 @@ class CoreMovieClip extends CoreImage implements ICoreRenderable
 	public function new() 
 	{
 		super();
+		this.displayType = DisplayType.MOVIECLIP;
 	}
 	
 	override function set_textureId(value:Int):Int {

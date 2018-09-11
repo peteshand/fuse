@@ -1,4 +1,5 @@
 package fuse.core.backend.display;
+import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.utils.Pool;
 
 /**
@@ -12,6 +13,7 @@ class CoreQuad extends CoreImage
 	public function new() 
 	{
 		super();
+		this.displayType = DisplayType.QUAD;
 	}
 	
 	override public function clone():CoreDisplayObject

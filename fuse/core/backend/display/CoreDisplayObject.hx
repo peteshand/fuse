@@ -63,6 +63,7 @@ class CoreDisplayObject
 	
 	public function new() 
 	{
+		this.displayType = DisplayType.DISPLAY_OBJECT;
 		bounds = new Bounds();
 		quadData = new QuadData();
 		transformData = new TransformData();
@@ -92,8 +93,8 @@ class CoreDisplayObject
 	
 	function updateTransform() 
 	{
-		alpha = Graphics.parent.alpha * displayData.alpha;
-		visible = Graphics.parent.visible && (displayData.visible == 1);
+		alpha = parent.alpha * displayData.alpha;
+		visible = parent.visible && (displayData.visible == 1);
 		
 		if (updateAny == true) {
 			Fuse.current.conductorData.backIsStatic = 0;

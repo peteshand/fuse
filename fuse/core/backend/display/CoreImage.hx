@@ -1,5 +1,6 @@
 package fuse.core.backend.display;
 
+import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.backend.displaylist.Graphics;
@@ -49,6 +50,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	{
 		super();
 		vertexData = new VertexData();
+		this.displayType = DisplayType.IMAGE;
 	}
 	
 	override public function setUpdates(value:Bool) 
