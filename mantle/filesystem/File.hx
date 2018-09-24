@@ -1,4 +1,4 @@
-package mantle.util.fs;
+package mantle.filesystem;
 
 #if (js||flash)
 import openfl.net.SharedObject;
@@ -72,6 +72,75 @@ import openfl.net.SharedObject;
 			return this;
 		}
 	}
+#elseif nodejs
+
+import js.node.Fs;
+
+class File
+{
+	public static var documentsDirectory(get, null):File;
+	public static var applicationDirectory(get, null):File;
+	
+	static function get_documentsDirectory():File 
+	{
+		return new File('/Users/peteshand/Documents');
+	}
+	
+	static function get_applicationDirectory():File 
+	{
+		return new File("/Users/peteshand/Projects/GrumpySailor/create-space/create-space/haxe/bin/electron/bin");
+	}
+	
+	
+	private var path:String;
+	public var nativePath(get, never):String;
+	public var exists(get, null):Bool;
+	public var url(get, null):String;
+
+	public function new(path:String="") 
+	{
+		this.path = path;
+	}
+
+	public function resolvePath(path:String):File
+	{
+		return new File(this.path + "/" + path);
+	}
+
+	private function get_nativePath():String 
+	{
+		return path;
+	}
+	
+	private function get_url():String 
+	{
+		return path;
+	}
+
+	private function get_exists():Bool 
+	{
+		var flag = true;
+		try{
+			Fs.accessSync(path, Fs.F_OK);
+		}catch(e:Dynamic){
+			flag = false;
+		}
+		return flag;
+		
+		/*var stats = Fs.statSync(path);
+		trace("stats = " + stats);
+		if (stats != null) {
+			return true;
+		}
+		return false;*/
+	}
+
+	public function createDirectory():Void
+	{
+		Fs.mkdirSync(path);
+	}
+}
+
 #elseif (js||flash)
 	
 	class File
@@ -79,11 +148,12 @@ import openfl.net.SharedObject;
 		public static var documentsDirectory(get, null):File;
 		public static var applicationDirectory(get, null):File;
 		
-		@:allow(mantle.util.fs.FileStream)
+		@:allow(mantle.filesystem.FileStream)
 		private var sharedObject:SharedObject;
 		private var path:String;
 		public var nativePath(get, never):String;
 		public var exists(get, null):Bool;
+		public var url(get, null):String;
 		
 		public function new(path:String="") 
 		{
@@ -101,8 +171,17 @@ import openfl.net.SharedObject;
 			return new File(this.path + "/" + path);
 		}
 		
+		public function createDirectory():Void
+		{
+			
+		}
 		
 		private function get_nativePath():String 
+		{
+			return path;
+		}
+		
+		private function get_url():String 
 		{
 			return path;
 		}
@@ -127,6 +206,5 @@ import openfl.net.SharedObject;
 			}
 		}
 	}
-	
 	
 #end

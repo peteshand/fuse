@@ -46,6 +46,8 @@ class Sprite extends DisplayObjectContainer
 		{
 			if (children[i].displayType == DisplayType.IMAGE){
 				_clone.addChild(cast(children[i], Image).clone());
+			} else if (children[i].displayType == DisplayType.QUAD){
+				_clone.addChild(cast(children[i], Quad).clone());
 			} else if (children[i].displayType == DisplayType.SPRITE){
 				_clone.addChild(cast(children[i], Sprite).clone());
 			}

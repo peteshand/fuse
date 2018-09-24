@@ -1,5 +1,6 @@
 package fuse.render.texture;
 
+import openfl.display3D.textures.VideoTexture;
 import openfl.display3D.Context3D;
 import fuse.core.front.texture.Textures;
 import openfl.display3D.textures.TextureBase;
@@ -77,15 +78,24 @@ class Context3DTexture
 	{
 		var id:Null<Int> = Textures.getTextureId(textureId);
 		var sampler = Textures.getTextureBase(id);
-		//if (textureId != -1) trace([index, textureId, id]);
-		//trace("i = " + index + ", sampler = " + sampler);
-		
-		contextTextureIds[index].value = sampler;
 		
 		#if html5
 			// Hack to get around a bug in lime/openfl where video textures don't update
-			context3D.__samplerDirty |= (1 << untyped sampler);
+			if (Std.is(sampler, VideoTexture)){
+				contextTextureIds[index].value = null;
+			}
 		#end
+		
+		contextTextureIds[index].value = sampler;
+
+		/*#if html5
+			// Hack to get around a bug in lime/openfl where video textures don't update
+			if (Std.is(sampler, VideoTexture)){
+				var s:Int = untyped sampler;
+				context3D.__samplerDirty |= (1 << s);
+			}
+		#end*/
+		
 	}
 	
 	public static function id(texture:TextureBase) 

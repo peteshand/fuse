@@ -11,8 +11,8 @@ class DefaultTexture extends BitmapTexture
 		
 		super(bitmapData, queUpload, onTextureUploadCompleteCallback);
 		
-		this.textureData.offsetU = 1;
-		this.textureData.offsetV = 1;
+		this.textureData.offsetU = 1 / bitmapData.width;
+		this.textureData.offsetV = 1 / bitmapData.width;
 		this.textureData.scaleU = (bitmapData.width - 2) / bitmapData.width;
 		this.textureData.scaleV = (bitmapData.height - 2) / bitmapData.height;
 		Fuse.current.workerSetup.updateTexture(objectId);

@@ -20,4 +20,11 @@ class Quad extends Image
 		
 		displayType = DisplayType.QUAD;
 	}
+
+	override public function clone():Image
+	{
+		var _clone = super.clone();
+		_clone.displayType = DisplayType.QUAD;
+		return _clone;
+	}
 }

@@ -47,7 +47,6 @@ class TextureData
 	
 	public function new(objectOffset:Int) 
 	{
-		//baseData = { textureId:0, x:0, y:0, width:1, height:1, p2Width:1, p2Height:1, offsetU:0.1, offsetV:0.1, scaleU:0.8, scaleV:0.8 };
 		baseData = { textureId:0, x:0, y:0, width:1, height:1, p2Width:1, p2Height:1, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
 		atlasData = { textureId:0, x:0, y:0, width:1, height:1, p2Width:1, p2Height:1, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
 

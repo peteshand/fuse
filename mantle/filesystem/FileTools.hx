@@ -1,41 +1,30 @@
-package fuse.filesystem;
+package mantle.filesystem;
 
 import haxe.io.Bytes;
 import haxe.io.BytesData;
-import openfl.errors.Error;
 import openfl.utils.ByteArray;
 
 #if sys
 import sys.FileSystem;
 #else
-import fuse.filesystem.EventListenerTracker;
+import mantle.util.EventListenerTracker;
 #end
 
 /**
  * ...
  * @author Thomas Byrne
  */
-#if flash
+#if (air && !mobile)
 
-	import fuse.filesystem.File as FlFile;
-	import fuse.filesystem.FileStream;
-	import fuse.filesystem.FileMode;
-	import flash.events.Event;
-	import flash.events.IOErrorEvent;
+	import flash.filesystem.File as FlFile;
+	import flash.filesystem.FileStream;
+	import flash.filesystem.FileMode;
+	import openfl.events.Event;
+	import openfl.events.IOErrorEvent;
 	
 	class FileTools
 	{
-		static var temp:FlFile;
-		
-		static function __init__():Void
-		{
-			try {
-				temp = new FlFile();
-			}
-			catch (e:Error) {
-				
-			}
-		}
+		static var temp:FlFile = new FlFile();
 
 		
 		static public function getBytes(path:String) : Bytes
@@ -87,7 +76,7 @@ import fuse.filesystem.EventListenerTracker;
 		{
 			temp.nativePath = path;
 			var stream:FileStream =  new FileStream();
-			var listenerTracker:EventListenerTracker = new EventListenerTracker(stream);
+			var listenerTracker:EventListenerTracker = new EventListenerTracker(untyped stream);
 			listenerTracker.addEventListener(Event.COMPLETE, readSuccessHandler.bind(_, stream, listenerTracker, onComplete) );
 			listenerTracker.addEventListener(IOErrorEvent.IO_ERROR, readFailHandler.bind(_, stream, listenerTracker, onFail) );
 			stream.openAsync(temp, FileMode.READ);
@@ -145,7 +134,7 @@ import fuse.filesystem.EventListenerTracker;
 				temp.nativePath = path;
 				confirmParent(temp);
 				var stream:FileStream =  new FileStream();
-				var listenerTracker:EventListenerTracker = new EventListenerTracker(stream);
+				var listenerTracker:EventListenerTracker = new EventListenerTracker(untyped stream);
 				listenerTracker.addEventListener(Event.CLOSE, writeSuccessHandler.bind(_, listenerTracker, onComplete) );
 				listenerTracker.addEventListener(IOErrorEvent.IO_ERROR, writeFailHandler.bind(_, listenerTracker, onFail) );
 				stream.openAsync(temp, FileMode.WRITE);
@@ -178,7 +167,7 @@ import fuse.filesystem.EventListenerTracker;
 				temp.nativePath = path;
 				confirmParent(temp);
 				var stream:FileStream =  new FileStream();
-				var listenerTracker:EventListenerTracker = new EventListenerTracker(stream);
+				var listenerTracker:EventListenerTracker = new EventListenerTracker(untyped stream);
 				listenerTracker.addEventListener(Event.CLOSE, writeSuccessHandler.bind(_, listenerTracker, onComplete) );
 				listenerTracker.addEventListener(IOErrorEvent.IO_ERROR, writeFailHandler.bind(_, listenerTracker, onFail) );
 				stream.openAsync(temp, FileMode.WRITE);

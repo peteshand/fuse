@@ -5,6 +5,7 @@ import org.swiftsuspenders.utils.DescribedType;
 #end
 import mantle.managers.transition.Transition;
 import mantle.notifier.Notifier;
+import mantle.notifier.BaseNotifier;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
 /**
  * ...

@@ -1,5 +1,5 @@
 #if (air||js)
-package mantle.util.fs;
+package mantle.filesystem;
 import mantle.util.app.App;
 import mantle.util.app.Platform;
 import openfl.display.BitmapData;

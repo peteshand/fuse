@@ -111,7 +111,7 @@ class Context3DSetup
 		context3D = stage3D.context3D;
 		//trace("context3D = " + context3D);
 		#if debug
-			context3D.enableErrorChecking = true;
+			context3D.enableErrorChecking = false; // true;
 		#else
 			context3D.enableErrorChecking = false;
 		#end

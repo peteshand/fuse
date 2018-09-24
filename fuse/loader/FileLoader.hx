@@ -1,8 +1,8 @@
 package fuse.loader;
 
-import fuse.filesystem.File;
-import fuse.filesystem.FileMode;
-import fuse.filesystem.FileStream;
+import mantle.filesystem.File;
+import mantle.filesystem.FileMode;
+import mantle.filesystem.FileStream;
 
 import openfl.events.Event;
 import openfl.utils.ByteArray;

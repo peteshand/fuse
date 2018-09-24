@@ -66,8 +66,6 @@ class MainThread extends ThreadBase
 		this.renderMode = renderMode;
 		this.profile = profile;
 		//this.frameRate = fuseConfig.frameRate;
-		
-		RemoteLoader.init();
 	}
 	
 	public function init():Void

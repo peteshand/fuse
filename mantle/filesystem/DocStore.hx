@@ -1,10 +1,10 @@
-package mantle.util.fs;
+package mantle.filesystem;
 
 #if (air&&!mobile)
 import mantle.definitions.Storage;
-import mantle.util.fs.File;
-import mantle.util.fs.FileMode;
-import mantle.util.fs.FileStream;
+import mantle.filesystem.File;
+import mantle.filesystem.FileMode;
+import mantle.filesystem.FileStream;
 import haxe.Json;
 
 /**
@@ -22,7 +22,7 @@ class DocStore
 	{
 		
 		this.id = id;
-		var docStoreDir:File = Storage.appDirectory.resolvePath("DocStore");
+		var docStoreDir:File = Storage.appStorageDir.resolvePath("DocStore");
 		if (!docStoreDir.exists) docStoreDir.createDirectory();
 		file = docStoreDir.resolvePath(id + ".json");
 		if (file.exists){

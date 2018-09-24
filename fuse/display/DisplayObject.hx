@@ -187,6 +187,7 @@ class DisplayObject
 	function set_width(value:Float):Float { 
 		if (width != value){
 			displayData.width = width = value;
+			updateAlignmentX();
 			updatePosition = true;
 			//isMoving = 1;
 			updateStaticBackend();
@@ -197,6 +198,7 @@ class DisplayObject
 	function set_height(value:Float):Float { 
 		if (height != value){
 			displayData.height = height = value;
+			updateAlignmentY();
 			updatePosition = true;
 			//isMoving = 1;
 			updateStaticBackend();
@@ -337,6 +339,8 @@ class DisplayObject
 				displayData.visible = 0;
 			}
 			updateVisible = true;
+			updatePosition = true; // incase the position was changed while invisible
+			updateRotation = true; // incase the rotation was changed while invisible
 			updateStaticBackend();
 			Fuse.current.workerSetup.visibleChange(this, displayData.visible == 1);
 			//isStatic = 0;
@@ -457,15 +461,25 @@ class DisplayObject
 	
 	function updateAlignment() 
 	{
-		if (verticalAlign != null) {
-			if (verticalAlign == Align.TOP) pivotY = 0;
-			if (verticalAlign == Align.BOTTOM) pivotY = height;
-			if (verticalAlign == Align.CENTER) pivotY = Math.round(height / 2);
-		}
+		updateAlignmentX();
+		updateAlignmentY();
+	}
+
+	function updateAlignmentX() 
+	{
 		if (horizontalAlign != null) {
 			if (horizontalAlign == Align.LEFT) pivotX = 0;
 			if (horizontalAlign == Align.RIGHT) pivotX = width;
 			if (horizontalAlign == Align.CENTER) pivotX = Math.round(width / 2);
+		}
+	}
+
+	function updateAlignmentY() 
+	{
+		if (verticalAlign != null) {
+			if (verticalAlign == Align.TOP) pivotY = 0;
+			if (verticalAlign == Align.BOTTOM) pivotY = height;
+			if (verticalAlign == Align.CENTER) pivotY = Math.round(height / 2);
 		}
 	}
 	

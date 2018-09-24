@@ -29,7 +29,7 @@ class Image extends DisplayObject
 		
 		renderLayer = 0;
 	}
-	
+
 	function get_bounds():Rectangle
 	{
 		if (Math.isNaN(displayData.bottomLeftX)) return null;
@@ -115,8 +115,10 @@ class Image extends DisplayObject
 	
 	function OnTextureUpdate() 
 	{
-		this.width = texture.width;
-		this.height = texture.height;
+		if (width == 0) this.width = texture.width;
+		if (height == 0) this.height = texture.height;
+		//this.width = texture.width;
+		//this.height = texture.height;
 		updateAlignment();
 	}
 	

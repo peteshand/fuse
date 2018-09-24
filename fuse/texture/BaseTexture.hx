@@ -23,7 +23,7 @@ import fuse.utils.ObjectId;
 class BaseTexture implements ITexture {
 	static var coreTextures = new Map<Int, BaseTexture>();
 
-	public var coreTexture(get, never):BaseTexture;
+	//var coreTexture(get, never):BaseTexture;
 
 	static var objectIdCount:Int = 0;
 	static var textureIdCount:Int = 0;
@@ -36,8 +36,8 @@ class BaseTexture implements ITexture {
 	public var objectId:ObjectId;
 	// public var textureId:TextureId;
 	public var textureData:ITextureData;
-	public var width:Null<Int>;
-	public var height:Null<Int>;
+	@:isVar public var width(default, set):Null<Int>;
+	@:isVar public var height(default, set):Null<Int>;
 	public var onUpdate = new Signal0();
 	public var onUpload = new Signal0();
 	public var nativeTexture(get, null):Texture;
@@ -86,19 +86,17 @@ class BaseTexture implements ITexture {
 		// setTextureData();
 		Fuse.current.workerSetup.addTexture(objectId);
 
-		if (queUpload)
-			TextureUploadQue.add(this);
-		else
-			upload();
-
-		Fuse.current.conductorData.frontStaticCount = 0;
-
 		onUpdate.add(function() {
 			for (image in dependantDisplays.iterator())
 				image.OnTextureUpdate();
 		});
 
 		coreTextures.set(this.objectId, this);
+
+		if (queUpload)
+			TextureUploadQue.add(this);
+		else
+			upload();
 	}
 
 	function setTextureData() {
@@ -128,8 +126,7 @@ class BaseTexture implements ITexture {
 
 	public function createNativeTexture() {
 		setTextureData();
-		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(textureData.p2Width, textureData.p2Height, Context3DTextureFormat
-			.BGRA, false, 0);
+		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(textureData.p2Width, textureData.p2Height, Context3DTextureFormat.BGRA, false, 0);
 		#if air
 		try {
 			uploadFromBitmapDataAsync = untyped textureData.nativeTexture["uploadFromBitmapDataAsync"];
@@ -177,16 +174,18 @@ class BaseTexture implements ITexture {
 		return textureData.nativeTexture;
 	}
 
-	function get_coreTexture():BaseTexture {
+	/*function get_coreTexture():BaseTexture {
 		return coreTextures.get(objectId);
-	}
+	}*/
 
 	public function addChangeListener(image:Image) {
-		coreTexture.dependantDisplays.set(image.objectId, image);
+		//coreTexture.dependantDisplays.set(image.objectId, image);
+		dependantDisplays.set(image.objectId, image);
 	}
 
 	public function removeChangeListener(image:Image) {
-		coreTexture.dependantDisplays.remove(image.objectId);
+		//coreTexture.dependantDisplays.remove(image.objectId);
+		dependantDisplays.remove(image.objectId);
 	}
 
 	function set_offsetU(value:Float):Float
@@ -219,5 +218,15 @@ class BaseTexture implements ITexture {
 		Fuse.current.workerSetup.updateTexture(objectId);
 		//textureData.changeCount++;
 		return scaleV;
+	}
+
+	function set_width(value:Null<Int>):Null<Int>
+	{
+		return width = value;
+	}
+
+	function set_height(value:Null<Int>):Null<Int>
+	{
+		return height = value;
 	}
 }

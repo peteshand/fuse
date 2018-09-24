@@ -2,6 +2,7 @@ package mantle.managers.transition;
 
 //import mantle.managers.transition.plugins.TransitionPlugins;
 import mantle.notifier.Notifier;
+import mantle.notifier.BaseNotifier;
 import mantle.delay.Delay;
 import motion.Actuate;
 import motion.actuators.GenericActuator;

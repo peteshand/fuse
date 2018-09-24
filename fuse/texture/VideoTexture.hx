@@ -1,5 +1,8 @@
 package fuse.texture;
 
+import openfl.events.Event;
+import openfl.events.VideoTextureEvent;
+import msignal.Signal.Signal0;
 import openfl.net.NetConnection;
 import fuse.texture.BaseTexture;
 import fuse.core.front.texture.Textures;
@@ -8,6 +11,7 @@ import openfl.events.NetStatusEvent;
 import openfl.net.NetStream;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
 import mantle.time.EnterFrame;
+import openfl.display3D.Context3D;
 /**
  * ...
  * @author P.J.Shand
@@ -15,18 +19,21 @@ import mantle.time.EnterFrame;
 @:access(fuse)
 class VideoTexture extends BaseTexture
 {
-	static inline var TEXTURE_READY:String = "textureReady";
 	public var netStream:NetStream;
 	public var nativeVideoTexture:NativeVideoTexture;
 	public var loop:Bool = false;
 	public var duration:Null<Float>;
 	var url:String;
 	public var time(get, null):Float;
+	@:isVar public var onComplete(get, null):Signal0;
+
 	var paused:Bool = false;
 	var videoMetaData:VideoMetaData;
 
-	public function new(url:String) 
+	public function new(url:String=null) 
 	{
+		trace("supportsVideoTexture = " + Context3D.supportsVideoTexture);
+
 		var nc:NetConnection = new NetConnection();
 		nc.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
 		nc.connect(null);
@@ -37,11 +44,13 @@ class VideoTexture extends BaseTexture
 		super(512, 512, false, null, false);
 		this.directRender = true;
 
-		if (url != null) play(url);
+		//if (url != null) play(url);
 	}
 
 	public function play(url:String=null) 
 	{
+		trace("play");
+		trace("paused = " + paused);
 		if (paused) {
 			netStream.togglePause();
 		} else {
@@ -57,12 +66,14 @@ class VideoTexture extends BaseTexture
 
 	public function stop()
 	{
+		trace("stop");
 		paused = false;
 		netStream.close();
 	}
 
 	public function pause()
 	{
+		trace("pause");
 		//netStream.togglePause();
 		paused = true;
 		netStream.pause();
@@ -70,19 +81,29 @@ class VideoTexture extends BaseTexture
 
 	public function seek(offset:Float)
 	{
-		trace("offset:" + offset);
+		trace("seek");
 		netStream.seek(offset);
 	}
 	
 	private function OnEvent(e:NetStatusEvent):Void 
 	{
 		var info:NetStatusInfo = e.info;
-		//trace(info.code);
+		trace(info.code);
+		if (textureData != null){
+			trace("textureData.textureAvailable = " + textureData.textureAvailable);
+		}
+		if (info.code == "NetStream.Play.Start") {
+			textureData.textureAvailable = 1;
+		}
+
 		if (info.code == "NetStream.Buffer.Empty") {
-			//nativeVideoTexture.addEventListener(TEXTURE_READY, function(e:Event) {
+			//nativeVideoTexture.addEventListener(Event.TEXTURE_READY, function(e:Event) {
 				textureData.textureAvailable = 1;
 			//});
 			//nativeVideoTexture.attachNetStream(netStream);
+			if (onComplete != null) {
+				onComplete.dispatch();
+			}
 		}
 	}
 	
@@ -91,7 +112,6 @@ class VideoTexture extends BaseTexture
 		if (this.videoMetaData != null) return;
 
 		this.videoMetaData = videoMetaData;
-		trace("onMetaData");
 		// TODO: need to be able to update width/height in backend texture
 		if (this.width == 0) this.width = videoMetaData.width;
 		if (this.height == 0) this.height = videoMetaData.height;
@@ -105,21 +125,27 @@ class VideoTexture extends BaseTexture
 		//createNativeTexture();
 		
 		/*textureBase =*/ //nativeVideoTexture = Textures.context3D.createVideoTexture();
-		trace("create video texture");
 		nativeVideoTexture = Textures.context3D.createVideoTexture();
 		
 		textureData.textureBase = nativeVideoTexture;
 		
 		//Textures.context3D.createTexture(64, 64, Context3DTextureFormat.BGRA, false);
 		
-		nativeVideoTexture.addEventListener(TEXTURE_READY, OnTextureUploadComplete);
+		nativeVideoTexture.addEventListener(Event.TEXTURE_READY, renderFrame);
+		nativeVideoTexture.addEventListener(VideoTextureEvent.RENDER_STATE, onRenderState);
+
 		nativeVideoTexture.attachNetStream(netStream);
 	}
 	
-	private function OnTextureUploadComplete(e:Event):Void 
+
+	function onRenderState(event:VideoTextureEvent)
 	{
-		trace("TEXTURE_READY");
-		nativeVideoTexture.removeEventListener(TEXTURE_READY, OnTextureUploadComplete);
+		trace(event.status);
+	}
+
+	private function renderFrame(e:Event):Void 
+	{
+		nativeVideoTexture.removeEventListener(Event.TEXTURE_READY, renderFrame);
 		EnterFrame.add(onTick);
 
 		textureData.placed = 0;
@@ -143,6 +169,14 @@ class VideoTexture extends BaseTexture
 	function get_time():Float
 	{
 		return netStream.time;
+	}
+
+	function get_onComplete()
+	{
+		if (onComplete == null) {
+			onComplete = new Signal0();
+		}
+		return onComplete;
 	}
 }
 

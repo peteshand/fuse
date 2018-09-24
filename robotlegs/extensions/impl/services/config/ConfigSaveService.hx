@@ -5,8 +5,8 @@ import robotlegs.extensions.impl.utils.json.JsonFormatter;
 import haxe.Json;
 import org.swiftsuspenders.utils.DescribedType;
 #if (air && !mobile)
-	import mantle.util.fs.File;
-	import fuse.filesystem.FileTools;
+	import mantle.filesystem.File;
+	import mantle.filesystem.FileTools;
 #end
 /**
  * ...

@@ -108,15 +108,15 @@ class CoreTexture
 		p2Height = activeData.p2Height;
 		
 		if (this.rotate) {
-			_uvLeft = (activeData.x + activeData.offsetV) / p2Width;
-			_uvTop = (activeData.y + (activeData.height * (1 - activeData.scaleU)) + activeData.offsetU) / p2Height;
-			_uvRight = (activeData.x + (activeData.width * activeData.scaleV) + activeData.offsetV) / p2Width;
-			_uvBottom = (activeData.y + (activeData.height) + activeData.offsetU) / p2Height;
+			_uvLeft = (activeData.x + (activeData.offsetV * activeData.width)) / p2Width;
+			_uvTop = (activeData.y + (activeData.height * (1 - activeData.scaleU)) + (activeData.offsetU * activeData.height)) / p2Height;
+			_uvRight = (activeData.x + (activeData.width * activeData.scaleV) + (activeData.offsetV * activeData.width)) / p2Width;
+			_uvBottom = (activeData.y + (activeData.height) + (activeData.offsetU * activeData.height)) / p2Height;
 		} else {
-			_uvLeft = (activeData.x + activeData.offsetU) / p2Width;
-			_uvTop = (activeData.y + activeData.offsetV) / p2Height;
-			_uvRight = (activeData.x + (activeData.width * activeData.scaleU) + activeData.offsetU) / p2Width;
-			_uvBottom = (activeData.y + (activeData.height * activeData.scaleV) + activeData.offsetV) / p2Height;
+			_uvLeft = (activeData.x + (activeData.offsetU * activeData.width)) / p2Width;
+			_uvTop = (activeData.y + (activeData.offsetV * activeData.height)) / p2Height;
+			_uvRight = (activeData.x + (activeData.width * activeData.scaleU) + (activeData.offsetU * activeData.width)) / p2Width;
+			_uvBottom = (activeData.y + (activeData.height * activeData.scaleV) + (activeData.offsetV * activeData.height)) / p2Height;
 		}
 		
 		

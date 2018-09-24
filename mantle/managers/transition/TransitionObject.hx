@@ -75,6 +75,8 @@ class TransitionObject implements ITransitionObject
 	
 	public function autoVisObject(value:Dynamic):ITransitionObject
 	{
+		if (option.autoVisObject != null && visSetter != null) visSetter(true);
+
 		option.autoVisObject = value;
 		UpdateAutoVis();
 		return set(properties, option);

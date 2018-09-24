@@ -1,5 +1,7 @@
 package mantle.managers.state;
+
 import mantle.notifier.Notifier;
+import mantle.notifier.BaseNotifier;
 
 /**
  * ...

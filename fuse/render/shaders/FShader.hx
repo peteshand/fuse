@@ -234,7 +234,7 @@ class FShader
 			// RGBA from 4 available textures ///////////////////////////////
 			for (j in 0...numTextures) 
 			{
-				agal += "tex ft0, v1.xy, fs" + j + " <2d,clamp,linear>	\n"; // nearest
+				agal += "tex ft0, v1.xy, fs" + j + " <2d,clamp,nomip,linear>	\n"; // nearest
 				agal += "mul ft0.xyzw, ft0.xyzw, " + rgbaIndex[j] + "	\n";
 				if (j == 0)	agal += "mov ft1, ft0						\n";
 				else 		agal += "add ft1, ft1, ft0					\n";
@@ -255,10 +255,10 @@ class FShader
 			
 			/////////////////////////////////////////////////////////////////
 			// Mark from 4 available textures ///////////////////////////////
-			if (FShader.ENABLE_MASKS){
+			/*if (FShader.ENABLE_MASKS){
 				for (j in 0...numTextures) 
 				{
-					agal += "tex ft0, v1.zw, fs" + j + " <2d,clamp,linear>	\n"; // nearest
+					agal += "tex ft0, v1.zw, fs" + j + " <2d,clamp,nomip,linear>	\n"; // nearest
 					agal += "mul ft0.w, ft0.w, " + maskIndex[j] + 		"	\n";
 					if (j == 0)	agal += "mov ft2, ft0						\n";
 					else 		agal += "add ft2, ft2, ft0					\n";
@@ -268,7 +268,7 @@ class FShader
 				agal += "add ft2.w, ft2.w, MASK_BASE.1						\n";
 				agal += "min ft2.w, ft2.w, ONE.1							\n";
 				agal += "mul ft1.xyzw, ft1.xyzw, ft2.wwww					\n";
-			}
+			}*/
 			/////////////////////////////////////////////////////////////////
 			/////////////////////////////////////////////////////////////////
 			

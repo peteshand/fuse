@@ -11,10 +11,13 @@ import mantle.time.EnterFrame;
 class Delay 
 {
 	private static var delayObjects:Array<IDelayObject>;
-	
-	static function __init__() { 
-       delayObjects = new Array<IDelayObject>();
-	   EnterFrame.add(OnTick);
+	static var initialized:Bool = false;
+
+	static function init() { 
+		if (initialized) return;
+		initialized = true;
+		delayObjects = new Array<IDelayObject>();
+		EnterFrame.add(OnTick);
     }
 	
 	static private function OnTick() 
@@ -39,11 +42,13 @@ class Delay
 	
 	public static function byFrames(frames:Int, callback:Function, params:Array<Dynamic>=null):Void 
 	{
+		Delay.init();
 		delayObjects.push(new FrameDelay(frames, callback, params));
 	}
 	
 	public static function byTime(duration:Float, callback:Function, params:Array<Dynamic>=null, timeUnit:TimeUnit=null, precision:Bool=false):Void 
 	{
+		Delay.init();
 		if (timeUnit == null) timeUnit = TimeUnit.SECONDS;
 		delayObjects.push(new TimeDelay(duration, callback, params, timeUnit, precision));
 	}

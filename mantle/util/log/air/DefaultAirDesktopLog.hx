@@ -2,7 +2,7 @@ package mantle.util.log.air;
 import mantle.util.log.Log;
 import mantle.delay.Delay;
 import mantle.util.app.App;
-import mantle.util.fs.Files;
+import mantle.filesystem.Files;
 import mantle.util.log.Log.LogLevel;
 import mantle.util.log.customTrace.CustomTrace;
 import flash.display.DisplayObject;

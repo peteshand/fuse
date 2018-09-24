@@ -1,9 +1,5 @@
-package fuse.text;
+package fuse.texture;
 
-import openfl.events.FocusEvent;
-import openfl.events.Event;
-import openfl.Lib;
-import mantle.delay.Delay;
 import openfl.display.StageQuality;
 import fuse.texture.BaseTexture;
 import fuse.texture.BitmapTexture;
@@ -16,7 +12,6 @@ import fuse.utils.PowerOfTwo;
 import lime.text.UTF8String;
 import mantle.time.EnterFrame;
 import openfl.display.BitmapData;
-
 import openfl.geom.Rectangle;
 import openfl.text.AntiAliasType;
 import openfl.text.GridFitType;
@@ -30,14 +25,14 @@ import openfl.text.TextLineMetrics;
  * ...
  * @author P.J.Shand
  */
-class TextField extends Image
+class TextFieldTexture extends BitmapTexture
 {
-	static var dirtyItems:GcoArray<TextField>;
+	static var dirtyItems:GcoArray<TextFieldTexture>;
 	
 	static function init():Void
 	{
 		if (dirtyItems != null) return;
-		dirtyItems = new GcoArray<TextField>();
+		dirtyItems = new GcoArray<TextFieldTexture>();
 		EnterFrame.add(updateDirtyTextFields);
 	}
 	
@@ -45,7 +40,7 @@ class TextField extends Image
 	{
 		for (i in 0...dirtyItems.length) 
 		{
-			dirtyItems[i].update();
+			dirtyItems[i].updateText();
 		}
 		dirtyItems.clear();
 	}
@@ -61,6 +56,8 @@ class TextField extends Image
 	var textureWidth:Int;
 	var textureHeight:Int;
 	
+	//@:isVar public var width(default, set):Float;
+	//@:isVar public var height(default, set):Float;
 	public var antiAliasType(get, set):AntiAliasType;
 	public var autoSize(get, set):TextFieldAutoSize;
 	public var background(get, set):Bool;
@@ -95,63 +92,30 @@ class TextField extends Image
 	public var textWidth(get, never):Float;
 	public var type(get, set):TextFieldType;
 	public var wordWrap(get, set):Bool;
-	@:isVar public var directRender(get, set):Bool = false;
+	//@:isVar public var directRender(get, set):Bool = false;
 	
-	var clearColour:Color = 0x00000000;
-	public var baseBmdTexture(get, never):BitmapTexture;
+	//var clearColour:Color = 0x00000000;
+	//public var baseBmdTexture(get, never):BitmapTexture;
 	var initialized:Bool = false;
 	
-	public function new(width:Int, height:Int) 
+	public function new(width:Int, height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
-		TextField.init();
+		TextFieldTexture.init();
 		nativeTextField = new NativeTextField();
-		nativeTextField.addEventListener(Event.CHANGE, onTextChange);
-		nativeTextField.addEventListener(FocusEvent.FOCUS_IN, onFocusIn);
-		nativeTextField.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
 		//nativeTextField.width = width;
 		//nativeTextField.height = height;
 		
 		//bitmapdata = new BitmapData(width, height, true, clearColour);
 		dirtySize = false;
 		
-		super(null);
-		
+		bitmapdata= new BitmapData(width, height, true, clearColour);
+
 		this.width = width;// nativeTextField.width;// = width;
 		this.height = height;// nativeTextField.height;// = height;
+
+		super(bitmapdata, width, height, queUpload, onTextureUploadCompleteCallback);
 		
-		update();
-	}
-
-	function onFocusIn(e:FocusEvent)
-	{
-		trace(e);
-		EnterFrame.add(checkSelection);
-	}
-
-	function onFocusOut(e:FocusEvent)
-	{
-		trace(e);
-		EnterFrame.remove(checkSelection);
-	}
-
-	function checkSelection()
-	{
-		trace([nativeTextField.selectionBeginIndex, nativeTextField.selectionEndIndex]);
-	}
-
-	function onTextChange(e:Event)
-	{
-		trace(e);
-		var hasFocus:Bool = Lib.current.stage.focus == nativeTextField;
-		if (hasFocus) {
-			Lib.current.stage.focus = null;
-		}
-		dirtyProp = true;
-		Delay.nextFrame(() -> { 
-			if (hasFocus) {
-				Lib.current.stage.focus = nativeTextField;
-			}
-		});
+		updateText();
 	}
 	
 	public function appendText(text:String):Void
@@ -212,7 +176,7 @@ class TextField extends Image
 	function get_displayAsPassword():Bool	return nativeTextField.displayAsPassword;
 	function get_embedFonts():Bool			return nativeTextField.embedFonts;
 	function get_gridFitType():GridFitType	return nativeTextField.gridFitType;
-	override function get_height():Float	return nativeTextField.height;
+	//override function get_height():Float	return nativeTextField.height;
 	function get_htmlText():String			return nativeTextField.htmlText;
 	function get_length():Int				return nativeTextField.length;
 	function get_maxChars():Int				return nativeTextField.maxChars;
@@ -234,10 +198,11 @@ class TextField extends Image
 	function get_textHeight():Float			return nativeTextField.textHeight;
 	function get_type():TextFieldType		return nativeTextField.type;
 	function get_wordWrap():Bool			return nativeTextField.wordWrap;
-	override function get_width():Float		return nativeTextField.width;
+	//override function get_width():Float		return nativeTextField.width;
 	
 	function set_antiAliasType(value:AntiAliasType):AntiAliasType
 	{
+		if (nativeTextField.antiAliasType == value) return value;
 		nativeTextField.antiAliasType = value;
 		dirtyProp = true;
 		return value;
@@ -245,6 +210,7 @@ class TextField extends Image
 	
 	function set_autoSize(value:TextFieldAutoSize):TextFieldAutoSize
 	{
+		if (nativeTextField.autoSize == value) return value;
 		nativeTextField.autoSize = value;
 		dirtyProp = true;
 		return value;
@@ -252,6 +218,7 @@ class TextField extends Image
 	
 	function set_background(value:Bool):Bool
 	{
+		if (nativeTextField.background == value) return value;
 		nativeTextField.background = value;
 		dirtyProp = true;
 		return value;
@@ -259,6 +226,7 @@ class TextField extends Image
 	
 	function set_backgroundColor(value:Int):Int
 	{
+		if (nativeTextField.backgroundColor == value) return value;
 		nativeTextField.backgroundColor = value;
 		dirtyProp = true;
 		return value;
@@ -266,6 +234,7 @@ class TextField extends Image
 	
 	function set_border(value:Bool):Bool
 	{
+		if (nativeTextField.border == value) return value;
 		nativeTextField.border = value;
 		dirtyProp = true;
 		return value;
@@ -273,6 +242,7 @@ class TextField extends Image
 	
 	function set_borderColor(value:Int):Int
 	{
+		if (nativeTextField.borderColor == value) return value;
 		nativeTextField.borderColor = value;
 		dirtyProp = true;
 		return value;
@@ -280,6 +250,7 @@ class TextField extends Image
 	
 	function set_defaultTextFormat(value:TextFormat):TextFormat
 	{
+		if (nativeTextField.defaultTextFormat == value) return value;
 		nativeTextField.defaultTextFormat = value;
 		dirtyProp = true;
 		return value;
@@ -287,6 +258,7 @@ class TextField extends Image
 	
 	function set_displayAsPassword(value:Bool):Bool
 	{
+		if (nativeTextField.displayAsPassword == value) return value;
 		nativeTextField.displayAsPassword = value;
 		dirtyProp = true;
 		return value;
@@ -294,6 +266,7 @@ class TextField extends Image
 	
 	function set_embedFonts(value:Bool):Bool
 	{
+		if (nativeTextField.embedFonts == value) return value;
 		nativeTextField.embedFonts = value;
 		dirtyProp = true;
 		return value;
@@ -301,12 +274,13 @@ class TextField extends Image
 	
 	function set_gridFitType(value:GridFitType):GridFitType
 	{
+		if (nativeTextField.gridFitType == value) return value;
 		nativeTextField.gridFitType = value;
 		dirtyProp = true;
 		return value;
 	}
 	
-	private override function set_height(value:Float):Float
+	override function set_height(value:Null<Int>):Null<Int>
 	{
 		super.set_height(value);
 		nativeTextField.height = value;
@@ -316,12 +290,12 @@ class TextField extends Image
 			textureHeight = _textureHeight;
 			dirtySize = true;
 		}
-		dirtyProp = true;
 		return value;
 	}
 	
 	function set_htmlText(value:String):String
 	{
+		if (nativeTextField.htmlText == value) return value;
 		nativeTextField.htmlText = value;
 		dirtyProp = true;
 		return value;
@@ -329,6 +303,7 @@ class TextField extends Image
 	
 	function set_maxChars(value:Int):Int
 	{
+		if (nativeTextField.maxChars == value) return value;
 		nativeTextField.maxChars = value;
 		dirtyProp = true;
 		return value;
@@ -336,6 +311,7 @@ class TextField extends Image
 	
 	function set_mouseWheelEnabled(value:Bool):Bool
 	{
+		if (nativeTextField.mouseWheelEnabled == value) return value;
 		nativeTextField.mouseWheelEnabled = value;
 		dirtyProp = true;
 		return value;
@@ -343,6 +319,7 @@ class TextField extends Image
 	
 	function set_multiline(value:Bool):Bool
 	{
+		if (nativeTextField.multiline == value) return value;
 		nativeTextField.multiline = value;
 		dirtyProp = true;
 		return value;
@@ -350,6 +327,7 @@ class TextField extends Image
 	
 	function set_scrollH(value:Int):Int
 	{
+		if (nativeTextField.scrollH == value) return value;
 		nativeTextField.scrollH = value;
 		dirtyProp = true;
 		return value;
@@ -357,6 +335,7 @@ class TextField extends Image
 	
 	function set_restrict(value:String):String
 	{
+		if (nativeTextField.restrict == value) return value;
 		nativeTextField.restrict = value;
 		dirtyProp = true;
 		return value;
@@ -364,6 +343,7 @@ class TextField extends Image
 	
 	function set_scrollV(value:Int):Int
 	{
+		if (nativeTextField.scrollV == value) return value;
 		nativeTextField.scrollV = value;
 		dirtyProp = true;
 		return value;
@@ -371,6 +351,7 @@ class TextField extends Image
 	
 	function set_selectable(value:Bool):Bool
 	{
+		if (nativeTextField.selectable == value) return value;
 		nativeTextField.selectable = value;
 		dirtyProp = true;
 		return value;
@@ -378,6 +359,7 @@ class TextField extends Image
 	
 	function set_sharpness(value:Float):Float
 	{
+		if (nativeTextField.sharpness == value) return value;
 		nativeTextField.sharpness = value;
 		dirtyProp = true;
 		return value;
@@ -385,6 +367,7 @@ class TextField extends Image
 	
 	function set_text(value:String):String
 	{
+		if (nativeTextField.text == value) return value;
 		nativeTextField.text = value;
 		dirtyProp = true;
 		return value;
@@ -392,6 +375,7 @@ class TextField extends Image
 	
 	function set_textColor(value:Int):Int
 	{
+		if (nativeTextField.textColor == value) return value;
 		nativeTextField.textColor = value;
 		dirtyProp = true;
 		return value;
@@ -399,6 +383,7 @@ class TextField extends Image
 	
 	function set_wordWrap(value:Bool):Bool
 	{
+		if (nativeTextField.wordWrap == value) return value;
 		nativeTextField.wordWrap = value;
 		dirtyProp = true;
 		return value;
@@ -406,12 +391,13 @@ class TextField extends Image
 	
 	function set_type(value:TextFieldType):TextFieldType
 	{
+		if (nativeTextField.type == value) return value;
 		nativeTextField.type = value;
 		dirtyProp = true;
 		return value;
 	}
 	
-	override function set_width(value:Float):Float
+	override function set_width(value:Null<Int>):Null<Int>
 	{
 		super.set_width(value);
 		nativeTextField.width = value;
@@ -423,9 +409,6 @@ class TextField extends Image
 		}
 		
 		
-		//trace("textureWidth: " + textureWidth);
-		
-		dirtyProp = true;
 		return value;
 	}
 	
@@ -456,28 +439,30 @@ class TextField extends Image
 		return value;
 	}
 	
-	public function update():Void
+	public function updateText():Void
 	{
 		if (!initialized || dirtySize == true) {
 			if (bitmapdata != null) bitmapdata.dispose();
+
 			//trace([this.width, this.textureWidth, this.nativeTextField.width]);
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
 			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
 			var textureId:Null<Int> = null;
-			if (texture != null && texture.objectId > 1) {
-				textureId = texture.objectId;
-				texture.dispose();
+			if (this.objectId > 1) {
+				textureId = this.objectId;
+				//texture.dispose();
 			}
 			//trace("create new texture");
-			texture = new BitmapTexture(bitmapdata, false, null, textureId);
-			texture.directRender = directRender;
+			this.update(bitmapdata);
+			//texture = new BitmapTexture(bitmapdata, false, null, textureId);
+			//texture.directRender = directRender;
 			initialized = true;
 		}
 		else if (dirtyProp == true) {
 			//trace("redraw texture");
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
 			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
-			baseBmdTexture.update(bitmapdata);
+			this.update(bitmapdata);
 		}
 		
 		//isStatic = 0;
@@ -487,12 +472,12 @@ class TextField extends Image
 		dirty = false;
 	}
 	
-	function get_baseBmdTexture():BitmapTexture 
+	/*function get_baseBmdTexture():BitmapTexture 
 	{
 		return untyped texture;
-	}
+	}*/
 	
-	function get_directRender():Bool 
+	/*function get_directRender():Bool 
 	{
 		return directRender;
 	}
@@ -501,9 +486,9 @@ class TextField extends Image
 	{
 		if (texture != null) texture.directRender = value;
 		return directRender = value;
-	}
+	}*/
 	
-	override function updateAlignment() 
+	/*override function updateAlignment() 
 	{
 		if (verticalAlign != null) {
 			if (verticalAlign == Align.TOP) pivotY = 0;
@@ -515,11 +500,10 @@ class TextField extends Image
 			if (horizontalAlign == Align.RIGHT) pivotX = textWidth;
 			if (horizontalAlign == Align.CENTER) pivotX = textWidth / 2;
 		}
-	}
+	}*/
 	
 	override public function dispose():Void
 	{
 		super.dispose();
-		texture.dispose();
 	}
 }

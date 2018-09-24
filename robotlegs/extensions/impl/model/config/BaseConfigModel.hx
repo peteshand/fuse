@@ -13,7 +13,7 @@ import robotlegs.extensions.impl.utils.config.ConfigUtil;
 import org.swiftsuspenders.utils.DescribedType;
 
 #if !html5
-import mantle.util.fs.File;
+import mantle.filesystem.File;
 #end
 
 /**

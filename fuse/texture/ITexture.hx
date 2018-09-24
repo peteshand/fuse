@@ -19,8 +19,8 @@ interface ITexture
 	var directRender(get, set):Bool;
 	var objectId:ObjectId;
 	//var textureId:TextureId;
-	var width:Null<Int>;
-	var height:Null<Int>;
+	@:isVar var width(default, set):Null<Int>;
+	@:isVar var height(default, set):Null<Int>;
 	var onUpdate:Signal0;
 	var clearColour:Color;
 	var _clear:Bool;

@@ -21,7 +21,8 @@ import openfl.display.Loader as NativeLoader;
 class Loader extends EventDispatcher implements ILoader
 {
 	var loader:NativeLoader;
-	
+	public var loading:Bool = false;
+
 	#if air
 		var loaderContext:LoaderContext;
 	#end
@@ -46,11 +47,13 @@ class Loader extends EventDispatcher implements ILoader
 	private function OnError(e:IOErrorEvent):Void 
 	{
 		trace(e + ", " + currentURL);
+		loading = false;
 		//dispatchEvent(e);
 	}
 	
 	public function load(url:String):Void
 	{
+		loading = true;
 		currentURL = url;
 	}
 	
@@ -59,8 +62,7 @@ class Loader extends EventDispatcher implements ILoader
 		var loaderInfo:LoaderInfo = cast (e.target, LoaderInfo);
 		var content:Bitmap = cast (loaderInfo.content, Bitmap);
 		bitmapData = content.bitmapData;
-		//bitmapData = new BitmapData(content.bitmapData.width, content.bitmapData.height, true, 0x00000000);
-		//bitmapData.draw(content.bitmapData);
+		loading = false;
 		dispatchEvent(e);
 	}
 }

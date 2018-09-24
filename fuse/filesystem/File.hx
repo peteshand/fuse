@@ -1,4 +1,4 @@
-package fuse.filesystem;
+package mantle.filesystem;
 
 import fuse.info.PlatformInfo;
 import openfl.net.FileFilter;

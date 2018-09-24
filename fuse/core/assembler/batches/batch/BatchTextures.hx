@@ -58,49 +58,49 @@ class BatchTextures
 	
 	inline function get_textureId1():Int 
 	{
-		if (textureIds.length <= 0) return 0;
-		return textureIds[0];
+		if (textureIds.length > 0) return textureIds[0];
+		return 0;
 	}
 	
 	inline function get_textureId2():Int 
 	{
-		if (textureIds.length <= 1) return 0;
-		return textureIds[1];
+		if (textureIds.length > 1) return textureIds[1];
+		return 0;
 	}
 	
 	inline function get_textureId3():Int 
 	{
-		if (textureIds.length <= 2) return 0;
-		return textureIds[2];
+		if (textureIds.length > 2) return textureIds[2];
+		return 0;
 	}
 	
 	inline function get_textureId4():Int 
 	{
-		if (textureIds.length <= 3) return 0;
-		return textureIds[3];
+		if (textureIds.length > 3) return textureIds[3];
+		return 0;
 	}
 	
 	inline function get_textureId5():Int 
 	{
-		if (textureIds.length <= 4) return 0;
-		return textureIds[4];
+		if (textureIds.length > 4) return textureIds[4];
+		return 0;
 	}
 	
 	inline function get_textureId6():Int 
 	{
-		if (textureIds.length <= 5) return 0;
-		return textureIds[5];
+		if (textureIds.length > 5) return textureIds[5];
+		return 0;
 	}
 	
 	inline function get_textureId7():Int 
 	{
-		if (textureIds.length <= 6) return 0;
-		return textureIds[6];
+		if (textureIds.length > 6) return textureIds[6];
+		return 0;
 	}
 	
 	inline function get_textureId8():Int 
 	{
-		if (textureIds.length <= 7) return 0;
-		return textureIds[7];
+		if (textureIds.length > 7) return textureIds[7];
+		return 0;
 	}
 }

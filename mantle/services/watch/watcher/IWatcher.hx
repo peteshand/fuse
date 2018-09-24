@@ -1,5 +1,5 @@
 package mantle.services.watch.watcher;
-import mantle.util.fs.File;
+import mantle.filesystem.File;
 import msignal.Signal.Signal1;
 
 /**

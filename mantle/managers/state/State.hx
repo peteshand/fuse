@@ -3,6 +3,7 @@ package mantle.managers.state;
 import mantle.managers.transition.Transition;
 import mantle.model.scene.SceneModel;
 import mantle.notifier.Notifier;
+import mantle.notifier.BaseNotifier;
 import msignal.Signal.Signal0;
 
 /**

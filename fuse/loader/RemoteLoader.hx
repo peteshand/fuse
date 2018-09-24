@@ -1,6 +1,6 @@
 package fuse.loader;
 
-import flash.net.URLRequest;
+import openfl.net.URLRequest;
 
 /**
  * ...
@@ -8,13 +8,6 @@ import flash.net.URLRequest;
  */
 class RemoteLoader extends Loader
 {
-	public static function init()
-	{
-		//#if (air||flash)
-		//new RemoteLoader().load("");
-		//#end
-	}
-	
 	public function new() 
 	{
 		super();
@@ -22,6 +15,10 @@ class RemoteLoader extends Loader
 	
 	override public function load(url:String):Void
 	{
+		loading = true;
+		if (url == null) {
+			trace("url = " + url);
+		}
 		currentURL = url;
 		#if air
 			loader.load(new URLRequest(url), loaderContext);

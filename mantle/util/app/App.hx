@@ -1,4 +1,5 @@
 package mantle.util.app;
+import haxe.Json;
 import mantle.notifier.Notifier;
 import mantle.util.app.AppExit.ExitContinue;
 
@@ -176,10 +177,12 @@ class App
 	
 	static private function checkManifest() 
 	{
+		trace("checkManifest");
 		if (appId != null) return;
-		
+		trace("checkManifest1");
 		
 		#if air
+		trace("checkManifest2");
 		var appXml:Xml = Xml.parse(flash.desktop.NativeApplication.nativeApplication.applicationDescriptor.toXMLString());
 		var idNode = appXml.firstChild().elementsNamed("id");
 		while(idNode.hasNext()){
@@ -198,13 +201,16 @@ class App
 		}
 		
 		#elseif openfl
+		trace("checkManifest3");
 			var stage:Stage = Lib.current.stage;
 			if (stage == null || stage.window == null) return;
 			
-			//appId = stage.window.application.config.packageName;
-			//appFilename = stage.window.application.config.name;
-			//version = stage.window.application.config.version;
+			
+			appId = stage.window.application.meta.get("packageName");
+			appFilename = stage.window.application.meta.get("name");
+			version = stage.window.application.meta.get("build");
+			trace([appId, appFilename, version]);
 		#end
-		
+		trace("checkManifest4");
 	}
 }

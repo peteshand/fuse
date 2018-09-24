@@ -1,6 +1,6 @@
 package mantle.notifier;
 
-import mantle.util.fs.DocStore;
+import mantle.filesystem.DocStore;
 import mantle.time.EnterFrame;
 import haxe.ds.ObjectMap;
 import msignal.Signal.Signal1;

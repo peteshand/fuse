@@ -41,7 +41,7 @@ class ATFTexture extends BaseTexture
 	
 	override public function upload() 
 	{
-		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(p2Width, p2Height, Context3DTextureFormat.BGRA, false);
+		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(textureData.p2Width, textureData.p2Height, Context3DTextureFormat.BGRA, false);
 		//createNativeTexture();
 		update(data);
 	}
@@ -81,7 +81,7 @@ class ATFTexture extends BaseTexture
 		nativeTexture.removeEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
 		
 		textureData.placed = 0;
-		Textures.registerTexture(textureId, this);
+		Textures.registerTexture(objectId, this);
 		textureData.textureAvailable = 1;
 		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		onUpload.dispatch();

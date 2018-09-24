@@ -65,9 +65,17 @@ class EnterFrame
 	
 	private static function OnTick():Void
 	{
-		for (i in 0...callbacks.length) 
+		var i = 0;
+		while (i < callbacks.length)
 		{
-			callbacks[i]();
+			var callback = callbacks[i];
+			if (callback != null) {
+				callback();
+				i++;
+			}
+			else {
+				callbacks.splice(i, 1);
+			}
 		}
 		
 		#if (!openfl)

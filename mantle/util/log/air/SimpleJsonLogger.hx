@@ -1,6 +1,6 @@
 package mantle.util.log.air;
-import mantle.util.fs.FileTools;
-import mantle.util.fs.Files;
+import mantle.filesystem.FileTools;
+import mantle.filesystem.Files;
 import flash.filesystem.File;
 import haxe.crypto.Md5;
 import mantle.util.log.ILogHandler;
