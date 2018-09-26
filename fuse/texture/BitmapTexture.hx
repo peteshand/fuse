@@ -1,5 +1,6 @@
 package fuse.texture;
 
+import fuse.utils.ObjectId;
 import fuse.texture.BaseTexture;
 import fuse.core.front.texture.Textures;
 import openfl.display.BitmapData;
@@ -14,7 +15,7 @@ class BitmapTexture extends BaseTexture
 {
 	var bitmapData:BitmapData;
 	
-	public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null, overTextureId:Null<Int>=null) 
+	public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) 
 	{
 		this.bitmapData = bitmapData;
 		
@@ -24,7 +25,7 @@ class BitmapTexture extends BaseTexture
 		var h:Int = height;
 		if (width == null) h = bitmapData.height;
 		
-		super(w, h, queUpload, onTextureUploadCompleteCallback, true, overTextureId);
+		super(w, h, queUpload, onTextureUploadCompleteCallback, true, _textureId, _objectId);
 	}
 	
 	override public function upload() 
@@ -53,7 +54,7 @@ class BitmapTexture extends BaseTexture
 		nativeTexture.removeEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
 		textureData.changeCount++;
 		textureData.placed = 0;
-		Textures.registerTexture(objectId, this);
+		Textures.registerTexture(textureId, this);
 		textureData.textureAvailable = 1;
 		
 		Fuse.current.conductorData.frontStaticCount = 0;

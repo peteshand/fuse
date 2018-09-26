@@ -44,6 +44,8 @@ abstract Key(Null<Int>) to Null<Int>
 	var X = 88;
 	var Y = 89;
 	var Z = 90;
+	//var LEFT_OS_KEY = 91;
+	//var RIGHT_OS_KEY = 92;
 	var NUMPAD_0 = 96;
 	var NUMPAD_1 = 97;
 	var NUMPAD_2 = 98;

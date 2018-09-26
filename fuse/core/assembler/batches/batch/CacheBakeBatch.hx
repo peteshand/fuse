@@ -23,6 +23,7 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 	
 	override function getTextureIndex(renderable:ICoreRenderable) 
 	{
+		trace("textureId = " + renderable.coreTexture.textureData.atlasData.textureId);
 		return batchTextures.getTextureIndex(renderable.coreTexture.textureData.atlasData.textureId);
 	}
 	

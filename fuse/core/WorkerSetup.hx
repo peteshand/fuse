@@ -1,20 +1,23 @@
 package fuse.core;
-import fuse.core.communication.messageData.StaticData;
-import fuse.core.input.Touch;
-import fuse.utils.GcoArray;
 
-import flash.events.Event;
 import fuse.Fuse;
+import openfl.events.Event;
+import fuse.texture.TextureId;
+import fuse.utils.ObjectId;
+import fuse.display.Stage;
+import fuse.display.DisplayObject;
+import fuse.display.DisplayObjectContainer;
+import fuse.core.input.Touch;
+import fuse.core.front.texture.TextureRef;
+import fuse.core.communication.messageData.StaticData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.info.WorkerInfo;
-import fuse.display.DisplayObject;
 import fuse.core.utils.Pool;
-import fuse.display.DisplayObjectContainer;
-import fuse.display.Stage;
 
 import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.WorkerlessComms;
+import fuse.utils.GcoArray;
 
 #if air
 import fuse.core.communication.WorkerComms;
@@ -160,21 +163,19 @@ class WorkerSetup
 		});
 	}
 	
-	public function addTexture(textureId:Int) 
+	public function addTexture(textureRef:TextureRef) 
 	{
-		send(MessageType.ADD_TEXTURE, textureId);
+		send(MessageType.ADD_TEXTURE, textureRef);
 	}
 
-	public function updateTexture(textureId:Int) 
+	public function updateTexture(objectId:ObjectId) 
 	{
-		send(MessageType.UPDATE_TEXTURE, textureId);
+		send(MessageType.UPDATE_TEXTURE, objectId);
 	}
-
 	
-	
-	public function removeTexture(textureId:Int) 
+	public function removeTexture(objectId:ObjectId) 
 	{
-		send(MessageType.REMOVE_TEXTURE, textureId);
+		send(MessageType.REMOVE_TEXTURE, objectId);
 	}
 	
 	public function setTouchable(displayObject:DisplayObject, value:Bool) 

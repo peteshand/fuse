@@ -1,5 +1,7 @@
 package fuse.core.assembler.atlas.textures;
 
+import fuse.utils.ObjectId;
+import fuse.texture.TextureId;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.backend.texture.CoreTexture;
 import fuse.utils.GcoArray;
@@ -47,17 +49,18 @@ class AtlasTextures
 		}
 		//trace("width = " + coreTexture.textureData.activeData.width);
 		//trace("textureAvailable = " + coreTexture.textureData.textureAvailable);
-		if (!exists(coreTexture.textureId)) {
+		
+		if (!exists(coreTexture.objectId)) {
 			//trace("texture available: " + coreTexture.textureId);
 			textures.push(coreTexture);
 		}
 	}
 	
-	static private function exists(textureId:Int) 
+	static private function exists(objectId:ObjectId) 
 	{
 		for (i in 0...textures.length) 
 		{
-			if (textureId == textures[i].textureId) return true;
+			if (objectId == textures[i].objectId) return true;
 		}
 		return false;
 	}

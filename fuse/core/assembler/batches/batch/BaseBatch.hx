@@ -58,6 +58,7 @@ class BaseBatch
 	
 	public function add(renderable:ICoreRenderable, renderTarget:Int, batchType:BatchType):Bool
 	{
+		//trace("renderTarget = " + renderTarget);
 		var textureIndex:Int = getTextureIndex(renderable);
 		//trace("textureIndex = " + textureIndex);
 		if (textureIndex == -1) return false;
@@ -65,7 +66,7 @@ class BaseBatch
 		
 		if (blendMode != null && blendMode != renderable.blendMode) return false;
 		blendMode = renderable.blendMode;
-
+		
 		if (shaderId != null && shaderId != renderable.shaderId) return false;
 		shaderId = renderable.shaderId;
 		
@@ -84,7 +85,6 @@ class BaseBatch
 	{
 		if (this.renderTarget == renderTarget) return false;
 		if (this.renderTarget != null) return true;
-		
 		this.renderTarget = renderTarget;
 		return false;
 	}

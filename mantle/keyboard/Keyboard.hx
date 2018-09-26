@@ -12,6 +12,7 @@ import openfl.events.KeyboardEvent;
  */
 class Keyboard
 {
+	public static var event:KeyboardEvent;
 	static var pressItems = new Array<KeyboardListener>();
 	static var releaseItems = new Array<KeyboardListener>();
 	
@@ -64,9 +65,14 @@ class Keyboard
 		var i:Int = items.length - 1;
 		while (i >= 0) 
 		{
-			if (items[i].callback == callback) {
-				items[i].dispose();
-				items.splice(i, 1);
+			if (items[i] != null) {
+				if (items[i].callback == callback) {
+					items[i].dispose();
+					items.splice(i, 1);
+				}
+			}
+			else {
+				i--;
 			}
 		}
 	}
@@ -116,6 +122,7 @@ class KeyboardListener
 	public function OnKeyDown(e:KeyboardEvent):Void 
 	{
 		if (pass(key, e.keyCode) && pass(_shift, e.shiftKey) && pass(_ctrl, e.ctrlKey) && pass(_alt, e.altKey)) {
+			Keyboard.event = e;
 			FunctionUtil.dispatch(callback, params);
 		}
 	}
@@ -123,6 +130,7 @@ class KeyboardListener
 	public function OnKeyUp(e:KeyboardEvent):Void 
 	{
 		if (pass(key, e.keyCode) && pass(_shift, e.shiftKey) && pass(_ctrl, e.ctrlKey) && pass(_alt, e.altKey)) {
+			Keyboard.event = e;
 			FunctionUtil.dispatch(callback, params);
 		}
 	}

@@ -81,7 +81,7 @@ class ATFTexture extends BaseTexture
 		nativeTexture.removeEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
 		
 		textureData.placed = 0;
-		Textures.registerTexture(objectId, this);
+		Textures.registerTexture(textureId, this);
 		textureData.textureAvailable = 1;
 		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		onUpload.dispatch();

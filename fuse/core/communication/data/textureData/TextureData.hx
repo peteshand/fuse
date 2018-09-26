@@ -19,7 +19,9 @@ class TextureData
 	public var activeData:TextureSizeData; // points to the active TextureSizeData
 	public var baseData:TextureSizeData; // stores data about the source texture
 	public var atlasData:TextureSizeData; // stores data about the dynamic texture atlas
-
+	
+	public var textureId:TextureId;
+	
 	public var x:Int = 0;
 	public var y:Int = 0;
 	public var width:Int = 1;
@@ -45,14 +47,12 @@ class TextureData
 	public var nativeTexture:Texture;
 	public var textureBase:TextureBase;
 	
-	public function new(objectOffset:Int) 
+	public function new(objectId:ObjectId) 
 	{
-		baseData = { textureId:0, x:0, y:0, width:1, height:1, p2Width:1, p2Height:1, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
-		atlasData = { textureId:0, x:0, y:0, width:1, height:1, p2Width:1, p2Height:1, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
+		baseData = { objectId:objectId, textureId:0, x:0, y:0, width:1, height:1, p2Width:1, p2Height:1, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
+		atlasData = { objectId:objectId, textureId:0, x:0, y:0, width:1, height:1, p2Width:1, p2Height:1, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
 
 		activeData = baseData;
-		baseData.textureId = objectOffset;
-		atlasData.textureId = objectOffset;
 		textureAvailable = 0;
 		//objectId = objectOffset;
 		//atlasTextureId = objectId;

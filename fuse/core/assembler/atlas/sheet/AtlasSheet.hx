@@ -1,5 +1,6 @@
 package fuse.core.assembler.atlas.sheet;
 
+import fuse.texture.TextureId;
 import fuse.core.assembler.atlas.sheet.partition.AtlasPartition;
 import fuse.core.assembler.atlas.sheet.placer.AtlasPartitionPlacer;
 import fuse.core.backend.display.CoreAtlasCopyFrameImage;
@@ -22,8 +23,8 @@ class AtlasSheet
 	var frameCopyPartition:CoreAtlasCopyFrameImage;
 	
 	public var index:Int;
-	public var atlasTextureId(get, null):Int;
-	public var lastFramesAtlasTextureId(get, null):Int;
+	public var atlasTextureId(get, null):TextureId;
+	public var lastFramesAtlasTextureId(get, null):TextureId;
 	
 	var texturesFromLastFrame:Int = 0;
 	public var renderCount:Int = 0;
@@ -82,7 +83,7 @@ class AtlasSheet
 			
 			
 			//trace("partition.lastFramePairPartition = " + partition.lastFramePairPartition);
-			
+			//trace("place: " + coreTexture.objectId + ", " + coreTexture.textureId);
 			successfulPlacement = AtlasPartitionPlacer.place(partition, coreTexture);
 			//trace("i = " + i);
 			if (successfulPlacement)
@@ -154,9 +155,9 @@ class AtlasSheet
 			//textureData.atlasBatchTextureIndex = index;
 			
 			textureData.activeData = textureData.atlasData;
-
+			
 			partition.lastRenderTarget = lastFramesAtlasTextureId;
-			partition.textureId = textureData.baseData.textureId;
+			partition.textureObjectId = textureData.baseData.objectId;
 			partition.coreTexture.updateUVData();
 			
 			AtlasSheets.partitions.push(partition);
@@ -193,12 +194,12 @@ class AtlasSheet
 		//AtlasSheets.partitions.push(frameCopyPartition);
 	//}
 	
-	inline function get_atlasTextureId():Int 
+	inline function get_atlasTextureId():TextureId 
 	{
 		return AtlasSheets.startIndex + (index * 2) + (renderCount % 2);
 	}
 	
-	inline function get_lastFramesAtlasTextureId():Int 
+	inline function get_lastFramesAtlasTextureId():TextureId 
 	{
 		return AtlasSheets.startIndex + (index * 2) + ((renderCount - 1) % 2);
 	}

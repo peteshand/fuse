@@ -6,7 +6,7 @@ import fuse.texture.TextureId;
  * @author P.J.Shand
  */
 
-
+@:keep
 typedef IDisplayData =
 {
 	x:Float,

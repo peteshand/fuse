@@ -82,7 +82,7 @@ class ImageTexture extends BaseTexture
 		
 		textureData.changeCount++;
 		textureData.placed = 0;
-		Textures.registerTexture(objectId, this);
+		Textures.registerTexture(textureId, this);
 		
 		textureData.textureAvailable = 1;
 		

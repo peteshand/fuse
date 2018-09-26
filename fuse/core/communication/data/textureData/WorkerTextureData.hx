@@ -1,5 +1,6 @@
 package fuse.core.communication.data.textureData;
 
+import fuse.texture.TextureId;
 import fuse.Fuse;
 import fuse.core.communication.data.MemoryBlock;
 import openfl.display3D.textures.Texture;
@@ -35,6 +36,7 @@ class WorkerTextureData
 	static inline var ATLAS_BATCH_TEXTURE_INDEX:Int = 36;
 	
 	static inline var CHANGE_COUNT:Int = 38;
+	//static inline var TEXTURE_ID:Int = 40;
 	
 	
 	public static inline var BYTES_PER_ITEM:Int = 40;
@@ -61,6 +63,8 @@ class WorkerTextureData
 	public var activeData:TextureSizeData; // points to the active TextureSizeData
 	public var baseData:TextureSizeData; // stores data about the source texture
 	public var atlasData:TextureSizeData; // stores data about the dynamic texture atlas
+	
+	public var textureId:TextureId;
 
 	public var textureAvailable(get, set):Int;
 	public var placed(get, set):Int;
@@ -74,18 +78,16 @@ class WorkerTextureData
 	public var nativeTexture:Texture;
 	public var textureBase:TextureBase;
 	
-	public function new(objectOffset:Int) 
+	public function new(objectId:ObjectId) 
 	{
-		baseData = { textureId:0, x:0, y:0, width:0, height:0, p2Width:0, p2Height:0, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
-		atlasData = { textureId:0, x:0, y:0, width:0, height:0, p2Width:0, p2Height:0, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
+		baseData = { objectId:objectId, textureId:0, x:0, y:0, width:0, height:0, p2Width:0, p2Height:0, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
+		atlasData = { objectId:objectId, textureId:0, x:0, y:0, width:0, height:0, p2Width:0, p2Height:0, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
 		
 		activeData = baseData;
-		baseData.textureId = objectOffset;
-		atlasData.textureId = objectOffset;
 		textureAvailable = 0;
 
 		//objectId = objectOffset;
-		memoryBlock = Fuse.current.sharedMemory.textureDataPool.createMemoryBlock(WorkerTextureData.BYTES_PER_ITEM, objectOffset);
+		memoryBlock = Fuse.current.sharedMemory.textureDataPool.createMemoryBlock(WorkerTextureData.BYTES_PER_ITEM, objectId);
 		//atlasTextureId = objectId;
 	}
 	
@@ -121,7 +123,9 @@ class WorkerTextureData
 		return memoryBlock.readInt16(CHANGE_COUNT);
 	}
 	
-	
+	/*inline function get_textureId():TextureId { 
+		return new TextureId(memoryBlock.readInt16(TEXTURE_ID));
+	}*/
 	
 	
 	inline function set_x(value:Int):Int { 
@@ -203,6 +207,13 @@ class WorkerTextureData
 		memoryBlock.writeInt16(CHANGE_COUNT, value);
 		return value;
 	}
+
+	/*inline function set_textureId(value:TextureId):TextureId { 
+		baseData.textureId = value;
+		atlasData.textureId = value;
+		memoryBlock.writeInt16(TEXTURE_ID, value);
+		return value;
+	}*/
 	
 	public function toString():String
 	{

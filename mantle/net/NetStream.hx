@@ -2,52 +2,60 @@ package mantle.net;
 
 import mantle.net.LocalFileCheckUtil;
 import openfl.errors.Error;
+import mantle.filesystem.File;
 import openfl.net.NetConnection;
-
+import openfl.net.NetStream as OpenFlNetStream;
 /**
  * ...
  * @author P.J.Shand
  */
-class NetStream extends openfl.net.NetStream
+class NetStream extends OpenFlNetStream
 {
-	
 	public function new(connection:NetConnection, peerID:String=null) 
 	{
 		super(connection, peerID);
 		
 	}
-
+	
 	public function playLocal(url:String):Void
 	{
-		if (url == null) {
-			trace("url = null");
-			return;
-		}
+		if (url == null) return;
 		
-		url = url.split("\n").join("");
-		url = url.split("\t").join("");
-		
-		var localURL:String = LocalFileCheckUtil.localURL(url);
+		var _localURL:String = localURL(url);
 		trace("url = " + url);
-		trace("localURL = " + localURL);
-		if (localURL == null) {
-			trace("localURL = " + localURL);
+		trace("localURL = " + _localURL);
+		if (_localURL == null) {
+			trace("localURL = " + _localURL);
 		}
 		
-		if (localURL != null) {
-			this.play(localURL);
+		if (_localURL != null) {
+			this.play(_localURL);
 		}
 		else {
 			download(url);
 			this.play(url);
 		}
 	}
+
+	public static function localURL(url:String):String
+	{
+		if (url == null) return null;
+		url = url.split("\n").join("");
+		url = url.split("\t").join("");
+		return LocalFileCheckUtil.localURL(url);
+	}
+
+	public static function hasLocalCopy(url:String):Bool
+	{
+		return new File(localURL(url)).exists;
+	}
 	
-	function download(url:String) 
+	public function download(url:String, onComplete:Void -> Void = null) 
 	{
 		if (url == null) {
 			throw new Error("localURL should not be null");
 		}
-		new FileCacher(url);
+		var cacher = new FileCacher(url);
+		if (onComplete != null) cacher.onComplete.add(onComplete);
 	}
 }

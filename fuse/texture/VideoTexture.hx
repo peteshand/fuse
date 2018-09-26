@@ -8,7 +8,7 @@ import fuse.texture.BaseTexture;
 import fuse.core.front.texture.Textures;
 import openfl.events.Event;
 import openfl.events.NetStatusEvent;
-import openfl.net.NetStream;
+import mantle.net.NetStream;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
 import mantle.time.EnterFrame;
 import openfl.display3D.Context3D;
@@ -59,7 +59,7 @@ class VideoTexture extends BaseTexture
 			this.url = url;
 			paused = false;
 			videoMetaData = null;
-			netStream.play(url);
+			netStream.playLocal(url);
 		}
 		
 	}
@@ -149,7 +149,7 @@ class VideoTexture extends BaseTexture
 		EnterFrame.add(onTick);
 
 		textureData.placed = 0;
-		Textures.registerTexture(objectId, this);
+		Textures.registerTexture(textureId, this);
 		textureData.textureAvailable = 1;
 		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		onUpload.dispatch();

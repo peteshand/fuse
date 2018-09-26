@@ -1,6 +1,6 @@
 package fuse.texture;
 
-abstract TextureId(Int) to Int from Int
+abstract TextureId(Int) to Int
 {
     public function new(value:Int)
     {

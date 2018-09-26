@@ -1,5 +1,6 @@
 package fuse.texture;
 
+import fuse.utils.ObjectId;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.data.renderTextureData.IRenderTextureData;
 import fuse.core.communication.data.renderTextureData.IRenderTextureDrawData;
@@ -22,13 +23,13 @@ class RenderTexture extends BaseTexture
 	var renderTextureData:IRenderTextureData;
 	var renderTextureDrawData:IRenderTextureDrawData;
 	
-	public function new(width:Int, height:Int, directRender:Bool=true, overTextureId:Null<Int>=null) 
+	public function new(width:Int, height:Int, directRender:Bool=true, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) 
 	{
 		if (conductorData == null) {
 			conductorData = new WorkerConductorData();
 		}
 		
-		super(width, height, false, null, true, overTextureId);
+		super(width, height, false, null, true, _textureId, _objectId);
 		this.directRender = directRender;
 		
 		renderTextureData = new RenderTextureData(objectId);
@@ -50,7 +51,7 @@ class RenderTexture extends BaseTexture
 		
 		clear();
 		
-		Textures.registerTexture(objectId, this);
+		Textures.registerTexture(textureId, this);
 		textureData.textureAvailable = 1;
 	}
 	

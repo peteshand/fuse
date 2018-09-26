@@ -21,7 +21,7 @@ import fuse.utils.ObjectId;
  */
 @:access(fuse)
 class BaseTexture implements ITexture {
-	static var coreTextures = new Map<Int, BaseTexture>();
+	//static var coreTextures = new Map<TextureId, BaseTexture>();
 
 	//var coreTexture(get, never):BaseTexture;
 
@@ -34,8 +34,10 @@ class BaseTexture implements ITexture {
 	var uploadFromBitmapDataAsync:BitmapData->UInt->Void;
 
 	public var objectId:ObjectId;
-	// public var textureId:TextureId;
+	public var textureId:TextureId;
+	
 	public var textureData:ITextureData;
+	
 	@:isVar public var width(default, set):Null<Int>;
 	@:isVar public var height(default, set):Null<Int>;
 	public var onUpdate = new Signal0();
@@ -53,18 +55,30 @@ class BaseTexture implements ITexture {
 	@:isVar public var scaleU(default, set):Float = 1;
 	@:isVar public var scaleV(default, set):Float = 1;
 
-	public function new(width:Int, height:Int, queUpload:Bool = true, onTextureUploadCompleteCallback:Void->Void = null, p2Texture:Bool = true,
-			overTextureId:Null<Int> = null) {
+	public function new(width:Int, height:Int, queUpload:Bool = true, onTextureUploadCompleteCallback:Void->Void = null, p2Texture:Bool = true, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) {
 		// objectId = BaseTexture.objectIdCount++;
 
-		if (overTextureId == null)
-			this.objectId = BaseTexture.objectIdCount++;
-		else {
-			this.objectId = overTextureId;
-			if (BaseTexture.objectIdCount <= overTextureId) {
-				BaseTexture.objectIdCount = overTextureId + 1;
-			}
+		if (_textureId == null) {
+			this.textureId = BaseTexture.textureIdCount++;
+		} else {
+			this.textureId = _textureId;
+			if (BaseTexture.textureIdCount <= _textureId) BaseTexture.textureIdCount = _textureId + 1;
 		}
+		
+		if (_objectId == null) {
+			this.objectId = BaseTexture.objectIdCount++;
+			//this.textureId = BaseTexture.textureIdCount++;
+		} else {
+			this.objectId = _objectId;
+			//this.textureId = _textureId;
+			if (BaseTexture.objectIdCount <= _objectId) BaseTexture.objectIdCount = _objectId + 1;
+			//if (BaseTexture.textureIdCount <= _textureId) BaseTexture.textureIdCount = _textureId + 1;
+		}
+		
+		//trace([_textureId, _objectId, textureId, objectId]);
+		
+		//if (_textureId != null) textureId = _textureId;
+		//else textureId = BaseTexture.textureIdCount++;
 
 		/*if (overTextureId == null) this.textureId = BaseTexture.textureIdCount++;
 			else {
@@ -81,17 +95,17 @@ class BaseTexture implements ITexture {
 		this.height = height;
 		this.p2Texture = p2Texture;
 		this.onTextureUploadCompleteCallback = onTextureUploadCompleteCallback;
-		textureData = CommsObjGen.getTextureData(objectId);
+		textureData = CommsObjGen.getTextureData(objectId, textureId);
 
 		// setTextureData();
-		Fuse.current.workerSetup.addTexture(objectId);
+		Fuse.current.workerSetup.addTexture( { objectId:objectId, textureId:textureId });
 
 		onUpdate.add(function() {
 			for (image in dependantDisplays.iterator())
 				image.OnTextureUpdate();
 		});
 
-		coreTextures.set(this.objectId, this);
+		//coreTextures.set(this.textureId, this);
 
 		if (queUpload)
 			TextureUploadQue.add(this);
@@ -147,7 +161,7 @@ class BaseTexture implements ITexture {
 			return;
 		}
 		Fuse.current.workerSetup.removeTexture(objectId);
-		Textures.deregisterTexture(objectId, this);
+		Textures.deregisterTexture(textureId, this);
 		textureData.dispose();
 	}
 
@@ -228,5 +242,15 @@ class BaseTexture implements ITexture {
 	function set_height(value:Null<Int>):Null<Int>
 	{
 		return height = value;
+	}
+
+	public function createSubTexture(offsetU:Float, offsetV:Float, scaleU:Float, scaleV:Float):SubTexture
+	{
+		var texture = new SubTexture(width, height, this);
+		texture.offsetU = offsetU;
+		texture.offsetV = offsetV;
+		texture.scaleU = scaleU;
+		texture.scaleV = scaleV;
+		return texture;
 	}
 }

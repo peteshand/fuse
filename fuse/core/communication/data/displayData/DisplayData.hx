@@ -6,7 +6,7 @@ import fuse.utils.ObjectId;
  * ...
  * @author P.J.Shand
  */
-
+@:keep
 class DisplayData
 {
 	public var x:Float = 0;

@@ -1,5 +1,7 @@
 package fuse.core.backend.display;
 
+import fuse.texture.TextureId;
+import fuse.utils.ObjectId;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
@@ -21,7 +23,7 @@ import fuse.core.assembler.batches.batch.BatchType;
 @:access(fuse.texture)
 class CoreImage extends CoreDisplayObject implements ICoreRenderable
 {
-	@:isVar public var textureId(get, set):Int = -1;
+	@:isVar public var textureId(get, set):ObjectId = -1;
 	
 	public var vertexData	:IVertexData;
 	public var coreTexture	:CoreTexture;
@@ -42,7 +44,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public var batchType	:BatchType = null;
 	//var updateUVs			:Bool = false;
 	var renderTarget		:Int = -1;
-	public var sourceTextureId(get, null):Int;
+	public var sourceTextureId(get, null):TextureId;
 	
 	var count:Int = 0;
 	
@@ -108,18 +110,18 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		}
 	}
 	
-	inline function get_textureId():Int { return textureId; }
+	inline function get_textureId():ObjectId { return textureId; }
 	
-	function set_textureId(value:Int):Int {
+	function set_textureId(value:ObjectId):ObjectId {
 		if (textureId != value){
 			textureId = value;
 			if (coreTexture != null && textureId == -1) {
 				coreTexture.removeChangeListener(this);
-				Core.textures.deregister(coreTexture.textureData.baseData.textureId);
+				Core.textures.deregister(coreTexture.textureData.baseData.objectId);
 				coreTexture = null;
 			}
 			
-			if (coreTexture == null || coreTexture.textureData.baseData.textureId != textureId) {
+			if (coreTexture == null || coreTexture.textureData.baseData.objectId != textureId) {
 				coreTexture = Core.textures.register(textureId);
 				if (coreTexture != null) coreTexture.addChangeListener(this);
 			}
@@ -191,7 +193,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		return false;
 	}
 	
-	function get_sourceTextureId():Int 
+	function get_sourceTextureId():TextureId 
 	{
 		return coreTexture.textureId;
 	}

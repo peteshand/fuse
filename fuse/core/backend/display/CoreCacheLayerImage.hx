@@ -14,7 +14,7 @@ class CoreCacheLayerImage extends CoreImage
 		
 		//trace("textureId = " + textureId);
 
-		displayData = new DisplayData( -1);
+		displayData = untyped new DisplayData( -1);
 		displayData.width = Fuse.MAX_TEXTURE_SIZE;
 		displayData.height = Fuse.MAX_TEXTURE_SIZE;
 		displayData.scaleX = 1;

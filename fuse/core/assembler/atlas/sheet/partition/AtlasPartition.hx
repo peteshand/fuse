@@ -1,5 +1,6 @@
 package fuse.core.assembler.atlas.sheet.partition;
 
+import fuse.texture.TextureId;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.backend.Core;
 import fuse.core.backend.texture.CoreTexture;
@@ -27,13 +28,13 @@ class AtlasPartition implements ICoreRenderable
 	public var rightPartition:AtlasPartition;
 	public var bottomPartition:AtlasPartition;
 	//public var textureData:ITextureData;
-	@:isVar public var textureId(get, set):Int = -1;
+	@:isVar public var textureObjectId(get, set):ObjectId = -1;
 	@:isVar public var textureIndex(get, set):Int;
 	public var coreTexture:CoreTexture;
-	public var sourceTextureId(get, null):Int;
+	public var sourceTextureId(get, null):TextureId;
 	
 	public var lastFramePairPartition:AtlasPartition;
-	public var lastRenderTarget:Int;
+	public var lastRenderTarget:TextureId;
 	
 	public function new() { 
 		objectId = objectCount++;
@@ -69,25 +70,28 @@ class AtlasPartition implements ICoreRenderable
 				" height = " + height;
 	}
 	
-	inline function get_textureId():Int { return textureId; }
+	inline function get_textureObjectId():ObjectId { return textureObjectId; }
 	
-	function set_textureId(value:Int):Int { 
-		if (textureId != value){
-			textureId = value;
-			
-			if (coreTexture != null && textureId == -1) {
-				Core.textures.deregister(coreTexture.textureData.baseData.textureId);
+	function set_textureObjectId(value:ObjectId):ObjectId { 
+		if (textureObjectId != value){
+			textureObjectId = value;
+			//trace("textureObjectId = " + textureObjectId);
+			if (coreTexture != null && textureObjectId == -1) {
+				Core.textures.deregister(coreTexture.textureData.baseData.objectId);
 				coreTexture = null;
 			}
 			
-			if (coreTexture == null || coreTexture.textureData.baseData.textureId != textureId) {
-				coreTexture = Core.textures.register(textureId);
+			//trace("coreTexture = " + coreTexture);
+			//trace("coreTexture.textureData.baseData.objectId = " + coreTexture.textureData.baseData.objectId);
+			if (coreTexture == null || coreTexture.textureData.baseData.objectId != textureObjectId) {
+				//trace("register textureId = " + textureObjectId);
+				coreTexture = Core.textures.register(textureObjectId);
 			}
 		}
 		return value;
 	}
 	
-	function get_sourceTextureId():Int 
+	function get_sourceTextureId():TextureId 
 	{
 		//if (AtlasUtils.alreadyPlaced(coreTexture.textureData)) {
 		

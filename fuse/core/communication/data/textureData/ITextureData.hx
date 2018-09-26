@@ -3,6 +3,7 @@ package fuse.core.communication.data.textureData;
 import openfl.display3D.textures.Texture;
 import openfl.display3D.textures.TextureBase;
 import fuse.utils.ObjectId;
+import fuse.texture.TextureId;
 /**
  * @author P.J.Shand
  */
@@ -15,6 +16,8 @@ typedef ITextureData =
 	public var activeData:TextureSizeData; // points to the active TextureSizeData
 	public var baseData:TextureSizeData; // stores data about the source texture
 	public var atlasData:TextureSizeData; // stores data about the dynamic texture atlas
+	
+	public var textureId:TextureId;
 	
 	public var x:Int;					// x position in pixels on underlying texture
 	public var y:Int;					// y position in pixels on underlying texture

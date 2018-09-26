@@ -1,7 +1,7 @@
 package fuse.utils.videoPlayer;
 import openfl.events.NetStatusEvent;
 import openfl.net.NetConnection;
-import openfl.net.NetStream;
+import mantle.net.NetStream;
 
 /**
  * ...
@@ -28,7 +28,7 @@ class VideoPlayer
 	
 	public function play(url:String) 
 	{
-		netStream.play(url);
+		netStream.playLocal(url);
 	}
 	
 	public function stop() 

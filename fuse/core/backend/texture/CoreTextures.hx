@@ -1,15 +1,19 @@
 package fuse.core.backend.texture;
 
+import fuse.utils.ObjectId;
+import fuse.core.front.texture.TextureRef;
+import fuse.texture.TextureId;
 /**
  * ...
  * @author P.J.Shand
  */
 
+@:access(fuse.core.backend.texture.CoreTexture)
 class CoreTextures
 {
 	public static var texturesHaveChanged:Bool = false;
 	
-	var texturesMap = new Map<Int, CoreTexture>();
+	var texturesMap = new Map<TextureId, CoreTexture>();
 	var textures = new Array<CoreTexture>();
 	//var count:Int = 0;
 	
@@ -40,44 +44,44 @@ class CoreTextures
 		//}
 	}
 	
-	public function create(textureId:Int) 
+	public function create(textureRef:TextureRef) 
 	{
-		if (!texturesMap.exists(textureId)) {
-			var texture:CoreTexture = new CoreTexture(textureId);
-			texturesMap.set(textureId, texture);
+		if (!texturesMap.exists(textureRef.objectId)) {
+			var texture:CoreTexture = new CoreTexture(textureRef);
+			texturesMap.set(textureRef.objectId, texture);
 			textures.push(texture);
 		}
 	}
 	
-	public function update(textureId:Int) 
+	public function update(objectId:ObjectId)
 	{
-		var texture:CoreTexture = texturesMap.get(textureId);
+		var texture:CoreTexture = texturesMap.get(objectId);
 		if (texture != null) texture.update();
 	}
 	
-	public function dispose(textureId:Int):Void
+	public function dispose(objectId:ObjectId):Void
 	{
-		if (texturesMap.exists(textureId)) {
+		if (texturesMap.exists(objectId)) {
 			var i:Int = textures.length - 1;
 			while (i >= 0) 
 			{
-				if (textures[i].textureId == textureId) {
+				if (textures[i].objectId == objectId) {
 					textures.splice(i, 1);
 				}
 				i--;
 			}
-			texturesMap.remove(textureId);
+			texturesMap.remove(objectId);
 		}
 	}
 	
-	public function register(textureId:Int):CoreTexture
+	public function register(textureId:ObjectId):CoreTexture
 	{
 		var texture:CoreTexture = texturesMap.get(textureId);
 		if (texture != null) texture.activeCount++;
 		return texture;
 	}
 	
-	public function deregister(textureId:Int) 
+	public function deregister(textureId:ObjectId) 
 	{
 		if (texturesMap.exists(textureId)) {
 			var texture:CoreTexture = texturesMap.get(textureId);

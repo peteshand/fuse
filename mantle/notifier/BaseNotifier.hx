@@ -23,13 +23,14 @@ class BaseNotifier<T> extends Signal0
 	{
 		//change = new Signal0();
 		_value = v;
+		super();
 		if (id != null) {
 			sharedObject = DocStore.getLocal("Notifier_" + id);
 			var localData:Null<T> = untyped Reflect.getProperty(sharedObject.data, "value");
 			if (localData != null) _value = localData;
 			this.add(SaveDataLocally);
 		}
-		super();
+		
 	}
 	function SaveDataLocally() 
 	{

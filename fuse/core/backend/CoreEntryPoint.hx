@@ -1,5 +1,8 @@
 package fuse.core.backend;
 
+import fuse.core.front.texture.TextureRef;
+import fuse.texture.TextureId;
+import fuse.utils.ObjectId;
 import fuse.core.assembler.input.Touchables;
 import fuse.core.communication.messageData.StaticData;
 import fuse.core.communication.messageData.TouchableMsg;
@@ -97,16 +100,16 @@ class CoreEntryPoint {
 		Core.displayList.removeMask(objectId);
 	}
 
-	function OnAddTexture(textureId:Int):Void {
-		Core.textures.create(textureId);
+	function OnAddTexture(textureRef:TextureRef):Void {
+		Core.textures.create(textureRef);
 	}
 
-	function OnUpdateTexture(textureId:Int):Void {
-		Core.textures.update(textureId);
+	function OnUpdateTexture(objectId:ObjectId):Void {
+		Core.textures.update(objectId);
 	}
 
-	private function OnRemoveTexture(textureId:Int):Void {
-		Core.textures.dispose(textureId);
+	private function OnRemoveTexture(objectId:ObjectId):Void {
+		Core.textures.dispose(objectId);
 	}
 
 	private function OnMouseInput(touch:Touch):Void {

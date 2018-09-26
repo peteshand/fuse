@@ -1,5 +1,8 @@
 package fuse.core.backend.texture;
 
+import fuse.core.front.texture.TextureRef;
+import fuse.utils.ObjectId;
+import fuse.texture.TextureId;
 import fuse.core.backend.display.CoreImage;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
@@ -14,7 +17,9 @@ import msignal.Signal.Signal0;
 
 class CoreTexture
 {
-	public var textureId:Int;
+	public var textureId:TextureId;
+	public var objectId:ObjectId;
+	
 	@:isVar public var textureData(get, set):ITextureData;
 	public var activeCount:Int = 0;
 	var textureAvailable:Notifier<Int>;
@@ -40,10 +45,12 @@ class CoreTexture
 	public var onTextureChange = new Signal0();
 	var dependantDisplays = new Map<Int, CoreImage>();
 	
-	public function new(textureId:Int) 
+	public function new(textureRef:TextureRef) 
 	{
-		this.textureId = textureId;
-		textureData = CommsObjGen.getTextureData(textureId);
+		textureId = textureRef.textureId;
+		objectId = textureRef.objectId;
+		
+		textureData = CommsObjGen.getTextureData(objectId, textureId);
 		
 		
 		//copyBaseValues();

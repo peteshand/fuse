@@ -62,7 +62,7 @@ abstract Color(UInt) from Int from UInt to UInt
 		return value;
 	}
 	
-	static public function random(alpha:Null<Int>, red:Null<Int>, green:Null<Int>, blue:Null<Int>):Color
+	static public function random(alpha:Null<Int>=null, red:Null<Int>=null, green:Null<Int>=null, blue:Null<Int>=null):Color
 	{
 		var randomColor:Color = 0x0;
 		if (alpha == null) randomColor.alpha = Math.round(0xFF * Math.random());

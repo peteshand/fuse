@@ -1,5 +1,8 @@
 package fuse.core.communication.data;
 
+import fuse.core.communication.data.textureData.ITextureData;
+import fuse.utils.ObjectId;
+import fuse.texture.TextureId;
 import fuse.core.communication.data.batchData.BatchData;
 import fuse.core.communication.data.batchData.IBatchData;
 import fuse.core.communication.data.batchData.WorkerBatchData;
@@ -70,10 +73,17 @@ class CommsObjGen
 		return rangeDataGen.get(id);
 	}	
 	
-	static public function getTextureData(id:Int) 
+	static public function getTextureData(objectId:ObjectId, textureId:TextureId) 
 	{
 		init();
-		return textureDataGen.get(id);
+		var textureData:ITextureData = textureDataGen.get(objectId);
+		textureData.textureId = textureId;
+		textureData.baseData.textureId = textureId;
+		textureData.atlasData.textureId = textureId;
+		//trace([textureData.textureId, textureData.atlasData.objectId]);
+
+		
+		return textureData;
 	}
 }
 

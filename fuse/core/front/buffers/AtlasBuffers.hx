@@ -46,7 +46,7 @@ class AtlasBuffers
 		if (textureId < startIndex || textureId >= startIndex + numBuffers) return;
 		
 		if (!buffers.exists(textureId)) {
-			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight, true, textureId);
+			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight, true, textureId, textureId);
 			//buffer.red = 0.5;
 			buffers.set(textureId, buffer);
 		}
