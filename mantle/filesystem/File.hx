@@ -75,8 +75,10 @@ import openfl.net.SharedObject;
 #elseif nodejs
 
 import js.node.Fs;
+import js.node.Path;
+import mantle.net.FileReference;
 
-class File
+class File extends FileReference
 {
 	public static var documentsDirectory(get, null):File;
 	public static var applicationDirectory(get, null):File;
@@ -96,10 +98,13 @@ class File
 	public var nativePath(get, never):String;
 	public var exists(get, null):Bool;
 	public var url(get, null):String;
+	public var separator(get, null):String;
+	public var isDirectory(get, never):Bool;
 
 	public function new(path:String="") 
 	{
 		this.path = path;
+		super();
 	}
 
 	public function resolvePath(path:String):File
@@ -126,19 +131,47 @@ class File
 			flag = false;
 		}
 		return flag;
-		
-		/*var stats = Fs.statSync(path);
-		trace("stats = " + stats);
-		if (stats != null) {
-			return true;
-		}
-		return false;*/
 	}
 
 	public function createDirectory():Void
 	{
 		Fs.mkdirSync(path);
 	}
+
+	public function getDirectoryListing():Array<File>
+	{
+		var fileStrs:Array<String> = Fs.readdirSync(path);
+		var files:Array<File> = [];
+		for (i in 0...fileStrs.length) {
+			files.push(new File(path + separator + fileStrs[i]));
+		}
+		return files;
+	}
+
+	
+	function get_isDirectory():Bool 
+	{
+		return Fs.lstatSync(path).isDirectory();
+	}
+
+	override function get_creationDate():Date
+	{
+		var jsDate = Fs.statSync(path).birthtime;
+		return new Date(jsDate.getFullYear(), jsDate.getMonth(), jsDate.getDate(), jsDate.getHours(), jsDate.getMinutes(), jsDate.getSeconds());
+	}
+
+	override function get_modificationDate():Date
+	{
+		var jsDate = Fs.statSync(path).mtime;
+		return new Date(jsDate.getFullYear(), jsDate.getMonth(), jsDate.getDate(), jsDate.getHours(), jsDate.getMinutes(), jsDate.getSeconds());
+	}
+
+	function get_separator():String
+	{
+		return Path.sep;
+	}
+
+	
 }
 
 #elseif (js||flash)

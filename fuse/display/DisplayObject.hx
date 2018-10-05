@@ -54,7 +54,7 @@ class DisplayObject
 	@:isVar public var alpha(get, set):Float = 0;
 	@:isVar public var visible(get, set):Bool = false;
 	@:isVar public var mask(default, set):Image;
-	
+	@:isVar public var renderLayer(default, set):Null<Int>;
 	//@:isVar public var blendMode(get, set):BlendMode;
 	public var displayType:DisplayType = DisplayType.DISPLAY_OBJECT;
 	
@@ -438,6 +438,11 @@ class DisplayObject
 	function set_mask(value:Image):Image 
 	{
 		return value;
+	}
+
+	function set_renderLayer(value:Null<Int>):Null<Int> 
+	{
+		return renderLayer = value;
 	}
 	
 	public function alignPivot(horizontalAlign:Align = Align.CENTER, verticalAlign:Align = Align.CENTER) 

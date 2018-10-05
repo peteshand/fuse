@@ -30,6 +30,8 @@ class Assembler
 	
 	public static function update() 
 	{
+		if (Core.displayList.stage == null) return;
+		
 		if (Fuse.current.conductorData.backIsStatic == 0 || Fuse.current.conductorData.frontStaticCount <= 0) {
 			Fuse.current.conductorData.changeAvailable = 1;
 		}

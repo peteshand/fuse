@@ -116,9 +116,9 @@ class CoreTexture
 		
 		if (this.rotate) {
 			_uvLeft = (activeData.x + (activeData.offsetV * activeData.width)) / p2Width;
-			_uvTop = (activeData.y + (activeData.height * (1 - activeData.scaleU)) + (activeData.offsetU * activeData.height)) / p2Height;
+			_uvTop = (activeData.y + (activeData.height * (1 - activeData.scaleU)) - (activeData.offsetU * activeData.height)) / p2Height;
 			_uvRight = (activeData.x + (activeData.width * activeData.scaleV) + (activeData.offsetV * activeData.width)) / p2Width;
-			_uvBottom = (activeData.y + (activeData.height) + (activeData.offsetU * activeData.height)) / p2Height;
+			_uvBottom = (activeData.y + (activeData.height) - (activeData.offsetU * activeData.height)) / p2Height;
 		} else {
 			_uvLeft = (activeData.x + (activeData.offsetU * activeData.width)) / p2Width;
 			_uvTop = (activeData.y + (activeData.offsetV * activeData.height)) / p2Height;

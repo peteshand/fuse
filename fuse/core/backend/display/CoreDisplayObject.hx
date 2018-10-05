@@ -193,50 +193,7 @@ class CoreDisplayObject
 	
 	public function clear():Void
 	{
-		//objectId = 0;
-		//isStatic = 0;
-		//isMoving = 1;
-		//isRotating = 1;
 		
-		//displayData = null;
-		//
-		//if (displayData != null){
-			//displayData.x = 0;
-			//displayData.y = 0;
-			//displayData.width = 0;
-			//displayData.height = 0;
-			//displayData.pivotX = 0;
-			//displayData.pivotY = 0;
-			//displayData.scaleX = 0;
-			//displayData.scaleY = 0;
-			//displayData.rotation = 0;
-			//displayData.alpha = 0;
-			//displayData.color = 0x0;
-			//displayData.colorTL = 0x0;
-			//displayData.colorTR = 0x0;
-			//displayData.colorBL = 0x0;
-			//displayData.colorBR = 0x0;
-			////displayData.textureId:Int,
-			//displayData.renderLayer = 0;
-			//displayData.visible = 1;
-			//displayData.isStatic = 0;
-			//displayData.isMoving = 1;
-			//displayData.isRotating = 1;
-		//}
-		
-		//parent = null;
-		
-		//quadData.clear();
-		//bounds.clear();
-		//transformData.clear();
-		//
-		//left = 0;
-		//right = 0;
-		//top = 0;
-		//bottom = 0;
-		//
-		//parentNonStatic = false;
-		//alpha = 1;
 	}
 	
 	function get_updateAny():Bool 

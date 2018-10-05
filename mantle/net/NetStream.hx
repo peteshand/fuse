@@ -15,6 +15,7 @@ class NetStream extends OpenFlNetStream
 	{
 		super(connection, peerID);
 		
+		//__video.setAttribute("preload", "auto");
 	}
 	
 	public function playLocal(url:String):Void

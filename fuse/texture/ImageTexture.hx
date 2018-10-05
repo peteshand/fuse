@@ -17,6 +17,9 @@ import openfl.events.Event;
 
 class ImageTexture extends BaseTexture
 {
+	static var imageTextureIds = new Map<String, TextureId>();
+	var masterTextureId:Null<TextureId>;
+	
 	static var loaders = new Map<String, ILoader>();
 	var fileLoader:ILoader;
 	var bitmapData:BitmapData;
@@ -24,17 +27,25 @@ class ImageTexture extends BaseTexture
 	
 	public function new(url:String, ?width:Int, ?height:Int, queUpload:Bool=false, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
-		fileLoader = loaders.get(url);
-		if (fileLoader == null){
+		// TODO: reuse nativeTexture when same url is set
+		//masterTextureId = imageTextureIds.get(url);
+
+		//fileLoader = loaders.get(url);
+		//if (fileLoader == null){
 			fileLoader = new RemoteLoader();
-			loaders.set(url, fileLoader);
-		}
+			//loaders.set(url, fileLoader);
+		//}
 		
 		this.url = url;
 		
-		super(0, 0, queUpload, onTextureUploadCompleteCallback);
+		super(0, 0, queUpload, onTextureUploadCompleteCallback, true, masterTextureId);
 		
-		fileLoader.addEventListener(Event.COMPLETE, OnLoadComplete);
+		if (masterTextureId == null){
+			//trace("no master texture found for " + url + ", setting self as master: " + this.textureId);
+			imageTextureIds.set(url, this.textureId);
+		}
+		
+		fileLoader.addEventListener(Event.COMPLETE, onLoadComplete);
 		fileLoader.addEventListener(IOErrorEvent.IO_ERROR, OnError);
 	}
 	
@@ -45,11 +56,11 @@ class ImageTexture extends BaseTexture
 	
 	override public function upload() 
 	{
-		if (fileLoader.bitmapData != null) OnLoadComplete();
+		if (fileLoader.bitmapData != null) onLoadComplete();
 		else if (fileLoader.loading == false) fileLoader.load(url);
 	}
 
-	private function OnLoadComplete(e:Event=null):Void
+	private function onLoadComplete(e:Event=null):Void
 	{
 		this.bitmapData = fileLoader.bitmapData;
 		this.width = bitmapData.width;

@@ -42,6 +42,12 @@ class FileStream
 		
 		
 	}
+
+	public function readUTF():String
+	{
+		if (openFile == null) return null;
+		return Fs.readFileSync(openFile.nativePath, 'utf8');
+	}
 	
 	public function writeUTFBytes(value:String):String
 	{

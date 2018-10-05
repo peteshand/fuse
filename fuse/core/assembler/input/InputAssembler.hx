@@ -90,7 +90,6 @@ class InputAssemblerObject
 	{
 		if (display == null) return false;
 		if (display.absoluteVis() == false) return false;
-		
 		var triangleSum:Float = getTriangleSum(display, touch);
 		if (triangleSum > display.area + 1) { 
 			// if outside bounds return only if not stage

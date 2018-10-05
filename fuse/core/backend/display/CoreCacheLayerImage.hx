@@ -13,8 +13,8 @@ class CoreCacheLayerImage extends CoreImage
 		super();
 		
 		//trace("textureId = " + textureId);
-
-		displayData = untyped new DisplayData( -1);
+		var d = new DisplayData( -1);
+		displayData = untyped d;
 		displayData.width = Fuse.MAX_TEXTURE_SIZE;
 		displayData.height = Fuse.MAX_TEXTURE_SIZE;
 		displayData.scaleX = 1;

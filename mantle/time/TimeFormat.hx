@@ -25,6 +25,7 @@ class TimeFormat
         var p:Int = milli.length - l;
         if (l > 2) l = 2;
         milli = milli.substr(p, l);
+        if (milli.length == 1) milli = "0" + milli;
         return pad(sec) + ":" + milli;
     }
 

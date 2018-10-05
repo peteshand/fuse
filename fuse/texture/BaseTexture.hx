@@ -75,22 +75,6 @@ class BaseTexture implements ITexture {
 			//if (BaseTexture.textureIdCount <= _textureId) BaseTexture.textureIdCount = _textureId + 1;
 		}
 		
-		//trace([_textureId, _objectId, textureId, objectId]);
-		
-		//if (_textureId != null) textureId = _textureId;
-		//else textureId = BaseTexture.textureIdCount++;
-
-		/*if (overTextureId == null) this.textureId = BaseTexture.textureIdCount++;
-			else {
-				this.textureId = overTextureId;
-				if (BaseTexture.textureIdCount < overTextureId) {
-					BaseTexture.textureIdCount = overTextureId + 1;
-				}
-		}*/
-
-		// if (overTextureId == null) this.textureId = BaseTexture.textureIdCount++;
-		// else this.textureId = overTextureId;
-
 		this.width = width;
 		this.height = height;
 		this.p2Texture = p2Texture;
@@ -111,6 +95,7 @@ class BaseTexture implements ITexture {
 			TextureUploadQue.add(this);
 		else
 			upload();
+		
 	}
 
 	function setTextureData() {

@@ -49,14 +49,14 @@ class Buffers
 			buffers.set(bufferSize, currentBuffer);
 		}
 		
-		if (currentBuffer != lastBuffer) {
+		//if (currentBuffer != lastBuffer) {
 			if (lastBuffer != null) {
 				lastBuffer.deactivate();
 			}
 			if (currentBuffer != null) {
 				currentBuffer.activate();
 			}
-		}
+		//}
 		
 		return currentBuffer;
 	}

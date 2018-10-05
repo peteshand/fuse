@@ -177,40 +177,31 @@ class App
 	
 	static private function checkManifest() 
 	{
-		trace("checkManifest");
 		if (appId != null) return;
-		trace("checkManifest1");
 		
 		#if air
-		trace("checkManifest2");
-		var appXml:Xml = Xml.parse(flash.desktop.NativeApplication.nativeApplication.applicationDescriptor.toXMLString());
-		var idNode = appXml.firstChild().elementsNamed("id");
-		while(idNode.hasNext()){
-			appId = idNode.next().firstChild().nodeValue;
-			break;
-		}
-		var filenameNode = appXml.firstChild().elementsNamed("filename");
-		while(filenameNode.hasNext()){
-			appFilename = filenameNode.next().firstChild().nodeValue;
-			break;
-		}
-		var versionNode = appXml.firstChild().elementsNamed("versionNumber");
-		while(versionNode.hasNext()){
-			version = versionNode.next().firstChild().nodeValue;
-			break;
-		}
-		
+			var appXml:Xml = Xml.parse(flash.desktop.NativeApplication.nativeApplication.applicationDescriptor.toXMLString());
+			var idNode = appXml.firstChild().elementsNamed("id");
+			while(idNode.hasNext()){
+				appId = idNode.next().firstChild().nodeValue;
+				break;
+			}
+			var filenameNode = appXml.firstChild().elementsNamed("filename");
+			while(filenameNode.hasNext()){
+				appFilename = filenameNode.next().firstChild().nodeValue;
+				break;
+			}
+			var versionNode = appXml.firstChild().elementsNamed("versionNumber");
+			while(versionNode.hasNext()){
+				version = versionNode.next().firstChild().nodeValue;
+				break;
+			}
 		#elseif openfl
-		trace("checkManifest3");
 			var stage:Stage = Lib.current.stage;
 			if (stage == null || stage.window == null) return;
-			
-			
 			appId = stage.window.application.meta.get("packageName");
 			appFilename = stage.window.application.meta.get("name");
 			version = stage.window.application.meta.get("build");
-			trace([appId, appFilename, version]);
 		#end
-		trace("checkManifest4");
 	}
 }

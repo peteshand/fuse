@@ -255,4 +255,15 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		}
 		return textureIndex = value;
 	}
+
+	/*override public function absoluteVis():Bool
+	{
+		var _value = super.absoluteVis();
+		if (_value) {
+			if (coreTexture.textureData.textureAvailable == 0) return false;
+			//trace("textureAvailable = " + coreTexture.textureData.textureAvailable);
+		}
+		
+		return _value;
+	}*/
 }

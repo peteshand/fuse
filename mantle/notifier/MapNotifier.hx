@@ -4,7 +4,7 @@ import mantle.filesystem.DocStore;
 import mantle.time.EnterFrame;
 import haxe.ds.ObjectMap;
 import msignal.Signal.Signal1;
-import msignal.Signal.Signal2;
+
 /**
  * ...
  * @author P.J.Shand
@@ -16,7 +16,7 @@ class MapNotifier<T>
 	public var onRemove = new Signal1<Array<T>>();
 	public var onChange = new Signal1<Array<T>>();
 	
-	@:isVar public var allItems(get, null):Array<T>;
+	public var allItems = new Array<T>();
 	public var newItems = new Array<T>();
 	public var removedItems = new Array<T>();
 	public var changedItems = new Array<T>();
@@ -90,6 +90,7 @@ class MapNotifier<T>
 			newItems.push( value );
 		}
 		updateSavedData();
+		updateAllItems();
 	}
 	
 	public function addArray(value:Array<T>)
@@ -106,6 +107,7 @@ class MapNotifier<T>
 			}
 		}
 		updateSavedData();
+		updateAllItems();
 	}
 	
 	public function remove(value:T)
@@ -115,6 +117,7 @@ class MapNotifier<T>
 			removedItems.push( value );
 		}
 		updateSavedData();
+		updateAllItems();
 	}
 	
 	public function removeMany(value:Array<T>)
@@ -127,6 +130,7 @@ class MapNotifier<T>
 			}
 		}
 		updateSavedData();
+		updateAllItems();
 	}
 	
 	function updateSavedData() 
@@ -147,13 +151,12 @@ class MapNotifier<T>
 		removeMany(allItems);
 	}
 	
-	function get_allItems():Array<T> 
+	function updateAllItems():Void
 	{
-		var _allItems = new Array<T>();
+		allItems = new Array<T>();
 		for (item in data.iterator()) 
 		{
-			_allItems.push(item);
+			allItems.push(item);
 		}
-		return _allItems;
 	}
 }

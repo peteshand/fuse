@@ -23,7 +23,7 @@ class Scale9Image extends Sprite
     var uvWidths:Array<Float> = [];
     var uvHeights:Array<Float> = [];
     @:isVar public var texture(default, set):ITexture;
-    @:isVar public var renderLayer(default, set):Int;
+    //@:isVar public var renderLayer(default, set):Int;
 	
     public function new(texture:ITexture, scale9Grid:Rectangle) 
 	{
@@ -211,7 +211,7 @@ class Scale9Image extends Sprite
             image.width = rect.width;
             image.height = rect.height;
             
-            image.texture.offsetU = -uvData.offsetU;
+            image.texture.offsetU = uvData.offsetU;
             image.texture.offsetV = uvData.offsetV;
             image.texture.scaleU = uvData.scaleU;
             image.texture.scaleV = uvData.scaleV;
@@ -234,7 +234,7 @@ class Scale9Image extends Sprite
 
 
 
-    inline function set_renderLayer(value:Int):Int 
+    override function set_renderLayer(value:Null<Int>):Null<Int> 
 	{
 		for (i in 0...images.length) {
             var image:Image = images[i];

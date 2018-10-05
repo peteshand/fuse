@@ -29,8 +29,6 @@ class DisplayObjectContainer extends InteractiveObject
 	{
 		if (children == null) children = [];
 		
-		
-		
 		//if (child.common == null || child.common.data != null){
 			child.setParent(this);
 			
@@ -39,6 +37,9 @@ class DisplayObjectContainer extends InteractiveObject
 			}
 			else {
 				children.push(child);
+			}
+			if (this.renderLayer != null && child.renderLayer == null) {
+				child.renderLayer = this.renderLayer;
 			}
 			
 			//child.drawToBackBuffer();
@@ -114,6 +115,15 @@ class DisplayObjectContainer extends InteractiveObject
 			children[i].mask = value;
 		}
 		return value;
+	}
+
+	override function set_renderLayer(value:Null<Int>):Null<Int> 
+	{
+		for (i in 0...children.length) 
+		{
+			children[i].renderLayer = value;
+		}
+		return renderLayer = value;
 	}
 
 	override public function dispose():Void

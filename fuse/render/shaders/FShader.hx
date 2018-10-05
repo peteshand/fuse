@@ -255,7 +255,7 @@ class FShader
 			
 			/////////////////////////////////////////////////////////////////
 			// Mark from 4 available textures ///////////////////////////////
-			/*if (FShader.ENABLE_MASKS){
+			if (FShader.ENABLE_MASKS){
 				for (j in 0...numTextures) 
 				{
 					agal += "tex ft0, v1.zw, fs" + j + " <2d,clamp,nomip,linear>	\n"; // nearest
@@ -268,7 +268,7 @@ class FShader
 				agal += "add ft2.w, ft2.w, MASK_BASE.1						\n";
 				agal += "min ft2.w, ft2.w, ONE.1							\n";
 				agal += "mul ft1.xyzw, ft1.xyzw, ft2.wwww					\n";
-			}*/
+			}
 			/////////////////////////////////////////////////////////////////
 			/////////////////////////////////////////////////////////////////
 			

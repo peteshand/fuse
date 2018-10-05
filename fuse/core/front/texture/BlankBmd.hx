@@ -15,15 +15,15 @@ class BlankBmd extends BitmapData
 		var _w:Int = 8;
 		var _h:Int = 8;
 		var color:UInt = 0x00000000;
-		//#if debug
+		#if debug
 			_w = 512;
 			_h = 512;
 			color = 0x11f2f2f2;
-		//#end
+		#end
 		
 		super(_w, _h, true, color);
 		
-		//#if debug
+		#if debug
 			var divs:Int = 32;
 			var size:Int = Math.floor(_w / divs);
 			var rect:Rectangle = new Rectangle(0, 0, size, size);
@@ -38,7 +38,7 @@ class BlankBmd extends BitmapData
 					}
 				}
 			}
-		//#end
+		#end
 	}
 	
 }

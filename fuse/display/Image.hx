@@ -15,7 +15,6 @@ import fuse.core.backend.displaylist.DisplayType;
 class Image extends DisplayObject
 {
 	@:isVar public var texture(default, set):ITexture;
-	@:isVar public var renderLayer(default, set):Int;
 	@:isVar public var blendMode(default, set):BlendMode;
 	@:isVar public var bounds(get, never):Rectangle;
 	var shaders:Array<IShader> = [];
@@ -26,8 +25,6 @@ class Image extends DisplayObject
 		displayType = DisplayType.IMAGE;
 		
 		this.texture = texture;
-		
-		renderLayer = 0;
 	}
 
 	function get_bounds():Rectangle
@@ -68,7 +65,7 @@ class Image extends DisplayObject
 		return _bounds;
 	}
 
-	inline function set_renderLayer(value:Int):Int 
+	override function set_renderLayer(value:Null<Int>):Null<Int> 
 	{
 		if (renderLayer != value){
 			displayData.renderLayer = renderLayer = value;

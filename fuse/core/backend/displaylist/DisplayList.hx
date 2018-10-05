@@ -75,7 +75,6 @@ class DisplayList
 		if (parent != null) {
 			parent.addChildAt(display, addAtIndex);
 		}
-		
 		if (objectId == 0) {
 			stage = display;
 		}

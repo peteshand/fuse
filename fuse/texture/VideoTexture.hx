@@ -1,5 +1,6 @@
 package fuse.texture;
 
+import mantle.delay.Delay;
 import openfl.events.Event;
 import openfl.events.VideoTextureEvent;
 import msignal.Signal.Signal0;
@@ -11,91 +12,125 @@ import openfl.events.NetStatusEvent;
 import mantle.net.NetStream;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
 import mantle.time.EnterFrame;
+import mantle.notifier.Notifier;
 import openfl.display3D.Context3D;
 /**
  * ...
  * @author P.J.Shand
  */
 @:access(fuse)
+#if (js && html5)
+@:access(mantle.net.NetStream)
+#end
 class VideoTexture extends BaseTexture
 {
 	public var netStream:NetStream;
 	public var nativeVideoTexture:NativeVideoTexture;
 	public var loop:Bool = false;
 	public var duration:Null<Float>;
-	var url:String;
+	var netConnection:NetConnection;
+
 	public var time(get, null):Float;
+	var url:String;
+	//var url(get, set):String;
 	@:isVar public var onComplete(get, null):Signal0;
 
-	var paused:Bool = false;
+	var paused:Null<Bool> = null;
 	var videoMetaData:VideoMetaData;
+	var playing = new Notifier<Bool>();
+	//var seeking = new Notifier<Bool>(false);
+	var seekTarget:Null<Float>;
+	var autoPlay:Bool;
 
 	public function new(url:String=null) 
 	{
-		trace("supportsVideoTexture = " + Context3D.supportsVideoTexture);
+		//trace("supportsVideoTexture = " + Context3D.supportsVideoTexture);
 
-		var nc:NetConnection = new NetConnection();
-		nc.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
-		nc.connect(null);
-		netStream = new NetStream(nc);
+		netConnection = new NetConnection();
+		netConnection.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
+		netConnection.connect(null);
+		netStream = new NetStream(netConnection);
 		netStream.client = { onMetaData: onMetaData };
 		netStream.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
 		
 		super(512, 512, false, null, false);
 		this.directRender = true;
 
+		/*seeking.add(() -> {
+			if (seeking.value == false && seekTarget != null){
+				seek(seekTarget);
+				textureData.textureAvailable = 1;
+			}
+		});*/
+
 		//if (url != null) play(url);
 	}
 
-	public function play(url:String=null) 
+	public function play(url:String=null, autoPlay:Bool=true) 
 	{
-		trace("play");
-		trace("paused = " + paused);
-		if (paused) {
-			netStream.togglePause();
+		Delay.killDelay(pause);
+
+		this.autoPlay = autoPlay;
+		
+		if (this.url == url) {
+			//trace("resume");
+			netStream.resume();
 		} else {
+			//trace("playLocal");
 			if (url == null && this.url != null) url = this.url;
 			duration = null;
 			this.url = url;
-			paused = false;
+			
 			videoMetaData = null;
 			netStream.playLocal(url);
 		}
-		
+		paused = false;
+		//playing.remove(onPlayingStartAfterSetURL);
+
+		checkAutoPlay();
 	}
 
 	public function stop()
 	{
-		trace("stop");
-		paused = false;
+		//if (paused == false) return;
+		//trace("stop");
+		paused = null;
 		netStream.close();
 	}
 
 	public function pause()
 	{
-		trace("pause");
-		//netStream.togglePause();
+		if (paused == true || paused == null) return;
 		paused = true;
 		netStream.pause();
 	}
 
 	public function seek(offset:Float)
 	{
-		trace("seek");
+		seekTarget = offset;
 		netStream.seek(offset);
 	}
 	
 	private function OnEvent(e:NetStatusEvent):Void 
 	{
 		var info:NetStatusInfo = e.info;
-		trace(info.code);
-		if (textureData != null){
-			trace("textureData.textureAvailable = " + textureData.textureAvailable);
-		}
+		//trace(info.code);
+		//if (textureData != null){
+		//	trace("textureData.textureAvailable = " + textureData.textureAvailable);
+		//}
 		if (info.code == "NetStream.Play.Start") {
 			textureData.textureAvailable = 1;
+			playing.value = true;
+		}
+		if (info.code == "NetStream.Play.Stop") {
+			playing.value = false;
 		}
 
+		if (info.code == "NetStream.Seek.Complete") {
+			//seeking.value = false;
+			//seek(seekTarget);
+		}
+		
 		if (info.code == "NetStream.Buffer.Empty") {
 			//nativeVideoTexture.addEventListener(Event.TEXTURE_READY, function(e:Event) {
 				textureData.textureAvailable = 1;
@@ -109,6 +144,7 @@ class VideoTexture extends BaseTexture
 	
 	public function onMetaData(videoMetaData:VideoMetaData) 
 	{
+		//trace("onMetaData");
 		if (this.videoMetaData != null) return;
 
 		this.videoMetaData = videoMetaData;
@@ -117,6 +153,16 @@ class VideoTexture extends BaseTexture
 		if (this.height == 0) this.height = videoMetaData.height;
 		duration = videoMetaData.duration;
 		setTextureData();
+
+		checkAutoPlay();
+	}
+
+	function checkAutoPlay()
+	{
+		Delay.killDelay(pause);
+		if (!autoPlay && videoMetaData != null) {
+			Delay.byFrames(5, pause);
+		}
 	}
 	
 	override public function upload() 
@@ -140,11 +186,12 @@ class VideoTexture extends BaseTexture
 
 	function onRenderState(event:VideoTextureEvent)
 	{
-		trace(event.status);
+		//trace(event.status);
 	}
 
 	private function renderFrame(e:Event):Void 
 	{
+		//trace("renderFrame");
 		nativeVideoTexture.removeEventListener(Event.TEXTURE_READY, renderFrame);
 		EnterFrame.add(onTick);
 
