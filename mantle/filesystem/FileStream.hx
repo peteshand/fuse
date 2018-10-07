@@ -48,6 +48,15 @@ class FileStream
 		if (openFile == null) return null;
 		return Fs.readFileSync(openFile.nativePath, 'utf8');
 	}
+
+	public function readUTFBytes(size:UInt):String
+	{
+		if (openFile == null) return null;
+		var buffer = Fs.readFileSync(openFile.nativePath, { flag:FsOpenFlag.ReadSync } );
+		return buffer.toString('utf8', 0, size);
+	}
+
+	
 	
 	public function writeUTFBytes(value:String):String
 	{

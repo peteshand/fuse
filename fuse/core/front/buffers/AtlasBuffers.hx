@@ -22,7 +22,7 @@ class AtlasBuffers
 	static var buffers = new Map<Int, RenderTexture>();
 	
 	public static var states:Array<Notifier<Null<Int>>> = [];
-	
+
 	public function new() 
 	{
 		

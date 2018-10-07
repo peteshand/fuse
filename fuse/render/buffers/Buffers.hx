@@ -49,14 +49,18 @@ class Buffers
 			buffers.set(bufferSize, currentBuffer);
 		}
 		
-		//if (currentBuffer != lastBuffer) {
+		var updateEveryFrame:Bool = false;
+		#if html5
+			#if (openfl >= "8.5.0") updateEveryFrame = true; #end
+		#end
+		if (updateEveryFrame || currentBuffer != lastBuffer) {
 			if (lastBuffer != null) {
 				lastBuffer.deactivate();
 			}
 			if (currentBuffer != null) {
 				currentBuffer.activate();
 			}
-		//}
+		}
 		
 		return currentBuffer;
 	}

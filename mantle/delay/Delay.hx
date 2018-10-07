@@ -55,6 +55,7 @@ class Delay
 	
 	public static function killDelay(callback:Function):Void 
 	{
+		Delay.init();
 		var i = delayObjects.length - 1;
 		while (i >= 0) {
 			if (delayObjects[i].callback == callback) {

@@ -1,7 +1,6 @@
 package fuse.texture;
 
 import mantle.delay.Delay;
-import openfl.events.Event;
 import openfl.events.VideoTextureEvent;
 import msignal.Signal.Signal0;
 import openfl.net.NetConnection;
@@ -13,7 +12,6 @@ import mantle.net.NetStream;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
 import mantle.time.EnterFrame;
 import mantle.notifier.Notifier;
-import openfl.display3D.Context3D;
 /**
  * ...
  * @author P.J.Shand
@@ -32,13 +30,11 @@ class VideoTexture extends BaseTexture
 
 	public var time(get, null):Float;
 	var url:String;
-	//var url(get, set):String;
 	@:isVar public var onComplete(get, null):Signal0;
 
 	var paused:Null<Bool> = null;
 	var videoMetaData:VideoMetaData;
 	var playing = new Notifier<Bool>();
-	//var seeking = new Notifier<Bool>(false);
 	var seekTarget:Null<Float>;
 	var autoPlay:Bool;
 
@@ -144,13 +140,14 @@ class VideoTexture extends BaseTexture
 	
 	public function onMetaData(videoMetaData:VideoMetaData) 
 	{
-		//trace("onMetaData");
+		trace("onMetaData");
 		if (this.videoMetaData != null) return;
+		trace(videoMetaData.width);
 
 		this.videoMetaData = videoMetaData;
 		// TODO: need to be able to update width/height in backend texture
-		if (this.width == 0) this.width = videoMetaData.width;
-		if (this.height == 0) this.height = videoMetaData.height;
+		/*if (this.width == 0)*/ this.width = videoMetaData.width;
+		/*if (this.height == 0)*/ this.height = videoMetaData.height;
 		duration = videoMetaData.duration;
 		setTextureData();
 

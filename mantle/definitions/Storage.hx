@@ -29,7 +29,6 @@ class Storage
 		appId = App.getAppId();
 
 		//#if air
-		trace("app id = " + App.getAppId());
 			configSeedDirectory = File.applicationDirectory.resolvePath("config");
 			
 			storageRootDir = File.documentsDirectory.resolvePath(".appStorage");

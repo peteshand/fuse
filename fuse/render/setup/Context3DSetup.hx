@@ -60,9 +60,7 @@ class Context3DSetup
 	
 	function checkStage3D() 
 	{
-		trace("checkStage3D: stage3D = " + stage3D);
 		if (stage3D == null) {
-			trace("num stage3ds = " + Lib.current.stage.stage3Ds.length);
 			stage3D = Lib.current.stage.stage3Ds[0];
 		}
 		stage3D.addEventListener(Event.CONTEXT3D_CREATE, OnContentCreated);
@@ -83,7 +81,6 @@ class Context3DSetup
 	function createContext() 
 	{
 		if (stage3D.context3D == null) {
-			trace("requestContext3D");
 			try {
 				stage3D.requestContext3D(renderMode, targetProfile);
 			}
@@ -93,7 +90,6 @@ class Context3DSetup
 			}
 		}
 		else {
-			trace("context3D already available");
 			#if air
 				sharedContext = true;
 			#end
@@ -115,7 +111,6 @@ class Context3DSetup
 	private function OnContentCreated(e:Event):Void 
 	{
 		context3D = stage3D.context3D;
-		trace("OnContentCreated: context3D = " + context3D.driverInfo);
 		#if debug
 			context3D.enableErrorChecking = false; // true;
 		#else

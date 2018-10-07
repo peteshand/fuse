@@ -75,30 +75,48 @@ import openfl.net.SharedObject;
 #elseif nodejs
 
 import js.node.Fs;
+import js.node.Os;
 import js.node.Path;
+import js.node.Require;
 import mantle.net.FileReference;
+import electron.WebSource;
 
 class File extends FileReference
 {
-	public static var documentsDirectory(get, null):File;
-	public static var applicationDirectory(get, null):File;
+	@:isVar public static var userDirectory(get, null):File;
+	@:isVar public static var documentsDirectory(get, null):File;
+	@:isVar public static var desktopDirectory(get, null):File;
+	@:isVar public static var applicationDirectory(get, null):File;
+
+	static function get_userDirectory():File 
+	{
+		if (userDirectory == null) userDirectory = new File(Os.homedir());
+		return userDirectory;
+	}
 	
 	static function get_documentsDirectory():File 
 	{
-		return new File('/Users/peteshand/Documents');
+		if (documentsDirectory == null) documentsDirectory = new File(userDirectory.nativePath + Path.sep + 'Documents');
+		return documentsDirectory;
+	}
+	
+	static function get_desktopDirectory():File 
+	{
+		if (desktopDirectory == null) desktopDirectory = new File(userDirectory.nativePath + Path.sep + 'Desktop');
+		return desktopDirectory;
 	}
 	
 	static function get_applicationDirectory():File 
 	{
-		return new File("/Users/peteshand/Projects/GrumpySailor/create-space/create-space/haxe/bin/electron/bin");
+		if (applicationDirectory == null) applicationDirectory = new File(Path.dirname(Require.main.filename));
+		return applicationDirectory;
 	}
-	
 	
 	private var path:String;
 	public var nativePath(get, never):String;
 	public var exists(get, null):Bool;
 	public var url(get, null):String;
-	public var separator(get, null):String;
+	public static var separator(get, null):String;
 	public var isDirectory(get, never):Bool;
 
 	public function new(path:String="") 
@@ -166,9 +184,15 @@ class File extends FileReference
 		return new Date(jsDate.getFullYear(), jsDate.getMonth(), jsDate.getDate(), jsDate.getHours(), jsDate.getMinutes(), jsDate.getSeconds());
 	}
 
-	function get_separator():String
+	static function get_separator():String
 	{
 		return Path.sep;
+	}
+
+	override function get_size():Float
+	{
+		var stats = Fs.statSync(path);
+		return stats.size;
 	}
 
 	

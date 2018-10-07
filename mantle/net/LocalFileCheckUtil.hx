@@ -8,6 +8,8 @@ import mantle.filesystem.File;
  */
 class LocalFileCheckUtil
 {
+	public static var REMOVE_DOMAIN:Bool = true;
+
 	static public function localURL(url:String):String
 	{
 		if (url == null) return null;
@@ -42,7 +44,9 @@ class LocalFileCheckUtil
 		
 		var url2:String = "";
 		var dirs:Array<String> = split[1].split("/");
-		for (i in 0...dirs.length-1) 
+		var startIndex:Int = 0;
+		if (REMOVE_DOMAIN) startIndex = 1;
+		for (i in startIndex...dirs.length-1) 
 		{
 			url2 += dirs[i] + "/";
 			var localDir:File = new File(cacheDir.nativePath + url2);
