@@ -16,6 +16,9 @@ interface IBatch
 	var hasChanged(get, null):Bool;
 	var active(get, null):Bool;
 	
+	var rangeStart:Int;
+	var rangeLength:Int;
+	
 	function init(index:Int):Void;
 	function add(renderable:ICoreRenderable, renderTarget:Int, batchType:BatchType):Bool;
 	function writeVertex():Bool;

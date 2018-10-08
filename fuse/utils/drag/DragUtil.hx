@@ -1,5 +1,5 @@
 package fuse.utils.drag;
-import fuse.core.input.Touch;
+import fuse.input.Touch;
 import fuse.display.DisplayObject;
 import openfl.geom.Point;
 

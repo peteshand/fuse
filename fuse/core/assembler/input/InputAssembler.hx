@@ -1,11 +1,11 @@
 package fuse.core.assembler.input;
 
-import fuse.core.input.TouchType;
+import fuse.input.TouchType;
 import fuse.core.utils.Calc;
 import fuse.display.geometry.Bounds;
 import fuse.core.backend.display.CoreDisplayObject;
 import fuse.core.backend.Core;
-import fuse.core.input.Touch;
+import fuse.input.Touch;
 import fuse.utils.GcoArray;
 import fuse.core.backend.displaylist.DisplayType;
 

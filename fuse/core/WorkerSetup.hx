@@ -7,7 +7,7 @@ import fuse.utils.ObjectId;
 import fuse.display.Stage;
 import fuse.display.DisplayObject;
 import fuse.display.DisplayObjectContainer;
-import fuse.core.input.Touch;
+import fuse.input.Touch;
 import fuse.core.front.texture.TextureRef;
 import fuse.core.communication.messageData.StaticData;
 import fuse.core.communication.memory.SharedMemory;

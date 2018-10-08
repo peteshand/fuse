@@ -132,11 +132,33 @@ class Image extends DisplayObject
 
 	public function addShader(shader:IShader):Void
 	{
+		if (shader == null) return;
 		shaders.push(shader);
+		updateShaderId();
+	}
+
+	public function removeShader(shader:IShader):Void
+	{
+		var index:Int = shaders.indexOf(shader);
+		if (index != -1){
+			shaders.splice(index, 1);
+			updateShaderId();
+		}
+	}
+
+	public function removeAllShader():Void
+	{
+		shaders = [];
+		updateShaderId();
+	}
+
+	function updateShaderId()
+	{
 		var shaderId:Int = 0;
 		for (i in 0...shaders.length) {
 			shaderId += shaders[i].objectId;
 		}
+		trace("CHECK: shaderId = " + shaderId);
 		displayData.shaderId = shaderId;
 	}
 

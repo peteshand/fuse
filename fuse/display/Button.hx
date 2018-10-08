@@ -1,7 +1,7 @@
 package fuse.display;
 
 import fuse.utils.Align;
-import fuse.core.input.Touch;
+import fuse.input.Touch;
 import fuse.texture.ITexture;
 
 class Button extends Sprite

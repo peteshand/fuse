@@ -52,6 +52,9 @@ class BatchRenderer
 		if (conductorData.highestNumTextures == 0) return;
 		if (currentBatchData.numItems == 0) return;
 		
+
+		var buffer:Buffer = Buffers.getBuffer(currentBatchData.numItems);
+
 		//trace("numItems = " + currentBatchData.numItems);
 		
 		//trace("startIndex = " + currentBatchData.startIndex);

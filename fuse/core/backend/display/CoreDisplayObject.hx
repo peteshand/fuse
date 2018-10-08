@@ -1,7 +1,7 @@
 package fuse.core.backend.display;
 
-import fuse.core.input.TouchType;
-import fuse.core.input.Touch;
+import fuse.input.TouchType;
+import fuse.input.Touch;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.utils.ObjectId;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;

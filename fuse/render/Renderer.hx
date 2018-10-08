@@ -114,7 +114,7 @@ class Renderer
 	{
 		BatchRenderer.begin(conductorData);
 		var traceOutput:Bool = false;
-		//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
+		trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
 		//if (conductorData.numberOfBatches > 1){
 			//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
 			//traceOutput = true;

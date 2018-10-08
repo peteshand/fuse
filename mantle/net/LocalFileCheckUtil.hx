@@ -33,7 +33,7 @@ class LocalFileCheckUtil
 	
 	static public function localPath(url:String) 
 	{
-		var cacheDir:File = new File(Storage.appStorageDir.nativePath + "/cache/");
+		var cacheDir:File = new File(Storage.appStorageDir.nativePath + File.separator + "cache" + File.separator);
 		if (!cacheDir.exists) cacheDir.createDirectory();
 
 		var split:Array<String> = url.split("://");
@@ -42,18 +42,18 @@ class LocalFileCheckUtil
 			return url; // already local
 		}
 		
-		var url2:String = "";
+		var url2:String = File.separator;
 		var dirs:Array<String> = split[1].split("/");
 		var startIndex:Int = 0;
 		if (REMOVE_DOMAIN) startIndex = 1;
 		for (i in startIndex...dirs.length-1) 
 		{
-			url2 += dirs[i] + "/";
+			url2 += dirs[i] + File.separator;
 			var localDir:File = new File(cacheDir.nativePath + url2);
 			if (!localDir.exists) localDir.createDirectory();
 		}
 		
 		var path:String = cacheDir.nativePath + url2;
-		return path + "/" + dirs[dirs.length - 1];
+		return path + File.separator + dirs[dirs.length - 1];
 	}
 }

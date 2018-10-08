@@ -7,7 +7,7 @@ import fuse.core.assembler.input.Touchables;
 import fuse.core.communication.messageData.StaticData;
 import fuse.core.communication.messageData.TouchableMsg;
 import fuse.core.communication.messageData.VisibleMsg;
-import fuse.core.input.Touch;
+import fuse.input.Touch;
 import fuse.Fuse;
 import fuse.core.assembler.Assembler;
 import fuse.core.assembler.input.InputAssembler;

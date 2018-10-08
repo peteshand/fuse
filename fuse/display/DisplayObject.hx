@@ -1,10 +1,10 @@
 package fuse.display;
 
-import fuse.core.input.TouchType;
+import fuse.input.TouchType;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.displayData.IDisplayData;
-import fuse.core.input.Touch;
+import fuse.input.Touch;
 import fuse.display.Stage;
 import fuse.utils.Align;
 import fuse.utils.Color;

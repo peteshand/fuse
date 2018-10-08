@@ -1,4 +1,4 @@
-package fuse.core.input;
+package fuse.input;
 
 import fuse.display.DisplayObject;
 /**

@@ -7,6 +7,8 @@ import openfl.events.Event;
 import openfl.events.TouchEvent;
 import openfl.events.MouseEvent;
 import openfl.display.Stage;
+import fuse.input.Touch;
+import fuse.input.TouchType;
 import fuse.core.backend.Core;
 import fuse.core.messenger.MessageID;
 import fuse.core.messenger.Messenger;
