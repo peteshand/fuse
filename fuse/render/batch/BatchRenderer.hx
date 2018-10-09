@@ -8,6 +8,7 @@ import fuse.core.front.buffers.AtlasBuffers;
 import fuse.render.blendMode.Context3DBlendMode;
 import fuse.render.texture.Context3DTexture;
 import fuse.render.buffers.Buffers;
+import fuse.render.buffers.Buffer;
 import fuse.render.debug.RenderDebugUtil;
 import fuse.render.shaders.FShader;
 import fuse.render.shaders.FShaders;
@@ -52,10 +53,11 @@ class BatchRenderer
 		if (conductorData.highestNumTextures == 0) return;
 		if (currentBatchData.numItems == 0) return;
 		
-
-		var buffer:Buffer = Buffers.getBuffer(currentBatchData.numItems);
-
 		//trace("numItems = " + currentBatchData.numItems);
+		
+		var buffer:Buffer = Buffers.getBuffer(currentBatchData.numItems * 2);
+		//buffer.update2();
+		buffer.activate();
 		
 		//trace("startIndex = " + currentBatchData.startIndex);
 		//trace("quadCount = " + quadCount);
@@ -104,13 +106,15 @@ class BatchRenderer
 		//}
 		
 		#if (air||flash)
-			var firstIndex = quadCount * 6;
+			var firstIndex = 0;//quadCount * 6;
 		#else
-			var firstIndex = quadCount * 6 * 2;
+			var firstIndex = 0;//quadCount * 6 * 2;
 		#end
-		Buffers.currentBuffer.drawTriangles(firstIndex, currentBatchData.numItems * 2);
+		buffer.drawTriangles(firstIndex, currentBatchData.numItems * 2);
 		//trace("quadCount = " + quadCount);
 		quadCount += currentBatchData.numItems;
+
+		buffer.deactivate();
 	}
 	
 	public function clear() 

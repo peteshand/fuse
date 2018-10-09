@@ -1,10 +1,12 @@
 package fuse.render.shaders;
-import openfl.display3D.Context3D;
 
+import openfl.display3D.Context3D;
+import fuse.shader.BaseShader;
 /**
  * ...
  * @author P.J.Shand
  */
+ @:access(fuse.shader.BaseShader)
 class FShaders
 {
 	static var context3D:Context3D;
@@ -34,8 +36,8 @@ class FShaders
 	{
 		lastShader = currentShader;
 
-		var id:Int = numTextures + Math.floor(numTextures * shaderId);
-		
+		//trace("BaseShader.idCount = " + BaseShader.idCount);
+		var id:Int = (numTextures * 100000) + shaderId;
 		currentShader = shaders.get(id);
 		
 		if (lastShader != currentShader && lastShader != null) {

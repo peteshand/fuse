@@ -100,8 +100,8 @@ class Renderer
 		
 		if (conductorData.numberOfRenderables == 0) return;
 		
-		Buffers.currentBuffer = Buffers.getBuffer(conductorData.numberOfRenderables);
-		Buffers.currentBuffer.update();
+		//Buffers.currentBuffer = Buffers.getBuffer(conductorData.numberOfRenderables);
+		//Buffers.currentBuffer.update();
 		
 		Context3DRenderTarget.begin();
 		
@@ -114,7 +114,7 @@ class Renderer
 	{
 		BatchRenderer.begin(conductorData);
 		var traceOutput:Bool = false;
-		trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
+		//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
 		//if (conductorData.numberOfBatches > 1){
 			//trace("conductorData.numberOfBatches = " + conductorData.numberOfBatches);
 			//traceOutput = true;

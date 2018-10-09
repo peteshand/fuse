@@ -97,6 +97,7 @@ class VideoTexture extends BaseTexture
 	public function pause()
 	{
 		if (paused == true || paused == null) return;
+		trace("pause");
 		paused = true;
 		netStream.pause();
 	}
@@ -110,7 +111,7 @@ class VideoTexture extends BaseTexture
 	private function OnEvent(e:NetStatusEvent):Void 
 	{
 		var info:NetStatusInfo = e.info;
-		//trace(info.code);
+		trace(info.code);
 		//if (textureData != null){
 		//	trace("textureData.textureAvailable = " + textureData.textureAvailable);
 		//}

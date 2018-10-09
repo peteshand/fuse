@@ -11,18 +11,16 @@ class BaseShader implements IShader
     
     static function getShaders(id:Int):Array<IShader>
     {
-        //trace("id = " + id);
         var shaders:Array<IShader> = [];
 
         var i:Int = registry.length - 1;
         while (i >= 0) {
-            //trace("registry[i].objectId = " + registry[i].objectId);
             if (id >= registry[i].objectId) {
                 shaders.push(registry[i]);
+                id -= registry[i].objectId;
             }
             i--;
         }
-        //trace("shaders.length = " + shaders.length);
         return shaders;
     }
 

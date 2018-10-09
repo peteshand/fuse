@@ -14,6 +14,7 @@ import fuse.core.communication.data.vertexData.VertexData;
 import openfl.utils.ByteArray;
 import openfl.utils.Endian;
 import fuse.utils.ObjectId;
+import fuse.render.batch.BatchRenderer;
 
 /**
  * ...
@@ -129,6 +130,14 @@ class Buffer
 		}
 		#end
 	}
+
+	/*public function update2():Void
+	{
+		if (Fuse.current.conductorData.changeAvailable == 1) {
+			trace("bufferSize = " + bufferSize);
+			updateVertices(0, bufferSize);
+		}
+	}*/
 	
 	inline function updateVertices(start:Int, length:Int) 
 	{
@@ -136,7 +145,7 @@ class Buffer
 		//trace([bufferSize, VertexData.BYTES_PER_ITEM * start, Buffer.VERTICES_PER_QUAD * start, Buffer.VERTICES_PER_QUAD * length]);
 		vertexbuffer.uploadFromByteArray(
 			SharedMemory.memory, 
-			VertexData.BYTES_PER_ITEM * start,
+			VertexData.BYTES_PER_ITEM * (BatchRenderer.quadCount + start),
 			Buffer.VERTICES_PER_QUAD * start, 
 			Buffer.VERTICES_PER_QUAD * length
 		);
