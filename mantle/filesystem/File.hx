@@ -156,6 +156,25 @@ class File extends FileReference
 		Fs.mkdirSync(path);
 	}
 
+	public function deleteDirectory(deleteDirectoryContents:Bool = false):Void
+	{
+		var files:Array<File> = this.getDirectoryListing();
+		if (deleteDirectoryContents){
+			for (i in 0...files.length){
+				if (files[i].isDirectory) files[i].deleteDirectory(true);
+				else files[i].deleteFile();
+			}
+			Fs.rmdirSync(path);
+		} else {
+			if (files.length == 0) Fs.rmdirSync(path);
+		}
+	}
+
+	function deleteFile()
+	{
+		Fs.unlinkSync(path);
+	}
+
 	public function getDirectoryListing():Array<File>
 	{
 		var fileStrs:Array<String> = Fs.readdirSync(path);
