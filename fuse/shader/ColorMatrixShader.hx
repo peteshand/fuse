@@ -26,27 +26,14 @@ class ColorMatrixShader extends BaseShader
         colorMatrixValues = new Vector<Float>();
         var i2:Int = 0;
         for (i in 0...16) {
-            
-            trace("i = " + i);
-            trace("i2 = " + i2);
-            
             colorMatrixValues.push(value.matrix[i2]);
-            trace("i % 4 = " + i % 4);
             if (i % 4 == 3) i2 += 2;
             else i2++;
         }
         for (j in 0...4){
             var j2:Int = 4 + (j * 5);
-            trace("j2 = " + j2);
             colorMatrixValues.push(value.matrix[j2]);
         }
-        
-        //[1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0]
-        //[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0]
-        //[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0]
-        //[1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,0]
-        trace("CHECK: value = " + value);
-        trace("CHECK: colorMatrixValues = " + colorMatrixValues);
         hasChanged = true; 
         return value;
     }
@@ -82,8 +69,6 @@ class ColorMatrixShader extends BaseShader
         }
         agal += "mov ft1.xyzw, ft3.xyzw \n";
         
-        trace("\nagal = \n" + agal);
-
         return agal;
     }
 }
