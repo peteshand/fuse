@@ -1,5 +1,6 @@
 package fuse.render;
 
+import msignal.Signal.Signal0;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.texture.Textures;
@@ -28,12 +29,14 @@ class Renderer
 {
 	//var m:Matrix3D = new Matrix3D();
 	var conductorData:WorkerConductorData;
-	var context3D:Context3D;
+	public var context3D:Context3D;
 	var sharedContext:Bool;
 	var numItemsInBatch:Int;
 	var scissorRectangle:Rectangle;
 	var batchRenderers:Array<BatchRenderer> = [];
 	
+	public var onPresent = new Signal0();
+
 	public function new(context3D:Context3D, sharedContext:Bool) 
 	{
 		this.context3D = context3D;
@@ -157,6 +160,7 @@ class Renderer
 		if (!sharedContext) {
 			// Doesn't execute if context3D.present is being handled externally
 			context3D.present();
+			onPresent.dispatch();
 		}
 	}
 	
