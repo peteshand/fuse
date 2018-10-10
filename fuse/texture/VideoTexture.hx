@@ -97,7 +97,7 @@ class VideoTexture extends BaseTexture
 	public function pause()
 	{
 		if (paused == true || paused == null) return;
-		trace("pause");
+		//trace("pause");
 		paused = true;
 		netStream.pause();
 	}
@@ -111,7 +111,7 @@ class VideoTexture extends BaseTexture
 	private function OnEvent(e:NetStatusEvent):Void 
 	{
 		var info:NetStatusInfo = e.info;
-		trace(info.code);
+		//trace(info.code);
 		//if (textureData != null){
 		//	trace("textureData.textureAvailable = " + textureData.textureAvailable);
 		//}
@@ -141,9 +141,9 @@ class VideoTexture extends BaseTexture
 	
 	public function onMetaData(videoMetaData:VideoMetaData) 
 	{
-		trace("onMetaData");
+		//trace("onMetaData");
 		if (this.videoMetaData != null) return;
-		trace(videoMetaData.width);
+		//trace(videoMetaData.width);
 
 		this.videoMetaData = videoMetaData;
 		// TODO: need to be able to update width/height in backend texture
