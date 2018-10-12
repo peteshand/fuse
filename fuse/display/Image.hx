@@ -69,11 +69,9 @@ class Image extends DisplayObject
 	{
 		if (renderLayer != value){
 			displayData.renderLayer = renderLayer = value;
-			//isStatic = 0;
-			//updateAll = true;
-			updatePosition = true;
-			updateRotation = true;
+			updateVisible = true;
 			updateStaticBackend();
+			Fuse.current.workerSetup.visibleChange(this, this.visible);
 		}
 		return value;
 	}
