@@ -13,11 +13,6 @@ class AtlasPartitionPlacer
 {
 	static var padding:Int = 1;
 	
-	public function new() 
-	{
-		
-	}
-	
 	public static function place(partition:AtlasPartition, coreTexture:CoreTexture):Bool
 	{
 		var textureWidth:Int = coreTexture.textureData.baseData.width;
@@ -33,8 +28,8 @@ class AtlasPartitionPlacer
 			partition.rightPartition = getRightPartition(partition, textureWidth, textureHeight /*coreTexture.textureData*/);
 			partition.bottomPartition = getBottomPartition(partition, textureWidth, textureHeight/*coreTexture.textureData*/);
 			
-			partition.width = textureWidth;//coreTexture.textureData.activeData.width;
-			partition.height = textureHeight;//coreTexture.textureData.activeData.height;
+			partition.width = textureWidth;
+			partition.height = textureHeight;
 			partition.coreTexture = coreTexture;
 			return true;
 		}
@@ -43,64 +38,21 @@ class AtlasPartitionPlacer
 	
 	static function getRightPartition(partition:AtlasPartition, textureWidth:Int, textureHeight:Int /*textureData:ITextureData*/):AtlasPartition
 	{
-		if (textureWidth < partition.width) {
-			/*if (height > width){
-				return new AtlasPartition(
-					partition.x + textureData.width,
-					partition.y,
-					partition.width - textureData.width,
-					textureData.height
-				);
-			}
-			else {*/
-				
-				//return Pool.atlasPartitions2.request().
-				return new AtlasPartition().init(
-					partition.x + textureWidth + padding,
-					partition.y,
-					partition.width - textureWidth - padding,
-					partition.height
-				);
-				
-				/*return new AtlasPartition(0, 
-					partition.x + textureData.width,
-					partition.y,
-					partition.width - textureData.width,
-					partition.height
-				);*/
-			//}
-		}
-		return null;
+		return new AtlasPartition().init(
+			partition.x + textureWidth + padding,
+			partition.y,
+			partition.width - textureWidth - padding,
+			textureHeight
+		);
 	}
 	
 	static function getBottomPartition(partition:AtlasPartition, textureWidth:Int, textureHeight:Int /*textureData:ITextureData*/):AtlasPartition
 	{
-		if (textureHeight < partition.height) {
-			/*if (height > width){
-				return new AtlasPartition(
-					partition.x,
-					partition.y + textureData.height,
-					partition.width,
-					partition.height - textureData.height
-				);
-			}
-			else {*/
-				//return Pool.atlasPartitions2.request().init(
-				return new AtlasPartition().init(
-					partition.x,
-					partition.y + textureHeight + padding,
-					textureWidth,
-					partition.height - textureHeight - padding
-				);
-				
-				/*return new AtlasPartition(0, 
-					partition.x,
-					partition.y + textureData.height,
-					textureData.width,
-					partition.height - textureData.height
-				);*/
-			//}
-		}
-		return null;
+		return new AtlasPartition().init(
+			partition.x,
+			partition.y + textureHeight + padding,
+			partition.width,
+			partition.height - textureHeight - padding
+		);
 	}
 }

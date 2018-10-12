@@ -27,7 +27,6 @@ class AtlasPartition implements ICoreRenderable
 	
 	public var rightPartition:AtlasPartition;
 	public var bottomPartition:AtlasPartition;
-	//public var textureData:ITextureData;
 	@:isVar public var textureObjectId(get, set):ObjectId = -1;
 	@:isVar public var textureIndex(get, set):Int;
 	public var coreTexture:CoreTexture;
@@ -75,16 +74,12 @@ class AtlasPartition implements ICoreRenderable
 	function set_textureObjectId(value:ObjectId):ObjectId { 
 		if (textureObjectId != value){
 			textureObjectId = value;
-			//trace("textureObjectId = " + textureObjectId);
 			if (coreTexture != null && textureObjectId == -1) {
 				Core.textures.deregister(coreTexture.textureData.baseData.objectId);
 				coreTexture = null;
 			}
 			
-			//trace("coreTexture = " + coreTexture);
-			//trace("coreTexture.textureData.baseData.objectId = " + coreTexture.textureData.baseData.objectId);
 			if (coreTexture == null || coreTexture.textureData.baseData.objectId != textureObjectId) {
-				//trace("register textureId = " + textureObjectId);
 				coreTexture = Core.textures.register(textureObjectId);
 			}
 		}
@@ -93,14 +88,10 @@ class AtlasPartition implements ICoreRenderable
 	
 	function get_sourceTextureId():TextureId 
 	{
-		//if (AtlasUtils.alreadyPlaced(coreTexture.textureData)) {
-		
 		if (lastFramePairPartition == null) {
-			//trace("use coreTexture.textureId: " + coreTexture.textureId);
 			return coreTexture.textureId;
 		}
 		else {
-			//trace("use atlas as source: " + lastRenderTarget + ", " + coreTexture.textureId);
 			return lastRenderTarget;
 		}
 	}
