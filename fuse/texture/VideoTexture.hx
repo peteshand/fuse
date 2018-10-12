@@ -29,9 +29,10 @@ class VideoTexture extends BaseTexture
 	var netConnection:NetConnection;
 
 	public var time(get, null):Float;
-	var url:String;
 	@:isVar public var onComplete(get, null):Signal0;
+	public var onMetaData = new Signal0();
 
+	var url:String;
 	var paused:Null<Bool> = null;
 	var videoMetaData:VideoMetaData;
 	var playing = new Notifier<Bool>();
@@ -41,23 +42,16 @@ class VideoTexture extends BaseTexture
 	public function new(url:String=null) 
 	{
 		//trace("supportsVideoTexture = " + Context3D.supportsVideoTexture);
-
 		netConnection = new NetConnection();
 		netConnection.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
 		netConnection.connect(null);
+
 		netStream = new NetStream(netConnection);
-		netStream.client = { onMetaData: onMetaData };
+		netStream.client = { onMetaData: onMetaDataReceived };
 		netStream.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
 		
 		super(512, 512, false, null, false);
 		this.directRender = true;
-
-		/*seeking.add(() -> {
-			if (seeking.value == false && seekTarget != null){
-				seek(seekTarget);
-				textureData.textureAvailable = 1;
-			}
-		});*/
 
 		//if (url != null) play(url);
 	}
@@ -90,6 +84,7 @@ class VideoTexture extends BaseTexture
 	{
 		//if (paused == false) return;
 		//trace("stop");
+		this.url = null;
 		paused = null;
 		netStream.close();
 	}
@@ -139,9 +134,9 @@ class VideoTexture extends BaseTexture
 		}
 	}
 	
-	public function onMetaData(videoMetaData:VideoMetaData) 
+	function onMetaDataReceived(videoMetaData:VideoMetaData) 
 	{
-		//trace("onMetaData");
+		//trace("onMetaDataReceived");
 		if (this.videoMetaData != null) return;
 		//trace(videoMetaData.width);
 
@@ -153,6 +148,7 @@ class VideoTexture extends BaseTexture
 		setTextureData();
 
 		checkAutoPlay();
+		onMetaData.dispatch();
 	}
 
 	function checkAutoPlay()
