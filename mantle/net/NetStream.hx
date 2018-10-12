@@ -1,21 +1,29 @@
 package mantle.net;
 
+#if (electron||air)
+
 import mantle.net.LocalFileCheckUtil;
 import openfl.errors.Error;
 import mantle.filesystem.File;
 import openfl.net.NetConnection;
 import openfl.net.NetStream as OpenFlNetStream;
+
 /**
  * ...
  * @author P.J.Shand
  */
+
 class NetStream extends OpenFlNetStream
 {
 	public function new(connection:NetConnection, peerID:String=null) 
 	{
 		super(connection, peerID);
 		
-		//__video.setAttribute("preload", "auto");
+		#if (js && html5)
+			// DEBUG
+			// js.Browser.document.body.insertBefore(__video, js.Browser.document.body.firstChild);
+			// __video.style.setProperty("width", "200px");
+		#end
 	}
 	
 	public function playLocal(url:String):Void
@@ -36,6 +44,11 @@ class NetStream extends OpenFlNetStream
 			download(url);
 			this.play(url);
 		}
+	}
+
+	override public function close()
+	{
+		super.close();
 	}
 
 	public static function localURL(url:String):String
@@ -60,3 +73,16 @@ class NetStream extends OpenFlNetStream
 		if (onComplete != null) cacher.onComplete.add(onComplete);
 	}
 }
+
+#else
+
+import openfl.net.NetStream as OpenFlNetStream;
+
+class NetStream extends OpenFlNetStream
+{
+	public function playLocal(url:String):Void
+	{
+		this.play(url);
+	}
+}
+#end

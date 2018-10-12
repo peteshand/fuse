@@ -28,23 +28,21 @@ class Storage
 		if (appId != null) return;
 		appId = App.getAppId();
 
-		//#if air
-			configSeedDirectory = File.applicationDirectory.resolvePath("config");
-			
-			storageRootDir = File.documentsDirectory.resolvePath(".appStorage");
-			if (!storageRootDir.exists) storageRootDir.createDirectory();
-			
-			appStorageDir = storageRootDir.resolvePath(appId);
-			if (!appStorageDir.exists) appStorageDir.createDirectory();
-			
-			configDirectory = appStorageDir.resolvePath("config");
-			if (!configDirectory.exists) configDirectory.createDirectory();
-			
-			logDirectory = appStorageDir.resolvePath("log");
-			if (!logDirectory.exists) logDirectory.createDirectory();
-			
-			errorLogDirectory = appStorageDir.resolvePath("errorLog");
-			if (!errorLogDirectory.exists) errorLogDirectory.createDirectory();
-		//#end
+		configSeedDirectory = File.applicationDirectory.resolvePath("config");
+		
+		storageRootDir = File.documentsDirectory.resolvePath(".appStorage");
+		if (!storageRootDir.exists) storageRootDir.createDirectory();
+		
+		appStorageDir = storageRootDir.resolvePath(appId);
+		if (!appStorageDir.exists) appStorageDir.createDirectory();
+		
+		configDirectory = appStorageDir.resolvePath("config");
+		if (!configDirectory.exists) configDirectory.createDirectory();
+		
+		logDirectory = appStorageDir.resolvePath("log");
+		if (!logDirectory.exists) logDirectory.createDirectory();
+		
+		errorLogDirectory = appStorageDir.resolvePath("errorLog");
+		if (!errorLogDirectory.exists) errorLogDirectory.createDirectory();
 	}
 }

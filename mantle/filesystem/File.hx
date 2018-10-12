@@ -217,7 +217,7 @@ class File extends FileReference
 	
 }
 
-#elseif (js||flash)
+#elseif (flash||js)
 	
 	class File
 	{
@@ -230,7 +230,8 @@ class File extends FileReference
 		public var nativePath(get, never):String;
 		public var exists(get, null):Bool;
 		public var url(get, null):String;
-		
+		public static var separator(get, null):String;
+
 		public function new(path:String="") 
 		{
 			this.path = path;
@@ -281,6 +282,12 @@ class File extends FileReference
 				return true;
 			}
 		}
+
+		static function get_separator():String
+		{
+			return "/";
+		}
 	}
-	
+#elseif html5
+
 #end

@@ -44,7 +44,7 @@ class FileCacher
 		if (localPath == "") return;
 		//trace("localPath: " + localPath);
 		
-		this.localFile = new File().resolvePath(localPath);
+		this.localFile = new File(localPath);
 		
 		if (localFile.exists) {
 			onComplete.dispatch();

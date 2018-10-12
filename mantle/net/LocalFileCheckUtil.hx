@@ -36,6 +36,8 @@ class LocalFileCheckUtil
 		var cacheDir:File = new File(Storage.appStorageDir.nativePath + File.separator + "cache" + File.separator);
 		if (!cacheDir.exists) cacheDir.createDirectory();
 
+		if (url.indexOf("://") == -1) return url;
+		
 		var split:Array<String> = url.split("://");
 		if (split.length <= 1) return null;
 		if (split[0] == "file") {

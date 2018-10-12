@@ -1,5 +1,10 @@
 package mantle.net;
 
+#if (html5||air)
+import openfl.display.Loader as OpenFLLoader;
+typedef Loader = OpenFLLoader;
+#else
+
 import openfl.display.BitmapData;
 import openfl.display.Loader as OpenFLLoader;
 import openfl.display.Bitmap;
@@ -97,7 +102,5 @@ class Loader
 		loader = null;
 	}
 }
-
-#if air
 
 #end
