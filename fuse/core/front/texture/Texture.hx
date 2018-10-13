@@ -1,4 +1,4 @@
-package fuse.texture;
+package fuse.core.front.texture;
 
 /**
  * ...

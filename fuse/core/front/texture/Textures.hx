@@ -1,5 +1,7 @@
 package fuse.core.front.texture;
 
+import fuse.core.front.texture.BlankBmd;
+import fuse.texture.DefaultTexture;
 import openfl.Lib;
 import fuse.core.front.buffers.AtlasBuffers;
 import fuse.core.front.buffers.LayerCacheBuffers;
@@ -8,7 +10,7 @@ import openfl.display.BitmapData;
 import openfl.display3D.Context3D;
 import openfl.display3D.textures.TextureBase;
 import openfl.events.Event;
-import fuse.texture.ITexture;
+import fuse.core.front.texture.ITexture;
 /**
  * ...
  * @author P.J.Shand

@@ -1,4 +1,4 @@
-package fuse.texture.atlas;
+package fuse.core.front.texture.atlas;
 
 typedef PhaserData =
 {

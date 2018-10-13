@@ -1,9 +1,9 @@
-package fuse.texture;
+package fuse.core.front.texture;
 import fuse.utils.AtfData;
 import openfl.display3D.Context3DTextureFormat;
 
 import fuse.utils.AtfData.AtfDataInfo;
-import fuse.texture.BaseTexture;
+import fuse.core.front.texture.BaseTexture;
 import fuse.core.front.texture.Textures;
 import openfl.errors.Error;
 import openfl.events.Event;

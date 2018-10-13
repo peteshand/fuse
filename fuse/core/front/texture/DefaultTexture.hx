@@ -1,6 +1,6 @@
 package fuse.core.front.texture;
 
-import fuse.texture.BitmapTexture;
+import fuse.core.front.texture.BitmapTexture;
 import openfl.display.BitmapData;
 
 class DefaultTexture extends BitmapTexture
@@ -11,11 +11,10 @@ class DefaultTexture extends BitmapTexture
 		
 		super(bitmapData, queUpload, onTextureUploadCompleteCallback);
 		
-		this.textureData.offsetU = 1 / bitmapData.width;
-		this.textureData.offsetV = 1 / bitmapData.width;
-		this.textureData.scaleU = (bitmapData.width - 2) / bitmapData.width;
-		this.textureData.scaleV = (bitmapData.height - 2) / bitmapData.height;
-		Fuse.current.workerSetup.updateTexture(objectId);
+		this.offsetU = 1 / bitmapData.width;
+		this.offsetV = 1 / bitmapData.width;
+		this.scaleU = (bitmapData.width - 2) / bitmapData.width;
+		this.scaleV = (bitmapData.height - 2) / bitmapData.height;
 	}
 	
 	override public function dispose():Void

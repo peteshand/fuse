@@ -1,6 +1,8 @@
-package fuse.texture;
+package fuse.core.front.texture;
 
-import fuse.texture.atlas.AtlasData
+import fuse.texture.ITexture;
+import fuse.core.front.texture.SubTexture;
+import fuse.core.front.texture.atlas.AtlasData
 /**
  * ...
  * @author P.J.Shand

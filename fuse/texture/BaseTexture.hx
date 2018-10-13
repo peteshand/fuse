@@ -1,241 +1,83 @@
 package fuse.texture;
 
-import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.core.front.texture.upload.TextureUploadQue;
-import fuse.core.front.texture.Textures;
-import fuse.display.Image;
+import fuse.core.front.texture.ITexture as FrontITexture;
+import fuse.utils.ObjectId;
+import fuse.texture.TextureId;
 import msignal.Signal.Signal0;
-import fuse.texture.ITexture;
+
+import fuse.display.Image;
 import fuse.utils.Color;
-import fuse.utils.PowerOfTwo;
-import openfl.display.BitmapData;
 import openfl.display3D.textures.TextureBase;
 import openfl.display3D.textures.Texture;
-import openfl.display3D.Context3DTextureFormat;
-import fuse.utils.ObjectId;
 
-/**
- * ...
- * @author P.J.Shand
- */
-@:access(fuse)
-class BaseTexture implements ITexture {
-	//static var coreTextures = new Map<TextureId, BaseTexture>();
+@:access(openfl.display3D.textures.TextureBase)
+@:access(fuse.core.front.texture.ITexture)
+class BaseTexture implements ITexture
+{
+    var texture:FrontITexture;
+    public var objectId(get, null):ObjectId;
+	public var textureId(get, null):TextureId;
 
-	//var coreTexture(get, never):BaseTexture;
+    public var onUpdate = new Signal0();
+    public var onUpload = new Signal0();
+    public var width(get, set):Null<Int>;
+	public var height(get, set):Null<Int>;
+    public var offsetU(get, set):Float;
+	public var offsetV(get, set):Float;
+	public var scaleU(get, set):Float;
+	public var scaleV(get, set):Float;
+    public var directRender(get, set):Bool;
 
-	static var objectIdCount:Int = 0;
-	static var textureIdCount:Int = 0;
+    public var textureData(get, set):ITextureData;
+    public var nativeTexture(get, null):Texture;
+    public var textureBase(get, null):TextureBase;
+    public var clearColour(get, set):Color;
+    public var _clear(get, set):Bool;
+    public var _alreadyClear(get, set):Bool;
 
-	var onTextureUploadCompleteCallback:Void->Void;
-	var persistent:Int;
-	var p2Texture:Bool;
-	var uploadFromBitmapDataAsync:BitmapData->UInt->Void;
+    public function new() 
+	{
+        
+    }
 
-	public var objectId:ObjectId;
-	public var textureId:TextureId;
+    function get_objectId():ObjectId                            {   return texture.objectId;                }
+    function get_textureId():TextureId                          {   return texture.textureId;               }
+    
+    function get_width():Null<Int>                              {   return texture.width;                   }
+	function get_height():Null<Int>                             {   return texture.height;                  }
+    function get_offsetU():Float                                {   return texture.offsetU;                 }
+	function get_offsetV():Float                                {   return texture.offsetV;                 }
+    function get_scaleU():Float                                 {   return texture.scaleU;                  }
+	function get_scaleV():Float                                 {   return texture.scaleV;                  }
+    function get_directRender():Bool                            {   return texture.directRender;            }
+    function get_textureData():ITextureData                     {   return texture.textureData;             }
+    function get_nativeTexture():Texture                        {   return texture.nativeTexture;           }
+    function get_textureBase():TextureBase                      {   return texture.textureBase;             }
+    function get_clearColour():Color                            {   return texture.clearColour;             }
+    function get__clear():Bool                                  {   return texture._clear;                  }
+    function get__alreadyClear():Bool                           {   return texture._alreadyClear;           }
+    
+    function set_width(value:Null<Int>):Null<Int>               {   return texture.width = value;           }
+	function set_height(value:Null<Int>):Null<Int>              {   return texture.height = value;          }
+    function set_offsetU(value:Float):Float                     {   return texture.offsetU = value;         }
+	function set_offsetV(value:Float):Float                     {   return texture.offsetV = value;         }
+    function set_scaleU(value:Float):Float                      {   return texture.scaleU = value;          }
+	function set_scaleV(value:Float):Float                      {   return texture.scaleV = value;          }
+	function set_directRender(value:Bool):Bool                  {   return texture.directRender = value;    }
+    function set_textureData(value:ITextureData):ITextureData   {   return texture.textureData = value;     }
+	function set_clearColour(value:Color):Color                 {   return texture.clearColour = value;     }
+	function set__clear(value:Bool):Bool                        {   return texture._clear = value;          }
+	function set__alreadyClear(value:Bool):Bool                 {   return texture._alreadyClear = value;   }
 	
-	public var textureData:ITextureData;
+    public function upload():Void                               {   texture.upload();                       }
+	public function dispose():Void                              {   texture.dispose();                      }
+	public function addChangeListener(image:Image):Void         {   texture.addChangeListener(image);       }
+	public function removeChangeListener(image:Image):Void      {   texture.removeChangeListener(image);    }
+	public function setTextureData():Void                       {   texture.setTextureData();               }
 	
-	@:isVar public var width(default, set):Null<Int>;
-	@:isVar public var height(default, set):Null<Int>;
-	public var onUpdate = new Signal0();
-	public var onUpload = new Signal0();
-	public var nativeTexture(get, null):Texture;
-	public var textureBase(get, null):TextureBase;
-	public var dependantDisplays = new Map<Int, Image>();
-	public var clearColour:Color = 0;
-	public var _clear:Bool = false;
-	public var _alreadyClear:Bool = false;
-	@:isVar public var directRender(get, set):Bool = false;
-
-	@:isVar public var offsetU(default, set):Float = 0;
-	@:isVar public var offsetV(default, set):Float = 0;
-	@:isVar public var scaleU(default, set):Float = 1;
-	@:isVar public var scaleV(default, set):Float = 1;
-
-	public function new(width:Int, height:Int, queUpload:Bool = true, onTextureUploadCompleteCallback:Void->Void = null, p2Texture:Bool = true, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) {
-		// objectId = BaseTexture.objectIdCount++;
-
-		if (_textureId == null) {
-			this.textureId = BaseTexture.textureIdCount++;
-		} else {
-			this.textureId = _textureId;
-			if (BaseTexture.textureIdCount <= _textureId) BaseTexture.textureIdCount = _textureId + 1;
-		}
-		
-		if (_objectId == null) {
-			this.objectId = BaseTexture.objectIdCount++;
-			//this.textureId = BaseTexture.textureIdCount++;
-		} else {
-			this.objectId = _objectId;
-			//this.textureId = _textureId;
-			if (BaseTexture.objectIdCount <= _objectId) BaseTexture.objectIdCount = _objectId + 1;
-			//if (BaseTexture.textureIdCount <= _textureId) BaseTexture.textureIdCount = _textureId + 1;
-		}
-		
-		this.width = width;
-		this.height = height;
-		this.p2Texture = p2Texture;
-		this.onTextureUploadCompleteCallback = onTextureUploadCompleteCallback;
-		textureData = CommsObjGen.getTextureData(objectId, textureId);
-
-		// setTextureData();
-		Fuse.current.workerSetup.addTexture( { objectId:objectId, textureId:textureId });
-
-		onUpdate.add(function() {
-			for (image in dependantDisplays.iterator())
-				image.OnTextureUpdate();
-		});
-
-		//coreTextures.set(this.textureId, this);
-
-		if (queUpload)
-			TextureUploadQue.add(this);
-		else
-			upload();
-		
-	}
-
-	function setTextureData() {
-		textureData.x = 0;
-		textureData.y = 0;
-		textureData.width = width;
-		textureData.height = height;
-
-		if (p2Texture) {
-			textureData.p2Width = PowerOfTwo.getNextPowerOfTwo(width);
-			textureData.p2Height = PowerOfTwo.getNextPowerOfTwo(height);
-		} else {
-			textureData.p2Width = width;
-			textureData.p2Height = height;
-		}
-		
-		textureData.offsetU = offsetU;
-		textureData.offsetV = offsetV;
-		textureData.scaleU = scaleU;
-		textureData.scaleV = scaleV;
-
-		textureData.textureAvailable = 0;
-		textureData.persistent = persistent;
-		Fuse.current.workerSetup.updateTexture(objectId);
-		onUpdate.dispatch();
-	}
-
-	public function createNativeTexture() {
-		setTextureData();
-		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(textureData.p2Width, textureData.p2Height, Context3DTextureFormat.BGRA, false, 0);
-		#if air
-		try {
-			uploadFromBitmapDataAsync = untyped textureData.nativeTexture["uploadFromBitmapDataAsync"];
-		} catch (e:Dynamic) {}
-		#else
-		uploadFromBitmapDataAsync = Reflect.getProperty(textureData.nativeTexture, "uploadFromBitmapDataAsync");
-		#end
-		return textureData.textureBase;
-	}
-
-	public function upload() {
-		throw "This function should be overriden";
-	}
-
-	public function dispose():Void {
-		if (objectId <= 1) {
-			// Can't dispose default textures
-			return;
-		}
-		Fuse.current.workerSetup.removeTexture(objectId);
-		Textures.deregisterTexture(textureId, this);
-		textureData.dispose();
-	}
-
-	function set_directRender(value:Bool):Bool {
-		if (directRender == value)
-			return value;
-		directRender = value;
-		if (directRender)
-			textureData.directRender = 1;
-		else
-			textureData.directRender = 0;
-		return directRender;
-	}
-
-	function get_textureBase():TextureBase {
-		return textureData.textureBase;
-	}
-
-	function get_directRender():Bool {
-		return directRender;
-	}
-
-	function get_nativeTexture():Texture {
-		return textureData.nativeTexture;
-	}
-
-	/*function get_coreTexture():BaseTexture {
-		return coreTextures.get(objectId);
-	}*/
-
-	public function addChangeListener(image:Image) {
-		//coreTexture.dependantDisplays.set(image.objectId, image);
-		dependantDisplays.set(image.objectId, image);
-	}
-
-	public function removeChangeListener(image:Image) {
-		//coreTexture.dependantDisplays.remove(image.objectId);
-		dependantDisplays.remove(image.objectId);
-	}
-
-	function set_offsetU(value:Float):Float
-	{
-		textureData.offsetU = offsetU = value;
-		Fuse.current.workerSetup.updateTexture(objectId);
-		//textureData.changeCount++;
-		return offsetU;
-	}
-
-	function set_offsetV(value:Float):Float
-	{
-		textureData.offsetV = offsetV = value;
-		Fuse.current.workerSetup.updateTexture(objectId);
-		//textureData.changeCount++;
-		return offsetV;
-	}
-
-	function set_scaleU(value:Float):Float
-	{
-		textureData.scaleU = scaleU = value;
-		Fuse.current.workerSetup.updateTexture(objectId);
-		//textureData.changeCount++;
-		return scaleU;
-	}
-
-	function set_scaleV(value:Float):Float
-	{
-		textureData.scaleV = scaleV = value;
-		Fuse.current.workerSetup.updateTexture(objectId);
-		//textureData.changeCount++;
-		return scaleV;
-	}
-
-	function set_width(value:Null<Int>):Null<Int>
-	{
-		return width = value;
-	}
-
-	function set_height(value:Null<Int>):Null<Int>
-	{
-		return height = value;
-	}
-
-	public function createSubTexture(offsetU:Float, offsetV:Float, scaleU:Float, scaleV:Float):SubTexture
-	{
-		var texture = new SubTexture(width, height, this);
-		texture.offsetU = offsetU;
-		texture.offsetV = offsetV;
-		texture.scaleU = scaleU;
-		texture.scaleV = scaleV;
-		return texture;
-	}
+    public function createSubTexture(offsetU:Float, offsetV:Float, scaleU:Float, scaleV:Float):SubTexture
+    {
+        return new SubTexture(texture.createSubTexture(offsetU, offsetV, scaleU, scaleV));
+    }
 }

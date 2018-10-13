@@ -1,6 +1,6 @@
 package fuse.core.front.texture.upload;
 
-import fuse.texture.ITexture;
+import fuse.core.front.texture.ITexture;
 import fuse.utils.FrameBudget;
 
 /**

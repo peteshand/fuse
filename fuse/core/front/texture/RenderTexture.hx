@@ -1,5 +1,7 @@
-package fuse.texture;
+package fuse.core.front.texture;
 
+import fuse.core.front.texture.BaseTexture;
+import fuse.texture.TextureId;
 import fuse.utils.ObjectId;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.data.renderTextureData.IRenderTextureData;

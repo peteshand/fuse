@@ -1,8 +1,8 @@
 package fuse.core.front.buffers;
 
 import fuse.core.communication.data.conductorData.WorkerConductorData;
-import fuse.texture.BaseTexture;
-import fuse.texture.RenderTexture;
+import fuse.core.front.texture.BaseTexture;
+import fuse.core.front.texture.RenderTexture;
 import mantle.notifier.Notifier;
 
 /**
@@ -10,7 +10,7 @@ import mantle.notifier.Notifier;
  * @author P.J.Shand
  */
 
-@:access(fuse.texture.BaseTexture)
+@:access(fuse.core.front.texture.BaseTexture)
 class AtlasBuffers
 {
 	static var startIndex:Int = 2;

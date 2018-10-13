@@ -3,34 +3,41 @@ package fuse.texture;
 import fuse.display.Image;
 import fuse.utils.Color;
 import msignal.Signal.Signal0;
-import openfl.display3D.textures.Texture;
-import openfl.display3D.textures.TextureBase;
-import fuse.utils.ObjectId;
 import fuse.core.communication.data.textureData.ITextureData;
+import openfl.display3D.textures.TextureBase;
+import openfl.display3D.textures.Texture;
+import fuse.texture.TextureId;
+import fuse.utils.ObjectId;
+
 
 /**
  * @author P.J.Shand
  */
 interface ITexture 
 {
-	var textureData:ITextureData;
+	var objectId(get, null):ObjectId;
+	var textureId(get, null):TextureId;
+	
+	var onUpdate = new Signal0();
+	var onUpload = new Signal0();
+    var width(get, set):Null<Int>;
+	var height(get, set):Null<Int>;
+    var offsetU(get, set):Float;
+	var offsetV(get, set):Float;
+	var scaleU(get, set):Float;
+	var scaleV(get, set):Float;
+	var directRender(get, set):Bool;
+
+
+    var textureData(get, set):ITextureData;
 	var nativeTexture(get, null):Texture;
 	var textureBase(get, null):TextureBase;
-	var directRender(get, set):Bool;
-	var objectId:ObjectId;
-	var textureId:TextureId;
-	@:isVar var width(default, set):Null<Int>;
-	@:isVar var height(default, set):Null<Int>;
-	var onUpdate:Signal0;
-	var onUpload:Signal0;
-	var clearColour:Color;
-	var _clear:Bool;
-	var _alreadyClear:Bool;
 	
-	@:isVar public var offsetU(default, set):Float;
-	@:isVar public var offsetV(default, set):Float;
-	@:isVar public var scaleU(default, set):Float;
-	@:isVar public var scaleV(default, set):Float;
+	var clearColour(get, set):Color;
+	var _clear(get, set):Bool;
+	var _alreadyClear(get, set):Bool;
+	
+	
 
 	function upload():Void;
 	function dispose():Void;
@@ -39,6 +46,4 @@ interface ITexture
 	function removeChangeListener(image:Image):Void;
 
 	function createSubTexture(offsetU:Float, offsetV:Float, scaleU:Float, scaleV:Float):SubTexture;
-
-	private function setTextureData():Void;
 }
