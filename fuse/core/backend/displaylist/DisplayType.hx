@@ -7,12 +7,11 @@ package fuse.core.backend.displaylist;
 
 @:enum abstract DisplayType(Int) from Int to Int {
 	
-	var STAGE = 0;
-	var SPRITE = 1;
-	var DISPLAY_OBJECT = 2;
-	var DISPLAY_OBJECT_CONTAINER = 3;
-	var IMAGE = 4;
-	var MOVIECLIP = 5;
-	var QUAD = 6;
-	
+	public var STAGE:Int = 0;
+	public var SPRITE:Int = 1;
+	public var DISPLAY_OBJECT:Int = 2;
+	public var DISPLAY_OBJECT_CONTAINER:Int = 3;
+	public var IMAGE:Int = 4;
+	public var MOVIECLIP:Int = 5;
+	public var QUAD:Int = 6;
 }
