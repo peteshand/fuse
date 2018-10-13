@@ -25,7 +25,7 @@ class ImageTexture extends BaseTexture
 	var bitmapData:BitmapData;
 	public var url:String;
 	
-	public function new(url:String, ?width:Int, ?height:Int, queUpload:Bool=false, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(url:String, ?width:Null<Int>, ?height:Null<Int>, queUpload:Bool=false, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		// TODO: reuse nativeTexture when same url is set
 		//masterTextureId = imageTextureIds.get(url);
@@ -38,7 +38,9 @@ class ImageTexture extends BaseTexture
 		
 		this.url = url;
 		
-		super(0, 0, queUpload, onTextureUploadCompleteCallback, true, masterTextureId);
+		if (width == null) width = 0;
+		if (height == null) height = 0;
+		super(width, height, queUpload, onTextureUploadCompleteCallback, true, masterTextureId);
 		
 		if (masterTextureId == null){
 			//trace("no master texture found for " + url + ", setting self as master: " + this.textureId);
