@@ -22,7 +22,7 @@ class CoreTextures
 	public function checkForTextureChanges():Void 
 	{
 		texturesHaveChanged = false;
-		trace("textures.length = " + textures.length);
+		//trace("textures.length = " + textures.length);
 		for (i in 0...textures.length) {
 			textures[i].checkForChanges();
 			

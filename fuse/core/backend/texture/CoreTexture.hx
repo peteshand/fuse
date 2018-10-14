@@ -110,6 +110,7 @@ class CoreTexture
 	
 	public function updateUVData() 
 	{
+		
 		var activeData:TextureSizeData = textureData.activeData;
 		p2Width = activeData.p2Width;
 		p2Height = activeData.p2Height;
@@ -136,6 +137,7 @@ class CoreTexture
 		uvTop = _uvTop;
 		uvRight = _uvRight;
 		uvBottom = _uvBottom;
+		
 	}
 	
 	public function checkForChanges():Void

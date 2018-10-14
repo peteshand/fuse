@@ -98,7 +98,7 @@ class Image extends DisplayObject
 			if (texture != null) texture.removeChangeListener(this);
 			texture = value;
 			texture.addChangeListener(this);
-			OnTextureUpdate();
+			onTextureUpdate();
 			displayData.textureId = texture.objectId;
 			//isStatic = 0;
 			updateTexture = true;
@@ -108,12 +108,10 @@ class Image extends DisplayObject
 		return value;
 	}
 	
-	function OnTextureUpdate() 
+	function onTextureUpdate() 
 	{
 		if (width == 0) this.width = texture.width;
 		if (height == 0) this.height = texture.height;
-		//this.width = texture.width;
-		//this.height = texture.height;
 		updateAlignment();
 	}
 	
@@ -156,7 +154,6 @@ class Image extends DisplayObject
 		for (i in 0...shaders.length) {
 			shaderId += shaders[i].objectId;
 		}
-		trace("CHECK: shaderId = " + shaderId);
 		displayData.shaderId = shaderId;
 	}
 

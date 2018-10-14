@@ -5,6 +5,7 @@ import fuse.core.front.texture.ITexture as FrontITexture;
 import fuse.utils.ObjectId;
 import fuse.texture.TextureId;
 import msignal.Signal.Signal0;
+import mantle.delay.Delay;
 
 import fuse.display.Image;
 import fuse.utils.Color;
@@ -68,11 +69,12 @@ class BaseTexture implements ITexture
         if (texture != null){
             texture.onUpdate.add(onUpdate.dispatch);
             texture.onUpload.add(onUpload.dispatch);
-
             if (texture.textureData.textureAvailable == 1){
-                // Texture already ready
-                onUpdate.dispatch();
-                onUpload.dispatch();
+                Delay.nextFrame(() -> {
+                    // Texture already ready
+                    onUpdate.dispatch();
+                    onUpload.dispatch();
+                });
             }
         }
         return value;
@@ -98,6 +100,9 @@ class BaseTexture implements ITexture
 	
     public function createSubTexture(offsetU:Float, offsetV:Float, scaleU:Float, scaleV:Float):SubTexture
     {
-        return new SubTexture(texture.createSubTexture(offsetU, offsetV, scaleU, scaleV));
+        var subTexture = new SubTexture(texture.createSubTexture(offsetU, offsetV, scaleU, scaleV));
+        //onUpdate.add(subTexture.onUpdate.dispatch);
+        //onUpload.add(subTexture.onUpload.dispatch);
+        return subTexture;
     }
 }

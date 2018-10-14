@@ -28,7 +28,8 @@ class AtlasSheet
 	
 	var texturesFromLastFrame:Int = 0;
 	public var renderCount:Int = 0;
-	
+	var lastLength:Null<Int>;
+
 	public function new(index:Int) 
 	{
 		this.index = index;
@@ -131,9 +132,9 @@ class AtlasSheet
 	
 	public function writeActivePartitions() 
 	{
-		//trace("activePartitions.length = " + activePartitions.length);
 		if (activePartitions.length == 0) return;
-		if (noChanges(activePartitions)) return;
+		var _noChanges = noChanges(activePartitions);
+		if (_noChanges) return;
 		
 		
 		
@@ -173,6 +174,12 @@ class AtlasSheet
 	
 	function noChanges(p:GcoArray<AtlasPartition>) 
 	{
+		if (lastLength != p.length){
+			lastLength = p.length;
+			return false;
+		}
+		lastLength = p.length;
+		
 		var count:Int = 0;
 		for (j in 0...p.length) 
 		{

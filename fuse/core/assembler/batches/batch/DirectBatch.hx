@@ -124,7 +124,7 @@ class DirectBatch extends BaseBatch implements IBatch
 		}
 		if (updateUVs) {
 			//trace([coreTexture.uvTop, coreTexture.uvBottom]);
-			//trace("updateUVs = " + updateUVs);
+			//trace("updateUVs = " + updateUVs + " objectId = " + coreTexture.objectId);
 			vertexData.setUV(0, coreTexture.uvLeft,		coreTexture.uvBottom);	// bottom left
 			vertexData.setUV(1, coreTexture.uvLeft,		coreTexture.uvTop);		// top left
 			vertexData.setUV(2, coreTexture.uvRight,	coreTexture.uvTop);		// top right

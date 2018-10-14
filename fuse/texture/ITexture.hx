@@ -18,8 +18,8 @@ interface ITexture
 	var objectId(get, null):ObjectId;
 	var textureId(get, null):TextureId;
 	
-	var onUpdate = new Signal0();
-	var onUpload = new Signal0();
+	var onUpdate:Signal0;
+	var onUpload:Signal0;
     var width(get, set):Null<Int>;
 	var height(get, set):Null<Int>;
     var offsetU(get, set):Float;

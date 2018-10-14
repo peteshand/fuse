@@ -4,6 +4,7 @@ import fuse.core.front.texture.atlas.AtlasData;
 import fuse.core.front.texture.ITexture;
 import fuse.core.front.texture.atlas.AtlasData.FrameData;
 import fuse.core.front.texture.BaseTexture;
+import fuse.display.Image;
 /**
  * ...
  * @author P.J.Shand
@@ -13,19 +14,20 @@ class SubTexture extends BaseTexture
 {
     var parentTexture:ITexture;
 
-    public function new(width:Int, height:Int, parentTexture:ITexture/*, frame:FrameData*/)
+    public function new(width:Int, height:Int, parentTexture:ITexture)
     {
-        //super(frame.sourceSize.w, frame.sourceSize.h, false, null, true, parentTexture.objectId);
         super(width, height, false, null, true, parentTexture.textureId);
-        parentTexture.onUpload.add(onParentUpdate);
         this.parentTexture = parentTexture;
+        parentTexture.onUpdate.add(onUpdate.dispatch);
+        parentTexture.onUpload.add(onUpload.dispatch);
+        parentTexture.onUpload.add(onParentUpdate);
+        onParentUpdate();
     }
 
     function onParentUpdate()
     {
         textureData.changeCount++;
-		//textureData.placed = 0;
-        this.width = parentTexture.width;
+		this.width = parentTexture.width;
         this.height = parentTexture.height;
 		
         setTextureData();

@@ -14,24 +14,27 @@ import fuse.core.communication.data.textureData.ITextureData;
  */
 interface ITexture 
 {
+	var objectId:ObjectId;
+	var textureId:TextureId;
+	var onUpdate:Signal0;
+	var onUpload:Signal0;
+
+	@:isVar var width(get, set):Null<Int>;
+	@:isVar var height(get, set):Null<Int>;
+	@:isVar var offsetU(get, set):Float;
+	@:isVar var offsetV(get, set):Float;
+	@:isVar var scaleU(get, set):Float;
+	@:isVar var scaleV(get, set):Float;
+	@:isVar var directRender(get, set):Bool;
+
 	var textureData:ITextureData;
 	var nativeTexture(get, null):Texture;
 	var textureBase(get, null):TextureBase;
-	var directRender(get, set):Bool;
-	var objectId:ObjectId;
-	var textureId:TextureId;
-	@:isVar var width(default, set):Null<Int>;
-	@:isVar var height(default, set):Null<Int>;
-	var onUpdate:Signal0;
-	var onUpload:Signal0;
 	var clearColour:Color;
 	var _clear:Bool;
 	var _alreadyClear:Bool;
 	
-	@:isVar public var offsetU(default, set):Float;
-	@:isVar public var offsetV(default, set):Float;
-	@:isVar public var scaleU(default, set):Float;
-	@:isVar public var scaleV(default, set):Float;
+	
 
 	function upload():Void;
 	function dispose():Void;

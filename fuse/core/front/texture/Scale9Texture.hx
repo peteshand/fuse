@@ -1,19 +1,38 @@
-package fuse.display;
+package fuse.core.front.texture;
 
 import fuse.utils.Color;
 import fuse.core.front.texture.Textures;
 import fuse.geom.Rectangle;
 import fuse.texture.ITexture;
 
-@:access(fuse.texture)
-class Scale9Image extends Sprite
+class Scale9Texture //implements ITexture
 {
+    //public var objectId:ObjectId;
+	//public var textureId:TextureId;
+	//public var onUpdate:Signal0;
+	//public var onUpload:Signal0;
+
+	@:isVar public var width(get, set):Null<Int>;
+	@:isVar public var height(get, set):Null<Int>;
+	//@:isVar public var offsetU(get, set):Float;
+	//@:isVar public var offsetV(get, set):Float;
+	//@:isVar public var scaleU(get, set):Float;
+	//@:isVar public var scaleV(get, set):Float;
+	//@:isVar public var directRender(get, set):Bool;
+
+	//public var textureData:ITextureData;
+	//public var nativeTexture(get, null):Texture;
+	//public var textureBase(get, null):TextureBase;
+	//public var clearColour:Color;
+	//public var _clear:Bool;
+	//public var _alreadyClear:Bool;
+
     @:isVar var scale9Grid(default, set):Rectangle;
     var rects:Array<Rectangle> = [];
     var uvs:Array<UVData> = [];    
     static var stretchX:Array<Bool> = [false, true, false, false, true, false, false, true, false]; 
     static var stretchY:Array<Bool> = [false, false, false, true, true, true, false, false, false];
-    public var images:Array<Image> = [];
+    public var textures:Array<ITexture> = [];
     var posX:Array<Float> = [];
     var posY:Array<Float> = [];
     var widths:Array<Float> = [];
@@ -22,11 +41,15 @@ class Scale9Image extends Sprite
     var uvYs:Array<Float> = [];
     var uvWidths:Array<Float> = [];
     var uvHeights:Array<Float> = [];
-    @:isVar public var texture(default, set):ITexture;
-	
-    public function new(texture:ITexture, scale9Grid:Rectangle) 
-	{
-		super();
+    var texture:ITexture;
+
+    public function new(texture:ITexture, scale9Grid:Rectangle)
+    {
+        //objectId = texture.objectId;
+        //textureId = texture.textureId;
+        //onUpdate = texture.onUpdate;
+        //onUpload = texture.onUpload;
+
         for (i in 0...9) rects.push(new Rectangle());
         for (i in 0...9) uvs.push({
             offsetU:0,
@@ -35,9 +58,52 @@ class Scale9Image extends Sprite
             scaleV:1
         });
         
-        this.scale9Grid = scale9Grid;
         this.texture = texture;
+        this.scale9Grid = scale9Grid;
+        for (i in 0...9) {
+            textures.push(texture.createSubTexture(0, 0, 1, 1));
+        }
+        //texture.onUpdate.add(onTextureUpdate);
+        //onTextureUpdate();
+        
+        updateRects();
     }
+
+    /*public function upload():Void
+    {
+        
+    }
+
+	public function dispose():Void
+    {
+
+    }
+
+	public function addChangeListener(image:Image):Void
+    {
+
+    }
+
+	public function removeChangeListener(image:Image):Void
+    {
+
+    }
+
+	public function createSubTexture(offsetU:Float, offsetV:Float, scaleU:Float, scaleV:Float):SubTexture
+    {
+        
+    }
+
+	private function setTextureData():Void
+    {
+
+    }*/
+
+    function get_width():Null<Int>		{	return width;			}
+	function get_height():Null<Int>		{	return height;			}
+
+    function set_width(value:Null<Int>):Null<Int>		{	return width = value;			}
+	function set_height(value:Null<Int>):Null<Int>		{	return height = value;			}
 
     function set_scale9Grid(value:Rectangle):Rectangle
     {
@@ -46,59 +112,27 @@ class Scale9Image extends Sprite
         return scale9Grid;
     }
 
-    function addImages()
-    {
-        for (i in 0...9) {
-            var image:Image = new Image(texture.createSubTexture(0, 0, 1, 1));
-            addChild(image);
-            images.push(image);
-        }
-    }
-
-    override function set_width(value:Float):Float { 
+    /*override function set_width(value:Float):Float { 
 		var v:Float = super.set_width(value);
         updateRects();
         return v;
-	}
+	}*/
 
-    override function set_height(value:Float):Float { 
+    /*override function set_height(value:Float):Float { 
 		var v:Float = super.set_height(value);
         updateRects();
         return v;
-	}
+	}*/
 
-    function set_texture(value:ITexture):ITexture 
-	{
-		if (value == null) value = Textures.blankTexture;
-        
-		if (texture != value) {
-
-			if (texture != null) texture.onUpdate.remove(onTextureUpdate);
-			texture = value;
-
-            if (images.length == 0){
-                addImages();
-            }
-
-			texture.onUpdate.add(onTextureUpdate);
-			onTextureUpdate();
-			
-			updateTexture = true;
-            updateRects();
-			updateStaticBackend();
-		}
-		return value;
-	}
-
-	function onTextureUpdate() 
+	/*function onTextureUpdate() 
 	{
 		if (width == 0) this.width = texture.width;
 		if (height == 0) this.height = texture.height;
 		//this.width = texture.width;
 		//this.height = texture.height;
-		updateAlignment();
+		//updateAlignment();
         updateRects();
-	}
+	}*/
 	
     function updateRects()
     {
@@ -197,50 +231,26 @@ class Scale9Image extends Sprite
 
     function updateLayout()
     {
-        //trace("set offsetU: " + this.texture.objectId + " textureId = " + texture.textureId);
-        //trace("updateLayout");
-        for (i in 0...images.length) {
-            var image:Image = images[i];
+        for (i in 0...textures.length) {
+            var texture:ITexture = textures[i];
             var rect:Rectangle = rects[i];
             var uvData:UVData = uvs[i];
-            //trace(rect);
-            //trace(uvData);
             
-            image.x = rect.x;
-            image.y = rect.y;
-            image.width = rect.width;
-            image.height = rect.height;
+            //image.x = rect.x;
+            //image.y = rect.y;
+            //image.width = rect.width;
+            //image.height = rect.height;
             
-            image.texture.offsetU = uvData.offsetU;
-            image.texture.offsetV = uvData.offsetV;
-            image.texture.scaleU = uvData.scaleU;
-            image.texture.scaleV = uvData.scaleV;
+            texture.offsetU = uvData.offsetU;
+            texture.offsetV = uvData.offsetV;
+            texture.scaleU = uvData.scaleU;
+            texture.scaleV = uvData.scaleV;
             
         }
 
         //this.texture.onUpload.dispatch();
-        updateAlignment();
+        //updateAlignment();
     }
-
-    override function set_color(value:Color):Color { 
-		for (i in 0...images.length) {
-            var image:Image = images[i];
-            image.color = value;
-        }
-		return super.set_color(value);
-	}
-
-
-
-    override function set_renderLayer(value:Null<Int>):Null<Int> 
-	{
-		for (i in 0...images.length) {
-            var image:Image = images[i];
-            image.renderLayer = value;
-        }
-		return renderLayer = value;
-	}
-    
 }
 
 typedef UVData =

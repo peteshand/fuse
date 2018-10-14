@@ -35,12 +35,12 @@ class BaseTexture implements ITexture
 	public var textureId:TextureId;
 	public var onUpdate = new Signal0();
 	public var onUpload = new Signal0();
-	@:isVar public var width(default, set):Null<Int>;
-	@:isVar public var height(default, set):Null<Int>;
-	@:isVar public var offsetU(default, set):Float = 0;
-	@:isVar public var offsetV(default, set):Float = 0;
-	@:isVar public var scaleU(default, set):Float = 1;
-	@:isVar public var scaleV(default, set):Float = 1;
+	@:isVar public var width(get, set):Null<Int>;
+	@:isVar public var height(get, set):Null<Int>;
+	@:isVar public var offsetU(get, set):Float = 0;
+	@:isVar public var offsetV(get, set):Float = 0;
+	@:isVar public var scaleU(get, set):Float = 1;
+	@:isVar public var scaleV(get, set):Float = 1;
 	@:isVar public var directRender(get, set):Bool = false;
 
 	public var textureData:ITextureData;
@@ -83,7 +83,7 @@ class BaseTexture implements ITexture
 
 		onUpdate.add(function() {
 			for (image in dependantDisplays.iterator())
-				image.OnTextureUpdate();
+				image.onTextureUpdate();
 		});
 
 		//coreTextures.set(this.textureId, this);
@@ -158,29 +158,26 @@ class BaseTexture implements ITexture
 		return directRender;
 	}
 
-	function get_textureBase():TextureBase {
-		return textureData.textureBase;
-	}
-
-	function get_directRender():Bool {
-		return directRender;
-	}
-
-	function get_nativeTexture():Texture {
-		return textureData.nativeTexture;
-	}
-
-	/*function get_coreTexture():BaseTexture {
-		return coreTextures.get(objectId);
-	}*/
+	function get_width():Null<Int>		{	return width;			}
+	function get_height():Null<Int>		{	return height;			}
+	function get_offsetU():Float		{	return offsetU;			}
+	function get_offsetV():Float		{	return offsetV;			}
+	function get_scaleU():Float			{	return scaleU;			}
+	function get_scaleV():Float			{	return scaleV;			}
+	function get_directRender():Bool	{	return directRender;	}
+	
+	function get_textureBase():TextureBase	{	return textureData.textureBase;		}
+	function get_nativeTexture():Texture	{	return textureData.nativeTexture;	}
 
 	public function addChangeListener(image:Image) {
-		//coreTexture.dependantDisplays.set(image.objectId, image);
 		dependantDisplays.set(image.objectId, image);
+		if (textureData.textureAvailable == 1) {
+			image.onTextureUpdate();
+		}
+		
 	}
 
 	public function removeChangeListener(image:Image) {
-		//coreTexture.dependantDisplays.remove(image.objectId);
 		dependantDisplays.remove(image.objectId);
 	}
 
@@ -188,7 +185,6 @@ class BaseTexture implements ITexture
 	{
 		textureData.offsetU = offsetU = value;
 		Fuse.current.workerSetup.updateTexture(objectId);
-		//textureData.changeCount++;
 		return offsetU;
 	}
 
@@ -196,7 +192,6 @@ class BaseTexture implements ITexture
 	{
 		textureData.offsetV = offsetV = value;
 		Fuse.current.workerSetup.updateTexture(objectId);
-		//textureData.changeCount++;
 		return offsetV;
 	}
 
@@ -204,7 +199,6 @@ class BaseTexture implements ITexture
 	{
 		textureData.scaleU = scaleU = value;
 		Fuse.current.workerSetup.updateTexture(objectId);
-		//textureData.changeCount++;
 		return scaleU;
 	}
 
@@ -212,7 +206,6 @@ class BaseTexture implements ITexture
 	{
 		textureData.scaleV = scaleV = value;
 		Fuse.current.workerSetup.updateTexture(objectId);
-		//textureData.changeCount++;
 		return scaleV;
 	}
 

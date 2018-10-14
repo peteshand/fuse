@@ -30,8 +30,6 @@ class AtlasTextures
 			add(HierarchyAssembler.hierarchy[i].coreTexture);
 		}
 		
-		//trace("textures.length = " + textures.length);
-		
 		textures.sort(function(t1:CoreTexture, t2:CoreTexture):Int {
 			if (t1.textureData.activeData.height < t2.textureData.activeData.height) return 1;
 			else if (t1.textureData.activeData.height > t2.textureData.activeData.height) return -1;
@@ -41,8 +39,12 @@ class AtlasTextures
 	
 	static inline function add(coreTexture:CoreTexture) 
 	{
-		if (coreTexture == null) return;
-		if (coreTexture.textureData.directRender == 1) return; // Texture should always render directly to the back buffer
+		if (coreTexture == null) {
+			return;
+		}
+		if (coreTexture.textureData.directRender == 1) {
+			return; // Texture should always render directly to the back buffer
+		}
 		if (coreTexture.textureData.textureAvailable == 0) {
 			//trace("texture isn't available: " + coreTexture.textureId);
 			return; // Texture isn't render yet, default texture will be used instead

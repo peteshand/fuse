@@ -5,7 +5,6 @@ import fuse.utils.ObjectId;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.core.assembler.hierarchy.HierarchyAssembler;
 import fuse.core.assembler.vertexWriter.ICoreRenderable;
-import fuse.core.backend.displaylist.Graphics;
 import fuse.core.backend.texture.CoreTexture;
 import fuse.core.backend.util.transform.WorkerTransformHelper;
 import fuse.core.communication.data.vertexData.IVertexData;
@@ -27,7 +26,6 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	
 	public var vertexData	:IVertexData;
 	public var coreTexture	:CoreTexture;
-	//public var textureChanged:Bool = false;
 	
 	@:isVar public var textureIndex(get, set):Int;
 	@:isVar public var mask(default, set):CoreImage;
@@ -90,7 +88,11 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		if (updateColour) {
 			blendMode = displayData.blendMode;
 		}
-		if (updateTexture || updateVisible) textureId = displayData.textureId;
+		if (updateTexture || updateVisible) {
+			textureId = displayData.textureId;
+			coreTexture.update();
+			coreTexture.uvsHaveChanged = true;
+		}
 		
 		if (updatePosition || updateVisible || this.isMask) {
 			
@@ -149,10 +151,6 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		Pool.images.release(this);
 	}
 	
-	////////////////////////////////////////////////////////////////
-	// New Assembler ///////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////
-	
 	override public function buildHierarchy()
 	{
 		if (displayData.visible == 1 || this.isMask) {
@@ -166,19 +164,6 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		bounds.right = Math.NEGATIVE_INFINITY;
 		bounds.top = Math.NEGATIVE_INFINITY;
 		bounds.bottom = Math.POSITIVE_INFINITY;
-		
-		//for (i in 0...quadData.length) 
-		//{
-			//if (i % 2 == 0){
-				//if (bounds.left > quadData[i]) bounds.left = quadData[i];
-				//if (bounds.right < quadData[i]) bounds.right = quadData[i];
-			//}
-			//else {
-				//if (bounds.top < quadData[i]) bounds.top = quadData[i];
-				//if (bounds.bottom > quadData[i]) bounds.bottom = quadData[i];
-			//}
-		//}
-		
 		return bounds;
 	}
 	
@@ -255,15 +240,4 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		}
 		return textureIndex = value;
 	}
-
-	/*override public function absoluteVis():Bool
-	{
-		var _value = super.absoluteVis();
-		if (_value) {
-			if (coreTexture.textureData.textureAvailable == 0) return false;
-			//trace("textureAvailable = " + coreTexture.textureData.textureAvailable);
-		}
-		
-		return _value;
-	}*/
 }
