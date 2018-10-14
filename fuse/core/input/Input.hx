@@ -25,7 +25,7 @@ class Input {
 	var mouseMap = new Map<String, TouchType>();
 
 	public function new() {
-		trace("Multitouch.supportsTouchEvents = " + Multitouch.supportsTouchEvents);
+		//trace("Multitouch.supportsTouchEvents = " + Multitouch.supportsTouchEvents);
 		Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 
 		touchMap.set(TouchEvent.TOUCH_MOVE, TouchType.MOVE);

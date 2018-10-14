@@ -71,10 +71,7 @@ class FShader
 		this.context3D = context3D;
 		this.numTextures = numTextures;
 		this.shaderId = shaderId;
-		trace("shaderId = " + shaderId);
-
 		shaders = BaseShader.getShaders(shaderId);
-		trace("shaders.length = " + shaders.length);
 		createAndUploadShaderProgram();
 	}
 
@@ -284,7 +281,6 @@ class FShader
 			//trace("2 colorTransform = " + colorTransform);
 			//if (colorTransform != null) agal += colorTransform.fragmentString();
 
-			trace("shaders.length = " + shaders.length);
 			for (i in 0...shaders.length) {
 				agal += shaders[i].fragmentString();
 			}

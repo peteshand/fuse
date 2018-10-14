@@ -22,9 +22,6 @@ class SaturationShader extends ColorMatrixShader
             negSat,negSat,1 + saturation,0,0, // blue
             0,0,0,1,0        // alpha
         ];
-        //var f:Array<Float> = ColorMatrixShader.defaultColorMatrixFilter.matrix;
-
-        trace("CHECK: Saturation = " + f);
         colorMatrixFilter = new ColorMatrixFilter(f);
         return value;
     }

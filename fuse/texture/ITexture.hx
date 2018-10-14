@@ -37,8 +37,6 @@ interface ITexture
 	var _clear(get, set):Bool;
 	var _alreadyClear(get, set):Bool;
 	
-	
-
 	function upload():Void;
 	function dispose():Void;
 

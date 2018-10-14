@@ -31,12 +31,6 @@ class NetStream extends OpenFlNetStream
 		if (url == null) return;
 		
 		var _localURL:String = localURL(url);
-		trace("url = " + url);
-		trace("localURL = " + _localURL);
-		if (_localURL == null) {
-			trace("localURL = " + _localURL);
-		}
-		
 		if (_localURL != null) {
 			this.play(_localURL);
 		}

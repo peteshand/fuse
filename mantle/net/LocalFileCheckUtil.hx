@@ -13,12 +13,8 @@ class LocalFileCheckUtil
 	static public function localURL(url:String):String
 	{
 		if (url == null) return null;
-		trace("url = " + url);
 		var _localPath:String = localPath(url);
-		trace("_localPath = " + _localPath);
 		if (_localPath == null) {
-			trace("url = " + url);
-			trace("_localPath = " + _localPath);
 			return null;
 		}
 		
@@ -38,9 +34,8 @@ class LocalFileCheckUtil
 		if (!cacheDir.exists) cacheDir.createDirectory();
 
 		if (url.indexOf("://") == -1) {
-			var split:Array<String> = url.split("/");
 			try {
-				if (new File(split[0]).exists){
+				if (new File(url).exists){
 					// is system path
 					return url;
 				} else {

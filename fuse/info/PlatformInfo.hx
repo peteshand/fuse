@@ -14,7 +14,6 @@ class PlatformInfo
 	static function __init__():Void
 	{
 		os = Capabilities.os.toLowerCase();
-		trace("os = " + os);
 		//manufacturer = Capabilities.manufacturer.toLowerCase();
 		//trace("manufacturer = " + manufacturer);
 		
