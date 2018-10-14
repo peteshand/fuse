@@ -21,11 +21,8 @@ import fuse.utils.ObjectId;
  * @author P.J.Shand
  */
 @:access(fuse)
-class BaseTexture implements ITexture {
-	//static var coreTextures = new Map<TextureId, BaseTexture>();
-
-	//var coreTexture(get, never):BaseTexture;
-
+class BaseTexture implements ITexture
+{
 	static var objectIdCount:Int = 0;
 	static var textureIdCount:Int = 0;
 
@@ -36,26 +33,25 @@ class BaseTexture implements ITexture {
 
 	public var objectId:ObjectId;
 	public var textureId:TextureId;
-	
-	public var textureData:ITextureData;
-	
-	@:isVar public var width(default, set):Null<Int>;
-	@:isVar public var height(default, set):Null<Int>;
 	public var onUpdate = new Signal0();
 	public var onUpload = new Signal0();
-	public var nativeTexture(get, null):Texture;
-	public var textureBase(get, null):TextureBase;
-	public var dependantDisplays = new Map<Int, Image>();
-	public var clearColour:Color = 0;
-	public var _clear:Bool = false;
-	public var _alreadyClear:Bool = false;
-	@:isVar public var directRender(get, set):Bool = false;
-
+	@:isVar public var width(default, set):Null<Int>;
+	@:isVar public var height(default, set):Null<Int>;
 	@:isVar public var offsetU(default, set):Float = 0;
 	@:isVar public var offsetV(default, set):Float = 0;
 	@:isVar public var scaleU(default, set):Float = 1;
 	@:isVar public var scaleV(default, set):Float = 1;
+	@:isVar public var directRender(get, set):Bool = false;
 
+	public var textureData:ITextureData;
+	public var nativeTexture(get, null):Texture;
+	public var textureBase(get, null):TextureBase;
+	public var clearColour:Color = 0;
+	public var _clear:Bool = false;
+	public var _alreadyClear:Bool = false;
+
+	public var dependantDisplays = new Map<Int, Image>();
+	
 	public function new(width:Int, height:Int, queUpload:Bool = true, onTextureUploadCompleteCallback:Void->Void = null, p2Texture:Bool = true, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) {
 		// objectId = BaseTexture.objectIdCount++;
 

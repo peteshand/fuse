@@ -15,7 +15,7 @@ import openfl.display3D.textures.Texture;
 @:access(fuse.core.front.texture.ITexture)
 class BaseTexture implements ITexture
 {
-    var texture:FrontITexture;
+    @:isVar var texture(default, set):FrontITexture;
     public var objectId(get, null):ObjectId;
 	public var textureId(get, null):TextureId;
 
@@ -58,6 +58,26 @@ class BaseTexture implements ITexture
     function get__clear():Bool                                  {   return texture._clear;                  }
     function get__alreadyClear():Bool                           {   return texture._alreadyClear;           }
     
+    function set_texture(value:FrontITexture):FrontITexture
+    {
+        if (texture != null){
+            texture.onUpdate.removeAll();
+            texture.onUpload.removeAll();
+        }
+        texture = value;
+        if (texture != null){
+            texture.onUpdate.add(onUpdate.dispatch);
+            texture.onUpload.add(onUpload.dispatch);
+
+            if (texture.textureData.textureAvailable == 1){
+                // Texture already ready
+                onUpdate.dispatch();
+                onUpload.dispatch();
+            }
+        }
+        return value;
+    }
+
     function set_width(value:Null<Int>):Null<Int>               {   return texture.width = value;           }
 	function set_height(value:Null<Int>):Null<Int>              {   return texture.height = value;          }
     function set_offsetU(value:Float):Float                     {   return texture.offsetU = value;         }
