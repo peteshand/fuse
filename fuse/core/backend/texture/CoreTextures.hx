@@ -22,7 +22,7 @@ class CoreTextures
 	public function checkForTextureChanges():Void 
 	{
 		texturesHaveChanged = false;
-		trace("textures.length = " + textures.length);
+		
 		for (i in 0...textures.length) {
 			textures[i].checkForChanges();
 			
@@ -31,7 +31,7 @@ class CoreTextures
 				texturesHaveChanged = true;
 			}
 		}
-		
+		//trace("textures.length = " + textures.length);
 		if (texturesHaveChanged) {
 			Fuse.current.conductorData.backIsStatic = 0;
 		}

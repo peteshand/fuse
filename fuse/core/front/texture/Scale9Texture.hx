@@ -11,16 +11,18 @@ class Scale9Texture
     @:isVar public var width(get, set):Float;
 	@:isVar public var height(get, set):Float;
 	
-    @:isVar var scale9Grid(default, set):Rectangle;
-    public var rects:Array<Rectangle> = [];
+    @:isVar public var scale9Grid(default, set):Rectangle;
+    var rects:Array<Rectangle> = [];
     var uvs:Array<UVData> = [];    
     static var stretchX:Array<Bool> = [false, true, false, false, true, false, false, true, false]; 
     static var stretchY:Array<Bool> = [false, false, false, true, true, true, false, false, false];
     public var textures:Array<ITexture> = [];
+    
     var posX:Array<Float> = [];
     var posY:Array<Float> = [];
     var widths:Array<Float> = [];
     var heights:Array<Float> = [];
+    
     var uvXs:Array<Float> = [];
     var uvYs:Array<Float> = [];
     var uvWidths:Array<Float> = [];

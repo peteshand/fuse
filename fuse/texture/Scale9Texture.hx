@@ -14,7 +14,7 @@ class Scale9Texture
     var frontScale9Texture:FrontScale9Texture;
     public var textures:Array<ITexture>;
     public var onLayoutUpdate:Signal0;
-    public var rects:Array<Rectangle>;
+    public var scale9Grid(get, null):Rectangle;
 
     @:isVar public var width(get, set):Float;
 	@:isVar public var height(get, set):Float;
@@ -30,11 +30,11 @@ class Scale9Texture
 
         textures = frontScale9Texture.textures;
         onLayoutUpdate = frontScale9Texture.onLayoutUpdate;
-        rects = frontScale9Texture.rects;
     }
 
-    function get_width():Float		{	return frontScale9Texture.width;			}
-	function get_height():Float		{	return frontScale9Texture.height;			}
+    function get_width():Float		            {	return frontScale9Texture.width;			        }
+	function get_height():Float		            {	return frontScale9Texture.height;			        }
+    function get_scale9Grid():Rectangle         {   return frontScale9Texture.scale9Grid;               }
 
     function set_width(value:Float):Float		{	return frontScale9Texture.width = value;			}
 	function set_height(value:Float):Float		{	return frontScale9Texture.height = value;			}

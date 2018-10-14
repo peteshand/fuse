@@ -33,7 +33,7 @@ class HierarchyAssembler
 			
 			Core.displayList.stage.buildTransformActions();
 			
-			OrderByRenderLayers(hierarchy);
+			orderByRenderLayers(hierarchy);
 		}
 		
 		var i:Int = 0;
@@ -44,7 +44,7 @@ class HierarchyAssembler
 		}
 	}
 	
-	static function OrderByRenderLayers(displayObjects:GcoArray<CoreImage>):Void
+	static function orderByRenderLayers(displayObjects:GcoArray<CoreImage>):Void
 	{
 		var swapping = false;
 		var temp:CoreImage;
