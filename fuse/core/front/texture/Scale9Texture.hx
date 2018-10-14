@@ -4,31 +4,15 @@ import fuse.utils.Color;
 import fuse.core.front.texture.Textures;
 import fuse.geom.Rectangle;
 import fuse.texture.ITexture;
+import msignal.Signal.Signal0;
 
-class Scale9Texture //implements ITexture
+class Scale9Texture
 {
-    //public var objectId:ObjectId;
-	//public var textureId:TextureId;
-	//public var onUpdate:Signal0;
-	//public var onUpload:Signal0;
-
-	@:isVar public var width(get, set):Null<Int>;
-	@:isVar public var height(get, set):Null<Int>;
-	//@:isVar public var offsetU(get, set):Float;
-	//@:isVar public var offsetV(get, set):Float;
-	//@:isVar public var scaleU(get, set):Float;
-	//@:isVar public var scaleV(get, set):Float;
-	//@:isVar public var directRender(get, set):Bool;
-
-	//public var textureData:ITextureData;
-	//public var nativeTexture(get, null):Texture;
-	//public var textureBase(get, null):TextureBase;
-	//public var clearColour:Color;
-	//public var _clear:Bool;
-	//public var _alreadyClear:Bool;
-
+    @:isVar public var width(get, set):Float;
+	@:isVar public var height(get, set):Float;
+	
     @:isVar var scale9Grid(default, set):Rectangle;
-    var rects:Array<Rectangle> = [];
+    public var rects:Array<Rectangle> = [];
     var uvs:Array<UVData> = [];    
     static var stretchX:Array<Bool> = [false, true, false, false, true, false, false, true, false]; 
     static var stretchY:Array<Bool> = [false, false, false, true, true, true, false, false, false];
@@ -42,14 +26,11 @@ class Scale9Texture //implements ITexture
     var uvWidths:Array<Float> = [];
     var uvHeights:Array<Float> = [];
     var texture:ITexture;
+    public var onLayoutUpdate = new Signal0();
 
     public function new(texture:ITexture, scale9Grid:Rectangle)
     {
-        //objectId = texture.objectId;
-        //textureId = texture.textureId;
-        //onUpdate = texture.onUpdate;
-        //onUpload = texture.onUpload;
-
+        
         for (i in 0...9) rects.push(new Rectangle());
         for (i in 0...9) uvs.push({
             offsetU:0,
@@ -63,47 +44,34 @@ class Scale9Texture //implements ITexture
         for (i in 0...9) {
             textures.push(texture.createSubTexture(0, 0, 1, 1));
         }
-        //texture.onUpdate.add(onTextureUpdate);
-        //onTextureUpdate();
         
+        texture.onUpdate.add(onTextureUpdate);
+        onTextureUpdate();
+    }
+
+    function onTextureUpdate()
+    {
+        if (this.width == null) this.width = texture.width;
+        if (this.height == null) this.height = texture.height;
         updateRects();
     }
 
-    /*public function upload():Void
+    function get_width():Float		{	return width;			}
+	function get_height():Float		{	return height;			}
+
+    function set_width(value:Float):Float
     {
-        
+        width = value;
+        updateRects();
+        return width;
     }
 
-	public function dispose():Void
+	function set_height(value:Float):Float
     {
-
+        height = value;
+        updateRects();
+        return height;
     }
-
-	public function addChangeListener(image:Image):Void
-    {
-
-    }
-
-	public function removeChangeListener(image:Image):Void
-    {
-
-    }
-
-	public function createSubTexture(offsetU:Float, offsetV:Float, scaleU:Float, scaleV:Float):SubTexture
-    {
-        
-    }
-
-	private function setTextureData():Void
-    {
-
-    }*/
-
-    function get_width():Null<Int>		{	return width;			}
-	function get_height():Null<Int>		{	return height;			}
-
-    function set_width(value:Null<Int>):Null<Int>		{	return width = value;			}
-	function set_height(value:Null<Int>):Null<Int>		{	return height = value;			}
 
     function set_scale9Grid(value:Rectangle):Rectangle
     {
@@ -112,28 +80,6 @@ class Scale9Texture //implements ITexture
         return scale9Grid;
     }
 
-    /*override function set_width(value:Float):Float { 
-		var v:Float = super.set_width(value);
-        updateRects();
-        return v;
-	}*/
-
-    /*override function set_height(value:Float):Float { 
-		var v:Float = super.set_height(value);
-        updateRects();
-        return v;
-	}*/
-
-	/*function onTextureUpdate() 
-	{
-		if (width == 0) this.width = texture.width;
-		if (height == 0) this.height = texture.height;
-		//this.width = texture.width;
-		//this.height = texture.height;
-		//updateAlignment();
-        updateRects();
-	}*/
-	
     function updateRects()
     {
         if (texture == null) return;
@@ -141,7 +87,7 @@ class Scale9Texture //implements ITexture
 		if (texture.height == 0) return;
         if (width == 0) return;
 		if (height == 0) return;
-
+        
         var leftX:Float = 0;
         var leftWidth:Float = scale9Grid.x;
         var middleX:Float = leftX + leftWidth;
@@ -233,23 +179,14 @@ class Scale9Texture //implements ITexture
     {
         for (i in 0...textures.length) {
             var texture:ITexture = textures[i];
-            var rect:Rectangle = rects[i];
             var uvData:UVData = uvs[i];
-            
-            //image.x = rect.x;
-            //image.y = rect.y;
-            //image.width = rect.width;
-            //image.height = rect.height;
-            
             texture.offsetU = uvData.offsetU;
             texture.offsetV = uvData.offsetV;
             texture.scaleU = uvData.scaleU;
-            texture.scaleV = uvData.scaleV;
-            
+            texture.scaleV = uvData.scaleV;    
         }
 
-        //this.texture.onUpload.dispatch();
-        //updateAlignment();
+        onLayoutUpdate.dispatch();
     }
 }
 
