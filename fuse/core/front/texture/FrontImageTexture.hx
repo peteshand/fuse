@@ -1,7 +1,7 @@
 package fuse.core.front.texture;
 
 
-import fuse.core.front.texture.BaseTexture;
+import fuse.core.front.texture.FrontBaseTexture;
 import fuse.texture.TextureId;
 import mantle.delay.Delay;
 import fuse.core.front.texture.Textures;
@@ -17,7 +17,7 @@ import openfl.events.Event;
  * @author P.J.Shand
  */
 
-class ImageTexture extends BaseTexture
+class FrontImageTexture extends FrontBaseTexture
 {
 	static var imageTextureIds = new Map<String, TextureId>();
 	var masterTextureId:Null<TextureId>;

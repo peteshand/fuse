@@ -2,7 +2,7 @@ package fuse.core.front.texture;
 
 import fuse.texture.TextureId;
 import fuse.utils.ObjectId;
-import fuse.core.front.texture.BaseTexture;
+import fuse.core.front.texture.FrontBaseTexture;
 import fuse.core.front.texture.Textures;
 import openfl.display.BitmapData;
 import openfl.events.Event;
@@ -12,7 +12,7 @@ import openfl.events.Event;
  */
 
 @:access(fuse)
-class BitmapTexture extends BaseTexture
+class FrontBitmapTexture extends FrontBaseTexture
 {
 	var bitmapData:BitmapData;
 	

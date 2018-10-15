@@ -1,6 +1,6 @@
 package fuse.texture;
 
-import fuse.core.front.texture.Scale9Texture as FrontScale9Texture;
+import fuse.core.front.texture.FrontScale9Texture;
 import openfl.display.BitmapData;
 import fuse.utils.ObjectId;
 import fuse.texture.TextureId;

@@ -1,6 +1,6 @@
 package fuse.core.front.texture.upload;
 
-import fuse.core.front.texture.ITexture;
+import fuse.core.front.texture.IFrontTexture;
 import fuse.utils.FrameBudget;
 
 /**
@@ -11,7 +11,7 @@ import fuse.utils.FrameBudget;
 @:access(fuse)
 class TextureUploadQue
 {
-	public static var que:Array<ITexture> = [];
+	public static var que:Array<IFrontTexture> = [];
 	static var count:Int;
 	
 	public function new() 
@@ -31,13 +31,13 @@ class TextureUploadQue
 		while (que.length > 0 && (FrameBudget.progress < 0.5 || count == 0)) 
 		{
 			//trace(count);
-			var texture:ITexture = que.shift();
+			var texture:IFrontTexture = que.shift();
 			texture.upload();
 			count++;
 		}
 	}
 	
-	static public function add(texture:ITexture) 
+	static public function add(texture:IFrontTexture) 
 	{
 		que.push(texture);
 	}

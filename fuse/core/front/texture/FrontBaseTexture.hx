@@ -7,7 +7,7 @@ import fuse.core.front.texture.Textures;
 import fuse.display.Image;
 import fuse.texture.TextureId;
 import msignal.Signal.Signal0;
-import fuse.core.front.texture.ITexture;
+import fuse.core.front.texture.IFrontTexture;
 import fuse.utils.Color;
 import fuse.utils.PowerOfTwo;
 import openfl.display.BitmapData;
@@ -21,7 +21,7 @@ import fuse.utils.ObjectId;
  * @author P.J.Shand
  */
 @:access(fuse)
-class BaseTexture implements ITexture
+class FrontBaseTexture implements IFrontTexture
 {
 	static var objectIdCount:Int = 0;
 	static var textureIdCount:Int = 0;
@@ -53,23 +53,23 @@ class BaseTexture implements ITexture
 	public var dependantDisplays = new Map<Int, Image>();
 	
 	public function new(width:Int, height:Int, queUpload:Bool = true, onTextureUploadCompleteCallback:Void->Void = null, p2Texture:Bool = true, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) {
-		// objectId = BaseTexture.objectIdCount++;
+		// objectId = FrontBaseTexture.objectIdCount++;
 
 		if (_textureId == null) {
-			this.textureId = BaseTexture.textureIdCount++;
+			this.textureId = FrontBaseTexture.textureIdCount++;
 		} else {
 			this.textureId = _textureId;
-			if (BaseTexture.textureIdCount <= _textureId) BaseTexture.textureIdCount = _textureId + 1;
+			if (FrontBaseTexture.textureIdCount <= _textureId) FrontBaseTexture.textureIdCount = _textureId + 1;
 		}
 		
 		if (_objectId == null) {
-			this.objectId = BaseTexture.objectIdCount++;
-			//this.textureId = BaseTexture.textureIdCount++;
+			this.objectId = FrontBaseTexture.objectIdCount++;
+			//this.textureId = FrontBaseTexture.textureIdCount++;
 		} else {
 			this.objectId = _objectId;
 			//this.textureId = _textureId;
-			if (BaseTexture.objectIdCount <= _objectId) BaseTexture.objectIdCount = _objectId + 1;
-			//if (BaseTexture.textureIdCount <= _textureId) BaseTexture.textureIdCount = _textureId + 1;
+			if (FrontBaseTexture.objectIdCount <= _objectId) FrontBaseTexture.objectIdCount = _objectId + 1;
+			//if (FrontBaseTexture.textureIdCount <= _textureId) FrontBaseTexture.textureIdCount = _textureId + 1;
 		}
 		
 		this.width = width;
@@ -219,9 +219,9 @@ class BaseTexture implements ITexture
 		return height = value;
 	}
 
-	public function createSubTexture(offsetU:Float, offsetV:Float, scaleU:Float, scaleV:Float):SubTexture
+	public function createSubTexture(offsetU:Float, offsetV:Float, scaleU:Float, scaleV:Float):FrontSubTexture
 	{
-		var texture = new SubTexture(width, height, this);
+		var texture = new FrontSubTexture(width, height, this);
 		texture.offsetU = offsetU;
 		texture.offsetV = offsetV;
 		texture.scaleU = scaleU;

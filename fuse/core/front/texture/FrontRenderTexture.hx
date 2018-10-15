@@ -1,6 +1,6 @@
 package fuse.core.front.texture;
 
-import fuse.core.front.texture.BaseTexture;
+import fuse.core.front.texture.FrontBaseTexture;
 import fuse.texture.TextureId;
 import fuse.utils.ObjectId;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
@@ -18,7 +18,7 @@ import openfl.display3D.Context3DTextureFormat;
  */
 
 @:access(fuse)
-class RenderTexture extends BaseTexture
+class FrontRenderTexture extends FrontBaseTexture
 {
 	static var currentRenderTargetId:Int;
 	static var conductorData:WorkerConductorData;

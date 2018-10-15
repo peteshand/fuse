@@ -1,6 +1,6 @@
 package fuse.texture;
 
-import fuse.core.front.texture.TextFieldTexture as FrontTextFieldTexture;
+import fuse.core.front.texture.FrontTextFieldTexture;
 import fuse.utils.Align;
 import fuse.utils.Color;
 import fuse.display.Image;

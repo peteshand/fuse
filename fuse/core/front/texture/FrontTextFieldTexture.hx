@@ -1,12 +1,7 @@
 package fuse.core.front.texture;
 
 import openfl.display.StageQuality;
-import fuse.core.front.texture.BaseTexture;
-import fuse.core.front.texture.BitmapTexture;
-import fuse.utils.Align;
-import fuse.utils.Color;
-import fuse.display.Image;
-import fuse.texture.ITexture;
+import fuse.core.front.texture.FrontBitmapTexture;
 import fuse.utils.GcoArray;
 import fuse.utils.PowerOfTwo;
 import lime.text.UTF8String;
@@ -25,14 +20,14 @@ import openfl.text.TextLineMetrics;
  * ...
  * @author P.J.Shand
  */
-class TextFieldTexture extends BitmapTexture
+class FrontTextFieldTexture extends FrontBitmapTexture
 {
-	static var dirtyItems:GcoArray<TextFieldTexture>;
+	static var dirtyItems:GcoArray<FrontTextFieldTexture>;
 	
 	static function init():Void
 	{
 		if (dirtyItems != null) return;
-		dirtyItems = new GcoArray<TextFieldTexture>();
+		dirtyItems = new GcoArray<FrontTextFieldTexture>();
 		EnterFrame.add(updateDirtyTextFields);
 	}
 	
@@ -100,7 +95,7 @@ class TextFieldTexture extends BitmapTexture
 	
 	public function new(width:Int, height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
-		TextFieldTexture.init();
+		FrontTextFieldTexture.init();
 		nativeTextField = new NativeTextField();
 		//nativeTextField.width = width;
 		//nativeTextField.height = height;

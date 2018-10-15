@@ -1,6 +1,6 @@
 package fuse.texture;
 
-import fuse.core.front.texture.VideoTexture as FrontVideoTexture;
+import fuse.core.front.texture.FrontVideoTexture;
 import msignal.Signal.Signal0;
 
 class VideoTexture extends BaseTexture

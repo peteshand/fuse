@@ -1,20 +1,20 @@
 package fuse.core.front.texture;
 import fuse.core.front.texture.atlas.AtlasData;
 
-import fuse.core.front.texture.ITexture;
+import fuse.core.front.texture.IFrontTexture;
 import fuse.core.front.texture.atlas.AtlasData.FrameData;
-import fuse.core.front.texture.BaseTexture;
+import fuse.core.front.texture.FrontBaseTexture;
 import fuse.display.Image;
 /**
  * ...
  * @author P.J.Shand
  */
 
-class SubTexture extends BaseTexture
+class FrontSubTexture extends FrontBaseTexture
 {
-    var parentTexture:ITexture;
+    var parentTexture:IFrontTexture;
 
-    public function new(width:Int, height:Int, parentTexture:ITexture)
+    public function new(width:Int, height:Int, parentTexture:IFrontTexture)
     {
         super(width, height, false, null, true, parentTexture.textureId);
         this.parentTexture = parentTexture;

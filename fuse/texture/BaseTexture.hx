@@ -1,7 +1,8 @@
 package fuse.texture;
 
 import fuse.core.communication.data.textureData.ITextureData;
-import fuse.core.front.texture.ITexture as FrontITexture;
+import fuse.core.front.texture.IFrontTexture;
+
 import fuse.utils.ObjectId;
 import fuse.texture.TextureId;
 import msignal.Signal.Signal0;
@@ -13,10 +14,10 @@ import openfl.display3D.textures.TextureBase;
 import openfl.display3D.textures.Texture;
 
 @:access(openfl.display3D.textures.TextureBase)
-@:access(fuse.core.front.texture.ITexture)
+@:access(fuse.core.front.texture.IFrontTexture)
 class BaseTexture implements ITexture
 {
-    @:isVar var texture(default, set):FrontITexture;
+    @:isVar var texture(default, set):IFrontTexture;
     public var objectId(get, null):ObjectId;
 	public var textureId(get, null):TextureId;
 
@@ -59,7 +60,7 @@ class BaseTexture implements ITexture
     function get__clear():Bool                                  {   return texture._clear;                  }
     function get__alreadyClear():Bool                           {   return texture._alreadyClear;           }
     
-    function set_texture(value:FrontITexture):FrontITexture
+    function set_texture(value:IFrontTexture):IFrontTexture
     {
         if (texture != null){
             texture.onUpdate.removeAll();

@@ -1,8 +1,8 @@
 package fuse.core.front.buffers;
 
 import fuse.core.communication.data.conductorData.WorkerConductorData;
-import fuse.core.front.texture.BaseTexture;
-import fuse.core.front.texture.RenderTexture;
+import fuse.core.front.texture.FrontBaseTexture;
+import fuse.core.front.texture.FrontRenderTexture;
 import mantle.notifier.Notifier;
 
 /**
@@ -10,7 +10,7 @@ import mantle.notifier.Notifier;
  * @author P.J.Shand
  */
 
-@:access(fuse.core.front.texture.BaseTexture)
+@:access(fuse.core.front.texture.FrontBaseTexture)
 class AtlasBuffers
 {
 	static var startIndex:Int = 2;
@@ -19,7 +19,7 @@ class AtlasBuffers
 	
 	static var bufferWidth:Int;
 	static var bufferHeight:Int;
-	static var buffers = new Map<Int, RenderTexture>();
+	static var buffers = new Map<Int, FrontRenderTexture>();
 	
 	public static var states:Array<Notifier<Null<Int>>> = [];
 
@@ -32,7 +32,7 @@ class AtlasBuffers
 	{
 		AtlasBuffers.bufferWidth = bufferWidth;
 		AtlasBuffers.bufferHeight = bufferHeight;
-		BaseTexture.textureIdCount = startIndex + numBuffers;
+		FrontBaseTexture.textureIdCount = startIndex + numBuffers;
 		for (i in startIndex...endIndex) 
 		{
 			if (i % 2 == 0) 
@@ -46,7 +46,7 @@ class AtlasBuffers
 		if (textureId < startIndex || textureId >= startIndex + numBuffers) return;
 		
 		if (!buffers.exists(textureId)) {
-			var buffer:RenderTexture = new RenderTexture(bufferWidth, bufferHeight, true, textureId, textureId);
+			var buffer:FrontRenderTexture = new FrontRenderTexture(bufferWidth, bufferHeight, true, textureId, textureId);
 			//buffer.red = 0.5;
 			buffers.set(textureId, buffer);
 		}
@@ -57,7 +57,7 @@ class AtlasBuffers
 		return startIndex + (numBuffers * 2);
 	}
 	
-	public static function getBufferTexture(index:Int):RenderTexture
+	public static function getBufferTexture(index:Int):FrontRenderTexture
 	{
 		if (index >= numBuffers) return null;
 		var id:Int = startIndex + index;

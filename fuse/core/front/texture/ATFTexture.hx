@@ -3,7 +3,7 @@ import fuse.utils.AtfData;
 import openfl.display3D.Context3DTextureFormat;
 
 import fuse.utils.AtfData.AtfDataInfo;
-import fuse.core.front.texture.BaseTexture;
+import fuse.core.front.texture.FrontBaseTexture;
 import fuse.core.front.texture.Textures;
 import openfl.errors.Error;
 import openfl.events.Event;
@@ -15,7 +15,7 @@ import openfl.utils.ByteArray;
  */
 
 @:access(fuse)
-class ATFTexture extends BaseTexture
+class ATFTexture extends FrontBaseTexture
 {
 	var data:ByteArray;
 	var atfDataInfo:AtfDataInfo;

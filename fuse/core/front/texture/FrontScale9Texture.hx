@@ -6,7 +6,7 @@ import fuse.geom.Rectangle;
 import fuse.texture.ITexture;
 import msignal.Signal.Signal0;
 
-class Scale9Texture
+class FrontScale9Texture
 {
     @:isVar public var width(get, set):Float;
 	@:isVar public var height(get, set):Float;

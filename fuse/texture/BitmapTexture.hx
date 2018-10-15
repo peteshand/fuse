@@ -1,6 +1,6 @@
 package fuse.texture;
 
-import fuse.core.front.texture.BitmapTexture as FrontBitmapTexture;
+import fuse.core.front.texture.FrontBitmapTexture;
 import openfl.display.BitmapData;
 import fuse.utils.ObjectId;
 import fuse.texture.TextureId;

@@ -4,7 +4,7 @@ import mantle.delay.Delay;
 import openfl.events.VideoTextureEvent;
 import msignal.Signal.Signal0;
 import openfl.net.NetConnection;
-import fuse.core.front.texture.BaseTexture;
+import fuse.core.front.texture.FrontBaseTexture;
 import fuse.core.front.texture.Textures;
 import openfl.events.Event;
 import openfl.events.NetStatusEvent;
@@ -20,7 +20,7 @@ import mantle.notifier.Notifier;
 #if (js && html5)
 @:access(mantle.net.NetStream)
 #end
-class VideoTexture extends BaseTexture
+class FrontVideoTexture extends FrontBaseTexture
 {
 	public var netStream:NetStream;
 	public var nativeVideoTexture:NativeVideoTexture;

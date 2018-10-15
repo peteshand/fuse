@@ -12,7 +12,7 @@ import fuse.core.communication.data.textureData.ITextureData;
 /**
  * @author P.J.Shand
  */
-interface ITexture 
+interface IFrontTexture 
 {
 	var objectId:ObjectId;
 	var textureId:TextureId;
@@ -42,7 +42,7 @@ interface ITexture
 	function addChangeListener(image:Image):Void;
 	function removeChangeListener(image:Image):Void;
 
-	function createSubTexture(offsetU:Float, offsetV:Float, scaleU:Float, scaleV:Float):SubTexture;
+	function createSubTexture(offsetU:Float, offsetV:Float, scaleU:Float, scaleV:Float):FrontSubTexture;
 
 	private function setTextureData():Void;
 }

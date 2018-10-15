@@ -10,7 +10,7 @@ import openfl.display.BitmapData;
 import openfl.display3D.Context3D;
 import openfl.display3D.textures.TextureBase;
 import openfl.events.Event;
-import fuse.core.front.texture.ITexture;
+import fuse.core.front.texture.IFrontTexture;
 /**
  * ...
  * @author P.J.Shand
@@ -22,7 +22,7 @@ import fuse.core.front.texture.ITexture;
 class Textures
 {
 	static private var context3D:Context3D;
-	static public var textures = new Map<Int, ITexture>();
+	static public var textures = new Map<Int, IFrontTexture>();
 	static private var blankId:Int = 0;
 	static private var whiteId:Int = 1;
 	static private var textureCount:Int = 0;
@@ -55,7 +55,7 @@ class Textures
 		//trace("whiteTexture.textureId = " + whiteTexture.textureId);
 	}
 	
-	static public function registerTexture(textureId:Int, texture:ITexture):Void
+	static public function registerTexture(textureId:Int, texture:IFrontTexture):Void
 	{
 		if (!textures.exists(textureId)) {
 			textures.set(textureId, texture);
@@ -65,7 +65,7 @@ class Textures
 		}
 	}
 	
-	static public function deregisterTexture(textureId:Int, texture:ITexture) 
+	static public function deregisterTexture(textureId:Int, texture:IFrontTexture) 
 	{
 		if (textureId == 0) {
 			trace("deregisterTexture: " + textureId);
@@ -80,7 +80,7 @@ class Textures
 	{
 		if (textureId == null) return null;
 		
-		var texture:ITexture = getTexture(textureId);
+		var texture:IFrontTexture = getTexture(textureId);
 		if (texture == null) {
 			//trace("No texture found for textureId: " + textureId);
 			return null;
@@ -89,7 +89,7 @@ class Textures
 		return texture.textureBase;
 	}
 
-	static inline public function getTexture(textureId:Int):ITexture
+	static inline public function getTexture(textureId:Int):IFrontTexture
 	{
 		return textures.get(getTextureId(textureId));
 	}

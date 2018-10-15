@@ -1,9 +1,9 @@
 package fuse.core.front.texture;
 
-import fuse.core.front.texture.BitmapTexture;
+import fuse.core.front.texture.FrontBitmapTexture;
 import openfl.display.BitmapData;
 
-class DefaultTexture extends BitmapTexture
+class FrontDefaultTexture extends FrontBitmapTexture
 {
 	public function new(bitmapData:BitmapData, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{

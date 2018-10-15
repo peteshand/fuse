@@ -1,6 +1,6 @@
 package fuse.texture;
 
-import fuse.core.front.texture.SubTexture as FrontSubTexture;
+import fuse.core.front.texture.FrontSubTexture;
 
 class SubTexture extends BaseTexture
 {

@@ -1,7 +1,8 @@
 package fuse.texture;
 
-import fuse.core.front.texture.DefaultTexture as FrontDefaultTexture;
+import fuse.core.front.texture.FrontDefaultTexture;
 import openfl.display.BitmapData;
+import fuse.texture.BaseTexture;
 
 class DefaultTexture extends BaseTexture
 {
