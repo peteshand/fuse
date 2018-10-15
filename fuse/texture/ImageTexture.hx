@@ -7,10 +7,10 @@ class ImageTexture extends BaseTexture
 {
     static var cache = new Map<String, IFrontTexture>();
 
-    public function new(url:String, ?width:Null<Int>, ?height:Null<Int>, queUpload:Bool=false, onTextureUploadCompleteCallback:Void -> Void = null) 
+    public function new(url:String, ?width:Null<Int>, ?height:Null<Int>, queUpload:Bool=false, onTextureUploadCompleteCallback:Void -> Void = null, useCache:Bool=true) 
 	{
         super();
-        texture = cache.get(url);
+        if (useCache) texture = cache.get(url);
         if (texture == null){
             texture = new FrontImageTexture(url, width, height, queUpload, onTextureUploadCompleteCallback);
             cache.set(url, texture);
