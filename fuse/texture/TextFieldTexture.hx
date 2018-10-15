@@ -1,15 +1,7 @@
 package fuse.texture;
 
 import fuse.core.front.texture.FrontTextFieldTexture;
-import fuse.utils.Align;
-import fuse.utils.Color;
-import fuse.display.Image;
-import fuse.texture.ITexture;
-import fuse.utils.GcoArray;
-import fuse.utils.PowerOfTwo;
 import lime.text.UTF8String;
-import mantle.time.EnterFrame;
-import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
 import openfl.text.AntiAliasType;
 import openfl.text.GridFitType;
@@ -17,7 +9,9 @@ import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.text.TextLineMetrics;
+import openfl.text.TextField as NativeTextField;
 
+@:access(fuse.core.front.texture.FrontTextFieldTexture)
 class TextFieldTexture extends BaseTexture
 {
     var textFieldTexture:FrontTextFieldTexture;
@@ -54,11 +48,13 @@ class TextFieldTexture extends BaseTexture
 	public var textWidth(get, never):Float;
 	public var type(get, set):TextFieldType;
 	public var wordWrap(get, set):Bool;
-	
+	var nativeTextField:NativeTextField;
+
 	public function new(width:Int, height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
         super();
         texture = textFieldTexture = new FrontTextFieldTexture(width, height, queUpload, onTextureUploadCompleteCallback);
+		nativeTextField = textFieldTexture.nativeTextField;
     }
 
 	public function appendText(text:String):Void

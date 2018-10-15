@@ -63,13 +63,14 @@ class BaseTexture implements ITexture
     function set_texture(value:IFrontTexture):IFrontTexture
     {
         if (texture != null){
-            texture.onUpdate.removeAll();
-            texture.onUpload.removeAll();
+            onUpdate = null;
+            onUpload = null;
         }
         texture = value;
         if (texture != null){
-            texture.onUpdate.add(onUpdate.dispatch);
-            texture.onUpload.add(onUpload.dispatch);
+            onUpdate = texture.onUpdate;
+            onUpload = texture.onUpload;
+            
             if (texture.textureData.textureAvailable == 1){
                 Delay.nextFrame(() -> {
                     // Texture already ready
