@@ -452,12 +452,14 @@ class FrontTextFieldTexture extends FrontBitmapTexture
 			//texture = new BitmapTexture(bitmapdata, false, null, textureId);
 			//texture.directRender = directRender;
 			initialized = true;
+			onUpdate.dispatch();
 		}
 		else if (dirtyProp == true) {
 			//trace("redraw texture");
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
 			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
 			this.update(bitmapdata);
+			onUpdate.dispatch();
 		}
 		
 		//isStatic = 0;
