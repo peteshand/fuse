@@ -1,7 +1,7 @@
-package fuse.render.debug;
+package fuse.core.render.debug;
 import fuse.core.communication.data.batchData.IBatchData;
 import fuse.core.communication.memory.SharedMemory;
-import fuse.render.buffers.Buffer;
+import fuse.core.render.buffers.Buffer;
 
 /**
  * ...

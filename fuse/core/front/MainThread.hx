@@ -8,8 +8,8 @@ import fuse.display.DisplayObject;
 import fuse.display.Stage;
 import fuse.events.FuseEvent;
 import fuse.loader.RemoteLoader;
-import fuse.render.setup.Context3DSetup;
-import fuse.render.Renderer;
+import fuse.core.render.Context3DSetup;
+import fuse.core.render.Renderer;
 import openfl.display.Stage3D;
 import openfl.events.Event;
 

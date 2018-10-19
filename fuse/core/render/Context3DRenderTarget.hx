@@ -1,4 +1,4 @@
-package fuse.render.target;
+package fuse.core.render;
 import fuse.core.front.texture.Textures;
 import fuse.core.front.texture.IFrontTexture;
 import mantle.notifier.Notifier;

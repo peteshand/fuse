@@ -1,9 +1,9 @@
-package fuse.render.buffers;
+package fuse.core.render.buffers;
 
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.rangeData.IRangeData;
 import fuse.core.communication.memory.SharedMemory;
-import fuse.render.shaders.FShader;
+import fuse.core.render.shaders.FShader;
 import mantle.notifier.Notifier;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DBufferUsage;
@@ -14,7 +14,7 @@ import fuse.core.communication.data.vertexData.VertexData;
 import openfl.utils.ByteArray;
 import openfl.utils.Endian;
 import fuse.utils.ObjectId;
-import fuse.render.batch.BatchRenderer;
+import fuse.core.render.batch.BatchRenderer;
 
 /**
  * ...

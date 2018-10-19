@@ -1,7 +1,7 @@
 package fuse.core.communication.data.vertexData;
 
 import fuse.Fuse;
-import fuse.render.shaders.FShader;
+import fuse.core.render.shaders.FShader;
 import fuse.utils.Color;
 import fuse.core.communication.memory.Memory;
 

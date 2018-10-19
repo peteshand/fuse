@@ -1,4 +1,4 @@
-package fuse.render.texture;
+package fuse.core.render;
 
 import openfl.display3D.textures.VideoTexture;
 import openfl.display3D.Context3D;

@@ -1,4 +1,4 @@
-package fuse.render.blendMode;
+package fuse.core.render;
 import fuse.display.BlendMode;
 import haxe.Json;
 import mantle.notifier.Notifier;

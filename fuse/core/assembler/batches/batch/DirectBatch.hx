@@ -5,7 +5,7 @@ import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.texture.CoreTexture;
 import fuse.core.communication.data.vertexData.IVertexData;
 import fuse.core.communication.data.vertexData.VertexData;
-import fuse.render.shaders.FShader;
+import fuse.core.render.shaders.FShader;
 import fuse.utils.GcoArray;
 
 /**

@@ -3,7 +3,7 @@ import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.display.DisplayObject;
 import fuse.display.Stage;
-import fuse.render.Renderer;
+import fuse.core.render.Renderer;
 import msignal.Signal.Signal0;
 import openfl.Lib;
 import openfl.events.EventDispatcher;

@@ -1,4 +1,4 @@
-package fuse.render.shaders;
+package fuse.core.render.shaders;
 
 import openfl.display3D.Context3D;
 import fuse.shader.BaseShader;

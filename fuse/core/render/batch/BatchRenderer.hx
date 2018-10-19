@@ -1,18 +1,18 @@
-package fuse.render.batch;
+package fuse.core.render.batch;
 
 import fuse.core.backend.texture.TextureRenderBatch;
 import fuse.core.communication.data.vertexData.VertexData;
 import fuse.core.communication.data.batchData.IBatchData;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.front.buffers.AtlasBuffers;
-import fuse.render.blendMode.Context3DBlendMode;
-import fuse.render.texture.Context3DTexture;
-import fuse.render.buffers.Buffers;
-import fuse.render.buffers.Buffer;
-import fuse.render.debug.RenderDebugUtil;
-import fuse.render.shaders.FShader;
-import fuse.render.shaders.FShaders;
-import fuse.render.target.Context3DRenderTarget;
+import fuse.core.render.Context3DBlendMode;
+import fuse.core.render.Context3DTexture;
+import fuse.core.render.buffers.Buffers;
+import fuse.core.render.buffers.Buffer;
+import fuse.core.render.debug.RenderDebugUtil;
+import fuse.core.render.shaders.FShader;
+import fuse.core.render.shaders.FShaders;
+import fuse.core.render.Context3DRenderTarget;
 import openfl.display3D.Context3D;
 
 /**

@@ -1,4 +1,4 @@
-package fuse.render.shaders;
+package fuse.core.render.shaders;
 
 import fuse.shader.BaseShader;
 import fuse.shader.ColorTransformShader;

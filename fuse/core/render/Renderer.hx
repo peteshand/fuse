@@ -1,16 +1,16 @@
-package fuse.render;
+package fuse.core.render;
 
 import msignal.Signal.Signal0;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.texture.Textures;
-import fuse.render.batch.BatchRenderer;
-import fuse.render.blendMode.Context3DBlendMode;
-import fuse.render.buffers.Buffer;
-import fuse.render.buffers.Buffers;
-import fuse.render.shaders.FShaders;
-import fuse.render.target.Context3DRenderTarget;
-import fuse.render.texture.Context3DTexture;
+import fuse.core.render.batch.BatchRenderer;
+import fuse.core.render.Context3DBlendMode;
+import fuse.core.render.buffers.Buffer;
+import fuse.core.render.buffers.Buffers;
+import fuse.core.render.shaders.FShaders;
+import fuse.core.render.Context3DRenderTarget;
+import fuse.core.render.Context3DTexture;
 import fuse.utils.Color;
 import fuse.Fuse;
 import mantle.managers.resize.Resize;

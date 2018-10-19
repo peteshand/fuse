@@ -1,5 +1,5 @@
-package fuse.render.buffers;
-import fuse.render.buffers.Buffer;
+package fuse.core.render.buffers;
+import fuse.core.render.buffers.Buffer;
 import openfl.display3D.Context3D;
 
 /**
