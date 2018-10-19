@@ -19,7 +19,7 @@ import openfl.net.SharedObject;
 
 
 	
-#elseif nodejs
+#elseif electron
 
 import js.node.Fs;
 import openfl.utils.ByteArray;

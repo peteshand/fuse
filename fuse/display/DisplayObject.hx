@@ -56,7 +56,7 @@ class DisplayObject
 	@:isVar public var mask(default, set):Image;
 	@:isVar public var renderLayer(default, set):Null<Int>;
 	//@:isVar public var blendMode(get, set):BlendMode;
-	public var displayType:DisplayType = DisplayType.DISPLAY_OBJECT;
+	public var displayType:DisplayType;
 	
 	// var updateUVs:Bool = false;
 	var updateTexture:Bool = false; // only used for Images
@@ -74,6 +74,7 @@ class DisplayObject
 	
 	public function new()
 	{
+		displayType = DisplayType.DISPLAY_OBJECT;
 		stage = Fuse.current.stage;
 		//isRotating.add(OnRotationChange);
 		//isMoving.add(OnMovingChange);

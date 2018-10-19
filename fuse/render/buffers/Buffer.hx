@@ -70,7 +70,6 @@ class Buffer
 	
 	public function activate():Void
 	{
-		//trace("activate: " + bufferSize);
 		// new order
 		bufferCount = 0;
 		bufferPosition = 0;
@@ -105,7 +104,6 @@ class Buffer
 	
 	public function deactivate():Void
 	{
-		//trace("deactivate: " + bufferSize);
 		context3D.setVertexBufferAt(0, null);
 		context3D.setVertexBufferAt(1, null);
 		context3D.setVertexBufferAt(2, null);

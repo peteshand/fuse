@@ -72,14 +72,13 @@ import openfl.net.SharedObject;
 			return this;
 		}
 	}
-#elseif nodejs
+#elseif electron
 
 import js.node.Fs;
 import js.node.Os;
 import js.node.Path;
 import js.node.Require;
 import mantle.net.FileReference;
-import electron.WebSource;
 
 class File extends FileReference
 {

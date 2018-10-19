@@ -18,7 +18,7 @@ abstract Notifier<T>(BaseNotifier<T>)
 	
 	// Implicit Casting
 	
-	public inline function new(?value:T, ?id:String) {
+	public function new(?value:T, ?id:String) {
 		this = new BaseNotifier(value, id);
 	}
 	

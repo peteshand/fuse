@@ -25,6 +25,7 @@ class Textures
 	static public var textures = new Map<Int, IFrontTexture>();
 	static private var blankId:Int = 0;
 	static private var whiteId:Int = 1;
+	static private var errorId:Int = 2;
 	static private var textureCount:Int = 0;
 	static public var whiteTexture:DefaultTexture;
 	static public var blankTexture:DefaultTexture;
@@ -47,11 +48,10 @@ class Textures
 	
 	static private function createDefaultTextures() 
 	{
-		var blank:BlankBmd = new BlankBmd();
-		blankTexture = new DefaultTexture(blank, false);
+		blankTexture = new DefaultTexture(new BlankBmd(), false);
+		//blankTexture = new DefaultTexture(new BitmapData(8, 8, true, 0xFFFF0000), false);
 		//trace("blankTexture.textureId = " + blankTexture.textureId);
-		var white:BitmapData = new BitmapData(8, 8, true, 0xFFFFFFFF);
-		whiteTexture = new DefaultTexture(white, false);
+		whiteTexture = new DefaultTexture(new BitmapData(32, 32, true, 0xFFFFFFFF), false);
 		//trace("whiteTexture.textureId = " + whiteTexture.textureId);
 	}
 	

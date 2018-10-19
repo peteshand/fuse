@@ -24,6 +24,9 @@ class SceneCondition extends Condition
 	
 	override function equalTo(value1:Dynamic, value2:Dynamic) 
 	{
+		if (value1 == null) value1 = "";
+		if (value2 == null) value2 = "";
+		
 		if (wildcard) {
 			var s1:String = untyped value1;
 			var s2:String = s1.substr(0, wildcardLength);

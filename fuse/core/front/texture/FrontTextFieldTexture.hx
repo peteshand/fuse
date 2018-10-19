@@ -102,7 +102,6 @@ class FrontTextFieldTexture extends FrontBitmapTexture
 		
 		//bitmapdata = new BitmapData(width, height, true, clearColour);
 		dirtySize = false;
-		
 		bitmapdata= new BitmapData(width, height, true, clearColour);
 
 		this.width = width;// nativeTextField.width;// = width;

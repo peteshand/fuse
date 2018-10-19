@@ -48,7 +48,7 @@ class Loader extends EventDispatcher implements ILoader
 	{
 		trace(e + ", " + currentURL);
 		loading = false;
-		//dispatchEvent(e);
+		dispatchEvent(e);
 	}
 	
 	public function load(url:String):Void

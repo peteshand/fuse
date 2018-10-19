@@ -19,7 +19,7 @@ class SceneViewMediator extends Mediator
 	
 	override public function initialize():Void
 	{
-		addState();
+		Delay.nextFrame(addState);
 	}
 	
 	function addState() 

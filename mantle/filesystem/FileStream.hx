@@ -13,7 +13,7 @@ import mantle.filesystem.File;
 
 	typedef FileStream = flash.filesystem.FileStream;
 
-#elseif nodejs
+#elseif electron
 
 import js.node.Fs;
 import js.node.fs.ReadStream;

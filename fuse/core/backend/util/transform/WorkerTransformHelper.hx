@@ -60,24 +60,6 @@ class WorkerTransformHelper
 	
 	public static function update(coreDisplay:CoreDisplayObject) 
 	{
-		//if (alpha != Graphics.opacity) {
-			
-			
-			//popAlpha = true;
-		//}
-		//Graphics.color = color.value;
-		
-		//applyRotation = 0;
-		//applyPosition = 0;
-		//
-		//
-		//if (coreDisplay.isRotating == 1) {
-			//applyRotation = 1;
-		//}
-		//if (coreDisplay.isMoving == 1) {
-			//applyPosition = 1;
-		//}
-		
 		WorkerTransformHelper.coreDisplay = coreDisplay;
 		WorkerTransformHelper.localTransform = coreDisplay.transformData.localTransform;
 		WorkerTransformHelper.quadData = coreDisplay.quadData;
@@ -92,7 +74,6 @@ class WorkerTransformHelper
 		WorkerTransformHelper.pivotX = coreDisplay.displayData.pivotX;
 		WorkerTransformHelper.pivotY = coreDisplay.displayData.pivotY;
 		WorkerTransformHelper.rotation = coreDisplay.displayData.rotation;
-		
 		//trace(Json.stringify(coreDisplay.displayData));
 		
 		localTransform.setFrom(clearMatrix);
