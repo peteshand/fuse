@@ -19,11 +19,7 @@ class InputAssembler
 {
 	public static var input = new GcoArray<Touch>([]);
 	public static var collisions = new GcoArray<Touch>([]);
-	
-	//static var objects = new Map<Int, InputAssemblerObject>();
 	static var objects = new Array<InputAssemblerObject>();
-	
-	public function new() { }
 	
 	public static function add(touch:Touch) 
 	{
@@ -50,13 +46,6 @@ class InputAssembler
 		var object:InputAssemblerObject = new InputAssemblerObject(index);
 		objects.push(object);
 		return object;
-		
-		//var object:InputAssemblerObject = objects.get(index);
-		//if (object == null) {
-			//object = new InputAssemblerObject(index);
-			//objects.set(index, object);
-		//}
-		//return object;
 	}
 	
 }
@@ -90,70 +79,35 @@ class InputAssemblerObject
 	{
 		if (display == null) return false;
 		if (display.absoluteVis() == false) return false;
-		var triangleSum:Float = getTriangleSum(display, touch);
-		if (triangleSum > display.area + 1) { 
-			// if outside bounds return only if not stage
-			if (display.displayType != 0) {
+
+		if (display.displayType != DisplayType.STAGE) {
+			var _withinBound:Bool = display.withinBounds(touch.x, touch.y);
+			if (_withinBound){
+				if (touch.targetId == null) {
+					display.onOver.index = touch.index;
+					display.onOver.x = touch.x;
+					display.onOver.y = touch.y;
+					InputAssembler.collisions.push(display.onOver);
+					//trace("OVER");
+				}
+			} else {
 				if (touch.targetId == display.objectId) {
 					touch.targetId = null;
 					display.onOut.index = touch.index;
 					display.onOut.x = touch.x;
 					display.onOut.y = touch.y;
 					InputAssembler.collisions.push(display.onOut);
+					//trace("OUT");
+					
 				}
-				return false; 
+				return false;
 			}
 		}
-		
-		if (display.displayType != 0) {
-			if (touch.targetId == null) {
-				display.onOver.index = touch.index;
-				display.onOver.x = touch.x;
-				display.onOver.y = touch.y;
-				InputAssembler.collisions.push(display.onOver);
-			}
-		}
+
 		var displayTouch:Touch = getDisplayTouch(display, touch);
 		InputAssembler.collisions.push(displayTouch);
 		return true;
 	}
-
-	/*function testDisplay(display:CoreDisplayObject, touch:Touch)
-	{
-		if (display == null) return;
-		// TODO: non visible displays should not be in the touchables array //trace(display.visible);
-		if (display.visible == true)
-		{
-			var releaseOutside:Bool = touch.type == "mouseUp" && touch.targetId == display.objectId;
-			
-			var triangleSum:Float = getTriangleSum(display, touch);
-			if (display.displayType == 0 || triangleSum <= display.area + 1 || releaseOutside) {
-				if (touch.targetId != display.objectId) {						
-					if (touch.targetId != -1) {
-						//trace("Out");
-						DispatchOut(display, touch.targetId, touch);	
-						
-					}
-					touch.targetId = display.objectId;
-					//trace("Over");
-					DispatchOver(display,display.objectId, touch);
-					
-				}
-				
-				//touch.collisionId = display.objectId;
-				
-				var displayTouch:Touch = getDisplayTouch(display, touch);
-
-				InputAssembler.collisions.push(displayTouch);
-				return;
-			}
-			else if (touch.targetId == display.objectId){
-				// outside
-				//trace("Out");
-				DispatchOut(display, display.objectId, touch);					
-			}
-		}
-	}*/
 
 	function getDisplayTouch(display:CoreDisplayObject, touch:Touch):Touch
 	{
@@ -186,63 +140,11 @@ class InputAssemblerObject
 		else return 0;
 	}
 	
-	function getDistance(display:CoreDisplayObject, touch:Touch) 
+	/*function getDistance(display:CoreDisplayObject, touch:Touch) 
 	{
 		return Math.sqrt(
 			Math.pow(display.quadData.middleX - Calc.pixelToScreenX(touch.x), 2) + 
 			Math.pow(display.quadData.middleY - Calc.pixelToScreenY(touch.y), 2)
 		);
-	} 
-	
-	
-	
-	function getTriangleSum(display:CoreDisplayObject, touch:Touch) 
-	{
-		var t1:Float = triangleArea(touch,
-			display.quadData.bottomLeftX, display.quadData.bottomLeftY,
-			display.quadData.topLeftX, display.quadData.topLeftY
-		);
-		var t2:Float = triangleArea(touch,
-			display.quadData.topLeftX, display.quadData.topLeftY,
-			display.quadData.topRightX, display.quadData.topRightY
-		);
-		var t3:Float = triangleArea(touch,
-			display.quadData.topRightX, display.quadData.topRightY,
-			display.quadData.bottomRightX, display.quadData.bottomRightY
-		);
-		var t4:Float = triangleArea(touch,
-			display.quadData.bottomRightX, display.quadData.bottomRightY,
-			display.quadData.bottomLeftX, display.quadData.bottomLeftY
-		);
-		
-		return t1 + t2 + t3 + t4;
-	}
-	
-	function triangleArea(touch:Touch, bx:Float, by:Float, cx:Float, cy:Float):Float
-	{
-		var ax:Float = touch.x;
-		var ay:Float = touch.y;
-		
-		bx = (bx + 1) / 2 * Core.STAGE_WIDTH;
-		by = (1 - by) / 2 * Core.STAGE_HEIGHT;
-		cx = (cx + 1) / 2 * Core.STAGE_WIDTH;
-		cy = (1 - cy) / 2 * Core.STAGE_HEIGHT;
-		
-		var a:Float = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));
-		var b:Float = Math.sqrt(Math.pow(bx - cx, 2) + Math.pow(by - cy, 2));
-		var c:Float = Math.sqrt(Math.pow(cx - ax, 2) + Math.pow(cy - ay, 2));
-		var p:Float = (a + b + c) / 2;
-		return Math.sqrt(p * (p - a) * (p - b) * (p - c));
-	}
-	
-	function withinBounds(bounds:Bounds, touch:Touch) 
-	{
-		if ((touch.x / Core.STAGE_WIDTH * 2) - 1 > bounds.left && 
-			(touch.x / Core.STAGE_WIDTH * 2) - 1 < bounds.right && 
-			1 - (touch.y / Core.STAGE_HEIGHT * 2) < bounds.top && 
-			1 - (touch.y / Core.STAGE_HEIGHT * 2) > bounds.bottom) {
-				return true;
-		}
-		return false;
-	}
+	}*/
 }
