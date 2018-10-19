@@ -215,9 +215,51 @@ class CoreDisplayObject
 	public function absoluteVis():Bool
 	{
 		if (visible == false) return false;
-
 		if (parent != null) return parent.absoluteVis();
-
+		else if (this.displayType != DisplayType.STAGE) return false;
+		//trace("check absoluteVis: " + objectId);
 		return true;
+	}
+
+
+	public function withinBounds(x:Float, y:Float):Bool
+	{
+		return false;
+	}
+
+	public function getTriangleSum(x:Float, y:Float) 
+	{
+		var t1:Float = triangleArea(x, y,
+			quadData.bottomLeftX, quadData.bottomLeftY,
+			quadData.topLeftX, quadData.topLeftY
+		);
+		var t2:Float = triangleArea(x, y,
+			quadData.topLeftX, quadData.topLeftY,
+			quadData.topRightX, quadData.topRightY
+		);
+		var t3:Float = triangleArea(x, y,
+			quadData.topRightX, quadData.topRightY,
+			quadData.bottomRightX, quadData.bottomRightY
+		);
+		var t4:Float = triangleArea(x, y,
+			quadData.bottomRightX, quadData.bottomRightY,
+			quadData.bottomLeftX, quadData.bottomLeftY
+		);
+		
+		return Math.round(t1 + t2 + t3 + t4);
+	}
+
+	function triangleArea(x:Float, y:Float, bx:Float, by:Float, cx:Float, cy:Float):Float
+	{
+		bx = (bx + 1) / 2 * Core.STAGE_WIDTH;
+		by = (1 - by) / 2 * Core.STAGE_HEIGHT;
+		cx = (cx + 1) / 2 * Core.STAGE_WIDTH;
+		cy = (1 - cy) / 2 * Core.STAGE_HEIGHT;
+		
+		var a:Float = Math.sqrt(Math.pow(x - bx, 2) + Math.pow(y - by, 2));
+		var b:Float = Math.sqrt(Math.pow(bx - cx, 2) + Math.pow(by - cy, 2));
+		var c:Float = Math.sqrt(Math.pow(cx - x, 2) + Math.pow(cy - y, 2));
+		var p:Float = (a + b + c) / 2;
+		return Math.sqrt(p * (p - a) * (p - b) * (p - c));
 	}
 }

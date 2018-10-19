@@ -101,4 +101,16 @@ class CoreInteractiveObject extends CoreDisplayObject
 			for (i in 0...children.length) children[i].buildHierarchy();
 		}
 	}
+
+	override public function withinBounds(x:Float, y:Float):Bool
+	{
+		for (i in 0...children.length) {
+			if (children[i].absoluteVis()){
+				if (children[i].withinBounds(x, y)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
