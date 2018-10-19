@@ -50,7 +50,7 @@ class CoreModelExtension implements IExtension
 		injector.map(ActivityModel).asSingleton();
 		injector.map(TimeoutModel).asSingleton();
 		injector.map(FPSThrottleModel).asSingleton();
-		injector.map(SceneModel).asSingleton();
+		injector.map(SceneModel).toValue(SceneModel.instance);
 		injector.map(FlagsModel).asSingleton();
 		
 		

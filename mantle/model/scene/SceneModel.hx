@@ -14,7 +14,7 @@ import robotlegs.extensions.impl.model.activity.ActivityModel;
 class SceneModel extends BaseNotifier<String> #if robotlegs implements DescribedType #end
 {
 	@inject public var activityModel:ActivityModel;
-	static public var instance:SceneModel;
+	@:isVar static public var instance(get, null):SceneModel;
 	
 	var updateHistory:Bool = true;
 	//var _uri:String = "";
@@ -33,6 +33,12 @@ class SceneModel extends BaseNotifier<String> #if robotlegs implements Described
 		super("");
 	}
 	
+	static function get_instance():SceneModel
+	{
+		if (instance == null) instance = new SceneModel();
+		return instance;
+	}
+
 	private function get_uri():String 
 	{
 		return this.value;

@@ -21,7 +21,6 @@ class ExecuteImagModels implements DescribedType implements IConfig
 	
 	public function configure():Void
 	{
-		if (SceneModel.instance == null) SceneModel.instance = sceneModel;
 		activityMonitorService.start();
 	}
 }

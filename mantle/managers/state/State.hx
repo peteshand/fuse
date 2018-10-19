@@ -59,7 +59,7 @@ class State extends BaseNotifier<Bool> implements IState
 	
 	public function addCondition(notifier:Notifier<Dynamic>, value:Dynamic, operation:String="=="):Void 
 	{
-		if (notifier == sceneModel) {
+		if (Std.is(notifier, SceneModel) || notifier == sceneModel) {
 			uris.push(value);
 			mapCondition(new SceneCondition(notifier, value, operation), untyped sceneConditions);
 		}
