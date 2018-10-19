@@ -26,7 +26,8 @@ class FrontImageTexture extends FrontBaseTexture
 	var fileLoader:ILoader;
 	var bitmapData:BitmapData;
 	public var url:String;
-	
+	@:isVar var errorBitmap(get, null):BitmapData;
+
 	public function new(url:String, ?width:Null<Int>, ?height:Null<Int>, queUpload:Bool=false, onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
 		// TODO: reuse nativeTexture when same url is set
@@ -55,7 +56,8 @@ class FrontImageTexture extends FrontBaseTexture
 	
 	private function OnError(e:IOErrorEvent):Void 
 	{
-		
+		trace("OnError");
+		setBitmapData(errorBitmap);
 	}
 	
 	override public function upload() 
@@ -66,7 +68,12 @@ class FrontImageTexture extends FrontBaseTexture
 
 	private function onLoadComplete(e:Event=null):Void
 	{
-		this.bitmapData = fileLoader.bitmapData;
+		setBitmapData(fileLoader.bitmapData);
+	}
+
+	function setBitmapData(bmd:BitmapData)
+	{
+		this.bitmapData = bmd;
 		this.width = bitmapData.width;
 		this.height = bitmapData.height;
 		
@@ -110,5 +117,11 @@ class FrontImageTexture extends FrontBaseTexture
 	{
 		super.dispose();
 		//ImageTexture.baseFileTextures.remove(url);
+	}
+
+	function get_errorBitmap():BitmapData
+	{
+		if (errorBitmap == null) errorBitmap = new BitmapData(32, 32, true, 0x99FF0000);
+		return errorBitmap;
 	}
 }

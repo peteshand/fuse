@@ -8,8 +8,8 @@ import msignal.Signal.Signal0;
 
 class FrontScale9Texture
 {
-    @:isVar public var width(get, set):Float;
-	@:isVar public var height(get, set):Float;
+    @:isVar public var width(get, set):Null<Float>;
+	@:isVar public var height(get, set):Null<Float>;
 	
     @:isVar public var scale9Grid(default, set):Rectangle;
     var rects:Array<Rectangle> = [];
@@ -58,17 +58,17 @@ class FrontScale9Texture
         updateRects();
     }
 
-    function get_width():Float		{	return width;			}
-	function get_height():Float		{	return height;			}
+    function get_width():Null<Float>		{	return width;			}
+	function get_height():Null<Float>		{	return height;			}
 
-    function set_width(value:Float):Float
+    function set_width(value:Null<Float>):Null<Float>
     {
         width = value;
         updateRects();
         return width;
     }
 
-	function set_height(value:Float):Float
+	function set_height(value:Null<Float>):Null<Float>
     {
         height = value;
         updateRects();
