@@ -5,12 +5,10 @@ import openfl.events.Event;
 import openfl.Lib;
 import mantle.delay.Delay;
 import openfl.display.StageQuality;
-import fuse.texture.BaseTexture;
 import fuse.texture.BitmapTexture;
 import fuse.utils.Align;
 import fuse.utils.Color;
 import fuse.display.Image;
-import fuse.texture.ITexture;
 import fuse.utils.GcoArray;
 import fuse.utils.PowerOfTwo;
 import lime.text.UTF8String;
@@ -60,6 +58,11 @@ class TextField extends Image
 	var targetHeight:Float;
 	var textureWidth:Int;
 	var textureHeight:Int;
+
+	public var textHeight(get, never):Null<Float>;
+	public var textWidth(get, never):Null<Float>;
+	
+
 	
 	public var antiAliasType(get, set):AntiAliasType;
 	public var autoSize(get, set):TextFieldAutoSize;
@@ -87,12 +90,9 @@ class TextField extends Image
 	public var selectable(get, set):Bool;
 	public var selectionBeginIndex(get, never):Int;
 	public var selectionEndIndex(get, never):Int;
-	//@:beta public var shader:Shader;
 	public var sharpness(get, set):Float;
 	public var text(get, set):UTF8String;
 	public var textColor(get, set):Int;
-	public var textHeight(get, never):Float;
-	public var textWidth(get, never):Float;
 	public var type(get, set):TextFieldType;
 	public var wordWrap(get, set):Bool;
 	@:isVar public var directRender(get, set):Bool = false;
@@ -472,12 +472,17 @@ class TextField extends Image
 			texture = new BitmapTexture(bitmapdata, false, null, textureId);
 			texture.directRender = directRender;
 			initialized = true;
+			baseBmdTexture.scaleU = targetWidth / textureWidth;
+			baseBmdTexture.scaleV = targetHeight / textureHeight;
 		}
 		else if (dirtyProp == true) {
 			//trace("redraw texture");
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
 			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
 			baseBmdTexture.update(bitmapdata);
+			baseBmdTexture.scaleU = targetWidth / textureWidth;
+			baseBmdTexture.scaleV = targetHeight / textureHeight;
+			
 		}
 		
 		//isStatic = 0;
