@@ -29,20 +29,8 @@ class Scale9Image extends Sprite
             images.push(image);
         }
 
-        scale9Texture.onLayoutUpdate.add(onLayoutUpdate);
-        onLayoutUpdate();
-    }
-
-    function onLayoutUpdate()
-    {
-        for (i in 0...images.length){
-            var rect:Rectangle = rects[i];
-            var image:Image = images[i];
-            image.x = rect.x;
-            image.y = rect.y;
-            image.width = rect.width;
-            image.height = rect.height;
-        }
+        scale9Texture.onLayoutUpdate.add(updateRects);
+        updateRects();
     }
 
     override function get_width():Float {    return width; }
@@ -80,6 +68,9 @@ class Scale9Image extends Sprite
 
     function updateRects()
     {
+        //trace([width, height]);
+        if (this.width == 0 || this.height == 0) return;
+
         var leftX:Float = 0;
         var leftWidth:Float = scale9Texture.scale9Grid.x;
         var middleX:Float = leftX + leftWidth;
@@ -119,6 +110,20 @@ class Scale9Image extends Sprite
             rect.y = posY[yi];
             rect.width = widths[xi];
             rect.height = heights[yi];
+        }
+
+        onLayoutUpdate();
+    }
+
+    function onLayoutUpdate()
+    {
+        for (i in 0...images.length){
+            var rect:Rectangle = rects[i];
+            var image:Image = images[i];
+            image.x = rect.x;
+            image.y = rect.y;
+            image.width = rect.width;
+            image.height = rect.height;
         }
     }
 }

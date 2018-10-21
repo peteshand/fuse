@@ -30,6 +30,7 @@ class Scale9Texture
 
         textures = frontScale9Texture.textures;
         onLayoutUpdate = frontScale9Texture.onLayoutUpdate;
+        onLayoutUpdate.dispatch();
     }
 
     function get_width():Float		            {	return frontScale9Texture.width;			        }
