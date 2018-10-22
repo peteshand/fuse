@@ -93,7 +93,7 @@ class WorkerTransformHelper
 			WorkerTransformHelper.setRotation(coreDisplay.isRotating, coreDisplay.isMoving, localTransform, rotMatrix, rotMatrix1, rotMatrix2, rotMatrix3, rotation + atlasItem.rotation);
 		}
 		else {*/
-			WorkerTransformHelper.setPosition();
+			
 			
 			//if (coreDisplay.isRotating == 1) {
 				//trace("coreDisplay.isRotating = " + coreDisplay.isRotating);
@@ -102,6 +102,8 @@ class WorkerTransformHelper
 			//}
 			
 			WorkerTransformHelper.setRotation(/*coreDisplay.parentNonStatic, coreDisplay.updateRotation, coreDisplay.updatePosition, localTransform, coreDisplay.transformData.rotMatrix, coreDisplay.transformData.rotMatrix1, coreDisplay.transformData.rotMatrix2, coreDisplay.transformData.rotMatrix3, rotation*/);
+
+			WorkerTransformHelper.setPosition();
 		//}
 		
 		
@@ -122,19 +124,19 @@ class WorkerTransformHelper
 	//
 	//inline static function multvecs(quadData:QuadData, localTransform:FastMatrix3, pivotX:Float, pivotY:Float, width:Float, height:Float) 
 	//{
-		multvec(localTransform, -pivotX, -pivotY + height);			// 0, 1
+		multvec(localTransform, 0, height);			// 0, 1
 		displayData.bottomLeftX = quadData.bottomLeftX = tempPoint.x;
 		displayData.bottomLeftY = quadData.bottomLeftY = tempPoint.y;
 		
-		multvec(localTransform, -pivotX, -pivotY);					// 2, 3
+		multvec(localTransform, 0, 0);					// 2, 3
 		displayData.topLeftX = quadData.topLeftX = tempPoint.x;
 		displayData.topLeftY = quadData.topLeftY = tempPoint.y;
 		
-		multvec(localTransform, -pivotX + width, -pivotY);			// 4, 5
+		multvec(localTransform, width, 0);			// 4, 5
 		displayData.topRightX = quadData.topRightX = tempPoint.x;
 		displayData.topRightY = quadData.topRightY = tempPoint.y;
 		
-		multvec(localTransform, -pivotX + width, -pivotY + height);	// 6, 7
+		multvec(localTransform, width, height);	// 6, 7
 		displayData.bottomRightX = quadData.bottomRightX = tempPoint.x;
 		displayData.bottomRightY = quadData.bottomRightY = tempPoint.y;
 	}
@@ -160,7 +162,7 @@ class WorkerTransformHelper
 	
 	inline static function setPosition() 
 	{
-		if (updatePosition || parentNonStatic) MatrixUtils.translation(transformData.positionMatrix, x, y);
+		if (updatePosition || parentNonStatic) MatrixUtils.translation(transformData.positionMatrix, x - pivotX, y - pivotY);
 		transformData.positionMatrix.multmat(localTransform);
 	}
 	
@@ -169,9 +171,10 @@ class WorkerTransformHelper
 		if (updateRotation || parentNonStatic) {
 			temp1 = rotation / 180 * PI;
 			if (updatePosition || parentNonStatic){
-				MatrixUtils.translation(transformData.rotMatrix1, localTransform._20, localTransform._21);
+				trace(pivotX);
+				MatrixUtils.translation(transformData.rotMatrix1, pivotX, pivotY);
 				MatrixUtils.rotateMatrix(transformData.rotMatrix2, temp1);
-				MatrixUtils.translation(transformData.rotMatrix3, -localTransform._20, -localTransform._21);
+				MatrixUtils.translation(transformData.rotMatrix3, -pivotX, -pivotY);
 				MatrixUtils.multMatrix(transformData.rotMatrix1, transformData.rotMatrix2, transformData.rotMatrix);
 				MatrixUtils.multMatrix(transformData.rotMatrix, transformData.rotMatrix3, transformData.rotMatrix);
 			}
