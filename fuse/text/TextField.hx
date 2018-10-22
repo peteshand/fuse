@@ -535,7 +535,8 @@ class TextField extends Sprite
 	
 	override function updateAlignment() 
 	{
-		if (verticalAlign != null) {
+		image.updateAlignment();
+		/*if (verticalAlign != null) {
 			if (verticalAlign == Align.TOP) pivotY = 0;
 			if (verticalAlign == Align.BOTTOM) pivotY = textHeight;
 			if (verticalAlign == Align.CENTER) pivotY = textHeight / 2;
@@ -544,7 +545,7 @@ class TextField extends Sprite
 			if (horizontalAlign == Align.LEFT) pivotX = 0;
 			if (horizontalAlign == Align.RIGHT) pivotX = textWidth;
 			if (horizontalAlign == Align.CENTER) pivotX = textWidth / 2;
-		}
+		}*/
 	}
 	
 	override public function dispose():Void
