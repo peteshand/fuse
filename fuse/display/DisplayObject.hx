@@ -141,8 +141,8 @@ class DisplayObject
 	inline function get_y():Float { return y; }
 	function get_width():Float { return width; }
 	function get_height():Float { return height; }
-	inline function get_pivotX():Float { return pivotX; }
-	inline function get_pivotY():Float { return pivotY; }
+	function get_pivotX():Float { return pivotX; }
+	function get_pivotY():Float { return pivotY; }
 	inline function get_rotation():Float { return rotation; }
 	inline function get_scaleX():Float { return scaleX; }
 	inline function get_scaleY():Float { return scaleY; }
@@ -207,7 +207,7 @@ class DisplayObject
 		return value;
 	}
 	
-	inline function set_pivotX(value:Float):Float { 
+	function set_pivotX(value:Float):Float { 
 		if (pivotX != value){
 			displayData.pivotX = pivotX = value;
 			updatePosition = true;
@@ -217,7 +217,7 @@ class DisplayObject
 		return value;
 	}
 	
-	inline function set_pivotY(value:Float):Float { 
+	function set_pivotY(value:Float):Float { 
 		if (pivotY != value){
 			displayData.pivotY = pivotY = value;
 			updatePosition = true;

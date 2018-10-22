@@ -1,5 +1,6 @@
 package fuse.text;
 
+import msignal.Signal.Signal0;
 import openfl.events.FocusEvent;
 import openfl.events.Event;
 import openfl.Lib;
@@ -9,6 +10,7 @@ import fuse.texture.BitmapTexture;
 import fuse.utils.Align;
 import fuse.utils.Color;
 import fuse.display.Image;
+import fuse.display.Sprite;
 import fuse.utils.GcoArray;
 import fuse.utils.PowerOfTwo;
 import lime.text.UTF8String;
@@ -28,7 +30,7 @@ import openfl.text.TextLineMetrics;
  * ...
  * @author P.J.Shand
  */
-class TextField extends Image
+class TextField extends Sprite
 {
 	static var dirtyItems:GcoArray<TextField>;
 	
@@ -53,6 +55,7 @@ class TextField extends Image
 	@:isVar var dirty(default, set):Bool = false;
 	
 	var nativeTextField:NativeTextField;
+	var image:Image;
 	var bitmapdata:BitmapData;
 	var targetWidth:Float;
 	var targetHeight:Float;
@@ -61,8 +64,6 @@ class TextField extends Image
 
 	public var textHeight(get, never):Null<Float>;
 	public var textWidth(get, never):Null<Float>;
-	
-
 	
 	public var antiAliasType(get, set):AntiAliasType;
 	public var autoSize(get, set):TextFieldAutoSize;
@@ -98,9 +99,10 @@ class TextField extends Image
 	@:isVar public var directRender(get, set):Bool = false;
 	
 	var clearColour:Color = 0x00000000;
-	public var baseBmdTexture(get, never):BitmapTexture;
+	public var texture(get, never):BitmapTexture;
 	var initialized:Bool = false;
-	
+	public var onUpdate = new Signal0();
+
 	public function new(width:Int, height:Int) 
 	{
 		TextField.init();
@@ -114,8 +116,10 @@ class TextField extends Image
 		//bitmapdata = new BitmapData(width, height, true, clearColour);
 		dirtySize = false;
 		
-		super(null);
-		
+		super();
+		image = new Image(null);
+		addChild(image);
+
 		this.width = width;// nativeTextField.width;// = width;
 		this.height = height;// nativeTextField.height;// = height;
 		
@@ -308,7 +312,7 @@ class TextField extends Image
 	
 	private override function set_height(value:Float):Float
 	{
-		super.set_height(value);
+		image.set_height(value);
 		nativeTextField.height = value;
 		targetHeight = nativeTextField.height;
 		var _textureHeight:Int = PowerOfTwo.getNextPowerOfTwo(Math.floor(targetHeight));
@@ -410,10 +414,30 @@ class TextField extends Image
 		dirtyProp = true;
 		return value;
 	}
+
+	override function get_pivotX():Float { return image.pivotX; }
+	override function get_pivotY():Float { return image.pivotY; }
+	override function set_pivotX(value:Float):Float { return image.pivotX = value; }
+	override function set_pivotY(value:Float):Float { return image.pivotY = value; }
+	
+	override public function alignPivot(horizontalAlign:Align = Align.CENTER, verticalAlign:Align = Align.CENTER) 
+	{
+		image.alignPivot(horizontalAlign, verticalAlign);
+	}
+	
+	override public function alignPivotX(horizontalAlign:Align = Align.CENTER) 
+	{
+		image.alignPivotX(horizontalAlign);
+	}
+	
+	override public function alignPivotY(verticalAlign:Align = Align.CENTER) 
+	{
+		image.alignPivotY(verticalAlign);
+	}
 	
 	override function set_width(value:Float):Float
 	{
-		super.set_width(value);
+		image.set_width(value);
 		nativeTextField.width = value;
 		targetWidth = nativeTextField.width;
 		var _textureWidth:Int = PowerOfTwo.getNextPowerOfTwo(Math.floor(targetWidth));
@@ -464,25 +488,26 @@ class TextField extends Image
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
 			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
 			var textureId:Null<Int> = null;
-			if (texture != null && texture.objectId > 1) {
-				textureId = texture.objectId;
-				texture.dispose();
+			if (image.texture != null && image.texture.objectId > 1) {
+				textureId = image.texture.objectId;
+				image.texture.dispose();
 			}
 			//trace("create new texture");
-			texture = new BitmapTexture(bitmapdata, false, null, textureId);
-			texture.directRender = directRender;
+			image.texture = new BitmapTexture(bitmapdata, false, null, textureId);
+			image.texture.directRender = directRender;
 			initialized = true;
-			baseBmdTexture.scaleU = targetWidth / textureWidth;
-			baseBmdTexture.scaleV = targetHeight / textureHeight;
+			texture.scaleU = targetWidth / textureWidth;
+			texture.scaleV = targetHeight / textureHeight;
+			onUpdate.dispatch();
 		}
 		else if (dirtyProp == true) {
 			//trace("redraw texture");
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
 			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
-			baseBmdTexture.update(bitmapdata);
-			baseBmdTexture.scaleU = targetWidth / textureWidth;
-			baseBmdTexture.scaleV = targetHeight / textureHeight;
-			
+			texture.update(bitmapdata);
+			texture.scaleU = targetWidth / textureWidth;
+			texture.scaleV = targetHeight / textureHeight;
+			onUpdate.dispatch();
 		}
 		
 		//isStatic = 0;
@@ -492,9 +517,9 @@ class TextField extends Image
 		dirty = false;
 	}
 	
-	function get_baseBmdTexture():BitmapTexture 
+	function get_texture():BitmapTexture 
 	{
-		return untyped texture;
+		return untyped image.texture;
 	}
 	
 	function get_directRender():Bool 

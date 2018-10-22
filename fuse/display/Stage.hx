@@ -8,6 +8,7 @@ import fuse.display.Quad;
 import fuse.Fuse;
 import fuse.utils.Color;
 import mantle.managers.resize.Resize;
+import mantle.notifier.Notifier;
 import msignal.Signal.Signal1;
 
 import openfl.Lib;
@@ -28,7 +29,7 @@ class Stage extends Sprite {
 	public var onDisplayAdded = new Signal1<DisplayObject>();
 	public var onDisplayRemoved = new Signal1<DisplayObject>();
 	public var camera = new Camera2D();
-	
+	public var focus = new Notifier<DisplayObject>();
 	//var stageColor:Color = 0xFF000000;
 	//public var transparent:Bool;
 	
