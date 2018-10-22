@@ -20,7 +20,7 @@ class FileCacher
 	public function new(url:String = null)
 	{
 		urlLoader = new URLLoader();
-		ListenerUtil.configureListeners(urlLoader, OnSuccess, OnFail);
+		ListenerUtil.configureListeners(urlLoader, onSuccess, onFail);
 		urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
 		
 		
@@ -36,12 +36,13 @@ class FileCacher
 			url = url.split("\t").join("");
 			this.url = url;
 		}
-		//trace("LOAD: " + url);
-		
 		
 		var localPath:String = LocalFileCheckUtil.localPath(this.url);
-		if (localPath == null) return;
-		if (localPath == "") return;
+		//trace("localPath = " + localPath);
+		if (localPath == null || localPath == "") {
+			onError.dispatch();
+			return;
+		}
 		//trace("localPath: " + localPath);
 		
 		this.localFile = new File(localPath);
@@ -55,13 +56,14 @@ class FileCacher
 		urlLoader.load(new URLRequest(this.url));
 	}
 	
-	function OnFail()
+	function onFail()
 	{
+		trace("onFail");
 		ListenerUtil.removeListeners(urlLoader);
 		onError.dispatch();
 	}
 	
-	function OnSuccess() 
+	function onSuccess() 
 	{
 		ListenerUtil.removeListeners(urlLoader);
 		var data:ByteArray = cast urlLoader.data;

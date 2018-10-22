@@ -30,9 +30,11 @@ class LocalFileCheckUtil
 	
 	static public function localPath(url:String) 
 	{
+		if (url == null) return null;
+
 		var cacheDir:File = new File(Storage.appStorageDir.nativePath + File.separator + "cache" + File.separator);
 		if (!cacheDir.exists) cacheDir.createDirectory();
-
+		
 		if (url.indexOf("://") == -1) {
 			try {
 				if (new File(url).exists){
@@ -47,13 +49,14 @@ class LocalFileCheckUtil
 		}
 		
 		var split:Array<String> = url.split("://");
-		if (split.length <= 1) return null;
 		if (split[0] == "file") {
 			return url; // already local
 		}
 		
 		var url2:String = File.separator;
-		var dirs:Array<String> = split[1].split("/");
+		var v = split[0];
+		if (split.length > 1) v = split[1];
+		var dirs:Array<String> = v.split("/");
 		var startIndex:Int = 0;
 		if (REMOVE_DOMAIN) startIndex = 1;
 		for (i in startIndex...dirs.length-1) 
