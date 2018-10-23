@@ -21,7 +21,6 @@ import openfl.geom.Rectangle;
 import openfl.text.AntiAliasType;
 import openfl.text.GridFitType;
 import openfl.text.TextField as NativeTextField;
-import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.text.TextLineMetrics;
@@ -67,7 +66,7 @@ class TextField extends Sprite
 	public var textWidth(get, never):Null<Float>;
 	
 	public var antiAliasType(get, set):AntiAliasType;
-	public var autoSize(get, set):TextFieldAutoSize;
+	@:isVar public var autoSize(default, set):TextFieldAutoSize = TextFieldAutoSize.HORIZONTAL;
 	public var background(get, set):Bool;
 	public var backgroundColor(get, set):Int;
 	public var border(get, set):Bool;
@@ -97,6 +96,7 @@ class TextField extends Sprite
 	public var textColor(get, set):Int;
 	public var type(get, set):TextFieldType;
 	public var wordWrap(get, set):Bool;
+	
 	@:isVar public var directRender(get, set):Bool = false;
 	
 	var debug:Bool = false;
@@ -218,7 +218,6 @@ class TextField extends Sprite
 	// Getters & Setters
 	
 	function get_antiAliasType():AntiAliasType	return nativeTextField.antiAliasType;
-	function get_autoSize():TextFieldAutoSize	return nativeTextField.autoSize;
 	function get_background():Bool			return nativeTextField.background;
 	function get_backgroundColor():Int		return nativeTextField.backgroundColor;
 	function get_border():Bool				return nativeTextField.border;
@@ -262,7 +261,7 @@ class TextField extends Sprite
 	
 	function set_autoSize(value:TextFieldAutoSize):TextFieldAutoSize
 	{
-		nativeTextField.autoSize = value;
+		autoSize = value;
 		dirtyProp = true;
 		return value;
 	}
