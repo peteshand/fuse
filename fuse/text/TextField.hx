@@ -25,6 +25,7 @@ import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.text.TextLineMetrics;
+import openfl.geom.Matrix;
 
 /**
  * ...
@@ -103,6 +104,8 @@ class TextField extends Sprite
 	public var texture(get, never):BitmapTexture;
 	var initialized:Bool = false;
 	public var onUpdate = new Signal0();
+	var matrix:Matrix = new Matrix();
+	@:isVar public var lineOffset(default, set):Float;
 
 	public function new(width:Int, height:Int) 
 	{
@@ -125,6 +128,15 @@ class TextField extends Sprite
 		this.height = height;// nativeTextField.height;// = height;
 		
 		update();
+	}
+
+	function set_lineOffset(value:Float):Float
+	{
+		lineOffset = value;
+		matrix.identity();
+		matrix.ty = value;
+		dirtyProp = true;
+		return value;
 	}
 
 	function onFocusIn(e:FocusEvent)
@@ -485,14 +497,17 @@ class TextField extends Sprite
 	{
 		if (debug){
 			trace(nativeTextField.getCharBoundaries(0));
+			if (nativeTextField.parent != null) trace(nativeTextField.getRect(nativeTextField.parent));
 			trace(nativeTextField.getRect(nativeTextField));
+			if (nativeTextField.parent != null) trace(nativeTextField.getBounds(nativeTextField.parent));
+			trace(nativeTextField.getBounds(nativeTextField));
 		}
 		
 		if (!initialized || dirtySize == true) {
 			if (bitmapdata != null) bitmapdata.dispose();
 			//trace([this.width, this.textureWidth, this.nativeTextField.width]);
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
-			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
+			bitmapdata.drawWithQuality(nativeTextField, matrix, null, null, null, false, StageQuality.HIGH);
 			var textureId:Null<Int> = null;
 			if (image.texture != null && image.texture.objectId > 1) {
 				textureId = image.texture.objectId;
@@ -509,7 +524,7 @@ class TextField extends Sprite
 		else if (dirtyProp == true) {
 			//trace("redraw texture");
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
-			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
+			bitmapdata.drawWithQuality(nativeTextField, matrix, null, null, null, false, StageQuality.HIGH);
 			texture.update(bitmapdata);
 			texture.scaleU = targetWidth / textureWidth;
 			texture.scaleV = targetHeight / textureHeight;
