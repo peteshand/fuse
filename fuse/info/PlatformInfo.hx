@@ -1,6 +1,9 @@
 package fuse.info;
 import openfl.system.Capabilities;
 
+#if electron
+	import js.node.Os;
+#end
 /**
  * ...
  * @author P.J.Shand
@@ -9,22 +12,30 @@ class PlatformInfo
 {
 	static private var os:String;
 	static private var manufacturer:String;
-	public static var platform:Platform;
-	
-	static function __init__():Void
+
+	@:isVar public static var platform(get, null):Platform;
+	static function get_platform():Platform
 	{
-		os = Capabilities.os.toLowerCase();
-		//manufacturer = Capabilities.manufacturer.toLowerCase();
-		//trace("manufacturer = " + manufacturer);
+		if (platform == null){
+			#if electron
+				os = Os.platform();
+				if (os.indexOf("win") != -1) platform = Platform.WINDOWS;
+				else if (os.indexOf("osx") != -1) platform = Platform.MAC;
+			#else
+				os = Capabilities.os.toLowerCase();
+				if (os.indexOf("windows") != -1) platform = Platform.WINDOWS;
+				else if (os.indexOf("osx") != -1) platform = Platform.MAC;
+			#end
+			trace("os = " + os);
+			trace("platform = " + platform);
+			//manufacturer = Capabilities.manufacturer.toLowerCase();
+			//trace("manufacturer = " + manufacturer);
+			
+			
+		}
 		
-		if (os.indexOf("windows") != -1) {
-			platform = Platform.WINDOWS;
-		}
-		else if (os.indexOf("osx") != -1) {
-			platform = Platform.MAC;
-		}
+		return platform;
 	}
-	
 }
 
 @:enum abstract Platform(String) from String to String
