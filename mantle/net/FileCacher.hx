@@ -58,7 +58,6 @@ class FileCacher
 	
 	function onFail()
 	{
-		trace("onFail");
 		ListenerUtil.removeListeners(urlLoader);
 		onError.dispatch();
 	}

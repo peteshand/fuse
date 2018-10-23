@@ -171,7 +171,6 @@ class WorkerTransformHelper
 		if (updateRotation || parentNonStatic) {
 			temp1 = rotation / 180 * PI;
 			if (updatePosition || parentNonStatic){
-				trace(pivotX);
 				MatrixUtils.translation(transformData.rotMatrix1, pivotX, pivotY);
 				MatrixUtils.rotateMatrix(transformData.rotMatrix2, temp1);
 				MatrixUtils.translation(transformData.rotMatrix3, -pivotX, -pivotY);
