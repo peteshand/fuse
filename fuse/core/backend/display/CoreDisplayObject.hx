@@ -41,12 +41,6 @@ class CoreDisplayObject
 	public var area(get, null):Float;
 	public var diagonal(get, null):Float;
 
-	@:isVar public var onPress(get, null):Touch;
-	@:isVar public var onRelease(get, null):Touch;
-	@:isVar public var onMove(get, null):Touch;
-	@:isVar public var onOver(get, null):Touch;
-	@:isVar public var onOut(get, null):Touch;
-	
 	public var transformData:TransformData;
 	var parentNonStatic		:Bool;
 	public var alpha:Float = 1;
@@ -185,11 +179,34 @@ class CoreDisplayObject
 		return Math.sqrt(Math.pow(quadData.topRightX - quadData.topLeftX, 2) + Math.pow(quadData.bottomLeftY - quadData.topLeftY, 2));
 	}
 
-	function get_onPress():Touch { if (onPress == null)		onPress =	{ targetId:objectId, type:TouchType.PRESS };	return onPress; }
-	function get_onRelease():Touch { if (onRelease == null)	onRelease =	{ targetId:objectId, type:TouchType.RELEASE };	return onRelease; }
-	function get_onMove():Touch { if (onMove == null)		onMove =	{ targetId:objectId, type:TouchType.MOVE };		return onMove; }
-	function get_onOver():Touch { if (onOver == null)		onOver =	{ targetId:objectId, type:TouchType.OVER };		return onOver; }
-	function get_onOut():Touch { if (onOut == null)			onOut =		{ targetId:objectId, type:TouchType.OUT };		return onOut; }
+	
+
+	var _onPresses = new Map<Int, Touch>();
+	var _onRelease = new Map<Int, Touch>();
+	var _onMove = new Map<Int, Touch>();
+	var _onOver = new Map<Int, Touch>();
+	var _onOut = new Map<Int, Touch>();
+
+	public function onPress(index:Int):Touch {	return getTouch(_onPresses, index, TouchType.PRESS); }
+	public function onRelease(index:Int):Touch {return getTouch(_onRelease, index, TouchType.RELEASE); }
+	public function onMove(index:Int):Touch {	return getTouch(_onMove, index, TouchType.MOVE); }
+	public function onOver(index:Int):Touch {	return getTouch(_onOver, index, TouchType.OVER); }
+	public function onOut(index:Int):Touch {	return getTouch(_onOut, index, TouchType.OUT); }
+
+	function getTouch(map:Map<Int, Touch>, index:Int, type:TouchType):Touch
+	{
+		var touch:Touch = map.get(index);
+		if (touch == null){
+			touch = { targetId:objectId, type:type };
+			map.set(index, touch);
+		}
+		return touch;
+	}
+	//function get_onPress():Touch { if (onPress == null)		onPress =	{ targetId:objectId, type:TouchType.PRESS };	return onPress; }
+	//function get_onRelease():Touch { if (onRelease == null)	onRelease =	{ targetId:objectId, type:TouchType.RELEASE };	return onRelease; }
+	//function get_onMove():Touch { if (onMove == null)		onMove =	{ targetId:objectId, type:TouchType.MOVE };		return onMove; }
+	//function get_onOver():Touch { if (onOver == null)		onOver =	{ targetId:objectId, type:TouchType.OVER };		return onOver; }
+	//function get_onOut():Touch { if (onOut == null)			onOut =		{ targetId:objectId, type:TouchType.OUT };		return onOut; }
 	
 	public function clear():Void
 	{

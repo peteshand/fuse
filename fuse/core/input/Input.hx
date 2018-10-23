@@ -45,11 +45,11 @@ class Input {
 			stage.addEventListener(TouchEvent.TOUCH_MOVE, OnTouch, false, 100);
 			stage.addEventListener(TouchEvent.TOUCH_BEGIN, OnTouch);
 			stage.addEventListener(TouchEvent.TOUCH_END, OnTouch);
-		} else {
+		}// else {
 			stage.addEventListener(MouseEvent.MOUSE_MOVE, OnMouse, false, 100);
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, OnMouse);
 			stage.addEventListener(MouseEvent.MOUSE_UP, OnMouse);
-		}
+		//}
 
 		stage.addEventListener(Event.MOUSE_LEAVE, OnMouseLeave);
 		stage.addEventListener(Event.ENTER_FRAME, OnTick);

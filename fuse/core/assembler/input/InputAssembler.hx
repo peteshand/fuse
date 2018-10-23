@@ -79,24 +79,25 @@ class InputAssemblerObject
 	{
 		if (display == null) return false;
 		if (display.absoluteVis() == false) return false;
-
 		if (display.displayType != DisplayType.STAGE) {
 			var _withinBound:Bool = display.withinBounds(touch.x, touch.y);
 			if (_withinBound){
 				if (touch.targetId == null) {
-					display.onOver.index = touch.index;
-					display.onOver.x = touch.x;
-					display.onOver.y = touch.y;
-					InputAssembler.collisions.push(display.onOver);
+					var displayTouch = display.onOver(touch.index);
+					displayTouch.index = touch.index;
+					displayTouch.x = touch.x;
+					displayTouch.y = touch.y;
+					InputAssembler.collisions.push(displayTouch);
 					//trace("OVER");
 				}
 			} else {
 				if (touch.targetId == display.objectId) {
 					touch.targetId = null;
-					display.onOut.index = touch.index;
-					display.onOut.x = touch.x;
-					display.onOut.y = touch.y;
-					InputAssembler.collisions.push(display.onOut);
+					var displayTouch = display.onOut(touch.index);
+					displayTouch.index = touch.index;
+					displayTouch.x = touch.x;
+					displayTouch.y = touch.y;
+					InputAssembler.collisions.push(displayTouch);
 					//trace("OUT");
 					
 				}
@@ -113,9 +114,9 @@ class InputAssemblerObject
 	{
 		var displayTouch:Touch = null;
 		switch touch.type {
-			case TouchType.MOVE: displayTouch = display.onMove;
-			case TouchType.PRESS: displayTouch = display.onPress;	
-			case TouchType.RELEASE: displayTouch = display.onRelease;
+			case TouchType.MOVE: displayTouch = display.onMove(touch.index);
+			case TouchType.PRESS: displayTouch = display.onPress(touch.index);	
+			case TouchType.RELEASE: displayTouch = display.onRelease(touch.index);
 			default: displayTouch = null;
 		}
 		
