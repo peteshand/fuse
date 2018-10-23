@@ -98,6 +98,7 @@ class TextField extends Sprite
 	public var wordWrap(get, set):Bool;
 	@:isVar public var directRender(get, set):Bool = false;
 	
+	var debug:Bool = false;
 	var clearColour:Color = 0x00000000;
 	public var texture(get, never):BitmapTexture;
 	var initialized:Bool = false;
@@ -482,6 +483,11 @@ class TextField extends Sprite
 	
 	public function update():Void
 	{
+		if (debug){
+			trace(nativeTextField.getCharBoundaries(0));
+			trace(nativeTextField.getRect(nativeTextField));
+		}
+		
 		if (!initialized || dirtySize == true) {
 			if (bitmapdata != null) bitmapdata.dispose();
 			//trace([this.width, this.textureWidth, this.nativeTextField.width]);
@@ -509,7 +515,7 @@ class TextField extends Sprite
 			texture.scaleV = targetHeight / textureHeight;
 			onUpdate.dispatch();
 		}
-		
+
 		//isStatic = 0;
 		//updateAll = true;
 		dirtySize = false;
