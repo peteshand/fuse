@@ -81,7 +81,7 @@ class Input {
 		var type:String = e.type;
 		if (type == TouchEvent.TOUCH_END)
 			type = TouchEvent.TOUCH_BEGIN; // share TOUCH_BEGIN and TOUCH_END id
-		var id:String = type + e.touchPointID;
+		var id:String = touchMap.get(type) + "-" + e.touchPointID;
 		var touch:Touch = getTouchItem(id, e.touchPointID);
 		touch.x = e.stageX + Fuse.current.stage.camera.x;
 		touch.y = e.stageY + Fuse.current.stage.camera.y;
@@ -97,7 +97,7 @@ class Input {
 		var type:String = e.type;
 		if (type == MouseEvent.MOUSE_UP)
 			type = MouseEvent.MOUSE_DOWN; // share MOUSE_DOWN and MOUSE_UP id
-		var id:String = type + 0;
+		var id:String = mouseMap.get(type) + "-" + 0;
 		var touch:Touch = getTouchItem(id, 0);
 		touch.x = e.stageX + Fuse.current.stage.camera.x;
 		touch.y = e.stageY + Fuse.current.stage.camera.y;
