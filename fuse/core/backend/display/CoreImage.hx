@@ -38,7 +38,6 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public var shaderId		:Int = 0;
 	public var renderLayer	:Int = 0;
 	
-	public var drawIndex	:Int = -1;
 	public var batchType	:BatchType = null;
 	//var updateUVs			:Bool = false;
 	var renderTarget		:Int = -1;

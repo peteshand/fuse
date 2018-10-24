@@ -19,19 +19,13 @@ class PlatformInfo
 		if (platform == null){
 			#if electron
 				os = Os.platform();
-				if (os.indexOf("win") != -1) platform = Platform.WINDOWS;
-				else if (os.indexOf("osx") != -1) platform = Platform.MAC;
+				if (os.indexOf("darwin") != -1) platform = Platform.MAC;
+				else if (os.indexOf("win") != -1) platform = Platform.WINDOWS;
 			#else
 				os = Capabilities.os.toLowerCase();
 				if (os.indexOf("windows") != -1) platform = Platform.WINDOWS;
 				else if (os.indexOf("osx") != -1) platform = Platform.MAC;
 			#end
-			trace("os = " + os);
-			trace("platform = " + platform);
-			//manufacturer = Capabilities.manufacturer.toLowerCase();
-			//trace("manufacturer = " + manufacturer);
-			
-			
 		}
 		
 		return platform;

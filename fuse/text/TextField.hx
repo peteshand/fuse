@@ -153,12 +153,12 @@ class TextField extends Sprite
 
 	function checkSelection()
 	{
-		trace([nativeTextField.selectionBeginIndex, nativeTextField.selectionEndIndex]);
+		//trace([nativeTextField.selectionBeginIndex, nativeTextField.selectionEndIndex]);
 	}
 
 	function onTextChange(e:Event)
 	{
-		trace(e);
+		//trace(e);
 		var hasFocus:Bool = Lib.current.stage.focus == nativeTextField;
 		if (hasFocus) {
 			Lib.current.stage.focus = null;
@@ -494,13 +494,13 @@ class TextField extends Sprite
 	
 	public function update():Void
 	{
-		if (debug){
+		/*if (debug){
 			trace(nativeTextField.getCharBoundaries(0));
 			if (nativeTextField.parent != null) trace(nativeTextField.getRect(nativeTextField.parent));
 			trace(nativeTextField.getRect(nativeTextField));
 			if (nativeTextField.parent != null) trace(nativeTextField.getBounds(nativeTextField.parent));
 			trace(nativeTextField.getBounds(nativeTextField));
-		}
+		}*/
 		
 		if (!initialized || dirtySize == true) {
 			if (bitmapdata != null) bitmapdata.dispose();

@@ -17,6 +17,7 @@ class DirectBatch extends BaseBatch implements IBatch
 {
 	var renderIndices = new GcoArray<CoreImage>();
 	var numItems:Int;
+	public static var RENDER_INDEX:Int;
 	
 	public function new() 
 	{
@@ -46,6 +47,7 @@ class DirectBatch extends BaseBatch implements IBatch
 		
 		numItems = 0;
 		
+		
 		//trace("renderables.length = " + renderables.length);
 		for (i in 0...renderables.length) 
 		{
@@ -60,6 +62,8 @@ class DirectBatch extends BaseBatch implements IBatch
 	
 	function writeLayerVertex(image:CoreImage)
 	{
+		image.renderIndex = RENDER_INDEX++;
+		
 		if (!image.visible || image.alpha == 0 || image.isMask) {
 			image.setUpdates(false);
 			image.drawIndex = -1;

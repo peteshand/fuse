@@ -68,7 +68,6 @@ class Scale9Image extends Sprite
 
     function updateRects()
     {
-        //trace([width, height]);
         if (this.width == 0 || this.height == 0) return;
 
         var leftX:Float = 0;
@@ -105,7 +104,6 @@ class Scale9Image extends Sprite
             var rect:Rectangle = rects[i];
             var xi:Int = i % 3;
             var yi:Int = Math.floor(i/3);
-            
             rect.x = posX[xi];
             rect.y = posY[yi];
             rect.width = widths[xi];

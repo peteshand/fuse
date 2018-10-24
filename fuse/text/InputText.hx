@@ -1,5 +1,7 @@
 package fuse.text;
 
+import mantle.delay.Delay;
+import fuse.geom.Rectangle;
 import mantle.time.EnterFrame;
 import fuse.display.Stage;
 import fuse.input.Touch;
@@ -14,6 +16,7 @@ class InputText extends TextField
 {
     var hitArea:Quad;
     var caret:Caret;
+    var active:Bool = false;
 
     public function new(width:Int, height:Int)
     {
@@ -25,18 +28,50 @@ class InputText extends TextField
         hitArea.onPress.add(onPressHitarea);
         hitArea.alpha = 0;
 
+       
+
         caret = new Caret(this);
         addChild(caret);
+
+        stage.focus.add(onFocusChange);
+    }
+
+    override function setStage(value:Stage):Stage 
+	{
+        super.setStage(value);
+        onFocusChange();
+        
+        return value;
+    }
+
+    function onFocusChange()
+    {
+        if (stage != null){
+            if (stage.focus.value == this) stage.onPress.add(onPressStage);
+            else stage.onPress.remove(onPressStage);
+        }
     }
 
     function onPressHitarea(touch:Touch)
     {
+        active = true;
+        Delay.nextFrame(updateOnNextFrame);
+    }
+
+    function onPressStage(touch:Touch)
+    {
+        active = false;
+    }
+
+    function updateOnNextFrame()
+    {
         if (stage != null){
-            stage.focus.value = this;
+            if (active) stage.focus.value = this;
+            else if (stage.focus.value == this) stage.focus.value = null;
         }
     }
 }
-
+@:access(fuse.text.InputText)
 class Caret extends Sprite
 {
     var quad:Quad;
@@ -51,8 +86,6 @@ class Caret extends Sprite
         quad = new Quad(2, 37, 0xFFFFFFFF);
         addChild(quad);
         quad.visible = false;
-
-        
     }
 
     override function setStage(value:Stage):Stage 
@@ -76,6 +109,7 @@ class Caret extends Sprite
             inputText.onUpdate.add(onTextUpdate);
             onTextUpdate();
         } else {
+            quad.visible = false;
             EnterFrame.remove(tick);
             inputText.onUpdate.remove(onTextUpdate);
         }
@@ -83,22 +117,21 @@ class Caret extends Sprite
 
     function onTextUpdate()
     {
-        var v = inputText.text;
-        inputText.text = "A";
-        quad.height = inputText.textHeight * 0.75;
-        inputText.text = v;
-
-        if (inputText.defaultTextFormat.align == TextFormatAlign.LEFT){
-            this.x = 0;
-            quad.x = Math.round(inputText.textWidth + (quad.height * 0.2));
-        } else if (inputText.defaultTextFormat.align == TextFormatAlign.CENTER){
-            this.x = inputText.width / 2;
-            quad.x = Math.round((inputText.textWidth / 2) + (quad.height * 0.2));
-        } else if (inputText.defaultTextFormat.align == TextFormatAlign.RIGHT){
-            this.x = inputText.width;
-            quad.x = 0;
+        var lastCharBounds:Rectangle = null;
+        var currentLen:Int = inputText.text.length;
+        if (currentLen == 0){
+            inputText.text = "A";
+            //quad.height = inputText.textHeight * 0.75;
+            lastCharBounds = inputText.nativeTextField.getCharBoundaries(0);
+            lastCharBounds.width = 0;
+            inputText.text = "";
+        } else {
+            lastCharBounds = inputText.nativeTextField.getCharBoundaries(currentLen-1);
         }
-        quad.y = Math.round(quad.height * 0.25);
+        
+        quad.x = lastCharBounds.x + lastCharBounds.width;
+        quad.y = lastCharBounds.y - (lastCharBounds.height * 0.05);
+        quad.height = lastCharBounds.height * 0.8;
     }
 
     function tick()

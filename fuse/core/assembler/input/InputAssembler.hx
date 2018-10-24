@@ -66,6 +66,8 @@ class InputAssemblerObject
 		var j:Int = Touchables.touchables.length - 1;
 		while (j >= 0)
 		{
+			//trace([Touchables.touchables[j].objectId, Touchables.touchables[j].renderIndex, Touchables.touchables[j].hierarchyIndex]);
+
 			if (testDisplay(Touchables.touchables[j], touch)) {
 				// hit display
 				j = -1;
@@ -135,8 +137,11 @@ class InputAssemblerObject
 	
 	function sortTouchables(i1:CoreDisplayObject, i2:CoreDisplayObject):Int
 	{
+		
 		// TODO: take into account renderLayerIndex
-		if (i1.hierarchyIndex > i2.hierarchyIndex) return 1;
+		/*if (i1.renderIndex > i2.renderIndex) return 1;
+		else if (i1.renderIndex < i2.renderIndex) return -1;
+		else */if (i1.hierarchyIndex > i2.hierarchyIndex) return 1;
 		else if (i1.hierarchyIndex < i2.hierarchyIndex) return -1;
 		else return 0;
 	}

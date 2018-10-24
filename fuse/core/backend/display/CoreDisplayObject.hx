@@ -45,6 +45,8 @@ class CoreDisplayObject
 	var parentNonStatic		:Bool;
 	public var alpha:Float = 1;
 	public var visible:Bool = true;
+	public var renderIndex	:Int = -1;
+	public var drawIndex	:Int = -1;
 	public var hierarchyIndex:Int = -1;
 	
 	public var updatePosition:Bool = true;

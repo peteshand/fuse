@@ -1,4 +1,5 @@
 package fuse.core.assembler.vertexWriter;
+import fuse.core.assembler.batches.batch.DirectBatch;
 import fuse.core.assembler.batches.BatchAssembler;
 import fuse.core.assembler.batches.batch.IBatch;
 import fuse.core.assembler.vertexWriter.prep.PrepLayersForBatching;
@@ -22,6 +23,7 @@ class VertexWriter
 	
 	static public function build() 
 	{
+		DirectBatch.RENDER_INDEX = 0;
 		VertexData.OBJECT_POSITION = 0;
 		VERTEX_COUNT = VertexData.basePosition;
 		var numItems:Int = 0;

@@ -51,6 +51,11 @@ class Textures
 		blankTexture = new DefaultTexture(new BlankBmd(), false);
 		//blankTexture = new DefaultTexture(new BitmapData(8, 8, true, 0xFFFF0000), false);
 		//trace("blankTexture.textureId = " + blankTexture.textureId);
+
+		//var white:BitmapData = new BitmapData(64, 64, true, 0x00000000);
+		//white.fillRect(new Rectangle(2, 2, white.width-4, white.height-4), 0xFFFFFFFF);
+		//whiteTexture = new DefaultTexture(white, false);
+
 		whiteTexture = new DefaultTexture(new BitmapData(32, 32, true, 0xFFFFFFFF), false);
 		//trace("whiteTexture.textureId = " + whiteTexture.textureId);
 	}
