@@ -20,7 +20,8 @@ import fuse.utils.GcoArray;
  */
 class Input {
 	var touchData = new Map<String, Touch>();
-	var touchDataArray = new GcoArray<Touch>();
+	var activeTouchData = new Map<String, Touch>();
+	//var touchDataArray = new GcoArray<Touch>();
 	var touchMap = new Map<String, TouchType>();
 	var mouseMap = new Map<String, TouchType>();
 
@@ -56,10 +57,14 @@ class Input {
 	}
 
 	private function OnTick(e:Event):Void {
-		for (i in 0...touchDataArray.length) {
+		for (touch in activeTouchData.iterator()){
+			Fuse.current.workerSetup.addInput(touch);
+		}
+		activeTouchData = new Map<String, Touch>();
+		/*for (i in 0...touchDataArray.length) {
 			Fuse.current.workerSetup.addInput(touchDataArray[i]);
 		}
-		touchDataArray.clear();
+		touchDataArray.clear();*/
 	}
 
 	function OnMouseXChange(value:Array<Float>) {
@@ -82,7 +87,8 @@ class Input {
 		touch.y = e.stageY + Fuse.current.stage.camera.y;
 		touch.type = touchMap.get(e.type);
 
-		touchDataArray.push(touch);
+		//touchDataArray.push(touch);
+		activeTouchData.set(id, touch);
 	}
 
 	function OnMouse(e:MouseEvent):Void {
@@ -96,7 +102,8 @@ class Input {
 		touch.x = e.stageX + Fuse.current.stage.camera.x;
 		touch.y = e.stageY + Fuse.current.stage.camera.y;
 		touch.type = mouseMap.get(e.type);
-		touchDataArray.push(touch);
+		//touchDataArray.push(touch);
+		activeTouchData.set(id, touch);
 	}
 
 	function getTouchItem(id:String, index:Int):Touch {
