@@ -121,7 +121,8 @@ class KeyboardListener
 	
 	public function OnKeyDown(e:KeyboardEvent):Void 
 	{
-		if (pass(key, e.keyCode) && pass(_shift, e.shiftKey) && pass(_ctrl, e.ctrlKey) && pass(_alt, e.altKey)) {
+		var ctrlPass:Bool = pass(_ctrl, e.ctrlKey) || pass(_ctrl, e.commandKey) || pass(_ctrl, e.controlKey);
+		if (pass(key, e.keyCode) && pass(_shift, e.shiftKey) && ctrlPass && pass(_alt, e.altKey)) {
 			Keyboard.event = e;
 			FunctionUtil.dispatch(callback, params);
 		}
@@ -129,7 +130,8 @@ class KeyboardListener
 	
 	public function OnKeyUp(e:KeyboardEvent):Void 
 	{
-		if (pass(key, e.keyCode) && pass(_shift, e.shiftKey) && pass(_ctrl, e.ctrlKey) && pass(_alt, e.altKey)) {
+		var ctrlPass:Bool = pass(_ctrl, e.ctrlKey) || pass(_ctrl, e.commandKey) || pass(_ctrl, e.controlKey);
+		if (pass(key, e.keyCode) && pass(_shift, e.shiftKey) && ctrlPass && pass(_alt, e.altKey)) {
 			Keyboard.event = e;
 			FunctionUtil.dispatch(callback, params);
 		}
