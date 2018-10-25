@@ -14,7 +14,7 @@ import mantle.notifier.Notifier;
 class AtlasBuffers
 {
 	static var startIndex:Int = 2;
-	static var numBuffers:Int = 4;
+	static var numBuffers:Int = 2;
 	static var endIndex(get, null):Int;
 	
 	static var bufferWidth:Int;
