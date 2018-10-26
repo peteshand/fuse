@@ -86,10 +86,10 @@ class FrontImageTexture extends FrontBaseTexture
 			#if (air||flash)
 				OnTextureUploadComplete(null);
 			#else
-			Delay.byFrames(40, () -> {
+			//Delay.byFrames(40, () -> {
 				// Without a delay the following error is happening: there is no texture bound to the unit 1
 				OnTextureUploadComplete(null);
-			});
+			//});
 			#end
 		}
 		else {

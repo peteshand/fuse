@@ -1,5 +1,6 @@
 package fuse.core.assembler.input;
 
+import fuse.core.backend.display.CoreInteractiveObject;
 import fuse.input.TouchType;
 import fuse.core.utils.Calc;
 import fuse.display.geometry.Bounds;
@@ -61,14 +62,21 @@ class InputAssemblerObject
 	
 	public function test(touch:Touch):Void
 	{
-		Touchables.touchables.sort(sortTouchables);
-		
-		var j:Int = Touchables.touchables.length - 1;
+		if (Touchables.requireRebuild == true){
+			Touchables.requireRebuild = false;
+			Touchables.flattened = [];
+			for (i in 0...Touchables.touchables.length) {
+				var display:CoreDisplayObject = untyped Touchables.touchables[i];
+				display.addToArray(display, Touchables.flattened);
+			}
+		}
+		// TODO: only sort when needed
+		Touchables.flattened.sort(sortTouchables);
+
+		var j:Int = Touchables.flattened.length - 1;
 		while (j >= 0)
 		{
-			//trace([Touchables.touchables[j].objectId, Touchables.touchables[j].renderIndex, Touchables.touchables[j].hierarchyIndex]);
-
-			if (testDisplay(Touchables.touchables[j], touch)) {
+			if (testDisplay(Touchables.flattened[j].touchDisplay, touch)) {
 				// hit display
 				j = -1;
 			}
@@ -137,20 +145,10 @@ class InputAssemblerObject
 	
 	function sortTouchables(i1:CoreDisplayObject, i2:CoreDisplayObject):Int
 	{
-		
-		// TODO: take into account renderLayerIndex
-		/*if (i1.renderIndex > i2.renderIndex) return 1;
+		if (i1.renderIndex > i2.renderIndex) return 1;
 		else if (i1.renderIndex < i2.renderIndex) return -1;
-		else */if (i1.hierarchyIndex > i2.hierarchyIndex) return 1;
+		else if (i1.hierarchyIndex > i2.hierarchyIndex) return 1;
 		else if (i1.hierarchyIndex < i2.hierarchyIndex) return -1;
 		else return 0;
 	}
-	
-	/*function getDistance(display:CoreDisplayObject, touch:Touch) 
-	{
-		return Math.sqrt(
-			Math.pow(display.quadData.middleX - Calc.pixelToScreenX(touch.x), 2) + 
-			Math.pow(display.quadData.middleY - Calc.pixelToScreenY(touch.y), 2)
-		);
-	}*/
 }

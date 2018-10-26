@@ -57,6 +57,8 @@ class CoreDisplayObject
 	public var updateTexture:Bool = true;
 	@:isVar public var updateAny(get, set):Bool = true;
 	
+	public var touchDisplay:CoreDisplayObject;
+
 	public function new() 
 	{
 		this.displayType = DisplayType.DISPLAY_OBJECT;
@@ -280,5 +282,10 @@ class CoreDisplayObject
 		var c:Float = Math.sqrt(Math.pow(cx - x, 2) + Math.pow(cy - y, 2));
 		var p:Float = (a + b + c) / 2;
 		return Math.sqrt(p * (p - a) * (p - b) * (p - c));
+	}
+
+	public function addToArray(touchDisplay:CoreDisplayObject, flattened:Array<CoreDisplayObject>)
+	{
+		// override
 	}
 }

@@ -113,4 +113,12 @@ class CoreInteractiveObject extends CoreDisplayObject
 		}
 		return false;
 	}
+
+	override public function addToArray(touchDisplay:CoreDisplayObject, flattened:Array<CoreDisplayObject>)
+	{
+		for (i in 0...children.length) {
+			children[i].addToArray(touchDisplay, flattened);
+		}
+		super.addToArray(touchDisplay, flattened);
+	}
 }

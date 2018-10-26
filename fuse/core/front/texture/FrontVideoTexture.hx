@@ -204,6 +204,15 @@ class FrontVideoTexture extends FrontBaseTexture
 
 	function onTick()
 	{
+		if (loop){
+			if (duration != null){
+				if (time + 0.3 >= duration){
+					nativeVideoTexture.addEventListener(Event.TEXTURE_READY, renderFrame);
+					EnterFrame.remove(onTick);
+					seek(0);
+				}
+			}
+		}
 		this.textureData.changeCount++;
 	}
 

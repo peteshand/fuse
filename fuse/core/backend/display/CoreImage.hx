@@ -247,4 +247,10 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		if (triangleSum < area + 1) return true;
 		return false;
 	}
+
+	override public function addToArray(touchDisplay:CoreDisplayObject, flattened:Array<CoreDisplayObject>)
+	{
+		flattened.push(this);
+		this.touchDisplay = touchDisplay;
+	}
 }

@@ -13,9 +13,11 @@ import fuse.utils.GcoArray;
 class Touchables
 {
 	public static var touchables = new Array<CoreDisplayObject>();
+	public static var flattened = new Array<CoreDisplayObject>();
 	public static var touchablesMap = new Map<Int, CoreDisplayObject>();
 	public static var stage:CoreDisplayObject;
-	
+	public static var requireRebuild:Bool = false;
+
 	public function new() { }
 	
 	static public function setTouchable(payload:TouchableMsg) 
@@ -31,6 +33,7 @@ class Touchables
 			if (!touchablesMap.exists(payload.objectId)) {
 				touchablesMap.set(payload.objectId, coreDisplay);
 				touchables.push(coreDisplay);
+				requireRebuild = true;
 			}
 		}
 		else {
@@ -44,6 +47,7 @@ class Touchables
 					}
 					i--;
 				}
+				requireRebuild = true;
 			}
 		}
 	}

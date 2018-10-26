@@ -1,5 +1,7 @@
 package fuse.display;
 
+import fuse.input.Touch;
+import msignal.Signal.Signal1;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.display.InteractiveObject;
 
@@ -134,4 +136,39 @@ class DisplayObjectContainer extends InteractiveObject
 			children[i].dispose();
 		}
 	}
+
+	/*override function get_onPress():Signal1<Touch> 
+	{
+		var onPress = super.get_onPress();
+		for (i in 0...children.length) children[i].onPress.add(onPress.dispatch);
+		return onPress;
+	}
+	
+	override function get_onMove():Signal1<Touch> 
+	{
+		var onMove = super.get_onMove();
+		for (i in 0...children.length) children[i].onMove.add(onMove.dispatch);
+		return onMove;
+	}
+	
+	override function get_onRelease():Signal1<Touch> 
+	{
+		var onRelease = super.get_onRelease();
+		for (i in 0...children.length) children[i].onRelease.add(onRelease.dispatch);
+		return onRelease;
+	}
+	
+	override function get_onRollover():Signal1<Touch> 
+	{
+		var onRollover = super.get_onRollover();
+		for (i in 0...children.length) children[i].onRollover.add(onRollover.dispatch);
+		return onRollover;
+	}
+	
+	override function get_onRollout():Signal1<Touch> 
+	{
+		var onRollout = super.get_onRollout();
+		for (i in 0...children.length) children[i].onRollout.add(onRollout.dispatch);
+		return onRollout;
+	}*/
 }
