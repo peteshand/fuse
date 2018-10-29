@@ -227,7 +227,7 @@ class DisplayObject
 		return value;
 	}
 	
-	inline function set_rotation(value:Float):Float { 
+	function set_rotation(value:Float):Float { 
 		if (rotation != value){
 			displayData.rotation = rotation = value;
 			//trace("rotation = " + value);

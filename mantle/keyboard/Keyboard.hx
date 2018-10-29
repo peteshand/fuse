@@ -31,6 +31,7 @@ class Keyboard
 	
 	static private function OnKeyUp(e:KeyboardEvent):Void 
 	{
+		trace("OnKeyUp");
 		for (i in 0...releaseItems.length) releaseItems[i].OnKeyUp(e);
 	}
 	
@@ -121,7 +122,7 @@ class KeyboardListener
 	
 	public function OnKeyDown(e:KeyboardEvent):Void 
 	{
-		var ctrlPass:Bool = pass(_ctrl, e.ctrlKey) || pass(_ctrl, e.commandKey) || pass(_ctrl, e.controlKey);
+		var ctrlPass:Bool = _ctrl == null || pass(_ctrl, e.ctrlKey) || pass(_ctrl, e.commandKey) || pass(_ctrl, e.controlKey);
 		if (pass(key, e.keyCode) && pass(_shift, e.shiftKey) && ctrlPass && pass(_alt, e.altKey)) {
 			Keyboard.event = e;
 			FunctionUtil.dispatch(callback, params);
@@ -130,7 +131,7 @@ class KeyboardListener
 	
 	public function OnKeyUp(e:KeyboardEvent):Void 
 	{
-		var ctrlPass:Bool = pass(_ctrl, e.ctrlKey) || pass(_ctrl, e.commandKey) || pass(_ctrl, e.controlKey);
+		var ctrlPass:Bool = _ctrl == null || pass(_ctrl, e.ctrlKey) || pass(_ctrl, e.commandKey) || pass(_ctrl, e.controlKey);
 		if (pass(key, e.keyCode) && pass(_shift, e.shiftKey) && ctrlPass && pass(_alt, e.altKey)) {
 			Keyboard.event = e;
 			FunctionUtil.dispatch(callback, params);

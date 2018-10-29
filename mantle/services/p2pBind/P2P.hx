@@ -1,4 +1,82 @@
 package mantle.services.p2pBind;
+
+import js.Browser;
+import tac.cs.logic.p2p.SendP2P;
+#if electron
+import haxe.Json;
+import mantle.notifier.Notifier;
+import js.html.Window;
+//import electron.renderer.IpcRenderer;
+//import memo.Memo;
+
+/**
+ * ...
+ * @author P.J.Shand
+ */
+class P2P
+{
+	static public var transmitters = new Map<String, WindowTransmitter>();
+	static public var receivers = new Map<String, WindowReceiver>();
+	static public var to:String;
+	static public var otherWindow:Window;
+
+	public function new() 
+	{
+		
+	}
+
+	public static function init()
+	{
+		on("connect", (value:Dynamic=null) -> {
+			for (transmitter in transmitters){
+				transmitter.setCurrentValue();
+			}
+		});
+		send("connect");
+	}
+	
+	public static function bind(notifier:Notifier<Dynamic>, id:String, transmit:Bool, receive:Bool):Void
+	{
+		if (transmit) transmitters.set(id, new WindowTransmitter(notifier, id));
+		if (receive) receivers.set(id, new WindowReceiver(notifier, id));
+	}
+	
+	static public function unbind(id:String, transmit:Bool=true, receive:Bool=true) 
+	{
+		if (transmit && transmitters.exists(id)) {
+			var transmitter = transmitters.get(id);
+			transmitter.dispose();
+			transmitters.remove(id);
+		}
+		if (receive && receivers.exists(id)) {
+			var receiver = receivers.get(id);
+			receiver.dispose();
+			receivers.remove(id);
+		}
+	}
+	
+	public static function send(id:String, payload:Dynamic=null):Void 
+	{
+		var _payload:Dynamic = null;
+		if (payload != null) _payload = Json.stringify(payload);
+		var message:WindowMessage = {
+			id:id,
+			payload:_payload
+		}
+		P2P.otherWindow.postMessage(message, "*");
+	}
+	
+	public static function on(id:String, callback:Dynamic -> Void):Void 
+	{
+		Browser.window.addEventListener('message', (event) -> {
+			var message:WindowMessage = event.data;
+			if (message.id == id){
+				callback(Json.parse(message.payload));
+			}
+		}, false);
+	}
+}
+#else
 import mantle.services.p2p.PeerObject;
 import mantle.notifier.Notifier;
 import mantle.util.app.App;
@@ -198,3 +276,4 @@ class P2P
 		}
 	}
 }
+#end
