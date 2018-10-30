@@ -2,6 +2,7 @@ package fuse.core.front.texture;
 
 import mantle.delay.Delay;
 import openfl.events.VideoTextureEvent;
+import openfl.media.SoundTransform;
 import msignal.Signal.Signal0;
 import openfl.net.NetConnection;
 import fuse.core.front.texture.FrontBaseTexture;
@@ -29,6 +30,7 @@ class FrontVideoTexture extends FrontBaseTexture
 	var netConnection:NetConnection;
 
 	public var time(get, null):Float;
+	@:isVar public var volume(default, set):Float = 1;
 	@:isVar public var onComplete(get, null):Signal0;
 	public var onMetaData = new Signal0();
 
@@ -227,6 +229,13 @@ class FrontVideoTexture extends FrontBaseTexture
 			onComplete = new Signal0();
 		}
 		return onComplete;
+	}
+
+	function set_volume(value:Float):Float
+	{
+		volume = value;
+		netStream.soundTransform = new SoundTransform(volume);
+		return value;
 	}
 }
 

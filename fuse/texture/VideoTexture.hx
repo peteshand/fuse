@@ -12,6 +12,7 @@ class VideoTexture extends BaseTexture
 	public var loop(get, set):Bool;
 	public var duration(get, set):Null<Float>;
 	public var time(get, null):Float;
+	public var volume(get, set):Float;
 	public var onComplete(get, null):Signal0;
 	public var onMetaData(get, null):Signal0;
 	
@@ -44,9 +45,12 @@ class VideoTexture extends BaseTexture
 	function get_loop():Bool								{	return videoTexture.loop;				}
 	function get_duration():Null<Float>						{	return videoTexture.duration;			}
 	function get_time():Float								{	return videoTexture.time;				}
+	function get_volume():Float								{	return videoTexture.volume;				}
 	function get_onComplete():Signal0						{	return videoTexture.onComplete;			}
 	function get_onMetaData():Signal0						{	return videoTexture.onMetaData;			}
 	
 	function set_loop(value:Bool):Bool						{	return videoTexture.loop = value;		}
 	function set_duration(value:Null<Float>):Null<Float>	{	return videoTexture.duration = value;	}
+	function set_volume(value:Float):Float						{	return videoTexture.volume = value;		}
+	
 }
