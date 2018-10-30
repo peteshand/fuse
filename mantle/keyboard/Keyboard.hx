@@ -31,7 +31,6 @@ class Keyboard
 	
 	static private function OnKeyUp(e:KeyboardEvent):Void 
 	{
-		trace("OnKeyUp");
 		for (i in 0...releaseItems.length) releaseItems[i].OnKeyUp(e);
 	}
 	
