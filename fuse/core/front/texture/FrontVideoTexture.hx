@@ -75,6 +75,8 @@ class FrontVideoTexture extends FrontBaseTexture
 			
 			videoMetaData = null;
 			netStream.playLocal(url);
+			trace("volume = " + volume);
+			netStream.soundTransform = new SoundTransform(volume);
 		}
 		paused = false;
 		//playing.remove(onPlayingStartAfterSetURL);
@@ -148,6 +150,9 @@ class FrontVideoTexture extends FrontBaseTexture
 		/*if (this.height == 0)*/ this.height = videoMetaData.height;
 		duration = videoMetaData.duration;
 		setTextureData();
+
+		trace("volume = " + volume);
+		netStream.soundTransform = new SoundTransform(volume);
 
 		checkAutoPlay();
 		onMetaData.dispatch();
@@ -234,6 +239,7 @@ class FrontVideoTexture extends FrontBaseTexture
 	function set_volume(value:Float):Float
 	{
 		volume = value;
+		trace("volume = " + volume);
 		netStream.soundTransform = new SoundTransform(volume);
 		return value;
 	}
