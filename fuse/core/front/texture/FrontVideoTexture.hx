@@ -120,6 +120,9 @@ class FrontVideoTexture extends FrontBaseTexture
 		}
 		if (info.code == "NetStream.Play.Stop") {
 			playing.value = false;
+			if (onComplete != null) {
+				onComplete.dispatch();
+			}
 		}
 
 		if (info.code == "NetStream.Seek.Complete") {
