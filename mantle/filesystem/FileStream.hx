@@ -19,8 +19,9 @@ import js.node.Fs;
 import js.node.fs.ReadStream;
 import js.node.fs.WriteStream;
 import js.node.Buffer;
+import openfl.events.EventDispatcher;
 
-class FileStream
+class FileStream extends EventDispatcher
 {
 	var openFile:File;
 	var fileMode:FileMode;
@@ -29,7 +30,7 @@ class FileStream
 	
 	public function new()
 	{
-		
+		super();
 	}
 	
 	public function open(openFile:File, fileMode:FileMode) 
@@ -39,9 +40,13 @@ class FileStream
 
 		if (fileMode == FileMode.WRITE) writeStream = Fs.createWriteStream(openFile.nativePath);
 		else if (fileMode == FileMode.READ) readStream = Fs.createReadStream(openFile.nativePath);
-		
-		
 	}
+
+	public function openAsync(openFile:File, fileMode:FileMode) 
+	{
+		open(openFile, fileMode);
+	}
+	
 
 	public function readUTF():String
 	{
@@ -72,7 +77,10 @@ class FileStream
 
 	public function writeBytes(bytes:ByteArray, offset:UInt = 0, length:UInt = 0):Void
 	{
-		if (openFile == null) return null;
+		if (openFile == null) {
+			trace(openFile == null);
+			return null;
+		}
 		
 		writeStream.once('open', function(fd) {
 			writeStream.write(Buffer.from(bytes));

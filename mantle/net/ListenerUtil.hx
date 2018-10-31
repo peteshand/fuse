@@ -18,13 +18,13 @@ class ListenerUtil
 {
 	private static var listenerUtilObjects = new Map<IEventDispatcher, ListenerUtilObject>();
 	
-	public static function configureListeners(dispatcher:IEventDispatcher, OnSuccess:Void -> Void, OnFail:Void -> Void):Void {
+	public static function configureListeners(dispatcher:IEventDispatcher, OnSuccess:Event -> Void, OnFail:Event -> Void, OnProgress:ProgressEvent -> Void):Void {
 		
 		var listenerUtilObject:ListenerUtilObject = listenerUtilObjects.get(dispatcher);
 		if (listenerUtilObject == null) {
 			listenerUtilObject = new ListenerUtilObject();
 		}	
-		listenerUtilObject.configureListeners(dispatcher, OnSuccess, OnFail);
+		listenerUtilObject.configureListeners(dispatcher, OnSuccess, OnFail, OnProgress);
 	}
 	
 	public static function removeListeners(dispatcher:IEventDispatcher):Void
@@ -41,21 +41,23 @@ class ListenerUtil
 
 class ListenerUtilObject
 {
-	var OnSuccessFuncs:Array<Void-> Void> = [];
-	var OnFailFuncs:Array<Void-> Void> = [];
+	var OnSuccessFuncs:Array<Event-> Void> = [];
+	var OnFailFuncs:Array<Event-> Void> = [];
+	var OnProgressFuncs:Array<ProgressEvent-> Void> = [];
 	
 	public function new ()
 	{
 		
 	}
 	
-	public function configureListeners(dispatcher:IEventDispatcher, OnSuccess:Void -> Void, OnFail:Void -> Void):Void
+	public function configureListeners(dispatcher:IEventDispatcher, OnSuccess:Event -> Void, OnFail:Event -> Void, OnProgress:ProgressEvent -> Void):Void
 	{
 		this.OnFailFuncs.push(OnFail);
 		this.OnSuccessFuncs.push(OnSuccess);
+		this.OnProgressFuncs.push(OnProgress);
 		
 		#if air
-		dispatcher.addEventListener(IOErrorEvent.NETWORK_ERROR, ioErrorHandler);
+		dispatcher.addEventListener(IOErrorEvent.NETWORK_ERROR, networkErrorHandler);
 		#end
 		
 		dispatcher.addEventListener(Event.COMPLETE, OnLoadComplete);
@@ -65,8 +67,8 @@ class ListenerUtilObject
 		dispatcher.addEventListener(ProgressEvent.PROGRESS, progressHandler);
 		dispatcher.addEventListener(Event.UNLOAD, unLoadHandler);
 		dispatcher.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
-		dispatcher.addEventListener(ErrorEvent.ERROR, ioErrorHandler);
-		dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, ioErrorHandler);
+		dispatcher.addEventListener(ErrorEvent.ERROR, errorHandler);
+		dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
 		dispatcher.addEventListener(AsyncErrorEvent.ASYNC_ERROR, onAsyncError);
 		dispatcher.addEventListener(NetStatusEvent.NET_STATUS, onNetStatus);
 	}
@@ -74,7 +76,7 @@ class ListenerUtilObject
 	public function removeListeners(dispatcher:IEventDispatcher):Void
 	{
 		#if air
-		dispatcher.removeEventListener(IOErrorEvent.NETWORK_ERROR, ioErrorHandler);
+		dispatcher.removeEventListener(IOErrorEvent.NETWORK_ERROR, networkErrorHandler);
 		#end
 		
 		dispatcher.removeEventListener(Event.COMPLETE, OnLoadComplete);
@@ -98,7 +100,7 @@ class ListenerUtilObject
 	
 	function OnLoadComplete(event:Event) 
 	{
-		OnSuccess();
+		OnSuccess(event);
 	}
 	
 	function httpStatusHandler(event:HTTPStatusEvent):Void {
@@ -114,37 +116,46 @@ class ListenerUtilObject
 	}
 	
 	function progressHandler(event:ProgressEvent):Void {
-		var frac:Float = event.bytesLoaded / event.bytesTotal;
+		//var frac:Float = event.bytesLoaded / event.bytesTotal;
 		//trace("progressHandler: bytesLoaded=" + event.bytesLoaded + " bytesTotal=" + event.bytesTotal);
 		//trace("progressHandler: " + frac);
-		
+		for (i in 0...OnProgressFuncs.length) 
+		{
+			OnProgressFuncs[i](event);
+		}
 	}
 
 	function unLoadHandler(event:Event):Void {
 		//trace("unLoadHandler: " + event);
 	}
 	
+	function networkErrorHandler(event:IOErrorEvent):Void
+	{
+		trace("networkErrorHandler: " + event);
+		OnFail(event);
+	}
+
+	function errorHandler(event:ErrorEvent):Void
+	{
+		trace("errorHandler: " + event);
+		OnFail(event);
+	}
+
 	function ioErrorHandler(event:IOErrorEvent):Void {
 		trace("ioErrorHandler: " + event);
-		OnFail();
+		OnFail(event);
 	}
 
 	private function securityErrorHandler(event:SecurityErrorEvent):Void 
 	{
 		trace("securityErrorHandler: " + event);
-		OnFail();
-	}
-	
-	private function errorHandler(event:ErrorEvent):Void 
-	{
-		trace("errorHandler: " + event);
-		OnFail();
+		OnFail(event);
 	}
 	
 	private function onAsyncError(event:AsyncErrorEvent):Void 
 	{
 		trace("onAsyncError: " + event);
-		OnFail();
+		OnFail(event);
 	}
 	
 	private function onNetStatus(event:NetStatusEvent):Void 
@@ -153,21 +164,21 @@ class ListenerUtilObject
 		event.preventDefault();
 	}
 	
-	function OnSuccess() 
+	function OnSuccess(event:Event) 
 	{
 		if (OnSuccessFuncs == null) return;
 		for (i in 0...OnSuccessFuncs.length) 
 		{
-			OnSuccessFuncs[i]();
+			OnSuccessFuncs[i](event);
 		}
 	}
 	
-	function OnFail() 
+	function OnFail(event:Event) 
 	{
 		if (OnFailFuncs == null) return;
 		for (i in 0...OnFailFuncs.length) 
 		{
-			OnFailFuncs[i]();
+			OnFailFuncs[i](event);
 		}
 	}
 }

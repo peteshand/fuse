@@ -8,6 +8,8 @@ import msignal.Signal.Signal0;
 import openfl.net.URLLoader;
 import openfl.net.URLLoaderDataFormat;
 import openfl.net.URLRequest;
+import openfl.events.Event;
+import openfl.events.ProgressEvent;
 
 class FileCacher
 {
@@ -20,7 +22,7 @@ class FileCacher
 	public function new(url:String = null)
 	{
 		urlLoader = new URLLoader();
-		ListenerUtil.configureListeners(urlLoader, onSuccess, onFail);
+		ListenerUtil.configureListeners(urlLoader, onSuccess, onFail, onProgress);
 		urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
 		
 		
@@ -56,13 +58,14 @@ class FileCacher
 		urlLoader.load(new URLRequest(this.url));
 	}
 	
-	function onFail()
+	function onFail(event:Event)
 	{
+		trace("onFail: " + url);
 		ListenerUtil.removeListeners(urlLoader);
 		onError.dispatch();
 	}
 	
-	function onSuccess() 
+	function onSuccess(event:Event) 
 	{
 		ListenerUtil.removeListeners(urlLoader);
 		var data:ByteArray = cast urlLoader.data;
@@ -71,5 +74,10 @@ class FileCacher
 		fileStream.writeBytes(data, 0, data.length);
 		fileStream.close();
 		onComplete.dispatch();
+	}
+
+	function onProgress(event:ProgressEvent)
+	{
+		trace(event.bytesLoaded / event.bytesTotal);
 	}
 }
