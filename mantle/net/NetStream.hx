@@ -64,7 +64,10 @@ class NetStream extends OpenFlNetStream
 			throw new Error("localURL should not be null");
 		}
 		var cacher = new FileCacher(url);
-		if (onComplete != null) cacher.onComplete.add(onComplete);
+		if (onComplete != null) {
+			cacher.onComplete.add(onComplete);
+			cacher.onError.add(onComplete);
+		}
 	}
 }
 

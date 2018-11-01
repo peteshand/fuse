@@ -131,30 +131,30 @@ class ListenerUtilObject
 	
 	function networkErrorHandler(event:IOErrorEvent):Void
 	{
-		trace("networkErrorHandler: " + event);
+		//trace("networkErrorHandler: " + event);
 		OnFail(event);
 	}
 
 	function errorHandler(event:ErrorEvent):Void
 	{
-		trace("errorHandler: " + event);
+		//trace("errorHandler: " + event);
 		OnFail(event);
 	}
 
 	function ioErrorHandler(event:IOErrorEvent):Void {
-		trace("ioErrorHandler: " + event);
+		//trace("ioErrorHandler: " + event);
 		OnFail(event);
 	}
 
 	private function securityErrorHandler(event:SecurityErrorEvent):Void 
 	{
-		trace("securityErrorHandler: " + event);
+		//trace("securityErrorHandler: " + event);
 		OnFail(event);
 	}
 	
 	private function onAsyncError(event:AsyncErrorEvent):Void 
 	{
-		trace("onAsyncError: " + event);
+		//trace("onAsyncError: " + event);
 		OnFail(event);
 	}
 	

@@ -5,6 +5,7 @@ import mantle.filesystem.FileStream;
 import openfl.utils.ByteArray;
 import mantle.filesystem.File;
 import msignal.Signal.Signal0;
+import msignal.Signal.Signal1;
 import openfl.net.URLLoader;
 import openfl.net.URLLoaderDataFormat;
 import openfl.net.URLRequest;
@@ -17,12 +18,13 @@ class FileCacher
 	var localFile:File;
 	var url:String;
 	public var onComplete = new Signal0();
+	public var onProgress = new Signal1<Float>();
 	public var onError = new Signal0();
 	
 	public function new(url:String = null)
 	{
 		urlLoader = new URLLoader();
-		ListenerUtil.configureListeners(urlLoader, onSuccess, onFail, onProgress);
+		ListenerUtil.configureListeners(urlLoader, onSuccess, onFail, onProgressChange);
 		urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
 		
 		
@@ -76,8 +78,10 @@ class FileCacher
 		onComplete.dispatch();
 	}
 
-	function onProgress(event:ProgressEvent)
+	function onProgressChange(event:ProgressEvent)
 	{
-		trace(event.bytesLoaded / event.bytesTotal);
+		if (event.bytesTotal != 0) {
+			onProgress.dispatch(event.bytesLoaded / event.bytesTotal);
+		}
 	}
 }
