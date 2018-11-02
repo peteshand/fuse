@@ -1,9 +1,9 @@
 package mantle.managers.transition;
 
+import haxe.Timer;
 //import mantle.managers.transition.plugins.TransitionPlugins;
 import mantle.notifier.Notifier;
 import mantle.notifier.BaseNotifier;
-import mantle.delay.Delay;
 import motion.Actuate;
 import motion.actuators.GenericActuator;
 import motion.easing.Linear;
@@ -68,6 +68,9 @@ class Transition
 	static public inline var HIDE:String = "hide";
 	// --------------------------------------------------- //
 	
+	var showDelayTimer:Timer;
+	var hideDelayTimer:Timer;
+
 	public function new(showTime:Float = 1, hideTime:Float = 1, showDelay:Float = 0, hideDelay:Float = 0, startHidden:Bool = true) 
 	{
 		this.showTime = showTime;
@@ -193,6 +196,7 @@ class Transition
 			queue(Show);
 			return;
 		}
+		
 		if (showing == true) return;
 		if (showing == null) {
 			ShowJump();
@@ -203,25 +207,36 @@ class Transition
 		if(progress.value == 1) {
 			this.value = -1;
 		}
-		
 		KillDelays();
 		isTweening.value = true;
 		if (showTime == 0) {
 			if (showDelay == 0) ShowJump();
-			else Delay.byTime(showDelay, ShowJump);
+			else {
+				showDelayTimer = Timer.delay(ShowJump, Math.floor(showDelay * 1000));
+				showDelayTimer.run();
+			}
 		}
 		else {
+			
+			
 			if (showDelay == 0) ShowTween();
-			else Delay.byTime(showDelay, ShowTween);
+			else {
+				showDelayTimer = Timer.delay(ShowTween, Math.floor(showDelay * 1000));
+				showDelayTimer.run();
+			}
 		}
 	}
 	
 	function KillDelays() 
 	{
-		Delay.killDelay(HideJump);
-		Delay.killDelay(HideTween);
-		Delay.killDelay(ShowJump);
-		Delay.killDelay(ShowTween);
+		if (showDelayTimer != null){
+			showDelayTimer.stop();
+			showDelayTimer = null;
+		}
+		if (hideDelayTimer != null){
+			hideDelayTimer.stop();
+			hideDelayTimer = null;
+		}
 	}
 	
 	private function ShowTween():Void 
@@ -230,6 +245,7 @@ class Transition
 		if (tween != null) {
 			Actuate.unload(tween);
 		}
+		
 		tween = Actuate.tween(this, showTime, { value:0 } ).onUpdate(PrivateShowOnUpdate).onComplete(PrivateShowOnComplete).ease(linearEaseNone);
 		PrivateShowOnStart();
 	}
@@ -260,11 +276,17 @@ class Transition
 		isTweening.value = true;
 		if (hideTime == 0) {
 			if (hideDelay == 0) HideJump();
-			else Delay.byTime(hideDelay, HideJump);
+			else {
+				hideDelayTimer = Timer.delay(HideJump, Math.floor(hideDelay * 1000));
+				hideDelayTimer.run();
+			}
 		}
 		else {
 			if (hideDelay == 0) HideTween();
-			else Delay.byTime(hideDelay, HideTween);
+			else {
+				hideDelayTimer = Timer.delay(HideTween, Math.floor(hideDelay * 1000));
+				hideDelayTimer.run();
+			}
 		}
 	}
 	
