@@ -89,8 +89,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		}
 		if (updateTexture || updateVisible) {
 			textureId = displayData.textureId;
-			coreTexture.update();
-			coreTexture.uvsHaveChanged = true;
+			
 		}
 		
 		if (updatePosition || updateVisible || this.isMask) {
@@ -124,7 +123,11 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 			
 			if (coreTexture == null || coreTexture.textureData.baseData.objectId != textureId) {
 				coreTexture = Core.textures.register(textureId);
-				if (coreTexture != null) coreTexture.addChangeListener(this);
+				if (coreTexture != null) {
+					coreTexture.addChangeListener(this);
+					coreTexture.update();
+					coreTexture.uvsHaveChanged = true;
+				}
 			}
 			
 			setUpdates(true);

@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.model.timeout;
 
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import msignal.Signal.Signal0;
 
 /**

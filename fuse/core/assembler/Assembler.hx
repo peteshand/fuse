@@ -12,7 +12,7 @@ import fuse.core.backend.Core;
 import fuse.core.backend.displaylist.DisplayList;
 import fuse.core.backend.texture.CoreTextures;
 import fuse.utils.GcoArray;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 
 /**
     This class is called every frame and is responsible for assembling stage3d display data.

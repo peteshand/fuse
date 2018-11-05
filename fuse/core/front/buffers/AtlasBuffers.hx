@@ -3,7 +3,7 @@ package fuse.core.front.buffers;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.front.texture.FrontBaseTexture;
 import fuse.core.front.texture.FrontRenderTexture;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 
 /**
  * ...

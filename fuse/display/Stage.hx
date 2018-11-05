@@ -8,7 +8,7 @@ import fuse.display.Quad;
 import fuse.Fuse;
 import fuse.utils.Color;
 import mantle.managers.resize.Resize;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import msignal.Signal.Signal1;
 
 import openfl.Lib;

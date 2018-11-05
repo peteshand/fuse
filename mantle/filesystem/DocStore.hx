@@ -1,6 +1,6 @@
 package mantle.filesystem;
 
-#if (air&&!mobile)
+#if ((air||electron)&&!mobile)
 import mantle.definitions.Storage;
 import mantle.filesystem.File;
 import mantle.filesystem.FileMode;
@@ -28,7 +28,7 @@ class DocStore
 		if (file.exists){
 			fileStream = new FileStream();
 			fileStream.open(file, FileMode.READ);
-			var str:String = fileStream.readUTFBytes(file.size);
+			var str:String = fileStream.readUTFBytes(Math.floor(file.size));
 			fileStream.close();
 			data = Json.parse(str);
 		}

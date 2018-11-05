@@ -2,8 +2,8 @@ package mantle.managers.transition;
 
 import haxe.Timer;
 //import mantle.managers.transition.plugins.TransitionPlugins;
-import mantle.notifier.Notifier;
-import mantle.notifier.BaseNotifier;
+import notifier.Notifier;
+import mantle.managers.state.IState;
 import motion.Actuate;
 import motion.actuators.GenericActuator;
 import motion.easing.Linear;
@@ -57,7 +57,7 @@ class Transition
 	//private var _value:Null<Float>;
 	//public var value(get, set):Float;
 	
-	var progress:BaseNotifier<Null<Float>>;
+	var progress:Notifier<Null<Float>>;
 	var target:Dynamic;
 	var tween:GenericActuator<Transition>;
 	@:isVar public var value(get, set):Float = 0;
@@ -70,6 +70,8 @@ class Transition
 	
 	var showDelayTimer:Timer;
 	var hideDelayTimer:Timer;
+
+	@isVar public var state(default, set):IState;
 
 	public function new(showTime:Float = 1, hideTime:Float = 1, showDelay:Float = 0, hideDelay:Float = 0, startHidden:Bool = true) 
 	{
@@ -86,7 +88,7 @@ class Transition
 		globalTweenCount.add(OnTweenCountChange);
 		isTweening.add(OnIsTweeningChange);
 		
-		progress = new BaseNotifier<Null<Float>>(0);
+		progress = new Notifier<Null<Float>>(0);
 		progress.add(OnProgressChange);
 		if (startHidden) progress.value = -1;
 		else progress.value = 0;
@@ -414,5 +416,19 @@ class Transition
 	function set_value(value:Float):Float 
 	{
 		return progress.value = value;
+	}
+
+	function set_state(value:IState):IState
+	{
+		if (state != null){
+			state.onActive.remove(Show);
+			state.onInactive.remove(Hide);
+		}
+		state = value;
+		if (state != null){
+			state.onActive.add(Show);
+			state.onInactive.add(Hide);
+		}
+		return state;
 	}
 }

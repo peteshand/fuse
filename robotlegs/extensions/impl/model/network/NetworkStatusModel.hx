@@ -1,5 +1,5 @@
 package robotlegs.extensions.impl.model.network;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 
 /**
  * ...

@@ -1,7 +1,7 @@
 
 package mantle.bind;
 
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import mantle.managers.state.State;
 import mantle.managers.transition.Transition;
 

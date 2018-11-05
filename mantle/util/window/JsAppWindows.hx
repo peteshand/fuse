@@ -1,7 +1,7 @@
 #if html5
 package mantle.util.window;
 
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import mantle.util.window.JsAppWindows.JsAppWindow;
 import js.Browser;
 import js.Lib;

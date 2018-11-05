@@ -2,7 +2,7 @@ package mantle.time;
 
 import haxe.Timer;
 import lime.app.Application;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 
 #if openfl
 import openfl.Lib;

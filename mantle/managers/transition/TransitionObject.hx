@@ -115,6 +115,10 @@ class TransitionObject implements ITransitionObject
 	{
 		if (_option != null) option = _option;
 		setDefault(option);
+
+		if (_properties == null){
+			_properties = { alpha:[0, 1] };
+		}
 		if (_properties != null) properties = _properties;
 		
 		//if (_properties == null) {

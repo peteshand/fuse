@@ -1,4 +1,4 @@
-package mantle.notifier;
+package notifier;
 
 import mantle.filesystem.DocStore;
 import mantle.time.EnterFrame;

@@ -4,7 +4,7 @@ import js.Browser;
 import tac.cs.logic.p2p.SendP2P;
 #if electron
 import haxe.Json;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import js.html.Window;
 //import electron.renderer.IpcRenderer;
 //import memo.Memo;
@@ -78,7 +78,7 @@ class P2P
 }
 #else
 import mantle.services.p2p.PeerObject;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import mantle.util.app.App;
 import msignal.Signal.Signal0;
 import msignal.Signal.Signal1;

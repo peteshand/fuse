@@ -2,15 +2,14 @@ package mantle.managers.state;
 
 import mantle.managers.transition.Transition;
 import mantle.model.scene.SceneModel;
-import mantle.notifier.Notifier;
-import mantle.notifier.BaseNotifier;
+import notifier.Notifier;
 import msignal.Signal.Signal0;
 
 /**
  * ...
  * @author P.J.Shand
  */
-class State extends BaseNotifier<Bool> implements IState
+class State extends Notifier<Bool> implements IState
 {
 	var sceneModel:Notifier<Dynamic>;
 	public var standardConsitions:Array<Condition> = [];
@@ -57,14 +56,14 @@ class State extends BaseNotifier<Bool> implements IState
 		removeCondition(sceneModel, uri, "!=");
 	}
 	
-	public function addCondition(notifier:Notifier<Dynamic>, value:Dynamic, operation:String="=="):Void 
+	public function addCondition(notifier:Notifier<Dynamic>, value:Dynamic, operation:String="==", subProp:String=null):Void 
 	{
 		if (Std.is(notifier, SceneModel) || notifier == sceneModel) {
 			uris.push(value);
 			mapCondition(new SceneCondition(notifier, value, operation), untyped sceneConditions);
 		}
 		else {
-			mapCondition(new Condition(notifier, value, operation), standardConsitions);
+			mapCondition(new Condition(notifier, value, operation, subProp), standardConsitions);
 		}
 		check();
 	}
@@ -182,21 +181,21 @@ class State extends BaseNotifier<Bool> implements IState
 	
 	function mapCondition(condition:Condition, _conditions:Array<Condition>):Void
 	{
-		condition.addWithPriority(OnConditionChange, 1000);
+		condition.add(OnConditionChange, 1000);
 		_conditions.push(condition);
 	}
 	
-	public function attachTransition(transition:Transition):Void
+	/*public function attachTransition(transition:Transition):Void
 	{
 		onActive.add(transition.Show);
 		onInactive.add(transition.Hide);
-	}
+	}*/
 	
-	public function removeTransition(transition:Transition):Void
+	/*public function removeTransition(transition:Transition):Void
 	{
 		onActive.remove(transition.Show);
 		onInactive.remove(transition.Hide);
-	}
+	}*/
 	
 	//public function ignore(uri:String):State 
 	//public static function fromURI(uri:String):State 

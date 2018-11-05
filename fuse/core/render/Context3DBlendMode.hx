@@ -1,7 +1,7 @@
 package fuse.core.render;
 import fuse.display.BlendMode;
 import haxe.Json;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DBlendFactor;
 

@@ -17,6 +17,7 @@ class InputText extends TextField
     var hitArea:Quad;
     var caret:Caret;
     var active:Bool = false;
+    public var editable:Bool = true;
 
     public function new(width:Int, height:Int)
     {
@@ -65,7 +66,7 @@ class InputText extends TextField
 
     function updateOnNextFrame()
     {
-        if (stage != null){
+        if (stage != null && editable){
             if (active) stage.focus.value = this;
             else if (stage.focus.value == this) stage.focus.value = null;
         }

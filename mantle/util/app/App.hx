@@ -1,6 +1,6 @@
 package mantle.util.app;
 import haxe.Json;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import mantle.util.app.AppExit.ExitContinue;
 
 import haxe.macro.Compiler;

@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.services.network;
 
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import mantle.delay.Delay;
 import openfl.net.URLLoader;
 import openfl.net.URLRequest;

@@ -1,6 +1,6 @@
 #if air
 package mantle.util.window;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import mantle.util.app.App;
 import mantle.util.app.AppExit;
 import flash.desktop.NativeApplication;

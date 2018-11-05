@@ -1,5 +1,5 @@
 package robotlegs.extensions.impl.model.fps;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 
 /**
  * ...

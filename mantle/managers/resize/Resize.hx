@@ -1,7 +1,8 @@
 package mantle.managers.resize;
 
+import notifier.Signal;
 import mantle.time.EnterFrame;
-import msignal.Signal.Signal0;
+//import msignal.Signal.Signal0;
 import msignal.Slot.Slot0;
 import openfl.display.Stage;
 import openfl.events.Event;
@@ -10,11 +11,11 @@ import openfl.events.Event;
  * ...
  * @author P.J.Shand
  */
-class Resize 
+class Resize
 {
 	private static var repeatResizeForXFrames:Int = 4;
 	private static var resizeCount:Int = 0;
-	private static var onResize:Signal0 = new Signal0();
+	private static var onResize:Signal = new Signal();
 	static var stage:Stage;
 	
 	public function new(stage:Stage) 
@@ -43,26 +44,10 @@ class Resize
 		}
 	}
 	
-	public static function add(listener:Void -> Void):Slot0
+	public static function add(callback:Void -> Void, fireOnce:Bool=false, priority:Int = 0):Void
 	{
-		var slot0:Slot0 = onResize.add(listener);
-		listener();
-		return slot0;
-	}
-	
-	public static function addOnce(listener:Void -> Void):Slot0
-	{
-		return onResize.addOnce(listener);
-	}
-	
-	public static function addOnceWithPriority(listener:Void -> Void, ?priority:Int=0):Slot0
-	{
-		return onResize.addOnceWithPriority(listener, priority);
-	}
-	
-	public static function addWithPriority(listener:Void -> Void, ?priority:Int=0):Slot0
-	{
-		return onResize.addWithPriority(listener, priority);
+		onResize.add(callback, fireOnce, priority);
+		callback();
 	}
 	
 	public static function dispatch():Void
@@ -70,9 +55,9 @@ class Resize
 		onResize.dispatch();
 	}
 	
-	public static function remove(listener:Void -> Void):Slot0
+	public static function remove(listener:Void -> Void):Void
 	{
-		return onResize.remove(listener);
+		onResize.remove(listener);
 	}
 	
 	public static function removeAll():Void

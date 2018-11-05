@@ -26,8 +26,7 @@ class SceneViewMediator extends Mediator
 	{
 		if (view.transition == null) Delay.nextFrame(addState);
 		else {
-			state = view.state;
-			state.attachTransition(view.transition);
+			view.transition.state = state = view.state;
 			var active:Bool = state.check();
 			if (active) {
 				view.transition.value = -1;
@@ -39,7 +38,7 @@ class SceneViewMediator extends Mediator
 	override public function destroy():Void
 	{
 		if (state != null){
-			state.removeTransition(view.transition);
+			view.transition.state = null;
 		}
 	}
 }

@@ -1,31 +1,30 @@
 package mantle.managers.state;
 
-import mantle.notifier.Notifier;
-import mantle.notifier.BaseNotifier;
+import notifier.Notifier;
 
 /**
  * ...
  * @author P.J.Shand
  */
-class Condition extends BaseNotifier<Bool>
+class Condition extends Notifier<Bool>
 {
 	public var notifier:Notifier<Dynamic>;
 	public var targetValue:Dynamic;
 	public var operation:String;
-	
-	public function new(notifier:Notifier<Dynamic>, targetValue:Dynamic, operation:String="==") 
+	public var subProp:String;
+	var testValue(get, null):Dynamic;
+
+	public function new(notifier:Notifier<Dynamic>, targetValue:Dynamic, operation:String="==", subProp:String=null) 
 	{
 		this.operation = operation;
 		this.targetValue = targetValue;
 		this.notifier = notifier;
-		
+		this.subProp = subProp;
+
 		super();
-		notifier.addWithPriority(Update, 1000);
-		check();
-	}
-	
-	function Update() 
-	{
+		notifier.add(() -> {
+			check();
+		}, 1000);
 		check();
 	}
 	
@@ -34,23 +33,40 @@ class Condition extends BaseNotifier<Bool>
 		this.value = getValue();
 		if (forceDispatch) this.dispatch();
 	}
+
+	function get_testValue()
+	{
+		if (subProp == null) return notifier.value;
+		else {
+			var split:Array<String> = subProp.split(".");
+			if (subProp.indexOf(".") == -1) split = [subProp];
+			
+			var value:Dynamic = notifier.value;
+			while (split.length > 0 && value != null){
+				var prop:String = split.shift();
+				value = Reflect.getProperty(value, prop);
+			}
+			
+			return value;
+		}
+	}
 	
 	function getValue() 
 	{
 		switch (operation) 
 		{
 			case "==":
-				return equalTo(notifier.value, targetValue);
+				return equalTo(testValue, targetValue);
 			case "!=":
-				return notEqualTo(notifier.value, targetValue);
+				return notEqualTo(testValue, targetValue);
 			case "<=":
-				return lessThanOrEqualTo(notifier.value, targetValue);
+				return lessThanOrEqualTo(testValue, targetValue);
 			case "<":
-				return lessThan(notifier.value, targetValue);
+				return lessThan(testValue, targetValue);
 			case ">=":
-				return greaterThanOrEqualTo(notifier.value, targetValue);
+				return greaterThanOrEqualTo(testValue, targetValue);
 			case ">":
-				return greaterThan(notifier.value, targetValue);
+				return greaterThan(testValue, targetValue);
 			default:
 		}
 		
@@ -63,31 +79,31 @@ class Condition extends BaseNotifier<Bool>
 		return false;
 	}
 	
-	function notEqualTo(value1:Dynamic, value2:Dynamic) 
+	inline function notEqualTo(value1:Dynamic, value2:Dynamic) 
 	{
 		if (value1 != value2) return true;
 		return false;
 	}
 	
-	function lessThanOrEqualTo(value1:Dynamic, value2:Dynamic) 
+	inline function lessThanOrEqualTo(value1:Dynamic, value2:Dynamic) 
 	{
 		if (value1 <= value2) return true;
 		return false;
 	}
 	
-	function lessThan(value1:Dynamic, value2:Dynamic) 
+	inline function lessThan(value1:Dynamic, value2:Dynamic) 
 	{
 		if (value1 < value2) return true;
 		return false;
 	}
 	
-	function greaterThanOrEqualTo(value1:Dynamic, value2:Dynamic) 
+	inline function greaterThanOrEqualTo(value1:Dynamic, value2:Dynamic) 
 	{
 		if (value1 >= value2) return true;
 		return false;
 	}
 	
-	function greaterThan(value1:Dynamic, value2:Dynamic) 
+	inline function greaterThan(value1:Dynamic, value2:Dynamic) 
 	{
 		if (value1 > value2) return true;
 		return false;

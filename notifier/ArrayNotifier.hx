@@ -1,4 +1,4 @@
-package mantle.notifier;
+package notifier;
 
 import msignal.Signal.Signal0;
 @:forward(length, base, concat, join, pop, push, reverse, shift, slice, sort, splice, unshift, insert, arrayRemove, indexOf, lastIndexOf, iterator, map, filter, resize,

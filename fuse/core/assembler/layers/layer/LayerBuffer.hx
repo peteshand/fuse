@@ -3,7 +3,7 @@ import fuse.core.assembler.vertexWriter.ICoreRenderable;
 import fuse.core.backend.display.CoreImage;
 import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 
 /**
  * ...

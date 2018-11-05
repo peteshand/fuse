@@ -12,7 +12,7 @@ import openfl.events.NetStatusEvent;
 import mantle.net.NetStream;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
 import mantle.time.EnterFrame;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 /**
  * ...
  * @author P.J.Shand

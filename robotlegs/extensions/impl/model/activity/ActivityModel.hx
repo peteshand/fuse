@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.model.activity;
 
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 
 /**
  * ...

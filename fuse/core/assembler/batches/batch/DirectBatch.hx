@@ -26,11 +26,11 @@ class DirectBatch extends BaseBatch implements IBatch
 	
 	override function getTextureIndex(renderable:ICoreRenderable) 
 	{
-		if (renderable.coreTexture.textureData.textureAvailable == 1) {
-			return batchTextures.getTextureIndex(renderable.coreTexture.textureData.atlasData.textureId);
+		if (renderable.coreTexture == null || renderable.coreTexture.textureData.textureAvailable != 1) {
+			return batchTextures.getTextureIndex(0);
 		}
 		else {
-			return batchTextures.getTextureIndex(0);
+			return batchTextures.getTextureIndex(renderable.coreTexture.textureData.atlasData.textureId);
 		}
 	}
 	
@@ -64,7 +64,7 @@ class DirectBatch extends BaseBatch implements IBatch
 	{
 		image.renderIndex = RENDER_INDEX++;
 		
-		if (!image.visible || image.alpha == 0 || image.isMask) {
+		if (!image.visible || image.alpha == 0 || image.isMask || image.coreTexture == null) {
 			image.setUpdates(false);
 			image.drawIndex = -1;
 			return;

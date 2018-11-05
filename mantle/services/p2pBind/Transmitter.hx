@@ -1,5 +1,5 @@
 package mantle.services.p2pBind;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 
 /**
  * ...

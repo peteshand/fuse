@@ -6,7 +6,7 @@ import fuse.core.front.texture.Textures;
 import openfl.display3D.textures.TextureBase;
 
 //#if air
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 /**
  * ...
  * @author P.J.Shand

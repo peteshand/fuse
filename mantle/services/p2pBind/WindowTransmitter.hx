@@ -1,7 +1,7 @@
 package mantle.services.p2pBind;
 
 import haxe.Json;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import js.html.Window;
 /**
  * ...

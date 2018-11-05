@@ -7,7 +7,7 @@ import fuse.core.backend.displaylist.DisplayList;
 import fuse.core.backend.texture.CoreTextures;
 import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 
 /**
  * ...

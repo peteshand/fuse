@@ -7,7 +7,7 @@ import fuse.core.backend.display.CoreImage;
 import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.TextureSizeData;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import msignal.Signal.Signal0;
 
 /**

@@ -1,6 +1,6 @@
 package mantle.managers.state;
 
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import msignal.Signal.AnySignal;
 import msignal.Slot;
 

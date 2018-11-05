@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.services.fps;
 
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import robotlegs.bender.extensions.contextView.ContextView;
 import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.model.activity.ActivityModel;

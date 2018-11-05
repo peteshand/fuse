@@ -1,6 +1,7 @@
-package mantle.notifier;
+package notifier;
 
-import msignal.Signal.Signal0;
+import notifier.Signal;
+//import msignal.Signal.Signal0;
 using Logger;
 /**
  * ...
@@ -29,8 +30,8 @@ class PropBind
 		return value;
 	}
 	
-	@:isVar public var sourceSignal(default, set):Signal0;
-	function set_sourceSignal(value:Signal0):Signal0 
+	@:isVar public var sourceSignal(default, set):Signal;
+	function set_sourceSignal(value:Signal):Signal 
 	{
 		if (sourceSignal == value) return value;
 		unbindSource();
@@ -40,10 +41,10 @@ class PropBind
 	}
 	
 	var sourceBound:Bool;
-	var boundSignal:Signal0;
+	var boundSignal:Signal;
 	var targets:Map<String, Array<Dynamic>>;
 
-	public function new(?source:Dynamic, ?sourceProp:String, ?sourceSignal:Signal0) 
+	public function new(?source:Dynamic, ?sourceProp:String, ?sourceSignal:Signal) 
 	{
 		targets = new Map();
 		this.source = source;

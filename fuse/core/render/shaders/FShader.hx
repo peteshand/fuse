@@ -3,7 +3,7 @@ package fuse.core.render.shaders;
 import fuse.shader.BaseShader;
 import fuse.shader.ColorTransformShader;
 import fuse.shader.IShader;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import openfl.Lib;
 import openfl.Vector;
 import openfl.display3D.Context3D;

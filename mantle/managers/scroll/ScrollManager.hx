@@ -1,7 +1,7 @@
 package mantle.managers.scroll;
 
 import mantle.managers.touch.TouchManager;
-import mantle.notifier.Notifier;
+import notifier.Notifier;
 import msignal.Signal.Signal0;
 import openfl.geom.Point;
 import starling.display.DisplayObject;

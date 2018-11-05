@@ -4,14 +4,13 @@ package mantle.model.scene;
 import org.swiftsuspenders.utils.DescribedType;
 #end
 import mantle.managers.transition.Transition;
-import mantle.notifier.Notifier;
-import mantle.notifier.BaseNotifier;
+import notifier.Notifier;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
 /**
  * ...
  * @author P.J.Shand
  */
-class SceneModel extends BaseNotifier<String> #if robotlegs implements DescribedType #end
+class SceneModel extends Notifier<String> #if robotlegs implements DescribedType #end
 {
 	@inject public var activityModel:ActivityModel;
 	@:isVar static public var instance(get, null):SceneModel;
@@ -51,10 +50,7 @@ class SceneModel extends BaseNotifier<String> #if robotlegs implements Described
 	
 	override private function set_value(v:Null<String>):Null<String> 
 	{
-		if (_value == v && requireChange) return v;
-		if (_value != null && _unsetHandlers != null) {
-			for(handler in _unsetHandlers) handler(_value);
-		}
+		if (!changeRequired(v)) return v;
 		
 		if (queueURI && Transition.globalTransitioning.value) {
 			queue(v, updateHistory);
@@ -62,9 +58,6 @@ class SceneModel extends BaseNotifier<String> #if robotlegs implements Described
 		else {
 			goBackUri = null;
 			_value = v;
-			if (_value != null && _setHandlers != null) {
-				for(handler in _setHandlers) handler(_value);
-			}
 			if (updateHistory) _history.push(v);
 			if (activityModel != null) activityModel.animating();
 			this.dispatch();
@@ -92,7 +85,7 @@ class SceneModel extends BaseNotifier<String> #if robotlegs implements Described
 		queuedUpdateHistory = updateHistory;
 		queueValue = value;
 		Transition.globalTransitioning.removeAll();
-		Transition.globalTransitioning.addOnce(OnTransitionChange);
+		Transition.globalTransitioning.add(OnTransitionChange, true);
 	}
 	
 	private function OnTransitionChange():Void 
