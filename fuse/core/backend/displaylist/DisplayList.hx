@@ -188,5 +188,6 @@ class DisplayList
 		display.updateVisible = payload.updateVisible;
 		display.updateAlpha = payload.updateAlpha;
 		display.updateTexture = payload.updateTexture;
+		display.updateUVs = payload.updateUVs;
 	}
 }

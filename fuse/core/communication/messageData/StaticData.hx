@@ -20,6 +20,7 @@ typedef StaticData =
 	?updateColour:Bool,
 	?updateVisible:Bool,
 	?updateAlpha:Bool,
-	?updateTexture:Bool
+	?updateTexture:Bool,
+	?updateUVs:Bool
 }
 

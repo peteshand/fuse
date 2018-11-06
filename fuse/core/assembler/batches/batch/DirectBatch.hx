@@ -15,6 +15,12 @@ import fuse.utils.GcoArray;
 @:access(fuse.core.backend.display)
 class DirectBatch extends BaseBatch implements IBatch
 {
+	var uvItem:UVItem;
+	var uvLeft:Float;
+	var uvTop:Float;
+	var uvRight:Float;
+	var uvBottom:Float;
+
 	var renderIndices = new GcoArray<CoreImage>();
 	var numItems:Int;
 	public static var RENDER_INDEX:Int;
@@ -22,6 +28,17 @@ class DirectBatch extends BaseBatch implements IBatch
 	public function new() 
 	{
 		super();
+		uvItem = {
+			uvLeft:0,
+			uvTop:0,
+			uvRight:0,
+			uvBottom:0,
+
+			offsetU:0,
+			offsetV:0,
+			scaleU:1,
+			scaleV:1
+		}
 	}
 	
 	override function getTextureIndex(renderable:ICoreRenderable) 
@@ -87,7 +104,8 @@ class DirectBatch extends BaseBatch implements IBatch
 		var batchTypeHasChanged:Bool = image.batchType != BatchType.DIRECT;
 		var vertexPositionHasMoved:Bool = (image.drawIndex != VertexData.OBJECT_POSITION) || batchTypeHasChanged;
 		
-		var updateUVs:Bool		= vertexPositionHasMoved || coreTexture.uvsHaveChanged;
+		var updateTextureUVs:Bool = vertexPositionHasMoved || coreTexture.uvsHaveChanged;
+		var updateImageUVs:Bool = vertexPositionHasMoved || image.updateUVs;
 		var updatePosition:Bool	= vertexPositionHasMoved || image.updatePosition;
 		var updateTexture:Bool	= vertexPositionHasMoved || image.updateTexture;// || image.textureChanged;
 		var updateMask:Bool		= vertexPositionHasMoved || image.maskChanged;
@@ -96,7 +114,7 @@ class DirectBatch extends BaseBatch implements IBatch
 		
 		//if (VertexData.OBJECT_POSITION < 10){
 			//trace([
-				//"\n updateUVs = " + updateUVs,
+				//"\n updateTextureUVs = " + updateTextureUVs,
 				//"\n updatePosition = " + updatePosition,
 				//"\n updateTexture = " + updateTexture,
 				//"\n updateMask = " + updateMask,
@@ -126,14 +144,76 @@ class DirectBatch extends BaseBatch implements IBatch
 				}
 			}
 		}
-		if (updateUVs) {
+
+		/*
+		uvLeft = 0;
+		uvTop = 0;
+		uvRight = 1;
+		uvBottom = 1;
+		
+		if (updateTextureUVs) {
 			//trace([coreTexture.uvTop, coreTexture.uvBottom]);
-			//trace("updateUVs = " + updateUVs + " objectId = " + coreTexture.objectId);
+			//trace("updateTextureUVs = " + updateTextureUVs + " objectId = " + coreTexture.objectId);
+
+			trace([coreTexture.uvLeft, coreTexture.uvRight, coreTexture.uvTop, coreTexture.uvBottom]);
+
 			vertexData.setUV(0, coreTexture.uvLeft,		coreTexture.uvBottom);	// bottom left
 			vertexData.setUV(1, coreTexture.uvLeft,		coreTexture.uvTop);		// top left
 			vertexData.setUV(2, coreTexture.uvRight,	coreTexture.uvTop);		// top right
 			vertexData.setUV(3, coreTexture.uvRight,	coreTexture.uvBottom);	// bottom right
+
+			uvLeft = coreTexture.uvLeft;
+			uvRight = coreTexture.uvRight;
+			uvTop = coreTexture.uvTop;
+			uvBottom = coreTexture.uvBottom;
+
 			//image.updateUVs = false;
+		}
+
+		if (updateImageUVs){
+			
+			
+			offsetU1 = 0
+			offsetU2 = 0.5
+
+			offsetU = 0.5
+			
+
+			scaleU1 = 0.5
+			scaleU2 = 0.5
+			
+			scaleU1 = 0.25
+
+			uvRight1 = 0.5
+			uvRight2 = 1
+
+			uvRight = 0.75
+			
+			trace([vertexPositionHasMoved, image.updateUVs]);
+		}
+		*/
+
+		if (updateTextureUVs || updateImageUVs) {
+			
+			if (updateImageUVs){
+				uvItem.offsetU = image.displayData.offsetU;
+				uvItem.offsetV = image.displayData.offsetV;
+				uvItem.scaleU = image.displayData.scaleU;
+				uvItem.scaleV = image.displayData.scaleV;
+			} else {
+				uvItem.offsetU = 0;
+				uvItem.offsetV = 0;
+				uvItem.scaleU = 1;
+				uvItem.scaleV = 1;
+			}
+			
+			coreTexture.getUVData(uvItem);
+			
+			vertexData.setUV(0, uvItem.uvLeft,	uvItem.uvBottom);	// bottom left
+			vertexData.setUV(1, uvItem.uvLeft,	uvItem.uvTop);		// top left
+			vertexData.setUV(2, uvItem.uvRight,	uvItem.uvTop);		// top right
+			vertexData.setUV(3, uvItem.uvRight,	uvItem.uvBottom);	// bottom right
+			
 		}
 		
 		if (FShader.ENABLE_MASKS && image.mask != null) {

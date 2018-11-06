@@ -67,6 +67,8 @@ class DisplayObject
 	var updateColour:Bool = true;
 	var updateVisible:Bool = true;
 	var updateAlpha:Bool = true;
+	var updateUVs:Bool = true;
+	
 	
 	var horizontalAlign:Align;
 	var verticalAlign:Align;
@@ -108,6 +110,7 @@ class DisplayObject
 		updateColour = false;
 		updateVisible = false;
 		updateAlpha = false;
+		updateUVs = false;
 	}
 	
 	//function OnRotationChange() 

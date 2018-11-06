@@ -253,6 +253,7 @@ class WorkerSetup
 			staticData.updateVisible = displayObject.updateVisible;
 			staticData.updateAlpha = displayObject.updateAlpha;
 			staticData.updateTexture = displayObject.updateTexture;
+			staticData.updateUVs = displayObject.updateUVs;
 			
 			send(MessageType.SET_STATIC, staticData);
 			

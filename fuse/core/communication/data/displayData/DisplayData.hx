@@ -30,6 +30,11 @@ class DisplayData
 	public var visible:Int = 0;
 	public var blendMode:Int = 0;
 	
+	public var offsetU:Float = 0;
+	public var offsetV:Float = 0;
+	public var scaleU:Float = 1;
+	public var scaleV:Float = 1;
+
 	public var shaderId:Int = 0;
 
 	public var isStatic:Int = 0;

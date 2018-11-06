@@ -121,9 +121,17 @@ class FrontVideoTexture extends FrontBaseTexture
 		if (info.code == "NetStream.Play.Stop") {
 			playing.value = false;
 			if (onComplete != null) {
+				//onComplete.dispatch();
+			}
+		}
+		if (info.code == "NetStream.Play.Complete") {
+			playing.value = false;
+			if (onComplete != null) {
 				onComplete.dispatch();
 			}
 		}
+
+		
 
 		if (info.code == "NetStream.Seek.Complete") {
 			//seeking.value = false;
@@ -154,7 +162,7 @@ class FrontVideoTexture extends FrontBaseTexture
 		duration = videoMetaData.duration;
 		setTextureData();
 
-		trace("volume = " + volume);
+		//trace("volume = " + volume);
 		netStream.soundTransform = new SoundTransform(volume);
 
 		checkAutoPlay();
@@ -242,7 +250,7 @@ class FrontVideoTexture extends FrontBaseTexture
 	function set_volume(value:Float):Float
 	{
 		volume = value;
-		trace("volume = " + volume);
+		//trace("volume = " + volume);
 		netStream.soundTransform = new SoundTransform(volume);
 		return value;
 	}

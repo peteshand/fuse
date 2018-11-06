@@ -89,7 +89,6 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		}
 		if (updateTexture || updateVisible) {
 			textureId = displayData.textureId;
-			
 		}
 		
 		if (updatePosition || updateVisible || this.isMask) {
@@ -99,7 +98,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 			WorkerTransformHelper.update(this);
 		}
 	}
-	
+
 	override public function buildTransformActions()
 	{
 		visible = (parent.visible && (displayData.visible == 1));

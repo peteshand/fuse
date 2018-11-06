@@ -55,6 +55,8 @@ class CoreDisplayObject
 	public var updateVisible:Bool = false;
 	public var updateAlpha:Bool = true;
 	public var updateTexture:Bool = true;
+	public var updateUVs:Bool = false;
+	
 	@:isVar public var updateAny(get, set):Bool = true;
 	
 	public var touchDisplay:CoreDisplayObject;
@@ -76,6 +78,7 @@ class CoreDisplayObject
 		this.updateVisible = value;
 		this.updateAlpha = value;
 		this.updateAny = value;
+		this.updateUVs = value;
 	}
 	
 	public function init(objectId:Int) 

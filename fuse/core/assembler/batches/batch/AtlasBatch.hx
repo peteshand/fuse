@@ -69,6 +69,7 @@ class AtlasBatch extends BaseBatch implements IBatch
 			right = left + (partition.lastFramePairPartition.width / Fuse.MAX_TEXTURE_SIZE);
 			bottom = top + (partition.lastFramePairPartition.height / Fuse.MAX_TEXTURE_SIZE);
 		}
+
 		
 		// Where to sample from source texture
 		vertexData.setUV(0, left, bottom);	// BOTTOM LEFT

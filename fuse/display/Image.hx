@@ -17,6 +17,11 @@ class Image extends DisplayObject
 	@:isVar public var texture(default, set):ITexture;
 	@:isVar public var blendMode(default, set):BlendMode;
 	@:isVar public var bounds(get, never):Rectangle;
+	@:isVar public var offsetU(default, set):Float;
+	@:isVar public var offsetV(default, set):Float;
+	@:isVar public var scaleU(default, set):Float;
+	@:isVar public var scaleV(default, set):Float;
+
 	var shaders:Array<IShader> = [];
 
 	public function new(texture:ITexture) 
@@ -25,6 +30,10 @@ class Image extends DisplayObject
 		displayType = DisplayType.IMAGE;
 		
 		this.texture = texture;
+		this.offsetU = 0;
+		this.offsetV = 0;
+		this.scaleU = 1;
+		this.scaleV = 1;
 	}
 
 	function get_bounds():Rectangle
@@ -63,6 +72,46 @@ class Image extends DisplayObject
 		_bounds.height = _bounds.height * stage.stageHeight / 2;
 		
 		return _bounds;
+	}
+
+	function set_offsetU(value:Float):Float
+	{
+		if (offsetU != value){
+			displayData.offsetU = offsetU = value;
+			updateUVs = true;
+			updateStaticBackend();
+		}
+		return value;
+	}
+
+	function set_offsetV(value:Float):Float
+	{
+		if (offsetV != value){
+			displayData.offsetV = offsetV = value;
+			updateUVs = true;
+			updateStaticBackend();
+		}
+		return value;
+	}
+
+	function set_scaleU(value:Float):Float
+	{
+		if (scaleU != value){
+			displayData.scaleU = scaleU = value;
+			updateUVs = true;
+			updateStaticBackend();
+		}
+		return value;
+	}
+
+	function set_scaleV(value:Float):Float
+	{
+		if (scaleV != value){
+			displayData.scaleV = scaleV = value;
+			updateUVs = true;
+			updateStaticBackend();
+		}
+		return value;
 	}
 
 	override function set_renderLayer(value:Null<Int>):Null<Int> 

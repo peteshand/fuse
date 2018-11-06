@@ -31,8 +31,6 @@ class CoreMovieClip extends CoreImage implements ICoreRenderable
 			if (coreTexture == null || coreTexture.textureData.baseData.objectId != textureId) {
 				coreTexture = Core.textures.register(textureId);
 			}
-			
-			//updateUVs = true;
 		}
 		return value;
 	}

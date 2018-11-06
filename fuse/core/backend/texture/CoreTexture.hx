@@ -110,7 +110,6 @@ class CoreTexture
 	
 	public function updateUVData() 
 	{
-		
 		var activeData:TextureSizeData = textureData.activeData;
 		p2Width = activeData.p2Width;
 		p2Height = activeData.p2Height;
@@ -138,6 +137,30 @@ class CoreTexture
 		uvRight = _uvRight;
 		uvBottom = _uvBottom;
 		
+	}
+
+	public function getUVData(uvItem:UVItem) 
+	{
+		var activeData:TextureSizeData = textureData.activeData;
+		p2Width = activeData.p2Width;
+		p2Height = activeData.p2Height;
+		
+		uvItem.offsetU += activeData.offsetU;
+		uvItem.offsetV += activeData.offsetV;
+		uvItem.scaleU *= activeData.scaleU;
+		uvItem.scaleV *= activeData.scaleV;
+		
+		if (this.rotate) {
+			uvItem.uvLeft = (activeData.x + (uvItem.offsetV * activeData.width)) / p2Width;
+			uvItem.uvTop = (activeData.y + (activeData.height * (1 - uvItem.scaleU)) - (uvItem.offsetU * activeData.height)) / p2Height;
+			uvItem.uvRight = (activeData.x + (activeData.width * uvItem.scaleV) + (uvItem.offsetV * activeData.width)) / p2Width;
+			uvItem.uvBottom = (activeData.y + (activeData.height) - (uvItem.offsetU * activeData.height)) / p2Height;
+		} else {
+			uvItem.uvLeft = (activeData.x + (uvItem.offsetU * activeData.width)) / p2Width;
+			uvItem.uvTop = (activeData.y + (uvItem.offsetV * activeData.height)) / p2Height;
+			uvItem.uvRight = (activeData.x + (activeData.width * uvItem.scaleU) + (uvItem.offsetU * activeData.width)) / p2Width;
+			uvItem.uvBottom = (activeData.y + (activeData.height * uvItem.scaleV) + (uvItem.offsetV * activeData.height)) / p2Height;
+		}
 	}
 	
 	public function checkForChanges():Void
@@ -175,4 +198,17 @@ class CoreTexture
 		updateUVData();
 		return textureData;
 	}
+}
+
+typedef UVItem =
+{
+	uvLeft:Float,
+	uvTop:Float,
+	uvRight:Float,
+	uvBottom:Float,
+
+	offsetU:Float,
+	offsetV:Float,
+	scaleU:Float,
+	scaleV:Float
 }

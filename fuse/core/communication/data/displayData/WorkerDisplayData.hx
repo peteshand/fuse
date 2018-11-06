@@ -32,13 +32,18 @@ class WorkerDisplayData /*implements IDisplayData*/
 	static inline var INDEX_VISIBLE:Int = 68;
 	static inline var INDEX_BLEND_MODE:Int = 72;
 	
-	static inline var INDEX_SHADER_ID:Int = 76;
+	static inline var INDEX_OFFSET_U:Int = 76;
+	static inline var INDEX_OFFSET_V:Int = 80;
+	static inline var INDEX_SCALE_U:Int = 84;
+	static inline var INDEX_SCALE_V:Int = 88;
 	
-	static inline var INDEX_IS_STATIC:Int = 80;
-	static inline var INDEX_IS_MOVING:Int = 84;
-	static inline var INDEX_IS_ROTATING:Int = 88;
+	static inline var INDEX_SHADER_ID:Int = 92;
 	
-	public static inline var BYTES_PER_ITEM:Int = 92;
+	static inline var INDEX_IS_STATIC:Int = 96;
+	static inline var INDEX_IS_MOVING:Int = 100;
+	static inline var INDEX_IS_ROTATING:Int = 104;
+	
+	public static inline var BYTES_PER_ITEM:Int = 108;
 	
 	var memoryBlock:MemoryBlock;
 	
@@ -63,6 +68,11 @@ class WorkerDisplayData /*implements IDisplayData*/
 	public var visible(get, set):Int;
 	public var blendMode(get, set):Int;
 	
+	public var offsetU(get, set):Float;
+	public var offsetV(get, set):Float;
+	public var scaleU(get, set):Float;
+	public var scaleV(get, set):Float;
+
 	public var shaderId(get, set):Int;
 
 	public var isStatic(get, set):Int;
@@ -165,6 +175,24 @@ class WorkerDisplayData /*implements IDisplayData*/
 		return memoryBlock.readByte(INDEX_BLEND_MODE);
 	}
 	
+	inline function get_offsetU():Float { 
+		return memoryBlock.readFloat(INDEX_OFFSET_U);
+	}
+	
+	inline function get_offsetV():Float { 
+		return memoryBlock.readFloat(INDEX_OFFSET_V);
+	}
+	
+	inline function get_scaleU():Float { 
+		return memoryBlock.readFloat(INDEX_SCALE_U);
+	}
+	
+	inline function get_scaleV():Float { 
+		return memoryBlock.readFloat(INDEX_SCALE_V);
+	}
+	
+	
+
 	inline function get_shaderId():Int { return memoryBlock.readInt(INDEX_SHADER_ID); }
 	
 	
@@ -278,6 +306,26 @@ class WorkerDisplayData /*implements IDisplayData*/
 	
 	inline function set_blendMode(value:Int):Int { 
 		memoryBlock.writeByte(INDEX_BLEND_MODE, value);
+		return value;
+	}
+
+	inline function set_offsetU(value:Float):Float { 
+		memoryBlock.writeFloat(INDEX_OFFSET_U, value);
+		return value;
+	}
+	
+	inline function set_offsetV(value:Float):Float { 
+		memoryBlock.writeFloat(INDEX_OFFSET_V, value);
+		return value;
+	}
+	
+	inline function set_scaleU(value:Float):Float { 
+		memoryBlock.writeFloat(INDEX_SCALE_U, value);
+		return value;
+	}
+	
+	inline function set_scaleV(value:Float):Float { 
+		memoryBlock.writeFloat(INDEX_SCALE_V, value); 
 		return value;
 	}
 	

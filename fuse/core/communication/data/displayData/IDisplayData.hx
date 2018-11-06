@@ -30,6 +30,11 @@ typedef IDisplayData =
 	visible:Int,
 	blendMode:Int,
 
+	offsetU:Float,
+	offsetV:Float,
+	scaleU:Float,
+	scaleV:Float,
+	
 	shaderId:Int,
 	
 	bottomLeftX:Float,
