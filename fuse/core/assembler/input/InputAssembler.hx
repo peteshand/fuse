@@ -76,7 +76,7 @@ class InputAssemblerObject
 		var j:Int = Touchables.flattened.length - 1;
 		while (j >= 0)
 		{
-			if (testDisplay(Touchables.flattened[j].touchDisplay, touch)) {
+			if (testDisplay(Touchables.flattened[j], touch)) {
 				// hit display
 				j = -1;
 			}
@@ -89,11 +89,16 @@ class InputAssemblerObject
 	{
 		if (display == null) return false;
 		if (display.absoluteVis() == false) return false;
-		if (display.displayType != DisplayType.STAGE) {
+		var touchDisplay:CoreDisplayObject = display.touchDisplay;
+		if (touchDisplay == null) return false;
+
+		if (touchDisplay.displayType != DisplayType.STAGE) {
 			var _withinBound:Bool = display.withinBounds(touch.x, touch.y);
 			if (_withinBound){
+				if (display.touchable == false) return false;
+		
 				if (touch.targetId == null) {
-					var displayTouch = display.onOver(touch.index);
+					var displayTouch = touchDisplay.onOver(touch.index);
 					displayTouch.index = touch.index;
 					displayTouch.x = touch.x;
 					displayTouch.y = touch.y;
@@ -101,9 +106,9 @@ class InputAssemblerObject
 					//trace("OVER");
 				}
 			} else {
-				if (touch.targetId == display.objectId) {
+				if (touch.targetId == touchDisplay.objectId) {
 					touch.targetId = null;
-					var displayTouch = display.onOut(touch.index);
+					var displayTouch = touchDisplay.onOut(touch.index);
 					displayTouch.index = touch.index;
 					displayTouch.x = touch.x;
 					displayTouch.y = touch.y;
@@ -115,7 +120,7 @@ class InputAssemblerObject
 			}
 		}
 
-		var displayTouch:Touch = getDisplayTouch(display, touch);
+		var displayTouch:Touch = getDisplayTouch(touchDisplay, touch);
 		InputAssembler.collisions.push(displayTouch);
 		return true;
 	}

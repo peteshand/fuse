@@ -247,13 +247,19 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	{
 		if (absoluteVis() == false) return false;
 		var triangleSum:Float = getTriangleSum(x, y);
-		if (triangleSum < area + 1) return true;
+		//trace("triangleSum = " + triangleSum);
+		//trace("area = " + area);
+		if (triangleSum < area + 1) {
+			return true;
+		}
 		return false;
 	}
 
 	override public function addToArray(touchDisplay:CoreDisplayObject, flattened:Array<CoreDisplayObject>)
 	{
-		flattened.push(this);
-		this.touchDisplay = touchDisplay;
+		if (touchable != false){
+			flattened.push(this);
+			this.touchDisplay = touchDisplay;
+		}
 	}
 }

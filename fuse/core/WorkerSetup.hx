@@ -178,7 +178,7 @@ class WorkerSetup
 		send(MessageType.REMOVE_TEXTURE, objectId);
 	}
 	
-	public function setTouchable(displayObject:DisplayObject, value:Bool) 
+	public function setTouchable(displayObject:DisplayObject, value:Null<Bool>) 
 	{
 		if (value) touchables.set(displayObject.objectId, displayObject);
 		else touchables.remove(displayObject.objectId);

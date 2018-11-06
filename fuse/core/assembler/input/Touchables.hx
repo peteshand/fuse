@@ -23,17 +23,20 @@ class Touchables
 	static public function setTouchable(payload:TouchableMsg) 
 	{
 		var coreDisplay:CoreDisplayObject = Core.displayList.getDisplay(payload.objectId, payload.displayType);
+		coreDisplay.touchable = payload.touchable;
+		
 		if (coreDisplay.displayType == DisplayType.STAGE) {
-			if (payload.touchable) stage = coreDisplay;
+			if (payload.touchable == true) stage = coreDisplay;
 			else stage = null;
 			return;
 		}
 
-		if (payload.touchable) {
+		requireRebuild = true;
+
+		if (payload.touchable == true) {
 			if (!touchablesMap.exists(payload.objectId)) {
 				touchablesMap.set(payload.objectId, coreDisplay);
-				touchables.push(coreDisplay);
-				requireRebuild = true;
+				touchables.push(coreDisplay);		
 			}
 		}
 		else {
@@ -47,7 +50,6 @@ class Touchables
 					}
 					i--;
 				}
-				requireRebuild = true;
 			}
 		}
 	}

@@ -228,7 +228,7 @@ class TextField extends Sprite
 	function get_displayAsPassword():Bool	return nativeTextField.displayAsPassword;
 	function get_embedFonts():Bool			return nativeTextField.embedFonts;
 	function get_gridFitType():GridFitType	return nativeTextField.gridFitType;
-	override function get_height():Float	return nativeTextField.height;
+	override function get_height():Float	return nativeTextField.height * this.scaleY;
 	function get_htmlText():String			return nativeTextField.htmlText;
 	function get_length():Int				return nativeTextField.length;
 	function get_maxChars():Int				return nativeTextField.maxChars;
@@ -246,11 +246,11 @@ class TextField extends Sprite
 	function get_sharpness():Float			return nativeTextField.sharpness;
 	function get_text():String				return nativeTextField.text;
 	function get_textColor():Int			return nativeTextField.textColor;
-	function get_textWidth():Float			return nativeTextField.textWidth;
-	function get_textHeight():Float			return nativeTextField.textHeight;
+	function get_textWidth():Float			return nativeTextField.textWidth * this.scaleX;
+	function get_textHeight():Float			return nativeTextField.textHeight * this.scaleY;
 	function get_type():TextFieldType		return nativeTextField.type;
 	function get_wordWrap():Bool			return nativeTextField.wordWrap;
-	override function get_width():Float		return nativeTextField.width;
+	override function get_width():Float		return nativeTextField.width * this.scaleX;
 	
 	function set_antiAliasType(value:AntiAliasType):AntiAliasType
 	{

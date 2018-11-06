@@ -28,7 +28,7 @@ class DisplayObject
 	public var onAddToStage = new Signal1<DisplayObject>();
 	public var onRemoveFromStage = new Signal1<DisplayObject>();
 	
-	@:isVar public var touchable(get, set):Bool = false;
+	@:isVar public var touchable(get, set):Null<Bool> = null;
 	public var onPress(get, null):Signal1<Touch>;
 	public var onMove(get, null):Signal1<Touch>;
 	public var onRelease(get, null):Signal1<Touch>;
@@ -136,7 +136,7 @@ class DisplayObject
 	//}
 	
 	
-	inline function get_touchable():Bool { return touchable; }
+	inline function get_touchable():Null<Bool> { return touchable; }
 	inline function get_x():Float { return x; }
 	inline function get_y():Float { return y; }
 	function get_width():Float { return width; }
@@ -156,7 +156,7 @@ class DisplayObject
 	function get_visible():Bool { return visible; }
 	
 	
-	inline function set_touchable(value:Bool):Bool 
+	inline function set_touchable(value:Null<Bool>):Null<Bool>
 	{
 		if (touchable != value){
 			touchable = value;

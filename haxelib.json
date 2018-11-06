@@ -9,6 +9,7 @@
 	"contributors": [ "p.j.shand" ],
 	"dependencies": {
 		"openfl": "",
+		"notifier": "",
 		"msignal": ""
 	}
 }

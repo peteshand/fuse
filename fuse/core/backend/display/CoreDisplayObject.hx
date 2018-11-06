@@ -58,6 +58,7 @@ class CoreDisplayObject
 	@:isVar public var updateAny(get, set):Bool = true;
 	
 	public var touchDisplay:CoreDisplayObject;
+	public var touchable:Null<Bool> = null;
 
 	public function new() 
 	{
@@ -174,8 +175,12 @@ class CoreDisplayObject
 	
 	function get_area():Float 
 	{
+		/*var _w:Float = (quadData.topRightX - quadData.topLeftX) / 2 * Core.STAGE_WIDTH;
+		var _h:Float = (quadData.topLeftY - quadData.bottomLeftY) / 2 * Core.STAGE_HEIGHT;
+		return _w * _h;*/
+
 		if (displayData == null) return 0;
-		return displayData.width * displayData.scaleX * displayData.height * displayData.scaleY;
+		return displayData.width * this.absoluteScaleX() * displayData.height * this.absoluteScaleY();
 	}
 	
 	function get_diagonal():Float 
@@ -242,6 +247,19 @@ class CoreDisplayObject
 		return true;
 	}
 
+	public function absoluteScaleX():Float
+	{
+		var sx:Float = displayData.scaleX;
+		if (parent != null) sx *= parent.absoluteScaleX();
+		return sx;
+	}
+
+	public function absoluteScaleY():Float
+	{
+		var sx:Float = displayData.scaleY;
+		if (parent != null) sx *= parent.absoluteScaleY();
+		return sx;
+	}
 
 	public function withinBounds(x:Float, y:Float):Bool
 	{
@@ -281,7 +299,7 @@ class CoreDisplayObject
 		var b:Float = Math.sqrt(Math.pow(bx - cx, 2) + Math.pow(by - cy, 2));
 		var c:Float = Math.sqrt(Math.pow(cx - x, 2) + Math.pow(cy - y, 2));
 		var p:Float = (a + b + c) / 2;
-		return Math.sqrt(p * (p - a) * (p - b) * (p - c));
+		return Math.sqrt(p * (p - a) * (p - b) * (p - c));// * 4;
 	}
 
 	public function addToArray(touchDisplay:CoreDisplayObject, flattened:Array<CoreDisplayObject>)

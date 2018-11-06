@@ -18,6 +18,7 @@ class CoreStage extends CoreInteractiveObject
 		super();
 		setUpdates(false);
 		this.displayType = DisplayType.STAGE;
+		this.touchDisplay = this;
 	}
 	
 	override public function clone():CoreDisplayObject
