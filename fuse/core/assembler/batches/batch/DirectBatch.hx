@@ -147,17 +147,10 @@ class DirectBatch extends BaseBatch implements IBatch
 
 		if (updateTextureUVs || updateImageUVs) {
 			
-			if (updateImageUVs){
-				uvItem.offsetU = image.displayData.offsetU;
-				uvItem.offsetV = image.displayData.offsetV;
-				uvItem.scaleU = image.displayData.scaleU;
-				uvItem.scaleV = image.displayData.scaleV;
-			} else {
-				uvItem.offsetU = 0;
-				uvItem.offsetV = 0;
-				uvItem.scaleU = 1;
-				uvItem.scaleV = 1;
-			}
+			uvItem.offsetU = image.displayData.offsetU;
+			uvItem.offsetV = image.displayData.offsetV;
+			uvItem.scaleU = image.displayData.scaleU;
+			uvItem.scaleV = image.displayData.scaleV;
 			
 			coreTexture.getUVData(uvItem);
 			
