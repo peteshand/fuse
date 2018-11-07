@@ -108,4 +108,9 @@ class Condition extends Notifier<Bool>
 		if (value1 > value2) return true;
 		return false;
 	}
+
+	override function toString():String
+	{
+		return "[Condition] " + testValue + " " + operation + " " + targetValue + " | " + value;
+	}
 }

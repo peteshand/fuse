@@ -184,6 +184,18 @@ class State extends Notifier<Bool> implements IState
 		condition.add(OnConditionChange, 1000);
 		_conditions.push(condition);
 	}
+
+	override function toString():String
+	{
+		var s:String = "\n";
+		for (i in 0...standardConsitions.length) {
+			s += standardConsitions[i] + "\n";
+		}
+		for (i in 0...sceneConditions.length) {
+			s += sceneConditions[i] + "\n";
+		}
+		return s;
+	}
 	
 	/*public function attachTransition(transition:Transition):Void
 	{
