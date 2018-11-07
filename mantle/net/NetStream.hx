@@ -15,6 +15,7 @@ import openfl.net.NetStream as OpenFlNetStream;
 
 class NetStream extends OpenFlNetStream
 {
+	public var url:String;
 	public function new(connection:NetConnection, peerID:String=null) 
 	{
 		super(connection, peerID);
@@ -28,7 +29,10 @@ class NetStream extends OpenFlNetStream
 	
 	public function playLocal(url:String):Void
 	{
+		this.url = url;
+		this.close();
 		if (url == null) return;
+		
 		
 		var _localURL:String = localURL(url);
 		if (_localURL != null) {

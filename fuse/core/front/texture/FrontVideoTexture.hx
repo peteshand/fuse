@@ -40,10 +40,12 @@ class FrontVideoTexture extends FrontBaseTexture
 	var playing = new Notifier<Bool>();
 	var seekTarget:Null<Float>;
 	var autoPlay:Bool;
-
+	var action = new Notifier<VideoAction>();
+	var state = new Notifier<VideoAction>();
+	
 	public function new(url:String=null) 
 	{
-		//trace("supportsVideoTexture = " + Context3D.supportsVideoTexture);
+		//traceProxy("supportsVideoTexture = " + Context3D.supportsVideoTexture);
 		netConnection = new NetConnection();
 		netConnection.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
 		netConnection.connect(null);
@@ -56,63 +58,142 @@ class FrontVideoTexture extends FrontBaseTexture
 		this.directRender = true;
 
 		//if (url != null) play(url);
+
+		action.add(onActiveChange);
+		playing.add(onPlayingChange);
+		playing.requireChange = false;
+	}
+
+	
+
+	function onActiveChange()
+	{
+		traceProxy("onActiveChange: " + action.value);
+		traceProxy("playing.value = " + playing.value);
+		if (action.value == VideoAction.PLAY) {
+			if (!autoPlay) action.value = VideoAction.PAUSE_WAIT;
+			/*if (playing.value != false)*/ playVideo();
+			//else action.value = VideoAction.PLAY_WAIT;
+		}
+		else if (action.value == VideoAction.STOP) {
+			if (playing.value == true) stopVideo();
+			else action.value = VideoAction.STOP_WAIT;
+		}
+		else if (action.value == VideoAction.PAUSE) {
+			if (playing.value == true) pauseVideo();
+			else action.value = VideoAction.PAUSE_WAIT;
+		}
+		else if (action.value == VideoAction.SEEK) {
+			if (playing.value == true) {
+				seekVideo();
+				if (!autoPlay) action.value = VideoAction.PAUSE_WAIT;
+			}
+			else action.value = VideoAction.SEEK_WAIT;
+		}
+	}
+
+	function onPlayingChange()
+	{
+		traceProxy("onPlayingChange: " + playing.value);
+		if (playing.value){
+			if (action.value == VideoAction.PLAY_WAIT) action.value = VideoAction.PLAY;
+			else if (action.value == VideoAction.PAUSE_WAIT) action.value = VideoAction.PAUSE;
+			else if (action.value == VideoAction.STOP_WAIT) action.value = VideoAction.STOP;
+			else if (action.value == VideoAction.SEEK_WAIT) action.value = VideoAction.SEEK;
+		}
 	}
 
 	public function play(url:String=null, autoPlay:Bool=true) 
 	{
-		Delay.killDelay(pause);
-
 		this.autoPlay = autoPlay;
-		
-		if (this.url == url) {
-			//trace("resume");
-			netStream.resume();
-		} else {
-			//trace("playLocal");
-			if (url == null && this.url != null) url = this.url;
-			duration = null;
-			this.url = url;
-			
-			videoMetaData = null;
-			netStream.playLocal(url);
-			trace("volume = " + volume);
-			netStream.soundTransform = new SoundTransform(volume);
-		}
-		paused = false;
-		//playing.remove(onPlayingStartAfterSetURL);
-
-		checkAutoPlay();
+		this.url = url;
+		action.value = VideoAction.PLAY;
 	}
 
 	public function stop()
 	{
-		//if (paused == false) return;
-		//trace("stop");
-		this.url = null;
-		paused = null;
-		netStream.close();
+		action.value = VideoAction.STOP;
 	}
 
 	public function pause()
 	{
-		if (paused == true || paused == null) return;
-		//trace("pause");
-		paused = true;
-		netStream.pause();
+		action.value = VideoAction.PAUSE;
 	}
 
 	public function seek(offset:Float)
 	{
 		seekTarget = offset;
-		netStream.seek(offset);
+		action.value = VideoAction.SEEK;
+	}
+	
+
+	function playVideo() 
+	{
+		
+		//Delay.killDelay(pause);
+
+		//this.autoPlay = autoPlay;
+		
+		/*if (netStream.url == url) {
+			traceProxy("resume");
+			netStream.resume();
+			
+		} else {*/
+			traceProxy("playLocal");
+			//if (url == null && this.url != null) url = this.url;
+			duration = null;
+			//this.url = url;
+			
+			videoMetaData = null;
+			
+			netStream.playLocal(url);
+			netStream.soundTransform = new SoundTransform(volume);
+		//}
+		paused = false;
+		playing.value = false;
+		//playing.remove(onPlayingStartAfterSetURL);
+
+		//checkAutoPlay();
+	}
+
+	function stopVideo()
+	{
+		//if (paused == false) return;
+		traceProxy("stop");
+		videoMetaData = null;
+		duration = null;
+		this.url = null;
+		paused = null;
+		netStream.close();
+		netStream.url = null;
+		playing.value = false;
+	}
+
+	function pauseVideo()
+	{
+		traceProxy("pause");
+		traceProxy(this.videoMetaData == null);
+
+
+		traceProxy("paused = " + paused);
+		if (paused == true || paused == null) return;
+		traceProxy("AAA");
+		paused = true;
+		netStream.pause();
+		//playing.value = false;
+	}
+
+	function seekVideo()
+	{
+		netStream.seek(seekTarget);
 	}
 	
 	private function OnEvent(e:NetStatusEvent):Void 
 	{
 		var info:NetStatusInfo = e.info;
-		//trace(info.code);
+		traceProxy(info.code);
 		//if (textureData != null){
-		//	trace("textureData.textureAvailable = " + textureData.textureAvailable);
+		//	traceProxy("textureData.textureAvailable = " + textureData.textureAvailable);
 		//}
 		if (info.code == "NetStream.Play.Start") {
 			textureData.textureAvailable = 1;
@@ -151,9 +232,9 @@ class FrontVideoTexture extends FrontBaseTexture
 	
 	function onMetaDataReceived(videoMetaData:VideoMetaData) 
 	{
-		//trace("onMetaDataReceived");
+		traceProxy("onMetaDataReceived");
 		if (this.videoMetaData != null) return;
-		//trace(videoMetaData.width);
+		//traceProxy(videoMetaData.width);
 
 		this.videoMetaData = videoMetaData;
 		// TODO: need to be able to update width/height in backend texture
@@ -162,20 +243,45 @@ class FrontVideoTexture extends FrontBaseTexture
 		duration = videoMetaData.duration;
 		setTextureData();
 
-		//trace("volume = " + volume);
+		//traceProxy("volume = " + volume);
 		netStream.soundTransform = new SoundTransform(volume);
 
-		checkAutoPlay();
+		//pause();
+		//action.value == VideoAction.PAUSE;
 		onMetaData.dispatch();
+		//checkAutoPlay();
 	}
 
-	function checkAutoPlay()
+	/*function checkAutoPlay()
 	{
-		Delay.killDelay(pause);
+		Delay.killDelay(autoPlayPause);
+		traceProxy("checkAutoPlay");
+		traceProxy("autoPlay = " + autoPlay);
+		traceProxy(videoMetaData != null);
 		if (!autoPlay && videoMetaData != null) {
-			Delay.byFrames(5, pause);
+			traceProxy("wait");
+			Delay.byFrames(5, autoPlayPause);
 		}
-	}
+	}*/
+
+	/*function autoPlayPause()
+	{
+		traceProxy("autoPlayPause");
+		pause();
+	}*/
+
+	//function checkState()
+	//{
+		/*traceProxy("state.value = " + state.value);
+		traceProxy("action.value = " + action.value);
+		
+		if (state.value != action.value){
+			state.value = action.value;
+			if (state.value == VideoAction.PAUSE) pause();
+			//else if (state.value == VideoAction.PLAY) play(url, autoPlay);
+			//else if (state.value == VideoAction.STOP) stop();
+		}*/
+	//}
 	
 	override public function upload() 
 	{
@@ -198,12 +304,12 @@ class FrontVideoTexture extends FrontBaseTexture
 
 	function onRenderState(event:VideoTextureEvent)
 	{
-		//trace(event.status);
+		//traceProxy(event.status);
 	}
 
 	private function renderFrame(e:Event):Void 
 	{
-		//trace("renderFrame");
+		//traceProxy("renderFrame");
 		nativeVideoTexture.removeEventListener(Event.TEXTURE_READY, renderFrame);
 		EnterFrame.add(onTick);
 
@@ -250,9 +356,14 @@ class FrontVideoTexture extends FrontBaseTexture
 	function set_volume(value:Float):Float
 	{
 		volume = value;
-		//trace("volume = " + volume);
+		//traceProxy("volume = " + volume);
 		netStream.soundTransform = new SoundTransform(volume);
 		return value;
+	}
+
+	function traceProxy(value:Dynamic)
+	{
+		//trace(value);
 	}
 }
 
@@ -268,4 +379,18 @@ typedef NetStatusInfo =
 {
 	level:String,
 	code:String
+}
+
+@:enum abstract VideoAction(String) from String to String {
+	
+	public var PLAY:String = "play";
+	public var STOP:String = "stop";
+	public var PAUSE:String = "pause";
+	public var SEEK:String = "seek";
+	public var PLAY_WAIT:String = "play_wait";
+	public var PAUSE_WAIT:String = "pause_wait";
+	public var STOP_WAIT:String = "stop_wait";
+	public var SEEK_WAIT:String = "seek_wait";
+	
+	
 }
