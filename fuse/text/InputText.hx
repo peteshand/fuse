@@ -23,18 +23,23 @@ class InputText extends TextField
     {
         super(width, height);
 
-        hitArea = new Quad(width, height, 0xFF00FF00);
+        hitArea = new Quad(10, 10, 0xFF00FF00);
         addChild(hitArea);
         hitArea.touchable = true;
         hitArea.onPress.add(onPressHitarea);
         hitArea.alpha = 0;
 
-       
-
         caret = new Caret(this);
         addChild(caret);
 
         stage.focus.add(onFocusChange);
+        onUpdate.add(onTextUpdate);
+    }
+
+    function onTextUpdate()
+    {
+        hitArea.width = width;
+        hitArea.height = textHeight;
     }
 
     override function setStage(value:Stage):Stage 
