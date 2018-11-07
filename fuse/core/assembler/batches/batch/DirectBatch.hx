@@ -145,54 +145,6 @@ class DirectBatch extends BaseBatch implements IBatch
 			}
 		}
 
-		/*
-		uvLeft = 0;
-		uvTop = 0;
-		uvRight = 1;
-		uvBottom = 1;
-		
-		if (updateTextureUVs) {
-			//trace([coreTexture.uvTop, coreTexture.uvBottom]);
-			//trace("updateTextureUVs = " + updateTextureUVs + " objectId = " + coreTexture.objectId);
-
-			trace([coreTexture.uvLeft, coreTexture.uvRight, coreTexture.uvTop, coreTexture.uvBottom]);
-
-			vertexData.setUV(0, coreTexture.uvLeft,		coreTexture.uvBottom);	// bottom left
-			vertexData.setUV(1, coreTexture.uvLeft,		coreTexture.uvTop);		// top left
-			vertexData.setUV(2, coreTexture.uvRight,	coreTexture.uvTop);		// top right
-			vertexData.setUV(3, coreTexture.uvRight,	coreTexture.uvBottom);	// bottom right
-
-			uvLeft = coreTexture.uvLeft;
-			uvRight = coreTexture.uvRight;
-			uvTop = coreTexture.uvTop;
-			uvBottom = coreTexture.uvBottom;
-
-			//image.updateUVs = false;
-		}
-
-		if (updateImageUVs){
-			
-			
-			offsetU1 = 0
-			offsetU2 = 0.5
-
-			offsetU = 0.5
-			
-
-			scaleU1 = 0.5
-			scaleU2 = 0.5
-			
-			scaleU1 = 0.25
-
-			uvRight1 = 0.5
-			uvRight2 = 1
-
-			uvRight = 0.75
-			
-			trace([vertexPositionHasMoved, image.updateUVs]);
-		}
-		*/
-
 		if (updateTextureUVs || updateImageUVs) {
 			
 			if (updateImageUVs){
