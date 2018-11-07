@@ -97,6 +97,11 @@ class TextField extends Sprite
 	public var type(get, set):TextFieldType;
 	public var wordWrap(get, set):Bool;
 	
+	public var offsetU(get, set):Float;
+	public var offsetV(get, set):Float;
+	public var scaleU(get, set):Float;
+	public var scaleV(get, set):Float;
+	
 	@:isVar public var directRender(get, set):Bool = false;
 	
 	var debug:Bool = false;
@@ -431,6 +436,16 @@ class TextField extends Sprite
 	override function get_pivotY():Float { return image.pivotY; }
 	override function set_pivotX(value:Float):Float { return image.pivotX = value; }
 	override function set_pivotY(value:Float):Float { return image.pivotY = value; }
+
+	function get_offsetU():Float { return image.offsetU; }
+	function get_offsetV():Float { return image.offsetV; }
+	function get_scaleU():Float { return image.scaleU; }
+	function get_scaleV():Float { return image.scaleV; }
+	
+	function set_offsetU(value:Float):Float { return image.offsetU = value; }
+	function set_offsetV(value:Float):Float { return image.offsetV = value; }
+	function set_scaleU(value:Float):Float { return image.scaleU = value; }
+	function set_scaleV(value:Float):Float { return image.scaleV = value; }
 	
 	override public function alignPivot(horizontalAlign:Align = Align.CENTER, verticalAlign:Align = Align.CENTER) 
 	{
