@@ -477,18 +477,14 @@ class DisplayObject
 	function updateAlignmentX() 
 	{
 		if (horizontalAlign != null) {
-			if (horizontalAlign == Align.LEFT) pivotX = 0;
-			if (horizontalAlign == Align.RIGHT) pivotX = width;
-			if (horizontalAlign == Align.CENTER) pivotX = Math.round(width / 2);
+			pivotX = Math.round(width * cast(horizontalAlign, Float));
 		}
 	}
 
 	function updateAlignmentY() 
 	{
 		if (verticalAlign != null) {
-			if (verticalAlign == Align.TOP) pivotY = 0;
-			if (verticalAlign == Align.BOTTOM) pivotY = height;
-			if (verticalAlign == Align.CENTER) pivotY = Math.round(height / 2);
+			pivotY = Math.round(height * cast(verticalAlign, Float));
 		}
 	}
 	
