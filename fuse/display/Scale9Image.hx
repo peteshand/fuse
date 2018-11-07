@@ -39,8 +39,8 @@ class Scale9Image extends Sprite
         this.texture = texture;
         this.scale9Grid = scale9Grid;
 
-        //texture.onLayoutUpdate.add(updateRects);
         texture.onUpload.add(updateRects);
+        texture.onUpdate.add(updateRects);
         updateRects();
     }
 
@@ -87,11 +87,11 @@ class Scale9Image extends Sprite
     function updateRects()
     {
         if (texture == null) return;
-        if (texture.width == 0) return;
-		if (texture.height == 0) return;
-        if (width == 0) return;
-		if (height == 0) return;
-        
+        if (texture.width == 0)  return;
+        if (texture.height == 0) return;
+        if (width == 0) width = texture.width;
+        if (height == 0) height = texture.height;
+
         var leftX:Float = 0;
         var leftWidth:Float = scale9Grid.x;
         var middleX:Float = leftX + leftWidth;
@@ -165,70 +165,6 @@ class Scale9Image extends Sprite
         uvHeights[1] = uvMiddleHeight;
         uvHeights[2] = uvBottomHeight;
 
-        for (i in 0...uvs.length) {
-            var uvData:UVData = uvs[i];
-            var xi:Int = i % 3;
-            var yi:Int = Math.floor(i/3);
-            
-            uvData.offsetU = uvXs[xi];
-            uvData.offsetV = uvYs[yi];
-            uvData.scaleU = uvWidths[xi];
-            uvData.scaleV = uvHeights[yi];
-        }
-
-        //updateLayout();
-
-
-
-        
-
-
-
-        /*var leftX:Float = 0;
-        var leftWidth:Float = scale9Grid.x;
-        var middleX:Float = leftX + leftWidth;
-        var middleWidth:Float = width - (scale9Grid.x * 2);
-        var rightX:Float = middleX + middleWidth;
-        var rightWidth:Float = width - rightX;
-
-        var topY:Float = 0;
-        var topHeight:Float = scale9Grid.y;
-        var middleY:Float = topY + topHeight;
-        var middleHeight:Float = height - (scale9Grid.y * 2);
-        var bottomY:Float = middleY + middleHeight;
-        var bottomHeight:Float = height - bottomY;
-
-        posX[0] = leftX;
-        posX[1] = middleX;
-        posX[2] = rightX; 
-
-        posY[0] = topY;
-        posY[1] = middleY;
-        posY[2] = bottomY; 
-
-        widths[0] = leftWidth;
-        widths[1] = middleWidth;
-        widths[2] = rightWidth; 
-
-        heights[0] = topHeight;
-        heights[1] = middleHeight;
-        heights[2] = bottomHeight;*/
-
-        /*for (i in 0...rects.length) {
-            var rect:Rectangle = rects[i];
-            var xi:Int = i % 3;
-            var yi:Int = Math.floor(i/3);
-            rect.x = posX[xi];
-            rect.y = posY[yi];
-            rect.width = widths[xi];
-            rect.height = heights[yi];
-        }*/
-
-        onLayoutUpdate();
-    }
-
-    function onLayoutUpdate()
-    {
         for (i in 0...images.length){
             var rect:Rectangle = rects[i];
             var image:Image = images[i];
@@ -237,12 +173,12 @@ class Scale9Image extends Sprite
             image.width = rect.width;
             image.height = rect.height;
 
-            //var texture:ITexture = textures[i];
-            var uvData:UVData = uvs[i];
-            image.offsetU = uvData.offsetU;
-            image.offsetV = uvData.offsetV;
-            image.scaleU = uvData.scaleU;
-            image.scaleV = uvData.scaleV;   
+            var xi:Int = i % 3;
+            var yi:Int = Math.floor(i/3);
+            image.offsetU = uvXs[xi];
+            image.offsetV = uvYs[yi];
+            image.scaleU = uvWidths[xi];
+            image.scaleV = uvHeights[yi];
         }
     }
 }
