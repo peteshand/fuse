@@ -85,16 +85,17 @@ class FrontVideoTexture extends FrontBaseTexture
 			else action.value = VideoAction.PAUSE_WAIT;
 		}
 		else if (action.value == VideoAction.SEEK) {
-			if (available.value == true) {
+			//if (available.value == true) {
 				seekVideo();
 				if (!autoPlay) action.value = VideoAction.PAUSE_WAIT;
-			}
-			else action.value = VideoAction.SEEK_WAIT;
+			//}
+			//else action.value = VideoAction.SEEK_WAIT;
 		}
 	}
 
 	function onAvailableChange()
 	{
+		Delay.killDelay(delayAvailable);
 		trace2("onAvailableChange: " + available.value);
 		if (available.value){
 			if (action.value == VideoAction.PLAY_WAIT) action.value = VideoAction.PLAY;
@@ -138,7 +139,7 @@ class FrontVideoTexture extends FrontBaseTexture
 		if (currentUrl == url) {
 			trace2("resume");
 			netStream.resume();
-			
+			onMetaData.dispatch();
 		} else {
 			trace2("playLocal");
 			//if (url == null && this.url != null) url = this.url;
@@ -202,7 +203,8 @@ class FrontVideoTexture extends FrontBaseTexture
 		//}
 		if (info.code == "NetStream.Play.Start") {
 			textureData.textureAvailable = 1;
-			available.value = true;
+			
+			Delay.nextFrame(delayAvailable);
 		}
 		if (info.code == "NetStream.Play.Stop") {
 			available.value = false;
@@ -233,6 +235,11 @@ class FrontVideoTexture extends FrontBaseTexture
 				onComplete.dispatch();
 			}
 		}
+	}
+
+	function delayAvailable()
+	{
+		available.value = true;
 	}
 	
 	function onMetaDataReceived(videoMetaData:VideoMetaData) 

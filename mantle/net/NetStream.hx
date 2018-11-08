@@ -22,8 +22,8 @@ class NetStream extends OpenFlNetStream
 		
 		#if (js && html5)
 			// DEBUG
-			// js.Browser.document.body.insertBefore(__video, js.Browser.document.body.firstChild);
-			// __video.style.setProperty("width", "200px");
+			//js.Browser.document.body.insertBefore(__video, js.Browser.document.body.firstChild);
+			//__video.style.setProperty("width", "200px");
 		#end
 	}
 	
