@@ -252,7 +252,12 @@ class TextField extends Sprite
 	function get_text():String				return nativeTextField.text;
 	function get_textColor():Int			return nativeTextField.textColor;
 	function get_textWidth():Float			return nativeTextField.textWidth * this.scaleX;
-	function get_textHeight():Float			return nativeTextField.textHeight * this.scaleY;
+	function get_textHeight():Float
+	{
+		var _h:Float = nativeTextField.textHeight * this.scaleY;
+		if (_h > height) _h = height;
+		return _h;
+	}
 	function get_type():TextFieldType		return nativeTextField.type;
 	function get_wordWrap():Bool			return nativeTextField.wordWrap;
 	override function get_width():Float		return nativeTextField.width * this.scaleX;

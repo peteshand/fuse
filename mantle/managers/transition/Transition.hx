@@ -428,6 +428,8 @@ class Transition
 		if (state != null){
 			state.onActive.add(Show);
 			state.onInactive.add(Hide);
+			if (state.value) Show();
+			else Hide();
 		}
 		return state;
 	}

@@ -112,6 +112,7 @@ class MapNotifier<T>
 	
 	public function remove(value:T)
 	{
+		if (value == null) return;
 		if (exists(value)) {
 			data.remove(untyped value);
 			removedItems.push( value );
