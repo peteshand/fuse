@@ -62,7 +62,7 @@ class FrontVideoTexture extends FrontBaseTexture
 
 		action.add(onActiveChange);
 		available.add(onAvailableChange);
-		available.requireChange = false;
+		//available.requireChange = false;
 	}
 
 	
@@ -107,6 +107,7 @@ class FrontVideoTexture extends FrontBaseTexture
 
 	public function play(url:String=null, autoPlay:Bool=true) 
 	{
+		trace2("play");
 		this.autoPlay = autoPlay;
 		this.url = url;
 		action.value = VideoAction.PLAY;
@@ -114,16 +115,19 @@ class FrontVideoTexture extends FrontBaseTexture
 
 	public function stop()
 	{
+		trace2("stop");
 		action.value = VideoAction.STOP;
 	}
 
 	public function pause()
 	{
+		trace2("pause");
 		action.value = VideoAction.PAUSE;
 	}
 
 	public function seek(offset:Float)
 	{
+		trace2("seek");
 		seekTarget = offset;
 		action.value = VideoAction.SEEK;
 	}
@@ -139,7 +143,10 @@ class FrontVideoTexture extends FrontBaseTexture
 		if (currentUrl == url) {
 			trace2("resume");
 			netStream.resume();
-			onMetaData.dispatch();
+			//onMetaData.dispatch();
+			Delay.nextFrame(() -> {
+				onMetaData.dispatch();
+			});
 		} else {
 			trace2("playLocal");
 			//if (url == null && this.url != null) url = this.url;
@@ -148,7 +155,6 @@ class FrontVideoTexture extends FrontBaseTexture
 			
 			videoMetaData = null;
 			
-			currentUrl = url;
 			netStream.playLocal(url);
 			netStream.soundTransform = new SoundTransform(volume);
 			available.value = false;
@@ -244,6 +250,7 @@ class FrontVideoTexture extends FrontBaseTexture
 	
 	function onMetaDataReceived(videoMetaData:VideoMetaData) 
 	{
+		currentUrl = url;
 		trace2("onMetaDataReceived");
 		if (this.videoMetaData != null) return;
 		//trace2(videoMetaData.width);
@@ -260,7 +267,9 @@ class FrontVideoTexture extends FrontBaseTexture
 
 		//pause();
 		//action.value == VideoAction.PAUSE;
-		onMetaData.dispatch();
+		Delay.nextFrame(() -> {
+			onMetaData.dispatch();
+		});
 		//checkAutoPlay();
 	}
 
