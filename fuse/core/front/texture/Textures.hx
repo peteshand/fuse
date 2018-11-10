@@ -11,6 +11,8 @@ import openfl.display3D.Context3D;
 import openfl.display3D.textures.TextureBase;
 import openfl.events.Event;
 import fuse.core.front.texture.IFrontTexture;
+import fuse.geom.Rectangle;
+
 /**
  * ...
  * @author P.J.Shand

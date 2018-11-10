@@ -77,6 +77,7 @@ class Buffer
 		addToVertexBuffer(Context3DVertexBufferFormat.FLOAT_2); // INDEX_X, INDEX_Y
 		addToVertexBuffer(Context3DVertexBufferFormat.FLOAT_4); // INDEX_TEXTURE, INDEX_ALPHA, INDEX_U, INDEX_V
 		addToVertexBuffer(Context3DVertexBufferFormat.BYTES_4); // INDEX_COLOR
+		addToVertexBuffer(Context3DVertexBufferFormat.FLOAT_4); // VERTEX_X, VERTEX_Y, VERTEX_WIDTH, VERTEX_HEIGHT
 		if (FShader.ENABLE_MASKS){
 			addToVertexBuffer(Context3DVertexBufferFormat.FLOAT_4); // INDEX_MU, INDEX_MV, INDEX_MASK_TEXTURE, INDEX_MASK_BASE_VALUE
 		}

@@ -13,8 +13,8 @@ class WorkerDisplayData /*implements IDisplayData*/
 	
 	static inline var INDEX_X:Int = 0;
 	static inline var INDEX_Y:Int = 4;
-	static inline var INDEX_WIDTH:Int = 8;
-	static inline var INDEX_HEIGHT:Int = 12;
+	static inline var VERTEX_X:Int = 8;
+	static inline var VERTEX_Y:Int = 12;
 	static inline var INDEX_PIVOT_X:Int = 16;
 	static inline var INDEX_PIVOT_Y:Int = 20;
 	static inline var INDEX_SCALE_X:Int = 24;
@@ -108,11 +108,11 @@ class WorkerDisplayData /*implements IDisplayData*/
 	}
 	
 	inline function get_width():Float { 
-		return memoryBlock.readFloat(INDEX_WIDTH);
+		return memoryBlock.readFloat(VERTEX_X);
 	}
 	
 	inline function get_height():Float { 
-		return memoryBlock.readFloat(INDEX_HEIGHT);
+		return memoryBlock.readFloat(VERTEX_Y);
 	}
 	
 	inline function get_pivotX():Float { 
@@ -225,12 +225,12 @@ class WorkerDisplayData /*implements IDisplayData*/
 	}
 	
 	inline function set_width(value:Float):Float { 
-		memoryBlock.writeFloat(INDEX_WIDTH, value);
+		memoryBlock.writeFloat(VERTEX_X, value);
 		return value;
 	}
 	
 	inline function set_height(value:Float):Float { 
-		memoryBlock.writeFloat(INDEX_HEIGHT, value);
+		memoryBlock.writeFloat(VERTEX_Y, value);
 		return value;
 	}
 	

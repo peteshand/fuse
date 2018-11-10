@@ -53,7 +53,7 @@ class ColorTransformShader extends BaseShader
     override public function activate(context3D:Context3D):Void
     {
         //if (hasChanged) {
-            context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 1, colorTransform, 2);
+            context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 11, colorTransform, 2);
             hasChanged = false;
         //}
     }
@@ -61,12 +61,12 @@ class ColorTransformShader extends BaseShader
     override public function fragmentString():String 
 	{
         var agal:String = "";
-        agal += "mul ft1, ft1, fc1				\n"; // multiply by color transform mul rgba
+        agal += "mul ft1, ft1, fc11				\n"; // multiply by color transform mul rgba
 			
 		agal += "min ft1, ft1, ONE.4			\n"; // cap to +1
 		agal += "min ft1, NEG_ONE.4, ft1		\n"; // cap to -1
 
-		agal += "add ft1, ft1, fc2				\n"; // add color transform offset rgba
+		agal += "add ft1, ft1, fc12				\n"; // add color transform offset rgba
 		
         return agal;
     }

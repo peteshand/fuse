@@ -77,7 +77,7 @@ class Renderer
 	public function resize() 
 	{
 		if (Fuse.current.stage == null) return;
-		context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 0, true);
+		context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 2, true);
 		scissorRectangle.setTo(0, 0, Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight);
 		//context3D.setScissorRectangle(scissorRectangle);
 	}

@@ -41,7 +41,7 @@ class ColorMatrixShader extends BaseShader
     override public function activate(context3D:Context3D):Void
     {
         //if (hasChanged) {
-            context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 3, colorMatrixValues, 5);
+            context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 13, colorMatrixValues, 5);
             hasChanged = false;
         //}
     }
@@ -49,7 +49,7 @@ class ColorMatrixShader extends BaseShader
     override public function fragmentString():String 
 	{
         var agal:String = "";
-        var fcs:Array<String> = ["fc3", "fc4", "fc5", "fc6"];
+        var fcs:Array<String> = ["fc13", "fc14", "fc15", "fc16"];
         var channel:Array<String> = ["x", "y", "z", "w"];
         
         for (i in 0...fcs.length) {
@@ -65,7 +65,7 @@ class ColorMatrixShader extends BaseShader
             agal += "add ft3." + c + ", ft3." + c + ", ft2.z       	        \n";
             agal += "add ft3." + c + ", ft3." + c + ", ft2.w       	        \n";
             
-            agal += "add ft3." + c + ", ft3." + c + ", fc7." + c + "        \n";
+            agal += "add ft3." + c + ", ft3." + c + ", fc17." + c + "        \n";
         }
         agal += "mov ft1.xyzw, ft3.xyzw \n";
         

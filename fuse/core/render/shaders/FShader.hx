@@ -45,7 +45,10 @@ class FShader
 	{
 		//colorTransform = new ColorTransformShader(1, 0, 0);
 		// FRAGMENT
-		fragmentData = Vector.ofArray([0, 255, 1.0, -1.0]);
+		fragmentData = Vector.ofArray([
+			0, 1.0, 2.0, -1.0,
+			Math.PI, 0.5, 0, 0
+		]);
 		//colorTransform = Vector.ofArray([1.0, 0.0, 0.0, 1.0, 0.0, 0.25, 0.25, 0.0]);
 		
 		// VERTEX
@@ -89,7 +92,7 @@ class FShader
 	function OnProgramConstantsChange() 
 	{
 		if (setProgram.value) {
-			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentData, 1);
+			context3D.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT, 0, fragmentData, 2);
 			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 0, textureChannelData, 16);
 			context3D.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 16, posData, 1);
 			context3D.setProgram(program);
@@ -140,6 +143,7 @@ class FShader
 	function vertexString():String 
 	{
 		var alias:Array<AgalAlias> = [];
+		alias.push( { value:"va0.xy", alias:"INDEX_XY" } );
 		alias.push( { value:"va0.x", alias:"INDEX_X" } );
 		alias.push( { value:"va0.y", alias:"INDEX_Y" } );
 		
@@ -150,17 +154,21 @@ class FShader
 		
 		alias.push( { value:"va2.zyxw", alias:"INDEX_COLOR" } );
 		
-		alias.push( { value:"va3.x", alias:"INDEX_MU" } );
-		alias.push( { value:"va3.y", alias:"INDEX_MV" } );
-		alias.push( { value:"va3.z", alias:"INDEX_MASK_TEXTURE" } );
-		alias.push( { value:"va3.w", alias:"INDEX_MASK_BASE_VALUE" } );
+		alias.push( { value:"va3.x", alias:"VERTEX_X" } );
+		alias.push( { value:"va3.y", alias:"VERTEX_Y" } );
+		alias.push( { value:"va3.z", alias:"VERTEX_WIDTH" } );
+		alias.push( { value:"va3.w", alias:"VERTEX_HEIGHT" } );
+		
+		alias.push( { value:"va4.x", alias:"INDEX_MU" } );
+		alias.push( { value:"va4.y", alias:"INDEX_MV" } );
+		alias.push( { value:"va4.z", alias:"INDEX_MASK_TEXTURE" } );
+		alias.push( { value:"va4.w", alias:"INDEX_MASK_BASE_VALUE" } );
 		
 		alias.push( { value:"vc17", alias:"CAMERA_POSITION" } );
 		
 		var agal:String = "";
 		agal += "mov vt0.zw, vc16.zw				\n"; // set z and w pos to vt0
-		agal += "mov vt0.x, INDEX_X					\n"; // set x and y pos to vt0
-		agal += "mov vt0.y, INDEX_Y					\n"; // set x and y pos to vt0
+		agal += "mov vt0.xy, INDEX_XY					\n"; // set x and y pos to vt0
 		
 		agal += "add vt0.x, vt0.x, CAMERA_POSITION.x	\n"; // set x and y pos to vt0
 		agal += "add vt0.y, vt0.y, CAMERA_POSITION.y	\n"; // set x and y pos to vt0
@@ -186,6 +194,7 @@ class FShader
 		agal += "mov v3, vt3						\n"; // copy RGB-TextureIndex with alpha multipliers into v2
 			
 		agal += "mov v7.xyzw, INDEX_COLOR			\n"; // copy tint colour data and flip Red and Blue
+		agal += "mov v0, va3						\n"; // copy width,height,width-1,height-1 into v0
 		
 		if (FShader.ENABLE_MASKS){
 		// Mask stuff
@@ -217,14 +226,26 @@ class FShader
 	{
 		var alias:Array<AgalAlias> = [];
 		alias.push( { alias:"ZERO.1", value:"fc0.x" } );
+		alias.push( { alias:"ZERO.2", value:"fc0.xx" } );
 		alias.push( { alias:"ZERO.4", value:"fc0.xxxx" } );
-		alias.push( { alias:"ONE.1", value:"fc0.z" } );
-		alias.push( { alias:"ONE.3", value:"fc0.zzz" } );
-		alias.push( { alias:"ONE.4", value:"fc0.zzzz" } );
+		alias.push( { alias:"ONE.1", value:"fc0.y" } );
+		alias.push( { alias:"ONE.2", value:"fc0.yy" } );
+		alias.push( { alias:"ONE.3", value:"fc0.yyy" } );
+		alias.push( { alias:"ONE.4", value:"fc0.yyyy" } );
+		alias.push( { alias:"TWO.1", value:"fc0.z" } );
+		alias.push( { alias:"TWO.2", value:"fc0.zz" } );
+		alias.push( { alias:"TWO.3", value:"fc0.zzz" } );
+		alias.push( { alias:"TWO.4", value:"fc0.zzzz" } );
 		alias.push( { alias:"NEG_ONE.4", value:"fc0.wwwww" } );
+
+		alias.push( { alias:"PI.1", value:"fc1.x" } );
+		alias.push( { alias:"PI.2", value:"fc1.xx" } );
+		alias.push( { alias:"PI.4", value:"fc1.xxxx" } );
+		alias.push( { alias:"HALF.2", value:"fc1.yy" } );
+		
 		alias.push( { alias:"MASK_BASE.1", value:"v6.z" } );
-		alias.push( { alias:"COLOR_TRANSFORM_MULTIPLIER", value:"fc1" } );
-		alias.push( { alias:"COLOR_TRANSFORM_OFFSET", value:"fc2" } );
+		alias.push( { alias:"COLOR_TRANSFORM_MULTIPLIER", value:"fc11" } );
+		alias.push( { alias:"COLOR_TRANSFORM_OFFSET", value:"fc12" } );
 		
 		
 		var agal:String = "\n";
@@ -281,9 +302,35 @@ class FShader
 			//trace("2 colorTransform = " + colorTransform);
 			//if (colorTransform != null) agal += colorTransform.fragmentString();
 
+
+			// ANTI ALIASING ////////////////////////////////
+			/*agal += "mov ft2, v0	\n";
+			agal += "div ft2.xy, ft2.xy, ft2.zw	\n";
+			agal += "frc ft2.xy, ft2.xy	\n";
+			agal += "sub ft2.xy, ft2.xy, HALF.2	\n";
+			agal += "abs ft2.xy, ft2.xy	\n";
+			agal += "neg ft2.xy, ft2.xy	\n";
+			agal += "add ft2.xy, ft2.xy, HALF.2	\n";
+			agal += "mul ft2.xy, ft2.xy, ft2.zw	\n";
+			agal += "min ft2.xy, ft2.xy, ONE.2	\n";
+			agal += "mul ft2.x, ft2.x, ft2.y	\n";
+			agal += "mov ft1.xyzw, ft2.xxxx \n";*/
+			/////////////////////////////////////////////////
+
+
 			for (i in 0...shaders.length) {
 				agal += shaders[i].fragmentString();
 			}
+
+			
+			
+			// sge	|	set-if-greater-equal	|	destination = source1 >= source2 ? 1 : 0, component-wise
+
+			//agal += "mul ft2.x, ft2.x, ft2.y	\n";
+			
+
+
+			//agal += "mul ft1.xyzw, ft1.xyzw, ft2.xxxx	\n"; 
 
 			agal += "mov oc0, ft1";
 		

@@ -21,28 +21,32 @@ class VertexData implements IVertexData
 	
 	
 	
+
 	
 	// new order
 	public static inline var INDEX_X:Int = 0;
 	public static inline var INDEX_Y:Int = 4;
-	
-	public static inline var INDEX_TEXTURE:Int = 8; // *
+
+	public static inline var INDEX_TEXTURE:Int = 8;
 	public static inline var INDEX_ALPHA:Int = 12;
 	public static inline var INDEX_U:Int = 16;
 	public static inline var INDEX_V:Int = 20;
 	
 	public static inline var INDEX_COLOR:Int = 24;
+
+	public static inline var VERTEX_X:Int = 28;
+	public static inline var VERTEX_Y:Int = 32;
+	public static inline var VERTEX_WIDTH:Int = 36;
+	public static inline var VERTEX_HEIGHT:Int = 40;
 	
-	public static inline var INDEX_MU:Int = 28;
-	public static inline var INDEX_MV:Int = 32;
-	public static inline var INDEX_MASK_TEXTURE:Int = 36;
-	public static inline var INDEX_MASK_BASE_VALUE:Int = 40;
-	
-	
-	
+	public static inline var INDEX_MU:Int = 44;
+	public static inline var INDEX_MV:Int = 48;
+	public static inline var INDEX_MASK_TEXTURE:Int = 52;
+	public static inline var INDEX_MASK_BASE_VALUE:Int = 56;
 	
 	public static inline var BYTES_PER_VALUE:Int = 4;
-	public static var VALUES_PER_VERTEX(get, null):Int = 11;
+	public static var VALUES_PER_VERTEX(get, null):Int;
+	
 	public static var BYTES_PER_VERTEX(get, null):Int;// = BYTES_PER_VALUE * VALUES_PER_VERTEX;
 	public static var BYTES_PER_ITEM:Int = BYTES_PER_VERTEX * 4;
 	
@@ -51,10 +55,27 @@ class VertexData implements IVertexData
 		//poolStartPosition = Fuse.current.sharedMemory.vertexDataPool.start;
 	}
 	
-	inline public function setXY(index:Int, x:Float, y:Float):Void 
+	inline public function setRect(index:Int, x:Float, y:Float, width:Float, height:Float):Void 
 	{
 		writeFloat(INDEX_X + indexOffset(index), x);
 		writeFloat(INDEX_Y + indexOffset(index), y);
+		
+		
+
+		//trace("index = " + index);
+
+		var _x:Float = Math.floor(index / 2);
+		var _y:Float = Math.floor(((index + 3) % 4) / 2);
+		//_x *= width - 1;
+		//_y *= height - 1;
+		
+		//trace([_x * width, _y * height]);
+		
+		writeFloat(VERTEX_WIDTH + indexOffset(index), width);
+		writeFloat(VERTEX_HEIGHT + indexOffset(index), height);
+
+		writeFloat(VERTEX_X + indexOffset(index), _x * width);
+		writeFloat(VERTEX_Y + indexOffset(index), _y * height);
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,8 +196,8 @@ class VertexData implements IVertexData
 	
 	static inline function get_VALUES_PER_VERTEX():Int 
 	{
-		if (FShader.ENABLE_MASKS) return 11;
-		else return INDEX_COLOR + 7;
+		if (FShader.ENABLE_MASKS) return 15;
+		else return INDEX_COLOR + 11;
 	}
 	
 	static inline function get_poolStartPosition():Int 

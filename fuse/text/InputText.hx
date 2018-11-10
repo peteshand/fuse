@@ -83,6 +83,7 @@ class Caret extends Sprite
     var quad:Quad;
     var inputText:InputText;
     var count:Int = 0;
+    var lastCharBounds:Rectangle = null;
 
     public function new(inputText:InputText)
     {
@@ -123,21 +124,30 @@ class Caret extends Sprite
 
     function onTextUpdate()
     {
-        var lastCharBounds:Rectangle = null;
+        var _lastCharBounds:Rectangle = null;
         var currentLen:Int = inputText.text.length;
-        if (currentLen == 0){
-            inputText.text = "A";
-            //quad.height = inputText.textHeight * 0.75;
-            lastCharBounds = inputText.nativeTextField.getCharBoundaries(0);
-            lastCharBounds.width = 0;
-            inputText.text = "";
+        if (currentLen > 0){
+            _lastCharBounds = inputText.nativeTextField.getCharBoundaries(currentLen-1);
         } else {
-            lastCharBounds = inputText.nativeTextField.getCharBoundaries(currentLen-1);
+            if (lastCharBounds == null){
+                inputText.text = "A";
+                //quad.height = inputText.textHeight * 0.75;
+                _lastCharBounds = inputText.nativeTextField.getCharBoundaries(0);
+                inputText.text = "";
+            } else {
+                _lastCharBounds = lastCharBounds;
+            }
+            _lastCharBounds.width = 0;
         }
         
-        quad.x = lastCharBounds.x + lastCharBounds.width;
-        quad.y = lastCharBounds.y - (lastCharBounds.height * 0.05);
-        quad.height = lastCharBounds.height * 0.8;
+        lastCharBounds = _lastCharBounds;
+
+        if (lastCharBounds != null){
+            quad.x = lastCharBounds.x + lastCharBounds.width;
+            quad.y = lastCharBounds.y - (lastCharBounds.height * 0.05);
+            quad.height = lastCharBounds.height * 0.8;
+        }
+        
     }
 
     function tick()

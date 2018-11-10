@@ -198,16 +198,16 @@ class DirectBatch extends BaseBatch implements IBatch
 		if (updatePosition) {
 
 			if (coreTexture.rotate) {
-				vertexData.setXY(0, 	image.quadData.topLeftX,		image.quadData.topLeftY);
-				vertexData.setXY(1, 	image.quadData.topRightX,		image.quadData.topRightY);
-				vertexData.setXY(2,		image.quadData.bottomRightX,	image.quadData.bottomRightY);
-				vertexData.setXY(3, 	image.quadData.bottomLeftX,		image.quadData.bottomLeftY);
+				vertexData.setRect(0, 	image.quadData.topLeftX,		image.quadData.topLeftY, image.displayData.width, image.displayData.height);
+				vertexData.setRect(1, 	image.quadData.topRightX,		image.quadData.topRightY, image.displayData.width, image.displayData.height);
+				vertexData.setRect(2,	image.quadData.bottomRightX,	image.quadData.bottomRightY, image.displayData.width, image.displayData.height);
+				vertexData.setRect(3, 	image.quadData.bottomLeftX,		image.quadData.bottomLeftY, image.displayData.width, image.displayData.height);
 				
 			} else {
-				vertexData.setXY(0, 	image.quadData.bottomLeftX,		image.quadData.bottomLeftY);
-				vertexData.setXY(1, 	image.quadData.topLeftX,		image.quadData.topLeftY);
-				vertexData.setXY(2, 	image.quadData.topRightX,		image.quadData.topRightY);
-				vertexData.setXY(3,		image.quadData.bottomRightX,	image.quadData.bottomRightY);
+				vertexData.setRect(0, 	image.quadData.bottomLeftX,		image.quadData.bottomLeftY, image.displayData.width, image.displayData.height);
+				vertexData.setRect(1, 	image.quadData.topLeftX,		image.quadData.topLeftY, image.displayData.width, image.displayData.height);
+				vertexData.setRect(2, 	image.quadData.topRightX,		image.quadData.topRightY, image.displayData.width, image.displayData.height);
+				vertexData.setRect(3,	image.quadData.bottomRightX,	image.quadData.bottomRightY, image.displayData.width, image.displayData.height);
 			}
 		}
 		//else {
