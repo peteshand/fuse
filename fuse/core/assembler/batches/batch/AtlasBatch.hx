@@ -102,15 +102,15 @@ class AtlasBatch extends BaseBatch implements IBatch
 		//
 
 		if (partition.rotate) {
-			vertexData.setRect(0, bottomRightX,	bottomRightY, partition.width, partition.height);
-			vertexData.setRect(1, bottomLeftX,	bottomLeftY, partition.width, partition.height);
-			vertexData.setRect(2, topLeftX,		topLeftY, partition.width, partition.height);
-			vertexData.setRect(3, topRightX,		topRightY, partition.width, partition.height);
+			vertexData.setRect(0, bottomRightX,	bottomRightY);
+			vertexData.setRect(1, bottomLeftX,	bottomLeftY);
+			vertexData.setRect(2, topLeftX,		topLeftY);
+			vertexData.setRect(3, topRightX,		topRightY);
 		} else {
-			vertexData.setRect(0, bottomLeftX,	bottomLeftY, partition.width, partition.height);
-			vertexData.setRect(1, topLeftX,		topLeftY, partition.width, partition.height);
-			vertexData.setRect(2, topRightX,		topRightY, partition.width, partition.height);
-			vertexData.setRect(3, bottomRightX,	bottomRightY, partition.width, partition.height);
+			vertexData.setRect(0, bottomLeftX,	bottomLeftY);
+			vertexData.setRect(1, topLeftX,		topLeftY);
+			vertexData.setRect(2, topRightX,		topRightY);
+			vertexData.setRect(3, bottomRightX,	bottomRightY);
 		}
 		
 		

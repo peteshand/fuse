@@ -55,13 +55,12 @@ class VertexData implements IVertexData
 		//poolStartPosition = Fuse.current.sharedMemory.vertexDataPool.start;
 	}
 	
-	inline public function setRect(index:Int, x:Float, y:Float, width:Float, height:Float):Void 
+	inline public function setRect(index:Int, x:Float, y:Float, width:Float=-1, height:Float=-1):Void 
 	{
 		writeFloat(INDEX_X + indexOffset(index), x);
 		writeFloat(INDEX_Y + indexOffset(index), y);
 		
 		
-
 		//trace("index = " + index);
 
 		var _x:Float = Math.floor(index / 2);

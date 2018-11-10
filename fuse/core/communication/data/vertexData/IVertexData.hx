@@ -7,7 +7,7 @@ import fuse.utils.Color;
 
 interface IVertexData 
 {
-	public function setRect(index:Int, x:Float, y:Float, width:Float, height:Float):Void;
+	public function setRect(index:Int, x:Float, y:Float, width:Float=-1, height:Float=-1):Void;
 	public function setUV(index:Int, u:Float, v:Float):Void;
 	public function setMaskUV(index:Int, u:Float, v:Float):Void;
 	public function setTexture(value:Float):Void;

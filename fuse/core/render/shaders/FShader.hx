@@ -194,7 +194,7 @@ class FShader
 		agal += "mov v3, vt3						\n"; // copy RGB-TextureIndex with alpha multipliers into v2
 			
 		agal += "mov v7.xyzw, INDEX_COLOR			\n"; // copy tint colour data and flip Red and Blue
-		agal += "mov v0, va3						\n"; // copy width,height,width-1,height-1 into v0
+		agal += "mov v0, va3						\n"; // copy vertexX, vertexY, vertexWidth, vertexHeight into v0
 		
 		if (FShader.ENABLE_MASKS){
 		// Mask stuff
@@ -262,6 +262,10 @@ class FShader
 			////////////////////////////////////////////////////////////////
 			////////////////////////////////////////////////////////////////
 			
+			
+			
+			
+			
 			/////////////////////////////////////////////////////////////////
 			// Add Colour ///////////////////////////////////////////////////
 			agal += "mov ft0, v7										\n" +
@@ -272,10 +276,44 @@ class FShader
 			/////////////////////////////////////////////////////////////////
 			/////////////////////////////////////////////////////////////////
 			
+
+			//agal += "add ft1, ft1, v7		\n";
+			//agal += "min ft1, ft1, ONE.4	\n";
+			
+			// ANTI ALIASING ////////////////////////////////
+			
+			agal += "mov ft3.x, ZERO.1	\n"; // ft3.x = 0;
+			agal += "mov ft3.y, ONE.1	\n"; // ft3.y = 1;
+			
+			agal += "sge ft3.x, v0.z, ZERO.1	\n"; // if width >= 0 then ft3.x = 1;
+			agal += "sub ft3.y, ft3.y, ft3.x	\n"; // if width >= 0 then ft3.y = 0;
+			
+			//agal += "ifg v0.z, ZERO.1 \n"; // if VERTEX_WIDTH > 0
+				agal += "mov ft2, v0	\n";
+				agal += "div ft2.xy, ft2.xy, ft2.zw	\n";
+				agal += "frc ft2.xy, ft2.xy	\n";
+				agal += "sub ft2.xy, ft2.xy, HALF.2	\n";
+				agal += "abs ft2.xy, ft2.xy	\n";
+				agal += "neg ft2.xy, ft2.xy	\n";
+				agal += "add ft2.xy, ft2.xy, HALF.2	\n";
+				agal += "mul ft2.xy, ft2.xy, ft2.zw	\n";
+				agal += "min ft2.xy, ft2.xy, ONE.2	\n";
+				agal += "mul ft2.x, ft2.x, ft2.y	\n";
+				agal += "mov ft4, ft1 \n";
+				agal += "mul ft4.xyzw, ft4.xyzw, ft2.xxxx \n";
+			//agal += "eif \n";
+
+			agal += "mul ft4.xyzw, ft4.xyzw, ft3.xxxx \n";
+			agal += "mul ft1.xyzw, ft1.xyzw, ft3.yyyy \n";
+			agal += "add ft1, ft1, ft4 \n";
+			
+			//agal += "mul ft1.xyz, ft1.xyz, ft1.www	\n";
+
+			/////////////////////////////////////////////////
 			
 			/////////////////////////////////////////////////////////////////
 			// Mark from 4 available textures ///////////////////////////////
-			if (FShader.ENABLE_MASKS){
+			/*if (FShader.ENABLE_MASKS){
 				for (j in 0...numTextures) 
 				{
 					agal += "tex ft0, v1.zw, fs" + j + " <2d,clamp,nomip,linear>	\n"; // nearest
@@ -288,7 +326,7 @@ class FShader
 				agal += "add ft2.w, ft2.w, MASK_BASE.1						\n";
 				agal += "min ft2.w, ft2.w, ONE.1							\n";
 				agal += "mul ft1.xyzw, ft1.xyzw, ft2.wwww					\n";
-			}
+			}*/
 			/////////////////////////////////////////////////////////////////
 			/////////////////////////////////////////////////////////////////
 			
@@ -302,22 +340,15 @@ class FShader
 			//trace("2 colorTransform = " + colorTransform);
 			//if (colorTransform != null) agal += colorTransform.fragmentString();
 
+			/*var v1 = 0;
+			var v2 = 1;
+			if (width > 0){
+				v1 = 1;	
+			}
+			v2 = v2 - v1;*/
 
-			// ANTI ALIASING ////////////////////////////////
-			/*agal += "mov ft2, v0	\n";
-			agal += "div ft2.xy, ft2.xy, ft2.zw	\n";
-			agal += "frc ft2.xy, ft2.xy	\n";
-			agal += "sub ft2.xy, ft2.xy, HALF.2	\n";
-			agal += "abs ft2.xy, ft2.xy	\n";
-			agal += "neg ft2.xy, ft2.xy	\n";
-			agal += "add ft2.xy, ft2.xy, HALF.2	\n";
-			agal += "mul ft2.xy, ft2.xy, ft2.zw	\n";
-			agal += "min ft2.xy, ft2.xy, ONE.2	\n";
-			agal += "mul ft2.x, ft2.x, ft2.y	\n";
-			agal += "mov ft1.xyzw, ft2.xxxx \n";*/
-			/////////////////////////////////////////////////
-
-
+			
+			
 			for (i in 0...shaders.length) {
 				agal += shaders[i].fragmentString();
 			}
