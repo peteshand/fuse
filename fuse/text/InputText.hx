@@ -116,6 +116,7 @@ class Caret extends Sprite
             inputText.onUpdate.add(onTextUpdate);
             onTextUpdate();
         } else {
+            lastCharBounds = null;
             quad.visible = false;
             EnterFrame.remove(tick);
             inputText.onUpdate.remove(onTextUpdate);

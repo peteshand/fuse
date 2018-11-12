@@ -71,20 +71,33 @@ class VertexData implements IVertexData
 		
 		//trace([_x * width, _y * height]);
 		var amp:Float = 1000;
-		var m:Float = Math.sin(rotation / 180 * Math.PI * 2);
+		//var m:Float = Math.sin(rotation / 180 * Math.PI * 2);
+		var r1:Float = rotation % 90;
+		if (r1 < 0) r1 += 90;
+		var m:Float = Math.sin(r1 / 180 * Math.PI * 2);
 		m = Math.pow(m, 0.00001);
 		m = ((Math.abs(m) - 1) * -amp) + 1;
 		//m = (Math.abs(m) * -1) + 2;
-		//trace([rotation, m]);
+		//trace([rotation, r1, m]);
 
 		
 		writeFloat(INDEX_AA_M + indexOffset(index), m);
 		
-		writeFloat(VERTEX_WIDTH + indexOffset(index), width);
-		writeFloat(VERTEX_HEIGHT + indexOffset(index), height);
+		// TODO: take into account if texture isn't baked into atlas buffer
+		if (width > height){
+			writeFloat(VERTEX_WIDTH + indexOffset(index), height);
+			writeFloat(VERTEX_HEIGHT + indexOffset(index), width);
 
-		writeFloat(VERTEX_X + indexOffset(index), _x * width);
-		writeFloat(VERTEX_Y + indexOffset(index), _y * height);
+			writeFloat(VERTEX_X + indexOffset(index), _x * height);
+			writeFloat(VERTEX_Y + indexOffset(index), _y * width);
+		} else {
+			writeFloat(VERTEX_WIDTH + indexOffset(index), width);
+			writeFloat(VERTEX_HEIGHT + indexOffset(index), height);
+
+			writeFloat(VERTEX_X + indexOffset(index), _x * width);
+			writeFloat(VERTEX_Y + indexOffset(index), _y * height);
+		}
+		
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////

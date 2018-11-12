@@ -300,6 +300,7 @@ class FShader
 				agal += "abs ft2.xy, ft2.xy	\n";
 				agal += "neg ft2.xy, ft2.xy	\n";
 				agal += "add ft2.xy, ft2.xy, HALF.2	\n";
+				//agal += "mul ft2.xy, ft2.xy, HALF.2	\n";
 				agal += "mul ft2.xy, ft2.xy, ft2.zw	\n";
 
 				agal += "mul ft2.xy, ft2.xy, v6.xx	\n";
