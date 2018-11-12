@@ -51,6 +51,6 @@ class VideoTexture extends BaseTexture
 	
 	function set_loop(value:Bool):Bool						{	return videoTexture.loop = value;		}
 	function set_duration(value:Null<Float>):Null<Float>	{	return videoTexture.duration = value;	}
-	function set_volume(value:Float):Float						{	return videoTexture.volume = value;		}
+	function set_volume(value:Float):Float					{	return videoTexture.volume = value;		}
 	
 }
