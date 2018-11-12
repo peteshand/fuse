@@ -412,7 +412,7 @@ class TextField extends Sprite
 	function set_text(value:String):String
 	{
 		nativeTextField.text = value;
-		if (nativeTextField.maxChars > 0 && nativeTextField.text > nativeTextField.maxChars){
+		if (nativeTextField.maxChars > 0 && nativeTextField.text.length > nativeTextField.maxChars){
 			nativeTextField.text = nativeTextField.text.substr(0, nativeTextField.maxChars);
 		}
 		dirtyProp = true;

@@ -146,6 +146,9 @@ class FShader
 		alias.push( { value:"va0.xy", alias:"INDEX_XY" } );
 		alias.push( { value:"va0.x", alias:"INDEX_X" } );
 		alias.push( { value:"va0.y", alias:"INDEX_Y" } );
+		alias.push( { value:"va0.z", alias:"INDEX_AA_M" } );
+
+		
 		
 		alias.push( { value:"va1.x", alias:"INDEX_TEXTURE" } );
 		alias.push( { value:"va1.y", alias:"INDEX_ALPHA" } );
@@ -169,7 +172,8 @@ class FShader
 		var agal:String = "";
 		agal += "mov vt0.zw, vc16.zw				\n"; // set z and w pos to vt0
 		agal += "mov vt0.xy, INDEX_XY					\n"; // set x and y pos to vt0
-		
+		agal += "mov v6.xyzw, va0.zzzz				\n";// copy AA mul into v6
+
 		agal += "add vt0.x, vt0.x, CAMERA_POSITION.x	\n"; // set x and y pos to vt0
 		agal += "add vt0.y, vt0.y, CAMERA_POSITION.y	\n"; // set x and y pos to vt0
 		
@@ -191,7 +195,7 @@ class FShader
 		agal += "sub vt3, vt3, vt1.wwww 			\n"; // substract inverted alpha from textureIndex alpha
 		agal += "max vt3, vt3, vc16.z				\n"; // clamp above 0 // NEED TO SWITCH TO vc16
 		agal += "min vt3, vt3, vc16.w				\n"; // clamp below 1 // NEED TO SWITCH TO vc16
-		agal += "mov v3, vt3						\n"; // copy RGB-TextureIndex with alpha multipliers into v2
+		agal += "mov v3, vt3						\n"; // copy RGB-TextureIndex with alpha multipliers into v3
 			
 		agal += "mov v7.xyzw, INDEX_COLOR			\n"; // copy tint colour data and flip Red and Blue
 		agal += "mov v0, va3						\n"; // copy vertexX, vertexY, vertexWidth, vertexHeight into v0
@@ -211,7 +215,7 @@ class FShader
 			agal += "mov vt5, vc[vt1.y]					\n"; // set mask textureIndex alpha multipliers
 			agal += "mov v5, vt5						\n"; // 
 				
-			agal += "mov v6.xyzw, vt1.zzzz				\n";// copy maskBaseValue into v6
+			agal += "mov v6.z, vt1.z				\n";// copy maskBaseValue into v6
 		}
 		
 		for (i in 0...alias.length) 
@@ -297,8 +301,13 @@ class FShader
 				agal += "neg ft2.xy, ft2.xy	\n";
 				agal += "add ft2.xy, ft2.xy, HALF.2	\n";
 				agal += "mul ft2.xy, ft2.xy, ft2.zw	\n";
+
+				agal += "mul ft2.xy, ft2.xy, v6.xx	\n";
+
 				agal += "min ft2.xy, ft2.xy, ONE.2	\n";
 				agal += "mul ft2.x, ft2.x, ft2.y	\n";
+				
+				
 				agal += "mov ft4, ft1 \n";
 				agal += "mul ft4.xyzw, ft4.xyzw, ft2.xxxx \n";
 			//agal += "eif \n";

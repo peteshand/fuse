@@ -250,6 +250,15 @@ class CoreDisplayObject
 		return true;
 	}
 
+	
+
+	public function absoluteRotation():Float
+	{
+		var r:Float = displayData.rotation;
+		if (parent != null) r += parent.absoluteRotation();
+		return r;
+	}
+
 	public function absoluteScaleX():Float
 	{
 		var sx:Float = displayData.scaleX;

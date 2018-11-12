@@ -74,7 +74,7 @@ class Buffer
 		bufferCount = 0;
 		bufferPosition = 0;
 		
-		addToVertexBuffer(Context3DVertexBufferFormat.FLOAT_2); // INDEX_X, INDEX_Y
+		addToVertexBuffer(Context3DVertexBufferFormat.FLOAT_3); // INDEX_X, INDEX_Y, INDEX_AA_M
 		addToVertexBuffer(Context3DVertexBufferFormat.FLOAT_4); // INDEX_TEXTURE, INDEX_ALPHA, INDEX_U, INDEX_V
 		addToVertexBuffer(Context3DVertexBufferFormat.BYTES_4); // INDEX_COLOR
 		addToVertexBuffer(Context3DVertexBufferFormat.FLOAT_4); // VERTEX_X, VERTEX_Y, VERTEX_WIDTH, VERTEX_HEIGHT

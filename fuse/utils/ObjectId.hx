@@ -1,6 +1,6 @@
 package fuse.utils;
 
-abstract ObjectId(Int) to Int from Int
+abstract ObjectId(Null<Int>) to Int from Int
 {
     public function new(value:Int)
     {
