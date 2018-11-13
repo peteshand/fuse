@@ -18,7 +18,7 @@ class ListenerUtil
 {
 	private static var listenerUtilObjects = new Map<IEventDispatcher, ListenerUtilObject>();
 	
-	public static function configureListeners(dispatcher:IEventDispatcher, OnSuccess:Event -> Void, OnFail:Event -> Void, OnProgress:ProgressEvent -> Void):Void {
+	public static function configureListeners(dispatcher:IEventDispatcher, OnSuccess:Event -> Void, OnFail:Event -> Void, OnProgress:ProgressEvent -> Void = null):Void {
 		
 		var listenerUtilObject:ListenerUtilObject = listenerUtilObjects.get(dispatcher);
 		if (listenerUtilObject == null) {
@@ -50,11 +50,11 @@ class ListenerUtilObject
 		
 	}
 	
-	public function configureListeners(dispatcher:IEventDispatcher, OnSuccess:Event -> Void, OnFail:Event -> Void, OnProgress:ProgressEvent -> Void):Void
+	public function configureListeners(dispatcher:IEventDispatcher, OnSuccess:Event -> Void, OnFail:Event -> Void, OnProgress:ProgressEvent -> Void = null):Void
 	{
 		this.OnFailFuncs.push(OnFail);
 		this.OnSuccessFuncs.push(OnSuccess);
-		this.OnProgressFuncs.push(OnProgress);
+		if (OnProgress != null) this.OnProgressFuncs.push(OnProgress);
 		
 		#if air
 		dispatcher.addEventListener(IOErrorEvent.NETWORK_ERROR, networkErrorHandler);
