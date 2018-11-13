@@ -28,7 +28,7 @@ class NotifierPersistence
             for (i in 0...a.length) notifier.add(a[i]);
         }
         
-        var onChange = function(a:Array<Dynamic>)
+        var onChange = function(a:Array<Dynamic>=null)
         {
             data.sharedObject.setProperty("value", notifier.allItems);
 		    data.sharedObject.flush();

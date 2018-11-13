@@ -21,11 +21,11 @@ class MapNotifier<T>
 	public var removedItems = new Array<T>();
 	public var changedItems = new Array<T>();
 	
-	private var sharedObject:DocStore;
+	//private var sharedObject:DocStore;
 	
-	public function new(id:String=null) 
+	public function new(/*id:String=null*/) 
 	{
-		if (id != null) {
+		/*if (id != null) {
 			sharedObject = DocStore.getLocal("ParseDataBind-" + id);
 			
 			var savedData:Array<T> = Reflect.getProperty(sharedObject.data, "savedData");
@@ -33,12 +33,12 @@ class MapNotifier<T>
 				this.addArray(untyped savedData);
 			}
 			check();
-		}
+		}*/
 		
-		EnterFrame.add(OnTick);
+		EnterFrame.add(onTick);
 	}
 	
-	function OnTick() 
+	function onTick() 
 	{
 		check();
 	}
@@ -89,7 +89,7 @@ class MapNotifier<T>
 			data.set(untyped value, value);
 			newItems.push( value );
 		}
-		updateSavedData();
+		//updateSavedData();
 		updateAllItems();
 	}
 	
@@ -106,7 +106,7 @@ class MapNotifier<T>
 				newItems.push( value[i] );
 			}
 		}
-		updateSavedData();
+		//updateSavedData();
 		updateAllItems();
 	}
 	
@@ -117,7 +117,7 @@ class MapNotifier<T>
 			data.remove(untyped value);
 			removedItems.push( value );
 		}
-		updateSavedData();
+		//updateSavedData();
 		updateAllItems();
 	}
 	
@@ -130,11 +130,11 @@ class MapNotifier<T>
 				removedItems.push( value[i] );
 			}
 		}
-		updateSavedData();
+		//updateSavedData();
 		updateAllItems();
 	}
 	
-	function updateSavedData() 
+	/*function updateSavedData() 
 	{
 		if (sharedObject == null) return;
 		
@@ -145,7 +145,7 @@ class MapNotifier<T>
 		}
 		sharedObject.setProperty("savedData", parseObjects);
 		sharedObject.flush();
-	}
+	}*/
 	
 	public function clear() 
 	{

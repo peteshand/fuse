@@ -377,9 +377,7 @@ class FrontVideoTexture extends FrontBaseTexture
 	function set_volume(value:Float):Float
 	{
 		volume = value;
-		trace("volume = " + volume);
 		
-
 		#if (js && html5)
 			// DEBUG
 			//js.Browser.document.body.insertBefore(__video, js.Browser.document.body.firstChild);
