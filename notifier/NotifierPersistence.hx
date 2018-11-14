@@ -9,8 +9,7 @@ class NotifierPersistence
     public static function register(notifier:Notifier<Dynamic>, id:String)
     {
         var data = getNPData(id);
-        //var sharedObject:DocStore = DocStore.getLocal("Notifier_" + id);
-        //var localData:Dynamic = Reflect.getProperty(sharedObject.data, "value");
+
         if (data.localData != null) {
             notifier.silentlySet(data.localData);
         }

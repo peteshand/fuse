@@ -1,5 +1,6 @@
 package fuse.text;
 
+import notifier.Signal;
 import msignal.Signal.Signal0;
 import openfl.events.FocusEvent;
 import openfl.events.Event;
@@ -111,12 +112,13 @@ class TextField extends Sprite
 	public var onUpdate = new Signal0();
 	var matrix:Matrix = new Matrix();
 	@:isVar public var lineOffset(default, set):Float;
+	public var onTextChange = new Signal();
 
 	public function new(width:Int, height:Int) 
 	{
 		TextField.init();
 		nativeTextField = new NativeTextField();
-		nativeTextField.addEventListener(Event.CHANGE, onTextChange);
+		nativeTextField.addEventListener(Event.CHANGE, onNativeTextChange);
 		nativeTextField.addEventListener(FocusEvent.FOCUS_IN, onFocusIn);
 		nativeTextField.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
 		//nativeTextField.width = width;
@@ -161,7 +163,7 @@ class TextField extends Sprite
 		//trace([nativeTextField.selectionBeginIndex, nativeTextField.selectionEndIndex]);
 	}
 
-	function onTextChange(e:Event)
+	function onNativeTextChange(e:Event)
 	{
 		//trace(e);
 		var hasFocus:Bool = Lib.current.stage.focus == nativeTextField;
@@ -174,12 +176,14 @@ class TextField extends Sprite
 				Lib.current.stage.focus = nativeTextField;
 			}
 		});
+		onTextChange.dispatch();
 	}
 	
 	public function appendText(text:String):Void
 	{	
 		nativeTextField.appendText(text);
 		dirtyProp = true;
+		onTextChange.dispatch();
 	}
 	
 	public function getCharBoundaries(charIndex:Int):Rectangle	{	return nativeTextField.getCharBoundaries(charIndex); }
@@ -416,6 +420,7 @@ class TextField extends Sprite
 			nativeTextField.text = nativeTextField.text.substr(0, nativeTextField.maxChars);
 		}
 		dirtyProp = true;
+		onTextChange.dispatch();
 		return value;
 	}
 	

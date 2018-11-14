@@ -111,6 +111,6 @@ class Condition extends Notifier<Bool>
 
 	override function toString():String
 	{
-		return "[Condition] " + testValue + " " + operation + " " + targetValue + " | " + value;
+		return "[Condition] " + testValue + " " + operation + " " + targetValue + " | " + value + " | " + (targetValue == targetValue);
 	}
 }
