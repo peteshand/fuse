@@ -20,7 +20,6 @@ class DocStore
 
 	function new(id:String) 
 	{
-		
 		this.id = id;
 		var docStoreDir:File = Storage.appStorageDir.resolvePath("DocStore");
 		if (!docStoreDir.exists) docStoreDir.createDirectory();
@@ -30,7 +29,11 @@ class DocStore
 			fileStream.open(file, FileMode.READ);
 			var str:String = fileStream.readUTFBytes(Math.floor(file.size));
 			fileStream.close();
-			data = Json.parse(str);
+			try{
+				data = Json.parse(str);
+			} catch (e:Dynamic){
+				trace('error parsing data: ' + str);
+			}
 		}
 	}
 	

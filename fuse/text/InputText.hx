@@ -154,6 +154,7 @@ class InputText extends TextField
 
     override function set_text(value:String):String
 	{
+        if (value == null) value = "";
         var currentText:String = text;
         if (currentText == "") selectEnd = true;
         var offset:Int = value.length - currentText.length;
