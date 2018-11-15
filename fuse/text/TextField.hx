@@ -176,7 +176,6 @@ class TextField extends Sprite
 				Lib.current.stage.focus = nativeTextField;
 			}
 		});
-		onTextChange.dispatch();
 	}
 	
 	public function appendText(text:String):Void
