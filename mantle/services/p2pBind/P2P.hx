@@ -18,7 +18,7 @@ class P2P
 	static public var transmitters = new Map<String, WindowTransmitter>();
 	static public var receivers = new Map<String, WindowReceiver>();
 	static public var to:String;
-	static public var otherWindow:Window;
+	static public var secondWindow:Window;
 
 	public function new() 
 	{
@@ -63,7 +63,7 @@ class P2P
 			id:id,
 			payload:_payload
 		}
-		P2P.otherWindow.postMessage(message, "*");
+		P2P.secondWindow.postMessage(message, "*");
 	}
 	
 	public static function on(id:String, callback:Dynamic -> Void):Void 

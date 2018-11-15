@@ -204,7 +204,7 @@ class Caret extends Sprite
         var currentLen:Int = inputText.text.length;
         if (currentLen > 0){
             var i:Int = inputText.charIndex.value;
-            if (i >= inputText.text.length - 1) {
+            if (i > inputText.text.length - 1) {
                 i = inputText.text.length - 1;
                 inputText.selectEnd = true;
             }
@@ -220,13 +220,12 @@ class Caret extends Sprite
             }
             _cursorCharBounds.width = 0;
         }
-        
         cursorCharBounds = _cursorCharBounds;
         if (cursorCharBounds != null){
             if (inputText.selectEnd){
                 quad.x = cursorCharBounds.x + cursorCharBounds.width;
             } else {
-                quad.x = cursorCharBounds.x;// + cursorCharBounds.width;
+                quad.x = cursorCharBounds.x;
             }
            
             quad.y = cursorCharBounds.y - (cursorCharBounds.height * 0.05);

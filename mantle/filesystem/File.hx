@@ -256,9 +256,53 @@ class File extends FileReference
 		return null;
 	}
  	 	
-    public function copyTo(newLocation:FileReference, overwrite:Bool = false):Void
+    public function copyTo(newLocation:File, overwrite:Bool = false):Void
 	{
-		throw "copyTo is yet to be implemented, please help add this feature";
+		if (newLocation.isDirectory){
+			copyFolderRecursiveSync(this, newLocation);
+		} else {
+			copyFileSync(this, newLocation);
+		}
+	}
+
+	function copyFileSync( source:File, target:File ) {
+
+		var targetFile:File = target;
+
+		if ( target.exists ) {
+			if ( target.isDirectory ) {
+				targetFile = target.resolvePath(source.name);
+			}
+		}
+
+		var fileStream1:FileStream = new FileStream();
+		fileStream1.open(source, FileMode.READ);
+		var value:String = fileStream1.readUTF();
+		fileStream1.close();
+
+		var fileStream:FileStream = new FileStream();
+		fileStream.open(targetFile, FileMode.WRITE);
+		fileStream.writeUTFBytes(value);
+		fileStream.close();
+	}
+
+	function copyFolderRecursiveSync( source:File, target:File ) {
+		var files:Array<File> = [];
+
+		if ( !target.exists ) {
+			target.createDirectory();
+		}
+		
+		if ( source.isDirectory ) {
+			files = source.getDirectoryListing();
+			for (file in files) {
+				if ( file.isDirectory ) {
+					copyFolderRecursiveSync( file, target );
+				} else {
+					copyFileSync( file, target );
+				}
+			}
+		}
 	}
  	 	
     public function copyToAsync(newLocation:FileReference, overwrite:Bool = false):Void
@@ -314,7 +358,7 @@ class File extends FileReference
 		throw "deleteFileAsync is yet to be implemented, please help add this feature";
 	}
  	 	
-   public function getDirectoryListing():Array<File>
+    public function getDirectoryListing():Array<File>
 	{
 		var fileStrs:Array<String> = Fs.readdirSync(path);
 		var files:Array<File> = [];
@@ -322,6 +366,11 @@ class File extends FileReference
 			files.push(new File(path + separator + fileStrs[i]));
 		}
 		return files;
+	}
+
+	override function get_name():String
+	{
+		return Path.basename(nativePath);
 	}
  	 	
     public function getDirectoryListingAsync():Void
