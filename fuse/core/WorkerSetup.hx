@@ -14,6 +14,7 @@ import fuse.core.communication.memory.SharedMemory;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.info.WorkerInfo;
 import fuse.core.utils.Pool;
+import fuse.utils.Orientation;
 
 import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.WorkerlessComms;
@@ -82,11 +83,28 @@ class WorkerSetup
 		workerComm.addListener(MessageType.MOUSE_COLLISION, OnInputCollision);
 	}
 	
+	var tempX:Float;
 	private function OnInputCollision(touch:Touch):Void 
 	{
 		var display:DisplayObject = touchables.get(touch.targetId);
 		if (display == null) return;
 		touch.target = display;
+		
+		tempX = touch.x;
+		switch Fuse.current.stage.orientation {
+            case Orientation.LANDSCAPE: 
+				
+            case Orientation.LANDSCAPE_FLIPPED: 
+				touch.x = Fuse.current.stage.windowWidth - touch.x;
+				touch.y = Fuse.current.stage.windowHeight - touch.y;
+            case Orientation.PORTRAIT: 
+				touch.x = Fuse.current.stage.windowHeight - touch.y;
+				touch.y = tempX;
+			case Orientation.PORTRAIT_FLIPPED: 
+				touch.x = touch.y;
+				touch.y = Fuse.current.stage.windowWidth - tempX;
+        }
+
 		display.dispatchInput(touch);
 	}
 	

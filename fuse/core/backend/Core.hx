@@ -22,6 +22,8 @@ class Core
 	public static var textureBuildRequired:Bool;
 	public static var STAGE_WIDTH(default, set):Int;
 	public static var STAGE_HEIGHT(default, set):Int;
+	public static var WINDOW_WIDTH(default, set):Int;
+	public static var WINDOW_HEIGHT(default, set):Int;
 	public static var RESIZE:Bool = false;
 	
 	@:isVar public static var isStatic(get, set):Int;
@@ -79,5 +81,21 @@ class Core
 		STAGE_HEIGHT = value;
 		RESIZE = true;
 		return STAGE_HEIGHT;
+	}
+	
+	static function set_WINDOW_WIDTH(value:Int):Int 
+	{
+		if (WINDOW_WIDTH == value) return value;
+		WINDOW_WIDTH = value;
+		RESIZE = true;
+		return WINDOW_WIDTH;
+	}
+	
+	static function set_WINDOW_HEIGHT(value:Int):Int 
+	{
+		if (WINDOW_HEIGHT == value) return value;
+		WINDOW_HEIGHT = value;
+		RESIZE = true;
+		return WINDOW_HEIGHT;
 	}
 }

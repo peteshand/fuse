@@ -273,7 +273,7 @@ class CoreDisplayObject
 		return sx;
 	}
 
-	public function withinBounds(x:Float, y:Float):Bool
+	public function withinBounds(debug:Bool=false, x:Float, y:Float):Bool
 	{
 		return false;
 	}
@@ -302,10 +302,10 @@ class CoreDisplayObject
 
 	function triangleArea(x:Float, y:Float, bx:Float, by:Float, cx:Float, cy:Float):Float
 	{
-		bx = (bx + 1) / 2 * Core.STAGE_WIDTH;
-		by = (1 - by) / 2 * Core.STAGE_HEIGHT;
-		cx = (cx + 1) / 2 * Core.STAGE_WIDTH;
-		cy = (1 - cy) / 2 * Core.STAGE_HEIGHT;
+		bx = (bx + 1) / 2 * Core.WINDOW_WIDTH;
+		by = (1 - by) / 2 * Core.WINDOW_HEIGHT;
+		cx = (cx + 1) / 2 * Core.WINDOW_WIDTH;
+		cy = (1 - cy) / 2 * Core.WINDOW_HEIGHT;
 		
 		var a:Float = Math.sqrt(Math.pow(x - bx, 2) + Math.pow(y - by, 2));
 		var b:Float = Math.sqrt(Math.pow(bx - cx, 2) + Math.pow(by - cy, 2));

@@ -188,11 +188,11 @@ class WorkerTransformHelper
 	
 	static inline function transformX(x:Float):Float 
 	{
-		return ((x / Core.STAGE_WIDTH) * 2) - 1;
+		return ((x / Core.WINDOW_WIDTH) * 2) - 1;
 	}
 	
 	static inline function transformY(y:Float):Float
 	{
-		return 1 - ((y / Core.STAGE_HEIGHT) * 2);
+		return 1 - ((y / Core.WINDOW_HEIGHT) * 2);
 	}
 }

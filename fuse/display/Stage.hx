@@ -10,7 +10,7 @@ import fuse.utils.Color;
 import mantle.managers.resize.Resize;
 import notifier.Notifier;
 import msignal.Signal.Signal1;
-
+import fuse.utils.Orientation;
 import openfl.Lib;
 import openfl.events.Event;
 
@@ -23,13 +23,17 @@ class Stage extends Sprite {
 	var count:Int = 0;
 	var background:Quad;
 	
+	@:isVar public var windowWidth(default, set):Int;
+	@:isVar public var windowHeight(default, set):Int;
 	@:isVar public var stageWidth(default, set):Int;
 	@:isVar public var stageHeight(default, set):Int;
-	
+	@:isVar public var orientation(default, set):Orientation = Orientation.LANDSCAPE;
+
 	public var onDisplayAdded = new Signal1<DisplayObject>();
 	public var onDisplayRemoved = new Signal1<DisplayObject>();
 	public var camera = new Camera2D();
 	public var focus = new Notifier<DisplayObject>();
+	
 	//var stageColor:Color = 0xFF000000;
 	//public var transparent:Bool;
 	
@@ -81,10 +85,53 @@ class Stage extends Sprite {
 		#end
 	}
 	
+	
+	function set_orientation(value:Orientation):Orientation 
+	{
+		if (orientation != value) {
+			orientation = value;
+			OnResize();
+		}
+		return value;
+	}
+
 	private function OnResize():Void 
 	{
-		this.stageWidth = Lib.current.stage.stageWidth;
-		this.stageHeight = Lib.current.stage.stageHeight;
+		this.windowWidth = Lib.current.stage.stageWidth;
+		this.windowHeight = Lib.current.stage.stageHeight;
+
+		switch orientation {
+            case Orientation.LANDSCAPE | Orientation.LANDSCAPE_FLIPPED: 
+				this.stageWidth = Lib.current.stage.stageWidth;
+				this.stageHeight = Lib.current.stage.stageHeight;
+				this.x = (orientation / 180) * windowWidth;
+				this.y = (orientation / 180) * windowHeight;
+            case Orientation.PORTRAIT | Orientation.PORTRAIT_FLIPPED: 
+				this.stageWidth = Lib.current.stage.stageHeight;
+				this.stageHeight = Lib.current.stage.stageWidth;
+				this.x = (1 - ((orientation - 90) / 180)) * windowWidth;
+				this.y = ((orientation - 90) / 180) * windowHeight;
+        }
+
+		this.rotation = orientation;
+	}
+
+	function set_windowWidth(value:Int):Int 
+	{
+		if (windowWidth != value) {
+			windowWidth = value;
+			Fuse.current.conductorData.windowWidth = value;
+		}
+		return value;
+	}
+	
+	function set_windowHeight(value:Int):Int 
+	{
+		if (windowHeight != value) {
+			windowHeight = value;
+			Fuse.current.conductorData.windowHeight = value;
+		}
+		return value;
 	}
 	
 	function set_stageHeight(value:Int):Int 

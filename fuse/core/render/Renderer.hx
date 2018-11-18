@@ -77,8 +77,8 @@ class Renderer
 	public function resize() 
 	{
 		if (Fuse.current.stage == null) return;
-		context3D.configureBackBuffer(Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight, 2, true);
-		scissorRectangle.setTo(0, 0, Fuse.current.stage.stageWidth, Fuse.current.stage.stageHeight);
+		context3D.configureBackBuffer(Fuse.current.stage.windowWidth, Fuse.current.stage.windowHeight, 2, true);
+		scissorRectangle.setTo(0, 0, Fuse.current.stage.windowWidth, Fuse.current.stage.windowHeight);
 		//context3D.setScissorRectangle(scissorRectangle);
 	}
 	
@@ -94,6 +94,7 @@ class Renderer
 	public function begin(clear:Bool = true, clearColor:Color):Void
 	{
 		if (!sharedContext) {
+			clearColor.red = 0xFF;
 			// Doesn't execute if context3D.clear is being handled externally
 			context3D.clear(clearColor.red / 255, clearColor.green / 255, clearColor.blue / 255, clearColor.alpha / 255);
 		}

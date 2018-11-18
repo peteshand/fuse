@@ -13,7 +13,7 @@ import fuse.core.backend.Core;
 import fuse.core.messenger.MessageID;
 import fuse.core.messenger.Messenger;
 import fuse.utils.GcoArray;
-
+import fuse.utils.Orientation;
 /**
  * ...
  * @author P.J.Shand
@@ -83,8 +83,9 @@ class Input {
 			type = TouchEvent.TOUCH_BEGIN; // share TOUCH_BEGIN and TOUCH_END id
 		var id:String = touchMap.get(type) + "-" + e.touchPointID;
 		var touch:Touch = getTouchItem(id, e.touchPointID);
-		touch.x = e.stageX + Fuse.current.stage.camera.x;
-		touch.y = e.stageY + Fuse.current.stage.camera.y;
+		setPosition(touch, e);
+		//touch.x = e.stageX + Fuse.current.stage.camera.x;
+		//touch.y = e.stageY + Fuse.current.stage.camera.y;
 		touch.type = touchMap.get(e.type);
 
 		//touchDataArray.push(touch);
@@ -99,11 +100,18 @@ class Input {
 			type = MouseEvent.MOUSE_DOWN; // share MOUSE_DOWN and MOUSE_UP id
 		var id:String = mouseMap.get(type) + "-" + 0;
 		var touch:Touch = getTouchItem(id, 0);
-		touch.x = e.stageX + Fuse.current.stage.camera.x;
-		touch.y = e.stageY + Fuse.current.stage.camera.y;
+		setPosition(touch, e);
+		//touch.x = e.stageX + Fuse.current.stage.camera.x;
+		//touch.y = e.stageY + Fuse.current.stage.camera.y;
 		touch.type = mouseMap.get(e.type);
 		//touchDataArray.push(touch);
 		activeTouchData.set(id, touch);
+	}
+
+	function setPosition(touch:Touch, e:InputEvent)
+	{
+		touch.x = e.stageX + Fuse.current.stage.camera.x;
+		touch.y = e.stageY + Fuse.current.stage.camera.y;
 	}
 
 	function getTouchItem(id:String, index:Int):Touch {
@@ -114,4 +122,10 @@ class Input {
 		}
 		return touch;
 	}
+}
+
+
+typedef InputEvent = {
+	public var stageX:Float;
+	public var stageY:Float;
 }

@@ -109,8 +109,8 @@ class FShader
 		//if (Fuse.current.conductorData.backIsStatic == 0){
 			if (Fuse.current.stage.camera.hasUpdate){
 				if (move) {
-					cameraData[0] = -Fuse.current.stage.camera.x / (Lib.current.stage.stageWidth / 2);
-					cameraData[1] = Fuse.current.stage.camera.y / (Lib.current.stage.stageHeight / 2);
+					cameraData[0] = -Fuse.current.stage.camera.x / (Fuse.current.stage.stageWidth / 2);
+					cameraData[1] = Fuse.current.stage.camera.y / (Fuse.current.stage.stageHeight / 2);
 				}
 				else {
 					cameraData[0] = 0;

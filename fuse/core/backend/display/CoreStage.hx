@@ -31,7 +31,7 @@ class CoreStage extends CoreInteractiveObject
 		
 	}
 	
-	override public function withinBounds(x:Float, y:Float):Bool
+	override public function withinBounds(debug:Bool=false, x:Float, y:Float):Bool
 	{
 		return true;
 	}

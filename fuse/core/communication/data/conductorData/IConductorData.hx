@@ -24,6 +24,8 @@ typedef IConductorData =
 	layerCacheTextureId5:Int,
 	stageWidth:Int,
 	stageHeight:Int,
+	windowWidth:Int,
+	windowHeight:Int,
 	//isStatic:Int,
 	frontIsStatic:Int,
 	backIsStatic:Int,

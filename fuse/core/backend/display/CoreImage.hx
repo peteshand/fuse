@@ -242,12 +242,16 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		return textureIndex = value;
 	}
 
-	override public function withinBounds(x:Float, y:Float):Bool
+	override public function withinBounds(debug:Bool=false, x:Float, y:Float):Bool
 	{
 		if (absoluteVis() == false) return false;
 		var triangleSum:Float = getTriangleSum(x, y);
-		//trace("triangleSum = " + triangleSum);
-		//trace("area = " + area);
+		if (debug && objectId == 154){
+			trace("triangleSum = " + triangleSum);
+			trace("area = " + area);
+			trace(triangleSum < area + 1);
+		}
+		
 		if (area == 0) return false;
 		if (triangleSum < area + 1) {
 			return true;

@@ -81,6 +81,8 @@ class CoreEntryPoint {
 	function OnTick() {
 		Core.STAGE_WIDTH = Conductor.conductorData.stageWidth;
 		Core.STAGE_HEIGHT = Conductor.conductorData.stageHeight;
+		Core.WINDOW_WIDTH = Conductor.conductorData.windowWidth;
+		Core.WINDOW_HEIGHT = Conductor.conductorData.windowHeight;
 
 		// Remove for New Assembler //
 		// Core.assembler.update();

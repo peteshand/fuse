@@ -93,10 +93,11 @@ class InputAssemblerObject
 		if (touchDisplay == null) return false;
 
 		if (touchDisplay.displayType != DisplayType.STAGE) {
-			var _withinBound:Bool = display.withinBounds(touch.x, touch.y);
+			
+			var _withinBound:Bool = display.withinBounds(touch.type == TouchType.PRESS, touch.x, touch.y);
+			
 			if (_withinBound){
 				if (display.touchable == false) return false;
-		
 				if (touch.targetId == null) {
 					var displayTouch = touchDisplay.onOver(touch.index);
 					displayTouch.index = touch.index;

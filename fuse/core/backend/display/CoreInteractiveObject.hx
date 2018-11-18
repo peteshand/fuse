@@ -102,11 +102,11 @@ class CoreInteractiveObject extends CoreDisplayObject
 		}
 	}
 
-	override public function withinBounds(x:Float, y:Float):Bool
+	override public function withinBounds(debug:Bool=false, x:Float, y:Float):Bool
 	{
 		for (i in 0...children.length) {
 			if (children[i].absoluteVis()){
-				if (children[i].withinBounds(x, y)){
+				if (children[i].withinBounds(debug, x, y)){
 					return true;
 				}
 			}

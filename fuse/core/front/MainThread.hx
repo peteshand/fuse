@@ -26,16 +26,8 @@ import openfl.display3D.Context3DRenderMode;
 @:access(fuse)
 class MainThread extends ThreadBase
 {
-	//static public inline var ROOT_CREATED:String = "rootCreated";
-	//public static var MAX_TEXTURE_SIZE:Int = 4096;
-	
-	//@:isVar 
-	//public static var current(default, null):MainThread;
-	
 	static var count:Int = 0;
 	var index:Int;
-	//var atlasBuffers:AtlasBuffers;
-	
 	var rootClass:Class<DisplayObject>;
 	var fuseConfig:FuseConfig;
 	var stage3D:Stage3D;
@@ -45,9 +37,6 @@ class MainThread extends ThreadBase
 	
 	var setupComplete:Bool = false;
 	
-	var stageWidth:Int;
-	var stageHeight:Int;
-	var dimensionChange:Bool = false;
 	var fuse:Fuse;
 	
 	public function new(fuse:Fuse, rootClass:Class<DisplayObject>, fuseConfig:FuseConfig, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
@@ -158,25 +147,8 @@ class MainThread extends ThreadBase
 			#end
 		}
 		
-		dimensionChange = false;
-		if (stageWidth != stage.stageWidth) {
-			stageWidth = stage.stageWidth;
-			dimensionChange = true;
-		}
-		if (stageHeight != stage.stageHeight) {
-			stageHeight = stage.stageHeight;
-			dimensionChange = true;
-		}
-		if (dimensionChange) {
-			//stage.forceRedraw();
-		}
-		
 		Fuse.current.enterFrame.dispatch();
 		
 		workerSetup.unlock();
-		
-		//trace("process end");
-		
-		//Fuse.current.conductorData.backIsStatic = 1;
 	}
 }
