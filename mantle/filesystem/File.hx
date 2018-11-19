@@ -360,17 +360,27 @@ class File extends FileReference
  	 	
     public function getDirectoryListing():Array<File>
 	{
-		var fileStrs:Array<String> = Fs.readdirSync(path);
-		var files:Array<File> = [];
-		for (i in 0...fileStrs.length) {
-			files.push(new File(path + separator + fileStrs[i]));
+		if (isDirectory){
+			var fileStrs:Array<String> = Fs.readdirSync(path);
+			var files:Array<File> = [];
+			for (i in 0...fileStrs.length) {
+				files.push(new File(path + separator + fileStrs[i]));
+			}
+			return files;
 		}
-		return files;
+		else {
+			return [];
+		}
 	}
 
 	override function get_name():String
 	{
 		return Path.basename(nativePath);
+	}
+
+	override function get_extension():String
+	{
+		return Path.extname(nativePath);
 	}
  	 	
     public function getDirectoryListingAsync():Void

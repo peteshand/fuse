@@ -44,97 +44,97 @@ class FileReference
 
 	function get_creationDate():Date
 	{
-		// Need to implement
+		throw "Need to implement";
 		return null;
 	}
 
 	function get_creator():String
 	{
-		// Need to implement
+		throw "Need to implement";
 		return null;
 	}
 	
 	function get_data():ByteArray
 	{
-		// Need to implement
+		throw "Need to implement";
 		return null;
 	}
 	
 	function get_extension():String
 	{
-		// Need to implement
+		throw "Need to implement";
 		return null;
 	}
 	
 	function get_modificationDate():Date
 	{
-		// Need to implement
+		throw "Need to implement";
 		return null;
 	}
 	
 	function get_name():String
 	{
-		// Need to implement
+		throw "Need to implement";
 		return null;
 	}
 	
 	static function get_permissionStatus():String
 	{
-		// Need to implement
+		throw "Need to implement";
 		return null;
 	}
 	
 	function get_size():Float
 	{
-		// Need to implement
+		throw "Need to implement";
 		return 0;
 	}
 	
 	function get_type():String
 	{
-		// Need to implement
+		throw "Need to implement";
 		return null;
 	}
 
 	public function browse(typeFilter:Array<String> = null):Bool
 	{
-		// Need to implement
+		throw "Need to implement";
 		return false;
 	}
 
 	public function cancel():Void
 	{
-		// Need to implement
+		throw "Need to implement";
 	}
 		
 	public function download(request:URLRequest, defaultFileName:String = null):Void
 	{
-		// Need to implement
+		throw "Need to implement";
 	}
 			
 	public function load():Void
 	{
-		// Need to implement
+		throw "Need to implement";
 	}
 			
 	public function requestPermission():Void
 	{
-		// Need to implement
+		throw "Need to implement";
 	}
 			
 	public function save(data:Dynamic, defaultFileName:String = null):Void
 	{
-		// Need to implement
+		throw "Need to implement";
 	}
 			
 	public function upload(request:URLRequest, uploadDataFieldName:String = "Filedata", testUpload:Bool = false):Void
 	{
-		// Need to implement
+		throw "Need to implement";
 	}
 			
 	public function uploadUnencoded(request:URLRequest):Void
 	{
-		// Need to implement
+		throw "Need to implement";
 	}
 }
 
