@@ -78,15 +78,9 @@ class DisplayObject
 	{
 		displayType = DisplayType.DISPLAY_OBJECT;
 		stage = Fuse.current.stage;
-		//isRotating.add(OnRotationChange);
-		//isMoving.add(OnMovingChange);
-		//isStatic.add(OnStaticChange);
 		
 		var id:Int = DisplayObject.objectIdCount++;
-		//displayData = new WorkerDisplayData(id);
 		displayData = CommsObjGen.getDisplayData(id);
-		//isMoving = 1;
-		//isRotating = 1;
 		
 		objectId = id;
 		scaleX = 1;
@@ -96,10 +90,6 @@ class DisplayObject
 		visible = true;
 		
 		displayData.textureId = -1;
-		
-		//isStatic = 0;
-		
-		
 	}
 	
 	
@@ -112,32 +102,6 @@ class DisplayObject
 		updateAlpha = false;
 		updateUVs = false;
 	}
-	
-	//function OnRotationChange() 
-	//{
-		//if (isRotating == 1) isMoving = 1;
-		//SendToBackend();
-	//}
-	//
-	//function OnMovingChange() 
-	//{
-		//if (isStatic == 1) isStatic = 0;
-		//SendToBackend();
-	//}
-	//
-	//function OnStaticChange() 
-	//{
-		//if (isStatic == 0) {
-			//Fuse.current.conductorData.frontIsStatic = 0;
-		//}
-		//SendToBackend();
-	//}
-	//
-	//function SendToBackend() 
-	//{
-		//Fuse.current.workerSetup.setStatic(this);
-	//}
-	
 	
 	inline function get_touchable():Null<Bool> { return touchable; }
 	inline function get_x():Float { return x; }
@@ -394,11 +358,6 @@ class DisplayObject
 		}
 	}
 	
-	//function forceRedraw():Void
-	//{
-		//this.isStatic = 0;
-	//}
-	
 	public function dispose():Void
 	{
 		this.touchable = false;
@@ -406,32 +365,11 @@ class DisplayObject
 	
 	function dispatchInput(touch:Touch) 
 	{
-		// TODO: combine Touch and Mouse keys
-		/*switch(touch.type) {
-			case TouchEvent.TOUCH_BEGIN:onPress.dispatch(touch);
-			case TouchEvent.TOUCH_MOVE:	onMove.dispatch(touch);
-			case TouchEvent.TOUCH_END:	onRelease.dispatch(touch);
-			case MouseEvent.MOUSE_DOWN:	onPress.dispatch(touch);
-			case MouseEvent.MOUSE_MOVE:	onMove.dispatch(touch);
-			case MouseEvent.MOUSE_UP:	onRelease.dispatch(touch);
-			case MouseEvent.MOUSE_OVER:	onRollover.dispatch(touch);
-			case MouseEvent.MOUSE_OUT:	onRollout.dispatch(touch);
-		} */
-
 		if (touch.type == TouchType.MOVE)			onMove.dispatch(touch);
 		else if (touch.type == TouchType.PRESS)		onPress.dispatch(touch);
 		else if (touch.type == TouchType.RELEASE)	onRelease.dispatch(touch);
 		else if (touch.type == TouchType.OVER)		onRollover.dispatch(touch);
 		else if (touch.type == TouchType.OUT)		onRollout.dispatch(touch);
-		
-		/*switch(touch.type) {
-			case TouchType.PRESS:	onPress.dispatch(touch);
-			case TouchType.MOVE:	onMove.dispatch(touch);
-			case TouchType.RELEASE:	onRelease.dispatch(touch);
-			case TouchType.OVER:	onRollover.dispatch(touch);
-			case TouchType.OUT:		onRollout.dispatch(touch);
-		}*/
-		
 	}
 	
 	inline function updateStaticBackend():Void

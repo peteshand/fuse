@@ -4,6 +4,7 @@ import fuse.core.front.FuseConfig;
 import fuse.core.front.buffers.AtlasBuffers;
 import fuse.core.front.buffers.LayerCacheBuffers;
 import fuse.core.input.Input;
+import fuse.display.Sprite;
 import fuse.display.DisplayObject;
 import fuse.display.Stage;
 import fuse.events.FuseEvent;
@@ -28,7 +29,7 @@ class MainThread extends ThreadBase
 {
 	static var count:Int = 0;
 	var index:Int;
-	var rootClass:Class<DisplayObject>;
+	var rootClass:Class<Sprite>;
 	var fuseConfig:FuseConfig;
 	var stage3D:Stage3D;
 	var renderMode:Context3DRenderMode;
@@ -39,7 +40,7 @@ class MainThread extends ThreadBase
 	
 	var fuse:Fuse;
 	
-	public function new(fuse:Fuse, rootClass:Class<DisplayObject>, fuseConfig:FuseConfig, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
+	public function new(fuse:Fuse, rootClass:Class<Sprite>, fuseConfig:FuseConfig, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
 	{	
 		super();
 		this.fuse = fuse;
@@ -54,6 +55,9 @@ class MainThread extends ThreadBase
 		this.stage3D = stage3D;
 		this.renderMode = renderMode;
 		this.profile = profile;
+
+		
+
 		//this.frameRate = fuseConfig.frameRate;
 	}
 	
@@ -64,6 +68,8 @@ class MainThread extends ThreadBase
 		workerSetup = new FrontWorkerSetup();
 		workerSetup.onReady.add(OnWorkerReady);
 		workerSetup.init();
+
+		
 	}
 	
 	function OnWorkerReady() 
@@ -82,14 +88,9 @@ class MainThread extends ThreadBase
 		LayerCacheBuffers.init(Fuse.MAX_TEXTURE_SIZE, Fuse.MAX_TEXTURE_SIZE);
 		setupComplete = true;
 		
-		if (Std.is(root, Stage)) {
-			root = Type.createInstance(rootClass, []);
-			this.stage = fuse.stage = untyped root;
-		}
-		else {
-			this.stage = fuse.stage = new Stage();
-			root = Type.createInstance(rootClass, []);
-		}
+		this.stage = fuse.stage = new Stage();
+		root = Type.createInstance(rootClass, []);
+		
 		this.stage.configure(fuseConfig);
 		if (fuseConfig.color != null) stage.color = fuseConfig.color;
 		//if (fuseConfig.transparent != null) stage.transparent = fuseConfig.transparent;

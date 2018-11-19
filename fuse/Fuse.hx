@@ -5,7 +5,7 @@ import fuse.core.front.FuseConfig;
 import fuse.core.front.MainThread;
 import fuse.core.messenger.MessageManager;
 import fuse.info.WorkerInfo;
-import fuse.display.DisplayObject;
+import fuse.display.Sprite;
 import fuse.display.Stage;
 import fuse.events.FuseEvent;
 import fuse.utils.FrameBudget;
@@ -29,13 +29,12 @@ class Fuse extends EventDispatcher
 	
 	var mainThread:MainThread;
 	var workerThread:WorkerThread;
-	@:isVar 
-	public static var current(default, null):ThreadBase;
+	@:isVar public static var current(default, null):ThreadBase;
 	public var stage:Stage;
 	
 	public static var skipUnchangedFrames:Bool = true;
 	
-	public function new(rootClass:Class<DisplayObject>, fuseConfig:FuseConfig=null, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
+	public function new(rootClass:Class<Sprite>, fuseConfig:FuseConfig=null, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
 	{	
 		MessageManager.init();
 		if (fuseConfig == null) fuseConfig = { };

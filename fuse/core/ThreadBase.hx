@@ -1,7 +1,7 @@
 package fuse.core;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
-import fuse.display.DisplayObject;
+import fuse.display.Sprite;
 import fuse.display.Stage;
 import fuse.core.render.Renderer;
 import msignal.Signal.Signal0;
@@ -27,7 +27,7 @@ class ThreadBase extends EventDispatcher
 	public var staticCount:Int = 0;
 	//public var frontIsStatic:Int = 0;
 	public var cleanContext:Bool = false;
-	public var root:DisplayObject;
+	public var root:Sprite;
 	
 	public function new() 
 	{
