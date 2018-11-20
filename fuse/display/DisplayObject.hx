@@ -321,6 +321,9 @@ class DisplayObject
 		if (stage != null && value == null) {
 			stage.onDisplayRemoved.dispatch(this);
 		}
+		if (value == null){
+			onRemoveFromStage.dispatch(this);
+		}
 		stage = value;
 		
 		if (stage != null) {
@@ -328,7 +331,6 @@ class DisplayObject
 			onAddToStage.dispatch(this);
 			//this.isRotating = 1; // set isRotating, isMoving and isStatic
 		}
-		else onRemoveFromStage.dispatch(this);
 		return stage;
 	}
 	
