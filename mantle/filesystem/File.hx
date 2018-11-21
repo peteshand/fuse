@@ -189,6 +189,7 @@ class File extends FileReference
 	
 	function get_isDirectory():Bool 
 	{
+		if (!this.exists) return false;
 		return Fs.lstatSync(path).isDirectory();
 	}
 
