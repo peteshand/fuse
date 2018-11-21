@@ -61,7 +61,13 @@ class FileStream extends EventDispatcher
 		return buffer.toString('utf8', 0, size);
 	}
 
-	
+	public function readBytes(bytes:ByteArray, offset:UInt = 0, length:UInt = 0):Void
+	{
+		if (openFile == null) return null;
+		var buffer:Buffer = Fs.readFileSync(openFile.nativePath, { flag:FsOpenFlag.ReadSync } );
+		var hxBytes = buffer.hxToBytes();
+		bytes.writeBytes(hxBytes, offset, length);
+	}
 	
 	public function writeUTFBytes(value:String):String
 	{

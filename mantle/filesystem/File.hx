@@ -80,6 +80,7 @@ import js.node.Path;
 import js.node.Require;
 import mantle.net.FileReference;
 import openfl.net.FileFilter;
+import openfl.utils.ByteArray;
 
 class File extends FileReference
 {
@@ -276,14 +277,16 @@ class File extends FileReference
 			}
 		}
 
+		var ba:ByteArray = new ByteArray();
+
 		var fileStream1:FileStream = new FileStream();
 		fileStream1.open(source, FileMode.READ);
-		var value:String = fileStream1.readUTF();
+		fileStream1.readBytes(ba, 0, Math.floor(source.size));
 		fileStream1.close();
 
 		var fileStream:FileStream = new FileStream();
 		fileStream.open(targetFile, FileMode.WRITE);
-		fileStream.writeUTFBytes(value);
+		fileStream.writeBytes(ba, 0, ba.length);
 		fileStream.close();
 	}
 
