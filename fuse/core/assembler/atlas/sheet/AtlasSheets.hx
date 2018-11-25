@@ -61,7 +61,8 @@ class AtlasSheets
 			}
 		}
 		if (failCount > 0) {
-			trace("failed to place " + failCount + " textures into atlas buffers");
+			if (failCount == 1) trace("failed to place 1 texture into atlas buffers");
+			else trace("failed to place " + failCount + " textures into atlas buffers");
 		}
 		
 		for (j in 0...sheets.length) 

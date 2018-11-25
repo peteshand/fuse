@@ -1,6 +1,5 @@
 package mantle.services.p2pBind;
 
-import tac.cs.logic.p2p.SendP2P;
 #if electron
 import js.Browser;
 import haxe.Json;

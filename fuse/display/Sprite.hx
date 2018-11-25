@@ -10,17 +10,6 @@ class Sprite extends DisplayObjectContainer
 		displayType = DisplayType.SPRITE;
 	}
 	
-	//override function forceRedraw():Void
-	//{
-		//super.forceRedraw();
-		//if (children != null){
-			//for (i in 0...children.length) 
-			//{
-				//children[i].forceRedraw();
-			//}		
-		//}
-	//}
-
 	public function clone()
 	{
 		var _clone = new Sprite();

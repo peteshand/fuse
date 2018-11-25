@@ -13,7 +13,7 @@ import robotlegs.extensions.impl.model.config2.Locations;
 
 interface IConfigModel 
 {
-	var timeout:Int;
+	/*var timeout:Int;
 	var activeFPS:Int;
 	var throttleFPS:Int;
 	var throttleTimeout:Int;
@@ -38,5 +38,5 @@ interface IConfigModel
 	function get(key:String):Dynamic;
 	
 	var localDynamicData:Map<String, Dynamic>;
-	var onLocalDynamicSet:Signal0;
+	var onLocalDynamicSet:Signal0;*/
 }

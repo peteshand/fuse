@@ -4,6 +4,7 @@ package robotlegs.extensions.impl.commands.config;
 import mantle.delay.Delay;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.extensions.api.model.config.IConfigModel;
+/*
 import robotlegs.extensions.impl.logic.config.app.SeedConfigLogic;
 import robotlegs.extensions.impl.logic.flags.compile.CompileDefineFlagsLogic;
 
@@ -19,7 +20,7 @@ import robotlegs.extensions.impl.logic.flags.compile.CompileDefineFlagsLogic;
 	import robotlegs.extensions.impl.logic.config.html.AttributeConfigLogic;
 	import robotlegs.extensions.impl.logic.config.html.QueryConfigLogic;
 #end
-
+*/
 //import robotlegs.extensions.impl.signals.startup.ConfigReadySignal;
 
 /**
@@ -31,7 +32,7 @@ class ConfigCommand extends Command
 {
 	@inject public var configModel:IConfigModel;
 	//@inject public var configReadySignal:ConfigReadySignal;
-	@inject public var seedConfigLogic:SeedConfigLogic;
+	/*@inject public var seedConfigLogic:SeedConfigLogic;
 	
 	@inject public var compileDefineFlagsLogic:CompileDefineFlagsLogic;
 	#if (air && !mobile)
@@ -46,7 +47,7 @@ class ConfigCommand extends Command
 		@inject public var attributeConfigLogic:AttributeConfigLogic;
 		@inject public var queryConfigLogic:QueryConfigLogic;
 	#end
-	
+	*/
 	public function new() { }
 	
 	override public function execute():Void
@@ -54,7 +55,7 @@ class ConfigCommand extends Command
 		/*#if (air && !mobile)
 			configSaveService.copyGlobalSeed();
 		#end*/
-		
+		/*
 		compileDefineFlagsLogic.init();
 		
 		#if (air && !mobile)
@@ -74,7 +75,7 @@ class ConfigCommand extends Command
 			attributeConfigLogic.init();
 			queryConfigLogic.init();
 		#end
-		
+		*/
 		
 		
 		//configLoadService.onLoadComplete.add(OnLoadComplete);
