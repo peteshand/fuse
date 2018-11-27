@@ -23,6 +23,10 @@ class Stage extends Sprite {
 	var count:Int = 0;
 	var background:Quad;
 	
+	var _width:Int;
+	var _height:Int;
+	var fuseConfig:FuseConfig;
+
 	@:isVar public var windowWidth(default, set):Int;
 	@:isVar public var windowHeight(default, set):Int;
 	@:isVar public var stageWidth(default, set):Int;
@@ -62,6 +66,8 @@ class Stage extends Sprite {
 	
 	function configure(fuseConfig:FuseConfig) 
 	{
+		this.fuseConfig = fuseConfig;
+		trace("fuseConfig");
 		#if html5
 			/*var configColor:UInt = Lib.current.stage.window.config.background;
 			var bgColor:String = "#";
@@ -101,18 +107,27 @@ class Stage extends Sprite {
 
 	private function OnResize():Void 
 	{
-		this.windowWidth = Lib.current.stage.stageWidth;
-		this.windowHeight = Lib.current.stage.stageHeight;
+		_width = Lib.current.stage.stageWidth;
+		_height = Lib.current.stage.stageHeight;
+		
+		if (fuseConfig != null){
+			if (fuseConfig.width != null) _width = fuseConfig.width;
+			if (fuseConfig.height != null) _height = fuseConfig.height;
+		}
+		
+		
+		this.windowWidth = _width;
+		this.windowHeight = _height;
 
 		switch orientation {
             case Orientation.LANDSCAPE | Orientation.LANDSCAPE_FLIPPED: 
-				this.stageWidth = Lib.current.stage.stageWidth;
-				this.stageHeight = Lib.current.stage.stageHeight;
+				this.stageWidth = _width;
+				this.stageHeight = _height;
 				this.x = (orientation / 180) * windowWidth;
 				this.y = (orientation / 180) * windowHeight;
             case Orientation.PORTRAIT | Orientation.PORTRAIT_FLIPPED: 
-				this.stageWidth = Lib.current.stage.stageHeight;
-				this.stageHeight = Lib.current.stage.stageWidth;
+				this.stageWidth = _height;
+				this.stageHeight = _width;
 				this.x = (1 - ((orientation - 90) / 180)) * windowWidth;
 				this.y = ((orientation - 90) / 180) * windowHeight;
         }

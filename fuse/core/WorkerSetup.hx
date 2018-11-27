@@ -105,6 +105,23 @@ class WorkerSetup
 				touch.y = Fuse.current.stage.windowWidth - tempX;
         }
 
+		/*
+		tempX = touch.x;
+		switch Fuse.current.stage.orientation {
+            case Orientation.LANDSCAPE: 
+				
+            case Orientation.LANDSCAPE_FLIPPED: 
+				touch.x = Fuse.current.stage.windowWidth - touch.x;
+				touch.y = Fuse.current.stage.windowHeight - touch.y;
+            case Orientation.PORTRAIT: 
+				touch.x = Fuse.current.stage.windowHeight - touch.y;
+				touch.y = tempX;
+			case Orientation.PORTRAIT_FLIPPED: 
+				touch.x = touch.y;
+				touch.y = Fuse.current.stage.windowWidth - tempX;
+        }
+		*/
+
 		display.dispatchInput(touch);
 	}
 	

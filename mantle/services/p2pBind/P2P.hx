@@ -62,6 +62,9 @@ class P2P
 			id:id,
 			payload:_payload
 		}
+		if (P2P.secondWindow == null){
+			return;
+		}
 		P2P.secondWindow.postMessage(message, "*");
 	}
 	

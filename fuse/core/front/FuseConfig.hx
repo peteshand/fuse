@@ -12,5 +12,7 @@ typedef FuseConfig =
 	?frameRate:Int,
 	?autoStart:Null<Bool>,
 	?color:Null<UInt>,
-	?transparent:Null<Bool>
+	?transparent:Null<Bool>,
+	?width:Null<Int>,
+	?height:Null<Int>
 }
