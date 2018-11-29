@@ -1,6 +1,6 @@
 package notifier;
 
-import msignal.Signal.Signal0;
+import notifier.Signal;
 @:forward(length, base, concat, join, pop, push, reverse, shift, slice, sort, splice, unshift, insert, arrayRemove, indexOf, lastIndexOf, iterator, map, filter, resize,
 add, addOnce, addWithPriority, addOnceWithPriority, remove, removeAll, dispatch)
 abstract ArrayNotifier<T>(BaseArrayNotifier<T>)
@@ -9,19 +9,17 @@ abstract ArrayNotifier<T>(BaseArrayNotifier<T>)
 		this = new BaseArrayNotifier(value, id);
 	}
 
-    /*public var value(get, set):Array<T>;
-
-    inline function get_value():Array<T>
-	{
-		return this.baseArray;
-	}
-	inline function set_value(value:Array<T>):Array<T>
-	{
-		return this.baseArray = value;
-	}*/
+    @:arrayAccess function get(k:Int) {
+        return this.base[k];
+        //return this.charAt(k);
+    }
+    
+    /*@:arrayAccess function getInt2(k:Int) {
+        return this.charAt(k).toUpperCase();
+    }*/
 }
 
-class BaseArrayNotifier<T> extends Signal0
+class BaseArrayNotifier<T> extends Signal
 {
     public var base:Array<T>;
 
