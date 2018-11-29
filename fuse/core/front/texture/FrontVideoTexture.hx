@@ -20,6 +20,7 @@ import notifier.Notifier;
 @:access(fuse)
 #if (js && html5)
 @:access(mantle.net.NetStream)
+@:access(notifier.Notifier)
 #end
 class FrontVideoTexture extends FrontBaseTexture
 {
@@ -46,6 +47,7 @@ class FrontVideoTexture extends FrontBaseTexture
 	
 	public function new(url:String=null) 
 	{
+		
 		//trace2("supportsVideoTexture = " + Context3D.supportsVideoTexture);
 		netConnection = new NetConnection();
 		netConnection.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
@@ -69,8 +71,6 @@ class FrontVideoTexture extends FrontBaseTexture
 
 	function onActiveChange()
 	{
-		trace2("onActiveChange: " + action.value);
-		trace2("available.value = " + available.value);
 		if (action.value == VideoAction.PLAY) {
 			if (!autoPlay) action.value = VideoAction.PAUSE_WAIT;
 			/*if (available.value != false)*/ playVideo();
@@ -85,11 +85,11 @@ class FrontVideoTexture extends FrontBaseTexture
 			else action.value = VideoAction.PAUSE_WAIT;
 		}
 		else if (action.value == VideoAction.SEEK) {
-			//if (available.value == true) {
-				seekVideo();
-				if (!autoPlay) action.value = VideoAction.PAUSE_WAIT;
-			//}
-			//else action.value = VideoAction.SEEK_WAIT;
+			seekVideo();
+			if (!autoPlay) action.value = VideoAction.PAUSE_WAIT;
+		} else if (action.value == VideoAction.RESTART) {
+			seekTarget = 0;
+			seekVideo();
 		}
 	}
 
@@ -351,10 +351,11 @@ class FrontVideoTexture extends FrontBaseTexture
 	{
 		if (loop){
 			if (duration != null){
-				if (time + 0.3 >= duration){
-					nativeVideoTexture.addEventListener(Event.TEXTURE_READY, renderFrame);
-					EnterFrame.remove(onTick);
-					seek(0);
+				if (time + 0.3 >= duration && action.value == VideoAction.PLAY){
+					action.value = VideoAction.RESTART;
+				}
+				if (action.value == VideoAction.RESTART && time + 0.3 < duration){
+					action.value = VideoAction.PLAY;
 				}
 			}
 		}
@@ -411,6 +412,8 @@ typedef NetStatusInfo =
 
 @:enum abstract VideoAction(String) from String to String {
 	
+	public var RESTART:String = "restart";
+	public var RESTART_WAIT:String = "restart_wait";
 	public var PLAY:String = "play";
 	public var STOP:String = "stop";
 	public var PAUSE:String = "pause";
