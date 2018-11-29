@@ -4,6 +4,7 @@ import fuse.utils.Color;
 import fuse.core.front.texture.Textures;
 import fuse.geom.Rectangle;
 import fuse.texture.ITexture;
+import fuse.core.backend.displaylist.DisplayType;
 
 class Scale9Image extends Sprite
 {
@@ -28,6 +29,8 @@ class Scale9Image extends Sprite
     public function new(texture:ITexture, scale9Grid:Rectangle) 
 	{
 		super();
+        displayType = DisplayType.SCALE9_IMAGE;
+
         for (i in 0...9) {
             uvs.push({ offsetU:0, offsetV:0, scaleU:1, scaleV:1 });
             rects.push(new Rectangle());
@@ -181,6 +184,14 @@ class Scale9Image extends Sprite
             image.scaleV = uvHeights[yi];
         }
     }
+
+    override public function clone():Sprite
+	{
+        var _clone = new Scale9Image(texture, scale9Grid);
+		copySpriteProps(this, _clone);
+		copySpriteChildren(this, _clone);
+		return cast(_clone, Sprite);
+	}
 }
 
 typedef UVData =

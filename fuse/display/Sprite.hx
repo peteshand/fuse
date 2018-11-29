@@ -13,34 +13,46 @@ class Sprite extends DisplayObjectContainer
 	public function clone()
 	{
 		var _clone = new Sprite();
-		_clone.name = this.name;
-		_clone.x = this.x;
-		_clone.y = this.y;
-		_clone.width = this.width;
-		_clone.height = this.height;
-		_clone.pivotX = this.pivotX;
-		_clone.pivotY = this.pivotY;
-		_clone.rotation = this.rotation;
-		_clone.scaleX = this.scaleX;
-		_clone.scaleY = this.scaleY;
-		_clone.color = this.color;
-		_clone.colorTL = this.colorTL;
-		_clone.colorTR = this.colorTR;
-		_clone.colorBL = this.colorBL;
-		_clone.colorBR = this.colorBR;
-		_clone.alpha = this.alpha;
-		_clone.visible = this.visible;
-		_clone.mask = this.mask;
-		for (i in 0...children.length) 
+		copySpriteProps(this, _clone);
+		copySpriteChildren(this, _clone);
+		return _clone;
+	}
+
+	function copySpriteProps(from:Sprite, to:Sprite)
+	{
+		to.name = from.name;
+		to.x = from.x;
+		to.y = from.y;
+		to.width = from.width;
+		to.height = from.height;
+		to.pivotX = from.pivotX;
+		to.pivotY = from.pivotY;
+		to.rotation = from.rotation;
+		to.scaleX = from.scaleX;
+		to.scaleY = from.scaleY;
+		to.color = from.color;
+		to.colorTL = from.colorTL;
+		to.colorTR = from.colorTR;
+		to.colorBL = from.colorBL;
+		to.colorBR = from.colorBR;
+		to.alpha = from.alpha;
+		to.visible = from.visible;
+		to.mask = from.mask;
+	}
+
+	function copySpriteChildren(from:Sprite, to:Sprite)
+	{
+		for (i in 0...from.children.length) 
 		{
-			if (children[i].displayType == DisplayType.IMAGE){
-				_clone.addChild(cast(children[i], Image).clone());
-			} else if (children[i].displayType == DisplayType.QUAD){
-				_clone.addChild(cast(children[i], Quad).clone());
-			} else if (children[i].displayType == DisplayType.SPRITE){
-				_clone.addChild(cast(children[i], Sprite).clone());
+			if (from.children[i].displayType == DisplayType.IMAGE){
+				to.addChild(cast(from.children[i], Image).clone());
+			} else if (from.children[i].displayType == DisplayType.SCALE9_IMAGE){
+				to.addChild(cast(from.children[i], Scale9Image).clone());
+			} else if (from.children[i].displayType == DisplayType.QUAD){
+				to.addChild(cast(from.children[i], Quad).clone());
+			} else if (from.children[i].displayType == DisplayType.SPRITE){
+				to.addChild(cast(from.children[i], Sprite).clone());
 			}
 		}
-		return _clone;
 	}
 }

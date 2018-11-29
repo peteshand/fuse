@@ -14,4 +14,5 @@ package fuse.core.backend.displaylist;
 	public var IMAGE:Int = 4;
 	public var MOVIECLIP:Int = 5;
 	public var QUAD:Int = 6;
+	public var SCALE9_IMAGE:Int = 7;
 }

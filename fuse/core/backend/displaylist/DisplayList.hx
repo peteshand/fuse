@@ -108,6 +108,7 @@ class DisplayList
 		switch displayType {
 			case DisplayType.STAGE:				return new CoreStage();
 			case DisplayType.SPRITE:			return Pool.sprites.request();
+			case DisplayType.SCALE9_IMAGE:		return Pool.sprites.request();
 			case DisplayType.DISPLAY_OBJECT:	return Pool.displayObjects.request();
 			case DisplayType.IMAGE:				return Pool.images.request();
 			case DisplayType.MOVIECLIP:			return Pool.movieclips.request();
