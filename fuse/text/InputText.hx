@@ -11,6 +11,7 @@ import notifier.Notifier;
 import fuse.geom.Point;
 import mantle.keyboard.Key;
 import mantle.keyboard.Keyboard;
+import fuse.display.DisplayObjectContainer;
 
 /**
  * ...
@@ -42,14 +43,9 @@ class InputText extends TextField
 
         stage.focus.add(onFocusChange);
         onUpdate.add(onTextUpdate);
-        /*charIndex.add(() -> {
-            trace("on charIndex change");
-            this.setSelection(charIndex.value, charIndex.value);
-        });*/
-
+        
         ignoreKeyCodes = [
             Key.LEFT, Key.RIGHT, Key.UP, Key.DOWN, Key.COMMAND, Key.CONTROL, Key.ALTERNATE, -1
-            
         ];
 
         Keyboard.onPress(onKeyPress);
@@ -176,6 +172,12 @@ class InputText extends TextField
             //else if (stage.focus.value == this) stage.focus.value = null;
         }
     }
+
+    override public function setTextFormat(format:TextFormat, beginIndex:Int = -1, endIndex:Int = -1):Void
+	{
+		super.setTextFormat(format, beginIndex, endIndex);
+        charIndex.dispatch();
+	}
 }
 @:access(fuse.text.InputText)
 class Caret extends Sprite
