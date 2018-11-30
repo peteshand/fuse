@@ -9,15 +9,23 @@ import notifier.Notifier;
 class Condition extends Notifier<Bool>
 {
 	public var notifier:Notifier<Dynamic>;
-	public var targetValue:Dynamic;
 	public var operation:String;
 	public var subProp:String;
+	var targetIsFunction:Bool;
 	var testValue(get, null):Dynamic;
+	
+	public var targetValue(get, null):Dynamic;
+	var _targetValue:Dynamic;
+	var _targetFunction:Void -> Dynamic;
 
-	public function new(notifier:Notifier<Dynamic>, targetValue:Dynamic, operation:String="==", subProp:String=null) 
+	public function new(notifier:Notifier<Dynamic>, _targetValue:Dynamic, operation:String="==", subProp:String=null) 
 	{
 		this.operation = operation;
-		this.targetValue = targetValue;
+		
+		targetIsFunction = Reflect.isFunction(_targetValue);
+		if (targetIsFunction) _targetFunction = _targetValue;
+		else this._targetValue = _targetValue;
+
 		this.notifier = notifier;
 		this.subProp = subProp;
 
@@ -26,6 +34,12 @@ class Condition extends Notifier<Bool>
 			check();
 		}, 1000);
 		check();
+	}
+
+	public function get_targetValue():Dynamic
+	{
+		if (targetIsFunction) return _targetFunction();
+		else return _targetValue;
 	}
 	
 	public inline function check(forceDispatch:Bool = false) 

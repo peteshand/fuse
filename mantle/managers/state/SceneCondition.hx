@@ -12,13 +12,13 @@ class SceneCondition extends Condition
 	var wildcardValue:String;
 	var wildcardLength:Int;
 	
-	public function new(notifier:Notifier<Dynamic>, targetValue:String, operation:String="==") 
+	public function new(notifier:Notifier<Dynamic>, uri:String, operation:String="==") 
 	{
-		super(notifier, targetValue, operation);
-		wildcardLength = targetValue.indexOf("*");
+		super(notifier, uri, operation);
+		wildcardLength = uri.indexOf("*");
 		if (wildcardLength > 0) {
 			wildcard = true;
-			wildcardValue = targetValue.substr(0, wildcardLength);
+			wildcardValue = uri.substr(0, wildcardLength);
 		}
 	}
 	
@@ -38,5 +38,10 @@ class SceneCondition extends Condition
 			return false;
 		}
 		
+	}
+
+	override function toString():String
+	{
+		return "[SceneCondition] " + testValue + " " + operation + " " + targetValue + " | " + value + " | " + (targetValue == targetValue);
 	}
 }
