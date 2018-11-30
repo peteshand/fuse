@@ -123,6 +123,8 @@ class InputAssemblerObject
 
 		var displayTouch:Touch = getDisplayTouch(touchDisplay, touch);
 		InputAssembler.collisions.push(displayTouch);
+
+		if (touchDisplay.clickThrough == true) return false;
 		return true;
 	}
 

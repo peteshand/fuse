@@ -29,6 +29,14 @@ class DisplayObject
 	public var onRemoveFromStage = new Signal1<DisplayObject>();
 	
 	@:isVar public var touchable(get, set):Null<Bool> = null;
+	@:isVar public var clickThrough(get, set):Null<Bool> = null;
+	
+	public var _onPress:Signal1<Touch>;
+	public var _onMove:Signal1<Touch>;
+	public var _onRelease:Signal1<Touch>;
+	public var _onRollover:Signal1<Touch>;
+	public var _onRollout:Signal1<Touch>;
+
 	public var onPress(get, null):Signal1<Touch>;
 	public var onMove(get, null):Signal1<Touch>;
 	public var onRelease(get, null):Signal1<Touch>;
@@ -68,6 +76,7 @@ class DisplayObject
 	var updateVisible:Bool = true;
 	var updateAlpha:Bool = true;
 	var updateUVs:Bool = true;
+	var updateTouchable:Bool = true;
 	
 	
 	var horizontalAlign:Align;
@@ -101,9 +110,11 @@ class DisplayObject
 		updateVisible = false;
 		updateAlpha = false;
 		updateUVs = false;
+		updateTouchable = false;
 	}
 	
 	inline function get_touchable():Null<Bool> { return touchable; }
+	inline function get_clickThrough():Null<Bool> { return clickThrough; }
 	inline function get_x():Float { return x; }
 	inline function get_y():Float { return y; }
 	function get_width():Float { return width; }
@@ -127,8 +138,16 @@ class DisplayObject
 	{
 		if (touchable != value){
 			touchable = value;
-			Fuse.current.workerSetup.setTouchable(this, value);
-			//isStatic = 0;
+			Fuse.current.workerSetup.setTouchable(this, touchable, clickThrough);
+		}
+		return value;
+	}
+
+	inline function set_clickThrough(value:Null<Bool>):Null<Bool>
+	{
+		if (clickThrough != value){
+			clickThrough = value;
+			Fuse.current.workerSetup.setTouchable(this, touchable, clickThrough);
 		}
 		return value;
 	}
@@ -442,31 +461,66 @@ class DisplayObject
 	
 	function get_onPress():Signal1<Touch> 
 	{
-		if (onPress == null) onPress = new Signal1<Touch>();
-		return onPress;
+		if (_onPress == null) {
+			_onPress = new Signal1<Touch>();
+			updateTouchable = true;
+			updateStaticBackend();
+		}
+		return _onPress;
 	}
 	
 	function get_onMove():Signal1<Touch> 
 	{
-		if (onMove == null) onMove = new Signal1<Touch>();
-		return onMove;
+		if (_onMove == null) {
+			_onMove = new Signal1<Touch>();
+			updateTouchable = true;
+			updateStaticBackend();
+		}
+		return _onMove;
 	}
 	
 	function get_onRelease():Signal1<Touch> 
 	{
-		if (onRelease == null) onRelease = new Signal1<Touch>();
-		return onRelease;
+		if (_onRelease == null) {
+			_onRelease = new Signal1<Touch>();
+			updateTouchable = true;
+			updateStaticBackend();
+		}
+		return _onRelease;
 	}
 	
 	function get_onRollover():Signal1<Touch> 
 	{
-		if (onRollover == null) onRollover = new Signal1<Touch>();
-		return onRollover;
+		if (_onRollover == null) {
+			_onRollover = new Signal1<Touch>();
+			updateTouchable = true;
+			updateStaticBackend();
+		}
+		return _onRollover;
 	}
 	
 	function get_onRollout():Signal1<Touch> 
 	{
-		if (onRollout == null) onRollout = new Signal1<Touch>();
-		return onRollout;
+		if (_onRollout == null) {
+			_onRollout = new Signal1<Touch>();
+			updateTouchable = true;
+			updateStaticBackend();
+		}
+		return _onRollout;
+	}
+
+	function checkTouchable()
+	{
+		var numListeners:Int = 0;
+		if (_onPress != null) numListeners += _onPress.numListeners;
+		if (_onMove != null) numListeners += _onMove.numListeners;
+		if (_onRelease != null) numListeners += _onRelease.numListeners;
+		if (_onRollover != null) numListeners += _onRollover.numListeners;
+		if (_onRollout != null) numListeners += _onRollout.numListeners;
+		//trace("touchable = " + touchable);
+		//trace("numListeners = " + numListeners);
+		//trace(this.objectId);
+		//if (numListeners == 0) touchable = false;
+		//else touchable = true;
 	}
 }

@@ -24,6 +24,7 @@ class Touchables
 	{
 		var coreDisplay:CoreDisplayObject = Core.displayList.getDisplay(payload.objectId, payload.displayType);
 		coreDisplay.touchable = payload.touchable;
+		coreDisplay.clickThrough = payload.clickThrough;
 		
 		if (coreDisplay.displayType == DisplayType.STAGE) {
 			if (payload.touchable == true) stage = coreDisplay;

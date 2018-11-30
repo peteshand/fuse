@@ -61,7 +61,8 @@ class CoreDisplayObject
 	
 	public var touchDisplay:CoreDisplayObject;
 	public var touchable:Null<Bool> = null;
-
+	public var clickThrough:Null<Bool> = null;
+	
 	public function new() 
 	{
 		this.displayType = DisplayType.DISPLAY_OBJECT;

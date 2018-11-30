@@ -213,15 +213,16 @@ class WorkerSetup
 		send(MessageType.REMOVE_TEXTURE, objectId);
 	}
 	
-	public function setTouchable(displayObject:DisplayObject, value:Null<Bool>) 
+	public function setTouchable(displayObject:DisplayObject, touchable:Null<Bool>, clickThrough:Null<Bool>) 
 	{
-		if (value) touchables.set(displayObject.objectId, displayObject);
+		if (touchable) touchables.set(displayObject.objectId, displayObject);
 		else touchables.remove(displayObject.objectId);
 		
 		send(MessageType.SET_TOUCHABLE, { 
 			objectId:displayObject.objectId, 
 			displayType:displayObject.displayType, 
-			touchable:value
+			touchable:touchable,
+			clickThrough:clickThrough
 		} );
 	}
 	
@@ -290,6 +291,11 @@ class WorkerSetup
 			staticData.updateTexture = displayObject.updateTexture;
 			staticData.updateUVs = displayObject.updateUVs;
 			
+			if (displayObject.updateTouchable){
+				displayObject.checkTouchable();
+				displayObject.updateTouchable = false;
+			}
+
 			send(MessageType.SET_STATIC, staticData);
 			
 			displayObject.resetMovement();

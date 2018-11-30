@@ -7,5 +7,6 @@ typedef TouchableMsg =
 {
 	objectId:Int,
 	displayType:Int,
-	touchable:Null<Bool>
+	touchable:Null<Bool>,
+	clickThrough:Null<Bool>
 }
