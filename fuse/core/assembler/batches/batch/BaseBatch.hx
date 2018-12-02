@@ -60,7 +60,7 @@ class BaseBatch
 	{
 		//trace("renderTarget = " + renderTarget);
 		var textureIndex:Int = getTextureIndex(renderable);
-		//trace("textureIndex = " + textureIndex);
+		
 		if (textureIndex == -1) return false;
 		renderable.textureIndex = textureIndex;
 		

@@ -255,7 +255,7 @@ class FShader
 		var agal:String = "\n";
 			
 			/////////////////////////////////////////////////////////////////
-			// RGBA from 4 available textures ///////////////////////////////
+			// RGBA from X available textures ///////////////////////////////
 			for (j in 0...numTextures) 
 			{
 				agal += "tex ft0, v1.xy, fs" + j + " <2d,clamp,nomip,linear>	\n"; // nearest
