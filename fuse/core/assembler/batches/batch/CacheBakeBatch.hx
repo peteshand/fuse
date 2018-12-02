@@ -124,8 +124,8 @@ class CacheBakeBatch extends BaseBatch implements IBatch
 				vertexData.setUV(3, coreTexture.uvRight,	coreTexture.uvBottom);	// bottom right
 				
 				if (image.mask != null) {
-					vertexData.setMaskUV(0, image.mask.mask.coreTexture.uvLeft,	image.mask.mask.coreTexture.uvBottom);	// bottom left
-					vertexData.setMaskUV(1, image.mask.mask.coreTexture.uvLeft,	image.mask.mask.coreTexture.uvTop);	// top left
+					vertexData.setMaskUV(0, image.mask.mask.coreTexture.uvLeft,		image.mask.mask.coreTexture.uvBottom);	// bottom left
+					vertexData.setMaskUV(1, image.mask.mask.coreTexture.uvLeft,		image.mask.mask.coreTexture.uvTop);	// top left
 					vertexData.setMaskUV(2, image.mask.mask.coreTexture.uvRight,	image.mask.mask.coreTexture.uvTop);	// top right
 					vertexData.setMaskUV(3, image.mask.mask.coreTexture.uvRight,	image.mask.mask.coreTexture.uvBottom);	// bottom right
 				}

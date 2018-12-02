@@ -13,7 +13,7 @@ class CoreMask
         this.image = image;
         this.mask = mask;
 
-        mask.addMaskOf(image);
+        //mask.addMaskOf(image);
     }
 
     public function dispose()
@@ -27,20 +27,20 @@ class CoreMask
     public function updateUVs()
     {
         var offsetBottomLeftX:Float = calcOffsetX(mask.bottomLeftX, image.bottomLeftX);
-        var offsetBottomLeftY:Float = calcOffsetY(image.bottomLeftY, mask.bottomLeftY);
+        var offsetBottomLeftY:Float = calcOffsetY(mask.bottomLeftY, image.bottomLeftY);
 
         var offsetTopLeftX:Float = calcOffsetX(mask.topLeftX, image.topLeftX);
-        var offsetTopLeftY:Float = calcOffsetY(image.topLeftY, mask.topLeftY);
+        var offsetTopLeftY:Float = calcOffsetY(mask.topLeftY, image.topLeftY);
 
         var offsetTopRightX:Float = calcOffsetX(mask.topRightX, image.topRightX);
-        var offsetTopRightY:Float = calcOffsetY(image.topRightY, mask.topRightY);
+        var offsetTopRightY:Float = calcOffsetY(mask.topRightY, image.topRightY);
 
         var offsetBottomRightX:Float = calcOffsetX(mask.bottomRightX, image.bottomRightX);
-        var offsetBottomRightY:Float = calcOffsetY(image.bottomRightY, mask.bottomRightY);
+        var offsetBottomRightY:Float = calcOffsetY(mask.bottomRightY, image.bottomRightY);
         
-        var imageRotated:Bool = image.coreTexture.rotate;
+        //var imageRotated:Bool = image.coreTexture.rotate;
         var maskRotated:Bool = mask.coreTexture.rotate;
-        var rotated:Bool = imageRotated || maskRotated;
+        //var rotated:Bool = imageRotated || maskRotated;
         
         var rot:Float = 0;
         if (maskRotated){
@@ -71,13 +71,15 @@ class CoreMask
         v[3] = mask.coreTexture.uvBottom - offsetBottomRightY2;
     }
 
-    function calcOffsetX(maskPosX:Float, posX:Float) 
+    inline function calcOffsetX(maskPosX:Float, posX:Float) 
 	{
-		return (posX - maskPosX) * 0.5 * Fuse.current.stage.stageWidth / mask.coreTexture.textureData.activeData.p2Width / mask.displayData.scaleX;
+        //trace(mask.displayData.width / mask.coreTexture.textureData.width);
+        //trace(mask.displayData.scaleX);
+		return (posX - maskPosX) * 0.5 * Fuse.current.stage.stageWidth / mask.coreTexture.textureData.activeData.p2Width / (mask.displayData.width / mask.coreTexture.textureData.width);// / mask.displayData.scaleX;
 	}
 	
-	function calcOffsetY(posY:Float, maskPosY:Float) 
+	inline function calcOffsetY(maskPosY:Float, posY:Float) 
 	{
-		return (posY - maskPosY) * 0.5 * Fuse.current.stage.stageHeight / mask.coreTexture.textureData.activeData.p2Height / mask.displayData.scaleY;
+		return (posY - maskPosY) * 0.5 * Fuse.current.stage.stageHeight / mask.coreTexture.textureData.activeData.p2Height / (mask.displayData.height / mask.coreTexture.textureData.height);// / mask.displayData.scaleY;
 	}
 }

@@ -58,7 +58,7 @@ class Textures
 		//white.fillRect(new Rectangle(2, 2, white.width-4, white.height-4), 0xFFFFFFFF);
 		//whiteTexture = new DefaultTexture(white, false);
 
-		whiteTexture = new DefaultTexture(new BitmapData(32, 32, true, 0xFFFFFFFF), false);
+		whiteTexture = new DefaultTexture(new BitmapData(128, 128, true, 0xFFFFFFFF), false);
 		//trace("whiteTexture.textureId = " + whiteTexture.textureId);
 	}
 	
