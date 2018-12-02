@@ -46,6 +46,15 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public var sourceTextureId(get, null):TextureId;
 	
 	var count:Int = 0;
+
+	public var bottomLeftX(get, null):Float;
+	public var bottomLeftY(get, null):Float;
+	public var topLeftX(get, null):Float;
+	public var topLeftY(get, null):Float;
+	public var topRightX(get, null):Float;
+	public var topRightY(get, null):Float;
+	public var bottomRightX(get, null):Float;
+	public var bottomRightY(get, null):Float;
 	
 	public function new() 
 	{
@@ -194,13 +203,11 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public function setMask(value:CoreImage)
 	{
 		if (value == null && mask != null){
-			mask.display.removeMaskOf(this);
 			mask.dispose();
 			mask = null;
 		}
-		if (mask == null || mask.display != value){
-			mask = new CoreMask(value);
-			value.addMaskOf(this);
+		if (mask == null || mask.mask != value){
+			mask = new CoreMask(this, value);
 		}
 	}
 	
@@ -214,13 +221,13 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		return mask;
 	}*/
 	
-	function addMaskOf(coreImage:CoreImage) 
+	public function addMaskOf(coreImage:CoreImage) 
 	{
 		maskOf.push(coreImage);
 		isMask = true;
 	}
 	
-	function removeMaskOf(coreImage:CoreImage) 
+	public function removeMaskOf(coreImage:CoreImage) 
 	{
 		var i:Int = maskOf.length - 1;
 		while (i >= 0) 
@@ -281,4 +288,53 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 			this.touchDisplay = touchDisplay;
 		}
 	}
+
+	function get_bottomLeftX():Float
+	{
+		if (coreTexture.rotate) return quadData.topLeftX;
+		return quadData.bottomLeftX;
+	}
+
+	function get_bottomLeftY():Float
+	{
+		if (coreTexture.rotate) return quadData.topLeftY;
+		return quadData.bottomLeftY;
+	}
+
+	function get_topLeftX():Float
+	{
+		if (coreTexture.rotate) return quadData.topRightX;
+		return quadData.topLeftX;
+	}
+
+	function get_topLeftY():Float
+	{
+		if (coreTexture.rotate) return quadData.topRightY;
+		return quadData.topLeftY;
+	}
+
+	function get_topRightX():Float
+	{
+		if (coreTexture.rotate) return quadData.bottomRightX;
+		return quadData.topRightX;
+	}
+
+	function get_topRightY():Float
+	{
+		if (coreTexture.rotate) return quadData.bottomRightY;
+		return quadData.topRightY;
+	}
+
+	function get_bottomRightX():Float
+	{
+		if (coreTexture.rotate) return quadData.bottomLeftX;
+		return quadData.bottomRightX;
+	}
+
+	function get_bottomRightY():Float
+	{
+		if (coreTexture.rotate) return quadData.bottomLeftY;
+		return quadData.bottomRightY;
+	}
+
 }

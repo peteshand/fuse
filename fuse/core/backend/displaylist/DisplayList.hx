@@ -49,7 +49,6 @@ class DisplayList
 			return;
 		}
 		display.setMask(maskDisplay);
-		//display.mask = maskDisplay;
 		hierarchyChangeCount = 0;
 	}
 	
@@ -58,7 +57,6 @@ class DisplayList
 		var display:CoreImage = untyped map.get(objectId);
 		if (display == null) return;
 		display.setMask(null);
-		//display.mask = null;
 		hierarchyChangeCount = 0;
 	}
 	

@@ -27,7 +27,7 @@ class CoreDisplayObject
 	public var displayData	:IDisplayData;
 	public var parent		:CoreInteractiveObject;
 	
-	public var quadData		:QuadData;
+	var quadData			:QuadData;
 	public var bounds		:Bounds;
 	
 	public var left			:Float = 0;
