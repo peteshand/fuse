@@ -28,7 +28,9 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public var coreTexture	:CoreTexture;
 	
 	@:isVar public var textureIndex(get, set):Int;
-	@:isVar public var mask(default, set):CoreImage;
+	//@:isVar public var mask(default, set):CoreImage;
+	
+	@:usVar public var mask(default, null):CoreMask;
 	public var maskChanged:Bool = false;
 	
 	public var isMask:Bool = false;
@@ -184,12 +186,25 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		return coreTexture.textureId;
 	}
 	
-	function get_mask():CoreImage 
+	/*function get_mask():CoreImage 
 	{
 		return mask;
+	}*/
+
+	public function setMask(value:CoreImage)
+	{
+		if (value == null && mask != null){
+			mask.display.removeMaskOf(this);
+			mask.dispose();
+			mask = null;
+		}
+		if (mask == null || mask.display != value){
+			mask = new CoreMask(value);
+			value.addMaskOf(this);
+		}
 	}
 	
-	function set_mask(value:CoreImage):CoreImage 
+	/*function set_mask(value:CoreImage):CoreImage 
 	{
 		if (mask != value){
 			mask = value;
@@ -197,7 +212,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 			maskChanged = true;
 		}
 		return mask;
-	}
+	}*/
 	
 	function addMaskOf(coreImage:CoreImage) 
 	{

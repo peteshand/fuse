@@ -48,7 +48,8 @@ class DisplayList
 			trace("mask displayObject must be added to the stage before it can be attached to a displayObject");
 			return;
 		}
-		display.mask = maskDisplay;
+		display.setMask(maskDisplay);
+		//display.mask = maskDisplay;
 		hierarchyChangeCount = 0;
 	}
 	
@@ -56,7 +57,8 @@ class DisplayList
 	{
 		var display:CoreImage = untyped map.get(objectId);
 		if (display == null) return;
-		display.mask = null;
+		display.setMask(null);
+		//display.mask = null;
 		hierarchyChangeCount = 0;
 	}
 	

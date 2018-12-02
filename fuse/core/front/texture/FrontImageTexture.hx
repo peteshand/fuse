@@ -121,7 +121,7 @@ class FrontImageTexture extends FrontBaseTexture
 
 	function get_errorBitmap():BitmapData
 	{
-		if (errorBitmap == null) errorBitmap = new BitmapData(32, 32, true, 0x99FF0000);
+		if (errorBitmap == null) errorBitmap = new BitmapData(32, 32, true, 0x990000FF);
 		return errorBitmap;
 	}
 }

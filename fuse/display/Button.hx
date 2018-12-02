@@ -21,7 +21,7 @@ class Button extends Sprite
         normalImage = new Image(normalTexture);
         addChild(normalImage);
 
-        hitArea = new Quad(50, 50, 0xFFFF0000);
+        hitArea = new Quad(50, 50, 0xFFFFFFFF);
         //hitArea.touchable = true;
 
         if (overTexture != null) {

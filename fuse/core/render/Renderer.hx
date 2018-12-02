@@ -94,7 +94,6 @@ class Renderer
 	public function begin(clear:Bool = true, clearColor:Color):Void
 	{
 		if (!sharedContext) {
-			clearColor.red = 0xFF;
 			// Doesn't execute if context3D.clear is being handled externally
 			context3D.clear(clearColor.red / 255, clearColor.green / 255, clearColor.blue / 255, clearColor.alpha / 255);
 		}

@@ -54,7 +54,7 @@ class AtlasBatch extends BaseBatch implements IBatch
 		if (partition.lastFramePairPartition == null) {
 			textureData = partition.coreTexture.textureData;
 			partition.coreTexture.rotate = partition.rotate;
-
+			
 			left = textureData.x;
 			top = textureData.y;
 			right = textureData.width / textureData.p2Width;

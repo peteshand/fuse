@@ -20,7 +20,7 @@ class CoreCacheLayerImage extends CoreImage
 		displayData.scaleX = 1;
 		displayData.scaleY = 1;
 		displayData.alpha = 1;
-		displayData.color = 0x33FF0000;
+		displayData.color = 0x330000FF;
 		//displayData.isStatic = 0;
 		updatePosition = updateTexture = true;
 		displayData.textureId = this.textureId = textureId;
