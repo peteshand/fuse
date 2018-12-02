@@ -13,7 +13,7 @@ class CoreMask
         this.image = image;
         this.mask = mask;
 
-        //mask.addMaskOf(display2);
+        mask.addMaskOf(image);
     }
 
     public function dispose()
@@ -26,8 +26,6 @@ class CoreMask
 
     public function updateUVs()
     {
-        //trace(mask.quadData);
-        //trace(image.quadData);
         var offsetBottomLeftX:Float = calcOffsetX(mask.bottomLeftX, image.bottomLeftX);
         var offsetBottomLeftY:Float = calcOffsetY(image.bottomLeftY, mask.bottomLeftY);
 
@@ -43,10 +41,6 @@ class CoreMask
         var imageRotated:Bool = image.coreTexture.rotate;
         var maskRotated:Bool = mask.coreTexture.rotate;
         var rotated:Bool = imageRotated || maskRotated;
-
-        trace("imageRotated = " + imageRotated);
-        trace("maskRotated = " + maskRotated);
-        trace("rotated = " + rotated);
         
         var rot:Float = 0;
         if (maskRotated){
@@ -65,48 +59,16 @@ class CoreMask
         var offsetBottomRightX2:Float = (offsetBottomRightX * -Math.cos(rot)) + (offsetBottomRightY * Math.sin(rot));
         var offsetBottomRightY2:Float =  (offsetBottomRightX * Math.sin(rot)) + (offsetBottomRightY * Math.cos(rot));
         
-        //trace([mask.coreTexture.uvLeft - offsetBottomLeftX2,	mask.coreTexture.uvBottom - offsetBottomLeftY2]);
-        //trace([mask.coreTexture.uvLeft - offsetTopLeftX2,	mask.coreTexture.uvTop - offsetTopLeftY2]);
-        //trace([mask.coreTexture.uvRight - offsetTopRightX2, mask.coreTexture.uvTop - offsetTopRightY2]);
-        //trace([mask.coreTexture.uvRight - offsetBottomRightX2, mask.coreTexture.uvBottom - offsetBottomRightY2]);
         
-        /*if (image.coreTexture.rotate) {
-            vertexData.setMaskUV(0, mask.coreTexture.uvLeft - offsetBottomLeftX2,	mask.coreTexture.uvTop - offsetBottomLeftY2);	// bottom left
-            vertexData.setMaskUV(1, mask.coreTexture.uvRight - offsetTopLeftX2,	mask.coreTexture.uvTop - offsetTopLeftY2);	// top left
-            vertexData.setMaskUV(2, mask.coreTexture.uvRight - offsetTopRightX2, mask.coreTexture.uvBottom - offsetTopRightY2);	// top right
-            vertexData.setMaskUV(3, mask.coreTexture.uvLeft - offsetBottomRightX2, mask.coreTexture.uvBottom - offsetBottomRightY2);	// bottom right
-        } else {*/
-            //vertexData.setMaskUV(0, mask.coreTexture.uvLeft - offsetBottomLeftX2,	mask.coreTexture.uvBottom - offsetBottomLeftY2);	// bottom left
-            //vertexData.setMaskUV(1, mask.coreTexture.uvLeft - offsetTopLeftX2,	mask.coreTexture.uvTop - offsetTopLeftY2);	// top left
-            //vertexData.setMaskUV(2, mask.coreTexture.uvRight - offsetTopRightX2, mask.coreTexture.uvTop - offsetTopRightY2);	// top right
-            //vertexData.setMaskUV(3, mask.coreTexture.uvRight - offsetBottomRightX2, mask.coreTexture.uvBottom - offsetBottomRightY2);	// bottom right
-        //}
+        u[0] = mask.coreTexture.uvLeft - offsetBottomLeftX2;
+        u[1] = mask.coreTexture.uvLeft - offsetTopLeftX2;
+        u[2] = mask.coreTexture.uvRight - offsetTopRightX2;
+        u[3] = mask.coreTexture.uvRight - offsetBottomRightX2;
 
-        /*if (rotated){
-        	u[1] = mask.coreTexture.uvLeft - offsetBottomLeftX2;
-            u[2] = mask.coreTexture.uvLeft - offsetTopLeftX2;
-            u[3] = mask.coreTexture.uvRight - offsetTopRightX2;
-            u[0] = mask.coreTexture.uvRight - offsetBottomRightX2;
-
-            v[1] = mask.coreTexture.uvBottom - offsetBottomLeftY2;
-            v[2] = mask.coreTexture.uvTop - offsetTopLeftY2;
-            v[3] = mask.coreTexture.uvTop - offsetTopRightY2;
-            v[0] = mask.coreTexture.uvBottom - offsetBottomRightY2;
-        } else {*/
-            u[0] = mask.coreTexture.uvLeft - offsetBottomLeftX2;
-            u[1] = mask.coreTexture.uvLeft - offsetTopLeftX2;
-            u[2] = mask.coreTexture.uvRight - offsetTopRightX2;
-            u[3] = mask.coreTexture.uvRight - offsetBottomRightX2;
-
-            v[0] = mask.coreTexture.uvBottom - offsetBottomLeftY2;
-            v[1] = mask.coreTexture.uvTop - offsetTopLeftY2;
-            v[2] = mask.coreTexture.uvTop - offsetTopRightY2;
-            v[3] = mask.coreTexture.uvBottom - offsetBottomRightY2;
-        //}
-
-        
-        
-        
+        v[0] = mask.coreTexture.uvBottom - offsetBottomLeftY2;
+        v[1] = mask.coreTexture.uvTop - offsetTopLeftY2;
+        v[2] = mask.coreTexture.uvTop - offsetTopRightY2;
+        v[3] = mask.coreTexture.uvBottom - offsetBottomRightY2;
     }
 
     function calcOffsetX(maskPosX:Float, posX:Float) 

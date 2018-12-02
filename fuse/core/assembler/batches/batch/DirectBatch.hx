@@ -17,12 +17,6 @@ import fuse.utils.GcoArray;
 class DirectBatch extends BaseBatch implements IBatch
 {
 	var uvItem:UVItem;
-	var uvMaskItem:UVItem;
-	//var uvLeft:Float;
-	//var uvTop:Float;
-	//var uvRight:Float;
-	//var uvBottom:Float;
-
 	var renderIndices = new GcoArray<CoreImage>();
 	var numItems:Int;
 	public static var RENDER_INDEX:Int;
@@ -31,17 +25,6 @@ class DirectBatch extends BaseBatch implements IBatch
 	{
 		super();
 		uvItem = {
-			uvLeft:0,
-			uvTop:0,
-			uvRight:0,
-			uvBottom:0,
-
-			offsetU:0,
-			offsetV:0,
-			scaleU:1,
-			scaleV:1
-		}
-		uvMaskItem = {
 			uvLeft:0,
 			uvTop:0,
 			uvRight:0,
@@ -176,24 +159,8 @@ class DirectBatch extends BaseBatch implements IBatch
 			
 		}
 		
-		if (FShader.ENABLE_MASKS && mask != null && false) {
-			
-			uvMaskItem.offsetU = mask.mask.displayData.offsetU;
-			uvMaskItem.offsetV = mask.mask.displayData.offsetV;
-			uvMaskItem.scaleU = mask.mask.displayData.scaleU;
-			uvMaskItem.scaleV = mask.mask.displayData.scaleV;
-			
-			
-			mask.mask.coreTexture.getUVData(uvMaskItem);
-
-			vertexData.setMaskUV(0, uvMaskItem.uvLeft,	uvMaskItem.uvBottom);	// bottom left
-			vertexData.setMaskUV(1, uvMaskItem.uvLeft,	uvMaskItem.uvTop);		// top left
-			vertexData.setMaskUV(2, uvMaskItem.uvRight,	uvMaskItem.uvTop);		// top right
-			vertexData.setMaskUV(3, uvMaskItem.uvRight,	uvMaskItem.uvBottom);	// bottom right
-		}
-
-		// OLD
-		if (FShader.ENABLE_MASKS && mask != null && true) {
+		
+		if (FShader.ENABLE_MASKS && mask != null) {
 			
 			mask.updateUVs();
 
@@ -218,13 +185,6 @@ class DirectBatch extends BaseBatch implements IBatch
 				vertexData.setRect(3,	image.quadData.bottomRightX,	image.quadData.bottomRightY, image.displayData.width, image.displayData.height, image.absoluteRotation());
 			}
 		}
-		//else {
-			//trace("resize");	
-			//vertexData.setXY(0, ResizeX(image.bottomLeft.x),	ResizeY(image.bottomLeft.y));
-			//vertexData.setXY(1, ResizeX(image.topLeft.x),	ResizeY(image.topLeft.y));
-			//vertexData.setXY(2, ResizeX(image.topRight.x),	ResizeY(image.topRight.y));
-			//vertexData.setXY(3, ResizeX(image.bottomRight.x),ResizeY(image.bottomRight.y));
-		//}
 		
 		if (updateColour){
 			vertexData.setColor(0, image.displayData.colorBL);
