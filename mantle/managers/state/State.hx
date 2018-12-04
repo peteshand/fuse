@@ -194,6 +194,7 @@ class State extends Notifier<Bool> implements IState
 		for (i in 0...sceneConditions.length) {
 			s += sceneConditions[i] + "\n";
 		}
+		s += "conditionPolicy = " + conditionPolicy;
 		return s;
 	}
 	
