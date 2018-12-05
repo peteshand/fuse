@@ -201,7 +201,7 @@ class App
 			if (stage == null || stage.window == null) return;
 			appId = stage.window.application.meta.get("packageName");
 			appFilename = stage.window.application.meta.get("name");
-			version = stage.window.application.meta.get("build");
+			version = stage.application.meta.get("version");
 		#end
 	}
 }
