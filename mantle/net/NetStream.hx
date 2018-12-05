@@ -30,7 +30,6 @@ class NetStream extends OpenFlNetStream
 	public function playLocal(url:String):Void
 	{
 		this.url = url;
-		this.close();
 		if (url == null) return;
 		
 		
@@ -44,10 +43,36 @@ class NetStream extends OpenFlNetStream
 		}
 	}
 
-	override public function close()
-	{
+	#if html5
+	override public function play (url:String, ?_, ?_, ?_, ?_, ?_):Void {
+		
+		if (__video == null) return;
+		
+		try {
+			// unlink MediaSource from video tag
+			__video.src = url;
+			__video.addEventListener('canplay', beginPlay);
+			
+		} catch(err:Dynamic) {
+			trace("Error playing: " + url);
+		}
+	}
+
+	function beginPlay():Void {
+		__video.play ();
+	}
+
+	override public function close():Void {
+		if (__video != null) __video.removeEventListener('canplay', beginPlay);
 		super.close();
 	}
+
+	override public function pause():Void {
+		if (__video != null) __video.removeEventListener('canplay', beginPlay);
+		super.pause();
+	}
+
+	#end
 
 	public static function localURL(url:String):String
 	{
