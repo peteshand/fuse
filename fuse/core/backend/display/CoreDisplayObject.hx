@@ -63,6 +63,9 @@ class CoreDisplayObject
 	public var touchable:Null<Bool> = null;
 	public var clickThrough:Null<Bool> = null;
 	
+	public var absoluteX:Float = 0;
+	public var absoluteY:Float = 0;
+	
 	public function new() 
 	{
 		this.displayType = DisplayType.DISPLAY_OBJECT;

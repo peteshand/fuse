@@ -109,6 +109,11 @@ class WorkerTransformHelper
 		
 		//trace(localTransform);
 		Graphics.transformation.multmat(localTransform);
+		//trace(Graphics.transformation);
+
+		coreDisplay.absoluteX = Graphics.transformation._20;
+		coreDisplay.absoluteY = Graphics.transformation._21;
+		
 		// Move into pushTransform function
 		//if (push) {
 			////Graphics.pushTransformation(Graphics.transformation.multmat(localTransform));
