@@ -35,7 +35,8 @@ class Fuse extends EventDispatcher
 	public static var skipUnchangedFrames:Bool = true;
 	
 	public function new(rootClass:Class<Sprite>, fuseConfig:FuseConfig=null, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
-	{	
+	{
+		trace("FUSE");
 		MessageManager.init();
 		if (fuseConfig == null) fuseConfig = { };
 		
