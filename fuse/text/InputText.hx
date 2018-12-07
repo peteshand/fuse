@@ -131,18 +131,21 @@ class InputText extends TextField
         var smallestDis:Float = Math.POSITIVE_INFINITY;
         for (i in 0...text.length){
             var charBounds = getCharBoundaries(i);
-            var disX:Float = p.x - charBounds.x;
-            var disY:Float = p.y - charBounds.y;
-            var dis:Float = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2));
-            if (smallestDis > dis){
-                smallestDis = dis;
-                _charIndex = i;
-            }
-            if (i == text.length-1) {
-                if (disX > charBounds.width / 2){
-                    _charIndex++;
+            if (charBounds != null){
+                var disX:Float = p.x - charBounds.x;
+                var disY:Float = p.y - charBounds.y;
+                var dis:Float = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2));
+                if (smallestDis > dis){
+                    smallestDis = dis;
+                    _charIndex = i;
+                }
+                if (i == text.length-1) {
+                    if (disX > charBounds.width / 2){
+                        _charIndex++;
+                    }
                 }
             }
+            
         }
         charIndex.value = _charIndex;
         Delay.nextFrame(updateOnNextFrame);
