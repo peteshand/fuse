@@ -110,9 +110,12 @@ class WorkerTransformHelper
 		//trace(localTransform);
 		Graphics.transformation.multmat(localTransform);
 		//trace(Graphics.transformation);
+		//trace(localTransform);
 
-		coreDisplay.absoluteX = Graphics.transformation._20;
-		coreDisplay.absoluteY = Graphics.transformation._21;
+		coreDisplay.absoluteX = localTransform._20;
+		coreDisplay.absoluteY = localTransform._21;
+		coreDisplay.uvPivot.x = coreDisplay.displayData.pivotX / coreDisplay.displayData.width / coreDisplay.displayData.scaleX;
+		coreDisplay.uvPivot.y = coreDisplay.displayData.pivotY / coreDisplay.displayData.height / coreDisplay.displayData.scaleY;
 		
 		// Move into pushTransform function
 		//if (push) {

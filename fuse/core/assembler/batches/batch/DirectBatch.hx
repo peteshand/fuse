@@ -109,7 +109,8 @@ class DirectBatch extends BaseBatch implements IBatch
 		var updateMask:Bool		= vertexPositionHasMoved || image.maskChanged;
 		var updateColour:Bool	= vertexPositionHasMoved || image.updateColour;
 		var updateAlpha:Bool	= vertexPositionHasMoved || image.updateAlpha;
-		
+		if (mask != null) updateAlpha = updateAlpha || mask.mask.updateAlpha;
+
 		//if (VertexData.OBJECT_POSITION < 10){
 			//trace([
 				//"\n updateTextureUVs = " + updateTextureUVs,
@@ -164,10 +165,10 @@ class DirectBatch extends BaseBatch implements IBatch
 			
 			mask.updateUVs();
 
-			vertexData.setMaskUV(0, mask.u[0], mask.v[0]);	// bottom left
-			vertexData.setMaskUV(1, mask.u[1], mask.v[1]);	// top left
-			vertexData.setMaskUV(2, mask.u[2], mask.v[2]);	// top right
-			vertexData.setMaskUV(3, mask.u[3], mask.v[3]);	// bottom right
+			vertexData.setMaskUV(0, mask.uv[0].x, mask.uv[0].y);	// bottom left
+			vertexData.setMaskUV(1, mask.uv[1].x, mask.uv[1].y);	// top left
+			vertexData.setMaskUV(2, mask.uv[2].x, mask.uv[2].y);	// top right
+			vertexData.setMaskUV(3, mask.uv[3].x, mask.uv[3].y);	// bottom right
 		}
 		
 		if (updatePosition) {
@@ -193,7 +194,9 @@ class DirectBatch extends BaseBatch implements IBatch
 			vertexData.setColor(3, image.displayData.colorBR);
 		}
 		if (updateAlpha){
-			vertexData.setAlpha(image.alpha);
+			var alpha:Float = image.alpha;
+			if (mask != null) alpha *= mask.alpha;
+			vertexData.setAlpha(alpha);
 		}
 		
 		image.setUpdates(false);

@@ -12,7 +12,7 @@ import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.utils.Pool;
 import fuse.display.geometry.Bounds;
 import fuse.display.geometry.QuadData;
-
+import fuse.geom.Point;
 /**
  * ...
  * @author P.J.Shand
@@ -65,7 +65,8 @@ class CoreDisplayObject
 	
 	public var absoluteX:Float = 0;
 	public var absoluteY:Float = 0;
-	
+	public var uvPivot = new Point();
+
 	public function new() 
 	{
 		this.displayType = DisplayType.DISPLAY_OBJECT;

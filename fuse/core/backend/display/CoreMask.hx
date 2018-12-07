@@ -6,11 +6,9 @@ class CoreMask
 {
     public var image:CoreImage;
     public var mask:CoreImage;
-    public var u:Array<Float> = [];
-    public var v:Array<Float> = [];
-    public var pu:Array<Float> = [];
-    public var pv:Array<Float> = [];
-    
+    public var uv:Array<Point> = [];
+    public var alpha(get, null):Float;
+
     var tempBounds = new TempBounds();
 
     public function new(image:CoreImage, mask:CoreImage)
@@ -18,138 +16,78 @@ class CoreMask
         this.image = image;
         this.mask = mask;
 
-        //mask.addMaskOf(image);
+        for (i in 0...4){
+            uv.push(new Point());
+        }
+        mask.addMaskOf(image);
     }
 
     public function dispose()
     {
         if (mask != null) mask.removeMaskOf(image);
-
+        uv = null;
         image = null;
         mask = null;
     }
 
     public function updateUVs()
     {
-        //var imageRotated:Bool = image.coreTexture.rotate;
-        var maskRotated:Bool = mask.coreTexture.rotate;
-        //var rotated:Bool = imageRotated || maskRotated;
+        uv[0].x = mask.coreTexture.uvLeft;
+        uv[1].x = mask.coreTexture.uvLeft;
+        uv[2].x = mask.coreTexture.uvRight;
+        uv[3].x = mask.coreTexture.uvRight;
+
+        uv[0].y = mask.coreTexture.uvBottom;
+        uv[1].y = mask.coreTexture.uvTop;
+        uv[2].y = mask.coreTexture.uvTop ;
+        uv[3].y = mask.coreTexture.uvBottom;
+
+        var absoluteRotation = mask.absoluteRotation();
+        var rotation = mask.displayData.rotation;
+        var scaleX = mask.displayData.scaleX / image.displayData.scaleX;
+        var scaleY = mask.displayData.scaleX / image.displayData.scaleY;
         
-        var rot:Float = 0;
-        if (maskRotated){
-        	rot = (mask.displayData.rotation + 90) / 180 * Math.PI;
-        } else {
-            rot = mask.displayData.rotation / 180 * Math.PI;
-        }
-        //trace([mask.bottomLeftX, image.bottomLeftY]);
+        var offsetX:Float = (mask.absoluteX - image.absoluteX) / image.displayData.width / image.displayData.scaleX;
+        var offsetY:Float = (mask.absoluteY - image.absoluteY) / image.displayData.height / image.displayData.scaleY;
+
+        rotate(uv[0], mask.uvPivot.x, mask.uvPivot.y, rotation, scaleX, scaleY, offsetX, offsetY, absoluteRotation);
+        rotate(uv[1], mask.uvPivot.x, mask.uvPivot.y, rotation, scaleX, scaleY, offsetX, offsetY, absoluteRotation);
+        rotate(uv[2], mask.uvPivot.x, mask.uvPivot.y, rotation, scaleX, scaleY, offsetX, offsetY, absoluteRotation);
+        rotate(uv[3], mask.uvPivot.x, mask.uvPivot.y, rotation, scaleX, scaleY, offsetX, offsetY, absoluteRotation);
         
-        tempBounds.bottomLeft.x = mask.bottomLeftX;
-        tempBounds.bottomLeft.y = mask.bottomLeftY;
-        tempBounds.topLeft.x = mask.topLeftX;
-        tempBounds.topLeft.y = mask.topLeftY;
-        tempBounds.topRight.x = mask.topRightX;
-        tempBounds.topRight.y = mask.topRightY;
-        tempBounds.bottomRight.x = mask.bottomRightX;
-        tempBounds.bottomRight.y = mask.bottomRightY;
-
-        //trace("removeRotation");
-        removeRotation(tempBounds.bottomLeft);
-        removeRotation(tempBounds.topLeft);
-        removeRotation(tempBounds.topRight);
-        removeRotation(tempBounds.bottomRight);
-        
-        var offsetBottomLeftX:Float = calcOffsetX(tempBounds.bottomLeft.x, image.bottomLeftX, rot);
-        var offsetBottomLeftY:Float = calcOffsetY(tempBounds.bottomLeft.y, image.bottomLeftY, rot);
-
-        var offsetTopLeftX:Float = calcOffsetX(tempBounds.topLeft.x, image.topLeftX, rot);
-        var offsetTopLeftY:Float = calcOffsetY(tempBounds.topLeft.y, image.topLeftY, rot);
-
-        var offsetTopRightX:Float = calcOffsetX(tempBounds.topRight.x, image.topRightX, rot);
-        var offsetTopRightY:Float = calcOffsetY(tempBounds.topRight.y, image.topRightY, rot);
-
-        var offsetBottomRightX:Float = calcOffsetX(tempBounds.bottomRight.x, image.bottomRightX, rot);
-        var offsetBottomRightY:Float = calcOffsetY(tempBounds.bottomRight.y, image.bottomRightY, rot);
-        
-        trace('------');
-        /*trace([offsetBottomLeftX, offsetBottomLeftX]);
-        trace([offsetTopLeftX, offsetTopLeftY]);
-        trace([offsetTopRightX, offsetTopRightY]);
-        trace([offsetBottomRightX, offsetBottomRightY]);*/
-        
-        u[0] = mask.coreTexture.uvLeft + offsetBottomLeftX;
-        u[1] = mask.coreTexture.uvLeft + offsetTopLeftX;
-        u[2] = mask.coreTexture.uvRight + offsetTopRightX;
-        u[3] = mask.coreTexture.uvRight + offsetBottomRightX;
-
-        v[0] = mask.coreTexture.uvBottom - offsetBottomLeftY;
-        v[1] = mask.coreTexture.uvTop - offsetTopLeftY;
-        v[2] = mask.coreTexture.uvTop - offsetTopRightY;
-        v[3] = mask.coreTexture.uvBottom - offsetBottomRightY;
-
-        /*for (i in 0...u.length){
-            //pu[i] = u[i];
-            //pv[i] = v[i];
-
-            trace(u[i], v[i]);
-
-            pu[i] = vertexToPixelSpaceX(u[i]);
-            pv[i] = vertexToPixelSpaceY(v[i]);
-
-            trace(pu[i], pv[i]);
-            
-            pu[i] = pixelToVertexSpaceX(pu[i]);
-            pv[i] = pixelToVertexSpaceY(pv[i]);
-            
-
-            u[i] = pu[i];
-            v[i] = pv[i];
-        }*/
     }
 
-    inline function calcOffsetX(maskPosX:Float, posX:Float, rotation:Float) 
-	{
-        //var base:Float = (posX - maskPosX) * 0.5;
-        //var width:Float = Fuse.current.stage.stageWidth / mask.coreTexture.textureData.activeData.p2Width / (mask.displayData.width / mask.coreTexture.textureData.width);// / mask.displayData.scaleX;
-        //var height:Float = Fuse.current.stage.stageHeight / mask.coreTexture.textureData.activeData.p2Height / (mask.displayData.height / mask.coreTexture.textureData.height);// / mask.displayData.scaleY;
-        //return (base * Math.cos(rotation / 180 * Math.PI) * width) + (base * Math.sin(rotation / 180 * Math.PI) * height); 
+    function rotate(p:Point, pivotX:Float, pivotY:Float, rotation:Float, scaleX:Float, scaleY:Float, offsetX:Float, offsetY:Float, absoluteRotation:Float)
+    {
+        var _x:Float = p.x - pivotX;
+        var _y:Float = p.y - pivotY;
+        var h:Float = Math.sqrt(Math.pow(_x, 2) + Math.pow(_y, 2));
+        var currentRot:Float = Math.atan2(_y, _x) * 180 / Math.PI;
+        var newRotation:Float = currentRot - rotation;
+        p.x = pivotX + (Math.cos(newRotation / 180 * Math.PI) * h / scaleX);
+        p.y = pivotY + (Math.sin(newRotation / 180 * Math.PI) * h / scaleY);
 
-        var difX:Float = posX - maskPosX;
-        return difX * 0.5 * Fuse.current.stage.stageWidth / mask.coreTexture.textureData.activeData.p2Width / (mask.displayData.width / mask.coreTexture.textureData.width);// / mask.displayData.scaleX;
-	}
-	
-	inline function calcOffsetY(maskPosY:Float, posY:Float, rotation:Float) 
-	{
-		//var base:Float = (posY - maskPosY) * 0.5;
-        //var width:Float = Fuse.current.stage.stageWidth / mask.coreTexture.textureData.activeData.p2Width / (mask.displayData.width / mask.coreTexture.textureData.width);// / mask.displayData.scaleX;
-        //var height:Float = Fuse.current.stage.stageHeight / mask.coreTexture.textureData.activeData.p2Height / (mask.displayData.height / mask.coreTexture.textureData.height);// / mask.displayData.scaleY;
-        //return (base * Math.sin(rotation / 180 * Math.PI) * width) + (base * Math.cos(rotation / 180 * Math.PI) * height); 
-        
-        var difY:Float = posY - maskPosY;
-        return difY * 0.5 * Fuse.current.stage.stageHeight / mask.coreTexture.textureData.activeData.p2Height / (mask.displayData.height / mask.coreTexture.textureData.height);// / mask.displayData.scaleY;
-	}
+        p.x -= Math.cos(absoluteRotation / 180 * Math.PI) * offsetX / scaleX;
+        p.x -= Math.sin(absoluteRotation / 180 * Math.PI) * offsetY / scaleY;
 
+        p.y -= Math.cos(absoluteRotation / 180 * Math.PI) * offsetY / scaleY;
+        p.y += Math.sin(absoluteRotation / 180 * Math.PI) * offsetX / scaleX;
+    }
+    
     function removeRotation(p:Point)
     {
-        var r:Float = Fuse.current.stage.stageWidth / Fuse.current.stage.stageHeight;
+        var r:Float = Core.WINDOW_WIDTH / Core.WINDOW_HEIGHT;
         
         vertexToPixelSpace(p);
         
-        //trace(p);
-        //trace([mask.absoluteX, mask.absoluteY]);
-
         p.x -= mask.absoluteX;
         p.y -= mask.absoluteY;
         
-        //trace(p);
         var h:Float = Math.sqrt(Math.pow(p.x, 2) + Math.pow(p.y, 2));
-        //trace(h);
         var currentRot:Float = Math.atan2(p.y, p.x) * 180 / Math.PI;
-        //trace("currentRot = " + currentRot);
         var absoluteRotation = mask.absoluteRotation();
-        //trace("absoluteRotation = " + absoluteRotation);
-
         var newRotation:Float = currentRot - absoluteRotation;
-
+        
         p.x = Math.cos(newRotation / 180 * Math.PI) * h;
         p.y = Math.sin(newRotation / 180 * Math.PI) * h;
         
@@ -157,45 +95,6 @@ class CoreMask
         p.y += mask.absoluteY;
 
         pixelToVertexSpace(p);
-        
-        
-        /*
-        //trace("r = " + r);
-        trace([p.x + 1, p.y - 1]);
-        var h:Float = Math.sqrt(Math.pow(p.x + 1, 2) + Math.pow(p.y - 1, 2));
-        trace("h = " + h);
-
-        
-
-        var h1:Float = Math.sin(absoluteRotation / 180 * Math.PI) * r * h;
-        var h2:Float = Math.cos(absoluteRotation / 180 * Math.PI) * 1 * h;
-        trace("h1 = " + h1);
-        trace("h2 = " + h2);
-
-        h = h1 + h2;
-
-        trace("h = " + h);
-        //trace(h * r);
-        
-        var currentRot:Float = Math.atan2(p.y - 1, p.x + 1) * 180 / Math.PI;
-        trace("currentRot = " + currentRot);
-        var offsetX:Float = Math.cos(currentRot / 180 * Math.PI) * h;
-        var offsetY:Float = Math.sin(currentRot / 180 * Math.PI) * h;
-        trace([offsetX, offsetY]);
-
-        
-        var offsetX2:Float = Math.cos((currentRot - absoluteRotation) / 180 * Math.PI) * h;
-        var offsetY2:Float = Math.sin((currentRot - absoluteRotation) / 180 * Math.PI) * h;
-        trace([offsetX2, offsetY2]);
-        
-        p.x = (offsetX2 - 1) * 1;
-        p.y = (offsetY2 + 1) * 1;
-        trace([p.x + 1, p.y - 1]);
-        trace('-----');
-
-        // [0,-0.5805128205128205]
-        // h = 0.5805128205128205
-        */
     }
 
     function vertexToPixelSpace(p:Point)
@@ -204,14 +103,14 @@ class CoreMask
         p.y = vertexToPixelSpaceY(p.y);
     }
 
-    function vertexToPixelSpaceX(v:Float)
+    inline function vertexToPixelSpaceX(v:Float)
     {
-        return ((v + 1) * 0.5) * Fuse.current.stage.stageWidth;
+        return ((v + 1) * 0.5) * Core.WINDOW_WIDTH;
     }
 
-    function vertexToPixelSpaceY(v:Float)
+    inline function vertexToPixelSpaceY(v:Float)
     {
-        return ((v - 1) * -0.5) * Fuse.current.stage.stageHeight;
+        return ((v - 1) * -0.5) * Core.WINDOW_HEIGHT;
     }
 
 
@@ -221,14 +120,19 @@ class CoreMask
         p.y = pixelToVertexSpaceY(p.y);
     }
 
-    function pixelToVertexSpaceX(v:Float)
+    inline function pixelToVertexSpaceX(v:Float)
     {
-        return (v / Fuse.current.stage.stageWidth / 0.5) - 1;
+        return (v / Core.WINDOW_WIDTH / 0.5) - 1;
     }
 
-    function pixelToVertexSpaceY(v:Float)
+    inline function pixelToVertexSpaceY(v:Float)
     {
-        return (v / Fuse.current.stage.stageHeight / -0.5) + 1;
+        return (v / Core.WINDOW_HEIGHT / -0.5) + 1;
+    }
+
+    function get_alpha():Float
+    {
+        return mask.alpha;
     }
 
 }
