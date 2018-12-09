@@ -267,8 +267,8 @@ class File extends FileReference
 		}
 	}
 
-	function copyFileSync( source:File, target:File ) {
-
+	function copyFileSync( source:File, target:File )
+	{
 		var targetFile:File = target;
 
 		if ( target.exists ) {
@@ -277,20 +277,19 @@ class File extends FileReference
 			}
 		}
 
-		var ba:ByteArray = new ByteArray();
-
 		var fileStream1:FileStream = new FileStream();
 		fileStream1.open(source, FileMode.READ);
-		fileStream1.readBytes(ba, 0, Math.floor(source.size));
+		var value:String = fileStream1.readUTFBytes(Math.floor(source.size));
 		fileStream1.close();
 
 		var fileStream:FileStream = new FileStream();
 		fileStream.open(targetFile, FileMode.WRITE);
-		fileStream.writeBytes(ba, 0, ba.length);
+		fileStream.writeUTFBytes(value);
 		fileStream.close();
 	}
 
-	function copyFolderRecursiveSync( source:File, target:File ) {
+	function copyFolderRecursiveSync( source:File, target:File )
+	{
 		var files:Array<File> = [];
 
 		if ( !target.exists ) {
