@@ -103,7 +103,7 @@ class InputAssemblerObject
 					displayTouch.index = touch.index;
 					displayTouch.x = touch.x;
 					displayTouch.y = touch.y;
-					InputAssembler.collisions.push(displayTouch);
+					addTouch(displayTouch);
 					//trace("OVER");
 				}
 			} else {
@@ -113,7 +113,7 @@ class InputAssemblerObject
 					displayTouch.index = touch.index;
 					displayTouch.x = touch.x;
 					displayTouch.y = touch.y;
-					InputAssembler.collisions.push(displayTouch);
+					addTouch(displayTouch);
 					//trace("OUT");
 					
 				}
@@ -122,10 +122,18 @@ class InputAssemblerObject
 		}
 
 		var displayTouch:Touch = getDisplayTouch(touchDisplay, touch);
-		InputAssembler.collisions.push(displayTouch);
+		addTouch(displayTouch);
+		
 
 		if (touchDisplay.clickThrough == true) return false;
 		return true;
+	}
+
+	inline function addTouch(touch:Touch)
+	{
+		if (InputAssembler.collisions.indexOf(touch) == -1){
+			InputAssembler.collisions.push(touch);
+		}
 	}
 
 	function getDisplayTouch(display:CoreDisplayObject, touch:Touch):Touch
