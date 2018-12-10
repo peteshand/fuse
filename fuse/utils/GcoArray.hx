@@ -5,7 +5,7 @@ import haxe.ds.ObjectMap;
  * ...
  * @author P.J.Shand
  */
-@:forward(sort, splice, insert, dispose)
+@:forward(sort, splice, insert, dispose, indexOf)
 
 abstract GcoArray<T>(GcoArrayBase<T>)
 {
@@ -106,6 +106,12 @@ class GcoArrayBase<T>
 	{
 		base.insert(index, value);
 		length++;
+	}
+
+	public function indexOf(x:T, ?fromIndex:Int ) : Int
+	{
+		for (i in 0...length) if (base[i] == x) return i;
+		return -1;
 	}
 	
 	public function toString():String
