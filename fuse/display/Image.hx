@@ -6,6 +6,7 @@ import fuse.texture.ITexture;
 import fuse.display.DisplayObject;
 import fuse.core.front.texture.Textures;
 import fuse.core.backend.displaylist.DisplayType;
+import fuse.utils.Orientation;
 
 /**
  * ...
@@ -16,7 +17,7 @@ class Image extends DisplayObject
 {
 	@:isVar public var texture(default, set):ITexture;
 	@:isVar public var blendMode(default, set):BlendMode;
-	@:isVar public var bounds(get, never):Rectangle;
+	@:isVar public var bounds(get, never):Rectangle = new Rectangle();
 	@:isVar public var offsetU(default, set):Float;
 	@:isVar public var offsetV(default, set):Float;
 	@:isVar public var scaleU(default, set):Float;
@@ -40,38 +41,64 @@ class Image extends DisplayObject
 	{
 		if (Math.isNaN(displayData.bottomLeftX)) return null;
 
-		var _bounds:Rectangle = new Rectangle(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 0, 0);
-		var _bounds2:Rectangle = new Rectangle(Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY, 0, 0);
+		var low:Rectangle = new Rectangle(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 0, 0);
+		var high:Rectangle = new Rectangle(Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY, 0, 0);
+		
+		if (low.x > displayData.bottomLeftX) low.x = displayData.bottomLeftX;
+		if (low.x > displayData.bottomRightX) low.x = displayData.bottomRightX;
+		if (low.x > displayData.topLeftX) low.x = displayData.topLeftX;
+		if (low.x > displayData.topRightX) low.x = displayData.topRightX;
+		
+		if (high.x < displayData.bottomLeftX) high.x = displayData.bottomLeftX;
+		if (high.x < displayData.bottomRightX) high.x = displayData.bottomRightX;
+		if (high.x < displayData.topLeftX) high.x = displayData.topLeftX;
+		if (high.x < displayData.topRightX) high.x = displayData.topRightX;
+		
+		if (low.y > displayData.bottomLeftY) low.y = displayData.bottomLeftY;
+		if (low.y > displayData.bottomRightY) low.y = displayData.bottomRightY;
+		if (low.y > displayData.topLeftY) low.y = displayData.topLeftY;
+		if (low.y > displayData.topRightY) low.y = displayData.topRightY;
+		
+		if (high.y < displayData.bottomLeftY) high.y = displayData.bottomLeftY;
+		if (high.y < displayData.bottomRightY) high.y = displayData.bottomRightY;
+		if (high.y < displayData.topLeftY) high.y = displayData.topLeftY;
+		if (high.y < displayData.topRightY) high.y = displayData.topRightY;
+		
+		bounds.x = low.x;
+		bounds.y = high.y;
+		bounds.width = high.x - low.x;
+		bounds.height = high.y - low.y;
 
-		if (_bounds.x > displayData.bottomLeftX) _bounds.x = displayData.bottomLeftX;
-		if (_bounds.x > displayData.bottomRightX) _bounds.x = displayData.bottomRightX;
-		if (_bounds.x > displayData.topLeftX) _bounds.x = displayData.topLeftX;
-		if (_bounds.x > displayData.topRightX) _bounds.x = displayData.topRightX;
+		var _x:Float = (bounds.x + 1) * stage.stageWidth / 2;
+		var _y:Float = (bounds.y - 1) * stage.stageHeight / -2;
+		var _width:Float = bounds.width * stage.stageWidth / 2;
+		var _height:Float = bounds.height * stage.stageHeight / 2;
 		
-		if (_bounds2.x < displayData.bottomLeftX) _bounds2.x = displayData.bottomLeftX;
-		if (_bounds2.x < displayData.bottomRightX) _bounds2.x = displayData.bottomRightX;
-		if (_bounds2.x < displayData.topLeftX) _bounds2.x = displayData.topLeftX;
-		if (_bounds2.x < displayData.topRightX) _bounds2.x = displayData.topRightX;
-		
-		if (_bounds.y > displayData.bottomLeftY) _bounds.y = displayData.bottomLeftY;
-		if (_bounds.y > displayData.bottomRightY) _bounds.y = displayData.bottomRightY;
-		if (_bounds.y > displayData.topLeftY) _bounds.y = displayData.topLeftY;
-		if (_bounds.y > displayData.topRightY) _bounds.y = displayData.topRightY;
-		
-		if (_bounds2.y < displayData.bottomLeftY) _bounds2.y = displayData.bottomLeftY;
-		if (_bounds2.y < displayData.bottomRightY) _bounds2.y = displayData.bottomRightY;
-		if (_bounds2.y < displayData.topLeftY) _bounds2.y = displayData.topLeftY;
-		if (_bounds2.y < displayData.topRightY) _bounds2.y = displayData.topRightY;
-		
-		_bounds.width = _bounds2.x - _bounds.x;
-		_bounds.height = _bounds2.y - _bounds.y;
-		
-		_bounds.x = (_bounds.x + 1) * stage.stageWidth / 2;
-		_bounds.y = ((_bounds.y + _bounds.height) - 1) * stage.stageHeight / -2;
-		_bounds.width = _bounds.width * stage.stageWidth / 2;
-		_bounds.height = _bounds.height * stage.stageHeight / 2;
-		
-		return _bounds;
+		var ratio:Float = stage.windowWidth / stage.windowHeight;
+		switch stage.orientation {
+            case Orientation.LANDSCAPE: 
+				bounds.x = _x;
+				bounds.y = _y;
+				bounds.width = _width;
+				bounds.height = _height;
+            case Orientation.LANDSCAPE_FLIPPED: 
+				bounds.x = stage.windowWidth - _x - _width;
+				bounds.y = stage.windowHeight - _y - _height;
+				bounds.width = _width;
+				bounds.height = _height;
+            case Orientation.PORTRAIT:
+				bounds.x = stage.windowHeight - ((_height + _y) / ratio);
+				bounds.y = (_x * ratio);
+				bounds.width = _height;
+				bounds.height = _width;
+			case Orientation.PORTRAIT_FLIPPED: 
+				
+				bounds.x = (_y / ratio);
+				bounds.y = stage.windowWidth - ((_width + _x) * ratio);
+				bounds.width = _height;
+				bounds.height = _width;
+        }
+		return bounds;
 	}
 
 	function set_offsetU(value:Float):Float
