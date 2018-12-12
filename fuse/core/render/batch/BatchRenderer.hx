@@ -94,16 +94,7 @@ class BatchRenderer
 				
 		// ** // Context3DProgram.setProgram(shaderProgram.value.program);
 		Context3DRenderTarget.value = currentBatchData.renderTargetId;
-		
 		Context3DBlendMode.blendMode.value = currentBatchData.blendMode;
-		
-		// TODO: move this logic into worker
-		//var newBlendMode:Int = 0;
-		//if (currentBlendMode != newBlendMode) {
-			//currentBlendMode = newBlendMode;
-			//var blendFactors:BlendFactors = BlendMode.getBlendFactors(currentBlendMode);
-			//context3D.setBlendFactors(blendFactors.sourceFactor, blendFactors.destinationFactor);
-		//}
 		
 		#if (air||flash)
 			var firstIndex = 0;//quadCount * 6;

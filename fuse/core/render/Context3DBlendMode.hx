@@ -43,6 +43,17 @@ class Context3DBlendMode
 		var blendFactors:BlendFactors = factors.get(blendMode.value);
 		context3D.setBlendFactors(blendFactors.sourceFactor, blendFactors.destinationFactor);
 	}	
+
+	public static function findBlendMode(sourceFactor:Context3DBlendFactor, destinationFactor:Context3DBlendFactor):BlendMode
+	{
+		for (key in factors.keys()){
+			var factor:BlendFactors = factors.get(key);
+			if (factor.sourceFactor == sourceFactor && factor.destinationFactor == destinationFactor){
+				return key;
+			}
+		}
+		return BlendMode.NONE;
+	}
 }
 
 typedef BlendFactors =

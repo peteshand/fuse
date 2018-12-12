@@ -231,6 +231,8 @@ class DisplayObject
 			displayData.scaleX = scaleX = value;
 			updatePosition = true;
 			//isMoving = 1;
+			
+			updateAlignmentX();
 			updateStaticBackend();
 		}
 		return value;
@@ -241,6 +243,8 @@ class DisplayObject
 			displayData.scaleY = scaleY = value;
 			updatePosition = true;
 			//isMoving = 1;
+			
+			updateAlignmentY();
 			updateStaticBackend();
 		}
 		return value;
