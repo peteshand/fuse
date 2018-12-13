@@ -8,7 +8,7 @@
 //
 // =================================================================================================
 
-package fuse.particles
+package fuse.particles;
 
 class ColorArgb
 {
