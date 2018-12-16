@@ -29,8 +29,8 @@ class Stage extends Sprite {
 
 	@:isVar public var windowWidth(default, set):Int;
 	@:isVar public var windowHeight(default, set):Int;
-	@:isVar public var stageWidth(default, set):Int;
-	@:isVar public var stageHeight(default, set):Int;
+	@:isVar public var stageWidth(default, null):Int;
+	@:isVar public var stageHeight(default, null):Int;
 	@:isVar public var orientation(default, set):Orientation = Orientation.LANDSCAPE;
 
 	public var onDisplayAdded = new Signal1<DisplayObject>();
@@ -107,14 +107,15 @@ class Stage extends Sprite {
 
 	private function OnResize():Void 
 	{
-		_width = Lib.current.stage.stageWidth;
-		_height = Lib.current.stage.stageHeight;
-		
+		updateDimensions(Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
+	}
+
+	public function updateDimensions(_width:Int, _height:Int)
+	{
 		if (fuseConfig != null){
 			if (fuseConfig.width != null) _width = fuseConfig.width;
 			if (fuseConfig.height != null) _height = fuseConfig.height;
 		}
-		
 		
 		this.windowWidth = _width;
 		this.windowHeight = _height;
@@ -131,6 +132,8 @@ class Stage extends Sprite {
 				this.x = (1 - ((orientation - 90) / 180)) * windowWidth;
 				this.y = ((orientation - 90) / 180) * windowHeight;
         }
+		
+		
 
 		this.rotation = orientation;
 	}
@@ -158,6 +161,7 @@ class Stage extends Sprite {
 		if (stageHeight != value) {
 			stageHeight = value;
 			Fuse.current.conductorData.stageHeight = value;
+			trace("this.stageHeight " + this.stageHeight);
 		}
 		return value;
 	}
@@ -167,6 +171,7 @@ class Stage extends Sprite {
 		if (stageWidth != value) {
 			stageWidth = value;
 			Fuse.current.conductorData.stageWidth = value;
+			trace("this.stageWidth " + this.stageWidth);
 		}
 		return value;
 	}

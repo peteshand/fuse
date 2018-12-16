@@ -262,10 +262,6 @@ class ParticleSystem extends Sprite
             _particles[i] = createParticle();
         }
 
-        trace("oldCapacity = " + oldCapacity);
-        trace("newCapacity = " + newCapacity);
-        
-
         if (newCapacity < oldCapacity)
         {
             var j:Int = oldCapacity;

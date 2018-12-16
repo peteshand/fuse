@@ -13,7 +13,7 @@ abstract Color(UInt) from Int from UInt to UInt
 	public var blue(get, set):UInt;
 	public var alpha(get, set):UInt;
 	
-	private function new(value:UInt) {
+	public function new(value:UInt) {
 		this = value;
 	}
 	
@@ -79,4 +79,14 @@ abstract Color(UInt) from Int from UInt to UInt
 		
 		return randomColor;
 	}
+
+	/*public function clone():Color
+	{
+		var _clone = new Color(0x0);
+		_clone.red = red;
+		_clone.green = green;
+		_clone.blue = blue;
+		_clone.alpha = alpha;
+		return _clone;
+	}*/
 }

@@ -15,7 +15,7 @@ import openfl.events.ProgressEvent;
 class FileCacher
 {
 	var urlLoader:URLLoader;
-	var localFile:File;
+	public var localFile:File;
 	var url:String;
 	public var onComplete = new Signal0();
 	public var onProgress = new Signal1<Float>();
