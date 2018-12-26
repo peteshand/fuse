@@ -2,7 +2,7 @@ package mantle.delay;
 
 import haxe.Constraints.Function;
 import mantle.time.EnterFrame;
-
+import mantle.time.TimeUnit;
 /**
  * ...
  * @author P.J.Shand

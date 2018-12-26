@@ -2,6 +2,7 @@ package mantle.delay;
 
 import haxe.Constraints.Function;
 import mantle.time.TimeUtils;
+import mantle.time.TimeUnit;
 import mantle.util.func.FunctionUtil;
 import mantle.time.GlobalTime;
 /**

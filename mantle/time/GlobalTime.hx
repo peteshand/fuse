@@ -10,12 +10,13 @@ class GlobalTime
 	
 	@:isVar static public var offset(get, set):Float = 0;
 	static public var pause:Bool = false;
-	static private var _nowDate:Date;
-	static private var _nowTime:Null<Float>;
-	static private var _nowTimeWithOffset:Null<Float>;
-	
-	static private var _timezoneOffset:Null<Float>;
 	static public var timezoneOffset(get, null):Float;
+	
+	static var _nowDate:Date;
+	static var _nowTime:Null<Float>;
+	static var _nowTimeWithOffset:Null<Float>;
+	
+	static var _timezoneOffset:Null<Float>;
 	
 	public function new() { }
 	

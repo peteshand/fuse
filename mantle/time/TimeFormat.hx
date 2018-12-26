@@ -2,8 +2,6 @@ package mantle.time;
 
 class TimeFormat
 {
-    
-    
     public static function milToMinSec(milliseconds:Float):String
     {
         return secToMinSec(TimeUtils.milToSeconds(milliseconds));
