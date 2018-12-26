@@ -1,6 +1,6 @@
 package fuse.core.render;
 
-import msignal.Signal.Signal0;
+import notifier.Signal;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.texture.Textures;
@@ -35,7 +35,7 @@ class Renderer
 	var scissorRectangle:Rectangle;
 	var batchRenderers:Array<BatchRenderer> = [];
 	
-	public var onPresent = new Signal0();
+	public var onPresent = new Signal();
 
 	public function new(context3D:Context3D, sharedContext:Bool) 
 	{

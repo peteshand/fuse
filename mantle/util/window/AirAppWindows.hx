@@ -11,9 +11,9 @@ import flash.display.NativeWindowSystemChrome;
 import flash.events.NativeWindowBoundsEvent;
 import flash.events.NativeWindowDisplayStateEvent;
 import flash.display.NativeWindowDisplayState;
-import msignal.Signal.Signal0;
-import msignal.Signal.Signal1;
-import msignal.Signal.Signal2;
+import notifier.Signal;
+import notifier.Signal1;
+import notifier.Signal2;
 import openfl.display.Stage;
 import openfl.events.Event;
 
@@ -120,8 +120,8 @@ class AirAppWindow
 {
 	public var closing:Signal2<AirAppWindow, Void->Void> = new Signal2<AirAppWindow, Void->Void>();
 	
-	public var onMove(get, null):Signal0;
-	public var onResize(get, null):Signal0;
+	public var onMove(get, null):Signal;
+	public var onResize(get, null):Signal;
 	
 	public var focused:Notifier<Bool> = new Notifier(false);
 	public var visible:Notifier<Bool> = new Notifier(false);
@@ -347,18 +347,18 @@ class AirAppWindow
 		}
 	}
 	
-	function get_onMove():Signal0 
+	function get_onMove():Signal 
 	{
 		if (onMove == null){
-			onMove = new Signal0();
+			onMove = new Signal();
 			window.addEventListener(NativeWindowBoundsEvent.MOVE, onNativeMove);
 		}
 		return onMove;
 	}
-	function get_onResize():Signal0 
+	function get_onResize():Signal 
 	{
 		if (onResize == null){
-			onResize = new Signal0();
+			onResize = new Signal();
 			window.addEventListener(NativeWindowBoundsEvent.RESIZE, onNativeResize);
 		}
 		return onResize;

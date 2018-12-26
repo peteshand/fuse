@@ -1,7 +1,7 @@
 package fuse.texture;
 
 import fuse.core.front.texture.FrontVideoTexture;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 
 class VideoTexture extends BaseTexture
 {
@@ -13,8 +13,8 @@ class VideoTexture extends BaseTexture
 	public var duration(get, set):Null<Float>;
 	public var time(get, null):Float;
 	public var volume(get, set):Float;
-	public var onComplete(get, null):Signal0;
-	public var onMetaData(get, null):Signal0;
+	public var onComplete(get, null):Signal;
+	public var onMetaData(get, null):Signal;
 	
     public function new(url:String=null) 
 	{
@@ -46,8 +46,8 @@ class VideoTexture extends BaseTexture
 	function get_duration():Null<Float>						{	return videoTexture.duration;			}
 	function get_time():Float								{	return videoTexture.time;				}
 	function get_volume():Float								{	return videoTexture.volume;				}
-	function get_onComplete():Signal0						{	return videoTexture.onComplete;			}
-	function get_onMetaData():Signal0						{	return videoTexture.onMetaData;			}
+	function get_onComplete():Signal						{	return videoTexture.onComplete;			}
+	function get_onMetaData():Signal						{	return videoTexture.onMetaData;			}
 	
 	function set_loop(value:Bool):Bool						{	return videoTexture.loop = value;		}
 	function set_duration(value:Null<Float>):Null<Float>	{	return videoTexture.duration = value;	}

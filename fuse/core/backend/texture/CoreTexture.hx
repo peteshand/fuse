@@ -8,7 +8,7 @@ import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.TextureSizeData;
 import notifier.Notifier;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 
 /**
  * ...
@@ -42,7 +42,7 @@ class CoreTexture
 	public var uvBottom	:Float = 1;
 	
 	public var textureHasChanged:Bool = true;
-	public var onTextureChange = new Signal0();
+	public var onTextureChange = new Signal();
 	var dependantDisplays = new Map<Int, CoreImage>();
 	
 	public function new(textureRef:TextureRef) 

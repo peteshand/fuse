@@ -1,14 +1,15 @@
 #if html5
 package mantle.util.window;
 
-import notifier.Notifier;
 import mantle.util.window.JsAppWindows.JsAppWindow;
 import js.Browser;
 import js.Lib;
 import js.html.Event;
 import js.html.Window;
-import msignal.Signal.Signal1;
-import msignal.Signal.Signal2;
+
+import notifier.Notifier;
+import notifier.Signal1;
+import notifier.Signal2;
 
 /**
  * ...

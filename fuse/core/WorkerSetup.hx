@@ -28,7 +28,7 @@ import flash.concurrent.Mutex;
 #end
 
 import fuse.core.backend.CoreEntryPoint;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.messageData.WorkerPayload;
 import fuse.core.communication.data.WorkerSharedProperties;
@@ -50,7 +50,7 @@ class WorkerSetup
 	var count:Int = 0;
 	var staticData:StaticData = { };
 	
-	public var onReady = new Signal0();
+	public var onReady = new Signal();
 	var workerStartCount:Int = 0;
 	
 	#if air

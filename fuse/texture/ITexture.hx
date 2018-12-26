@@ -2,7 +2,7 @@ package fuse.texture;
 
 import fuse.display.Image;
 import fuse.utils.Color;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 import fuse.core.communication.data.textureData.ITextureData;
 import openfl.display3D.textures.TextureBase;
 import openfl.display3D.textures.Texture;
@@ -18,8 +18,8 @@ interface ITexture
 	var objectId(get, null):ObjectId;
 	var textureId(get, null):TextureId;
 	
-	var onUpdate:Signal0;
-	var onUpload:Signal0;
+	var onUpdate:Signal;
+	var onUpload:Signal;
     var width(get, set):Null<Int>;
 	var height(get, set):Null<Int>;
     var offsetU(get, set):Float;

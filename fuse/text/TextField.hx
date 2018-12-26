@@ -1,7 +1,6 @@
 package fuse.text;
 
 import notifier.Signal;
-import msignal.Signal.Signal0;
 import openfl.events.FocusEvent;
 import openfl.events.Event;
 import openfl.Lib;
@@ -109,7 +108,7 @@ class TextField extends Sprite
 	var clearColour:Color = 0x00000000;
 	public var texture(get, never):BitmapTexture;
 	var initialized:Bool = false;
-	public var onUpdate = new Signal0();
+	public var onUpdate = new Signal();
 	var matrix:Matrix = new Matrix();
 	@:isVar public var lineOffset(default, set):Float;
 	public var onTextChange = new Signal();

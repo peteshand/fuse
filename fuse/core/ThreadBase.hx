@@ -4,7 +4,7 @@ import fuse.core.communication.memory.SharedMemory;
 import fuse.display.Sprite;
 import fuse.display.Stage;
 import fuse.core.render.Renderer;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 import openfl.Lib;
 import openfl.events.EventDispatcher;
 
@@ -15,12 +15,12 @@ import openfl.events.EventDispatcher;
 
 class ThreadBase extends EventDispatcher
 {
-	public var enterFrame:Signal0 = new Signal0();
+	public var enterFrame = new Signal();
 	public var sharedMemory:SharedMemory;
 	public var renderer:Renderer;
 	public var stage:Stage;
 	public var frameRate(get, set):Float;
-	public var onRender:Signal0;
+	public var onRender:Signal;
 	public var workerSetup:WorkerSetup;
 	public var conductorData:WorkerConductorData;
 	

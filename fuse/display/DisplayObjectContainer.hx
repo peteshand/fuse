@@ -1,7 +1,7 @@
 package fuse.display;
 
 import fuse.input.Touch;
-import msignal.Signal.Signal1;
+import notifier.Signal1;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.display.InteractiveObject;
 
@@ -62,6 +62,7 @@ class DisplayObjectContainer extends InteractiveObject
 	
 	public function removeChild(child:DisplayObject):Void
 	{
+		if (child == null) return;
 		// unlink from child
 		//child.next.previous = child.previous;
 		

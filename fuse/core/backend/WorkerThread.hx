@@ -4,7 +4,6 @@ import fuse.core.communication.memory.SharedMemory;
 import fuse.core.input.Input;
 import fuse.info.WorkerInfo;
 import fuse.core.utils.Pool;
-import msignal.Signal.Signal0;
 import openfl.Lib;
 
 import fuse.core.communication.IWorkerComms;

@@ -3,7 +3,7 @@ package notifier;
 import mantle.filesystem.DocStore;
 import mantle.time.EnterFrame;
 import haxe.ds.ObjectMap;
-import msignal.Signal.Signal1;
+import notifier.Signal1;
 
 /**
  * ...

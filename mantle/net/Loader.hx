@@ -9,8 +9,8 @@ import openfl.display.BitmapData;
 import openfl.display.Loader as OpenFLLoader;
 import openfl.display.Bitmap;
 import openfl.net.URLRequest;
-import msignal.Signal.Signal1;
-import msignal.Signal.Signal0;
+import notifier.Signal1;
+import notifier.Signal;
 
 /**
  * ...
@@ -20,7 +20,7 @@ class Loader
 {
 	var loader:OpenFLLoader;
 	public var onLoadComplete = new Signal1<BitmapData>();
-	public var onError = new Signal0();
+	public var onError = new Signal();
 	
 	public function new() 
 	{

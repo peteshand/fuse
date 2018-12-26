@@ -9,7 +9,7 @@ import fuse.Fuse;
 import fuse.utils.Color;
 import mantle.managers.resize.Resize;
 import notifier.Notifier;
-import msignal.Signal.Signal1;
+import notifier.Signal1;
 import fuse.utils.Orientation;
 import openfl.Lib;
 import openfl.events.Event;

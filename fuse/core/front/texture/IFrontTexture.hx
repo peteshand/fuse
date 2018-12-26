@@ -3,7 +3,7 @@ package fuse.core.front.texture;
 import fuse.display.Image;
 import fuse.texture.TextureId;
 import fuse.utils.Color;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 import openfl.display3D.textures.Texture;
 import openfl.display3D.textures.TextureBase;
 import fuse.utils.ObjectId;
@@ -16,8 +16,8 @@ interface IFrontTexture
 {
 	var objectId:ObjectId;
 	var textureId:TextureId;
-	var onUpdate:Signal0;
-	var onUpload:Signal0;
+	var onUpdate:Signal;
+	var onUpload:Signal;
 
 	@:isVar var width(get, set):Null<Int>;
 	@:isVar var height(get, set):Null<Int>;

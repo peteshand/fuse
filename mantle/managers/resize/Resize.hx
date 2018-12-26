@@ -2,8 +2,6 @@ package mantle.managers.resize;
 
 import notifier.Signal;
 import mantle.time.EnterFrame;
-//import msignal.Signal.Signal0;
-import msignal.Slot.Slot0;
 import openfl.display.Stage;
 import openfl.events.Event;
 

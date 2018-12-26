@@ -1,7 +1,7 @@
 package fuse.core.render;
 
 import fuse.utils.PlayerVersion;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 import openfl.Lib;
 import openfl.display3D.Context3D;
 import openfl.display3D.Context3DProfile;
@@ -18,7 +18,7 @@ class Context3DSetup
 {
 	public var sharedContext:Bool = false;
 	public var context3D:Context3D;
-	public var onComplete:Signal0 = new Signal0();
+	public var onComplete = new Signal();
 	public var activeProfile:Context3DProfile;
 	
 	var stage3D:Stage3D;

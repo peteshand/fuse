@@ -6,7 +6,7 @@ import fuse.core.front.texture.upload.TextureUploadQue;
 import fuse.core.front.texture.Textures;
 import fuse.display.Image;
 import fuse.texture.TextureId;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 import fuse.core.front.texture.IFrontTexture;
 import fuse.utils.Color;
 import fuse.utils.PowerOfTwo;
@@ -33,8 +33,8 @@ class FrontBaseTexture implements IFrontTexture
 
 	public var objectId:ObjectId;
 	public var textureId:TextureId;
-	public var onUpdate = new Signal0();
-	public var onUpload = new Signal0();
+	public var onUpdate = new Signal();
+	public var onUpload = new Signal();
 	@:isVar public var width(get, set):Null<Int>;
 	@:isVar public var height(get, set):Null<Int>;
 	@:isVar public var offsetU(get, set):Float = 0;

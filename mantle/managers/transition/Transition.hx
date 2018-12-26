@@ -3,11 +3,11 @@ package mantle.managers.transition;
 import haxe.Timer;
 //import mantle.managers.transition.plugins.TransitionPlugins;
 import notifier.Notifier;
-import mantle.managers.state.IState;
+import condition.IState;
 import motion.Actuate;
 import motion.actuators.GenericActuator;
 import motion.easing.Linear;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 import openfl.errors.Error;
 
 /**
@@ -38,13 +38,13 @@ class Transition
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	public var onShowStart = new Signal0();														////
-	public var onShowUpdate = new Signal0();													////
-	public var onShowComplete = new Signal0();													////
+	public var onShowStart = new Signal();														////
+	public var onShowUpdate = new Signal();													////
+	public var onShowComplete = new Signal();													////
 																								////
-	public var onHideStart = new Signal0();														////
-	public var onHideUpdate = new Signal0();													////
-	public var onHideComplete = new Signal0();													////
+	public var onHideStart = new Signal();														////
+	public var onHideUpdate = new Signal();													////
+	public var onHideComplete = new Signal();													////
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	

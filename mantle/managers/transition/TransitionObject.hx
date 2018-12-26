@@ -7,7 +7,7 @@ import mantle.managers.transition.TransitionSettings;
 import motion.easing.Expo;
 import motion.easing.IEasing;
 import motion.easing.Quad;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 
 using Logger;
 
@@ -34,7 +34,7 @@ class TransitionObject implements ITransitionObject
 	private var properties:Dynamic = {};
 	var visSetter:Dynamic;
 	public var option:TransitionSettings = {};
-	public var onSet = new Signal0();
+	public var onSet = new Signal();
 	
 	// Update vars
 	var uStartValue:Float;

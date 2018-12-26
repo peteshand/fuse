@@ -5,7 +5,7 @@ import fuse.core.front.texture.IFrontTexture;
 
 import fuse.utils.ObjectId;
 import fuse.texture.TextureId;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 import mantle.delay.Delay;
 
 import fuse.display.Image;
@@ -21,8 +21,8 @@ class BaseTexture implements ITexture
     public var objectId(get, null):ObjectId;
 	public var textureId(get, null):TextureId;
 
-    public var onUpdate = new Signal0();
-    public var onUpload = new Signal0();
+    public var onUpdate = new Signal();
+    public var onUpload = new Signal();
     public var width(get, set):Null<Int>;
 	public var height(get, set):Null<Int>;
     public var offsetU(get, set):Float;

@@ -82,9 +82,9 @@ class P2P
 import mantle.services.p2p.PeerObject;
 import notifier.Notifier;
 import mantle.util.app.App;
-import msignal.Signal.Signal0;
-import msignal.Signal.Signal1;
-import msignal.Signal.Signal2;
+import notifier.Signal;
+import notifier.Signal1;
+import notifier.Signal2;
 using Logger;
 /**
  * ...
@@ -106,16 +106,16 @@ class P2P
 	static public var key:Notifier<String>;
 	static public var idAddress:Notifier<String>;
 	
-	public static var connectionRefused:Signal0;
-	public static var connectionSuccess:Signal0;
+	public static var connectionRefused:Signal;
+	public static var connectionSuccess:Signal;
 	public static var neighborConnect:Signal1<String>;
 	public static var neighborDisconnect:Signal1<String>;
 	public static var onMsg:Signal2<String, Dynamic>;
 	
 	public static function __init__():Void
 	{
-		connectionRefused	= new Signal0();
-		connectionSuccess	= new Signal0();
+		connectionRefused	= new Signal();
+		connectionSuccess	= new Signal();
 		neighborConnect		= new Signal1(String);
 		neighborDisconnect	= new Signal1(String);
 		onMsg				= new Signal2(String, Dynamic);

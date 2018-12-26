@@ -7,7 +7,7 @@ import fuse.core.communication.IWorkerComms;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.data.WorkerSharedProperties;
 import fuse.info.WorkerInfo;
-import msignal.Signal.Signal0;
+import notifier.Signal;
 import openfl.Lib;
 import openfl.events.Event;
 import openfl.events.TimerEvent;
@@ -22,7 +22,7 @@ import flash.concurrent.Condition;
 class Conductor
 {
 	public static var threadActive(get, null):Bool;
-	static public var onTick:Signal0;
+	static public var onTick:Signal;
 	static public var waitCount:Int;
 	
 	//static var conductorData:ConductorData;
@@ -56,7 +56,7 @@ class Conductor
 		
 		
 		
-		onTick = new Signal0();
+		onTick = new Signal();
 		//workerComms.addListener(MessageType.MAIN_THREAD_TICK, OnMainTick);
 		update.addEventListener(Event.ENTER_FRAME, OnUpdate);
 		
