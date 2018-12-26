@@ -1,6 +1,6 @@
 package mantle.view;
-import mantle.managers.state.IState;
-import mantle.managers.state.State;
+import condition.IState;
+import condition.State;
 import mantle.delay.Delay;
 import robotlegs.bender.bundles.mvcs.Mediator;
 import robotlegs.bender.extensions.mediatorMap.api.IMediatorMap;

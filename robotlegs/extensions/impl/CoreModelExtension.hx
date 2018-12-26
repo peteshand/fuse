@@ -3,7 +3,7 @@ package robotlegs.extensions.impl;
 import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
 import robotlegs.extensions.impl.model.ExecuteImagModels;
-import mantle.model.scene.SceneModel;
+import condition.SceneModel;
 import robotlegs.extensions.impl.model.flags.FlagsModel;
 import robotlegs.extensions.impl.model.fps.FPSThrottleModel;
 

@@ -1,7 +1,7 @@
 package mantle.view;
 
 import fuse.display.Sprite;
-import mantle.managers.state.IState;
+import condition.IState;
 import mantle.managers.transition.Transition;
 
 class BaseSceneView extends Sprite implements ISceneView

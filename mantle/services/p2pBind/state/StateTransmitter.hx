@@ -1,7 +1,7 @@
 package mantle.services.p2pBind.state;
 
 import mantle.services.p2p.PeerObject;
-import mantle.model.scene.SceneModel;
+import condition.SceneModel;
 
 /**
  * ...

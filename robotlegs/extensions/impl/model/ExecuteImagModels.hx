@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.model;
 
-import mantle.model.scene.SceneModel;
+import condition.SceneModel;
 import robotlegs.extensions.impl.services.activity.ActivityMonitorService;
 import robotlegs.bender.framework.api.IConfig;
 import org.swiftsuspenders.utils.DescribedType;

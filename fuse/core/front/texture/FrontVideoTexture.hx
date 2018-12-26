@@ -3,7 +3,6 @@ package fuse.core.front.texture;
 import mantle.delay.Delay;
 import openfl.events.VideoTextureEvent;
 import openfl.media.SoundTransform;
-import msignal.Signal.Signal0;
 import openfl.net.NetConnection;
 import fuse.core.front.texture.FrontBaseTexture;
 import fuse.core.front.texture.Textures;
@@ -13,6 +12,7 @@ import mantle.net.NetStream;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
 import mantle.time.EnterFrame;
 import notifier.Notifier;
+import notifier.Signal;
 /**
  * ...
  * @author P.J.Shand
@@ -32,8 +32,8 @@ class FrontVideoTexture extends FrontBaseTexture
 
 	public var time(get, null):Float;
 	@:isVar public var volume(default, set):Float = 1;
-	@:isVar public var onComplete(get, null):Signal0;
-	public var onMetaData = new Signal0();
+	@:isVar public var onComplete(get, null):Signal;
+	public var onMetaData = new Signal();
 
 	var url:String;
 	var currentUrl:String;
@@ -370,7 +370,7 @@ class FrontVideoTexture extends FrontBaseTexture
 	function get_onComplete()
 	{
 		if (onComplete == null) {
-			onComplete = new Signal0();
+			onComplete = new Signal();
 		}
 		return onComplete;
 	}

@@ -1,7 +1,7 @@
 package mantle.managers.initialize;
 
-import mantle.managers.state.IState;
-import mantle.managers.state.State;
+import condition.IState;
+import condition.State;
 import msignal.Signal.Signal0;
 
 /**
