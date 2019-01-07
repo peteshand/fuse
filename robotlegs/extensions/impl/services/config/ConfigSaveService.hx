@@ -1,12 +1,12 @@
 package robotlegs.extensions.impl.services.config;
 
-import mantle.delay.Delay;
+import delay.Delay;
 import robotlegs.extensions.impl.utils.json.JsonFormatter;
 import haxe.Json;
 import org.swiftsuspenders.utils.DescribedType;
 #if (air && !mobile)
-	import mantle.filesystem.File;
-	import mantle.filesystem.FileTools;
+	import openfl.filesystem.File;
+	import openfl.filesystem.FileTools;
 #end
 /**
  * ...

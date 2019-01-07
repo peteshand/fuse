@@ -1,6 +1,6 @@
 package mantle.util.app;
 
-import mantle.delay.Delay;
+import delay.Delay;
 
 
 #if openfl

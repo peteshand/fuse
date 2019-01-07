@@ -5,8 +5,8 @@ import fuse.core.front.texture.IFrontTexture;
 
 import fuse.utils.ObjectId;
 import fuse.texture.TextureId;
-import notifier.Signal;
-import mantle.delay.Delay;
+import signal.Signal;
+import delay.Delay;
 
 import fuse.display.Image;
 import fuse.utils.Color;

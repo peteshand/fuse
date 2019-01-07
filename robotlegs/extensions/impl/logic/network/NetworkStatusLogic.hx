@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.logic.network;
 
-import mantle.delay.Delay;
+import delay.Delay;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
 import robotlegs.extensions.impl.model.network.NetworkStatusModel;

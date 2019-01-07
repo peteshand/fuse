@@ -1,8 +1,8 @@
 package robotlegs.extensions.impl.commands.fullscreen;
 
-import mantle.keyboard.Key;
-import mantle.keyboard.Keyboard;
-import mantle.delay.Delay;
+import keyboard.Key;
+import keyboard.Keyboard;
+import delay.Delay;
 import flash.display.DisplayObject;
 import flash.display.StageDisplayState;
 import flash.events.MouseEvent;

@@ -1,6 +1,6 @@
 package fuse.core.front.texture;
 
-import mantle.delay.Delay;
+import delay.Delay;
 import openfl.events.VideoTextureEvent;
 import openfl.media.SoundTransform;
 import openfl.net.NetConnection;
@@ -10,9 +10,9 @@ import openfl.events.Event;
 import openfl.events.NetStatusEvent;
 import mantle.net.NetStream;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
-import mantle.time.EnterFrame;
+import time.EnterFrame;
 import notifier.Notifier;
-import notifier.Signal;
+import signal.Signal;
 /**
  * ...
  * @author P.J.Shand

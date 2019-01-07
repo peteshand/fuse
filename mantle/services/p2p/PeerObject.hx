@@ -1,6 +1,6 @@
 package mantle.services.p2p;
 
-import mantle.delay.Delay;
+import delay.Delay;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.NetStatusEvent;
@@ -8,7 +8,7 @@ import flash.events.SecurityErrorEvent;
 import flash.net.GroupSpecifier;
 import flash.net.NetConnection;
 import flash.net.NetGroup;
-import mantle.time.EnterFrame;
+import time.EnterFrame;
 import msignal.Signal;
 
 /**

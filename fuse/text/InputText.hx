@@ -1,16 +1,16 @@
 package fuse.text;
 
-import mantle.delay.Delay;
+import delay.Delay;
 import fuse.geom.Rectangle;
-import mantle.time.EnterFrame;
+import time.EnterFrame;
 import fuse.display.Stage;
 import fuse.input.Touch;
 import fuse.display.Quad;
 import fuse.display.Sprite;
 import notifier.Notifier;
 import fuse.geom.Point;
-import mantle.keyboard.Key;
-import mantle.keyboard.Keyboard;
+import keyboard.Key;
+import keyboard.Keyboard;
 import fuse.display.DisplayObjectContainer;
 
 /**

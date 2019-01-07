@@ -5,7 +5,7 @@ import fuse.core.front.texture.FrontBitmapTexture;
 import fuse.utils.GcoArray;
 import fuse.utils.PowerOfTwo;
 import lime.text.UTF8String;
-import mantle.time.EnterFrame;
+import time.EnterFrame;
 import openfl.display.BitmapData;
 import openfl.geom.Rectangle;
 import openfl.text.AntiAliasType;

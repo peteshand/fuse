@@ -47,7 +47,7 @@ class FShader
 		// FRAGMENT
 		fragmentData = Vector.ofArray([
 			0, 1.0, 2.0, -1.0,
-			Math.PI, 0.5, 0, 0
+			Math.PI, 0.5, 0, 100
 		]);
 		//colorTransform = Vector.ofArray([1.0, 0.0, 0.0, 1.0, 0.0, 0.25, 0.25, 0.0]);
 		
@@ -328,6 +328,13 @@ class FShader
 				{
 					agal += "tex ft0, v1.zw, fs" + j + " <2d,clamp,nomip,linear>	\n"; // nearest
 					agal += "mul ft0.w, ft0.w, " + maskIndex[j] + 		"	\n";
+
+					// CLIP OUTSIDE MASK /////////////////////
+					// agal += "sge ft3.xy, v1.zw, HALF.2	\n";
+					// agal += "mul ft0.w, ft0.w, ft3.x	\n";
+					// agal += "mul ft0.w, ft0.w, ft3.y	\n";
+					////////////////////////////////////////////
+					
 					if (j == 0)	agal += "mov ft2, ft0						\n";
 					else 		agal += "add ft2, ft2, ft0					\n";
 				}

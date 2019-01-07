@@ -109,7 +109,10 @@ class DirectBatch extends BaseBatch implements IBatch
 		var updateMask:Bool		= vertexPositionHasMoved || image.maskChanged;
 		var updateColour:Bool	= vertexPositionHasMoved || image.updateColour;
 		var updateAlpha:Bool	= vertexPositionHasMoved || image.updateAlpha;
-		if (mask != null) updateAlpha = updateAlpha || mask.mask.updateAlpha;
+		
+		if (mask != null) {
+			updateAlpha = updateAlpha || mask.mask.updateAlpha;
+		}
 
 		//if (VertexData.OBJECT_POSITION < 10){
 			//trace([
@@ -133,7 +136,7 @@ class DirectBatch extends BaseBatch implements IBatch
 		}
 		
 		if (FShader.ENABLE_MASKS) {
-			if (updateMask){
+			//if (updateMask){
 				if (mask != null) {
 					vertexData.setMaskTexture(mask.mask.textureIndex);
 					//trace("setBatchProps mask: " + image.objectId);
@@ -141,7 +144,7 @@ class DirectBatch extends BaseBatch implements IBatch
 				else {
 					vertexData.setMaskTexture(-1);
 				}
-			}
+			//}
 		}
 
 		if (updateTextureUVs || updateImageUVs) {
@@ -164,11 +167,10 @@ class DirectBatch extends BaseBatch implements IBatch
 		if (FShader.ENABLE_MASKS && mask != null) {
 			
 			mask.updateUVs();
-
-			vertexData.setMaskUV(0, mask.uv[0].x, mask.uv[0].y);	// bottom left
-			vertexData.setMaskUV(1, mask.uv[1].x, mask.uv[1].y);	// top left
-			vertexData.setMaskUV(2, mask.uv[2].x, mask.uv[2].y);	// top right
-			vertexData.setMaskUV(3, mask.uv[3].x, mask.uv[3].y);	// bottom right
+			vertexData.setMaskUV(0, mask.uvs[0].x, mask.uvs[0].y);	// bottom left
+			vertexData.setMaskUV(1, mask.uvs[1].x, mask.uvs[1].y);	// top left
+			vertexData.setMaskUV(2, mask.uvs[2].x, mask.uvs[2].y);	// top right
+			vertexData.setMaskUV(3, mask.uvs[3].x, mask.uvs[3].y);	// bottom right
 		}
 		
 		if (updatePosition) {
@@ -195,7 +197,7 @@ class DirectBatch extends BaseBatch implements IBatch
 		}
 		if (updateAlpha){
 			var alpha:Float = image.alpha;
-			if (mask != null) alpha *= mask.alpha;
+			//if (mask != null) alpha *= mask.alpha;
 			vertexData.setAlpha(alpha);
 		}
 		

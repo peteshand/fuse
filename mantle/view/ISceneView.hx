@@ -1,7 +1,7 @@
 package mantle.view;
 
 import condition.IState;
-import mantle.managers.transition.Transition;
+import transition.Transition;
 
 /**
  * @author P.J.Shand

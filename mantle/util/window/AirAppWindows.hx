@@ -11,9 +11,9 @@ import flash.display.NativeWindowSystemChrome;
 import flash.events.NativeWindowBoundsEvent;
 import flash.events.NativeWindowDisplayStateEvent;
 import flash.display.NativeWindowDisplayState;
-import notifier.Signal;
-import notifier.Signal1;
-import notifier.Signal2;
+import signal.Signal;
+import signal.Signal1;
+import signal.Signal2;
 import openfl.display.Stage;
 import openfl.events.Event;
 

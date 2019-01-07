@@ -98,6 +98,10 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 		if (updateColour) {
 			blendMode = displayData.blendMode;
 		}
+		//if (displayData.blendMode != 0){
+			//trace([displayData.objectId, displayData.blendMode]);
+
+		//}
 		if (updateTexture || updateVisible) {
 			textureId = displayData.textureId;
 		}

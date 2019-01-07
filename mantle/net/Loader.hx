@@ -9,8 +9,8 @@ import openfl.display.BitmapData;
 import openfl.display.Loader as OpenFLLoader;
 import openfl.display.Bitmap;
 import openfl.net.URLRequest;
-import notifier.Signal1;
-import notifier.Signal;
+import signal.Signal1;
+import signal.Signal;
 
 /**
  * ...

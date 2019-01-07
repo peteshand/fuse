@@ -6,7 +6,7 @@ import fuse.core.front.texture.upload.TextureUploadQue;
 import fuse.core.front.texture.Textures;
 import fuse.display.Image;
 import fuse.texture.TextureId;
-import notifier.Signal;
+import signal.Signal;
 import fuse.core.front.texture.IFrontTexture;
 import fuse.utils.Color;
 import fuse.utils.PowerOfTwo;

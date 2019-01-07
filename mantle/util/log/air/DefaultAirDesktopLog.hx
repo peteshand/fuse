@@ -1,6 +1,6 @@
 package mantle.util.log.air;
 import mantle.util.log.Log;
-import mantle.delay.Delay;
+import delay.Delay;
 import mantle.util.app.App;
 import mantle.filesystem.Files;
 import mantle.util.log.Log.LogLevel;

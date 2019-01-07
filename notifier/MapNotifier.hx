@@ -1,9 +1,9 @@
 package notifier;
 
 import mantle.filesystem.DocStore;
-import mantle.time.EnterFrame;
+import time.EnterFrame;
 import haxe.ds.ObjectMap;
-import notifier.Signal1;
+import signal.Signal1;
 
 /**
  * ...

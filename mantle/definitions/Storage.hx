@@ -1,6 +1,6 @@
 package mantle.definitions;
 import mantle.util.app.App;
-import mantle.filesystem.File;
+import openfl.filesystem.File;
 
 /**
  * ...

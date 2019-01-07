@@ -10,7 +10,7 @@ import fuse.utils.Align;
 import fuse.utils.Color;
 import fuse.Fuse;
 import fuse.utils.drag.DragUtil;
-import notifier.Signal1;
+import signal.Signal1;
 import fuse.utils.ObjectId;
 
 @:access(fuse)

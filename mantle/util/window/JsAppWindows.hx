@@ -8,8 +8,8 @@ import js.html.Event;
 import js.html.Window;
 
 import notifier.Notifier;
-import notifier.Signal1;
-import notifier.Signal2;
+import signal.Signal1;
+import signal.Signal2;
 
 /**
  * ...

@@ -3,7 +3,7 @@ package fuse.core.front.texture;
 
 import fuse.core.front.texture.FrontBaseTexture;
 import fuse.texture.TextureId;
-import mantle.delay.Delay;
+import delay.Delay;
 import fuse.core.front.texture.Textures;
 import fuse.loader.ILoader;
 import openfl.events.IOErrorEvent;

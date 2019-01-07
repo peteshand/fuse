@@ -1,8 +1,8 @@
 package robotlegs.extensions.impl.commands.keyboard;
-import mantle.keyboard.Key;
-import mantle.keyboard.Keyboard;
+import keyboard.Key;
+import keyboard.Keyboard;
 import mantle.util.app.App;
-import mantle.time.GlobalTime;
+import time.GlobalTime;
 import openfl.display.StageDisplayState;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;

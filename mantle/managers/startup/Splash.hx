@@ -1,7 +1,7 @@
 package mantle.managers.startup;
 
-import mantle.delay.Delay;
-import mantle.managers.resize.Resize;
+import delay.Delay;
+import resize.Resize;
 import openfl.Assets;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;

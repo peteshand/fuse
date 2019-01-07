@@ -3,7 +3,7 @@ package mantle.bind;
 
 import notifier.Notifier;
 import condition.State;
-import mantle.managers.transition.Transition;
+import transition.Transition;
 
 class Bind
 {

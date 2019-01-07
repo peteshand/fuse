@@ -1,7 +1,7 @@
 package robotlegs.extensions.impl.services.config;
-import mantle.filesystem.File;
-import mantle.filesystem.FileMode;
-import mantle.filesystem.FileStream;
+import openfl.filesystem.File;
+import openfl.filesystem.FileMode;
+import openfl.filesystem.FileStream;
 import haxe.Json;
 import openfl.errors.Error;
 import robotlegs.extensions.api.model.config.IConfigModel;

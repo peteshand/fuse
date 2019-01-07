@@ -4,7 +4,7 @@ import mantle.util.log.Log.LogLevel;
 import mantle.util.log.ILogHandler;
 import mantle.util.log.LogFormatImpl;
 import mantle.util.log.LogFormatter;
-import mantle.time.GlobalTime;
+import time.GlobalTime;
 //import remove.worker.WorkerSwitchboard;
 import flash.Lib;
 import flash.filesystem.File;

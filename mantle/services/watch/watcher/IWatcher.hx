@@ -1,6 +1,6 @@
 package mantle.services.watch.watcher;
-import mantle.filesystem.File;
-import notifier.Signal1;
+import openfl.filesystem.File;
+import signal.Signal1;
 
 /**
  * @author P.J.Shand

@@ -1,7 +1,7 @@
 package mantle.util.log;
 
 #if !macro
-	import mantle.time.GlobalTime;
+	import time.GlobalTime;
 #end
 
 import haxe.PosInfos;

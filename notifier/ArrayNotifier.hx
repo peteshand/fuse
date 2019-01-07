@@ -1,6 +1,6 @@
 package notifier;
 
-import notifier.Signal;
+import signal.Signal;
 @:forward(length, base, concat, join, pop, push, reverse, shift, slice, sort, splice, unshift, insert, arrayRemove, indexOf, lastIndexOf, iterator, map, filter, resize,
 add, addOnce, addWithPriority, addOnceWithPriority, remove, removeAll, dispatch)
 abstract ArrayNotifier<T>(BaseArrayNotifier<T>)

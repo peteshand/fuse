@@ -107,15 +107,29 @@ class WorkerTransformHelper
 		//}
 		
 		
-		//trace(localTransform);
 		Graphics.transformation.multmat(localTransform);
-		//trace(Graphics.transformation);
 		//trace(localTransform);
-
+		//trace(Graphics.transformation);
+		
 		coreDisplay.absoluteX = localTransform._20;
+		//trace("pivotX = " + pivotX);
+		//trace("pivotY = " + pivotY);
+		//trace("coreDisplay.absoluteX = " + coreDisplay.absoluteX);
+
+		//coreDisplay.absoluteX += Math.cos(rotation / 180 * Math.PI) * pivotX;
+		//coreDisplay.absoluteX -= Math.sin(rotation / 180 * Math.PI) * pivotY;
+		//trace("coreDisplay.absoluteX = " + coreDisplay.absoluteX);
+		
+		//trace(Math.cos(rotation / 180 * Math.PI) * pivotX);
+		
+		//trace("rotation = " + rotation);
+
 		coreDisplay.absoluteY = localTransform._21;
-		coreDisplay.uvPivot.x = coreDisplay.displayData.pivotX / coreDisplay.displayData.width / coreDisplay.displayData.scaleX;
-		coreDisplay.uvPivot.y = coreDisplay.displayData.pivotY / coreDisplay.displayData.height / coreDisplay.displayData.scaleY;
+		//coreDisplay.absoluteY += Math.cos(rotation / 180 * Math.PI) * pivotY;
+		//coreDisplay.absoluteY += Math.sin(rotation / 180 * Math.PI) * pivotX;
+		
+		coreDisplay.uvPivot.x = pivotX / width / scaleX;
+		coreDisplay.uvPivot.y = pivotY / height / scaleY;
 		
 		// Move into pushTransform function
 		//if (push) {

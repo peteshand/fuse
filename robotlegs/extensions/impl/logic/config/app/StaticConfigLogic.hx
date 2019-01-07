@@ -2,9 +2,9 @@ package robotlegs.extensions.impl.logic.config.app;
 
 #if (air && !mobile)
 import mantle.definitions.Storage;
-import mantle.filesystem.File;
-import mantle.filesystem.FileMode;
-import mantle.filesystem.FileStream;
+import openfl.filesystem.File;
+import openfl.filesystem.FileMode;
+import openfl.filesystem.FileStream;
 import haxe.Json;
 import robotlegs.extensions.api.model.config.IConfigModel;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;

@@ -1,7 +1,7 @@
 package mantle.net;
 
 import mantle.definitions.Storage;
-import mantle.filesystem.File;
+import openfl.filesystem.File;
 /**
  * ...
  * @author P.J.Shand

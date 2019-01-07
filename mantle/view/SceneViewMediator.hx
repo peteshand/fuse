@@ -1,7 +1,7 @@
 package mantle.view;
 import condition.IState;
 import condition.State;
-import mantle.delay.Delay;
+import delay.Delay;
 import robotlegs.bender.bundles.mvcs.Mediator;
 import robotlegs.bender.extensions.mediatorMap.api.IMediatorMap;
 

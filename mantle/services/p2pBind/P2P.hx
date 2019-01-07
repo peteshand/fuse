@@ -82,9 +82,9 @@ class P2P
 import mantle.services.p2p.PeerObject;
 import notifier.Notifier;
 import mantle.util.app.App;
-import notifier.Signal;
-import notifier.Signal1;
-import notifier.Signal2;
+import signal.Signal;
+import signal.Signal1;
+import signal.Signal2;
 using Logger;
 /**
  * ...

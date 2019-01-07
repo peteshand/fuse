@@ -1,8 +1,8 @@
 package robotlegs.extensions.impl.services.activity;
 
-import mantle.time.GlobalTime;
+import time.GlobalTime;
 import notifier.Notifier;
-import mantle.time.EnterFrame;
+import time.EnterFrame;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.events.TouchEvent;

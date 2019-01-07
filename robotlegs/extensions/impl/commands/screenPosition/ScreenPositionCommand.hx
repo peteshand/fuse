@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.commands.screenPosition;
 
-import mantle.delay.Delay;
+import delay.Delay;
 
 #if air
 import flash.desktop.NativeApplication;

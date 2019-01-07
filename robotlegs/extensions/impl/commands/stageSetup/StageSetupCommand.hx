@@ -1,7 +1,6 @@
 package robotlegs.extensions.impl.commands.stageSetup;
 
-
-import mantle.managers.resize.Resize;
+//import resize.Resize;
 import flash.display.Stage;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
@@ -38,6 +37,6 @@ class StageSetupCommand extends Command
 		//mantle.managers.layout.scale.ScaleManager.stage = stage;
 		#end
 		
-		new Resize(stage);
+		//new Resize(stage);
 	}
 }

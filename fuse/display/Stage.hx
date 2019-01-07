@@ -7,9 +7,9 @@ import fuse.display.Sprite;
 import fuse.display.Quad;
 import fuse.Fuse;
 import fuse.utils.Color;
-import mantle.managers.resize.Resize;
+import resize.Resize;
 import notifier.Notifier;
-import notifier.Signal1;
+import signal.Signal1;
 import fuse.utils.Orientation;
 import openfl.Lib;
 import openfl.events.Event;
@@ -54,9 +54,9 @@ class Stage extends Sprite {
 		this.touchable = true;
 		this.name = "stage";
 		
-		new Resize(Lib.current.stage);
-		Resize.add(OnResize);
-		OnResize();
+		//new Resize(Lib.current.stage);
+		Resize.add(onResize);
+		onResize();
 	}
 
 	function initialize()
@@ -100,12 +100,12 @@ class Stage extends Sprite {
 	{
 		if (orientation != value) {
 			orientation = value;
-			OnResize();
+			onResize();
 		}
 		return value;
 	}
 
-	private function OnResize():Void 
+	private function onResize():Void 
 	{
 		updateDimensions(Lib.current.stage.stageWidth, Lib.current.stage.stageHeight);
 	}

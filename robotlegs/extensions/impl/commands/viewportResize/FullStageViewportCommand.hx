@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.commands.viewportResize;
 
-import mantle.managers.resize.Resize;
+import resize.Resize;
 import openfl.display.Stage;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;

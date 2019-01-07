@@ -5,7 +5,7 @@ import mantle.managers.replay.FrameActions;
 import mantle.managers.replay.InstantReplay;
 import mantle.managers.replay.InstantReplayObject;
 import mantle.managers.replay.MouseEventData;
-import mantle.time.EnterFrame;
+import time.EnterFrame;
 import mantle.util.app.App;
 import flash.events.MouseEvent;
 import flash.filesystem.File;

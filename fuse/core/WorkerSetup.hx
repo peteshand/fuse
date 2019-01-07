@@ -28,7 +28,7 @@ import flash.concurrent.Mutex;
 #end
 
 import fuse.core.backend.CoreEntryPoint;
-import notifier.Signal;
+import signal.Signal;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.messageData.WorkerPayload;
 import fuse.core.communication.data.WorkerSharedProperties;

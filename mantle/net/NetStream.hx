@@ -4,7 +4,7 @@ package mantle.net;
 
 import mantle.net.LocalFileCheckUtil;
 import openfl.errors.Error;
-import mantle.filesystem.File;
+import openfl.filesystem.File;
 import openfl.net.NetConnection;
 import openfl.net.NetStream as OpenFlNetStream;
 

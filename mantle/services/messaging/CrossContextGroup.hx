@@ -1,6 +1,6 @@
 package mantle.services.messaging;
 
-import notifier.Signal1;
+import signal.Signal1;
 import openfl.events.Event;
 import openfl.events.EventDispatcher;
 

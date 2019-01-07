@@ -1,7 +1,7 @@
 package fuse.display;
 
 import fuse.input.Touch;
-import notifier.Signal1;
+import signal.Signal1;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.display.InteractiveObject;
 

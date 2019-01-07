@@ -1,11 +1,11 @@
 package mantle.net;
 
-import mantle.filesystem.FileMode;
-import mantle.filesystem.FileStream;
+import openfl.filesystem.FileMode;
+import openfl.filesystem.FileStream;
 import openfl.utils.ByteArray;
-import mantle.filesystem.File;
-import notifier.Signal;
-import notifier.Signal1;
+import openfl.filesystem.File;
+import signal.Signal;
+import signal.Signal1;
 import openfl.net.URLLoader;
 import openfl.net.URLLoaderDataFormat;
 import openfl.net.URLRequest;

@@ -1,5 +1,5 @@
 package mantle.util.log.air;
-import mantle.filesystem.FileTools;
+import openfl.filesystem.FileTools;
 import mantle.filesystem.Files;
 import flash.filesystem.File;
 import haxe.crypto.Md5;

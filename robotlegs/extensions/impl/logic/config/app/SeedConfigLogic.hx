@@ -2,9 +2,9 @@ package robotlegs.extensions.impl.logic.config.app;
 import mantle.definitions.Storage;
 
 #if (air && !mobile && !test_flash)
-import mantle.filesystem.File;
-import mantle.filesystem.FileMode;
-import mantle.filesystem.FileStream;
+import openfl.filesystem.File;
+import openfl.filesystem.FileMode;
+import openfl.filesystem.FileStream;
 #end
 
 import openfl.Assets;

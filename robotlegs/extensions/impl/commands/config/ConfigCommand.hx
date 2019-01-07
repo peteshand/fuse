@@ -1,7 +1,7 @@
 package robotlegs.extensions.impl.commands.config;
 
 
-import mantle.delay.Delay;
+import delay.Delay;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.extensions.api.model.config.IConfigModel;
 /*

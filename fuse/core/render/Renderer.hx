@@ -1,6 +1,6 @@
 package fuse.core.render;
 
-import notifier.Signal;
+import signal.Signal;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.texture.Textures;
@@ -13,7 +13,7 @@ import fuse.core.render.Context3DRenderTarget;
 import fuse.core.render.Context3DTexture;
 import fuse.utils.Color;
 import fuse.Fuse;
-import mantle.managers.resize.Resize;
+import resize.Resize;
 import openfl.geom.Rectangle;
 
 import openfl.display3D.Context3DTriangleFace;

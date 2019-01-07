@@ -8,7 +8,7 @@ import fuse.core.communication.data.CommsObjGen;
 import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.communication.data.textureData.TextureSizeData;
 import notifier.Notifier;
-import notifier.Signal;
+import signal.Signal;
 
 /**
  * ...

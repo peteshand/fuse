@@ -1,10 +1,10 @@
 package fuse.text;
 
-import notifier.Signal;
+import signal.Signal;
 import openfl.events.FocusEvent;
 import openfl.events.Event;
 import openfl.Lib;
-import mantle.delay.Delay;
+import delay.Delay;
 import openfl.display.StageQuality;
 import fuse.texture.BitmapTexture;
 import fuse.utils.Align;
@@ -14,7 +14,7 @@ import fuse.display.Sprite;
 import fuse.utils.GcoArray;
 import fuse.utils.PowerOfTwo;
 import lime.text.UTF8String;
-import mantle.time.EnterFrame;
+import time.EnterFrame;
 import openfl.display.BitmapData;
 
 import openfl.geom.Rectangle;

@@ -1,8 +1,8 @@
 package fuse.robotlegs.window.logic;
 
 import org.swiftsuspenders.utils.DescribedType;
-import mantle.keyboard.Key;
-import mantle.keyboard.Keyboard;
+import keyboard.Key;
+import keyboard.Keyboard;
 import openfl.Lib;
 import openfl.display.StageDisplayState;
 
