@@ -7,6 +7,7 @@ import openfl.errors.Error;
 import openfl.filesystem.File;
 import openfl.net.NetConnection;
 import openfl.net.NetStream as OpenFlNetStream;
+import signal.Signal;
 
 /**
  * ...
@@ -15,6 +16,9 @@ import openfl.net.NetStream as OpenFlNetStream;
 
 class NetStream extends OpenFlNetStream
 {
+	public var onComplete = new Signal();
+	public var onError = new Signal();
+
 	public var url:String;
 	public function new(connection:NetConnection, peerID:String=null) 
 	{
@@ -87,7 +91,7 @@ class NetStream extends OpenFlNetStream
 		return new File(localURL(url)).exists;
 	}
 	
-	public function download(url:String, onComplete:Void -> Void = null) 
+	public function download(url:String, onComplete:Void -> Void = null, onError:Void -> Void = null) 
 	{
 		if (url == null) {
 			throw new Error("localURL should not be null");
@@ -95,7 +99,9 @@ class NetStream extends OpenFlNetStream
 		var cacher = new FileCacher(url);
 		if (onComplete != null) {
 			cacher.onComplete.add(onComplete);
-			cacher.onError.add(onComplete);
+			cacher.onError.add(onError);
+			cacher.onComplete.add(this.onComplete.dispatch);
+			cacher.onError.add(this.onError.dispatch);
 		}
 	}
 }

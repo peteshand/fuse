@@ -33,6 +33,7 @@ class FrontVideoTexture extends FrontBaseTexture
 	public var time(get, null):Float;
 	@:isVar public var volume(default, set):Float = 1;
 	@:isVar public var onComplete(get, null):Signal;
+	@:isVar public var onError(get, null):Signal;
 	public var onMetaData = new Signal();
 
 	var url:String;
@@ -57,6 +58,9 @@ class FrontVideoTexture extends FrontBaseTexture
 		netStream.client = { onMetaData: onMetaDataReceived };
 		netStream.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
 		
+		netStream.onError.add(() -> {
+			onError.dispatch();
+		});
 		super(512, 512, false, null, false);
 		this.directRender = true;
 
@@ -366,13 +370,17 @@ class FrontVideoTexture extends FrontBaseTexture
 	{
 		return netStream.time;
 	}
-
+	
 	function get_onComplete()
 	{
-		if (onComplete == null) {
-			onComplete = new Signal();
-		}
+		if (onComplete == null) onComplete = new Signal();
 		return onComplete;
+	}
+
+	function get_onError()
+	{
+		if (onError == null) onError = new Signal();
+		return onError;
 	}
 
 	function set_volume(value:Float):Float

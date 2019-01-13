@@ -8,8 +8,8 @@
 	"releasenote": "initial release",
 	"contributors": [ "p.j.shand" ],
 	"dependencies": {
-		"openfl": "8.6.4",
-		"lime": "7.1.0",
+		"openfl": "",
+		"lime": "",
 		"openflFileSystem": "",
 		"notifier": "",
 		"signals": "",

@@ -226,17 +226,17 @@ class PDParticleSystem extends ParticleSystem
     
     private function parseConfig(config:Xml):Void
     {
-        function getIntValue(element:haxe.xml.Fast):Int
+        function getIntValue(element:haxe.xml.Access):Int
         {
             return Std.parseInt(element.att.value);
         }
         
-        function getFloatValue(element:haxe.xml.Fast):Float
+        function getFloatValue(element:haxe.xml.Access):Float
         {
             return element != null ? Std.parseFloat(element.att.value) : Math.NaN;
         }
         
-        function getColor(element:haxe.xml.Fast):ColorArgb
+        function getColor(element:haxe.xml.Access):ColorArgb
         {
             var color:ColorArgb = new ColorArgb();
             color.red   = Std.parseFloat(element.att.red);
@@ -246,7 +246,7 @@ class PDParticleSystem extends ParticleSystem
             return color;
         }
         
-        function getBlendFunc(element:haxe.xml.Fast):Context3DBlendFactor
+        function getBlendFunc(element:haxe.xml.Access):Context3DBlendFactor
         {
             var value:Int = getIntValue(element);
             switch (value)
@@ -265,12 +265,12 @@ class PDParticleSystem extends ParticleSystem
             }
         }
         
-        function getNode(element:haxe.xml.Fast, name:String):haxe.xml.Fast
+        function getNode(element:haxe.xml.Access, name:String):haxe.xml.Access
         {
             return Reflect.field(element.node, name);
         }
         
-        var cfg:haxe.xml.Fast = new haxe.xml.Fast(config.firstElement());
+        var cfg:haxe.xml.Access = new haxe.xml.Access(config.firstElement());
         _emitterXVariance = Std.parseFloat(cfg.node.sourcePositionVariance.att.x);
         _emitterYVariance = Std.parseFloat(cfg.node.sourcePositionVariance.att.y);
         _gravityX = Std.parseFloat(cfg.node.gravity.att.x);
