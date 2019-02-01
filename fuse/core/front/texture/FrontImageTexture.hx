@@ -68,12 +68,14 @@ class FrontImageTexture extends FrontBaseTexture
 
 	private function onLoadComplete(e:Event=null):Void
 	{
-		setBitmapData(fileLoader.bitmapData);
+		setBitmapData(fileLoader.bitmapData.clone());
 	}
 
 	function setBitmapData(bmd:BitmapData)
 	{
 		this.bitmapData = bmd;
+		//this.bitmapData = new BitmapData(bmd.width, bmd.height, true, 0x00000000);
+		//bitmapData.draw(bmd);
 		this.width = bitmapData.width;
 		this.height = bitmapData.height;
 		
