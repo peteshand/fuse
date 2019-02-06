@@ -21,8 +21,19 @@ class DocStore
 	function new(id:String) 
 	{
 		this.id = id;
+
 		var docStoreDir:File = Storage.appStorageDir.resolvePath("DocStore");
 		if (!docStoreDir.exists) docStoreDir.createDirectory();
+
+		var split:Array<String> = id.split("/");
+		if (split.length > 1){
+			for (i in 0...split.length-1){
+				docStoreDir = docStoreDir.resolvePath(split[i]);
+				if (!docStoreDir.exists) docStoreDir.createDirectory();
+			}
+			id = split[split.length - 1];
+		}
+
 		file = docStoreDir.resolvePath(id + ".json");
 		if (file.exists){
 			fileStream = new FileStream();
