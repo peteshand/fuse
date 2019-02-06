@@ -38,7 +38,7 @@ class Fuse extends EventDispatcher
 	{
 		MessageManager.init();
 		if (fuseConfig == null) fuseConfig = { };
-		trace("FUSE VERSION: 0.0.7");
+		trace("FUSE VERSION: 0.0.8");
 		if (WorkerInfo.isMainThread) {
 			mainThread = new MainThread(this, rootClass, fuseConfig, stage3D, renderMode, profile);
 			mainThread.addEventListener(FuseEvent.ROOT_CREATED, this.dispatchEvent);

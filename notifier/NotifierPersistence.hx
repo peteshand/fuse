@@ -40,7 +40,7 @@ class NotifierPersistence
     
     static function getNPData(id:String):NPData
     {
-        var sharedObject:DocStore = DocStore.getLocal("Notifier_" + id);
+        var sharedObject:DocStore = DocStore.getLocal("notifiers/" + id);
         return {
             sharedObject:sharedObject,
             localData:Reflect.getProperty(sharedObject.data, "value")
