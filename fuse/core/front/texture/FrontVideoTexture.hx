@@ -201,6 +201,8 @@ class FrontVideoTexture extends FrontBaseTexture
 	function seekVideo()
 	{
 		trace2("seekTarget = " + seekTarget);
+		action.value = VideoAction.SEEKING;
+
 		netStream.seek(seekTarget);
 	}
 	
@@ -426,6 +428,7 @@ typedef NetStatusInfo =
 	public var STOP:String = "stop";
 	public var PAUSE:String = "pause";
 	public var SEEK:String = "seek";
+	public var SEEKING:String = "seekING";
 	public var PLAY_WAIT:String = "play_wait";
 	public var PAUSE_WAIT:String = "pause_wait";
 	public var STOP_WAIT:String = "stop_wait";
