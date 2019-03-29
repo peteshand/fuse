@@ -112,7 +112,9 @@ class MainThread extends ThreadBase
 	
 	private function Update(e:Event):Void 
 	{
+		renderer.begin(true, stage.color);
 		process();
+		renderer.end();
 	}
 	
 	public function process():Void
@@ -134,7 +136,7 @@ class MainThread extends ThreadBase
 		//trace("conductorData.backIsStatic = " + conductorData.backIsStatic);
 		
 		if (renderer != null) {
-			#if air
+			//#if air
 			if (Fuse.skipUnchangedFrames) {
 				if (Fuse.current.conductorData.changeAvailable == 1) {
 					renderer.update();
@@ -143,9 +145,9 @@ class MainThread extends ThreadBase
 			else {
 				renderer.update();
 			}
-			#else
-				renderer.update();
-			#end
+			//#else
+			//	renderer.update();
+			//#end
 		}
 		
 		Fuse.current.enterFrame.dispatch();

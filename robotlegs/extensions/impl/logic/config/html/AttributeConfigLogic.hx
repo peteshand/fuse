@@ -2,7 +2,7 @@ package robotlegs.extensions.impl.logic.config.html;
 import haxe.Json;
 import mantle.util.app.App;
 import js.Browser;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...

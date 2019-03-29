@@ -74,18 +74,19 @@ class InputAssemblerObject
 		Touchables.flattened.sort(sortTouchables);
 
 		var j:Int = Touchables.flattened.length - 1;
+		var hit:Bool = false;
 		while (j >= 0)
 		{
-			if (testDisplay(Touchables.flattened[j], touch)) {
+			if (testDisplay(Touchables.flattened[j], touch, hit)) {
 				// hit display
-				j = -1;
+				hit = true;
 			}
 			j--;
 		}
-		testDisplay(Touchables.stage, touch);
+		testDisplay(Touchables.stage, touch, false);
 	}
 
-	function testDisplay(display:CoreDisplayObject, touch:Touch):Bool
+	function testDisplay(display:CoreDisplayObject, touch:Touch, hit:Bool):Bool
 	{
 		if (display == null) return false;
 		if (display.absoluteVis() == false) return false;
@@ -96,30 +97,35 @@ class InputAssemblerObject
 			
 			var _withinBound:Bool = display.withinBounds(touch.type == TouchType.PRESS, touch.x, touch.y);
 			
+			
 			if (_withinBound){
 				if (display.touchable == false) return false;
-				if (touch.targetId == null) {
+				if (!display.currentlyOver.get(touch.index)) {
 					var displayTouch = touchDisplay.onOver(touch.index);
 					displayTouch.index = touch.index;
 					displayTouch.x = touch.x;
 					displayTouch.y = touch.y;
 					addTouch(displayTouch);
+					display.currentlyOver.set(touch.index, true);
 					//trace("OVER");
 				}
 			} else {
-				if (touch.targetId == touchDisplay.objectId) {
+				if (display.currentlyOver.get(touch.index)) {
 					touch.targetId = null;
 					var displayTouch = touchDisplay.onOut(touch.index);
 					displayTouch.index = touch.index;
 					displayTouch.x = touch.x;
 					displayTouch.y = touch.y;
 					addTouch(displayTouch);
+					display.currentlyOver.set(touch.index, false);
 					//trace("OUT");
 					
 				}
 				return false;
 			}
 		}
+
+		if (hit) return true;
 
 		var displayTouch:Touch = getDisplayTouch(touchDisplay, touch);
 		addTouch(displayTouch);

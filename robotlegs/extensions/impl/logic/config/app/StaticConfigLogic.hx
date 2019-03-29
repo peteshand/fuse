@@ -6,7 +6,7 @@ import openfl.filesystem.File;
 import openfl.filesystem.FileMode;
 import openfl.filesystem.FileStream;
 import haxe.Json;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigLoadService;
 import robotlegs.extensions.impl.utils.json.JsonFormatter;

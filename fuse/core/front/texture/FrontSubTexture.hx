@@ -16,7 +16,7 @@ class FrontSubTexture extends FrontBaseTexture
 
     public function new(width:Int, height:Int, parentTexture:IFrontTexture)
     {
-        super(width, height, false, null, true, parentTexture.textureId);
+        super(width, height, false, /*null, */true, parentTexture.textureId);
         this.parentTexture = parentTexture;
         parentTexture.onUpdate.add(onUpdate.dispatch);
         parentTexture.onUpload.add(onUpload.dispatch);

@@ -2,7 +2,7 @@ package robotlegs.extensions.impl.logic.config.app;
 
 import mantle.definitions.Storage;
 import msignal.Signal.Signal0;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigSaveService;
 import org.swiftsuspenders.utils.DescribedType;

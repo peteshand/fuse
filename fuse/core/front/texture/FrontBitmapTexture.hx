@@ -16,7 +16,7 @@ class FrontBitmapTexture extends FrontBaseTexture
 {
 	var bitmapData:BitmapData;
 	
-	public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) 
+	public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, /*onTextureUploadCompleteCallback:Void -> Void = null, */_textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) 
 	{
 		this.bitmapData = bitmapData;
 		
@@ -26,7 +26,7 @@ class FrontBitmapTexture extends FrontBaseTexture
 		var h:Int = height;
 		if (width == null) h = bitmapData.height;
 		
-		super(w, h, queUpload, onTextureUploadCompleteCallback, true, _textureId, _objectId);
+		super(w, h, queUpload, /*onTextureUploadCompleteCallback, */true, _textureId, _objectId);
 	}
 	
 	override public function upload() 
@@ -45,8 +45,14 @@ class FrontBitmapTexture extends FrontBaseTexture
 			uploadFromBitmapDataAsync(bitmapData, 0);
 		}
 		else {*/
-			nativeTexture.uploadFromBitmapData(bitmapData, 0);
-			OnTextureUploadComplete(null);
+			try {
+				nativeTexture.uploadFromBitmapData(bitmapData, 0);
+				OnTextureUploadComplete(null);
+			} catch (e:Dynamic) {
+				trace("Error uploading texture");
+			}
+			
+			
 		//}
 	}
 	
@@ -60,7 +66,7 @@ class FrontBitmapTexture extends FrontBaseTexture
 		
 		Fuse.current.conductorData.frontStaticCount = 0;
 		
-		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
+		//if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		onUpload.dispatch();
 	}
 }

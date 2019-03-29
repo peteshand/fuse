@@ -5,7 +5,7 @@ import openfl.display.Stage;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;
 import robotlegs.bender.extensions.display.base.api.IViewport;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import org.swiftsuspenders.utils.DescribedType;
 
 /**

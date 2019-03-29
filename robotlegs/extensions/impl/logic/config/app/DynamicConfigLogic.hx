@@ -8,7 +8,7 @@ import openfl.filesystem.FileMode;
 import openfl.filesystem.FileStream;
 import haxe.Json;
 import openfl.errors.Error;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.logic.config.app.StaticConfigLogic.EmptyConfig;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigSaveService;

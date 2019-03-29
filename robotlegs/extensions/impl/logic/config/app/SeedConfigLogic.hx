@@ -8,7 +8,7 @@ import openfl.filesystem.FileStream;
 #end
 
 import openfl.Assets;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigLoadService;
 import org.swiftsuspenders.utils.DescribedType;

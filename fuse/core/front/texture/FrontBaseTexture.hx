@@ -26,7 +26,7 @@ class FrontBaseTexture implements IFrontTexture
 	static var objectIdCount:Int = 0;
 	static var textureIdCount:Int = 0;
 
-	var onTextureUploadCompleteCallback:Void->Void;
+	//var onTextureUploadCompleteCallback:Void->Void;
 	var persistent:Int;
 	var p2Texture:Bool;
 	var uploadFromBitmapDataAsync:BitmapData->UInt->Void;
@@ -52,7 +52,7 @@ class FrontBaseTexture implements IFrontTexture
 
 	public var dependantDisplays = new Map<Int, Image>();
 	
-	public function new(width:Int, height:Int, queUpload:Bool = true, onTextureUploadCompleteCallback:Void->Void = null, p2Texture:Bool = true, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) {
+	public function new(width:Int, height:Int, queUpload:Bool = true, /*onTextureUploadCompleteCallback:Void->Void = null, */p2Texture:Bool = true, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) {
 		// objectId = FrontBaseTexture.objectIdCount++;
 
 		if (_textureId == null) {
@@ -75,7 +75,7 @@ class FrontBaseTexture implements IFrontTexture
 		this.width = width;
 		this.height = height;
 		this.p2Texture = p2Texture;
-		this.onTextureUploadCompleteCallback = onTextureUploadCompleteCallback;
+		//this.onTextureUploadCompleteCallback = onTextureUploadCompleteCallback;
 		textureData = CommsObjGen.getTextureData(objectId, textureId);
 
 		// setTextureData();

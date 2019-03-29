@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl;
 
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
 import robotlegs.extensions.impl.model.ExecuteImagModels;
 import condition.SceneModel;

@@ -31,7 +31,7 @@ class FrontRenderTexture extends FrontBaseTexture
 			conductorData = new WorkerConductorData();
 		}
 		
-		super(width, height, false, null, true, _textureId, _objectId);
+		super(width, height, false, /*null, */true, _textureId, _objectId);
 		this.directRender = directRender;
 		
 		renderTextureData = new RenderTextureData(objectId);

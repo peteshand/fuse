@@ -197,7 +197,8 @@ class CoreDisplayObject
 	}
 
 	
-
+	public var currentlyOver = new Map<Int, Bool>();
+	
 	var _onPresses = new Map<Int, Touch>();
 	var _onRelease = new Map<Int, Touch>();
 	var _onMove = new Map<Int, Touch>();

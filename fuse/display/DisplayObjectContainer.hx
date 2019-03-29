@@ -4,6 +4,7 @@ import fuse.input.Touch;
 import signal.Signal1;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.display.InteractiveObject;
+import fuse.geom.Rectangle;
 
 /**
  * ...
@@ -136,6 +137,31 @@ class DisplayObjectContainer extends InteractiveObject
 		{
 			children[i].dispose();
 		}
+	}
+
+
+
+	override function get_bounds():Rectangle
+	{
+		// only hald implemented
+		var low:Rectangle = new Rectangle(Math.POSITIVE_INFINITY, Math.POSITIVE_INFINITY, 0, 0);
+		var high:Rectangle = new Rectangle(Math.NEGATIVE_INFINITY, Math.NEGATIVE_INFINITY, 0, 0);
+
+		for (i in 0...children.length) 
+		{
+			if (low.x > children[i].bounds.x) low.x = children[i].bounds.x;
+			if (high.x < children[i].bounds.x) high.x = children[i].bounds.x;
+			if (low.y > children[i].bounds.y) low.y = children[i].bounds.y;
+			if (high.y < children[i].bounds.y) high.y = children[i].bounds.y;
+			
+		}
+		
+		bounds.x = low.x;
+		bounds.y = high.y;
+		bounds.width = high.x - low.x;
+		bounds.height = high.y - low.y;
+
+		return bounds;
 	}
 
 	/*override function get_onPress():Signal1<Touch> 

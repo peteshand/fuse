@@ -9,7 +9,7 @@ import flash.events.MouseEvent;
 import openfl.errors.Error;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 /**
  * ...
  * @author Thomas Byrne
@@ -32,7 +32,6 @@ class AirFullscreenCommand extends Command
 			GoFullScreen();
 		}
 		attachTo(contextView.view.stage);
-		Keyboard.onPress(Key.F, ToggleFullscreen).ctrl(true);
 		Keyboard.onPress(Key.ENTER, ToggleFullscreen).ctrl(true);
 	}
 	

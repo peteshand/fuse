@@ -2,7 +2,7 @@ package robotlegs.extensions.impl.services.fps;
 
 import notifier.Notifier;
 import robotlegs.bender.extensions.contextView.ContextView;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
 import robotlegs.extensions.impl.model.fps.FPSThrottleModel;
 import org.swiftsuspenders.utils.DescribedType;

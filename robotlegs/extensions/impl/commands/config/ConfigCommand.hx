@@ -3,7 +3,7 @@ package robotlegs.extensions.impl.commands.config;
 
 import delay.Delay;
 import robotlegs.bender.bundles.mvcs.Command;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 /*
 import robotlegs.extensions.impl.logic.config.app.SeedConfigLogic;
 import robotlegs.extensions.impl.logic.flags.compile.CompileDefineFlagsLogic;

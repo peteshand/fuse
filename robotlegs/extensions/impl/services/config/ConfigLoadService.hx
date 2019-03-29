@@ -4,7 +4,7 @@ import openfl.filesystem.FileMode;
 import openfl.filesystem.FileStream;
 import haxe.Json;
 import openfl.errors.Error;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.flags.FlagsModel;
 import org.swiftsuspenders.utils.DescribedType;
 /**

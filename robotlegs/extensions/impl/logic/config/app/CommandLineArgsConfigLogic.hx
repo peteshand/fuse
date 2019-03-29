@@ -3,7 +3,7 @@ package robotlegs.extensions.impl.logic.config.app;
 import flash.desktop.NativeApplication;
 import flash.events.InvokeEvent;
 import openfl.errors.Error;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.utils.types.CastUtils;
 import org.swiftsuspenders.utils.DescribedType;
 /**

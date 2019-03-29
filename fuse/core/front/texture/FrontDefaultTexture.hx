@@ -5,11 +5,11 @@ import openfl.display.BitmapData;
 
 class FrontDefaultTexture extends FrontBitmapTexture
 {
-	public function new(bitmapData:BitmapData, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(bitmapData:BitmapData, queUpload:Bool=true/*, onTextureUploadCompleteCallback:Void -> Void = null*/) 
 	{
 		this.persistent = 1;
 		
-		super(bitmapData, queUpload, onTextureUploadCompleteCallback);
+		super(bitmapData, queUpload/*, onTextureUploadCompleteCallback*/);
 		
 		this.offsetU = 1 / bitmapData.width;
 		this.offsetV = 1 / bitmapData.width;

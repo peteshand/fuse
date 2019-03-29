@@ -12,7 +12,10 @@ class BitmapTexture extends BaseTexture
     public function new(bitmapData:BitmapData, ?width:Int, ?height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) 
 	{
         super();
-        texture = bitmapTexture = new FrontBitmapTexture(bitmapData, width, height, queUpload, onTextureUploadCompleteCallback, _textureId, _objectId);
+        texture = bitmapTexture = new FrontBitmapTexture(bitmapData, width, height, queUpload/*, onTextureUploadCompleteCallback*/, _textureId, _objectId);
+        if (onTextureUploadCompleteCallback != null){
+            texture.onUpload.add(onTextureUploadCompleteCallback);
+        }
     }
 
     public function update(source:BitmapData)

@@ -143,39 +143,4 @@ class Dimensions
 		object.x = Dimensions.x;
 		object.y = Dimensions.y;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public static var D_720P(get, null):Rectangle;
-	public static var D_1080P(get, null):Rectangle;
-	public static var D_4K(get, null):Rectangle;
-	
-	static function get_D_720P():Rectangle 
-	{
-		Logger.error(Dimensions, "Dimensions.D_720P has moved to com.imagination.definitions.layout.Dimensions");
-		return null;
-	}
-
-	static function get_D_1080P():Rectangle 
-	{
-		Logger.error(Dimensions, "Dimensions.D_1080P has moved to com.imagination.definitions.layout.Dimensions");
-		return null;
-	}
-
-	static function get_D_4K():Rectangle 
-	{
-		Logger.error(Dimensions, "Dimensions.D_4K has moved to com.imagination.definitions.layout.Dimensions");
-		return null;
-	}
-
-	
 }

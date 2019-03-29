@@ -24,11 +24,11 @@ class FrontImageTexture extends FrontBaseTexture
 	
 	static var loaders = new Map<String, ILoader>();
 	var fileLoader:ILoader;
-	var bitmapData:BitmapData;
+	public var bitmapData:BitmapData;
 	public var url:String;
 	@:isVar var errorBitmap(get, null):BitmapData;
 
-	public function new(url:String, ?width:Null<Int>, ?height:Null<Int>, queUpload:Bool=false, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(url:String, ?width:Null<Int>, ?height:Null<Int>, queUpload:Bool=false/*, onTextureUploadCompleteCallback:Void -> Void = null*/) 
 	{
 		// TODO: reuse nativeTexture when same url is set
 		//masterTextureId = imageTextureIds.get(url);
@@ -43,7 +43,7 @@ class FrontImageTexture extends FrontBaseTexture
 		
 		if (width == null) width = 0;
 		if (height == null) height = 0;
-		super(width, height, queUpload, onTextureUploadCompleteCallback, true, masterTextureId);
+		super(width, height, queUpload, /*onTextureUploadCompleteCallback, */true, masterTextureId);
 		
 		if (masterTextureId == null){
 			//trace("no master texture found for " + url + ", setting self as master: " + this.textureId);
@@ -82,17 +82,19 @@ class FrontImageTexture extends FrontBaseTexture
 		createNativeTexture();
 		
 		if (uploadFromBitmapDataAsync == null) {
-			nativeTexture.uploadFromBitmapData(bitmapData, 0);
-			
-
-			#if (air||flash)
-				OnTextureUploadComplete(null);
-			#else
-			//Delay.byFrames(40, () -> {
-				// Without a delay the following error is happening: there is no texture bound to the unit 1
-				OnTextureUploadComplete(null);
-			//});
-			#end
+			try {
+				nativeTexture.uploadFromBitmapData(bitmapData, 0);
+				#if (air||flash)
+					OnTextureUploadComplete(null);
+				#else
+				//Delay.byFrames(40, () -> {
+					// Without a delay the following error is happening: there is no texture bound to the unit 1
+					OnTextureUploadComplete(null);
+				//});
+				#end
+			} catch (e:Dynamic) {
+				trace("Error uploading texture");
+			}
 		}
 		else {
 			nativeTexture.addEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
@@ -111,7 +113,8 @@ class FrontImageTexture extends FrontBaseTexture
 		textureData.textureAvailable = 1;
 		
 		Fuse.current.conductorData.frontStaticCount = 0;
-		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
+		//if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
+		//trace('load complete: ' + url);
 		onUpload.dispatch();
 	}
 	

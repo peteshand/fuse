@@ -50,11 +50,16 @@ class TextFieldTexture extends BaseTexture
 	public var wordWrap(get, set):Bool;
 	var nativeTextField:NativeTextField;
 
-	public function new(width:Int, height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(width:Int, height:Int, ?defaultTextFormat:TextFormat, ?queUpload:Bool=true, ?onTextureUploadCompleteCallback:Void -> Void = null) 
 	{
         super();
-        texture = textFieldTexture = new FrontTextFieldTexture(width, height, queUpload, onTextureUploadCompleteCallback);
+        texture = textFieldTexture = new FrontTextFieldTexture(width, height, queUpload/*, onTextureUploadCompleteCallback*/);
+		if (onTextureUploadCompleteCallback != null){
+			texture.onUpload.add(onTextureUploadCompleteCallback);
+		}
 		nativeTextField = textFieldTexture.nativeTextField;
+		if (defaultTextFormat != null) this.defaultTextFormat = defaultTextFormat;
+		this.wordWrap = true;
     }
 
 	public function appendText(text:String):Void

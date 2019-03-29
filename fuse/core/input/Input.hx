@@ -24,6 +24,7 @@ class Input {
 	//var touchDataArray = new GcoArray<Touch>();
 	var touchMap = new Map<String, TouchType>();
 	var mouseMap = new Map<String, TouchType>();
+	var currentMouseMove:MouseEvent;
 
 	public function new() {
 		//trace("Multitouch.supportsTouchEvents = " + Multitouch.supportsTouchEvents);
@@ -43,20 +44,26 @@ class Input {
 		
 		var stage:Stage = Lib.current.stage;
 		if (Multitouch.supportsTouchEvents) {
-			stage.addEventListener(TouchEvent.TOUCH_MOVE, OnTouch, false, 100);
-			stage.addEventListener(TouchEvent.TOUCH_BEGIN, OnTouch);
-			stage.addEventListener(TouchEvent.TOUCH_END, OnTouch);
+			stage.addEventListener(TouchEvent.TOUCH_MOVE, onTouch, false, 100);
+			stage.addEventListener(TouchEvent.TOUCH_BEGIN, onTouch);
+			stage.addEventListener(TouchEvent.TOUCH_END, onTouch);
 		}// else {
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, OnMouse, false, 100);
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, OnMouse);
-			stage.addEventListener(MouseEvent.MOUSE_UP, OnMouse);
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouse, false, 100);
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);
+			stage.addEventListener(MouseEvent.MOUSE_UP, onMouse);
 		//}
 
-		stage.addEventListener(Event.MOUSE_LEAVE, OnMouseLeave);
-		stage.addEventListener(Event.ENTER_FRAME, OnTick);
+		stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseScroll);
+		stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave);
+		stage.addEventListener(Event.ENTER_FRAME, onTick);
 	}
 
-	private function OnTick(e:Event):Void {
+	function onMouseScroll(e:MouseEvent)
+	{
+		if (currentMouseMove != null) onMouse(currentMouseMove);
+	}
+
+	function onTick(e:Event):Void {
 		for (touch in activeTouchData.iterator()){
 			Fuse.current.workerSetup.addInput(touch);
 		}
@@ -67,15 +74,15 @@ class Input {
 		touchDataArray.clear();*/
 	}
 
-	function OnMouseXChange(value:Array<Float>) {
-		// trace("OnMouseXChange: " + value);
+	function onMouseXChange(value:Array<Float>) {
+		// trace("onMouseXChange: " + value);
 	}
 
-	private function OnMouseLeave(e:Event):Void {
-		// OnMouse(leaveStageMouseEvent);
+	private function onMouseLeave(e:Event):Void {
+		// onMouse(leaveStageMouseEvent);
 	}
 
-	function OnTouch(e:TouchEvent):Void {
+	function onTouch(e:TouchEvent):Void {
 		if (Fuse.current.stage == null)
 			return;
 		var type:String = e.type;
@@ -92,7 +99,7 @@ class Input {
 		activeTouchData.set(id, touch);
 	}
 
-	function OnMouse(e:MouseEvent):Void {
+	function onMouse(e:MouseEvent):Void {
 		if (Fuse.current.stage == null)
 			return;
 		var type:String = e.type;
@@ -106,6 +113,8 @@ class Input {
 		touch.type = mouseMap.get(e.type);
 		//touchDataArray.push(touch);
 		activeTouchData.set(id, touch);
+
+		if (e.type == MouseEvent.MOUSE_MOVE) currentMouseMove = e;
 	}
 
 	function setPosition(touch:Touch, e:InputEvent)

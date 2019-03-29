@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.commands;
 
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.CoreModelExtension;
 // import robotlegs.extensions.impl.commands.assets.SetupAssetsCommand;
 // import robotlegs.extensions.impl.commands.assets.SetupS3ResourceSyncCommand;

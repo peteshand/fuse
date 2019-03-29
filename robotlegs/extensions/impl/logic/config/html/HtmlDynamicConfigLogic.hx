@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.logic.config.html;
 import openfl.net.SharedObject;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 import org.swiftsuspenders.utils.DescribedType;
 /**
  * ...

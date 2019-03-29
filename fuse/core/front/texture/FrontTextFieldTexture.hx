@@ -15,7 +15,6 @@ import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.text.TextLineMetrics;
-
 /**
  * ...
  * @author P.J.Shand
@@ -93,10 +92,13 @@ class FrontTextFieldTexture extends FrontBitmapTexture
 	//public var baseBmdTexture(get, never):BitmapTexture;
 	var initialized:Bool = false;
 	
-	public function new(width:Int, height:Int, queUpload:Bool=true, onTextureUploadCompleteCallback:Void -> Void = null) 
+	public function new(width:Int, height:Int, queUpload:Bool=true/*, onTextureUploadCompleteCallback:Void -> Void = null*/) 
 	{
 		FrontTextFieldTexture.init();
 		nativeTextField = new NativeTextField();
+		nativeTextField.embedFonts = true;
+		nativeTextField.antiAliasType = AntiAliasType.ADVANCED; 
+		nativeTextField.sharpness = 400;
 		//nativeTextField.width = width;
 		//nativeTextField.height = height;
 		
@@ -107,7 +109,7 @@ class FrontTextFieldTexture extends FrontBitmapTexture
 		this.width = width;// nativeTextField.width;// = width;
 		this.height = height;// nativeTextField.height;// = height;
 
-		super(bitmapdata, width, height, queUpload, onTextureUploadCompleteCallback);
+		super(bitmapdata, width, height, queUpload/*, onTextureUploadCompleteCallback*/);
 		
 		updateText();
 	}
@@ -432,6 +434,7 @@ class FrontTextFieldTexture extends FrontBitmapTexture
 		}
 		return value;
 	}
+	static var count:Int = 0;
 	
 	public function updateText():Void
 	{
@@ -440,12 +443,14 @@ class FrontTextFieldTexture extends FrontBitmapTexture
 
 			//trace([this.width, this.textureWidth, this.nativeTextField.width]);
 			bitmapdata = new BitmapData(textureWidth, textureHeight, true, clearColour);
-			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
+			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, true, StageQuality.HIGH);
 			var textureId:Null<Int> = null;
 			if (this.objectId > 1) {
 				textureId = this.objectId;
 				//texture.dispose();
 			}
+
+			
 			//trace("create new texture");
 			this.update(bitmapdata);
 			//texture = new BitmapTexture(bitmapdata, false, null, textureId);
@@ -456,7 +461,7 @@ class FrontTextFieldTexture extends FrontBitmapTexture
 		else if (dirtyProp == true) {
 			//trace("redraw texture");
 			bitmapdata.fillRect(bitmapdata.rect, clearColour);
-			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, false, StageQuality.HIGH);
+			bitmapdata.drawWithQuality(nativeTextField, null, null, null, null, true, StageQuality.HIGH);
 			this.update(bitmapdata);
 			onUpdate.dispatch();
 		}

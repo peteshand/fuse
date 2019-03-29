@@ -17,7 +17,7 @@ class Image extends DisplayObject
 {
 	@:isVar public var texture(default, set):ITexture;
 	@:isVar public var blendMode(default, set):BlendMode;
-	@:isVar public var bounds(get, never):Rectangle = new Rectangle();
+	
 	@:isVar public var offsetU(default, set):Float;
 	@:isVar public var offsetV(default, set):Float;
 	@:isVar public var scaleU(default, set):Float;
@@ -37,7 +37,7 @@ class Image extends DisplayObject
 		this.scaleV = 1;
 	}
 
-	function get_bounds():Rectangle
+	override function get_bounds():Rectangle
 	{
 		if (Math.isNaN(displayData.bottomLeftX)) return null;
 
@@ -106,6 +106,7 @@ class Image extends DisplayObject
 		if (offsetU != value){
 			displayData.offsetU = offsetU = value;
 			updateUVs = true;
+			updatePosition = true;
 			updateStaticBackend();
 		}
 		return value;
@@ -116,6 +117,7 @@ class Image extends DisplayObject
 		if (offsetV != value){
 			displayData.offsetV = offsetV = value;
 			updateUVs = true;
+			updatePosition = true;
 			updateStaticBackend();
 		}
 		return value;
@@ -126,6 +128,7 @@ class Image extends DisplayObject
 		if (scaleU != value){
 			displayData.scaleU = scaleU = value;
 			updateUVs = true;
+			updatePosition = true;
 			updateStaticBackend();
 		}
 		return value;
@@ -136,6 +139,7 @@ class Image extends DisplayObject
 		if (scaleV != value){
 			displayData.scaleV = scaleV = value;
 			updateUVs = true;
+			updatePosition = true;
 			updateStaticBackend();
 		}
 		return value;

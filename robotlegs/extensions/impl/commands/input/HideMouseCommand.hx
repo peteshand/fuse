@@ -5,7 +5,7 @@ import openfl.events.MouseEvent;
 import openfl.ui.Mouse;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;
-import robotlegs.extensions.api.model.config.IConfigModel;
+import robotlegs.bender.extensions.config.IConfigModel;
 
 /**
  * Trigger this command on startup to hide the mouse

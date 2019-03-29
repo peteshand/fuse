@@ -12,6 +12,7 @@ import fuse.Fuse;
 import fuse.utils.drag.DragUtil;
 import signal.Signal1;
 import fuse.utils.ObjectId;
+import fuse.geom.Rectangle;
 
 @:access(fuse)
 class DisplayObject
@@ -64,6 +65,7 @@ class DisplayObject
 	@:isVar public var mask(default, set):Image;
 	@:isVar public var renderLayer(default, set):Null<Int>;
 	//@:isVar public var blendMode(get, set):BlendMode;
+	@:isVar public var bounds(get, never):Rectangle = new Rectangle();
 	public var displayType:DisplayType;
 	
 	// var updateUVs:Bool = false;
@@ -152,7 +154,7 @@ class DisplayObject
 		return value;
 	}
 	
-	inline function set_x(value:Float):Float { 
+	function set_x(value:Float):Float { 
 		if (x != value){
 			displayData.x = x = value;
 			updatePosition = true;
@@ -161,7 +163,7 @@ class DisplayObject
 		}
 		return value;
 	}
-	inline function set_y(value:Float):Float { 
+	function set_y(value:Float):Float { 
 		if (y != value){
 			displayData.y = y = value;
 			updatePosition = true;
@@ -226,7 +228,7 @@ class DisplayObject
 		return value;
 	}
 	
-	inline function set_scaleX(value:Float):Float { 
+	function set_scaleX(value:Float):Float { 
 		if (scaleX != value){
 			displayData.scaleX = scaleX = value;
 			updatePosition = true;
@@ -238,7 +240,7 @@ class DisplayObject
 		return value;
 	}
 	
-	inline function set_scaleY(value:Float):Float { 
+	function set_scaleY(value:Float):Float { 
 		if (scaleY != value){
 			displayData.scaleY = scaleY = value;
 			updatePosition = true;
@@ -337,6 +339,11 @@ class DisplayObject
 			//isStatic = 0;
 		}
 		return value;
+	}
+
+	function get_bounds():Rectangle
+	{
+		return bounds;
 	}
 	
 	function setStage(value:Stage):Stage 
