@@ -85,7 +85,6 @@ class Renderer
 	public function update() 
 	{
 		if (context3D.driverInfo == "Disposed") return;
-		trace("update");
 		drawBuffer();
 	}
 	

@@ -67,7 +67,7 @@ class Stage extends Sprite {
 	function configure(fuseConfig:FuseConfig) 
 	{
 		this.fuseConfig = fuseConfig;
-		trace("fuseConfig");
+		//trace("fuseConfig");
 		#if html5
 			/*var configColor:UInt = Lib.current.stage.window.config.background;
 			var bgColor:String = "#";
@@ -90,7 +90,7 @@ class Stage extends Sprite {
 			trace("bgColor = " + bgColor);
 			//Lib.current.stage.window.config.element.style.background = bgColor;
 			Lib.current.stage.window.element.style.setProperty("background", bgColor);*/
-			trace("TODO: fix set background color");
+			//trace("TODO: fix set background color");
 			Reflect.setProperty(Browser.window, "stageWindow", Lib.current.stage.window);
 		#end
 	}
