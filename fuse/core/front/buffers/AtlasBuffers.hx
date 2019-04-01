@@ -67,7 +67,7 @@ class AtlasBuffers
 	
 	static public function setBufferIndexState(renderTargetId:Int) 
 	{
-		if (renderTargetId >= 2 && renderTargetId < 10) {
+		if (renderTargetId >= startIndex && renderTargetId < endIndex) {
 			var index:Int = Math.floor((renderTargetId - 2) / 2);
 			var state:Int = (renderTargetId - 2) % 2;
 			states[index].value = state;
