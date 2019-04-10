@@ -61,7 +61,7 @@ class FrontVideoTexture extends FrontBaseTexture
 		netStream.onError.add(() -> {
 			onError.dispatch();
 		});
-		super(512, 512, false, null, false);
+		super(512, 512, false, false);
 		this.directRender = true;
 
 		//if (url != null) play(url);
@@ -95,6 +95,7 @@ class FrontVideoTexture extends FrontBaseTexture
 			seekTarget = 0;
 			seekVideo();
 		}
+		this.textureData.changeCount++;
 	}
 
 	function onAvailableChange()
@@ -343,7 +344,6 @@ class FrontVideoTexture extends FrontBaseTexture
 		textureData.placed = 0;
 		Textures.registerTexture(textureId, this);
 		textureData.textureAvailable = 1;
-		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		onUpload.dispatch();
 	}
 
@@ -365,7 +365,9 @@ class FrontVideoTexture extends FrontBaseTexture
 				}
 			}
 		}
-		this.textureData.changeCount++;
+		if (action.value == VideoAction.PLAY){
+			this.textureData.changeCount++;
+		}
 	}
 
 	function get_time():Float
