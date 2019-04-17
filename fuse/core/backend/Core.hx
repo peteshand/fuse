@@ -1,8 +1,9 @@
 package fuse.core.backend;
+
 import fuse.core.backend.texture.CoreTextures;
 import fuse.core.backend.displaylist.DisplayList;
 import fuse.core.backend.texture.TextureRenderBatch;
-import fuse.core.backend.texture.RenderTextureManager;
+//import fuse.core.backend.texture.RenderTextureManager;
 
 /**
  * ...
@@ -14,7 +15,7 @@ class Core
 	public static var displayList:DisplayList;
 	public static var textures:CoreTextures;
 	public static var textureRenderBatch:TextureRenderBatch;
-	public static var renderTextureManager:RenderTextureManager;
+	//public static var renderTextureManager:RenderTextureManager;
 	
 	@:isVar public static var textureBuildRequiredCount(default, set):Int = 0;
 	
@@ -38,7 +39,7 @@ class Core
 		Core.textures = new CoreTextures();
 		Core.textureRenderBatch = new TextureRenderBatch();
 		
-		Core.renderTextureManager = new RenderTextureManager();
+		//Core.renderTextureManager = new RenderTextureManager();
 	}
 	
 	static function get_textureBuildRequiredCount():Int 

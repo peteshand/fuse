@@ -122,7 +122,6 @@ class MainThread extends ThreadBase
 		//trace("process start");
 		if (!setupComplete) return;
 		
-		trace("frontStaticCount++");
 		Fuse.current.conductorData.frontStaticCount++;
 		workerSetup.sendQue();
 		
@@ -130,7 +129,6 @@ class MainThread extends ThreadBase
 		workerSetup.update();
 		if (Fuse.current.cleanContext) {
 			conductorData.backIsStatic = 0;
-			//trace("4");W
 		}
 		
 		//trace("conductorData.frontIsStatic = " + conductorData.frontIsStatic);

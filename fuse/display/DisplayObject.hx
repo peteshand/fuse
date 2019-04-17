@@ -155,7 +155,7 @@ class DisplayObject
 	}
 	
 	function set_x(value:Float):Float { 
-		if (x != value){
+		if (floatHasChanged(x, value)){
 			displayData.x = x = value;
 			updatePosition = true;
 			//isMoving = 1;
@@ -164,7 +164,7 @@ class DisplayObject
 		return value;
 	}
 	function set_y(value:Float):Float { 
-		if (y != value){
+		if (floatHasChanged(y, value)){
 			displayData.y = y = value;
 			updatePosition = true;
 			//isMoving = 1;
@@ -174,7 +174,7 @@ class DisplayObject
 	}
 	
 	function set_width(value:Float):Float { 
-		if (width != value){
+		if (floatHasChanged(width, value)){
 			displayData.width = width = value;
 			updateAlignmentX();
 			updatePosition = true;
@@ -185,7 +185,7 @@ class DisplayObject
 	}
 	
 	function set_height(value:Float):Float { 
-		if (height != value){
+		if (floatHasChanged(height, value)){
 			displayData.height = height = value;
 			updateAlignmentY();
 			updatePosition = true;
@@ -196,7 +196,7 @@ class DisplayObject
 	}
 	
 	function set_pivotX(value:Float):Float { 
-		if (pivotX != value){
+		if (floatHasChanged(pivotX, value)){
 			displayData.pivotX = pivotX = value;
 			updatePosition = true;
 			//isMoving = 1;
@@ -206,7 +206,7 @@ class DisplayObject
 	}
 	
 	function set_pivotY(value:Float):Float { 
-		if (pivotY != value){
+		if (floatHasChanged(pivotY, value)){
 			displayData.pivotY = pivotY = value;
 			updatePosition = true;
 			//isMoving = 1;
@@ -216,7 +216,7 @@ class DisplayObject
 	}
 	
 	function set_rotation(value:Float):Float { 
-		if (rotation != value){
+		if (floatHasChanged(rotation, value, 100)){
 			displayData.rotation = rotation = value;
 			//trace("rotation = " + value);
 			
@@ -533,5 +533,11 @@ class DisplayObject
 		//trace(this.objectId);
 		//if (numListeners == 0) touchable = false;
 		//else touchable = true;
+	}
+
+	inline function floatHasChanged(current:Float, _new:Float, decimalPlaces:Int=10):Bool
+	{
+		if (current == _new) return false;
+		return Math.floor(Math.abs(current - _new) * decimalPlaces) > 0;
 	}
 }

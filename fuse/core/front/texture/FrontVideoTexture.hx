@@ -214,9 +214,7 @@ class FrontVideoTexture extends FrontBaseTexture
 		//	trace2("textureData.textureAvailable = " + textureData.textureAvailable);
 		//}
 		if (info.code == "NetStream.Play.Start") {
-			textureAvailable = true;
 			updateTextureSurface();
-			
 			Delay.nextFrame(delayAvailable);
 		}
 		if (info.code == "NetStream.Play.Stop") {
@@ -241,7 +239,6 @@ class FrontVideoTexture extends FrontBaseTexture
 		
 		if (info.code == "NetStream.Buffer.Empty") {
 			//nativeVideoTexture.addEventListener(Event.TEXTURE_READY, function(e:Event) {
-				textureAvailable = true;
 				updateTextureSurface();
 			//});
 			//nativeVideoTexture.attachNetStream(netStream);
@@ -253,6 +250,7 @@ class FrontVideoTexture extends FrontBaseTexture
 
 	inline function updateTextureSurface()
 	{
+		textureAvailable = true;
 		Fuse.current.workerSetup.updateTextureSurface(objectId);
 	}
 
@@ -349,8 +347,7 @@ class FrontVideoTexture extends FrontBaseTexture
 
 		textureData.placed = 0;
 		Textures.registerTexture(textureId, this);
-		textureAvailable = true;
-		Fuse.current.workerSetup.updateTextureSurface(objectId);
+		updateTextureSurface();
 		//if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		onUpload.dispatch();
 	}
@@ -373,8 +370,9 @@ class FrontVideoTexture extends FrontBaseTexture
 				}
 			}
 		}
-		//this.textureData.changeCount++;
-		Fuse.current.workerSetup.updateTextureSurface(objectId);
+		if (action.value == VideoAction.PLAY){
+			updateTextureSurface();
+		}
 	}
 
 	function get_time():Float

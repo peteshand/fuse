@@ -113,7 +113,7 @@ class FrontImageTexture extends FrontBaseTexture
 		textureAvailable = true;
 		Fuse.current.workerSetup.updateTextureSurface(objectId);
 		
-		trace("frontStaticCount = 0");
+		//trace("frontStaticCount = 0");
 		Fuse.current.conductorData.frontStaticCount = 0;
 		//if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		//trace('load complete: ' + url);

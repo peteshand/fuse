@@ -64,7 +64,7 @@ class FrontBitmapTexture extends FrontBaseTexture
 		Textures.registerTexture(textureId, this);
 		textureAvailable = true;
 		Fuse.current.workerSetup.updateTextureSurface(objectId);
-		trace("frontStaticCount = 0");
+		//trace("frontStaticCount = 0");
 		Fuse.current.conductorData.frontStaticCount = 0;
 		
 		//if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
