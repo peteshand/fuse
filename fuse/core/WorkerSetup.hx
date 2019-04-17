@@ -190,6 +190,13 @@ class WorkerSetup
 	{
 		send(MessageType.UPDATE_TEXTURE, objectId);
 	}
+
+	public function updateTextureSurface(objectId:ObjectId) 
+	{
+		send(MessageType.UPDATE_TEXTURE_SURFACE, objectId);
+	}
+
+	
 	
 	public function removeTexture(objectId:ObjectId) 
 	{
@@ -216,6 +223,7 @@ class WorkerSetup
 	
 	public function setStatic(displayObject:DisplayObject) 
 	{
+		//trace("frontStaticCount = 0");
 		Fuse.current.conductorData.frontStaticCount = 0;
 		staticChanges[displayObject.objectId] = displayObject;
 		//Fuse.current.conductorData.backIsStatic = 0;

@@ -61,7 +61,7 @@ class FrontVideoTexture extends FrontBaseTexture
 		netStream.onError.add(() -> {
 			onError.dispatch();
 		});
-		super(512, 512, false, null, false);
+		super(512, 512, false, false);
 		this.directRender = true;
 
 		//if (url != null) play(url);
@@ -214,7 +214,8 @@ class FrontVideoTexture extends FrontBaseTexture
 		//	trace2("textureData.textureAvailable = " + textureData.textureAvailable);
 		//}
 		if (info.code == "NetStream.Play.Start") {
-			textureData.textureAvailable = 1;
+			textureAvailable = true;
+			updateTextureSurface();
 			
 			Delay.nextFrame(delayAvailable);
 		}
@@ -240,13 +241,19 @@ class FrontVideoTexture extends FrontBaseTexture
 		
 		if (info.code == "NetStream.Buffer.Empty") {
 			//nativeVideoTexture.addEventListener(Event.TEXTURE_READY, function(e:Event) {
-				textureData.textureAvailable = 1;
+				textureAvailable = true;
+				updateTextureSurface();
 			//});
 			//nativeVideoTexture.attachNetStream(netStream);
 			if (onComplete != null) {
 				onComplete.dispatch();
 			}
 		}
+	}
+
+	inline function updateTextureSurface()
+	{
+		Fuse.current.workerSetup.updateTextureSurface(objectId);
 	}
 
 	function delayAvailable()
@@ -342,8 +349,9 @@ class FrontVideoTexture extends FrontBaseTexture
 
 		textureData.placed = 0;
 		Textures.registerTexture(textureId, this);
-		textureData.textureAvailable = 1;
-		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
+		textureAvailable = true;
+		Fuse.current.workerSetup.updateTextureSurface(objectId);
+		//if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		onUpload.dispatch();
 	}
 
@@ -365,7 +373,8 @@ class FrontVideoTexture extends FrontBaseTexture
 				}
 			}
 		}
-		this.textureData.changeCount++;
+		//this.textureData.changeCount++;
+		Fuse.current.workerSetup.updateTextureSurface(objectId);
 	}
 
 	function get_time():Float

@@ -30,9 +30,10 @@ class FrontBaseTexture implements IFrontTexture
 	var persistent:Int;
 	var p2Texture:Bool;
 	var uploadFromBitmapDataAsync:BitmapData->UInt->Void;
-
+	
 	public var objectId:ObjectId;
 	public var textureId:TextureId;
+	public var textureAvailable:Bool = false;
 	public var onUpdate = new Signal();
 	public var onUpload = new Signal();
 	@:isVar public var width(get, set):Null<Int>;
@@ -114,7 +115,7 @@ class FrontBaseTexture implements IFrontTexture
 		textureData.scaleU = scaleU;
 		textureData.scaleV = scaleV;
 
-		textureData.textureAvailable = 0;
+		//textureData.textureAvailable = 0;
 		textureData.persistent = persistent;
 		Fuse.current.workerSetup.updateTexture(objectId);
 		onUpdate.dispatch();
@@ -171,7 +172,7 @@ class FrontBaseTexture implements IFrontTexture
 
 	public function addChangeListener(image:Image) {
 		dependantDisplays.set(image.objectId, image);
-		if (textureData.textureAvailable == 1) {
+		if (textureAvailable == true) {
 			image.onTextureUpdate();
 		}
 		

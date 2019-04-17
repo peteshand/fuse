@@ -71,7 +71,7 @@ class BaseTexture implements ITexture
             onUpdate = texture.onUpdate;
             onUpload = texture.onUpload;
             
-            if (texture.textureData.textureAvailable == 1){
+            if (texture.textureAvailable == true){
                 Delay.nextFrame(() -> {
                     // Texture already ready
                     onUpdate.dispatch();

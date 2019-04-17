@@ -22,8 +22,9 @@ class CoreTexture
 	
 	@:isVar public var textureData(get, set):ITextureData;
 	public var activeCount:Int = 0;
-	var textureAvailable:Notifier<Int>;
-	var changeCount:Notifier<Int>;
+	public var textureAvailable:Bool = false;
+	//var textureAvailable:Notifier<Int>;
+	//var changeCount:Notifier<Int>;
 	var p2Width:Int;
 	var p2Height:Int;
 
@@ -55,11 +56,11 @@ class CoreTexture
 		
 		//copyBaseValues();
 
-		textureAvailable = new Notifier<Int>(0);
-		textureAvailable.add(OnTextureAvailableChange);
+		//textureAvailable = new Notifier<Int>(0);
+		//textureAvailable.add(OnTextureAvailableChange);
 		
-		changeCount = new Notifier<Int>(-1);
-		changeCount.add(OnCountChange);
+		//changeCount = new Notifier<Int>(-1);
+		//changeCount.add(OnCountChange);
 		
 		onTextureChange.add(function() {
 			for (key in dependantDisplays.keys()) {
@@ -90,15 +91,15 @@ class CoreTexture
 		textureData.atlasData.scaleV = textureData.scaleV;
 	}
 	
-	function OnCountChange() 
+	/*function OnCountChange() 
 	{
 		OnTextureAvailableChange();
-	}
+	}*/
 	
-	inline function OnTextureAvailableChange() 
+	/*inline function OnTextureAvailableChange() 
 	{
 		textureHasChanged = true;
-	}
+	}*/
 
 	function set_rotate(value:Bool):Bool
 	{
@@ -163,11 +164,11 @@ class CoreTexture
 		}
 	}
 	
-	public function checkForChanges():Void
+	/*public function checkForChanges():Void
 	{
 		textureHasChanged = false;
-		changeCount.value = textureData.changeCount;
-		textureAvailable.value = textureData.textureAvailable;
+		//changeCount.value = textureData.changeCount;
+		//textureAvailable.value = textureData.textureAvailable;
 		
 		if (textureHasChanged) {
 			//textureHasChanged = true;
@@ -175,6 +176,14 @@ class CoreTexture
 			onTextureChange.dispatch();
 			//trace("change: " + this.textureId);
 		}
+	}*/
+
+	public function updateSurface()
+	{
+		textureHasChanged = true;
+		textureAvailable = true;
+		updateUVData();
+		onTextureChange.dispatch();
 	}
 	
 	public function addChangeListener(coreImage:CoreImage) 

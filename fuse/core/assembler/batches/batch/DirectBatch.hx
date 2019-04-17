@@ -39,7 +39,7 @@ class DirectBatch extends BaseBatch implements IBatch
 	
 	override function getTextureIndex(renderable:ICoreRenderable) 
 	{
-		if (renderable.coreTexture == null || renderable.coreTexture.textureData.textureAvailable != 1) {
+		if (renderable.coreTexture == null || renderable.coreTexture.textureAvailable != true) {
 			return batchTextures.getTextureIndex(0);
 		}
 		else {

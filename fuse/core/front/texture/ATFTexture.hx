@@ -82,7 +82,7 @@ class ATFTexture extends FrontBaseTexture
 		
 		textureData.placed = 0;
 		Textures.registerTexture(textureId, this);
-		textureData.textureAvailable = 1;
+		textureAvailable = true;
 		if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		onUpload.dispatch();
 	}

@@ -16,6 +16,7 @@ interface IFrontTexture
 {
 	var objectId:ObjectId;
 	var textureId:TextureId;
+	var textureAvailable:Bool;
 	var onUpdate:Signal;
 	var onUpload:Signal;
 

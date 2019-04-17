@@ -21,6 +21,7 @@ class CoreTextures
 	
 	public function checkForTextureChanges():Void 
 	{
+		/*
 		texturesHaveChanged = false;
 		
 		for (i in 0...textures.length) {
@@ -31,6 +32,7 @@ class CoreTextures
 				texturesHaveChanged = true;
 			}
 		}
+		*/
 		//trace("textures.length = " + textures.length);
 		if (texturesHaveChanged) {
 			Fuse.current.conductorData.backIsStatic = 0;
@@ -58,6 +60,15 @@ class CoreTextures
 	{
 		var texture:CoreTexture = texturesMap.get(objectId);
 		if (texture != null) texture.update();
+	}
+
+	public function updateSurface(objectId:ObjectId)
+	{
+		var texture:CoreTexture = texturesMap.get(objectId);
+		if (texture != null) {
+			texturesHaveChanged = true;
+			texture.updateSurface();
+		}
 	}
 	
 	public function dispose(objectId:ObjectId):Void

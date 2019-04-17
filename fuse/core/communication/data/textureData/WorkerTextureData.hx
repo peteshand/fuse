@@ -66,12 +66,12 @@ class WorkerTextureData
 	
 	public var textureId:TextureId;
 
-	public var textureAvailable(get, set):Int;
+	//public var textureAvailable(get, set):Int;
 	public var placed(get, set):Int;
 	public var persistent(get, set):Int;
 	public var directRender(get, set):Int;
 	//public var atlasBatchTextureIndex(get, set):Int;
-	public var changeCount(get, set):Int;
+	//public var changeCount(get, set):Int;
 	public var area(get, null):Float;
 	
 	// Shared Props
@@ -84,7 +84,7 @@ class WorkerTextureData
 		atlasData = { objectId:objectId, textureId:0, x:0, y:0, width:0, height:0, p2Width:0, p2Height:0, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
 		
 		activeData = baseData;
-		textureAvailable = 0;
+		//textureAvailable = 0;
 
 		//objectId = objectOffset;
 		memoryBlock = Fuse.current.sharedMemory.textureDataPool.createMemoryBlock(WorkerTextureData.BYTES_PER_ITEM, objectId);

@@ -31,12 +31,15 @@ typedef ITextureData =
 	public var scaleU:Float;
 	public var scaleV:Float;
 
-	public var textureAvailable:Int;	// 
+	
 	public var placed:Int;				// 
 	public var persistent:Int;			// 
 	public var directRender:Int;		// 
 	//public var atlasTextureId:Int;		// 
-	public var changeCount:Int;			// 
+	
+	//public var textureAvailable:Int;	// 
+	//public var changeCount:Int;			// 
+	
 	public var area(get, null):Float;	// 
 	
 	// Shared Props

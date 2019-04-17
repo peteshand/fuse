@@ -54,7 +54,8 @@ class FrontRenderTexture extends FrontBaseTexture
 		clear();
 		
 		Textures.registerTexture(textureId, this);
-		textureData.textureAvailable = 1;
+		textureAvailable = true;
+		Fuse.current.workerSetup.updateTextureSurface(objectId);
 	}
 	
 	public function clear() 

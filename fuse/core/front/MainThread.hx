@@ -122,6 +122,7 @@ class MainThread extends ThreadBase
 		//trace("process start");
 		if (!setupComplete) return;
 		
+		trace("frontStaticCount++");
 		Fuse.current.conductorData.frontStaticCount++;
 		workerSetup.sendQue();
 		

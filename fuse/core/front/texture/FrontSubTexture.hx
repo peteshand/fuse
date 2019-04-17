@@ -26,13 +26,15 @@ class FrontSubTexture extends FrontBaseTexture
 
     function onParentUpdate()
     {
-        textureData.changeCount++;
+        //textureData.changeCount++;
 		this.width = parentTexture.width;
         this.height = parentTexture.height;
 		
         setTextureData();
-        textureData.textureAvailable = parentTexture.textureData.textureAvailable;
+        //textureData.textureAvailable = parentTexture.textureData.textureAvailable;
+        
         Fuse.current.workerSetup.updateTexture(objectId);
+        Fuse.current.workerSetup.updateTextureSurface(objectId);
     }
 
     override public function upload() {

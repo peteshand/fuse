@@ -106,12 +106,14 @@ class FrontImageTexture extends FrontBaseTexture
 	{
 		nativeTexture.removeEventListener(Event.TEXTURE_READY, OnTextureUploadComplete);
 		
-		textureData.changeCount++;
+		//textureData.changeCount++;
 		textureData.placed = 0;
 		Textures.registerTexture(textureId, this);
 		
-		textureData.textureAvailable = 1;
+		textureAvailable = true;
+		Fuse.current.workerSetup.updateTextureSurface(objectId);
 		
+		trace("frontStaticCount = 0");
 		Fuse.current.conductorData.frontStaticCount = 0;
 		//if (onTextureUploadCompleteCallback != null) onTextureUploadCompleteCallback();
 		//trace('load complete: ' + url);

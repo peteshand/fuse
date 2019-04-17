@@ -45,9 +45,9 @@ class AtlasTextures
 		if (coreTexture.textureData.directRender == 1) {
 			return; // Texture should always render directly to the back buffer
 		}
-		if (coreTexture.textureData.textureAvailable == 0) {
+		if (coreTexture.textureAvailable == false) {
 			//trace("texture isn't available: " + coreTexture.textureId);
-			return; // Texture isn't render yet, default texture will be used instead
+			return; // Texture isn't ready yet, default texture will be used instead
 		}
 		//trace("width = " + coreTexture.textureData.activeData.width);
 		//trace("textureAvailable = " + coreTexture.textureData.textureAvailable);

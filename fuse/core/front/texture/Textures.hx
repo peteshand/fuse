@@ -68,6 +68,7 @@ class Textures
 			textures.set(textureId, texture);
 			textureCount++;
 			//trace("textureCount = " + textureCount);
+			trace("frontStaticCount = 0");
 			Fuse.current.conductorData.frontStaticCount = 0;
 		}
 	}

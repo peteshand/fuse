@@ -34,13 +34,13 @@ class TextureData
 	public var scaleU:Float = 1;
 	public var scaleV:Float = 1;
 
-	public var textureAvailable:Int;
+	//public var textureAvailable:Int;
 	public var placed:Int;
 	public var persistent:Int;
 	public var directRender:Int;
 	//public var atlasTextureId:Int;
 	//public var atlasBatchTextureIndex:Int;
-	public var changeCount:Int = 0;
+	//public var changeCount:Int = 0;
 	public var area(get, null):Float;
 	
 	// Shared Props
@@ -53,7 +53,7 @@ class TextureData
 		atlasData = { objectId:objectId, textureId:0, x:0, y:0, width:1, height:1, p2Width:1, p2Height:1, offsetU:0, offsetV:0, scaleU:1, scaleV:1 };
 
 		activeData = baseData;
-		textureAvailable = 0;
+		//textureAvailable = 0;
 		//objectId = objectOffset;
 		//atlasTextureId = objectId;
 		
