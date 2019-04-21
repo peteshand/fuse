@@ -5,7 +5,7 @@
 	"tags": [],
 	"description": "Fuse is a Haxe based hardware accelerated displaylist style 2d rendering library",
 	"version": "0.0.15",
-	"releasenote": "optimize static frame reader loop",
+	"releasenote": "optimize static frame render loop",
 	"contributors": [ "p.j.shand" ],
 	"dependencies": {
 		"openfl": "",
