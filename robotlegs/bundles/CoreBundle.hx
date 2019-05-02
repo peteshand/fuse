@@ -7,7 +7,6 @@ import robotlegs.extensions.impl.CoreLogicExtension;
 import robotlegs.extensions.impl.CoreModelExtension;
 import robotlegs.extensions.impl.CoreServiceExtension;
 import robotlegs.extensions.impl.CoreSignalExtension;
-import robotlegs.extensions.impl.CoreViewExtension;
 import robotlegs.bender.extensions.signalCommandMap.SignalCommandMapExtension;
 import robotlegs.bender.extensions.viewManager.ManualStageObserverExtension;
 import robotlegs.bender.framework.api.IBundle;
@@ -35,15 +34,15 @@ class CoreBundle implements IBundle
 		context.logLevel = LogLevel.INFO;
 		
 		context.install([
-			ManualStageObserverExtension, 
 			SignalCommandMapExtension, 
+			ManualStageObserverExtension, 
+			Stage3DStackExtension,
+
 			CoreLogicExtension,
-			CoreViewExtension,
 			CoreSignalExtension,
 			CoreModelExtension,
 			CoreServiceExtension,
-			CoreCommandExtension,
-			Stage3DStackExtension
+			CoreCommandExtension
 		]);
 	}
 }

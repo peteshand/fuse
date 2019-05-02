@@ -4,6 +4,7 @@ import mantle.util.composite.Composite;
 import mantle.util.composite.CompositeMode;
 import fuse.texture.ITexture;
 import fuse.utils.Align;
+import fuse.geom.Rectangle;
 
 class Frame extends Sprite
 {
@@ -13,10 +14,16 @@ class Frame extends Sprite
     var frameHeight:Float = 100;
     var frameX:Float = 0;
     var frameY:Float = 0;
-    
+    var compositeRect:Rectangle;
+
     @:isVar public var mode(default, set):CompositeMode = CompositeMode.LETTERBOX;
+    public var contentWidth(get, never):Float;
+    public var contentHeight(get, never):Float;
     @:isVar public var contentAlignH(default, set):Align = Align.CENTER;
     @:isVar public var contentAlignV(default, set):Align = Align.CENTER;
+    @:isVar public var contentScale(default, set):Float = 1;
+    @:isVar public var offsetX(default, set):Float = 0;
+    @:isVar public var offsetY(default, set):Float = 0;
     
     public function new(width:Int, height:Int, texture:ITexture, backgroundColor:Null<UInt>=null) 
 	{
@@ -38,6 +45,9 @@ class Frame extends Sprite
 
     override function get_width():Float { return frameWidth; }
     override function get_height():Float { return frameHeight; }
+
+    function get_contentWidth():Float { return compositeRect.width; }
+    function get_contentHeight():Float { return compositeRect.height; }
 
     override function set_width(value:Float):Float
     { 
@@ -73,36 +83,63 @@ class Frame extends Sprite
         updateLayout();
         return contentAlignV;
     }
+
+    function set_contentScale(value:Float):Float
+    {
+        contentScale = value;
+        updateLayout();
+        return contentScale;
+    }
+
+    function set_offsetX(value:Float):Float
+    {
+        offsetX = value;
+        updateLayout();
+        return offsetX;
+    }
+
+    function set_offsetY(value:Float):Float
+    {
+        offsetY = value;
+        updateLayout();
+        return offsetY;
+    }
+
+    
+    
     
     function updateLayout()
     {
-        var rect = Composite.fit(frameWidth, frameHeight, image.texture.width, image.texture.height, mode, contentAlignH, contentAlignV);
+        compositeRect = Composite.fit(frameWidth, frameHeight, image.texture.width, image.texture.height, mode, contentAlignH, contentAlignV, contentScale);
         
-        image.width = rect.width;
-		image.height = rect.height;
-		image.x = rect.x;
-		image.y = rect.y;
+        compositeRect.x += offsetX;
+        compositeRect.y += offsetY;
+        
+        image.width = compositeRect.width;
+		image.height = compositeRect.height;
+		image.x = compositeRect.x;
+		image.y = compositeRect.y;
         image.offsetU = 0;
         image.offsetV = 0;
         
-        if (rect.width > frameWidth){
-            if (rect.x < 0) {
+        if (compositeRect.width > frameWidth){
+            if (compositeRect.x < 0) {
                 image.x = 0;
-                image.offsetU = -rect.x / rect.width;
+                image.offsetU = -compositeRect.x / compositeRect.width;
             }
-            if (rect.width > frameWidth) image.width = frameWidth;
-            image.scaleU = frameWidth / rect.width;
+            if (compositeRect.width > frameWidth) image.width = frameWidth;
+            image.scaleU = frameWidth / compositeRect.width;
         } else {
             image.scaleU = 1;
         }
 
-        if (rect.height > frameHeight){
-            if (rect.y < 0) {
+        if (compositeRect.height > frameHeight){
+            if (compositeRect.y < 0) {
                 image.y = 0;
-                image.offsetV = -rect.y / rect.height;
+                image.offsetV = -compositeRect.y / compositeRect.height;
             }
-            if (rect.height > frameHeight) image.height = frameHeight;
-            image.scaleV = frameHeight / rect.height;
+            if (compositeRect.height > frameHeight) image.height = frameHeight;
+            image.scaleV = frameHeight / compositeRect.height;
         } else {
             image.scaleV = 1;
         }

@@ -54,7 +54,7 @@ class Composite
 	 * @return  newDimensions An array containing the width, height, X position, and Y position to use to best fit the object display. 
 	 */
 	
-	public static function fit(boundWidth:Float, boundHeight:Float, objectWidth:Float, objectHeight:Float, zoomType:CompositeMode, ?alignH:Align, ?alignV:Align):Rectangle 
+	public static function fit(boundWidth:Float, boundHeight:Float, objectWidth:Float, objectHeight:Float, zoomType:CompositeMode=0, ?alignH:Align, ?alignV:Align, scale:Float=1):Rectangle 
 	{
 		if (alignH == null) alignH = Align.CENTER;
 		if (alignV == null) alignV = Align.CENTER;
@@ -64,61 +64,58 @@ class Composite
 		
 		if (zoomType == CompositeMode.LETTERBOX)
 		{
-			trace("A");
-			if (objectRatio < displayRatio) letterboxSides(boundWidth, boundHeight, alignH);
-			else letterboxTopBottom(boundWidth, boundHeight, alignV);
-		}
-		else if (zoomType == CompositeMode.CROP)
+			//trace("A");
+			if (objectRatio < displayRatio) letterboxSides(boundWidth, boundHeight, alignH, alignV, scale);
+			else letterboxTopBottom(boundWidth, boundHeight, alignH, alignV, scale);
+		} else if (zoomType == CompositeMode.CROP)
 		{
-			trace("B");
-			if (objectRatio < displayRatio) letterboxTopBottom(boundWidth, boundHeight, alignV);
-			else letterboxSides(boundWidth, boundHeight, alignH);
-		}
-		else if (zoomType == CompositeMode.FIT_WIDTH)
+			//trace("B");
+			if (objectRatio < displayRatio) letterboxTopBottom(boundWidth, boundHeight, alignH, alignV, scale);
+			else letterboxSides(boundWidth, boundHeight, alignH, alignV, scale);
+		} else if (zoomType == CompositeMode.FIT_WIDTH)
 		{
-			trace("C");
-			letterboxTopBottom(boundWidth, boundHeight, alignV);
-		}
-		else if (zoomType == CompositeMode.FIT_HEIGHT)
+			//trace("C");
+			letterboxTopBottom(boundWidth, boundHeight, alignH, alignV, scale);
+		} else if (zoomType == CompositeMode.FIT_HEIGHT)
 		{
-			trace("D");
-			letterboxSides(boundWidth, boundHeight, alignH);
-		}
-		else if (zoomType == CompositeMode.ORIGINAL) {
-			trace("E");
+			//trace("D");
+			letterboxSides(boundWidth, boundHeight, alignH, alignV, scale);
+		} else if (zoomType == CompositeMode.ORIGINAL) {
+			//trace("E");
 			rectangle.width = Math.round(objectWidth);
 			rectangle.height = Math.round(objectHeight);
 			rectangle.x = Math.round((boundWidth - rectangle.width) * untyped alignH);
 			rectangle.y = Math.round((boundHeight - rectangle.height) * untyped alignV);
-		}
-		else if (zoomType == CompositeMode.STRETCH) {
-			trace("F");
+		} else if (zoomType == CompositeMode.STRETCH) {
+			//trace("F");
 			rectangle.width = Math.round(boundWidth);	
 			rectangle.height = Math.round(boundHeight);
 			rectangle.x = 0;
 			rectangle.y = 0;
 		}
+
+		//trace("rectangle.height = " + rectangle.height);
 		
 		return rectangle;
 	}
 
-	static inline function letterboxTopBottom(boundWidth:Float, boundHeight:Float, align:Align)
+	static inline function letterboxTopBottom(boundWidth:Float, boundHeight:Float, alignH:Align, alignV:Align, scale:Float=1)
 	{
-		trace("1");
-		rectangle.width = Math.round(boundWidth);	
-		rectangle.height = Math.round(boundWidth / objectRatio);
-		rectangle.x = 0;
-		rectangle.y = Math.round((boundHeight - rectangle.height) * untyped align);
+		//trace("1");
+		rectangle.width = Math.round(boundWidth * scale);	
+		rectangle.height = Math.round(boundWidth / objectRatio * scale);
+		rectangle.x = Math.round((boundWidth - rectangle.width) * untyped alignH);
+		rectangle.y = Math.round((boundHeight - rectangle.height) * untyped alignV);
 	}
 
-	static inline function letterboxSides(boundWidth:Float, boundHeight:Float, align:Align)
+	static inline function letterboxSides(boundWidth:Float, boundHeight:Float, alignH:Align, alignV:Align, scale:Float=1)
 	{
-		trace("2");
-		rectangle.width = Math.round(boundHeight * objectRatio);	
-		rectangle.height = Math.round(boundHeight);
-		trace("boundHeight = " + boundHeight);
-		rectangle.x = Math.round((boundWidth - rectangle.width) * untyped align);
-		rectangle.y = 0;
+		//trace("2");
+		rectangle.width = Math.round(boundHeight * objectRatio * scale);	
+		rectangle.height = Math.round(boundHeight * scale);
+		//trace("boundHeight = " + boundHeight);
+		rectangle.x = Math.round((boundWidth - rectangle.width) * untyped alignH);
+		rectangle.y = Math.round((boundHeight - rectangle.height) * untyped alignV);
 	}
 	
 	public static function get_width():Float

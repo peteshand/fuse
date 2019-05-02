@@ -2,8 +2,8 @@ package robotlegs.extensions.impl;
 
 import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
-import robotlegs.extensions.impl.model.ExecuteImagModels;
-import condition.SceneModel;
+import robotlegs.extensions.impl.model.ExecuteCoreModels;
+//import condition.SceneModel;
 import robotlegs.extensions.impl.model.flags.FlagsModel;
 import robotlegs.extensions.impl.model.fps.FPSThrottleModel;
 
@@ -50,7 +50,7 @@ class CoreModelExtension implements IExtension
 		injector.map(ActivityModel).asSingleton();
 		injector.map(TimeoutModel).asSingleton();
 		injector.map(FPSThrottleModel).asSingleton();
-		injector.map(SceneModel).toValue(SceneModel.instance);
+		//injector.map(SceneModel).toValue(SceneModel.instance);
 		injector.map(FlagsModel).asSingleton();
 		
 		
@@ -59,7 +59,7 @@ class CoreModelExtension implements IExtension
 			injector.map(NetworkStatusModel).asSingleton();
 		#end
 		
-		context.configure(ExecuteImagModels);
+		context.configure(ExecuteCoreModels);
 	}
 	
 	private function handleConfigModel(configModel:IConfigModel):Void
