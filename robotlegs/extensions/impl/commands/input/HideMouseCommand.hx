@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.commands.input;
 
-import haxe.Timer;
+import delay.Delay;
 import openfl.events.MouseEvent;
 import openfl.ui.Mouse;
 import robotlegs.bender.bundles.mvcs.Command;
@@ -15,11 +15,7 @@ import robotlegs.bender.extensions.config.IConfigModel;
  */
 class HideMouseCommand extends Command
 {
-	private static inline var DELAY:Int = 4000;
-	
-	
-	var timer:Timer;
-	
+	private static inline var DELAY:Int = 4;
 	
 	@inject public var contextView:ContextView;
 	@inject public var configModel:IConfigModel;
@@ -43,14 +39,12 @@ class HideMouseCommand extends Command
 		if (!configModel.hideMouse){
 			Mouse.show();
 		}
-		
-		if (timer != null) timer.stop();
-		timer = Timer.delay(onTimer, DELAY);
+		Delay.killDelay(hide);
+		Delay.byTime(DELAY, hide);
 	}
 	
-	function onTimer() 
+	function hide() 
 	{
-		timer = null;
 		#if !debug
 			Mouse.hide();
 		#end

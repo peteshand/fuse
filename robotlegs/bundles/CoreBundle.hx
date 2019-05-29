@@ -17,32 +17,29 @@ import robotlegs.bender.framework.api.LogLevel;
  * The <code>CoreBundle</code> class will include all extensions
  * which are required to create basic sytle applications.
  */
-
 @:keepSub
-class CoreBundle implements IBundle
-{
+class CoreBundle implements IBundle {
 	public static var VERSION:String = "1.2";
+
 	/*============================================================================*/
 	/* Public Functions                                                           */
 	/*============================================================================*/
-
 	/** @inheritDoc **/
-	public function extend(context:IContext):Void
-	{
+	public function extend(context:IContext):Void {
 		context.install([MVCSBundle]);
-		
+
 		context.logLevel = LogLevel.INFO;
-		
+
 		context.install([
-			SignalCommandMapExtension, 
-			ManualStageObserverExtension, 
+			SignalCommandMapExtension,
+			ManualStageObserverExtension,
 			Stage3DStackExtension,
 
-			CoreLogicExtension,
-			CoreSignalExtension,
-			CoreModelExtension,
-			CoreServiceExtension,
-			CoreCommandExtension
+			// CoreLogicExtension,
+			// CoreSignalExtension,
+			// CoreModelExtension,
+			// CoreServiceExtension,
+			// CoreCommandExtension
 		]);
 	}
 }

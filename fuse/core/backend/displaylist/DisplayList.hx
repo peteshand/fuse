@@ -19,6 +19,8 @@ class DisplayList
 	public static var hierarchyBuildRequired:Bool = true;
 	var hierarchyChangeCount:Int = 0;
 	
+	public static var movementCount:Int = 0;
+
 	public var stage:CoreDisplayObject;
 	public var map = new Map<Int, CoreDisplayObject>();
 	//var transformDataMap = new Map<Int, IDisplayData>();
@@ -190,5 +192,7 @@ class DisplayList
 		display.updateAlpha = payload.updateAlpha;
 		display.updateTexture = payload.updateTexture;
 		display.updateUVs = payload.updateUVs;
+
+		movementCount++;
 	}
 }
