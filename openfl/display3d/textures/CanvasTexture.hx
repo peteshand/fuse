@@ -17,7 +17,8 @@ import openfl.events.Event;
 	public var canvasHeight(default, null):Int;
 	public var canvasWidth(default, null):Int;
 
-	@:noCompletion private var __canvas:CanvasElement;
+	var __update:Bool = true;
+	@:noCompletion private var canvas:CanvasElement;
 
 	@:noCompletion public function new(context:Context3D) {
 		super(context);
@@ -26,25 +27,31 @@ import openfl.events.Event;
 	}
 
 	public function attachCanvas(canvas:CanvasElement):Void {
-		__canvas = canvas;
+		this.canvas = canvas;
 		__textureReady();
 	}
 
 	@:noCompletion private override function __getTexture():GLTexture {
 		#if (js && html5)
-		var gl = __context.gl;
-		__context.__bindGLTexture2D(__textureID);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, __canvas);
-		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, __canvas);
+		if (__update == true) {
+			__update = false;
+			var gl = __context.gl;
+			__context.__bindGLTexture2D(__textureID);
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
+			gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
+		}
 		#end
-
 		return __textureID;
+	}
+
+	public function update() {
+		__update = true;
 	}
 
 	@:noCompletion private function __textureReady():Void {
 		#if (js && html5)
-		canvasWidth = __canvas.width;
-		canvasHeight = __canvas.height;
+		canvasWidth = canvas.clientWidth;
+		canvasHeight = canvas.clientHeight;
 		#end
 
 		var event:Event = null;
