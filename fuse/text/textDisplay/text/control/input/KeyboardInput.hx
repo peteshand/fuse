@@ -74,7 +74,7 @@ class KeyboardInput {
 			else if (e.charCode != 0 && !e.ctrlKey) {
 				#if js
 				jsCapsLock.check();
-				//Tick.once(delayInput.bind(e));
+				// Tick.once(delayInput.bind(e));
 				Delay.nextFrame(delayInput, [e]);
 				#else
 				textDisplay.replaceSelection(String.fromCharCode(e.charCode));

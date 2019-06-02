@@ -1,13 +1,12 @@
 package fuse.core.backend.display;
+
 import fuse.math.FastMatrix3;
 
 /**
  * ...
  * @author P.J.Shand
  */
-
-class TransformData
-{
+class TransformData {
 	public var localTransform:FastMatrix3;
 	public var globalTransform:FastMatrix3;
 	public var positionMatrix:FastMatrix3;
@@ -15,14 +14,13 @@ class TransformData
 	public var rotMatrix1:FastMatrix3;
 	public var rotMatrix2:FastMatrix3;
 	public var rotMatrix3:FastMatrix3;
-	
-	public function new() 
-	{
-		//clear();
-	//}
-	//
-	//inline public function clear() 
-	//{
+
+	public function new() {
+		// clear();
+		// }
+		//
+		// inline public function clear()
+		// {
 		localTransform = FastMatrix3.identity();
 		globalTransform = FastMatrix3.identity();
 		positionMatrix = FastMatrix3.identity();

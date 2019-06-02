@@ -7,7 +7,7 @@ import robotlegs.extensions.impl.CoreModelExtension;
 import robotlegs.extensions.impl.commands.config.ConfigCommand;
 import robotlegs.extensions.impl.commands.keyboard.BaseKeyCommand;
 // import robotlegs.extensions.impl.commands.layout.SetupLayoutCommand;
-//import robotlegs.extensions.impl.commands.logging.SetupLoggingCommand;
+// import robotlegs.extensions.impl.commands.logging.SetupLoggingCommand;
 import robotlegs.extensions.impl.commands.stageSetup.StageSetupCommand;
 import robotlegs.extensions.impl.commands.viewportResize.FullStageViewportCommand;
 // import robotlegs.extensions.impl.signals.LoadConfigSignal;

@@ -115,8 +115,6 @@ class CoreEntryPoint {
 		Core.textures.updateSurface(objectId);
 	}
 
-	
-
 	private function OnRemoveTexture(objectId:ObjectId):Void {
 		Core.textures.dispose(objectId);
 	}
@@ -137,7 +135,6 @@ class CoreEntryPoint {
 	function OnSetChildIndex(payload:SetChildIndexMsg) {
 		Core.displayList.setChildIndex(payload.objectId, payload.displayType, payload.parentId, payload.index);
 	}
-	
 
 	function OnRemoveChild(workerPayload:WorkerPayload) {
 		var objectId:Int = workerPayload;

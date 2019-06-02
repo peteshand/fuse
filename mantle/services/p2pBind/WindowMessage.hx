@@ -1,7 +1,6 @@
 package mantle.services.p2pBind;
 
-typedef WindowMessage =
-{
+typedef WindowMessage = {
 	id:String,
 	payload:Dynamic
 }

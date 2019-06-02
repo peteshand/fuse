@@ -3,14 +3,12 @@ package robotlegs.extensions.impl;
 import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.activity.ActivityModel;
 import robotlegs.extensions.impl.model.ExecuteCoreModels;
-//import condition.SceneModel;
+// import condition.SceneModel;
 import robotlegs.extensions.impl.model.flags.FlagsModel;
 import robotlegs.extensions.impl.model.fps.FPSThrottleModel;
-
 #if (air && !mobile)
 import robotlegs.extensions.impl.model.network.NetworkStatusModel;
 #end
-
 import robotlegs.extensions.impl.model.timeout.TimeoutModel;
 import robotlegs.bender.extensions.matching.InstanceOfType;
 import robotlegs.bender.framework.api.IContext;
@@ -21,60 +19,53 @@ import robotlegs.bender.framework.impl.UID;
 /**
  * ...
  * @author P.J.Shand
- * 
+ *
  */
 @:keepSub
-class CoreModelExtension implements IExtension
-{
+class CoreModelExtension implements IExtension {
 	/*============================================================================*/
 	/* Private Properties                                                         */
 	/*============================================================================*/
 	public static var ConfigClass:Class<Dynamic>;
+
 	private var _uid = UID.create(CoreModelExtension);
 	private var context:IContext;
 	private var injector:IInjector;
-	
-	public function new() { }
-	
+
+	public function new() {}
+
 	/*============================================================================*/
 	/* Public Functions                                                           */
 	/*============================================================================*/
-
-	public function extend(context:IContext):Void
-	{
+	public function extend(context:IContext):Void {
 		this.context = context;
 		injector = context.injector;
-		
-		
+
 		context.addConfigHandler(InstanceOfType.call(IConfigModel), handleConfigModel);
 		injector.map(ActivityModel).asSingleton();
 		injector.map(TimeoutModel).asSingleton();
 		injector.map(FPSThrottleModel).asSingleton();
-		//injector.map(SceneModel).toValue(SceneModel.instance);
+		// injector.map(SceneModel).toValue(SceneModel.instance);
 		injector.map(FlagsModel).asSingleton();
-		
-		
-		
+
 		#if (air && !mobile)
-			injector.map(NetworkStatusModel).asSingleton();
+		injector.map(NetworkStatusModel).asSingleton();
 		#end
-		
+
 		context.configure(ExecuteCoreModels);
 	}
-	
-	private function handleConfigModel(configModel:IConfigModel):Void
-	{
-		//ImagModelExtension.ConfigClass = configModel.constructor;
+
+	private function handleConfigModel(configModel:IConfigModel):Void {
+		// ImagModelExtension.ConfigClass = configModel.constructor;
 		#if cpp
-			CoreModelExtension.ConfigClass = Type.getClass(configModel);
+		CoreModelExtension.ConfigClass = Type.getClass(configModel);
 		#else
-			CoreModelExtension.ConfigClass = Reflect.getProperty(configModel, "constructor");
+		CoreModelExtension.ConfigClass = Reflect.getProperty(configModel, "constructor");
 		#end
 		injector.map(IConfigModel).toSingleton(CoreModelExtension.ConfigClass);
 	}
-	
-	public function toString():String
-	{
+
+	public function toString():String {
 		return _uid;
 	}
 }

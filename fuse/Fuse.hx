@@ -1,4 +1,5 @@
 package fuse;
+
 import fuse.core.ThreadBase;
 import fuse.core.backend.WorkerThread;
 import fuse.core.front.FuseConfig;
@@ -21,43 +22,43 @@ import openfl.events.EventDispatcher;
  * @author P.J.Shand
  */
 @:access(fuse)
-class Fuse extends EventDispatcher
-{
-	//public static inline var MAX_TEXTURE_SIZE:Int = 8192;
+class Fuse extends EventDispatcher {
+	// public static inline var MAX_TEXTURE_SIZE:Int = 8192;
 	public static inline var MAX_TEXTURE_SIZE:Int = 4096;
-	//public static inline var MAX_TEXTURE_SIZE:Int = 2048;
-	
+
+	// public static inline var MAX_TEXTURE_SIZE:Int = 2048;
 	var mainThread:MainThread;
 	var workerThread:WorkerThread;
+
 	@:isVar public static var current(default, null):ThreadBase;
+
 	public var stage:Stage;
-	
+
 	public static var skipUnchangedFrames:Bool = true;
-	
-	public function new(rootClass:Class<Sprite>, fuseConfig:FuseConfig=null, stage3D:Stage3D=null, renderMode:Context3DRenderMode = AUTO, profile:Array<Context3DProfile> = null)
-	{
+
+	public function new(rootClass:Class<Sprite>, fuseConfig:FuseConfig = null, stage3D:Stage3D = null, renderMode:Context3DRenderMode = AUTO,
+			profile:Array<Context3DProfile> = null) {
 		MessageManager.init();
-		if (fuseConfig == null) fuseConfig = { };
+		if (fuseConfig == null)
+			fuseConfig = {};
 		if (WorkerInfo.isMainThread) {
 			mainThread = new MainThread(this, rootClass, fuseConfig, stage3D, renderMode, profile);
 			mainThread.addEventListener(FuseEvent.ROOT_CREATED, this.dispatchEvent);
-			//mainThread.init();
+			// mainThread.init();
 		}
 		if (WorkerInfo.isCoreThread) {
 			workerThread = new WorkerThread();
-			//workerThread.init();
+			// workerThread.init();
 		}
-		
-		Lib.current.stage.addEventListener(Event.ENTER_FRAME, function(e:Event):Void
-		{
+
+		Lib.current.stage.addEventListener(Event.ENTER_FRAME, function(e:Event):Void {
 			FrameBudget.startFrame();
 		}, false, 1000);
-		Lib.current.stage.addEventListener(Event.EXIT_FRAME, function(e:Event):Void
-		{
+		Lib.current.stage.addEventListener(Event.EXIT_FRAME, function(e:Event):Void {
 			FrameBudget.endFrame();
 		}, false, 1000);
 		super();
-		
+
 		if (fuseConfig.autoStart == true) {
 			this.addEventListener(FuseEvent.ROOT_CREATED, function(e:Event) {
 				this.start();
@@ -65,9 +66,8 @@ class Fuse extends EventDispatcher
 			this.init();
 		}
 	}
-	
-	public function init():Void
-	{
+
+	public function init():Void {
 		if (WorkerInfo.isMainThread) {
 			mainThread.init();
 		}
@@ -75,31 +75,27 @@ class Fuse extends EventDispatcher
 			workerThread.init();
 		}
 	}
-	
-	public function start():Void
-	{
+
+	public function start():Void {
 		mainThread.start();
 	}
-	
-	public function stop():Void
-	{
+
+	public function stop():Void {
 		mainThread.stop();
 	}
-	
-	public function process() 
-	{
+
+	public function process() {
 		mainThread.process();
 	}
-	
-	static public function useWorker():Bool 
-	{
+
+	static public function useWorker():Bool {
 		WorkerInfo.numberOfWorkers = 1;
 		if (WorkerInfo.isWorkerThread) {
 			var fuse:Fuse = new Fuse(null, null, null);
 			fuse.init();
 			return true;
 		}
-		
+
 		return false;
 	}
 }

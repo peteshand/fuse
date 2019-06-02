@@ -3,23 +3,20 @@ package fuse.display;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.display.DisplayObjectContainer;
 
-class Sprite extends DisplayObjectContainer
-{
+class Sprite extends DisplayObjectContainer {
 	public function new() {
 		super();
 		displayType = DisplayType.SPRITE;
 	}
-	
-	public function clone()
-	{
+
+	public function clone() {
 		var _clone = new Sprite();
 		copySpriteProps(this, _clone);
 		copySpriteChildren(this, _clone);
 		return _clone;
 	}
 
-	function copySpriteProps(from:Sprite, to:Sprite)
-	{
+	function copySpriteProps(from:Sprite, to:Sprite) {
 		to.name = from.name;
 		to.x = from.x;
 		to.y = from.y;
@@ -40,17 +37,15 @@ class Sprite extends DisplayObjectContainer
 		to.mask = from.mask;
 	}
 
-	function copySpriteChildren(from:Sprite, to:Sprite)
-	{
-		for (i in 0...from.children.length) 
-		{
-			if (from.children[i].displayType == DisplayType.IMAGE){
+	function copySpriteChildren(from:Sprite, to:Sprite) {
+		for (i in 0...from.children.length) {
+			if (from.children[i].displayType == DisplayType.IMAGE) {
 				to.addChild(cast(from.children[i], Image).clone());
-			} else if (from.children[i].displayType == DisplayType.SCALE9_IMAGE){
+			} else if (from.children[i].displayType == DisplayType.SCALE9_IMAGE) {
 				to.addChild(cast(from.children[i], Scale9Image).clone());
-			} else if (from.children[i].displayType == DisplayType.QUAD){
+			} else if (from.children[i].displayType == DisplayType.QUAD) {
 				to.addChild(cast(from.children[i], Quad).clone());
-			} else if (from.children[i].displayType == DisplayType.SPRITE){
+			} else if (from.children[i].displayType == DisplayType.SPRITE) {
 				to.addChild(cast(from.children[i], Sprite).clone());
 			}
 		}

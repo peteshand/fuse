@@ -7,8 +7,7 @@ import fuse.texture.TextureId;
 /**
  * @author P.J.Shand
  */
-interface ICoreRenderable 
-{
+interface ICoreRenderable {
 	var objectId:ObjectId;
 	var coreTexture:CoreTexture;
 	var textureIndex(get, set):Int;

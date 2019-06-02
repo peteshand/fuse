@@ -14,6 +14,7 @@ import fuse.core.messenger.MessageID;
 import fuse.core.messenger.Messenger;
 import fuse.utils.GcoArray;
 import fuse.utils.Orientation;
+
 /**
  * ...
  * @author P.J.Shand
@@ -21,57 +22,57 @@ import fuse.utils.Orientation;
 class Input {
 	var touchData = new Map<String, Touch>();
 	var activeTouchData = new Map<String, Touch>();
-	//var touchDataArray = new GcoArray<Touch>();
+	// var touchDataArray = new GcoArray<Touch>();
 	var touchMap = new Map<String, TouchType>();
 	var mouseMap = new Map<String, TouchType>();
 	var currentMouseMove:MouseEvent;
 
 	public function new() {
-		//trace("Multitouch.supportsTouchEvents = " + Multitouch.supportsTouchEvents);
+		// trace("Multitouch.supportsTouchEvents = " + Multitouch.supportsTouchEvents);
 		Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 
 		touchMap.set(TouchEvent.TOUCH_MOVE, TouchType.MOVE);
 		touchMap.set(TouchEvent.TOUCH_BEGIN, TouchType.PRESS);
 		touchMap.set(TouchEvent.TOUCH_END, TouchType.RELEASE);
-		//touchMap.set(TouchEvent.TOUCH_OVER, TouchType.OVER);
-		//touchMap.set(TouchEvent.TOUCH_OUT, TouchType.OUT);
-		
+		// touchMap.set(TouchEvent.TOUCH_OVER, TouchType.OVER);
+		// touchMap.set(TouchEvent.TOUCH_OUT, TouchType.OUT);
+
 		mouseMap.set(MouseEvent.MOUSE_MOVE, TouchType.MOVE);
 		mouseMap.set(MouseEvent.MOUSE_DOWN, TouchType.PRESS);
 		mouseMap.set(MouseEvent.MOUSE_UP, TouchType.RELEASE);
-		//mouseMap.set(MouseEvent.MOUSE_OVER, TouchType.OVER);
-		//mouseMap.set(MouseEvent.MOUSE_OUT, TouchType.OUT);
-		
+		// mouseMap.set(MouseEvent.MOUSE_OVER, TouchType.OVER);
+		// mouseMap.set(MouseEvent.MOUSE_OUT, TouchType.OUT);
+
 		var stage:Stage = Lib.current.stage;
 		if (Multitouch.supportsTouchEvents) {
 			stage.addEventListener(TouchEvent.TOUCH_MOVE, onTouch, false, 100);
 			stage.addEventListener(TouchEvent.TOUCH_BEGIN, onTouch);
 			stage.addEventListener(TouchEvent.TOUCH_END, onTouch);
-		}// else {
-			stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouse, false, 100);
-			stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);
-			stage.addEventListener(MouseEvent.MOUSE_UP, onMouse);
-		//}
+		} // else {
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouse, false, 100);
+		stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouse);
+		stage.addEventListener(MouseEvent.MOUSE_UP, onMouse);
+		// }
 
 		stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseScroll);
 		stage.addEventListener(Event.MOUSE_LEAVE, onMouseLeave);
 		stage.addEventListener(Event.ENTER_FRAME, onTick);
 	}
 
-	function onMouseScroll(e:MouseEvent)
-	{
-		if (currentMouseMove != null) onMouse(currentMouseMove);
+	function onMouseScroll(e:MouseEvent) {
+		if (currentMouseMove != null)
+			onMouse(currentMouseMove);
 	}
 
 	function onTick(e:Event):Void {
-		for (touch in activeTouchData.iterator()){
+		for (touch in activeTouchData.iterator()) {
 			Fuse.current.workerSetup.addInput(touch);
 		}
 		activeTouchData = new Map<String, Touch>();
 		/*for (i in 0...touchDataArray.length) {
-			Fuse.current.workerSetup.addInput(touchDataArray[i]);
-		}
-		touchDataArray.clear();*/
+				Fuse.current.workerSetup.addInput(touchDataArray[i]);
+			}
+			touchDataArray.clear(); */
 	}
 
 	function onMouseXChange(value:Array<Float>) {
@@ -91,11 +92,11 @@ class Input {
 		var id:String = touchMap.get(type) + "-" + e.touchPointID;
 		var touch:Touch = getTouchItem(id, e.touchPointID);
 		setPosition(touch, e);
-		//touch.x = e.stageX + Fuse.current.stage.camera.x;
-		//touch.y = e.stageY + Fuse.current.stage.camera.y;
+		// touch.x = e.stageX + Fuse.current.stage.camera.x;
+		// touch.y = e.stageY + Fuse.current.stage.camera.y;
 		touch.type = touchMap.get(e.type);
 
-		//touchDataArray.push(touch);
+		// touchDataArray.push(touch);
 		activeTouchData.set(id, touch);
 	}
 
@@ -108,17 +109,17 @@ class Input {
 		var id:String = mouseMap.get(type) + "-" + 0;
 		var touch:Touch = getTouchItem(id, 0);
 		setPosition(touch, e);
-		//touch.x = e.stageX + Fuse.current.stage.camera.x;
-		//touch.y = e.stageY + Fuse.current.stage.camera.y;
+		// touch.x = e.stageX + Fuse.current.stage.camera.x;
+		// touch.y = e.stageY + Fuse.current.stage.camera.y;
 		touch.type = mouseMap.get(e.type);
-		//touchDataArray.push(touch);
+		// touchDataArray.push(touch);
 		activeTouchData.set(id, touch);
 
-		if (e.type == MouseEvent.MOUSE_MOVE) currentMouseMove = e;
+		if (e.type == MouseEvent.MOUSE_MOVE)
+			currentMouseMove = e;
 	}
 
-	function setPosition(touch:Touch, e:InputEvent)
-	{
+	function setPosition(touch:Touch, e:InputEvent) {
 		touch.x = e.stageX + Fuse.current.stage.camera.x;
 		touch.y = e.stageY + Fuse.current.stage.camera.y;
 	}
@@ -132,7 +133,6 @@ class Input {
 		return touch;
 	}
 }
-
 
 typedef InputEvent = {
 	public var stageX:Float;

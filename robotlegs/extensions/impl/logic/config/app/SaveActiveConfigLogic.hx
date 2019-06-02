@@ -6,49 +6,45 @@ import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigSaveService;
 import org.swiftsuspenders.utils.DescribedType;
+
 /**
  * ...
  * @author P.J.Shand
  */
 @:keepSub
-class SaveActiveConfigLogic implements DescribedType
-{
+class SaveActiveConfigLogic implements DescribedType {
 	@inject public var configModel:IConfigModel;
 	@inject public var configSaveService:ConfigSaveService;
-	
-	
-	public function new() 
-	{
-		
-	}
-	
-	public function init():Void
-	{
-		var props:Dynamic = { };
+
+	public function new() {}
+
+	public function init():Void {
+		var props:Dynamic = {};
 		var fields:Array<String> = Type.getInstanceFields(Type.getClass(configModel));
-		
+
 		var count:Int = 0;
-		for (i in 0...fields.length) 
-		{
+		for (i in 0...fields.length) {
 			var field:String = fields[i];
-			
-			if (field == "localDynamicData") continue;
-			if (field == "globalDynamicData") continue;
-			
+
+			if (field == "localDynamicData")
+				continue;
+			if (field == "globalDynamicData")
+				continue;
+
 			var fieldValue:Dynamic = Reflect.getProperty(configModel, field);
-			
+
 			if (!Reflect.isFunction(fieldValue) && !Std.is(fieldValue, Signal0)) {
 				var value:Dynamic = Reflect.getProperty(configModel, fieldValue);
-				
-				if (fieldValue != null){
+
+				if (fieldValue != null) {
 					Reflect.setProperty(props, field, fieldValue);
-					//trace(field + " = " + fieldValue);
+					// trace(field + " = " + fieldValue);
 					count++;
 				}
 			}
 		}
-		
-		if (count > 0){
+
+		if (count > 0) {
 			configSaveService.saveConfigData(props, Storage.configDirectory.resolvePath(ConfigSettings.FILE_NAME_COMBINED_REF + ".json"));
 		}
 	}

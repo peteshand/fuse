@@ -14,26 +14,23 @@ import fuse.core.utils.Pool;
 import fuse.utils.GcoArray;
 
 /**
-    This class is called every frame and is responsible for rendering textures into a dynamic texture atlas.
-	This texture atlas is then used instead of the original texture. 
+	This class is called every frame and is responsible for rendering textures into a dynamic texture atlas.
+	This texture atlas is then used instead of the original texture.
 	This allows for far less draw calls once the initial copying is completed
 **/
-class AtlasBufferAssembler
-{
-	public function new() { }
-	
-	static public function build() 
-	{
+class AtlasBufferAssembler {
+	public function new() {}
+
+	static public function build() {
 		AtlasSheets.active = false;
-		
+
 		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged) {
 			AtlasTextures.build();
 			AtlasSheets.build();
 		}
 	}
-	
-	static public function closePartitions() 
-	{
+
+	static public function closePartitions() {
 		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged) {
 			AtlasSheets.closePartitions();
 		}

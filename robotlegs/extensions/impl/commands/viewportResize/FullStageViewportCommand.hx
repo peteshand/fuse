@@ -13,29 +13,23 @@ import org.swiftsuspenders.utils.DescribedType;
  * @author P.J.Shand
  */
 @:keepSub
-class FullStageViewportCommand extends Command
-{
+class FullStageViewportCommand extends Command {
 	@inject public var viewport:IViewport;
 	@inject public var contextView:ContextView;
 	@inject public var configModel:IConfigModel;
-	
+
 	private var stage:Stage;
-	
-	public function new() 
-	{
-		
+
+	public function new() {}
+
+	override public function execute():Void {
+		// if (configModel.fullWindowResize){
+		stage = contextView.view.stage;
+		Resize.add(OnStageResize);
+		// }
 	}
-	
-	override public function execute():Void
-	{
-		//if (configModel.fullWindowResize){
-			stage = contextView.view.stage;
-			Resize.add(OnStageResize);
-		//}
-	}
-	
-	private function OnStageResize():Void 
-	{
+
+	private function OnStageResize():Void {
 		viewport.setTo(0, 0, stage.stageWidth, stage.stageHeight);
 	}
 }

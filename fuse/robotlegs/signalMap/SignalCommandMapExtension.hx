@@ -4,7 +4,6 @@
 //  NOTICE: You are permitted to use, modify, and distribute this file
 //  in accordance with the terms of the license agreement accompanying it.
 //------------------------------------------------------------------------------
-
 package fuse.robotlegs.signalMap;
 
 import fuse.robotlegs.signalMap.api.ISignalCommandMap;
@@ -14,29 +13,23 @@ import robotlegs.bender.framework.api.IExtension;
 import robotlegs.bender.framework.impl.UID;
 
 @:keepSub
-class SignalCommandMapExtension implements IExtension
-{
+class SignalCommandMapExtension implements IExtension {
+	/*============================================================================*/
+	/* Private Properties                                                         */
+	/*============================================================================*/
+	// private var _uid:String;
+	/*============================================================================*/
+	/* Public Functions                                                           */
+	/*============================================================================*/
+	public function new() {}
 
-    /*============================================================================*/
-    /* Private Properties                                                         */
-    /*============================================================================*/
+	public function extend(context:IContext):Void {
+		// _uid = UID.create(SignalCommandMapExtension);
+		context.injector.map(ISignalCommandMap).toSingleton(SignalCommandMap);
+	}
 
-    //private var _uid:String;
-
-    /*============================================================================*/
-    /* Public Functions                                                           */
-    /*============================================================================*/
-	
-	public function new() { }
-	
-    public function extend(context:IContext):Void
-    {
-		//_uid = UID.create(SignalCommandMapExtension);
-        context.injector.map(ISignalCommandMap).toSingleton(SignalCommandMap);
-    }
-
-    //public function toString():String
-    //{
-        //return _uid;
-    //}
+	// public function toString():String
+	// {
+	// return _uid;
+	// }
 }

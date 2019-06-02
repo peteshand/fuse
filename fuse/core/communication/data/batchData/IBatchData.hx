@@ -3,9 +3,7 @@ package fuse.core.communication.data.batchData;
 /**
  * @author P.J.Shand
  */
-
-interface IBatchData 
-{
+interface IBatchData {
 	public var renderTargetId(get, set):Int;
 	public var clearRenderTarget(get, set):Int;
 	public var startIndex(get, set):Int;

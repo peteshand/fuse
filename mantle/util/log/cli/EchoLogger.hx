@@ -1,4 +1,5 @@
 package mantle.util.log.cli;
+
 import mantle.util.log.Log;
 import mantle.cli.utils.CmdTools;
 import mantle.util.log.Log.LogLevel;
@@ -11,13 +12,13 @@ import mantle.util.log.LogFormatter;
  * @author Thomas Byrne
  */
 @:access(mantle.util.log.LogFormatImpl)
-class EchoLogger implements ILogHandler
-{
+class EchoLogger implements ILogHandler {
 	static private var checked:Bool;
 	static private var hasColorCmd:Bool;
-	static function setup() 
-	{
-		if (checked) return;
+
+	static function setup() {
+		if (checked)
+			return;
 		checked = true;
 		#if cpp
 		hasColorCmd = CmdTools.hasCmd("cmdcolor");
@@ -25,54 +26,50 @@ class EchoLogger implements ILogHandler
 		hasColorCmd = false;
 		#end
 	}
-	
-	static function defaultEchoFormatter(source:Dynamic, level:String, rest:Array<Dynamic>, time:Date) 
-	{
+
+	static function defaultEchoFormatter(source:Dynamic, level:String, rest:Array<Dynamic>, time:Date) {
 		var content = rest.join(" ");
 		var sourceStr = LogFormatImpl.padStr(LogFormatImpl.getType(source), 25);
 		var msg = rest.join(" ");
 		msg = msg.split("&").join("^&");
-		if(hasColorCmd){
+		if (hasColorCmd) {
 			var textColor:TextColor;
 			var bgColor:BgColor;
-			switch(level) {
+			switch (level) {
 				case LogLevel.INFO:
 					textColor = LightGray;
 					bgColor = DarkGray;
-					
+
 				case LogLevel.WARN:
 					textColor = LightYellow;
 					bgColor = Yellow;
-					
+
 				case LogLevel.ERROR:
 					textColor = LightRed;
 					bgColor = Red;
-					
+
 				case LogLevel.UNCAUGHT_ERROR:
 					textColor = LightRed;
 					bgColor = Black;
-					
+
 				default: // | LogLevel.LOG:
 					textColor = White;
 					bgColor = Black;
 			}
 			return "echo \\033[" + textColor + ";" + bgColor + "m " + sourceStr + " \\033[0m " + msg + " | cmdcolor";
-		}else{
-			return "echo " + sourceStr+" "+ msg;
+		} else {
+			return "echo " + sourceStr + " " + msg;
 		}
 	}
-	
+
 	public var formatter:LogFormatter;
-	
-	public function new(formatter:LogFormatter=null):Void
-	{
+
+	public function new(formatter:LogFormatter = null):Void {
 		setup();
 		this.formatter = (formatter == null ? defaultEchoFormatter : formatter);
 	}
-	
-	
-	public function log(source:Dynamic, level:String, rest:Array<Dynamic>, time:Date):Void 
-	{
+
+	public function log(source:Dynamic, level:String, rest:Array<Dynamic>, time:Date):Void {
 		Sys.command(formatter(source, level, rest, time));
 	}
 }
@@ -97,6 +94,7 @@ abstract TextColor(String) to String {
 	public var LightCyan = "96";
 	public var White = "97";
 }
+
 @:enum
 abstract BgColor(String) to String {
 	public var Default = "49";

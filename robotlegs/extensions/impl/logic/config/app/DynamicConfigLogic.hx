@@ -14,23 +14,19 @@ import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigSaveService;
 import robotlegs.extensions.impl.utils.json.JsonFormatter;
 import org.swiftsuspenders.utils.DescribedType;
+
 /**
  * ...
  * @author P.J.Shand
  */
 @:keepSub
-class DynamicConfigLogic implements DescribedType
-{
+class DynamicConfigLogic implements DescribedType {
 	@inject public var configModel:IConfigModel;
 	@inject public var configSaveService:ConfigSaveService;
-	
-	public function new() 
-	{
-		
-	}
-	
-	public function init() 
-	{
+
+	public function new() {}
+
+	public function init() {
 		#if (air && !mobile)
 		var file:File = Storage.configDirectory.resolvePath(ConfigSettings.FILE_NAME_DYNAMIC + ".json");
 		if (!file.exists) {
@@ -40,22 +36,21 @@ class DynamicConfigLogic implements DescribedType
 		configModel.onLocalDynamicSet.add(OnLocalDynamicSet);
 		#end
 	}
-	
-	function createEmptyDynamic(file:File) 
-	{
-		var emptyConfig:EmptyConfig = { props: { exampleProp:"test" } };
+
+	function createEmptyDynamic(file:File) {
+		var emptyConfig:EmptyConfig = {props: {exampleProp: "test"}};
 		var emptyConfigStr:String = JsonFormatter.formatJsonString(Json.stringify(emptyConfig));
 		var fileStream:FileStream = new FileStream();
 		fileStream.open(file, FileMode.WRITE);
 		fileStream.writeUTFBytes(emptyConfigStr);
 		fileStream.close();
 	}
-	
+
 	#if (air && !mobile)
-	function loadDynamicData(file:File) 
-	{
-		if (!file.exists) return;
-		
+	function loadDynamicData(file:File) {
+		if (!file.exists)
+			return;
+
 		var fileStream:FileStream = new FileStream();
 		fileStream.open(file, FileMode.READ);
 		var dataStr:String = fileStream.readUTFBytes(file.size);
@@ -63,40 +58,34 @@ class DynamicConfigLogic implements DescribedType
 		try {
 			var data:PropsData = Json.parse(dataStr);
 			if (data.props != null) {
-				for (key in Reflect.fields(data.props)){
+				for (key in Reflect.fields(data.props)) {
 					configModel.set(key, Reflect.field(data.props, key));
 				}
 			}
-		}
-		catch (e:Error) {
-			
-		}
+		} catch (e:Error) {}
 	}
-	
-	function OnLocalDynamicSet() 
-	{
+
+	function OnLocalDynamicSet() {
 		saveDynamicData(configModel.localDynamicData, Storage.configDirectory.resolvePath(ConfigSettings.FILE_NAME_DYNAMIC + ".json"));
 	}
-	
-	function saveDynamicData(dynamicData:Map<String, Dynamic>, saveLocation:File) 
-	{
-		var data:Dynamic = { };
+
+	function saveDynamicData(dynamicData:Map<String, Dynamic>, saveLocation:File) {
+		var data:Dynamic = {};
 		var count:Int = 0;
-		for (key in dynamicData.keys()) 
-		{
-			//trace([key, dynamicData.get(key)]);
+		for (key in dynamicData.keys()) {
+			// trace([key, dynamicData.get(key)]);
 			Reflect.setProperty(data, key, dynamicData.get(key));
 			count++;
 		}
-		if (count == 0) return;
-		var dynamicConfig:Dynamic = { "props":data };
+		if (count == 0)
+			return;
+		var dynamicConfig:Dynamic = {"props": data};
 		configSaveService.saveConfigData(dynamicConfig, saveLocation);
 	}
 	#end
 }
 
-typedef PropsData =
-{
+typedef PropsData = {
 	props:{}
 }
 #end

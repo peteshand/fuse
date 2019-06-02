@@ -1,4 +1,5 @@
 package robotlegs.extensions.impl.utils.loaders;
+
 import signal.Signal1;
 import signal.Signal2;
 import openfl.errors.Error;
@@ -13,15 +14,10 @@ import openfl.net.URLRequest;
  * @author P.J.Shand
  */
 @:keepSub
-class XMLLoaderService 
-{
-	public function new() 
-	{
-		
-	}
-	
-	public function load(url:String, onComplete:Xml->Void=null, onFail:String->Void=null):XMLLoader
-	{
+class XMLLoaderService {
+	public function new() {}
+
+	public function load(url:String, onComplete:Xml->Void = null, onFail:String->Void = null):XMLLoader {
 		var xmlLoader:XMLLoader = new XMLLoader();
 		xmlLoader.load(url);
 		xmlLoader.onComplete = onComplete;
@@ -30,68 +26,59 @@ class XMLLoaderService
 	}
 }
 
-
-
-class XMLLoader
-{
+class XMLLoader {
 	public var available:Bool = true;
 	public var url:String;
-	
+
 	private var request:URLRequest;
 	private var loader:URLLoader;
-	
+
 	public var onComplete:Xml->Void;
 	public var onFail:String->Void;
-	
-	public function new(url:String="")
-	{
+
+	public function new(url:String = "") {
 		this.url = url;
 	}
-	
-	public function load(url:String):Void
-	{
+
+	public function load(url:String):Void {
 		this.url = url;
 		if (loader == null) {
 			loader = new URLLoader();
 			loader.addEventListener(Event.COMPLETE, OnLoadComplete);
 			loader.addEventListener(ErrorEvent.ERROR, OnError);
 			loader.addEventListener(IOErrorEvent.IO_ERROR, OnError);
-			
 		}
-		
+
 		available = false;
 		request = new URLRequest(url);
 		loader.load(request);
 	}
-	
-	private function OnLoadComplete(e:Event):Void 
-	{
+
+	private function OnLoadComplete(e:Event):Void {
 		available = true;
-		
+
 		var data:String = loader.data;
 		loader.close();
-		
+
 		var xml:Xml = null;
-		
-		try{
+
+		try {
 			xml = Xml.parse(data);
-		}catch (e:Error) {
+		} catch (e:Error) {
 			onFail(Std.string(e));
 			return;
 		}
 		onComplete(xml);
 	}
-	
-	private function OnError(e:ErrorEvent):Void 
-	{
+
+	private function OnError(e:ErrorEvent):Void {
 		trace("Load Error: " + e);
 		available = true;
 		onFail(e.toString());
 	}
-	
-	public function dispose():Void 
-	{
-		if (loader != null){
+
+	public function dispose():Void {
+		if (loader != null) {
 			loader.removeEventListener(Event.COMPLETE, OnLoadComplete);
 			loader.removeEventListener(ErrorEvent.ERROR, OnError);
 			loader = null;

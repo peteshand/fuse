@@ -13,38 +13,33 @@ import fuse.core.utils.Calc;
 import fuse.core.utils.Pool;
 import fuse.display.geometry.Bounds;
 import fuse.core.assembler.batches.batch.BatchType;
+
 /**
  * ...
  * @author P.J.Shand
  */
-
 @:keep
 @:access(fuse.texture)
-class CoreImage extends CoreDisplayObject implements ICoreRenderable
-{
+class CoreImage extends CoreDisplayObject implements ICoreRenderable {
 	@:isVar public var textureId(get, set):ObjectId = -1;
-	
-	public var vertexData	:IVertexData;
-	public var coreTexture	:CoreTexture;
-	
+	public var vertexData:IVertexData;
+	public var coreTexture:CoreTexture;
 	@:isVar public var textureIndex(get, set):Int;
-	//@:isVar public var mask(default, set):CoreImage;
-	
+	// @:isVar public var mask(default, set):CoreImage;
 	@:usVar public var mask(default, null):CoreMask;
 	public var maskChanged:Bool = false;
-	
 	public var isMask:Bool = false;
 	public var maskOf:Array<CoreImage> = [];
-	
-	public var blendMode	:Int = 0;
-	public var shaderId		:Int = 0;
-	public var renderLayer	:Int = 0;
-	
-	public var batchType	:BatchType = null;
-	//var updateUVs			:Bool = false;
-	var renderTarget		:Int = -1;
+	public var blendMode:Int = 0;
+	public var shaderId:Int = 0;
+	public var renderLayer:Int = 0;
+	public var batchType:BatchType = null;
+
+	// var updateUVs			:Bool = false;
+	var renderTarget:Int = -1;
+
 	public var sourceTextureId(get, null):TextureId;
-	
+
 	var count:Int = 0;
 
 	public var bottomLeftX(get, null):Float;
@@ -55,67 +50,59 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 	public var topRightY(get, null):Float;
 	public var bottomRightX(get, null):Float;
 	public var bottomRightY(get, null):Float;
-	
-	public function new() 
-	{
+
+	public function new() {
 		super();
 		vertexData = new VertexData();
 		this.displayType = DisplayType.IMAGE;
 	}
-	
-	override public function setUpdates(value:Bool) 
-	{
+
+	override public function setUpdates(value:Bool) {
 		super.setUpdates(value);
 		this.updateTexture = value;
 	}
-	
-	override public function init(objectId:Int) 
-	{
+
+	override public function init(objectId:Int) {
 		super.init(objectId);
 		textureId = displayData.textureId;
 	}
-	
-	
-	override function calculateTransform() 
-	{
+
+	override function calculateTransform() {
 		checkUpdates();
 		updateTransform();
 	}
-	
-	override function updateTransform() 
-	{
+
+	override function updateTransform() {
 		alpha = parent.alpha * displayData.alpha;
 		visible = (parent.visible && (displayData.visible == 1));
-		
-		//trace("updateAny = " + updateAny);
+
+		// trace("updateAny = " + updateAny);
 		if (updateAny) {
 			Fuse.current.conductorData.backIsStatic = 0;
 		}
 
 		shaderId = displayData.shaderId;
-		
-		//trace([isRotating, isMoving, isStatic]);
+
+		// trace([isRotating, isMoving, isStatic]);
 		if (updateColour) {
 			blendMode = displayData.blendMode;
 		}
-		//if (displayData.blendMode != 0){
-			//trace([displayData.objectId, displayData.blendMode]);
+		// if (displayData.blendMode != 0){
+		// trace([displayData.objectId, displayData.blendMode]);
 
-		//}
+		// }
 		if (updateTexture || updateVisible) {
 			textureId = displayData.textureId;
 		}
-		
+
 		if (updatePosition || updateVisible || this.isMask) {
-			
 			renderLayer = displayData.renderLayer;
-			
+
 			WorkerTransformHelper.update(this);
 		}
 	}
 
-	override public function buildTransformActions()
-	{
+	override public function buildTransformActions() {
 		visible = (parent.visible && (displayData.visible == 1));
 
 		if (this.visible || this.isMask) {
@@ -123,18 +110,20 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 			HierarchyAssembler.transformActions.push(calculateTransform);
 		}
 	}
-	
-	inline function get_textureId():ObjectId { return textureId; }
-	
+
+	inline function get_textureId():ObjectId {
+		return textureId;
+	}
+
 	function set_textureId(value:ObjectId):ObjectId {
-		if (textureId != value){
+		if (textureId != value) {
 			textureId = value;
 			if (coreTexture != null && textureId == -1) {
 				coreTexture.removeChangeListener(this);
 				Core.textures.deregister(coreTexture.textureData.baseData.objectId);
 				coreTexture = null;
 			}
-			
+
 			if (coreTexture == null || coreTexture.textureData.baseData.objectId != textureId) {
 				coreTexture = Core.textures.register(textureId);
 				if (coreTexture != null) {
@@ -143,202 +132,183 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable
 					coreTexture.uvsHaveChanged = true;
 				}
 			}
-			
+
 			setUpdates(true);
 		}
 		return value;
 	}
-	
-	public function OnTextureChange() 
-	{
+
+	public function OnTextureChange() {
 		updateAny = updateTexture = true;
 	}
-	
-	override public function clone():CoreDisplayObject
-	{
+
+	override public function clone():CoreDisplayObject {
 		var _clone:CoreDisplayObject = Pool.images.request();
 		_clone.displayData = displayData;
 		_clone.objectId = objectId;
 		return _clone;
 	}
-	
-	override public function recursiveReleaseToPool()
-	{
+
+	override public function recursiveReleaseToPool() {
 		Pool.images.release(this);
 	}
-	
-	override public function buildHierarchy()
-	{
+
+	override public function buildHierarchy() {
 		if (displayData.visible == 1 || this.isMask) {
 			HierarchyAssembler.hierarchy.push(this);
 		}
 	}
-	
-	public function getBounds():Bounds
-	{
+
+	public function getBounds():Bounds {
 		bounds.left = Math.POSITIVE_INFINITY;
 		bounds.right = Math.NEGATIVE_INFINITY;
 		bounds.top = Math.NEGATIVE_INFINITY;
 		bounds.bottom = Math.POSITIVE_INFINITY;
 		return bounds;
 	}
-	
-	override public function insideBounds(x:Float, y:Float) 
-	{
-		var distance:Float = Math.sqrt(
-			Math.pow(quadData.middleX - Calc.pixelToScreenX(x), 2) + 
-			Math.pow(quadData.middleY - Calc.pixelToScreenY(y), 2)
-		);
-		
-		if (distance < diagonal * 0.5) return true;
+
+	override public function insideBounds(x:Float, y:Float) {
+		var distance:Float = Math.sqrt(Math.pow(quadData.middleX - Calc.pixelToScreenX(x), 2) + Math.pow(quadData.middleY - Calc.pixelToScreenY(y), 2));
+
+		if (distance < diagonal * 0.5)
+			return true;
 		return false;
 	}
-	
-	function get_sourceTextureId():TextureId 
-	{
+
+	function get_sourceTextureId():TextureId {
 		return coreTexture.textureId;
 	}
-	
-	/*function get_mask():CoreImage 
-	{
-		return mask;
-	}*/
 
-	public function setMask(value:CoreImage)
-	{
-		if (value == null && mask != null){
+	/*function get_mask():CoreImage 
+		{
+			return mask;
+	}*/
+	public function setMask(value:CoreImage) {
+		if (value == null && mask != null) {
 			mask.dispose();
 			mask = null;
 		}
-		if (mask == null || mask.mask != value){
+		if (mask == null || mask.mask != value) {
 			mask = new CoreMask(this, value);
 		}
 	}
-	
+
 	/*function set_mask(value:CoreImage):CoreImage 
-	{
-		if (mask != value){
-			mask = value;
-			value.addMaskOf(this);
-			maskChanged = true;
-		}
-		return mask;
+		{
+			if (mask != value){
+				mask = value;
+				value.addMaskOf(this);
+				maskChanged = true;
+			}
+			return mask;
 	}*/
-	
-	public function addMaskOf(coreImage:CoreImage) 
-	{
+	public function addMaskOf(coreImage:CoreImage) {
 		maskOf.push(coreImage);
 		isMask = true;
 	}
-	
-	public function removeMaskOf(coreImage:CoreImage) 
-	{
+
+	public function removeMaskOf(coreImage:CoreImage) {
 		var i:Int = maskOf.length - 1;
-		while (i >= 0) 
-		{
+		while (i >= 0) {
 			if (maskOf[i] == coreImage) {
 				maskOf.splice(i, 1);
 			}
 			i--;
 		}
-		if (maskOf.length == 0) isMask = false;
+		if (maskOf.length == 0)
+			isMask = false;
 	}
-	
-	override function set_updateAny(value:Bool):Bool 
-	{
+
+	override function set_updateAny(value:Bool):Bool {
 		updateAny = value;
-		for (i in 0...maskOf.length) 
-		{
+		for (i in 0...maskOf.length) {
 			maskOf[i].updateAny = true;
 			maskOf[i].maskChanged = true;
 		}
 		return updateAny;
 	}
-	
-	function get_textureIndex():Int 
-	{
+
+	function get_textureIndex():Int {
 		return textureIndex;
 	}
-	
-	function set_textureIndex(value:Int):Int 
-	{
+
+	function set_textureIndex(value:Int):Int {
 		if (textureIndex != value) {
 			updateTexture = true;
 		}
 		return textureIndex = value;
 	}
 
-	override public function withinBounds(debug:Bool=false, x:Float, y:Float):Bool
-	{
-		if (absoluteVis() == false) return false;
+	override public function withinBounds(debug:Bool = false, x:Float, y:Float):Bool {
+		if (absoluteVis() == false)
+			return false;
 		var triangleSum:Float = getTriangleSum(x, y);
-		if (debug && objectId == 154){
+		if (debug && objectId == 154) {
 			trace("triangleSum = " + triangleSum);
 			trace("area = " + area);
 			trace(triangleSum < area + 1);
 		}
-		
-		if (area == 0) return false;
+
+		if (area == 0)
+			return false;
 		if (triangleSum < area + 1) {
 			return true;
 		}
 		return false;
 	}
 
-	override public function addToArray(touchDisplay:CoreDisplayObject, flattened:Array<CoreDisplayObject>)
-	{
-		if (touchable != false){
+	override public function addToArray(touchDisplay:CoreDisplayObject, flattened:Array<CoreDisplayObject>) {
+		if (touchable != false) {
 			flattened.push(this);
 			this.touchDisplay = touchDisplay;
 		}
 	}
 
-	function get_bottomLeftX():Float
-	{
-		if (coreTexture.rotate) return quadData.topLeftX;
+	function get_bottomLeftX():Float {
+		if (coreTexture.rotate)
+			return quadData.topLeftX;
 		return quadData.bottomLeftX;
 	}
 
-	function get_bottomLeftY():Float
-	{
-		if (coreTexture.rotate) return quadData.topLeftY;
+	function get_bottomLeftY():Float {
+		if (coreTexture.rotate)
+			return quadData.topLeftY;
 		return quadData.bottomLeftY;
 	}
 
-	function get_topLeftX():Float
-	{
-		if (coreTexture.rotate) return quadData.topRightX;
+	function get_topLeftX():Float {
+		if (coreTexture.rotate)
+			return quadData.topRightX;
 		return quadData.topLeftX;
 	}
 
-	function get_topLeftY():Float
-	{
-		if (coreTexture.rotate) return quadData.topRightY;
+	function get_topLeftY():Float {
+		if (coreTexture.rotate)
+			return quadData.topRightY;
 		return quadData.topLeftY;
 	}
 
-	function get_topRightX():Float
-	{
-		if (coreTexture.rotate) return quadData.bottomRightX;
+	function get_topRightX():Float {
+		if (coreTexture.rotate)
+			return quadData.bottomRightX;
 		return quadData.topRightX;
 	}
 
-	function get_topRightY():Float
-	{
-		if (coreTexture.rotate) return quadData.bottomRightY;
+	function get_topRightY():Float {
+		if (coreTexture.rotate)
+			return quadData.bottomRightY;
 		return quadData.topRightY;
 	}
 
-	function get_bottomRightX():Float
-	{
-		if (coreTexture.rotate) return quadData.bottomLeftX;
+	function get_bottomRightX():Float {
+		if (coreTexture.rotate)
+			return quadData.bottomLeftX;
 		return quadData.bottomRightX;
 	}
 
-	function get_bottomRightY():Float
-	{
-		if (coreTexture.rotate) return quadData.bottomLeftY;
+	function get_bottomRightY():Float {
+		if (coreTexture.rotate)
+			return quadData.bottomLeftY;
 		return quadData.bottomRightY;
 	}
-
 }

@@ -9,51 +9,40 @@ import fuse.core.utils.Pool;
  * ...
  * @author P.J.Shand
  */
-
-class CoreStage extends CoreInteractiveObject
-{
-
-	public function new() 
-	{
+class CoreStage extends CoreInteractiveObject {
+	public function new() {
 		super();
 		setUpdates(false);
 		this.displayType = DisplayType.STAGE;
 		this.touchDisplay = this;
 	}
-	
-	override public function clone():CoreDisplayObject
-	{
+
+	override public function clone():CoreDisplayObject {
 		return null;
 	}
-	
-	override public function recursiveReleaseToPool()
-	{
-		
-	}
-	
-	override public function withinBounds(debug:Bool=false, x:Float, y:Float):Bool
-	{
+
+	override public function recursiveReleaseToPool() {}
+
+	override public function withinBounds(debug:Bool = false, x:Float, y:Float):Bool {
 		return true;
 	}
 
-	override public function insideBounds(x:Float, y:Float) 
-	{
+	override public function insideBounds(x:Float, y:Float) {
 		return true;
 	}
 
-	override function updateTransform() 
-	{
+	override function updateTransform() {
 		alpha = displayData.alpha;
 		visible = displayData.visible == 1;
-		
+
 		if (updateAny == true) {
 			Fuse.current.conductorData.backIsStatic = 0;
 		}
-		
+
 		if (updatePosition) {
 			WorkerTransformHelper.update(this);
 		}
-		
+
 		pushTransform();
 	}
 }

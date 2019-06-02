@@ -5,7 +5,6 @@ package fuse.display;
  * @author P.J.Shand
  */
 @:enum abstract BlendMode(UInt) from Int to Int {
-	
 	public var NORMAL = 0;
 	public var NONE = 1;
 	public var ADD = 2;

@@ -1,4 +1,5 @@
 package fuse.core.assembler.atlas.sheet;
+
 import fuse.core.assembler.atlas.sheet.partition.AtlasPartition;
 import fuse.core.assembler.atlas.sheet.AtlasSheet;
 import fuse.core.assembler.atlas.textures.AtlasTextures;
@@ -9,72 +10,61 @@ import fuse.utils.GcoArray;
  * ...
  * @author P.J.Shand
  */
-class AtlasSheets
-{
+class AtlasSheets {
 	public static var partitions = new GcoArray<AtlasPartition>([]);
-	
 	public static var sheets:Array<AtlasSheet>;
 	public static var numAtlases:Int;
 	public static var startIndex:Int;
 	public static var active:Bool = false;
-	
-	
-	static function __init__() 
-	{
+
+	static function __init__() {
 		sheets = [];
 		numAtlases = 4;
 		startIndex = 2;
-		
-		for (i in 0...numAtlases) 
-		{
+
+		for (i in 0...numAtlases) {
 			sheets.push(new AtlasSheet(i));
 		}
 	}
-	
-	static function clear() 
-	{
+
+	static function clear() {
 		partitions.clear();
-		
-		for (i in 0...sheets.length) 
-		{
+
+		for (i in 0...sheets.length) {
 			sheets[i].clear();
 		}
 	}
-	
-	static public function build() 
-	{
+
+	static public function build() {
 		active = true;
-		
+
 		clear();
-		
+
 		var failCount:Int = 0;
-		for (k in 0...AtlasTextures.textures.length) 
-		{
-			for (i in 0...sheets.length) 
-			{
+		for (k in 0...AtlasTextures.textures.length) {
+			for (i in 0...sheets.length) {
 				var successfulPlacement:Bool = sheets[i].add(AtlasTextures.textures[k]);
 				if (successfulPlacement) {
 					break;
 				}
 				failCount++;
-				//trace("failed to bake to atlas " + i);
+				// trace("failed to bake to atlas " + i);
 			}
 		}
 		if (failCount > 0) {
-			if (failCount == 1) trace("failed to place 1 texture into atlas buffers");
-			else trace("failed to place " + failCount + " textures into atlas buffers");
+			if (failCount == 1)
+				trace("failed to place 1 texture into atlas buffers");
+			else
+				trace("failed to place " + failCount + " textures into atlas buffers");
 		}
-		
-		for (j in 0...sheets.length) 
-		{
+
+		for (j in 0...sheets.length) {
 			sheets[j].writeActivePartitions();
 		}
 	}
-	
-	static public function closePartitions() 
-	{
-		for (i in 0...partitions.length) 
-		{
+
+	static public function closePartitions() {
+		for (i in 0...partitions.length) {
 			partitions[i].placed = true;
 			partitions[i].coreTexture.textureData.placed = 1;
 		}

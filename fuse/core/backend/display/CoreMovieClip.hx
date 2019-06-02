@@ -8,26 +8,23 @@ import fuse.core.assembler.vertexWriter.ICoreRenderable;
  * ...
  * @author P.J.Shand
  */
-
 @:keep
 @:access(fuse.texture)
-class CoreMovieClip extends CoreImage implements ICoreRenderable
-{
-	public function new() 
-	{
+class CoreMovieClip extends CoreImage implements ICoreRenderable {
+	public function new() {
 		super();
 		this.displayType = DisplayType.MOVIECLIP;
 	}
-	
+
 	override function set_textureId(value:ObjectId):ObjectId {
-		if (textureId != value){
+		if (textureId != value) {
 			textureId = value;
-			
+
 			if (coreTexture != null && textureId == -1) {
 				Core.textures.deregister(coreTexture.textureData.baseData.objectId);
 				coreTexture = null;
 			}
-			
+
 			if (coreTexture == null || coreTexture.textureData.baseData.objectId != textureId) {
 				coreTexture = Core.textures.register(textureId);
 			}

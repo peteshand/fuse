@@ -4,9 +4,7 @@ package fuse.core.communication.data;
  * ...
  * @author P.J.Shand
  */
-
-class WorkerSharedProperties
-{
+class WorkerSharedProperties {
 	public static inline var BACK_TO_MAIN:String = "backToMain";
 	public static inline var MAIN_TO_BACK:String = "mainToBack";
 	static public inline var TRANSFORM_DATA:String = "transformData";
@@ -20,9 +18,6 @@ class WorkerSharedProperties
 	static public inline var CONDITION:String = "condition";
 	static public inline var VERTEX_DATA:String = "vertexData";
 	static public inline var DISPLAY_DATA:String = "displayData";
-	
-	public function new() 
-	{
-		
-	}
+
+	public function new() {}
 }

@@ -8,17 +8,14 @@ import msignal.Signal.Signal0;
  * ...
  * @author P.J.Shand
  */
-
-class DefinitionObject
-{
+class DefinitionObject {
 	var parent:Dynamic;
 	var ViewClass:Class<Dynamic>;
 	var state:IState;
 	var params:Array<Dynamic>;
 	var onActive:Signal0;
-	
-	public function new(parent:Dynamic, ViewClass:Class<Dynamic>, state:IState, params:Array<Dynamic>=null) 
-	{
+
+	public function new(parent:Dynamic, ViewClass:Class<Dynamic>, state:IState, params:Array<Dynamic> = null) {
 		this.parent = parent;
 		this.ViewClass = ViewClass;
 		this.state = state;
@@ -26,7 +23,7 @@ class DefinitionObject
 		if (this.params == null) {
 			this.params = [];
 		}
-		
+
 		onActive = Reflect.getProperty(state, "onActive");
 		onActive.addOnce(initialize);
 		var result:Bool = state.check();
@@ -35,12 +32,10 @@ class DefinitionObject
 			initialize();
 		}
 	}
-	
-	public function initialize():Void
-	{
+
+	public function initialize():Void {
 		onActive.remove(initialize);
 		var sceneView:Dynamic = Type.createInstance(ViewClass, params);
 		Reflect.callMethod(parent, parent.addChild, [sceneView]);
 	}
-	
 }

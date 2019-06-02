@@ -3,21 +3,31 @@ package mantle.managers.layout2.items;
 /**
  * @author P.J.Shand
  */
-interface IInternetTransformObject 
-{
-	#if swc @:extern #end
+interface IInternetTransformObject {
+	#if swc
+	@:extern
+	#end
 	public var scaleContainerScaleX(null, set):Float;
-	#if swc @:extern #end
+	#if swc
+	@:extern
+	#end
 	public var scaleContainerScaleY(null, set):Float;
-	#if swc @:extern #end
+	#if swc
+	@:extern
+	#end
 	public var alignX(null, set):Float;
-	#if swc @:extern #end
+	#if swc
+	@:extern
+	#end
 	public var alignY(null, set):Float;
-	#if swc @:extern #end
+	#if swc
+	@:extern
+	#end
 	public var anchorX(null, set):Float;
-	#if swc @:extern #end
+	#if swc
+	@:extern
+	#end
 	public var anchorY(null, set):Float;
-	
 	/*#if swc @:setter(scaleContainerScaleX) #end*/
 	private function set_scaleContainerScaleX(value:Float):Float;
 	/*#if swc @:setter(scaleContainerScaleY) #end*/

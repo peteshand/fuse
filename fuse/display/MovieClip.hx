@@ -9,55 +9,51 @@ import openfl.errors.Error;
  * @author P.J.Shand
  */
 @:access(fuse.texture)
-class MovieClip extends Image
-{
+class MovieClip extends Image {
 	public var textures(default, set):Array<ITexture>;
+
 	var tick:Int = 0;
 	var normalized:Float = 0;
 	var fsp:Int;
 	@:isVar var frame(get, set):Int = 0;
-	
-	public function new(textures:Array<ITexture>, fsp:Int=24) 
-	{
+
+	public function new(textures:Array<ITexture>, fsp:Int = 24) {
 		this.fsp = fsp;
 		if (textures == null || textures.length == 0) {
 			throw new Error("One or more textures must be past");
 		}
 		this.textures = textures;
-		
+
 		super(textures[0]);
 		displayType = DisplayType.MOVIECLIP;
-		
+
 		play();
 	}
-	
-	public function play() 
-	{
+
+	public function play() {
 		Fuse.current.enterFrame.add(OnTick);
 	}
-	
-	public function stop() 
-	{
+
+	public function stop() {
 		Fuse.current.enterFrame.remove(OnTick);
 	}
-	
-	function OnTick() 
-	{
-		if (stage == null) return;
-		
+
+	function OnTick() {
+		if (stage == null)
+			return;
+
 		tick++;
 		normalized = (tick * fsp / 60);
-		frame = Math.round(normalized); 
+		frame = Math.round(normalized);
 	}
-	
-	function get_frame():Int 
-	{
+
+	function get_frame():Int {
 		return frame;
 	}
-	
-	function set_frame(value:Int):Int 
-	{
-		if (frame == value % textures.length) return value;
+
+	function set_frame(value:Int):Int {
+		if (frame == value % textures.length)
+			return value;
 		texture.textureData.changeCount++;
 		frame = value % textures.length;
 		textures[frame].directRender = true;
@@ -65,21 +61,18 @@ class MovieClip extends Image
 		texture = textures[frame];
 		return frame;
 	}
-	
-	override public function dispose():Void
-	{
+
+	override public function dispose():Void {
 		Fuse.current.enterFrame.remove(OnTick);
 		super.dispose();
 	}
-	
-	function set_textures(value:Array<ITexture>):Array<ITexture> 
-	{
+
+	function set_textures(value:Array<ITexture>):Array<ITexture> {
 		textures = value;
-		for (i in 0...textures.length) 
-		{
+		for (i in 0...textures.length) {
 			textures[i].directRender = true;
 		}
-		
+
 		return textures;
 	}
 }

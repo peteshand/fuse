@@ -19,12 +19,10 @@ import openfl.utils.Endian;
  * ...
  * @author P.J.Shand
  */
-
-class SharedMemory
-{
+class SharedMemory {
 	static var memorySize:Int = 0;
 	@:isVar public static var memory(get, set):ByteArray;
-	
+
 	public var vertexDataPool:MemoryPool;
 	public var batchDataPool:MemoryPool;
 	public var vertexRangePool:MemoryPool;
@@ -34,9 +32,8 @@ class SharedMemory
 	public var renderTextureDataPool:MemoryPool;
 	public var renderTextureDrawDataPool:MemoryPool;
 	public var messageDataPool:MemoryPool;
-	
-	public function new(memory:ByteArray=null) 
-	{
+
+	public function new(memory:ByteArray = null) {
 		vertexDataPool = CreatePool(VertexData.BUFFER_SIZE * VertexData.BYTES_PER_ITEM);
 		batchDataPool = CreatePool(WorkerBatchData.BUFFER_SIZE * WorkerBatchData.BYTES_PER_ITEM);
 		vertexRangePool = CreatePool(WorkerRangeData.BUFFER_SIZE * WorkerRangeData.BYTES_PER_ITEM);
@@ -46,47 +43,43 @@ class SharedMemory
 		renderTextureDataPool = CreatePool(RenderTextureData.BUFFER_SIZE * RenderTextureData.BYTES_PER_ITEM);
 		renderTextureDrawDataPool = CreatePool(RenderTextureDrawData.BUFFER_SIZE * RenderTextureDrawData.BYTES_PER_ITEM);
 		messageDataPool = CreatePool(MessageManager.BUFFER_SIZE);
-		
+
 		if (memory == null) {
 			SharedMemory.memory = new ByteArrayData();
-		}
-		else {
+		} else {
 			SharedMemory.memory = memory;
 		}
-		
-		//Messenger.init(messageDataPool);
+
+		// Messenger.init(messageDataPool);
 	}
-	
-	function CreatePool(size:Int):MemoryPool
-	{
+
+	function CreatePool(size:Int):MemoryPool {
 		var pool = new MemoryPool(size);
 		memorySize += pool.size;
 		return pool;
 	}
-	
-	static function get_memory():ByteArray 
-	{
+
+	static function get_memory():ByteArray {
 		return memory;
 	}
-	
-	static function set_memory(value:ByteArray):ByteArray 
-	{
+
+	static function set_memory(value:ByteArray):ByteArray {
 		memory = value;
 		memory.length = memorySize + memorySize;
 		memory.position = 0;
 		memory.endian = Endian.LITTLE_ENDIAN;
 		#if air
-			//memory.shareable = true;
-			if (WorkerInfo.isMainThread) {
-				Reflect.setProperty(memory, "shareable", true);
-			}
-			//if (WorkerInfo.usingWorkers || WorkerInfo.isWorkerThread) {
-				//Memory.select(memory);
-			//}
+		// memory.shareable = true;
+		if (WorkerInfo.isMainThread) {
+			Reflect.setProperty(memory, "shareable", true);
+		}
+		// if (WorkerInfo.usingWorkers || WorkerInfo.isWorkerThread) {
+		// Memory.select(memory);
+		// }
 		#end
-		
+
 		Memory.select(memory);
-		
+
 		return memory;
 	}
 }

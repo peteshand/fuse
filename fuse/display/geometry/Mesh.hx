@@ -7,14 +7,11 @@ import openfl.Vector;
  * ...
  * @author P.J.Shand
  */
-class Mesh
-{
-	//var indices:Vector<UInt>;
+class Mesh {
+	// var indices:Vector<UInt>;
 	var geometryData:Array<IGeometryData> = [];
-	
-	public function new() 
-	{
+
+	public function new() {
 		indices = new Vector<UInt>(6);
 	}
-	
 }

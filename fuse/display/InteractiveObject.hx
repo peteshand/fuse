@@ -6,13 +6,8 @@ import fuse.display.DisplayObject;
  * ...
  * @author P.J.Shand
  */
-class InteractiveObject extends DisplayObject
-{
-	
-	public function new() 
-	{
+class InteractiveObject extends DisplayObject {
+	public function new() {
 		super();
-		
 	}
-	
 }

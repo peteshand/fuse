@@ -1,124 +1,121 @@
 package notifier;
 
 import signal.Signal;
-//import msignal.Signal.Signal0;
+
+// import msignal.Signal.Signal0;
 using Logger;
+
 /**
  * ...
  * @author Thomas Byrne
  */
-class PropBind
-{
-	
+class PropBind {
 	@:isVar public var source(default, set):Dynamic;
-	function set_source(value:Dynamic):Dynamic 
-	{
-		if (source == value) return value;
+
+	function set_source(value:Dynamic):Dynamic {
+		if (source == value)
+			return value;
 		unbindSource();
 		source = value;
 		bindSource();
 		return value;
 	}
-	
+
 	@:isVar public var sourceProp(default, set):String;
-	function set_sourceProp(value:String):String 
-	{
-		if (sourceProp == value) return value;
+
+	function set_sourceProp(value:String):String {
+		if (sourceProp == value)
+			return value;
 		unbindSource();
 		sourceProp = value;
 		bindSource();
 		return value;
 	}
-	
+
 	@:isVar public var sourceSignal(default, set):Signal;
-	function set_sourceSignal(value:Signal):Signal 
-	{
-		if (sourceSignal == value) return value;
+
+	function set_sourceSignal(value:Signal):Signal {
+		if (sourceSignal == value)
+			return value;
 		unbindSource();
 		sourceSignal = value;
 		bindSource();
 		return value;
 	}
-	
+
 	var sourceBound:Bool;
 	var boundSignal:Signal;
 	var targets:Map<String, Array<Dynamic>>;
 
-	public function new(?source:Dynamic, ?sourceProp:String, ?sourceSignal:Signal) 
-	{
+	public function new(?source:Dynamic, ?sourceProp:String, ?sourceSignal:Signal) {
 		targets = new Map();
 		this.source = source;
 		this.sourceProp = sourceProp;
 		this.sourceSignal = sourceSignal;
 	}
-	
-	public function add(target:Dynamic, targetProp:String) : PropBind
-	{
+
+	public function add(target:Dynamic, targetProp:String):PropBind {
 		var list = targets.get(targetProp);
-		if (list == null){
+		if (list == null) {
 			list = [target];
 			targets.set(targetProp, list);
-		}else if (list.indexOf(target) !=-1){
+		} else if (list.indexOf(target) != -1) {
 			return this;
-		}else{
+		} else {
 			list.push(target);
 		}
 		return this;
 	}
-	
-	public function remove(target:Dynamic, targetProp:String)  : PropBind
-	{
+
+	public function remove(target:Dynamic, targetProp:String):PropBind {
 		var list = targets.get(targetProp);
-		if (list != null){
+		if (list != null) {
 			list.remove(target);
-			if (list.length == 0){
+			if (list.length == 0) {
 				targets.remove(targetProp);
 			}
 		}
 		return this;
 	}
-	
-	
-	function unbindSource() 
-	{
-		if (!sourceBound) return;
-		
+
+	function unbindSource() {
+		if (!sourceBound)
+			return;
+
 		sourceBound = false;
 		boundSignal.remove(onSourceChange);
 		boundSignal = null;
 	}
-	
-	
-	function bindSource() 
-	{
-		if (sourceBound) return;
-		if (source == null || sourceProp == null || sourceSignal == null) return;
-		
+
+	function bindSource() {
+		if (sourceBound)
+			return;
+		if (source == null || sourceProp == null || sourceSignal == null)
+			return;
+
 		sourceBound = true;
 		boundSignal = sourceSignal;
 		boundSignal.add(onSourceChange);
 		onSourceChange();
 	}
-	
-	function onSourceChange() 
-	{
+
+	function onSourceChange() {
 		var value:Dynamic;
-		try{
+		try {
 			value = Reflect.getProperty(source, sourceProp);
-		}catch (e:Dynamic){
+		} catch (e:Dynamic) {
 			Logger.warn(this, "Error thrown in getter for binding " + sourceProp + " on object " + source);
 			return;
 		}
-		for (prop in targets.keys()){
+		for (prop in targets.keys()) {
 			var list = targets.get(prop);
-			for(target in list){
-				try{
+			for (target in list) {
+				try {
 					Reflect.setProperty(target, prop, value);
-				}catch (e:Dynamic){
+				} catch (e:Dynamic) {
 					Logger.warn(this, "Error thrown in setter for binding " + prop + " on object " + target);
 				}
 			}
 		}
 	}
-	
 }

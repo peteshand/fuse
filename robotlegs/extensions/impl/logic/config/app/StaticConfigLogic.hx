@@ -11,23 +11,19 @@ import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigLoadService;
 import robotlegs.extensions.impl.utils.json.JsonFormatter;
 import org.swiftsuspenders.utils.DescribedType;
+
 /**
  * ...
  * @author P.J.Shand
  */
 @:keepSub
-class StaticConfigLogic implements DescribedType
-{
+class StaticConfigLogic implements DescribedType {
 	@inject public var configModel:IConfigModel;
 	@inject public var configLoadService:ConfigLoadService;
-	
-	public function new() 
-	{
-		
-	}
-	
-	public function init() 
-	{
+
+	public function new() {}
+
+	public function init() {
 		#if (air && !mobile)
 		var file:File = Storage.configDirectory.resolvePath(ConfigSettings.FILE_NAME_STATIC + ".json");
 		if (!file.exists) {
@@ -36,10 +32,9 @@ class StaticConfigLogic implements DescribedType
 		configLoadService.loadDynamicData(file);
 		#end
 	}
-	
-	function createEmptyConfigOverride(file:File) 
-	{
-		var emptyConfig:EmptyConfig = { props: { exampleProp:"test" } };
+
+	function createEmptyConfigOverride(file:File) {
+		var emptyConfig:EmptyConfig = {props: {exampleProp: "test"}};
 		var emptyConfigStr:String = JsonFormatter.formatJsonString(Json.stringify(emptyConfig));
 		var fileStream:FileStream = new FileStream();
 		fileStream.open(file, FileMode.WRITE);
@@ -48,9 +43,7 @@ class StaticConfigLogic implements DescribedType
 	}
 }
 
-typedef EmptyConfig = 
-{
+typedef EmptyConfig = {
 	props:Dynamic
 }
-
 #end

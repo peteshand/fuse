@@ -1,14 +1,14 @@
 package fuse.core.communication.data.displayData;
+
 import fuse.display.BlendMode;
 import fuse.utils.Color;
 import fuse.texture.TextureId;
+
 /**
  * @author P.J.Shand
  */
-
 @:keep
-typedef IDisplayData =
-{
+typedef IDisplayData = {
 	x:Float,
 	y:Float,
 	width:Float,
@@ -29,14 +29,11 @@ typedef IDisplayData =
 	renderLayer:Int,
 	visible:Int,
 	blendMode:Int,
-
 	offsetU:Float,
 	offsetV:Float,
 	scaleU:Float,
 	scaleV:Float,
-	
 	shaderId:Int,
-	
 	bottomLeftX:Float,
 	bottomLeftY:Float,
 	topLeftX:Float,

@@ -3,8 +3,7 @@ package fuse.core.communication.data.conductorData;
 /**
  * @author P.J.Shand
  */
-typedef IConductorData =
-{
+typedef IConductorData = {
 	frameIndex:Int,
 	processIndex:Int,
 	numberOfBatches:Int,
@@ -26,7 +25,7 @@ typedef IConductorData =
 	stageHeight:Int,
 	windowWidth:Int,
 	windowHeight:Int,
-	//isStatic:Int,
+	// isStatic:Int,
 	frontIsStatic:Int,
 	backIsStatic:Int,
 	numTriangles:Int,

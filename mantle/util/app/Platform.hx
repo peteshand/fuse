@@ -10,29 +10,24 @@ typedef RealPlatform = BrowserPlatform;
 typedef RealPlatform = DesktopPlatform;
 #end
 
-class Platform
-{
-	public static function isWindows():Bool 
-	{
+class Platform {
+	public static function isWindows():Bool {
 		return RealPlatform.isWindows();
 	}
-	
-	public static function isMac():Bool 
-	{
+
+	public static function isMac():Bool {
 		return RealPlatform.isMac();
 	}
-	
-	public static function isMobile():Bool 
-	{
+
+	public static function isMobile():Bool {
 		return RealPlatform.isMobile();
 	}
-	
-	public static function is64Bit():Bool 
-	{
+
+	public static function is64Bit():Bool {
 		#if html5
-			return false;
+		return false;
 		#else
-			return RealPlatform.is64Bit();
+		return RealPlatform.is64Bit();
 		#end
 	}
 }

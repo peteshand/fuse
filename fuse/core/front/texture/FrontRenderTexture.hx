@@ -16,50 +16,45 @@ import openfl.display3D.Context3DTextureFormat;
  * ...
  * @author P.J.Shand
  */
-
 @:access(fuse)
-class FrontRenderTexture extends FrontBaseTexture
-{
+class FrontRenderTexture extends FrontBaseTexture {
 	static var currentRenderTargetId:Int;
 	static var conductorData:WorkerConductorData;
+
 	var renderTextureData:IRenderTextureData;
 	var renderTextureDrawData:IRenderTextureDrawData;
-	
-	public function new(width:Int, height:Int, directRender:Bool=true, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) 
-	{
+
+	public function new(width:Int, height:Int, directRender:Bool = true, _textureId:Null<TextureId> = null, _objectId:Null<ObjectId> = null) {
 		if (conductorData == null) {
 			conductorData = new WorkerConductorData();
 		}
-		
-		super(width, height, false, /*null, */true, _textureId, _objectId);
+
+		super(width, height, false, /*null, */ true, _textureId, _objectId);
 		this.directRender = directRender;
-		
+
 		renderTextureData = new RenderTextureData(objectId);
 		renderTextureDrawData = new RenderTextureDrawData(0);
 	}
-	
-	public function draw(display:DisplayObject) 
-	{
+
+	public function draw(display:DisplayObject) {
 		RenderTextureDrawData.OBJECT_POSITION = conductorData.renderTextureCountIndex++;
 		renderTextureDrawData.renderTextureId = objectId;
 		renderTextureDrawData.displayObjectId = display.objectId;
-		
 	}
-	
-	override function upload() 
-	{
+
+	override function upload() {
 		setTextureData();
-		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(textureData.p2Width, textureData.p2Height, Context3DTextureFormat.BGRA, true, 0);
-		
+		textureData.textureBase = textureData.nativeTexture = Textures.context3D.createTexture(textureData.p2Width, textureData.p2Height,
+			Context3DTextureFormat.BGRA, true, 0);
+
 		clear();
-		
+
 		Textures.registerTexture(textureId, this);
 		textureAvailable = true;
 		Fuse.current.workerSetup.updateTextureSurface(objectId);
 	}
-	
-	public function clear() 
-	{
+
+	public function clear() {
 		this._clear = true;
 	}
 }

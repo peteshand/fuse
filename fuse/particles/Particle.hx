@@ -7,32 +7,29 @@
 //	in accordance with the terms of the accompanying license agreement.
 //
 // =================================================================================================
-
 package fuse.particles;
 
 import fuse.display.Image;
 import fuse.display.BlendMode;
 import fuse.texture.BaseTexture;
 
-class Particle extends Image
-{
-    @:isVar public var scale(default, set):Float = 1;
-    public var currentTime:Float;
-    public var totalTime:Float;
-    
-    static var COUNT:Int = 0;
-    public var index:Int;
+class Particle extends Image {
+	@:isVar public var scale(default, set):Float = 1;
+	public var currentTime:Float;
+	public var totalTime:Float;
 
-    public function new(texture:BaseTexture)
-    {
-        super(texture);
+	static var COUNT:Int = 0;
 
-        index = COUNT++;
-        this.alignPivot();
-    }
+	public var index:Int;
 
-    function set_scale(value:Float):Float
-    {
-        return scale = this.scaleX = this.scaleY = value;
-    }
+	public function new(texture:BaseTexture) {
+		super(texture);
+
+		index = COUNT++;
+		this.alignPivot();
+	}
+
+	function set_scale(value:Float):Float {
+		return scale = this.scaleX = this.scaleY = value;
+	}
 }

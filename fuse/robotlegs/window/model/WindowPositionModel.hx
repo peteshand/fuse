@@ -6,12 +6,8 @@ import notifier.Notifier;
  * ...
  * @author P.J.Shand
  */
-class WindowPositionModel 
-{
+class WindowPositionModel {
 	public var fullscreen = new Notifier<Bool>(false);
-	
-	public function new() 
-	{
-		
-	}
+
+	public function new() {}
 }

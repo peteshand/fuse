@@ -4,9 +4,7 @@ package fuse.core.communication.data;
  * ...
  * @author P.J.Shand
  */
-
-class MessageType
-{
+class MessageType {
 	public static inline var INIT:String = "init";
 	public static inline var UPDATE:String = "update";
 	static public inline var UPDATE_RETURN:String = "updateReturn";
@@ -16,7 +14,6 @@ class MessageType
 	static public inline var ADD_CHILD_AT:String = "addDisplayAt";
 	static public inline var SET_CHILD_INDEX:String = "setChildIndex";
 	static public inline var REMOVE_CHILD:String = "removeDisplay";
-	
 	static public inline var VISIBLE_CHANGE:String = "visibleChange";
 	static public inline var SET_TOUCHABLE:String = "setTouchable";
 	static public inline var MAIN_THREAD_TICK:String = "mainThreadTick";
@@ -25,15 +22,10 @@ class MessageType
 	static public inline var UPDATE_TEXTURE:String = "updateTexture";
 	static public inline var UPDATE_TEXTURE_SURFACE:String = "updateTextureSurface";
 	static public inline var REMOVE_TEXTURE:String = "removeTexture";
-	//static public inline var ADD_TEXTURE:String = "addTexture";
+	// static public inline var ADD_TEXTURE:String = "addTexture";
 	static public inline var MOUSE_INPUT:String = "mouseInput";
 	static public inline var MOUSE_COLLISION:String = "mouseCollision";
 	static public inline var SET_STATIC:String = "setStatic";
-	
-	
-	public function new() 
-	{
-		
-	}
-	
+
+	public function new() {}
 }

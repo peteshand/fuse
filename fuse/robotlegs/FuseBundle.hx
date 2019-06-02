@@ -12,31 +12,25 @@ import robotlegs.bender.framework.api.IContext;
  * ...
  * @author P.J.Shand
  */
-class FuseBundle implements IBundle
-{
+class FuseBundle implements IBundle {
 	/*============================================================================*/
 	/* Public Functions                                                           */
 	/*============================================================================*/
-	
-	public function new()
-	{
-		
-	}
-	
+	public function new() {}
+
 	/** @inheritDoc **/
-	public function extend(context:IContext):Void
-	{
+	public function extend(context:IContext):Void {
 		context.install([
-			SignalCommandMapExtension, 
-			ManualStageObserverExtension, 
+			SignalCommandMapExtension,
+			ManualStageObserverExtension,
 			Stage3DStackExtension,
-			
+
 			FuseIntegrationExtension,
 			FuseStageSyncExtension,
 			/*ConfigExtension,*/
 			/*SceneExtension,*/
 			/*AppWindowExtension*/
-			
+
 		]);
 	}
 }

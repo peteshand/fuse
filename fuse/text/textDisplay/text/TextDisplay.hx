@@ -126,7 +126,6 @@ class TextDisplay extends Sprite {
 
 		super();
 
-		
 		updater = new Updater(update);
 
 		if (height == null && width == null)
