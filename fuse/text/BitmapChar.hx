@@ -2,6 +2,7 @@ package fuse.text;
 
 import fuse.texture.BaseTexture;
 import fuse.display.Image;
+import fuse.geom.Rectangle;
 
 class BitmapChar {
 	private var __texture:BaseTexture;
@@ -10,6 +11,8 @@ class BitmapChar {
 	private var __yOffset:Float;
 	private var __xAdvance:Float;
 	private var __kernings:Map<Int, Float>;
+	var parentTexture:BaseTexture;
+	var region:Rectangle;
 
 	#if commonjs
 	private static function __init__() {
@@ -26,9 +29,12 @@ class BitmapChar {
 	#end
 
 	/** Creates a char with a texture and its properties. */
-	public function new(id:Int, texture:BaseTexture, xOffset:Float, yOffset:Float, xAdvance:Float) {
+	public function new(id:Int, parentTexture:BaseTexture, region:Rectangle, xOffset:Float, yOffset:Float, xAdvance:Float) {
 		__charID = id;
-		__texture = texture;
+		this.parentTexture = parentTexture;
+		this.region = region;
+		__texture = BaseTexture.fromTexture(parentTexture, region);
+		// __texture = texture;
 		__xOffset = xOffset;
 		__yOffset = yOffset;
 		__xAdvance = xAdvance;
@@ -53,6 +59,9 @@ class BitmapChar {
 
 	/** Creates an image of the char. */
 	public function createImage():Image {
+		if (__texture == null) {
+			__texture = BaseTexture.fromTexture(parentTexture, region);
+		}
 		return new Image(__texture);
 	}
 

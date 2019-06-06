@@ -1,7 +1,6 @@
 package mantle.managers.initialize;
 
-import condition.IState;
-import condition.State;
+import condition.Condition;
 
 /**
  * ...
@@ -10,7 +9,7 @@ import condition.State;
 class InitializeManager {
 	public function new() {}
 
-	public static function define(parent:Dynamic, view:Class<Dynamic>, state:IState, params:Array<Dynamic> = null):DefinitionObject {
-		return new DefinitionObject(parent, view, state, params);
+	public static function define(parent:Dynamic, view:Class<Dynamic>, condition:Condition, params:Array<Dynamic> = null):DefinitionObject {
+		return new DefinitionObject(parent, view, condition, params);
 	}
 }

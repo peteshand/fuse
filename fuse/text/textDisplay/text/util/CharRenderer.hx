@@ -24,6 +24,7 @@ class CharRenderer {
 	// private var batches:Map<String, MeshBatch> = new Map();
 	var characters:Array<Char>;
 	var color:Null<UInt>;
+	var images:Array<Image> = [];
 
 	public function new(textDisplay:TextDisplay) {
 		this.textDisplay = textDisplay;
@@ -61,16 +62,16 @@ class CharRenderer {
 						// var image:Image = textDisplay.defaultFormat.
 
 						var image:Image = char.bitmapChar.createImage();
+						images.push(image);
 						/*var image:Image = charImageMap.get(char.bitmapChar);
 							if (image == null) {
 								image = char.bitmapChar.createImage();
 								image.touchable = false;
 								charImageMap.set(char.bitmapChar, image);
 						}*/
+						if (char.scale != image.scaleX)
+							image.scaleX = image.scaleY = char.scale;
 						/*
-							if (char.scale != image.scaleX)
-								image.scaleX = image.scaleY = char.scale;
-
 							var smoothing:String = textDisplay.textureSmoothing;
 							if (smoothing == null)
 								smoothing = char.font.smoothing;
@@ -147,6 +148,10 @@ class CharRenderer {
 	}
 
 	function clearBatches() {
+		for (image in images) {
+			image.parent.removeChild(image);
+		}
+		images = [];
 		// for (quadBatch in batches) {
 		// #if (starling >= "2.0.0")
 		// quadBatch.clear();

@@ -4,6 +4,7 @@ import fuse.text.BitmapChar;
 import fuse.text.BitmapFont;
 import fuse.text.textDisplay.text.model.format.InputFormat;
 import fuse.text.textDisplay.utils.SpecialChar;
+import fuse.display.Image;
 
 /**
  * ...

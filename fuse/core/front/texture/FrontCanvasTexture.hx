@@ -51,7 +51,7 @@ class FrontCanvasTexture extends FrontBaseTexture {
 
 		nativeCanvasTexture.attachCanvas(canvas);
 
-		EnterFrame.add(onTick);
+		// EnterFrame.add(onTick);
 
 		textureData.placed = 0;
 		Textures.registerTexture(textureId, this);
@@ -60,12 +60,17 @@ class FrontCanvasTexture extends FrontBaseTexture {
 		onUpload.dispatch();
 	}
 
-	override public function dispose() {
-		super.dispose();
-		EnterFrame.remove(onTick);
-	}
-
-	function onTick() {
+	public function update() {
+		nativeCanvasTexture.update();
 		updateTextureSurface();
 	}
+
+	override public function dispose() {
+		super.dispose();
+		// EnterFrame.remove(onTick);
+	}
+
+	// function onTick() {
+	//
+	// }
 }

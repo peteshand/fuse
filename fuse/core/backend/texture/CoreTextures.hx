@@ -64,9 +64,11 @@ class CoreTextures {
 	public function updateSurface(objectId:ObjectId) {
 		var texture:CoreTexture = texturesMap.get(objectId);
 		if (texture != null) {
-			if (texture.textureData.directRender == 0) {
-				texturesHaveChanged = true;
-			}
+			// TODO: amend so altas isn't recalulated every frame
+			// if (texture.textureData.directRender == 0) {
+			trace("FIX");
+			texturesHaveChanged = true;
+			// }
 			texture.updateSurface();
 		}
 	}

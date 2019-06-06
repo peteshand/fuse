@@ -89,8 +89,7 @@ class BitmapFont {
 			region.width = Std.parseFloat(charElement.get("width")) / scale;
 			region.height = Std.parseFloat(charElement.get("height")) / scale;
 
-			var subTexture = BaseTexture.fromTexture(texture, region);
-			var bitmapChar:BitmapChar = new BitmapChar(id, subTexture, xOffset, yOffset, xAdvance);
+			var bitmapChar:BitmapChar = new BitmapChar(id, texture, region, xOffset, yOffset, xAdvance);
 			addChar(id, bitmapChar);
 		}
 

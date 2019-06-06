@@ -285,7 +285,6 @@ class TextDisplay extends Sprite {
 		this.value = FormatParser.nodesToPlainText(contentModel.nodes);
 		selection.index = this.value.length;
 		dispatchEvent(new Event(Event.CHANGE));
-		trace("v = " + contentModel.nodes);
 		return text;
 	}
 

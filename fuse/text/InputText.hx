@@ -87,10 +87,13 @@ class InputText extends TextField {
 	function onKeyPress() {
 		if (stage.focus.value != this)
 			return;
+		applyKeyPress(Keyboard.event.charCode, Keyboard.event.keyCode);
+	}
 
+	function applyKeyPress(charCode:Int, keyCode:Int) {
 		var text:String = this.text;
-		var charCode:Int = Keyboard.event.charCode;
-		var keyCode:Int = Keyboard.event.keyCode;
+		// var charCode:Int = Keyboard.event.charCode;
+		// var keyCode:Int = Keyboard.event.keyCode;
 		var _charIndex:Int = charIndex.value;
 
 		if (keyCode == Key.LEFT) {

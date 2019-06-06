@@ -12,5 +12,9 @@ class CanvasTexture extends BaseTexture {
 		super();
 		texture = canvasTexture = new FrontCanvasTexture(canvas);
 	}
+
+	public function update() {
+		canvasTexture.update();
+	}
 }
 #end
