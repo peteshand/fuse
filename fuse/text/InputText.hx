@@ -28,6 +28,7 @@ class InputText extends TextField {
 	var selectEnd:Bool;
 
 	public var ignoreKeyCodes:Array<Int>;
+	public var hasFocus = new Notifier<Bool>();
 
 	public function new(width:Int, height:Int) {
 		super(width, height);
@@ -42,7 +43,7 @@ class InputText extends TextField {
 		caret = new Caret(this);
 		addChild(caret);
 
-		stage.focus.add(onFocusChange);
+		stage.focus.add(onStageFocusChange);
 		onUpdate.add(onTextUpdate);
 
 		ignoreKeyCodes = [
@@ -69,13 +70,14 @@ class InputText extends TextField {
 
 	override function setStage(value:Stage):Stage {
 		super.setStage(value);
-		onFocusChange();
+		onStageFocusChange();
 
 		return value;
 	}
 
-	function onFocusChange() {
+	function onStageFocusChange() {
 		if (stage != null) {
+			hasFocus.value = stage.focus.value == this;
 			if (stage.focus.value == this) {
 				stage.onPress.add(onPressStage);
 			} else {
@@ -208,6 +210,8 @@ class Caret extends Sprite {
 		quad.visible = false;
 
 		inputText.charIndex.add(onCharIndexChange);
+
+		inputText.hasFocus.add(onFocusChange);
 	}
 
 	function onCharIndexChange() {
@@ -247,17 +251,33 @@ class Caret extends Sprite {
 
 	override function setStage(value:Stage):Stage {
 		if (stage != null) {
-			stage.focus.remove(onFocusChange);
+			stage.focus.remove(onStageFocusChange);
 		}
 		super.setStage(value);
 		if (stage != null) {
-			stage.focus.add(onFocusChange);
-			onFocusChange();
+			stage.focus.add(onStageFocusChange);
+			onStageFocusChange();
 		}
 		return value;
 	}
 
-	function onFocusChange() {
+	function onFocusChange()
+	{
+		if (inputText.hasFocus.value){
+			count = 0;
+			EnterFrame.add(tick);
+			inputText.onUpdate.add(onTextUpdate);
+			onTextUpdate();
+		} else {
+			cursorCharBounds = null;
+			quad.visible = false;
+			EnterFrame.remove(tick);
+			inputText.onUpdate.remove(onTextUpdate);
+		}
+	}
+
+	// TODO: update stage focus
+	function onStageFocusChange() {
 		if (stage.focus.value == inputText) {
 			count = 0;
 			EnterFrame.add(tick);
