@@ -5,11 +5,12 @@ import notifier.Notifier;
 import notifier.MapNotifier;
 
 class NotifierPersistence {
-	public static function register(notifier:Notifier<Dynamic>, id:String) {
+	public static function register(notifier:Notifier<Dynamic>, id:String, silentlySet:Bool=true) {
 		var data = getNPData(id);
 
 		if (data.localData != null) {
-			notifier.silentlySet(data.localData);
+			if (silentlySet) notifier.silentlySet(data.localData);
+			else notifier.value = data.localData;
 		}
 		notifier.add(() -> {
 			data.sharedObject.setProperty("value", notifier.value);
