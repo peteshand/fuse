@@ -154,12 +154,13 @@ class Image extends DisplayObject {
 	}
 
 	override function set_renderLayer(value:Null<Int>):Null<Int> {
-		if (renderLayer != value) {
+		//if (renderLayer != value) {
 			displayData.renderLayer = renderLayer = value;
 			updateVisible = true;
-			updateStaticBackend();
 			Fuse.current.workerSetup.visibleChange(this, this.visible);
-		}
+			updateStaticBackend();
+			
+		//}
 		return value;
 	}
 

@@ -182,6 +182,7 @@ class DisplayList {
 
 	public function setStatic(payload:StaticData) {
 		var display:CoreDisplayObject = untyped map.get(payload.objectId);
+		movementCount++;
 		if (display == null)
 			return;
 
@@ -194,6 +195,6 @@ class DisplayList {
 		display.updateTexture = payload.updateTexture;
 		display.updateUVs = payload.updateUVs;
 
-		movementCount++;
+		
 	}
 }
