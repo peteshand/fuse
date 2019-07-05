@@ -36,9 +36,9 @@ class CoreCommandExtension implements IExtension {
 		injector = context.injector;
 
 		#if flash
-		context.configure([ExecuteFlashImagCommands]);
+		context.configure(ExecuteFlashImagCommands);
 		#elseif js
-		context.configure([ExecuteJSImagCommands]);
+		context.configure(ExecuteJSImagCommands);
 		#end
 	}
 

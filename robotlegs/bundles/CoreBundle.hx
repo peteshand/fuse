@@ -26,20 +26,18 @@ class CoreBundle implements IBundle {
 	/*============================================================================*/
 	/** @inheritDoc **/
 	public function extend(context:IContext):Void {
-		context.install([MVCSBundle]);
+		context.install(MVCSBundle);
 
 		context.logLevel = LogLevel.INFO;
 
-		context.install([
-			SignalCommandMapExtension,
-			ManualStageObserverExtension,
-			Stage3DStackExtension,
+		context.install(SignalCommandMapExtension);
+		context.install(ManualStageObserverExtension);
+		context.install(Stage3DStackExtension);
 
-			// CoreLogicExtension,
-			// CoreSignalExtension,
-			// CoreModelExtension,
-			// CoreServiceExtension,
-			// CoreCommandExtension
-		]);
+		// context.install(CoreLogicExtension);
+		// context.install(CoreSignalExtension);
+		// context.install(CoreModelExtension);
+		// context.install(CoreServiceExtension);
+		// context.install(CoreCommandExtension);
 	}
 }
