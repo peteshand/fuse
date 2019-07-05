@@ -20,17 +20,14 @@ class FuseBundle implements IBundle {
 
 	/** @inheritDoc **/
 	public function extend(context:IContext):Void {
-		context.install([
-			SignalCommandMapExtension,
-			ManualStageObserverExtension,
-			Stage3DStackExtension,
+		context.install(SignalCommandMapExtension);
+		context.install(ManualStageObserverExtension);
+		context.install(Stage3DStackExtension);
+		context.install(FuseIntegrationExtension);
+		context.install(FuseStageSyncExtension);
 
-			FuseIntegrationExtension,
-			FuseStageSyncExtension,
-			/*ConfigExtension,*/
-			/*SceneExtension,*/
-			/*AppWindowExtension*/
-
-		]);
+		/*context.install(ConfigExtension);*/
+		/*context.install(SceneExtension);*/
+		/*context.install(AppWindowExtension);*/
 	}
 }
