@@ -263,19 +263,9 @@ class MiniBitmapFont {
 
 	private static function get_texture():BitmapTexture {
 		var bitmapData:BitmapData = getBitmapData();
-		// var format:String = Context3DTextureFormat.BGRA_PACKED;
-		// var texture:Texture = Texture.fromBitmapData(bitmapData, false, false, 1, format);
 		var texture:BitmapTexture = new BitmapTexture(bitmapData);
 		bitmapData.dispose();
 		bitmapData = null;
-
-		trace("TODO: clean up");
-		// texture.root.onRestore = function(textureRoot:ConcreteTexture):Void {
-		//	bitmapData = getBitmapData();
-		//	textureRoot.uploadBitmapData(bitmapData);
-		//	bitmapData.dispose();
-		//	bitmapData = null;
-		// };
 
 		return texture;
 	}

@@ -25,7 +25,7 @@ class HierarchyAssembler {
 
 			HierarchyAssembler.renderIndex = 0;
 			Core.displayList.stage.buildHierarchy();
-
+			
 			Core.displayList.stage.buildTransformActions();
 
 			orderByRenderLayers(hierarchy);

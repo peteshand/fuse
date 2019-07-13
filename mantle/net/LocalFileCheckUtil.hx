@@ -31,6 +31,8 @@ class LocalFileCheckUtil {
 		if (url == null)
 			return null;
 
+		url = removeQueryStr(url);
+
 		var cacheDir:File = new File(Storage.appStorageDir.nativePath + File.separator + "cache" + File.separator);
 		if (!cacheDir.exists)
 			cacheDir.createDirectory();
@@ -51,7 +53,7 @@ class LocalFileCheckUtil {
 			return url; // already local
 		}
 
-		var url2:String = File.separator;
+		var url2:String = "";
 		var v = split[0];
 		if (split.length > 1)
 			v = split[1];
@@ -68,5 +70,12 @@ class LocalFileCheckUtil {
 
 		var path:String = cacheDir.nativePath + url2;
 		return path + File.separator + dirs[dirs.length - 1];
+	}
+
+	static function removeQueryStr(value:String):String {
+		if (value.indexOf("?") == -1)
+			return value;
+		var split:Array<String> = value.split("?");
+		return split[0];
 	}
 }

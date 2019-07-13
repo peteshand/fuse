@@ -66,7 +66,7 @@ class CoreTextures {
 		if (texture != null) {
 			// TODO: amend so altas isn't recalulated every frame
 			// if (texture.textureData.directRender == 0) {
-			trace("FIX");
+			//trace("FIX");
 			texturesHaveChanged = true;
 			// }
 			texture.updateSurface();

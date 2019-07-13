@@ -9,11 +9,14 @@ import fuse.geom.Rectangle;
 class Frame extends Sprite {
 	var background:Quad;
 	var image:Image;
-	var frameWidth:Float = 100;
-	var frameHeight:Float = 100;
+	var frameWidth:Int = 100;
+	var frameHeight:Int = 100;
 	var frameX:Float = 0;
 	var frameY:Float = 0;
 	var compositeRect:Rectangle;
+	var backgroundColor:Null<UInt>;
+
+	@:isVar public var texture(default, set):ITexture;
 
 	@:isVar public var mode(default, set):CompositeMode = CompositeMode.LETTERBOX;
 	public var contentWidth(get, never):Float;
@@ -27,6 +30,7 @@ class Frame extends Sprite {
 	public function new(width:Int, height:Int, texture:ITexture, backgroundColor:Null<UInt> = null) {
 		super();
 
+		this.backgroundColor = backgroundColor;
 		if (backgroundColor != null) {
 			background = new Quad(width, height, backgroundColor);
 			addChild(background);
@@ -35,7 +39,7 @@ class Frame extends Sprite {
 		image = new Image(texture);
 		addChild(image);
 
-		texture.onUpdate.add(updateLayout);
+		this.texture = texture;
 
 		frameWidth = width;
 		frameHeight = height;
@@ -58,13 +62,19 @@ class Frame extends Sprite {
 	}
 
 	override function set_width(value:Float):Float {
-		background.width = frameWidth = value;
+		frameWidth = Math.round(value);
+		if (background != null) {
+			background.width = frameWidth;
+		}
 		updateLayout();
 		return frameWidth;
 	}
 
 	override function set_height(value:Float):Float {
-		background.height = frameHeight = value;
+		frameHeight = Math.round(value);
+		if (background != null) {
+			background.height = frameHeight;
+		}
 		updateLayout();
 		return frameHeight;
 	}
@@ -131,15 +141,73 @@ class Frame extends Sprite {
 		}
 
 		if (compositeRect.height > frameHeight) {
-			if (compositeRect.y < 0) {
-				image.y = 0;
-				image.offsetV = -compositeRect.y / compositeRect.height;
-			}
+			// if (compositeRect.y < 0) {
+			image.y = 0;
+			image.offsetV = -compositeRect.y / compositeRect.height;
+			// }
 			if (compositeRect.height > frameHeight)
 				image.height = frameHeight;
 			image.scaleV = frameHeight / compositeRect.height;
 		} else {
 			image.scaleV = 1;
 		}
+	}
+
+	override public function clone():Sprite {
+		var _clone = new Frame(frameWidth, frameHeight, image.texture, backgroundColor);
+		copySpriteProps(this, _clone);
+		_clone.mode = this.mode;
+		_clone.contentAlignH = this.contentAlignH;
+		_clone.contentAlignV = this.contentAlignV;
+		_clone.contentScale = this.contentScale;
+		_clone.offsetX = this.offsetX;
+		_clone.offsetY = this.offsetY;
+		// copySpriteChildren(this, _clone);
+		return cast(_clone, Sprite);
+	}
+
+	override public function dispose() {
+		if (background != null) {
+			if (background.parent != null) {
+				background.parent.removeChild(background);
+				background = null;
+			}
+		}
+		if (image != null) {
+			if (image.parent != null) {
+				image.parent.removeChild(image);
+				image.dispose();
+				image = null;
+			}
+		}
+		if (texture != null) {
+			texture.onUpdate.remove(updateLayout);
+			texture = null;
+		}
+
+		super.dispose();
+	}
+
+	override function updateAlignmentX() {
+		if (horizontalAlign != null) {
+			pivotX = Math.round(scaleX * frameWidth * cast(horizontalAlign, Float));
+		}
+	}
+
+	override function updateAlignmentY() {
+		if (verticalAlign != null) {
+			pivotY = Math.round(scaleY * frameHeight * cast(verticalAlign, Float));
+		}
+	}
+
+	function set_texture(value:ITexture):ITexture {
+		if (texture != null) {
+			texture.onUpdate.remove(updateLayout);
+		}
+		image.texture = texture = value;
+		if (texture != null) {
+			texture.onUpdate.add(updateLayout);
+		}
+		return texture;
 	}
 }

@@ -13,10 +13,11 @@ class RemoteLoader extends Loader {
 
 	override public function load(url:String):Void {
 		loading = true;
-		if (url == null) {
-			trace("url = " + url);
-		}
+		// if (url == null) {
+		// trace("load image start: " + url);
+		// }
 		currentURL = url;
+		Loader.LOADING++;
 		#if air
 		loader.load(new URLRequest(url), loaderContext);
 		#else

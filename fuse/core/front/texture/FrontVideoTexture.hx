@@ -50,12 +50,12 @@ class FrontVideoTexture extends FrontBaseTexture {
 	public function new(url:String = null) {
 		// trace2("supportsVideoTexture = " + Context3D.supportsVideoTexture);
 		netConnection = new NetConnection();
-		netConnection.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
+		netConnection.addEventListener(NetStatusEvent.NET_STATUS, onNetEvent);
 		netConnection.connect(null);
 
 		netStream = new NetStream(netConnection);
 		netStream.client = {onMetaData: onMetaDataReceived};
-		netStream.addEventListener(NetStatusEvent.NET_STATUS, OnEvent);
+		netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetEvent);
 
 		netStream.onError.add(() -> {
 			onError.dispatch();
@@ -71,6 +71,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 	}
 
 	function onActiveChange() {
+		trace2("action: " + action.value);
 		if (action.value == VideoAction.PLAY) {
 			if (!autoPlay)
 				action.value = VideoAction.PAUSE_WAIT;
@@ -199,7 +200,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 		netStream.seek(seekTarget);
 	}
 
-	private function OnEvent(e:NetStatusEvent):Void {
+	private function onNetEvent(e:NetStatusEvent):Void {
 		var info:NetStatusInfo = e.info;
 		trace2(info.code);
 		// if (textureData != null){
@@ -208,6 +209,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 		if (info.code == "NetStream.Play.Start") {
 			updateTextureSurface();
 			Delay.nextFrame(delayAvailable);
+			action.value = VideoAction.PLAY;
 		}
 		if (info.code == "NetStream.Play.Stop") {
 			available.value = false;
@@ -409,7 +411,7 @@ typedef NetStatusInfo = {
 	public var STOP:String = "stop";
 	public var PAUSE:String = "pause";
 	public var SEEK:String = "seek";
-	public var SEEKING:String = "seekING";
+	public var SEEKING:String = "seeking";
 	public var PLAY_WAIT:String = "play_wait";
 	public var PAUSE_WAIT:String = "pause_wait";
 	public var STOP_WAIT:String = "stop_wait";

@@ -93,7 +93,7 @@ class DirectBatch extends BaseBatch implements IBatch {
 		}
 
 		var batchTypeHasChanged:Bool = image.batchType != BatchType.DIRECT;
-		var vertexPositionHasMoved:Bool = (image.drawIndex != VertexData.OBJECT_POSITION) || batchTypeHasChanged;
+		var vertexPositionHasMoved:Bool = true;//(image.drawIndex != VertexData.OBJECT_POSITION) || batchTypeHasChanged;
 
 		var updateTextureUVs:Bool = vertexPositionHasMoved || coreTexture.uvsHaveChanged;
 		var updateImageUVs:Bool = vertexPositionHasMoved || image.updateUVs;

@@ -30,6 +30,8 @@ class Loader extends EventDispatcher implements ILoader {
 
 	var currentURL:String;
 
+	public static var LOADING:Int = 0;
+
 	public function new() {
 		super();
 
@@ -39,11 +41,11 @@ class Loader extends EventDispatcher implements ILoader {
 		#end
 
 		loader = new NativeLoader();
-		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, OnLoadComplete);
-		loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, OnError);
+		loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadComplete);
+		loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError);
 	}
 
-	private function OnError(e:IOErrorEvent):Void {
+	private function onError(e:IOErrorEvent):Void {
 		trace(e + ", " + currentURL);
 		loading = false;
 		dispatchEvent(e);
@@ -52,9 +54,15 @@ class Loader extends EventDispatcher implements ILoader {
 	public function load(url:String):Void {
 		loading = true;
 		currentURL = url;
+		LOADING++;
 	}
 
-	function OnLoadComplete(e:Event):Void {
+	function onLoadComplete(e:Event):Void {
+		LOADING--;
+
+		trace("load image complete: " + currentURL);
+		trace("LOADING = " + LOADING);
+
 		var loaderInfo:LoaderInfo = cast(e.target, LoaderInfo);
 		var content:Bitmap = cast(loaderInfo.content, Bitmap);
 		// bitmapData = content.bitmapData;

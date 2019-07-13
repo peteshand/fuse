@@ -243,11 +243,6 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable {
 		if (absoluteVis() == false)
 			return false;
 		var triangleSum:Float = getTriangleSum(x, y);
-		if (debug && objectId == 154) {
-			trace("triangleSum = " + triangleSum);
-			trace("area = " + area);
-			trace(triangleSum < area + 1);
-		}
 
 		if (area == 0)
 			return false;
