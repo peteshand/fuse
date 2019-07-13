@@ -12,6 +12,7 @@ import signal.Signal;
  * ...
  * @author P.J.Shand
  */
+@:keep
 class NetStream extends OpenFlNetStream {
 	public var onComplete = new Signal();
 	public var onError = new Signal();
@@ -99,8 +100,13 @@ class NetStream extends OpenFlNetStream {
 }
 #else
 import openfl.net.NetStream as OpenFlNetStream;
+import signal.Signal;
 
 class NetStream extends OpenFlNetStream {
+	public var onComplete = new Signal();
+	public var onError = new Signal();
+	public var url:String;
+
 	public function playLocal(url:String):Void {
 		this.play(url);
 	}
