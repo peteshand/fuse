@@ -51,15 +51,16 @@ class TextFieldTexture extends BaseTexture {
 
 	var nativeTextField:NativeTextField;
 
-	public function new(width:Int, height:Int, ?defaultTextFormat:TextFormat, ?queUpload:Bool = true, ?onTextureUploadCompleteCallback:Void->Void = null) {
+	public function new(?text:String, width:Int, ?height:Null<Int>, ?defaultTextFormat:TextFormat, ?queUpload:Bool = true,
+			?onTextureUploadCompleteCallback:Void->Void = null) {
 		super();
-		texture = textFieldTexture = new FrontTextFieldTexture(width, height, queUpload /*, onTextureUploadCompleteCallback*/);
+		texture = textFieldTexture = new FrontTextFieldTexture(text, width, height, defaultTextFormat, queUpload /*, onTextureUploadCompleteCallback*/);
 		if (onTextureUploadCompleteCallback != null) {
 			texture.onUpload.add(onTextureUploadCompleteCallback);
 		}
 		nativeTextField = textFieldTexture.nativeTextField;
-		if (defaultTextFormat != null)
-			this.defaultTextFormat = defaultTextFormat;
+		// if (defaultTextFormat != null)
+		//	this.defaultTextFormat = defaultTextFormat;
 		this.wordWrap = true;
 	}
 

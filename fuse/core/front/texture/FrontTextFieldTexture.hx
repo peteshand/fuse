@@ -84,28 +84,42 @@ class FrontTextFieldTexture extends FrontBitmapTexture {
 	public var type(get, set):TextFieldType;
 	public var wordWrap(get, set):Bool;
 
-	// @:isVar public var directRender(get, set):Bool = false;
-	// var clearColour:Color = 0x00000000;
-	// public var baseBmdTexture(get, never):BitmapTexture;
 	var initialized:Bool = false;
 
-	public function new(width:Int, height:Int, queUpload:Bool = true /*, onTextureUploadCompleteCallback:Void -> Void = null*/) {
+	public function new(?text:String, width:Int, ?height:Null<Int>, ?defaultTextFormat:TextFormat, queUpload:Bool = true) {
 		FrontTextFieldTexture.init();
 		nativeTextField = new NativeTextField();
 		nativeTextField.embedFonts = true;
 		nativeTextField.antiAliasType = AntiAliasType.ADVANCED;
 		nativeTextField.sharpness = 400;
-		// nativeTextField.width = width;
-		// nativeTextField.height = height;
+		nativeTextField.width = width;
+		nativeTextField.wordWrap = true;
+		// if (width != null)
+		//	nativeTextField.width = width;
+		// if (height != null)
+		//	nativeTextField.height = height;
 
-		// bitmapdata = new BitmapData(width, height, true, clearColour);
+		if (defaultTextFormat != null) {
+			nativeTextField.defaultTextFormat = defaultTextFormat;
+		}
+
 		dirtySize = false;
+		if (text != null && height == null) {
+			nativeTextField.text = text;
+			// nativeTextField.setTextFormat(defaultTextFormat);
+			// dirtyProp = true;
+			// dirtySize = true;
+			// if (height == null)
+			height = Math.ceil(nativeTextField.textHeight) + 5;
+			nativeTextField.text = "";
+		}
+
 		bitmapdata = new BitmapData(width, height, true, clearColour);
 
-		this.width = width; // nativeTextField.width;// = width;
-		this.height = height; // nativeTextField.height;// = height;
+		this.width = width;
+		this.height = height;
 
-		super(bitmapdata, width, height, queUpload /*, onTextureUploadCompleteCallback*/);
+		super(bitmapdata, width, height, queUpload);
 
 		updateText();
 	}
