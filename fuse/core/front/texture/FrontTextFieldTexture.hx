@@ -86,31 +86,34 @@ class FrontTextFieldTexture extends FrontBitmapTexture {
 
 	var initialized:Bool = false;
 
-	public function new(?text:String, width:Int, ?height:Null<Int>, ?defaultTextFormat:TextFormat, queUpload:Bool = true) {
+	public function new(?text:String, ?width:Null<Int>, ?height:Null<Int>, ?defaultTextFormat:TextFormat, queUpload:Bool = true) {
 		FrontTextFieldTexture.init();
 		nativeTextField = new NativeTextField();
 		nativeTextField.embedFonts = true;
 		nativeTextField.antiAliasType = AntiAliasType.ADVANCED;
 		nativeTextField.sharpness = 400;
-		nativeTextField.width = width;
+
 		nativeTextField.wordWrap = true;
-		// if (width != null)
-		//	nativeTextField.width = width;
-		// if (height != null)
-		//	nativeTextField.height = height;
+		// if (width != null) {
+		nativeTextField.width = width;
+		// } else {
+		//	nativeTextField.width = 1000;
+		// }
 
 		if (defaultTextFormat != null) {
 			nativeTextField.defaultTextFormat = defaultTextFormat;
 		}
 
 		dirtySize = false;
-		if (text != null && height == null) {
+		if (text != null) {
 			nativeTextField.text = text;
-			// nativeTextField.setTextFormat(defaultTextFormat);
-			// dirtyProp = true;
-			// dirtySize = true;
-			// if (height == null)
-			height = Math.ceil(nativeTextField.textHeight) + 5;
+			// if (width == null) {
+			width = Math.ceil(nativeTextField.textWidth) + 5;
+			// }
+			if (height == null) {
+				height = Math.ceil(nativeTextField.textHeight) + 5;
+			}
+
 			nativeTextField.text = "";
 		}
 

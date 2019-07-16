@@ -1,12 +1,12 @@
 package fuse.utils;
 
-abstract ObjectId(Null<Int>) to Int from Int {
-	public function new(value:Int) {
+abstract ObjectId(Null<Int>) to Null<Int> from Null<Int> {
+	public function new(value:Null<Int>) {
 		this = value;
 	}
 
 	@:from
-	static public function fromInt(value:Int) {
+	static public function fromInt(value:Null<Int>) {
 		return new ObjectId(value);
 	}
 

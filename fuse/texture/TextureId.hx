@@ -1,12 +1,12 @@
 package fuse.texture;
 
-abstract TextureId(Int) to Int {
-	public function new(value:Int) {
+abstract TextureId(Null<Int>) to Null<Int> {
+	public function new(value:Null<Int>) {
 		this = value;
 	}
 
 	@:from
-	static public function fromInt(value:Int) {
+	static public function fromInt(value:Null<Int>) {
 		return new TextureId(value);
 	}
 

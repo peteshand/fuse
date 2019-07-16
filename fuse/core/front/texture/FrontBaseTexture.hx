@@ -50,10 +50,14 @@ class FrontBaseTexture implements IFrontTexture {
 	public var _alreadyClear:Bool = false;
 	public var dependantDisplays = new Map<Int, Image>();
 
-	public function new(width:Int, height:Int, queUpload:Bool = true, /*onTextureUploadCompleteCallback:Void->Void = null, */ p2Texture:Bool = true,
-		_textureId:Null<TextureId> = null,
-			_objectId:Null<ObjectId> = null) {
-		// objectId = FrontBaseTexture.objectIdCount++;
+	var queUpload:Bool;
+
+	public function new(width:Int, height:Int, queUpload:Bool = true, p2Texture:Bool = true, ?_textureId:Null<TextureId> = null,
+			?_objectId:Null<ObjectId> = null, autoGenBackendTexture:Bool = true) {
+		this.width = width;
+		this.height = height;
+		this.p2Texture = p2Texture;
+		this.queUpload = queUpload;
 
 		if (_textureId == null) {
 			this.textureId = FrontBaseTexture.textureIdCount++;
@@ -74,21 +78,21 @@ class FrontBaseTexture implements IFrontTexture {
 			// if (FrontBaseTexture.textureIdCount <= _textureId) FrontBaseTexture.textureIdCount = _textureId + 1;
 		}
 
-		this.width = width;
-		this.height = height;
-		this.p2Texture = p2Texture;
 		// this.onTextureUploadCompleteCallback = onTextureUploadCompleteCallback;
 		textureData = CommsObjGen.getTextureData(objectId, textureId);
 
 		// setTextureData();
 		Fuse.current.workerSetup.addTexture({objectId: objectId, textureId: textureId});
 
+		if (autoGenBackendTexture)
+			generateBackendTexture();
+	}
+
+	function generateBackendTexture() {
 		onUpdate.add(function() {
 			for (image in dependantDisplays.iterator())
 				image.onTextureUpdate();
 		});
-
-		// coreTextures.set(this.textureId, this);
 
 		if (queUpload)
 			TextureUploadQue.add(this);

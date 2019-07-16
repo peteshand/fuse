@@ -28,7 +28,11 @@ class ImageTexture extends BaseTexture {
 	}
 
 	function get_bitmapData():BitmapData {
+		#if js
+		return null;
+		#else
 		return imageTexture.bitmapData;
+		#end
 	}
 
 	override public function dispose():Void {
