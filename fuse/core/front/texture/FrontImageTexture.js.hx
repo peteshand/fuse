@@ -28,7 +28,8 @@ class FrontImageTexture extends FrontBaseTexture {
 	public function new(url:String, ?width:Null<Int>, ?height:Null<Int>, queUpload:Bool = false) {
 		imageElement = Browser.document.createImageElement();
 		imageElement.addEventListener('load', onImageLoaded);
-		
+		imageElement.crossOrigin = "anonymous";
+
 		super(imageElement.width, imageElement.height, false, false, false);
 
 		imageElement.src = url;

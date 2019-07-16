@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Fuse is a Haxe based hardware accelerated displaylist style 2d rendering library",
-	"version": "0.0.23",
-	"releasenote": "js ImageTexture and TextField updates",
+	"version": "0.0.24",
+	"releasenote": "Add html ImageElement openfl Texture",
 	"contributors": [ "p.j.shand" ],
 	"dependencies": {
 		"openfl": "",
