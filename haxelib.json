@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Fuse is a Haxe based hardware accelerated displaylist style 2d rendering library",
-	"version": "0.0.26",
+	"version": "0.0.27",
 	"releasenote": "Add offsetU, offsetV, scaleU and scaleV to frame display",
 	"contributors": [ "p.j.shand" ],
 	"dependencies": {

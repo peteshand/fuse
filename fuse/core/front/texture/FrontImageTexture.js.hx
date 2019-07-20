@@ -4,7 +4,7 @@ import delay.Delay;
 import fuse.core.front.texture.FrontBaseTexture;
 import fuse.core.front.texture.Textures;
 import openfl.events.Event;
-import openfl.display3D.textures.ImageTexture;
+import openflEx.display3D.textures.ImageTexture;
 import time.EnterFrame;
 import notifier.Notifier;
 import signal.Signal;

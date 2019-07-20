@@ -1,5 +1,5 @@
 #if !flash
-package openfl.concurrent;
+package openflEx.concurrent;
 
 /**
  * ...

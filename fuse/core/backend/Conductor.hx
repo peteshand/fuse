@@ -13,7 +13,11 @@ import openfl.events.Event;
 import openfl.events.TimerEvent;
 import openfl.utils.Endian;
 import openfl.utils.Timer;
+#if flash
 import flash.concurrent.Condition;
+#else
+import openflEx.concurrent.Condition;
+#end
 
 /**
  * ...

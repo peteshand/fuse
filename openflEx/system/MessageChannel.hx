@@ -1,5 +1,5 @@
 #if !flash
-package openfl.system;
+package openflEx.system;
 
 import openfl.events.EventDispatcher;
 
