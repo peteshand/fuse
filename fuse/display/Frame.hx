@@ -5,6 +5,7 @@ import mantle.util.composite.CompositeMode;
 import fuse.texture.ITexture;
 import fuse.utils.Align;
 import fuse.geom.Rectangle;
+import color.Color;
 
 class Frame extends Sprite {
 	var background:Quad;
@@ -27,6 +28,11 @@ class Frame extends Sprite {
 	@:isVar public var offsetX(default, set):Float = 0;
 	@:isVar public var offsetY(default, set):Float = 0;
 
+	@:isVar public var offsetU(default, set):Float = 0;
+	@:isVar public var offsetV(default, set):Float = 0;
+	@:isVar public var scaleU(default, set):Float = 1;
+	@:isVar public var scaleV(default, set):Float = 1;
+
 	public function new(width:Int, height:Int, texture:ITexture, backgroundColor:Null<UInt> = null) {
 		super();
 
@@ -38,8 +44,6 @@ class Frame extends Sprite {
 
 		image = new Image(texture);
 		addChild(image);
-
-		this.texture = texture;
 
 		frameWidth = width;
 		frameHeight = height;
@@ -125,31 +129,31 @@ class Frame extends Sprite {
 		image.height = compositeRect.height;
 		image.x = compositeRect.x;
 		image.y = compositeRect.y;
-		image.offsetU = 0;
-		image.offsetV = 0;
+		image.offsetU = offsetU;
+		image.offsetV = offsetV;
 
 		if (compositeRect.width > frameWidth) {
 			if (compositeRect.x < 0) {
 				image.x = 0;
-				image.offsetU = -compositeRect.x / compositeRect.width;
+				image.offsetU = (offsetU * frameWidth / compositeRect.width) - (compositeRect.x / compositeRect.width);
 			}
 			if (compositeRect.width > frameWidth)
 				image.width = frameWidth;
-			image.scaleU = frameWidth / compositeRect.width;
+			image.scaleU = scaleU * (frameWidth / compositeRect.width);
 		} else {
-			image.scaleU = 1;
+			image.scaleU = scaleU;
 		}
 
 		if (compositeRect.height > frameHeight) {
 			// if (compositeRect.y < 0) {
 			image.y = 0;
-			image.offsetV = -compositeRect.y / compositeRect.height;
+			image.offsetV = (offsetV * frameHeight / compositeRect.height) - (compositeRect.y / compositeRect.height);
 			// }
 			if (compositeRect.height > frameHeight)
 				image.height = frameHeight;
-			image.scaleV = frameHeight / compositeRect.height;
+			image.scaleV = scaleV * (frameHeight / compositeRect.height);
 		} else {
-			image.scaleV = 1;
+			image.scaleV = scaleV;
 		}
 	}
 
@@ -209,5 +213,44 @@ class Frame extends Sprite {
 			texture.onUpdate.add(updateLayout);
 		}
 		return texture;
+	}
+
+	function set_offsetU(value:Float):Float {
+		if (offsetU != value) {
+			offsetU = value;
+			updateLayout();
+		}
+		return value;
+	}
+
+	function set_offsetV(value:Float):Float {
+		if (offsetV != value) {
+			offsetV = value;
+			updateLayout();
+		}
+		return value;
+	}
+
+	function set_scaleU(value:Float):Float {
+		if (scaleU != value) {
+			scaleU = value;
+			updateLayout();
+		}
+		return value;
+	}
+
+	function set_scaleV(value:Float):Float {
+		if (scaleV != value) {
+			scaleV = value;
+			updateLayout();
+		}
+		return value;
+	}
+
+	override function set_color(value:Color):Color {
+		super.set_color(value);
+		if (image != null)
+			image.color = value;
+		return value;
 	}
 }

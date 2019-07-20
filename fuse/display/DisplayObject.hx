@@ -477,13 +477,13 @@ class DisplayObject extends EventDispatcher {
 
 	function updateAlignmentX() {
 		if (horizontalAlign != null) {
-			pivotX = Math.round(scaleX * width * cast(horizontalAlign, Float));
+			pivotX = Math.round(scaleX * Math.abs(width) * cast(horizontalAlign, Float));
 		}
 	}
 
 	function updateAlignmentY() {
 		if (verticalAlign != null) {
-			pivotY = Math.round(scaleY * height * cast(verticalAlign, Float));
+			pivotY = Math.round(scaleY * Math.abs(height) * cast(verticalAlign, Float));
 		}
 	}
 
