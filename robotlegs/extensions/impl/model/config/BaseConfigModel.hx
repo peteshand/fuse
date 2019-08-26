@@ -2,7 +2,7 @@ package robotlegs.extensions.impl.model.config;
 
 import mantle.util.app.App;
 import mantle.util.device.DeviceInfo;
-import msignal.Signal.Signal0;
+import signal.Signal;
 import openfl.errors.Error;
 import openfl.geom.Rectangle;
 import robotlegs.extensions.impl.model.config2.ConfigData;
@@ -23,7 +23,7 @@ import openfl.filesystem.File;
 class BaseConfigModel implements DescribedType {
 	public var configSummary:ConfigSummary;
 	public var localDynamicData = new Map<String, Dynamic>();
-	public var onLocalDynamicSet = new Signal0();
+	public var onLocalDynamicSet = new Signal();
 	public var timeout:Int = 60000;
 	public var activeFPS:Int = 60;
 	public var throttleFPS:Int = 4;

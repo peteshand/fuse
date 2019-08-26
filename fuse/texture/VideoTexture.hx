@@ -33,6 +33,10 @@ class VideoTexture extends BaseTexture {
 		videoTexture.pause();
 	}
 
+	public function resume() {
+		videoTexture.resume();
+	}
+
 	public function seek(offset:Float) {
 		videoTexture.seek(offset);
 	}

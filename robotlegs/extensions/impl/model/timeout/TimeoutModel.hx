@@ -1,7 +1,7 @@
 package robotlegs.extensions.impl.model.timeout;
 
 import notifier.Notifier;
-import msignal.Signal.Signal0;
+import signal.Signal;
 
 /**
  * ...
@@ -17,7 +17,7 @@ class TimeoutModel {
 		return _value;
 	}
 
-	public var change = new Signal0();
+	public var change = new Signal();
 
 	public function new() {}
 }

@@ -1,5 +1,5 @@
 #if !flash
-package openflEx.system;
+package openfl.system;
 
 import openfl.utils.ByteArray;
 

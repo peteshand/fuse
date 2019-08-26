@@ -1,6 +1,5 @@
 package mantle.managers.initialize;
 
-import msignal.Signal.Signal0;
 import condition.Condition;
 
 /**

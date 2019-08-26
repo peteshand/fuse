@@ -16,6 +16,7 @@ class ImageTexture extends BaseTexture {
 			useCache:Bool = true) {
 		super();
 		this.url = url;
+
 		if (useCache)
 			texture = cache.get(url);
 		if (texture == null) {

@@ -15,11 +15,14 @@ class AtlasPartitionPlacer {
 		var textureWidth:Int = coreTexture.textureData.baseData.width;
 		var textureHeight:Int = coreTexture.textureData.baseData.height;
 
-		if (textureWidth > textureHeight) {
-			partition.rotate = true;
-			textureWidth = coreTexture.textureData.baseData.height;
-			textureHeight = coreTexture.textureData.baseData.width;
-		}
+		/*
+			trace("FIX, causing blinking issue");
+			if (textureWidth > textureHeight) {
+				partition.rotate = true;
+				textureWidth = coreTexture.textureData.baseData.height;
+				textureHeight = coreTexture.textureData.baseData.width;
+			}
+		 */
 
 		if (textureWidth <= partition.width && textureHeight <= partition.height) {
 			partition.rightPartition = getRightPartition(partition, textureWidth, textureHeight /*coreTexture.textureData*/);

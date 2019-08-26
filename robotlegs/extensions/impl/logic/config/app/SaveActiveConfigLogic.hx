@@ -1,7 +1,7 @@
 package robotlegs.extensions.impl.logic.config.app;
 
 import mantle.definitions.Storage;
-import msignal.Signal.Signal0;
+import signal.Signal;
 import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigSaveService;
@@ -33,7 +33,7 @@ class SaveActiveConfigLogic implements DescribedType {
 
 			var fieldValue:Dynamic = Reflect.getProperty(configModel, field);
 
-			if (!Reflect.isFunction(fieldValue) && !Std.is(fieldValue, Signal0)) {
+			if (!Reflect.isFunction(fieldValue) && !Std.is(fieldValue, Signal)) {
 				var value:Dynamic = Reflect.getProperty(configModel, fieldValue);
 
 				if (fieldValue != null) {

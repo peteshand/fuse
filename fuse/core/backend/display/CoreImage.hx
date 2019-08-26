@@ -139,7 +139,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable {
 	}
 
 	public function OnTextureChange() {
-		updateAny = updateTexture = true;
+		updateAny = updatePosition = updateTexture = true;
 	}
 
 	override public function clone():CoreDisplayObject {

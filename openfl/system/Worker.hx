@@ -1,5 +1,5 @@
 #if !flash
-package openflEx.system;
+package openfl.system;
 
 import openfl.system.MessageChannel;
 import openfl.system.Worker;

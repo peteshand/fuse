@@ -80,6 +80,7 @@ class CharRenderer {
 
 						image.x = char.x;
 						image.y = char.y;
+						image.color = textDisplay.color;
 						/*
 							if (image.rotation != char.rotation)
 								image.rotation = char.rotation;

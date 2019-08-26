@@ -1,6 +1,6 @@
 package fuse.robotlegs;
 
-import fuse.robotlegs.signalMap.SignalCommandMapExtension;
+// import fuse.robotlegs.signalMap.SignalCommandMapExtension;
 import robotlegs.bender.extensions.display.stage3D.Stage3DStackExtension;
 import robotlegs.bender.extensions.display.stage3D.fuse.FuseIntegrationExtension;
 import robotlegs.bender.extensions.display.stage3D.fuse.FuseStageSyncExtension;
@@ -20,7 +20,7 @@ class FuseBundle implements IBundle {
 
 	/** @inheritDoc **/
 	public function extend(context:IContext):Void {
-		context.install(SignalCommandMapExtension);
+		// context.install(SignalCommandMapExtension);
 		context.install(ManualStageObserverExtension);
 		context.install(Stage3DStackExtension);
 		context.install(FuseIntegrationExtension);

@@ -9,7 +9,9 @@ import flash.net.GroupSpecifier;
 import flash.net.NetConnection;
 import flash.net.NetGroup;
 import time.EnterFrame;
-import msignal.Signal;
+import signal.Signal;
+import signal.Signal1;
+import signal.Signal2;
 
 /**
  * @author P.J.Shand
@@ -18,8 +20,8 @@ import msignal.Signal;
 class PeerObject {
 	private var groupID:String;
 
-	public var connectionRefused = new Signal0();
-	public var connectionSuccess = new Signal0();
+	public var connectionRefused = new Signal();
+	public var connectionSuccess = new Signal();
 	public var neighborConnect = new Signal1(String);
 	public var neighborDisconnect = new Signal1(String);
 	public var onMsg = new Signal2<String, Dynamic>();

@@ -76,7 +76,8 @@ class DisplayObject extends EventDispatcher {
 	var updateTouchable:Bool = true;
 	var horizontalAlign:Align;
 	var verticalAlign:Align;
-	var dragUtil:DragUtil;
+
+	public var dragUtil(get, null):DragUtil;
 
 	public function new() {
 		displayType = DisplayType.DISPLAY_OBJECT;
@@ -487,10 +488,8 @@ class DisplayObject extends EventDispatcher {
 		}
 	}
 
-	public function startDrag() {
-		if (dragUtil == null)
-			dragUtil = new DragUtil(this);
-		dragUtil.startDrag();
+	public function startDrag(xAxis:Bool = true, yAxis:Bool = true) {
+		dragUtil.startDrag(xAxis, yAxis);
 	}
 
 	public function stopDrag() {
@@ -565,5 +564,11 @@ class DisplayObject extends EventDispatcher {
 		if (current == _new)
 			return false;
 		return Math.floor(Math.abs(current - _new) * decimalPlaces) > 0;
+	}
+
+	function get_dragUtil():DragUtil {
+		if (dragUtil == null)
+			dragUtil = new DragUtil(this);
+		return dragUtil;
 	}
 }

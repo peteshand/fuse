@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.signals.startup;
 
-import msignal.Signal.Signal0;
+import signal.Signal;
 import org.swiftsuspenders.utils.DescribedType;
 
 /**
@@ -8,7 +8,7 @@ import org.swiftsuspenders.utils.DescribedType;
  * @author P.J.Shand
  */
 @:keepSub
-class InitializeAppSignal extends Signal0 implements DescribedType {
+class InitializeAppSignal extends Signal implements DescribedType {
 	public function new() {
 		super();
 	}

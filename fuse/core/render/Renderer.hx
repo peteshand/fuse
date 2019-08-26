@@ -49,7 +49,7 @@ class Renderer {
 		}
 
 		context3D.setDepthTest(false, Context3DCompareMode.ALWAYS);
-		context3D.setCulling(Context3DTriangleFace.BACK);
+		context3D.setCulling(Context3DTriangleFace.NONE);
 
 		conductorData = new WorkerConductorData();
 

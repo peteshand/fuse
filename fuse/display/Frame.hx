@@ -44,6 +44,7 @@ class Frame extends Sprite {
 
 		image = new Image(texture);
 		addChild(image);
+		this.texture = texture;
 
 		frameWidth = width;
 		frameHeight = height;

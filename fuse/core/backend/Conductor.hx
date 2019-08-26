@@ -16,7 +16,7 @@ import openfl.utils.Timer;
 #if flash
 import flash.concurrent.Condition;
 #else
-import openflEx.concurrent.Condition;
+import openfl.concurrent.Condition;
 #end
 
 /**

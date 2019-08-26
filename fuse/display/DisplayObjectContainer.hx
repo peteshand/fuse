@@ -29,6 +29,9 @@ class DisplayObjectContainer extends InteractiveObject {
 			children = [];
 
 		// if (child.common == null || child.common.data != null){
+		if (child == null) {
+			trace("null");
+		}
 		child.setParent(this);
 
 		if (index >= 0 && index < children.length) {

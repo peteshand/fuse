@@ -125,6 +125,8 @@ class CoreTexture {
 		uvTop = _uvTop;
 		uvRight = _uvRight;
 		uvBottom = _uvBottom;
+
+		onTextureChange.dispatch();
 	}
 
 	public function getUVData(uvItem:UVItem) {
@@ -167,7 +169,6 @@ class CoreTexture {
 		textureHasChanged = true;
 		textureAvailable = true;
 		updateUVData();
-		onTextureChange.dispatch();
 	}
 
 	public function addChangeListener(coreImage:CoreImage) {

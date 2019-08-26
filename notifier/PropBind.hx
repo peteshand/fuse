@@ -1,8 +1,6 @@
 package notifier;
 
 import signal.Signal;
-
-// import msignal.Signal.Signal0;
 using Logger;
 
 /**

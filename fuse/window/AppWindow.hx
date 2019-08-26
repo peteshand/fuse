@@ -3,15 +3,15 @@ package fuse.window;
 import flash.display.NativeWindow;
 import flash.display.NativeWindowDisplayState;
 import flash.display.NativeWindowResize;
-import msignal.Signal.Signal0;
+import signal.Signal;
 
 /**
  * ...
  * @author P.J.Shand
  */
 class AppWindow {
-	public var onMove = new Signal0();
-	public var onResize = new Signal0();
+	public var onMove = new Signal();
+	public var onResize = new Signal();
 	public var x(get, null):Float;
 	public var y(get, null):Float;
 	public var width(get, null):Float;

@@ -129,6 +129,13 @@ class FrontVideoTexture extends FrontBaseTexture {
 		action.value = VideoAction.PAUSE;
 	}
 
+	public function resume() {
+		trace2("resume: " + action.value);
+		if (action.value == VideoAction.PAUSE || action.value == VideoAction.PAUSE_WAIT) {
+			action.value = VideoAction.PLAY;
+		}
+	}
+
 	public function seek(offset:Float) {
 		trace2("seek");
 		seekTarget = offset;
