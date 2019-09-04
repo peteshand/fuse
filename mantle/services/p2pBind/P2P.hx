@@ -1,6 +1,6 @@
 package mantle.services.p2pBind;
 
-#if electron
+#if js
 import js.Browser;
 import haxe.Json;
 import notifier.Notifier;
@@ -63,11 +63,12 @@ class P2P {
 		P2P.secondWindow.postMessage(message, "*");
 	}
 
-	public static function on(id:String, callback:Dynamic->Void):Void {
+	public static function on(id:String, callback:Dynamic->Void, returnParsedPayload=true):Void {
 		Browser.window.addEventListener('message', (event) -> {
 			var message:WindowMessage = event.data;
-			if (message.id == id) {
-				callback(Json.parse(message.payload));
+			if (message.id == id || id == "*") {
+				if (returnParsedPayload) callback(Json.parse(message.payload));
+				else callback(message);
 			}
 		}, false);
 	}
