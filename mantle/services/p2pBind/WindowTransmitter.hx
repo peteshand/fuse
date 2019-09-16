@@ -28,7 +28,7 @@ class WindowTransmitter {
 			id: id,
 			payload: Json.stringify(notifier.value)
 		}
-		P2P.secondWindow.postMessage(message, "*");
+		P2P.send(id, message);
 	}
 
 	public function dispose() {

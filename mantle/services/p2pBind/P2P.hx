@@ -16,7 +16,7 @@ class P2P {
 	static public var transmitters = new Map<String, WindowTransmitter>();
 	static public var receivers = new Map<String, WindowReceiver>();
 	static public var to:String;
-	static public var secondWindow:Window;
+	static var otherWindows:Array<Window> = [];
 
 	public function new() {}
 
@@ -50,6 +50,10 @@ class P2P {
 	}
 
 	public static function send(id:String, payload:Dynamic = null):Void {
+		if (otherWindows.length == 0) {
+			trace("No other windows open");
+			return;
+		}
 		var _payload:Dynamic = null;
 		if (payload != null)
 			_payload = Json.stringify(payload);
@@ -57,10 +61,10 @@ class P2P {
 			id: id,
 			payload: _payload
 		}
-		if (P2P.secondWindow == null) {
-			return;
+		
+		for (otherWindow in otherWindows){
+			otherWindow.postMessage(message, "*");
 		}
-		P2P.secondWindow.postMessage(message, "*");
 	}
 
 	public static function on(id:String, callback:Dynamic->Void, returnParsedPayload=true):Void {
@@ -71,6 +75,25 @@ class P2P {
 				else callback(message);
 			}
 		}, false);
+	}
+
+	public static function addWindow(window:Window)
+	{
+		for (otherWindow in otherWindows){
+			if (otherWindow == window) return;
+		}
+		otherWindows.push(window);
+	}
+
+	public static function removeWindow(window:Window)
+	{
+		var i:Int = otherWindows.length-1;
+		while(i >= 0){
+			if (otherWindows[i] == window){
+				otherWindows.splice(i, 1);
+			}
+			i--;
+		}
 	}
 }
 #else

@@ -3,6 +3,8 @@ package notifier;
 import mantle.filesystem.DocStore;
 import notifier.Notifier;
 import notifier.MapNotifier;
+import haxe.Serializer;
+import haxe.Unserializer;
 
 class NotifierPersistence {
 	public static function register(notifier:Notifier<Dynamic>, id:String, silentlySet:Bool = true) {
@@ -36,6 +38,26 @@ class NotifierPersistence {
 		notifier.onAdd.add(onChange);
 		notifier.onChange.add(onChange);
 		notifier.onRemove.add(onChange);
+	}
+
+	public static function registerMap3(map3:MapNotifier3<Dynamic, Dynamic>, id:String) {
+		var data = getNPData(id);
+		if (data.localData != null) {
+			var a:String = data.localData;
+			if (a != null) {
+				var unserializer = new Unserializer(a);
+				map3.value = unserializer.unserialize();
+			}
+		}
+
+		var serializer = function() {
+			data.sharedObject.setProperty("value", Serializer.run(map3.value));
+			data.sharedObject.flush();
+		}
+
+		map3.onAdd.add((key:Dynamic, value:Dynamic) -> serializer());
+		map3.onChange.add((key:Dynamic, value:Dynamic) -> serializer());
+		map3.onRemove.add((key:Dynamic) -> serializer());
 	}
 
 	static function getNPData(id:String):NPData {
