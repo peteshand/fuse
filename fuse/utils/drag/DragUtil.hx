@@ -23,8 +23,18 @@ class DragUtil {
 	public var maxY:Null<Float>;
 	public var onMove = new Signal();
 
+	public var pastThreshold:Bool;
+	public var threshold:Float = 0;
+	public var pressTouch:Touch;
+
 	public function new(displayObject:DisplayObject) {
 		this.displayObject = displayObject;
+		displayObject.onPress.add(onPress);
+	}
+
+	public function onPress(touch:Touch) {
+		pastThreshold = false;
+		pressTouch = touch;
 	}
 
 	public function startDrag(xAxis:Bool = true, yAxis:Bool = true) {
@@ -44,6 +54,11 @@ class DragUtil {
 	}
 
 	function onDragMove(touch:Touch) {
+		if (pressTouch != null) {
+			if (pressTouch.index != touch.index)
+				return;
+		}
+
 		if (touchStartX == null)
 			touchStartX = touch.x;
 		if (touchStartY == null)
@@ -66,6 +81,18 @@ class DragUtil {
 				displayObject.y = maxY;
 			}
 		}
-		onMove.dispatch();
+
+		if (threshold == 0) {
+			pastThreshold = true;
+		} else {
+			if (Math.abs(touchStartX - touch.x) >= threshold)
+				pastThreshold = true;
+			else if (Math.abs(touchStartY - touch.y) >= threshold)
+				pastThreshold = true;
+		}
+
+		if (pastThreshold) {
+			onMove.dispatch();
+		}
 	}
 }

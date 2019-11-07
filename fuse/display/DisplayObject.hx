@@ -11,9 +11,9 @@ import fuse.utils.Align;
 import fuse.utils.Color;
 import fuse.Fuse;
 import fuse.utils.drag.DragUtil;
-import signal.Signal1;
+import signals.Signal1;
 import fuse.utils.ObjectId;
-import fuse.geom.Rectangle;
+import openfl.geom.Rectangle;
 
 @:access(fuse)
 class DisplayObject extends EventDispatcher {
