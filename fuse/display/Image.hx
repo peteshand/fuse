@@ -1,5 +1,6 @@
 package fuse.display;
 
+import fuse.texture.RenderTexture;
 import fuse.geom.Rectangle;
 import fuse.shader.IShader;
 import fuse.texture.ITexture;
@@ -20,6 +21,7 @@ class Image extends DisplayObject {
 	@:isVar public var offsetV(default, set):Float;
 	@:isVar public var scaleU(default, set):Float;
 	@:isVar public var scaleV(default, set):Float;
+	@:isVar public var renderTarget(default, set):RenderTexture;
 
 	var shaders:Array<IShader> = [];
 
@@ -153,14 +155,24 @@ class Image extends DisplayObject {
 		return value;
 	}
 
-	override function set_renderLayer(value:Null<Int>):Null<Int> {
-		//if (renderLayer != value) {
-			displayData.renderLayer = renderLayer = value;
-			updateVisible = true;
-			Fuse.current.workerSetup.visibleChange(this, this.visible);
+	function set_renderTarget(value:RenderTexture):RenderTexture {
+		if (renderTarget != value) {
+			renderTarget = value;
+			displayData.renderTargetId = renderTarget.objectId;
+			updatePosition = true;
 			updateStaticBackend();
-			
-		//}
+		}
+		return value;
+	}
+
+	override function set_renderLayer(value:Null<Int>):Null<Int> {
+		// if (renderLayer != value) {
+		displayData.renderLayer = renderLayer = value;
+		updateVisible = true;
+		Fuse.current.workerSetup.visibleChange(this, this.visible);
+		updateStaticBackend();
+
+		// }
 		return value;
 	}
 
@@ -217,6 +229,7 @@ class Image extends DisplayObject {
 	public function addShader(shader:IShader):Void {
 		if (shader == null)
 			return;
+		shader.onUpdate.add(onShaderChange);
 		shaders.push(shader);
 		updateShaderId();
 	}
@@ -224,9 +237,15 @@ class Image extends DisplayObject {
 	public function removeShader(shader:IShader):Void {
 		var index:Int = shaders.indexOf(shader);
 		if (index != -1) {
+			shader.onUpdate.remove(onShaderChange);
 			shaders.splice(index, 1);
 			updateShaderId();
 		}
+	}
+
+	function onShaderChange() {
+		updateColour = true;
+		updateStaticBackend();
 	}
 
 	public function removeAllShader():Void {

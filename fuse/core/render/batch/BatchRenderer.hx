@@ -66,8 +66,10 @@ class BatchRenderer {
 		// conductorData.highestNumTextures = 8;
 		// trace("conductorData.highestNumTextures = " + conductorData.highestNumTextures);
 		// trace("currentBatchData.numTextures = " + currentBatchData.numTextures);
+		// trace("currentBatchData.renderTargetId = " + currentBatchData.renderTargetId);
 		for (j in 0...8) {
 			if (j < currentBatchData.numTextures) {
+				// trace(currentBatchData.textureIds[j]);
 				Context3DTexture.setContextTexture(j, currentBatchData.textureIds[j]);
 			} else {
 				Context3DTexture.setContextTexture(j, -1);

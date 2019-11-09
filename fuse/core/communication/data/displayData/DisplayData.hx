@@ -25,6 +25,7 @@ class DisplayData {
 	public var colorBR:UInt = 0;
 	public var textureId:Int = 0;
 	public var renderLayer:Int = 0;
+	public var renderTargetId:Int = -1;
 	public var visible:Int = 0;
 	public var blendMode:Int = 0;
 	public var offsetU:Float = 0;

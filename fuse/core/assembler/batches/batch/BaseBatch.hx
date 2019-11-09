@@ -70,10 +70,16 @@ class BaseBatch {
 			return false;
 		shaderId = renderable.shaderId;
 
+		// if renderable has a renderTarget, then override the layer renderTarget
+		if (renderable.renderTargetId != -1) {
+			renderTarget = renderable.renderTargetId;
+		}
+
 		if (renderTargetChanged(renderTarget))
 			return false;
 
 		renderables.push(renderable);
+		// trace("renderables.length = " + renderables.length);
 		return true;
 	}
 

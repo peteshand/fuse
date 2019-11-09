@@ -82,6 +82,7 @@ class BatchAssembler {
 	}
 
 	static private function addRenderables(renderables:GcoArray<ICoreRenderable>, renderTarget:Int) {
+		// trace("renderTarget = " + renderTarget);
 		for (j in 0...renderables.length) {
 			addRenderable(renderables[j], renderTarget);
 		}
@@ -92,6 +93,10 @@ class BatchAssembler {
 			getNewBatch();
 
 		var added:Bool = currentBatch.add(renderable, renderTarget, currentBatchType);
+
+		// trace("currentBatch.renderTarget = " + currentBatch.renderTarget);
+		// trace("renderable.renderTargetId = " + renderable.renderTargetId);
+		// trace("added = " + added);
 		if (added)
 			return;
 

@@ -16,28 +16,48 @@ import fuse.core.backend.display.CoreDisplayObject;
  */
 @:access(fuse)
 class RenderTextureManager {
-	var start:Int;
-	var end:Int;
-	var lastStart:Int;
-	var lastEnd:Int;
+	static var start:Int;
+	static var end:Int;
+	static var lastStart:Int;
+	static var lastEnd:Int;
 
-	public var renderTextureDataMap = new Map<Int, RenderTextureDrawData>();
+	public static var renderTextureDataMap = new Map<Int, RenderTextureDrawData>();
 
-	public function new() {}
+	public static var textures = new Array<CoreTexture>();
 
-	public function update() {
+	// public function new() {}
+
+	public static function add(texture:CoreTexture) {
+		textures.push(texture);
+	}
+
+	public static function remove(texture:CoreTexture) {
+		var i:Int = textures.length - 1;
+		while (i >= 0) {
+			if (textures[i] == texture) {
+				textures.splice(i, 1);
+			}
+			i--;
+		}
+	}
+
+	public static function update() {
 		// Will need to be reworked for New Assembler //
 
-		/*start = Conductor.conductorData.renderTextureProcessIndex;
-			end = Conductor.conductorData.renderTextureCountIndex;
+		// trace("Core.textures.renderTextures.length = " + Core.textures.renderTextures.length);
+		start = Conductor.conductorData.renderTextureProcessIndex;
+		end = Conductor.conductorData.renderTextureCountIndex;
 
-			if (end > 0 && start != end) {
-				Core.hierarchyBuildRequired = true;
+		// trace("start = " + start);
+		// trace("end = " + end);
 
-				for (i in start...end)
-				{
-					var renderTextureDrawData:RenderTextureDrawData = getMemoryBlock(i);
-					RenderTexture.currentRenderTargetId = renderTextureDrawData.renderTextureId;
+		if (end > 0 && start != end) {
+			// Core.hierarchyBuildRequired = true;
+
+			for (i in start...end) {
+				var renderTextureDrawData:RenderTextureDrawData = getMemoryBlock(i);
+				// trace(renderTextureDrawData.renderTextureId);
+				/*RenderTexture.currentRenderTargetId = renderTextureDrawData.renderTextureId;
 
 					var rootWorkerDisplay:CoreDisplayObject = Core.displayList.get(renderTextureDrawData.displayObjectId);
 
@@ -46,20 +66,17 @@ class RenderTextureManager {
 
 					Core.assembler.process(clonedRoot);
 
-					clonedRoot.recursiveReleaseToPool();
-				}
-
-
-
-				Conductor.conductorData.renderTextureProcessIndex = Conductor.conductorData.renderTextureCountIndex = 0;
+					clonedRoot.recursiveReleaseToPool(); */
 			}
 
+			Conductor.conductorData.renderTextureProcessIndex = Conductor.conductorData.renderTextureCountIndex = 0;
+		}
 
-			lastStart = start;
-			lastEnd = end; */
+		lastStart = start;
+		lastEnd = end;
 	}
 
-	function getMemoryBlock(index:Int):RenderTextureDrawData {
+	static function getMemoryBlock(index:Int):RenderTextureDrawData {
 		if (!renderTextureDataMap.exists(index))
 			renderTextureDataMap.set(index, new RenderTextureDrawData(index));
 		return renderTextureDataMap.get(index);

@@ -1,5 +1,6 @@
 package fuse.core.backend.display;
 
+import fuse.core.backend.texture.CoreRenderTexture;
 import fuse.texture.TextureId;
 import fuse.utils.ObjectId;
 import fuse.core.backend.displaylist.DisplayType;
@@ -34,10 +35,11 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable {
 	public var shaderId:Int = 0;
 	public var renderLayer:Int = 0;
 	public var batchType:BatchType = null;
+	public var renderTargetId:Int = -1;
+	public var renderTexture:CoreRenderTexture;
 
 	// var updateUVs			:Bool = false;
-	var renderTarget:Int = -1;
-
+	// var renderTarget:Int = -1;
 	public var sourceTextureId(get, null):TextureId;
 
 	var count:Int = 0;
@@ -97,8 +99,11 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable {
 
 		if (updatePosition || updateVisible || this.isMask) {
 			renderLayer = displayData.renderLayer;
-
-			WorkerTransformHelper.update(this);
+			renderTargetId = displayData.renderTargetId;
+			renderTexture = Core.textures.getRenderTexture(renderTargetId);
+			// trace("renderTarget = " + renderTargetId);
+			// trace(renderTexture == null);
+			WorkerTransformHelper.update(this, renderTexture);
 		}
 	}
 

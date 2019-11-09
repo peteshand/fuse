@@ -2,6 +2,7 @@ package fuse.shader;
 
 import openfl.display3D.Context3D;
 import fuse.utils.ObjectId;
+import signals.Signal;
 
 class BaseShader implements IShader {
 	static var idCount:Int = 1;
@@ -23,6 +24,7 @@ class BaseShader implements IShader {
 	}
 
 	public var objectId:ObjectId;
+	public var onUpdate = new Signal();
 
 	var hasChanged:Bool = false;
 

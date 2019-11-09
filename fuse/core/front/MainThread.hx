@@ -35,6 +35,8 @@ class MainThread extends ThreadBase {
 	var setupComplete:Bool = false;
 	var fuse:Fuse;
 
+	var updateAvailable(get, null):Bool;
+
 	public function new(fuse:Fuse, rootClass:Class<Sprite>, fuseConfig:FuseConfig, stage3D:Stage3D = null, renderMode:Context3DRenderMode = AUTO,
 			profile:Array<Context3DProfile> = null) {
 		super();
@@ -98,9 +100,13 @@ class MainThread extends ThreadBase {
 	}
 
 	private function Update(e:Event):Void {
-		renderer.begin(true, stage.color);
+		if (updateAvailable) {
+			renderer.begin(true, stage.color);
+		}
 		process();
-		renderer.end();
+		if (updateAvailable) {
+			renderer.end();
+		}
 	}
 
 	public function process():Void {
@@ -120,22 +126,25 @@ class MainThread extends ThreadBase {
 		// trace("conductorData.frontIsStatic = " + conductorData.frontIsStatic);
 		// trace("conductorData.backIsStatic = " + conductorData.backIsStatic);
 
-		if (renderer != null) {
-			// #if air
-			if (Fuse.skipUnchangedFrames) {
-				if (Fuse.current.conductorData.changeAvailable == 1) {
-					renderer.update();
-				}
-			} else {
+		if (updateAvailable) {
+			if (renderer != null) {
 				renderer.update();
 			}
-			// #else
-			//	renderer.update();
-			// #end
 		}
 
 		Fuse.current.enterFrame.dispatch();
 
 		workerSetup.unlock();
+	}
+
+	function get_updateAvailable():Bool {
+		if (Fuse.skipUnchangedFrames) {
+			if (Fuse.current.conductorData.changeAvailable == 1) {
+				return true;
+			}
+		} else {
+			return true;
+		}
+		return false;
 	}
 }

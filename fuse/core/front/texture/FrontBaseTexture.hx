@@ -53,7 +53,7 @@ class FrontBaseTexture implements IFrontTexture {
 	var queUpload:Bool;
 
 	public function new(width:Int, height:Int, queUpload:Bool = true, p2Texture:Bool = true, ?_textureId:Null<TextureId> = null,
-			?_objectId:Null<ObjectId> = null, autoGenBackendTexture:Bool = true) {
+			?_objectId:Null<ObjectId> = null, autoGenBackendTexture:Bool = true, renderTexture:Bool = false) {
 		this.width = width;
 		this.height = height;
 		this.p2Texture = p2Texture;
@@ -82,7 +82,7 @@ class FrontBaseTexture implements IFrontTexture {
 		textureData = CommsObjGen.getTextureData(objectId, textureId);
 
 		// setTextureData();
-		Fuse.current.workerSetup.addTexture({objectId: objectId, textureId: textureId});
+		Fuse.current.workerSetup.addTexture({objectId: objectId, textureId: textureId, renderTexture: renderTexture});
 
 		if (autoGenBackendTexture)
 			generateBackendTexture();

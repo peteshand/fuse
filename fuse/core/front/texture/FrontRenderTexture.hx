@@ -29,7 +29,9 @@ class FrontRenderTexture extends FrontBaseTexture {
 			conductorData = new WorkerConductorData();
 		}
 
-		super(width, height, false, /*null, */ true, _textureId, _objectId);
+		// Fuse.current.workerSetup.addRenderTexture({objectId: objectId, textureId: textureId, renderTexture: true});
+
+		super(width, height, false, /*null, */ true, _textureId, _objectId, true, true);
 		this.directRender = directRender;
 
 		renderTextureData = new RenderTextureData(objectId);
@@ -40,6 +42,14 @@ class FrontRenderTexture extends FrontBaseTexture {
 		RenderTextureDrawData.OBJECT_POSITION = conductorData.renderTextureCountIndex++;
 		renderTextureDrawData.renderTextureId = objectId;
 		renderTextureDrawData.displayObjectId = display.objectId;
+
+		trace("conductorData.renderTextureCountIndex = " + conductorData.renderTextureCountIndex);
+		trace("renderTextureDrawData.renderTextureId = " + renderTextureDrawData.renderTextureId);
+		trace("renderTextureDrawData.displayObjectId = " + renderTextureDrawData.displayObjectId);
+	}
+
+	public function add(display:DisplayObject) {
+		Fuse.current.workerSetup.addToRenderTexture(objectId, display);
 	}
 
 	override function upload() {

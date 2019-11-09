@@ -210,6 +210,10 @@ class FShader {
 			agal += "mov v6.z, vt1.z				\n"; // copy maskBaseValue into v6
 		}
 
+		for (i in 0...shaders.length) {
+			agal += shaders[i].vertexString();
+		}
+
 		for (i in 0...alias.length) {
 			agal = agal.split(alias[i].alias).join(alias[i].value);
 		}

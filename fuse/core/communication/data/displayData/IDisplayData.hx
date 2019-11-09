@@ -27,6 +27,7 @@ typedef IDisplayData = {
 	objectId:Int,
 	textureId:TextureId,
 	renderLayer:Int,
+	renderTargetId:Int,
 	visible:Int,
 	blendMode:Int,
 	offsetU:Float,

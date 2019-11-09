@@ -159,6 +159,10 @@ class WorkerSetup {
 		send(MessageType.REMOVE_CHILD, child.objectId);
 	}
 
+	public function addToRenderTexture(objectId:Int, child:DisplayObject) {
+		send(MessageType.ADD_TO_RENDER_TEXTURE, {textureId: objectId, objectId: child.objectId, displayType: child.displayType});
+	}
+
 	public function visibleChange(child:DisplayObject, visible:Bool) {
 		send(MessageType.VISIBLE_CHANGE, {
 			objectId: child.objectId,
@@ -170,6 +174,9 @@ class WorkerSetup {
 		send(MessageType.ADD_TEXTURE, textureRef);
 	}
 
+	/*public function addRenderTexture(textureRef:TextureRef) {
+		send(MessageType.ADD_RENDER_TEXTURE, textureRef);
+	}*/
 	public function updateTexture(objectId:ObjectId) {
 		send(MessageType.UPDATE_TEXTURE, objectId);
 	}

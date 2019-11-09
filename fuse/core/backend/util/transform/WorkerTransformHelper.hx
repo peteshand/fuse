@@ -1,5 +1,6 @@
 package fuse.core.backend.util.transform;
 
+import fuse.core.backend.texture.CoreRenderTexture;
 import fuse.core.communication.data.displayData.IDisplayData;
 import fuse.core.backend.display.TransformData;
 import fuse.display.geometry.QuadData;
@@ -15,6 +16,9 @@ import openfl.geom.Point;
  */
 @:access(fuse)
 class WorkerTransformHelper {
+	static var TARGET_WIDTH:Int;
+	static var TARGET_HEIGHT:Int;
+
 	static var clearMatrix:FastMatrix3;
 	// static var applyRotation:Int;
 	// static var applyPosition:Int;
@@ -49,7 +53,14 @@ class WorkerTransformHelper {
 
 	public function new() {}
 
-	public static function update(coreDisplay:CoreDisplayObject) {
+	public static function update(coreDisplay:CoreDisplayObject, renderTexture:CoreRenderTexture) {
+		if (renderTexture == null) {
+			TARGET_WIDTH = Core.WINDOW_WIDTH;
+			TARGET_HEIGHT = Core.WINDOW_HEIGHT;
+		} else {
+			TARGET_WIDTH = renderTexture.p2Width;
+			TARGET_HEIGHT = renderTexture.p2Height;
+		}
 		WorkerTransformHelper.coreDisplay = coreDisplay;
 		WorkerTransformHelper.localTransform = coreDisplay.transformData.localTransform;
 		WorkerTransformHelper.quadData = coreDisplay.quadData;
@@ -193,10 +204,10 @@ class WorkerTransformHelper {
 	}
 
 	static inline function transformX(x:Float):Float {
-		return ((x / Core.WINDOW_WIDTH) * 2) - 1;
+		return ((x / TARGET_WIDTH) * 2) - 1;
 	}
 
 	static inline function transformY(y:Float):Float {
-		return 1 - ((y / Core.WINDOW_HEIGHT) * 2);
+		return 1 - ((y / TARGET_HEIGHT) * 2);
 	}
 }

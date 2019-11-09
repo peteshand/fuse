@@ -1,5 +1,8 @@
 package fuse.core.backend;
 
+import fuse.core.backend.texture.CoreRenderTexture;
+import fuse.core.backend.display.CoreDisplayObject;
+import fuse.core.backend.texture.RenderTextureManager;
 import fuse.core.front.texture.TextureRef;
 import fuse.texture.TextureId;
 import fuse.utils.ObjectId;
@@ -48,21 +51,23 @@ class CoreEntryPoint {
 
 		Core.init();
 
-		workerComms.addListener(MessageType.UPDATE, OnUpdateMsg);
-		workerComms.addListener(MessageType.ADD_CHILD, OnAddChild);
-		workerComms.addListener(MessageType.ADD_CHILD_AT, OnAddChildAt);
-		workerComms.addListener(MessageType.SET_CHILD_INDEX, OnSetChildIndex);
-		workerComms.addListener(MessageType.REMOVE_CHILD, OnRemoveChild);
-		workerComms.addListener(MessageType.VISIBLE_CHANGE, OnVisibleChange);
-		workerComms.addListener(MessageType.ADD_MASK, OnAddMask);
-		workerComms.addListener(MessageType.REMOVE_MASK, OnRemoveMask);
-		workerComms.addListener(MessageType.ADD_TEXTURE, OnAddTexture);
-		workerComms.addListener(MessageType.UPDATE_TEXTURE, OnUpdateTexture);
-		workerComms.addListener(MessageType.UPDATE_TEXTURE_SURFACE, OnUpdateTextureSurface);
-		workerComms.addListener(MessageType.REMOVE_TEXTURE, OnRemoveTexture);
-		workerComms.addListener(MessageType.MOUSE_INPUT, OnMouseInput);
-		workerComms.addListener(MessageType.SET_TOUCHABLE, OnSetTouchable);
-		workerComms.addListener(MessageType.SET_STATIC, OnSetStatic);
+		workerComms.addListener(MessageType.UPDATE, onUpdateMsg);
+		workerComms.addListener(MessageType.ADD_CHILD, onAddChild);
+		workerComms.addListener(MessageType.ADD_CHILD_AT, onAddChildAt);
+		workerComms.addListener(MessageType.SET_CHILD_INDEX, onSetChildIndex);
+		workerComms.addListener(MessageType.REMOVE_CHILD, onRemoveChild);
+		workerComms.addListener(MessageType.ADD_TO_RENDER_TEXTURE, onAddToRenderTexture);
+		workerComms.addListener(MessageType.VISIBLE_CHANGE, onVisibleChange);
+		workerComms.addListener(MessageType.ADD_MASK, onAddMask);
+		workerComms.addListener(MessageType.REMOVE_MASK, onRemoveMask);
+		workerComms.addListener(MessageType.ADD_TEXTURE, onAddTexture);
+		// workerComms.addListener(MessageType.ADD_RENDER_TEXTURE, onAddRenderTexture);
+		workerComms.addListener(MessageType.UPDATE_TEXTURE, onUpdateTexture);
+		workerComms.addListener(MessageType.UPDATE_TEXTURE_SURFACE, onUpdateTextureSurface);
+		workerComms.addListener(MessageType.REMOVE_TEXTURE, onRemoveTexture);
+		workerComms.addListener(MessageType.MOUSE_INPUT, onMouseInput);
+		workerComms.addListener(MessageType.SET_TOUCHABLE, onSetTouchable);
+		workerComms.addListener(MessageType.SET_STATIC, onSetStatic);
 
 		index = workerComms.getSharedProperty(WorkerSharedProperties.INDEX);
 		numberOfWorkers = workerComms.getSharedProperty(WorkerSharedProperties.NUMBER_OF_WORKERS);
@@ -71,7 +76,7 @@ class CoreEntryPoint {
 		Lib.current.stopAllMovieClips();
 
 		Conductor.init(workerComms, index, numberOfWorkers, workerComms.usingWorkers);
-		Conductor.onTick.add(OnTick);
+		Conductor.onTick.add(onTick);
 
 		VertexWriter.init();
 		Assembler.init();
@@ -79,7 +84,7 @@ class CoreEntryPoint {
 		workerComms.send(MessageType.WORKER_STARTED);
 	}
 
-	function OnTick() {
+	function onTick() {
 		Core.STAGE_WIDTH = Conductor.conductorData.stageWidth;
 		Core.STAGE_HEIGHT = Conductor.conductorData.stageHeight;
 		Core.WINDOW_WIDTH = Conductor.conductorData.windowWidth;
@@ -94,66 +99,76 @@ class CoreEntryPoint {
 		}
 	}
 
-	function OnAddMask(addChildPayload:AddMaskMsg) {
+	function onAddMask(addChildPayload:AddMaskMsg) {
 		Core.displayList.addMask(addChildPayload);
 	}
 
-	function OnRemoveMask(workerPayload:WorkerPayload) {
+	function onRemoveMask(workerPayload:WorkerPayload) {
 		var objectId:Int = workerPayload;
 		Core.displayList.removeMask(objectId);
 	}
 
-	function OnAddTexture(textureRef:TextureRef):Void {
-		Core.textures.create(textureRef);
+	function onAddTexture(textureRef:TextureRef):Void {
+		var texture = Core.textures.create(textureRef);
 	}
 
-	function OnUpdateTexture(objectId:ObjectId):Void {
+	/*function onAddRenderTexture(textureRef:TextureRef):Void {
+		var texture = Core.textures.create(textureRef);
+		RenderTextureManager.add(texture);
+	}*/
+	function onUpdateTexture(objectId:ObjectId):Void {
 		Core.textures.update(objectId);
 	}
 
-	function OnUpdateTextureSurface(objectId:ObjectId):Void {
+	function onUpdateTextureSurface(objectId:ObjectId):Void {
 		Core.textures.updateSurface(objectId);
 	}
 
-	private function OnRemoveTexture(objectId:ObjectId):Void {
+	private function onRemoveTexture(objectId:ObjectId):Void {
 		Core.textures.dispose(objectId);
 	}
 
-	private function OnMouseInput(touch:Touch):Void {
+	private function onMouseInput(touch:Touch):Void {
 		InputAssembler.add(touch);
 	}
 
-	function OnAddChild(addChildPayload:AddChildMsg) {
+	function onAddChild(addChildPayload:AddChildMsg) {
 		addChildPayload.addAtIndex = -1;
-		OnAddChildAt(addChildPayload);
+		onAddChildAt(addChildPayload);
 	}
 
-	function OnAddChildAt(payload:AddChildMsg) {
+	function onAddChildAt(payload:AddChildMsg) {
 		Core.displayList.addChildAt(payload.objectId, payload.displayType, payload.parentId, payload.addAtIndex);
 	}
 
-	function OnSetChildIndex(payload:SetChildIndexMsg) {
+	function onSetChildIndex(payload:SetChildIndexMsg) {
 		Core.displayList.setChildIndex(payload.objectId, payload.displayType, payload.parentId, payload.index);
 	}
 
-	function OnRemoveChild(workerPayload:WorkerPayload) {
+	function onRemoveChild(workerPayload:WorkerPayload) {
 		var objectId:Int = workerPayload;
 		Core.displayList.removeChild(objectId);
 	}
 
-	function OnVisibleChange(visibleMsg:VisibleMsg) {
+	function onAddToRenderTexture(payload:{textureId:ObjectId, objectId:Int, displayType:Int}) {
+		var display:CoreDisplayObject = Core.displayList.getDisplay(payload.objectId, payload.displayType);
+		var texture:CoreRenderTexture = Core.textures.getRenderTexture(payload.textureId);
+		texture.addDisplay(display);
+	}
+
+	function onVisibleChange(visibleMsg:VisibleMsg) {
 		Core.displayList.visibleChange(visibleMsg.objectId, visibleMsg.visible);
 	}
 
-	private function OnSetTouchable(payload:TouchableMsg):Void {
+	private function onSetTouchable(payload:TouchableMsg):Void {
 		Touchables.setTouchable(payload);
 	}
 
-	private function OnSetStatic(payload:StaticData):Void {
+	private function onSetStatic(payload:StaticData):Void {
 		Core.displayList.setStatic(payload);
 	}
 
-	function OnUpdateMsg(workerPayload:WorkerPayload) {
+	function onUpdateMsg(workerPayload:WorkerPayload) {
 		workerComms.send(MessageType.UPDATE_RETURN);
 		// OnTick();
 	}

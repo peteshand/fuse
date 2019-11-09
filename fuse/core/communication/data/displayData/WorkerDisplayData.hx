@@ -27,17 +27,18 @@ class WorkerDisplayData /*implements IDisplayData*/ {
 	static inline var INDEX_COLOR_BR:Int = 56;
 	static inline var INDEX_TEXTURE_ID:Int = 60;
 	static inline var INDEX_RENDER_LAYER:Int = 64;
-	static inline var INDEX_VISIBLE:Int = 68;
-	static inline var INDEX_BLEND_MODE:Int = 72;
-	static inline var INDEX_OFFSET_U:Int = 76;
-	static inline var INDEX_OFFSET_V:Int = 80;
-	static inline var INDEX_SCALE_U:Int = 84;
-	static inline var INDEX_SCALE_V:Int = 88;
-	static inline var INDEX_SHADER_ID:Int = 92;
-	static inline var INDEX_IS_STATIC:Int = 96;
-	static inline var INDEX_IS_MOVING:Int = 100;
-	static inline var INDEX_IS_ROTATING:Int = 104;
-	public static inline var BYTES_PER_ITEM:Int = 108;
+	static inline var INDEX_RENDER_TARGET:Int = 68;
+	static inline var INDEX_VISIBLE:Int = 72;
+	static inline var INDEX_BLEND_MODE:Int = 76;
+	static inline var INDEX_OFFSET_U:Int = 80;
+	static inline var INDEX_OFFSET_V:Int = 84;
+	static inline var INDEX_SCALE_U:Int = 88;
+	static inline var INDEX_SCALE_V:Int = 92;
+	static inline var INDEX_SHADER_ID:Int = 96;
+	static inline var INDEX_IS_STATIC:Int = 100;
+	static inline var INDEX_IS_MOVING:Int = 104;
+	static inline var INDEX_IS_ROTATING:Int = 108;
+	public static inline var BYTES_PER_ITEM:Int = 112;
 
 	var memoryBlock:MemoryBlock;
 
@@ -58,6 +59,7 @@ class WorkerDisplayData /*implements IDisplayData*/ {
 	public var colorBR(get, set):UInt;
 	public var textureId(get, set):Int;
 	public var renderLayer(get, set):Int;
+	public var renderTargetId(get, set):Int;
 	public var visible(get, set):Int;
 	public var blendMode(get, set):Int;
 	public var offsetU(get, set):Float;
@@ -154,6 +156,10 @@ class WorkerDisplayData /*implements IDisplayData*/ {
 
 	inline function get_renderLayer():Int {
 		return memoryBlock.readInt(INDEX_RENDER_LAYER);
+	}
+
+	inline function get_renderTargetId():Int {
+		return memoryBlock.readInt(INDEX_RENDER_TARGET);
 	}
 
 	inline function get_visible():Int {
@@ -282,6 +288,11 @@ class WorkerDisplayData /*implements IDisplayData*/ {
 
 	inline function set_renderLayer(value:Int):Int {
 		memoryBlock.writeInt(INDEX_RENDER_LAYER, value);
+		return value;
+	}
+
+	inline function set_renderTargetId(value:Int):Int {
+		memoryBlock.writeInt(INDEX_RENDER_TARGET, value);
 		return value;
 	}
 

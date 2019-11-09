@@ -7,6 +7,7 @@ import fuse.core.assembler.layers.LayerBufferAssembler;
 import fuse.core.assembler.batches.BatchAssembler;
 import fuse.core.assembler.layers.sort.SortLayers;
 import fuse.core.assembler.vertexWriter.VertexWriter;
+import fuse.core.backend.texture.RenderTextureManager;
 import fuse.core.backend.display.CoreImage;
 import fuse.core.backend.Core;
 import fuse.core.backend.displaylist.DisplayList;
@@ -60,6 +61,7 @@ class Assembler {
 		// trace("Fuse.current.conductorData.backIsStatic = " + Fuse.current.conductorData.backIsStatic);
 
 		if (Fuse.current.conductorData.backIsStatic == 0) {
+			RenderTextureManager.update();
 			LayerBufferAssembler.build();
 			BatchAssembler.build();
 			VertexWriter.build();

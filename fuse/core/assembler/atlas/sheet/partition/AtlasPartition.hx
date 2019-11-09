@@ -31,6 +31,7 @@ class AtlasPartition implements ICoreRenderable {
 	public var sourceTextureId(get, null):TextureId;
 	public var lastFramePairPartition:AtlasPartition;
 	public var lastRenderTarget:TextureId;
+	public var renderTargetId:Int = -1;
 
 	public function new() {
 		objectId = objectCount++;

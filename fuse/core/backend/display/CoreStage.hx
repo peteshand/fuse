@@ -40,7 +40,7 @@ class CoreStage extends CoreInteractiveObject {
 		}
 
 		if (updatePosition) {
-			WorkerTransformHelper.update(this);
+			WorkerTransformHelper.update(this, null);
 		}
 
 		pushTransform();

@@ -14,4 +14,5 @@ interface ICoreRenderable {
 	var blendMode:Int;
 	var shaderId:Int;
 	var sourceTextureId(get, null):TextureId;
+	var renderTargetId:Int;
 }

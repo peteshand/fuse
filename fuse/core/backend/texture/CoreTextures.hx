@@ -15,6 +15,8 @@ class CoreTextures {
 	var texturesMap = new Map<TextureId, CoreTexture>();
 	var textures = new Array<CoreTexture>();
 
+	public var renderTextures = new Array<CoreRenderTexture>();
+
 	// var count:Int = 0;
 
 	public function new() {}
@@ -48,17 +50,39 @@ class CoreTextures {
 	}
 
 	public function create(textureRef:TextureRef) {
-		if (!texturesMap.exists(textureRef.objectId)) {
-			var texture:CoreTexture = new CoreTexture(textureRef);
+		var texture:CoreTexture = get(textureRef.objectId);
+		if (texture == null) {
+			if (textureRef.renderTexture) {
+				trace("CREATE RENDER TEXTURE");
+				trace(textureRef);
+				var renderTexture = new CoreRenderTexture(textureRef);
+				renderTextures.push(renderTexture);
+				texture = renderTexture;
+			} else {
+				texture = new CoreTexture(textureRef);
+			}
 			texturesMap.set(textureRef.objectId, texture);
 			textures.push(texture);
 		}
+		return texture;
 	}
 
 	public function update(objectId:ObjectId) {
-		var texture:CoreTexture = texturesMap.get(objectId);
+		var texture:CoreTexture = get(objectId);
 		if (texture != null)
 			texture.update();
+	}
+
+	public function get(objectId:ObjectId) {
+		return texturesMap.get(objectId);
+	}
+
+	public function getRenderTexture(objectId:ObjectId) {
+		for (renderTexture in renderTextures) {
+			if (renderTexture.objectId == objectId)
+				return renderTexture;
+		}
+		return null;
 	}
 
 	public function updateSurface(objectId:ObjectId) {
@@ -66,7 +90,7 @@ class CoreTextures {
 		if (texture != null) {
 			// TODO: amend so altas isn't recalulated every frame
 			// if (texture.textureData.directRender == 0) {
-			//trace("FIX");
+			// trace("FIX");
 			texturesHaveChanged = true;
 			// }
 			texture.updateSurface();

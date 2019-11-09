@@ -96,7 +96,7 @@ class CoreDisplayObject {
 		}
 
 		if (updatePosition) {
-			WorkerTransformHelper.update(this);
+			WorkerTransformHelper.update(this, null);
 		}
 
 		pushTransform();

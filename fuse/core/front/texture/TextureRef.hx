@@ -5,5 +5,6 @@ import fuse.texture.TextureId;
 
 typedef TextureRef = {
 	objectId:ObjectId,
-	textureId:TextureId
+	textureId:TextureId,
+	renderTexture:Bool
 }
