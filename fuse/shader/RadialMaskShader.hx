@@ -8,8 +8,10 @@ class RadialMaskShader extends BaseShader {
 	var id:Int;
 	var data:Vector<Float>;
 
-	@:isVar public var rotation(default, set):Float = 0;
-	@:isVar public var offset(default, set):Float = 0;
+	@:isVar public var start(default, set):Float = 0;
+	@:isVar public var end(default, set):Float = 0;
+	@:isVar public var x(default, set):Float = 0.5;
+	@:isVar public var y(default, set):Float = 0.5;
 
 	static var count:Int = 0;
 
@@ -26,27 +28,49 @@ class RadialMaskShader extends BaseShader {
 		data[4] = 1e-10;
 		data[5] = Math.PI / 2;
 		data[6] = 0.5;
-		data[7] = rotation = 360 / 180 * Math.PI; // Rotation
+		data[7] = 0; // length
 
-		data[8] = 0; // Offset
-		data[9] = 0; // Not in use
-		data[10] = 0; // Not in use
-		data[11] = 0; // Not in use
+		data[8] = 0.5; // x
+		data[9] = 0.5; // y
+		data[10] = 0; // start
+		data[11] = end = 360 / 180 * Math.PI; // end
 	}
 
-	function set_rotation(value:Float):Float {
-		data[7] = (value / 180 * Math.PI) % (Math.PI * 2);
+	function set_x(value:Float):Float {
+		data[8] = value;
 		onUpdate.dispatch();
-		return rotation = value;
+		return x = value;
 	}
 
-	function set_offset(value:Float):Float {
-		value %= 360;
-		if (value < 0)
-			value += 360;
-		data[8] = (value / 180 * Math.PI);
+	function set_y(value:Float):Float {
+		data[9] = value;
 		onUpdate.dispatch();
-		return offset = value;
+		return y = value;
+	}
+
+	function set_start(value:Float):Float {
+		var value2 = (value) % 360;
+		if (value2 < 0)
+			value2 += 360;
+		data[10] = (value2 / 180 * Math.PI);
+		start = value;
+		data[7] = (end - start) / 180 * Math.PI;
+		trace("length = " + data[7]);
+		onUpdate.dispatch();
+		return start;
+	}
+
+	function set_end(value:Float):Float {
+		// data[11] = (value / 180 * Math.PI) % (Math.PI * 2);
+		var value2 = (value) % 360;
+		if (value2 < 0)
+			value2 += 360;
+		data[11] = (value2 / 180 * Math.PI);
+		end = value;
+		data[7] = (end - start) / 180 * Math.PI;
+		trace("length = " + data[7]);
+		onUpdate.dispatch();
+		return end;
 	}
 
 	override public function activate(context3D:Context3D):Void {
@@ -58,17 +82,19 @@ class RadialMaskShader extends BaseShader {
 		var agal:String = "";
 
 		agal += "div ft2.xy, v0.xy, v0.zw					\n";
-		agal += "sub ft2.xy, ft2.xy, fc11.zz				\n";
+		// agal += "sub ft2.xy, ft2.xy, fc11.zz				\n";
+		agal += "sub ft2.xy, ft2.xy, fc12.xy				\n";
 
 		agal += atan2(); // ft4.x = atan2(ft2.y, ft2.x)  Uses: ft3, ft4, ft5
 
 		agal += "add ft4.x, ft4.x, fc10.z					\n";
-		agal += "add ft4.x, ft4.x, fc12.x					\n"; // Add offset
+		agal += "sub ft4.x, ft4.x, fc12.z					\n"; // set start
 
 		agal += "div ft4.x, ft4.x, fc10.w					\n";
 		agal += "frc ft4.x, ft4.x							\n";
 		agal += "mul ft4.x, ft4.x, fc10.w					\n";
 
+		// agal += "sub ft4.y, fc12.w, fc12.z				\n"; // calc length = end - start
 		// set-if-less-than - destination = source1 < source2 ? 1 : 0, component-wise
 		agal += "slt ft0.z, ft4.x, fc11.w				\n";
 
