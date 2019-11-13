@@ -1,5 +1,6 @@
 package fuse.utils.css;
 
+import signals.Signal1;
 import js.html.XMLHttpRequestResponseType;
 import js.html.FileReader;
 import js.html.XMLHttpRequest;
@@ -8,12 +9,19 @@ import js.html.DivElement;
 import js.Browser;
 
 class Base64CssAssetBundler {
-	static var urls:Array<UrlData> = [];
-	static var cssStr:String = "";
-	static var allFontFaces:Array<CSSStyleRule> = [];
+	// static var urls = new Map<String, UrlData>(); // :Array<UrlData> = [];
+	// static var urls:Array<UrlData> = [];
+	static var allFontFaces:Array<CSSStyleRule>;
 
-	public static function findCss(div:DivElement, callback:String->Void) {
-		urls = [];
+	var cssStr:String = "";
+	var loaders = new Map<String, Base64Loader>();
+
+	public function new() {}
+
+	public function findCss(div:DivElement, callback:String->Void) {
+		// urls = [];
+		Base64Loader.COUNT = 0;
+		// urls = new Map<String, UrlData>();
 
 		findFontFaces();
 
@@ -58,14 +66,18 @@ class Base64CssAssetBundler {
 		cssStr = cssStr.split("\n").join(" ");
 
 		findUrls(() -> {
-			for (urlData in urls) {
-				cssStr = cssStr.split(urlData.token).join("url(" + urlData.base64 + ")");
+			for (loader in loaders.iterator()) {
+				cssStr = cssStr.split(loader.token).join("url(" + loader.base64 + ")");
 			}
 			callback(cssStr);
 		});
 	}
 
-	static function findFontFaces() {
+	function findFontFaces() {
+		if (allFontFaces != null)
+			return;
+		allFontFaces = [];
+
 		for (stylesheet in Browser.document.styleSheets) {
 			var cssStyleRules:Array<CSSStyleRule> = untyped stylesheet.cssRules;
 			for (cssStyleRule in cssStyleRules) {
@@ -78,7 +90,7 @@ class Base64CssAssetBundler {
 		}
 	}
 
-	static function findUrls(callback:Void->Void) {
+	function findUrls(callback:Void->Void) {
 		var r = ~/url\(.*?\)/g;
 		var matchFound:Bool = r.match(cssStr);
 		if (!matchFound)
@@ -99,36 +111,64 @@ class Base64CssAssetBundler {
 				u2 = u2.split(")")[0];
 			}
 
-			var urlData:UrlData = {
-				url: u2,
-				token: "{{" + urls.length + "}}"
-			}
-			urls.push(urlData);
-
-			toDataUrl(u2, (base64:String) -> {
-				urlData.base64 = base64;
-				cssStr = cssStr.split(u).join(urlData.token);
+			var loader:Base64Loader = getLoader(u2);
+			loader.load((base64:String) -> {
+				cssStr = cssStr.split(u).join(loader.token);
 				findUrls(callback);
 			});
 		} catch (e:Dynamic) {
-			trace(e);
+			// trace(e);
 			urlFound = false;
 			callback();
 		}
 	}
 
-	static function loadUrls(?index:Int = 0, callback:Void->Void) {
-		if (index == urls.length) {
-			callback();
+	function mapLength(map:Map<Dynamic, Dynamic>):Int {
+		var count:Int = 0;
+		for (key in map.keys()) {
+			count++;
+		}
+		return count;
+	}
+
+	function getLoader(url:String):Base64Loader {
+		var loader:Base64Loader = loaders.get(url);
+		if (loader == null) {
+			loader = new Base64Loader(url);
+			loaders.set(url, loader);
+		}
+		return loader;
+	}
+}
+
+class Base64Loader {
+	var onload = new Signal1();
+
+	public var base64:String;
+	public var url:String;
+	public var token:String;
+
+	public static var COUNT:Int = 0;
+
+	public function new(url:String) {
+		this.url = url;
+		token = "{{" + COUNT++ + "}}";
+
+		toDataUrl(url, (base64:String) -> {
+			this.base64 = base64;
+			onload.dispatch(base64);
+		});
+	}
+
+	public function load(callback:String->Void) {
+		if (base64 == null) {
+			onload.add(callback);
 		} else {
-			toDataUrl(urls[index].url, (base64:String) -> {
-				urls[index].base64 = base64;
-				loadUrls(index + 1, callback);
-			});
+			callback(base64);
 		}
 	}
 
-	static function toDataUrl(url:String, callback:Dynamic->Void) {
+	function toDataUrl(url:String, callback:Dynamic->Void) {
 		var xhr = new XMLHttpRequest();
 		xhr.onload = function() {
 			var reader = new FileReader();
