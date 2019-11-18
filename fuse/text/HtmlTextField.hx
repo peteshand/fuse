@@ -1,107 +1,50 @@
 package fuse.text;
 
-import fuse.utils.Align;
-import delay.Delay;
-import fuse.display.Quad;
-import fuse.display.Image;
 import fuse.display.Sprite;
-import fuse.texture.DivTexture;
+import fuse.texture.CanvasTexture;
+import fuse.utils.div.DivRenderer;
+import fuse.core.front.texture.Textures;
+import fuse.display.Image;
 import js.html.DivElement;
+import notifier.utils.Persist;
+import utils.Hash;
+import notifier.Notifier;
 
 /**
  * ...
  * @author P.J.Shand
  */
 class HtmlTextField extends Sprite {
-	@:isVar public var text(default, set):String = "";
-	@:isVar public var styleId(default, set):String = "";
-	@:isVar public var css(default, set):Dynamic;
+	var divRenderer:DivRenderer;
 
-	var texture:DivTexture;
+	// @:isVar var text(default, set):String = "";
+	// @:isVar var styleId(default, set):String = null;
+	// @:isVar var css(default, set):Dynamic = null;
+	public var divWidth(get, null):Int;
+	public var divHeight(get, null):Int;
+
 	var div:DivElement;
-	var image(get, null):Image;
+	var canvasTexture:CanvasTexture;
 
-	public function new(styleId:String = null, text:String = null) {
+	public function new(styleId:String = null, text:String = "", css:Dynamic = null, cacheDate:Bool = false) {
+		divRenderer = new DivRenderer(styleId, text, css, cacheDate);
+		divRenderer.onRender.add(onDivRendered);
 		super();
-		div = untyped js.Browser.document.createDivElement();
-		div.id = styleId;
-
-		if (text != null) {
-			this.text = text;
-		}
 	}
 
-	function get_image():Image {
-		if (image == null) {
-			image = new Image(texture);
-			addChild(image);
-		}
-		return image;
+	function onDivRendered() {
+		canvasTexture = new CanvasTexture(divRenderer.canvas);
+		var image = new Image(canvasTexture);
+		addChild(image);
+		this.width = canvasTexture.width;
+		this.height = canvasTexture.height;
 	}
 
-	function set_text(value:String):String {
-		if (text == value)
-			return value;
-		div.innerText = text = value;
-		// Delay.killDelay(newTexture);
-		// Delay.nextFrame(newTexture);
-		newTexture();
-		return text;
+	function get_divWidth():Int {
+		return divRenderer.width;
 	}
 
-	function set_styleId(value:String):String {
-		if (styleId == value)
-			return value;
-		div.id = styleId = value;
-		Delay.killDelay(newTexture);
-		Delay.nextFrame(newTexture);
-		return styleId;
-	}
-
-	function set_css(value:Dynamic):Dynamic {
-		if (css == value)
-			return value;
-		css = value;
-		for (field in Reflect.fields(css)) {
-			var value = Reflect.getProperty(css, field);
-			trace([field, value]);
-			div.style.setProperty(field, value);
-		}
-		Delay.killDelay(newTexture);
-		Delay.nextFrame(newTexture);
-		return styleId;
-	}
-
-	function newTexture() {
-		Delay.killDelay(newTexture);
-		if (texture != null) {
-			texture.dispose();
-		}
-		texture = new DivTexture(div);
-		image.texture = texture;
-	}
-
-	override function get_width():Float {
-		if (texture == null)
-			return super.get_width();
-		return texture.divWidth;
-	}
-
-	override function get_height():Float {
-		if (texture == null)
-			return super.get_height();
-		return texture.divHeight;
-	}
-
-	override public function alignPivot(horizontalAlign:Align = Align.CENTER, verticalAlign:Align = Align.CENTER) {
-		image.alignPivot(horizontalAlign, verticalAlign);
-	}
-
-	override public function alignPivotX(horizontalAlign:Align = Align.CENTER) {
-		image.alignPivotX(horizontalAlign);
-	}
-
-	override public function alignPivotY(verticalAlign:Align = Align.CENTER) {
-		image.alignPivotY(verticalAlign);
+	function get_divHeight():Int {
+		return divRenderer.height;
 	}
 }

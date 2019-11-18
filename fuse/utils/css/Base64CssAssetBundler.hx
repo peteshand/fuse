@@ -13,14 +13,16 @@ class Base64CssAssetBundler {
 	// static var urls:Array<UrlData> = [];
 	static var allFontFaces:Array<CSSStyleRule>;
 
-	var cssStr:String = "";
+	var cssStr:String;
 	var loaders = new Map<String, Base64Loader>();
+	var count:Int = 0;
 
 	public function new() {}
 
 	public function findCss(div:DivElement, callback:String->Void) {
 		// urls = [];
 		Base64Loader.COUNT = 0;
+		cssStr = "";
 		// urls = new Map<String, UrlData>();
 
 		findFontFaces();
@@ -93,8 +95,11 @@ class Base64CssAssetBundler {
 	function findUrls(callback:Void->Void) {
 		var r = ~/url\(.*?\)/g;
 		var matchFound:Bool = r.match(cssStr);
-		if (!matchFound)
+		if (!matchFound) {
 			callback();
+			return;
+		}
+
 		var urlFound = true;
 		var index:Int = 0;
 		try {

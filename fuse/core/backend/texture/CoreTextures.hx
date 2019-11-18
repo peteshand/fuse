@@ -53,8 +53,6 @@ class CoreTextures {
 		var texture:CoreTexture = get(textureRef.objectId);
 		if (texture == null) {
 			if (textureRef.renderTexture) {
-				trace("CREATE RENDER TEXTURE");
-				trace(textureRef);
 				var renderTexture = new CoreRenderTexture(textureRef);
 				renderTextures.push(renderTexture);
 				texture = renderTexture;

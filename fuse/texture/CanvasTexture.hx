@@ -8,7 +8,7 @@ import signal.Signal;
 class CanvasTexture extends BaseTexture {
 	var canvasTexture:FrontCanvasTexture;
 
-	public function new(canvas:CanvasElement = null) {
+	public function new(canvas:CanvasElement) {
 		super();
 		texture = canvasTexture = new FrontCanvasTexture(canvas);
 	}
