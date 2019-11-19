@@ -1,5 +1,6 @@
 package fuse.utils.div;
 
+import js.html.DOMRect;
 import haxe.Json;
 import delay.Delay;
 import js.html.DivElement;
@@ -57,6 +58,7 @@ class DivRenderer {
 	public var src(get, null):String;
 
 	var count:Int = 0;
+	var bounds:DOMRect;
 
 	public function new(styleId:String = null, text:String = "", css:Dynamic = null, cacheDate:Bool = false) {
 		this.styleId = styleId;
@@ -201,7 +203,7 @@ class DivRenderer {
 
 		loadFromData(svg2img(svg));
 
-		js.Browser.document.body.append(svg);
+		// js.Browser.document.body.append(svg);
 	}
 
 	public function loadFromData(base64:String) {
@@ -218,7 +220,7 @@ class DivRenderer {
 		canvas.width = width;
 		canvas.height = height;
 		ctx = canvas.getContext2d();
-		js.Browser.document.body.append(canvas);
+		// js.Browser.document.body.append(canvas);
 
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.drawImage(img, 0, 0);
@@ -230,8 +232,10 @@ class DivRenderer {
 			js.Browser.document.body.append(div);
 			tempAdd = true;
 		}
-		width = div.clientWidth;
-		height = div.clientHeight;
+		bounds = div.getBoundingClientRect();
+
+		width = Math.floor(bounds.width);
+		height = Math.floor(bounds.height);
 
 		if (tempAdd) {
 			tempAdd = false;

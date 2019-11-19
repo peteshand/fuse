@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Fuse is a Haxe based hardware accelerated displaylist style 2d rendering library",
-	"version": "0.0.43",
-	"releasenote": "Add Basic HtmlTextField",
+	"version": "0.0.44",
+	"releasenote": "Apply css scale to DivTexture width and height",
 	"contributors": [ "p.j.shand" ],
 	"dependencies": {
 		"notifier": "",
