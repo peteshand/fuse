@@ -1,7 +1,7 @@
 package fuse.display;
 
 import fuse.input.Touch;
-import signal.Signal1;
+import signals.Signal1;
 import fuse.core.backend.displaylist.DisplayType;
 import fuse.display.InteractiveObject;
 import fuse.geom.Rectangle;

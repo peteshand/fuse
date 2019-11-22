@@ -9,7 +9,7 @@ import fuse.Fuse;
 import fuse.utils.Color;
 import resize.Resize;
 import notifier.Notifier;
-import signal.Signal1;
+import signals.Signal1;
 import fuse.utils.Orientation;
 import openfl.Lib;
 import openfl.events.Event;

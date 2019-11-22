@@ -12,7 +12,7 @@ import mantle.net.NetStream;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
 import time.EnterFrame;
 import notifier.Notifier;
-import signal.Signal;
+import signals.Signal;
 
 /**
  * ...

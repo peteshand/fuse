@@ -9,9 +9,9 @@ import flash.net.GroupSpecifier;
 import flash.net.NetConnection;
 import flash.net.NetGroup;
 import time.EnterFrame;
-import signal.Signal;
-import signal.Signal1;
-import signal.Signal2;
+import signals.Signal;
+import signals.Signal1;
+import signals.Signal2;
 
 /**
  * @author P.J.Shand

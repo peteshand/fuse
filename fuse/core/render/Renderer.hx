@@ -1,6 +1,6 @@
 package fuse.core.render;
 
-import signal.Signal;
+import signals.Signal;
 import fuse.core.communication.data.conductorData.WorkerConductorData;
 import fuse.core.communication.memory.SharedMemory;
 import fuse.core.front.texture.Textures;

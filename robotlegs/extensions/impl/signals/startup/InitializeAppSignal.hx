@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.signals.startup;
 
-import signal.Signal;
+import signals.Signal;
 import org.swiftsuspenders.utils.DescribedType;
 
 /**

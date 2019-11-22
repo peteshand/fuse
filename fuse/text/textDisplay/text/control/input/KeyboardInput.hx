@@ -1,8 +1,8 @@
 package fuse.text.textDisplay.text.control.input;
 
 import delay.Delay;
-import signal.Signal;
-import signal.Signal1;
+import signals.Signal;
+import signals.Signal1;
 import openfl.system.Capabilities;
 import openfl.ui.Keyboard;
 import fuse.text.textDisplay.text.model.layout.CharLayout;

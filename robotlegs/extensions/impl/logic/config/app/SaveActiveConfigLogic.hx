@@ -1,7 +1,7 @@
 package robotlegs.extensions.impl.logic.config.app;
 
 import mantle.definitions.Storage;
-import signal.Signal;
+import signals.Signal;
 import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
 import robotlegs.extensions.impl.services.config.ConfigSaveService;

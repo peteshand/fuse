@@ -2,7 +2,7 @@ package robotlegs.extensions.impl.model.config;
 
 import mantle.util.app.App;
 import mantle.util.device.DeviceInfo;
-import signal.Signal;
+import signals.Signal;
 import openfl.errors.Error;
 import openfl.geom.Rectangle;
 import robotlegs.extensions.impl.model.config2.ConfigData;

@@ -1,6 +1,6 @@
 package fuse.text;
 
-import signal.Signal;
+import signals.Signal;
 import openfl.events.FocusEvent;
 import openfl.events.Event;
 import openfl.Lib;

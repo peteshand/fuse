@@ -4,7 +4,7 @@ import fuse.core.communication.data.textureData.ITextureData;
 import fuse.core.front.texture.IFrontTexture;
 import fuse.utils.ObjectId;
 import fuse.texture.TextureId;
-import signal.Signal;
+import signals.Signal;
 import delay.Delay;
 import fuse.display.Image;
 import fuse.utils.Color;

@@ -1,6 +1,6 @@
 package notifier;
 
-import signal.Signal;
+import signals.Signal;
 
 @:forward(length, base, concat, join, pop, push, reverse, shift, slice, sort, splice, unshift, insert, arrayRemove, indexOf, lastIndexOf, iterator, map,
 	filter, resize, add, addOnce, addWithPriority, addOnceWithPriority, remove, removeAll, dispatch)

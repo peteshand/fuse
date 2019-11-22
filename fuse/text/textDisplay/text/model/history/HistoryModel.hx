@@ -1,6 +1,6 @@
 package fuse.text.textDisplay.text.model.history;
 
-import signal.Signal;
+import signals.Signal;
 
 /**
  * ...

@@ -1,7 +1,7 @@
 package fuse.texture;
 
 import fuse.core.front.texture.FrontVideoTexture;
-import signal.Signal;
+import signals.Signal;
 
 class VideoTexture extends BaseTexture {
 	var videoTexture:FrontVideoTexture;

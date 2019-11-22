@@ -3,7 +3,7 @@ package fuse.texture;
 
 import js.html.CanvasElement;
 import fuse.core.front.texture.FrontCanvasTexture;
-import signal.Signal;
+import signals.Signal;
 
 class CanvasTexture extends BaseTexture {
 	var canvasTexture:FrontCanvasTexture;

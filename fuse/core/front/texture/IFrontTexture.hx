@@ -3,7 +3,7 @@ package fuse.core.front.texture;
 import fuse.display.Image;
 import fuse.texture.TextureId;
 import fuse.utils.Color;
-import signal.Signal;
+import signals.Signal;
 import openfl.display3D.textures.Texture;
 import openfl.display3D.textures.TextureBase;
 import fuse.utils.ObjectId;

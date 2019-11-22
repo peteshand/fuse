@@ -2,7 +2,7 @@ package fuse.texture;
 
 import fuse.display.Image;
 import fuse.utils.Color;
-import signal.Signal;
+import signals.Signal;
 import fuse.core.communication.data.textureData.ITextureData;
 import openfl.display3D.textures.TextureBase;
 import openfl.display3D.textures.Texture;

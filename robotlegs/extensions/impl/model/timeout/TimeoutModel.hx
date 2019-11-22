@@ -1,7 +1,7 @@
 package robotlegs.extensions.impl.model.timeout;
 
 import notifier.Notifier;
-import signal.Signal;
+import signals.Signal;
 
 /**
  * ...

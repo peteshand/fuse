@@ -1,6 +1,6 @@
 package fuse.utils.drag;
 
-import signal.Signal;
+import signals.Signal;
 import fuse.input.Touch;
 import fuse.display.DisplayObject;
 import openfl.geom.Point;

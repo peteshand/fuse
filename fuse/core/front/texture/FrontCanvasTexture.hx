@@ -7,7 +7,7 @@ import openfl.events.Event;
 import openfl.display3D.textures.CanvasTexture as NativeCanvasTexture;
 import time.EnterFrame;
 import notifier.Notifier;
-import signal.Signal;
+import signals.Signal;
 import js.html.CanvasElement;
 
 /**

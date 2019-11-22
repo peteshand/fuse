@@ -1,6 +1,6 @@
 package mantle.util.window;
 
-import signal.Signal1;
+import signals.Signal1;
 
 /**
  * @author Thomas Byrne

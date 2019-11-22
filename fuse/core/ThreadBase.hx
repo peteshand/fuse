@@ -5,7 +5,7 @@ import fuse.core.communication.memory.SharedMemory;
 import fuse.display.Sprite;
 import fuse.display.Stage;
 import fuse.core.render.Renderer;
-import signal.Signal;
+import signals.Signal;
 import openfl.Lib;
 import openfl.events.EventDispatcher;
 

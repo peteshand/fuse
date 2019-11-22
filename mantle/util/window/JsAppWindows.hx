@@ -7,8 +7,8 @@ import js.Lib;
 import js.html.Event;
 import js.html.Window;
 import notifier.Notifier;
-import signal.Signal1;
-import signal.Signal2;
+import signals.Signal1;
+import signals.Signal2;
 
 /**
  * ...

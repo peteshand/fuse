@@ -8,8 +8,8 @@ import openfl.display.BitmapData;
 import openfl.display.Loader as OpenFLLoader;
 import openfl.display.Bitmap;
 import openfl.net.URLRequest;
-import signal.Signal1;
-import signal.Signal;
+import signals.Signal1;
+import signals.Signal;
 
 /**
  * ...

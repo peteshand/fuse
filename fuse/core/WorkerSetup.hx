@@ -25,7 +25,7 @@ import flash.concurrent.Condition;
 import flash.concurrent.Mutex;
 #end
 import fuse.core.backend.CoreEntryPoint;
-import signal.Signal;
+import signals.Signal;
 import fuse.core.communication.data.MessageType;
 import fuse.core.communication.messageData.WorkerPayload;
 import fuse.core.communication.data.WorkerSharedProperties;

@@ -6,7 +6,7 @@ import openfl.errors.Error;
 import openfl.filesystem.File;
 import openfl.net.NetConnection;
 import openfl.net.NetStream as OpenFlNetStream;
-import signal.Signal;
+import signals.Signal;
 
 /**
  * ...
@@ -100,7 +100,7 @@ class NetStream extends OpenFlNetStream {
 }
 #else
 import openfl.net.NetStream as OpenFlNetStream;
-import signal.Signal;
+import signals.Signal;
 
 class NetStream extends OpenFlNetStream {
 	public var onComplete = new Signal();

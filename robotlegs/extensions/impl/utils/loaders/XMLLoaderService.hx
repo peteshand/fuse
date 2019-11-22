@@ -1,7 +1,7 @@
 package robotlegs.extensions.impl.utils.loaders;
 
-import signal.Signal1;
-import signal.Signal2;
+import signals.Signal1;
+import signals.Signal2;
 import openfl.errors.Error;
 import openfl.events.ErrorEvent;
 import openfl.events.Event;
