@@ -2,13 +2,10 @@ package robotlegs.extensions.impl.commands.keyboard;
 
 import keyboard.Key;
 import keyboard.Keyboard;
-import mantle.util.app.App;
 import time.GlobalTime;
-import openfl.display.StageDisplayState;
+import fuse.utils.Exit;
 import robotlegs.bender.bundles.mvcs.Command;
 import robotlegs.bender.extensions.contextView.ContextView;
-
-using Logger;
 
 /**
  * ...
@@ -22,7 +19,7 @@ class BaseKeyCommand extends Command {
 	public function new() {}
 
 	override public function execute():Void {
-		Keyboard.onPress(Key.Q, App.exit).ctrl(true);
+		Keyboard.onPress(Key.Q, Exit.execute).ctrl(true);
 
 		// Fullscreen is done on a per platform basis within platform-specific commands
 		// Keyboard.onPress(GoFullScreen, Key.F, { ctrl:true } );
@@ -73,16 +70,4 @@ class BaseKeyCommand extends Command {
 	function ResetTimeOffset() {
 		GlobalTime.offset += 0;
 	}
-	/*private function GoFullScreen():Void 
-		{
-			#if air
-				contextView.view.stage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE;
-
-				if (contextView.view.stage.nativeWindow != null) {	//seems to be null on the tablet
-					contextView.view.stage.nativeWindow.activate();
-				}
-			#else
-				contextView.view.stage.displayState = StageDisplayState.FULL_SCREEN;
-			#end
-	}*/
 }

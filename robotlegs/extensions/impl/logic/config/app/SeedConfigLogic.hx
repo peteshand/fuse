@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.logic.config.app;
 
-import mantle.definitions.Storage;
+import fuse.filesystem.Storage;
 #if (air && !mobile && !test_flash)
 import openfl.filesystem.File;
 import openfl.filesystem.FileMode;

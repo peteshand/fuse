@@ -2,7 +2,7 @@ package robotlegs.extensions.impl.logic.config.app;
 
 #if (air && !mobile)
 import robotlegs.extensions.impl.logic.config.app.StaticConfigLogic;
-import mantle.definitions.Storage;
+import fuse.filesystem.Storage;
 import openfl.filesystem.File;
 import openfl.filesystem.FileMode;
 import openfl.filesystem.FileStream;

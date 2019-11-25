@@ -1,7 +1,7 @@
 package robotlegs.extensions.impl.logic.flags.app;
 
 #if (air && !mobile)
-import mantle.definitions.Storage;
+import fuse.filesystem.Storage;
 import openfl.filesystem.File;
 import openfl.filesystem.FileMode;
 import openfl.filesystem.FileStream;

@@ -1,6 +1,6 @@
 package robotlegs.extensions.impl.logic.config.app;
 
-import mantle.definitions.Storage;
+import fuse.filesystem.Storage;
 import signals.Signal;
 import robotlegs.bender.extensions.config.IConfigModel;
 import robotlegs.extensions.impl.model.config2.ConfigSettings;
