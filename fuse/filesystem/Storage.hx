@@ -1,7 +1,7 @@
-package mantle.definitions;
+package fuse.filesystem;
 
-import mantle.util.app.App;
-// import openfl.filesystem.File;
+import openfl.Lib;
+import openfl.display.Stage;
 import openfl.filesystem.File;
 
 /**
@@ -50,7 +50,10 @@ class Storage {
 	static function init():Void {
 		if (appId != null)
 			return;
-		appId = App.getAppId();
+		var stage:Stage = Lib.current.stage;
+		if (stage == null || stage.window == null)
+			return;
+		appId = stage.window.application.meta.get("packageName");
 
 		configSeedDirectory = File.applicationDirectory.resolvePath("config");
 

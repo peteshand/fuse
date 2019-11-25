@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Fuse is a Haxe based hardware accelerated displaylist style 2d rendering library",
-	"version": "0.0.45",
-	"releasenote": "remove deprecated imports",
+	"version": "0.0.46",
+	"releasenote": "remove deprecated classes",
 	"contributors": [ "p.j.shand" ],
 	"dependencies": {
 		"notifier": "",
@@ -14,6 +14,7 @@
 		"time": "",
 		"delay": "",
 		"color": "",
-		"condition": ""
+		"condition": "",
+		"cacher": ""
 	}
 }

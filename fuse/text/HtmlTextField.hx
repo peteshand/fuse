@@ -22,6 +22,8 @@ class HtmlTextField extends Sprite {
 	// @:isVar var css(default, set):Dynamic = null;
 	public var divWidth(get, null):Int;
 	public var divHeight(get, null):Int;
+	public var textWidth(get, null):Int;
+	public var textHeight(get, null):Int;
 
 	var div:DivElement;
 	var canvasTexture:CanvasTexture;
@@ -46,5 +48,13 @@ class HtmlTextField extends Sprite {
 
 	function get_divHeight():Int {
 		return divRenderer.height;
+	}
+
+	function get_textWidth():Int {
+		return divRenderer.textWidth;
+	}
+
+	function get_textHeight():Int {
+		return divRenderer.textHeight;
 	}
 }

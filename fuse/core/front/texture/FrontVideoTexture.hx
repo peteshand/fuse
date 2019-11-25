@@ -8,7 +8,7 @@ import fuse.core.front.texture.FrontBaseTexture;
 import fuse.core.front.texture.Textures;
 import openfl.events.Event;
 import openfl.events.NetStatusEvent;
-import mantle.net.NetStream;
+import cacher.openfl.NetStream;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
 import time.EnterFrame;
 import notifier.Notifier;
@@ -20,7 +20,7 @@ import signals.Signal;
  */
 @:access(fuse)
 #if (js && html5)
-@:access(mantle.net.NetStream)
+@:access(cacher.openfl.NetStream)
 @:access(notifier.Notifier)
 #end
 class FrontVideoTexture extends FrontBaseTexture {

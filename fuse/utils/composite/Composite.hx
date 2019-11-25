@@ -1,11 +1,9 @@
-package mantle.util.composite;
+package fuse.utils.composite;
 
 import openfl.geom.Matrix;
 import fuse.geom.Rectangle;
 import fuse.display.DisplayObject;
 import fuse.utils.Align;
-
-using Logger;
 
 /**
  * ...

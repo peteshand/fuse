@@ -1,7 +1,7 @@
 package fuse.display;
 
-import mantle.util.composite.Composite;
-import mantle.util.composite.CompositeMode;
+import fuse.utils.composite.Composite;
+import fuse.utils.composite.CompositeMode;
 import fuse.texture.ITexture;
 import fuse.utils.Align;
 import fuse.geom.Rectangle;

@@ -32,12 +32,15 @@ class DivRenderer {
 	var css:Dynamic;
 
 	public var div(default, null):DivElement;
+	public var textDiv(default, null):DivElement;
 
 	var base64CssAssetBundler = new Base64CssAssetBundler();
 	var tempAdd:Bool = false;
 
 	public var width(get, null):Null<Int> = null;
 	public var height(get, null):Null<Int> = null;
+	public var textWidth(get, null):Null<Int> = null;
+	public var textHeight(get, null):Null<Int> = null;
 	// public var onBase64 = new Signal1<String>();
 	public var onRender = new Signal();
 
@@ -59,6 +62,7 @@ class DivRenderer {
 
 	var count:Int = 0;
 	var bounds:DOMRect;
+	var textBounds:DOMRect;
 
 	public function new(styleId:String = null, text:String = "", css:Dynamic = null, cacheDate:Bool = false) {
 		this.styleId = styleId;
@@ -67,6 +71,8 @@ class DivRenderer {
 		this.cacheDate = cacheDate;
 		// if (div == null) {
 		div = untyped js.Browser.document.createDivElement();
+		textDiv = untyped js.Browser.document.createDivElement();
+		div.appendChild(textDiv);
 		// }
 
 		img = new Image();
@@ -97,7 +103,7 @@ class DivRenderer {
 			var value = Reflect.getProperty(css, field);
 			div.style.setProperty(field, value);
 		}
-		div.innerHTML = text;
+		textDiv.innerHTML = text;
 
 		// updateHash();
 		// }
@@ -217,8 +223,8 @@ class DivRenderer {
 
 	function onImageLoadComplete() {
 		canvas = js.Browser.document.createCanvasElement();
-		canvas.width = width;
-		canvas.height = height;
+		canvas.width = textWidth;
+		canvas.height = textHeight;
 		ctx = canvas.getContext2d();
 		// js.Browser.document.body.append(canvas);
 
@@ -233,9 +239,12 @@ class DivRenderer {
 			tempAdd = true;
 		}
 		bounds = div.getBoundingClientRect();
-
 		width = Math.floor(bounds.width);
 		height = Math.floor(bounds.height);
+
+		textBounds = textDiv.getBoundingClientRect();
+		textWidth = Math.floor(textBounds.width);
+		textHeight = Math.floor(textBounds.height);
 
 		if (tempAdd) {
 			tempAdd = false;
@@ -272,5 +281,13 @@ class DivRenderer {
 		// if (height == null)
 		// update();
 		return height;
+	}
+
+	function get_textWidth():Int {
+		return textWidth;
+	}
+
+	function get_textHeight():Int {
+		return textHeight;
 	}
 }

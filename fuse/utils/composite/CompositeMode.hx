@@ -1,4 +1,4 @@
-package mantle.util.composite;
+package fuse.utils.composite;
 
 @:enum abstract CompositeMode(Int) from Int to Int {
 	public static var LETTERBOX:Int = 0;
