@@ -55,7 +55,6 @@ class RadialMaskShader extends BaseShader {
 		data[10] = (value2 / 180 * Math.PI);
 		start = value;
 		data[7] = (end - start) / 180 * Math.PI;
-		trace("length = " + data[7]);
 		onUpdate.dispatch();
 		return start;
 	}
@@ -68,7 +67,6 @@ class RadialMaskShader extends BaseShader {
 		data[11] = (value2 / 180 * Math.PI);
 		end = value;
 		data[7] = (end - start) / 180 * Math.PI;
-		trace("length = " + data[7]);
 		onUpdate.dispatch();
 		return end;
 	}
