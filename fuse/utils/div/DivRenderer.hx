@@ -1,5 +1,8 @@
 package fuse.utils.div;
 
+import js.html.Element;
+import fuse.text.TextFormatAlign;
+import fuse.display.Sprite;
 import js.html.DOMRect;
 import haxe.Json;
 import delay.Delay;
@@ -24,13 +27,6 @@ import utils.Hash;
 import notifier.Notifier;
 
 class DivRenderer {
-	// @:isVar public var text(default, set):String = null;
-	// @:isVar public var styleId(default, set):String = null;
-	// @:isVar public var css(default, set):Dynamic;
-	var text:String = null;
-	var styleId:String = null;
-	var css:Dynamic;
-
 	public var div(default, null):DivElement;
 	public var textDiv(default, null):DivElement;
 
@@ -41,148 +37,74 @@ class DivRenderer {
 	public var height(get, null):Null<Int> = null;
 	public var textWidth(get, null):Null<Int> = null;
 	public var textHeight(get, null):Null<Int> = null;
-	// public var onBase64 = new Signal1<String>();
+	public var onCssReady = new Signal();
 	public var onRender = new Signal();
 
 	public var canvas:CanvasElement;
 
+	var styleId:String = null;
 	var ctx:CanvasRenderingContext2D;
 	var cssStr:String = "";
 	var svg:SVGElement;
-	var style:StyleElement;
+	var svgStyle:StyleElement;
 	var img:Image;
-
-	var cacheHash = new Notifier<Null<Float>>();
-	var cachedData = new Notifier<String>();
-	var cachedWidth = new Notifier<Int>();
-	var cachedHeight = new Notifier<Int>();
-	var cacheDate:Bool;
 
 	public var src(get, null):String;
 
 	var count:Int = 0;
 	var bounds:DOMRect;
 	var textBounds:DOMRect;
+	var image64:String;
 
-	public function new(styleId:String = null, text:String = "", css:Dynamic = null, cacheDate:Bool = false) {
+	@:isVar public var text(default, set):String = "";
+
+	public function new(?styleId:String = null, ?width:Null<Int>, ?height:Null<Int>, ?size:Null<Float>, ?color:Null<Color>, ?kerning:Null<Float>,
+			?leading:Null<Float>, ?font:String, ?alignment:Null<TextFormatAlign>, ?css:Dynamic = null) {
 		this.styleId = styleId;
-		this.text = text;
-		this.css = css;
-		this.cacheDate = cacheDate;
-		// if (div == null) {
+
 		div = untyped js.Browser.document.createDivElement();
 		textDiv = untyped js.Browser.document.createDivElement();
 		div.appendChild(textDiv);
-		// }
 
 		img = new Image();
 		img.setAttribute("crossOrigin", "anonymous");
 		img.onload = onImageLoadComplete;
-
-		/*if (base64 == null) {
-				if (div != null) {
-					loadFromDiv(div);
-				}
-			} else {
-				loadFromData(base64);
-		}*/
-
-		// if (cacheDate) {
-		//	cachedData.add(onBase64Set);
-		// }
-		// cacheHash.add(onCacheHashChange);
-
-		// update();
-		// }
-
-		// function update() {
-		// Delay.killDelay(update);
 
 		div.id = styleId;
 		for (field in Reflect.fields(css)) {
 			var value = Reflect.getProperty(css, field);
 			div.style.setProperty(field, value);
 		}
-		textDiv.innerHTML = text;
 
-		// updateHash();
-		// }
+		if (width != null)
+			div.style.setProperty('width', width + 'px');
+		if (height != null)
+			div.style.setProperty('height', height + 'px');
+		if (color != null)
+			div.style.setProperty('color', '#' + StringTools.hex(color, 6));
+		if (size != null)
+			div.style.setProperty('font-size', size + "px");
 
-		// function updateHash() {
-		var hashId:String = text + styleId;
+		if (font != null && alignment == null) {
+			if (font == TextFormatAlign.CENTER || font == TextFormatAlign.END || font == TextFormatAlign.JUSTIFY || font == TextFormatAlign.LEFT
+				|| font == TextFormatAlign.RIGHT || font == TextFormatAlign.START) {
+				alignment = font;
+				font = null;
+			}
+		}
+		if (font != null)
+			div.style.setProperty('font-family', font);
+		if (alignment != null)
+			div.style.setProperty('text-align', alignment);
+		if (kerning != null)
+			div.style.setProperty('letter-spacing', kerning + "px");
+		if (leading != null)
+			div.style.setProperty('line-height', leading + "px");
+
+		var hashId:String = /*text +*/ styleId;
 		if (css != null)
 			hashId += Json.stringify(css);
-		cacheHash.value = Hash.compute(hashId);
-		// }
 
-		// function onCacheHashChange(hashId:Float) {
-		if (text == null)
-			return;
-
-		/*if (cacheDate) {
-			if (hashId != null) {
-				Persist.register(cachedData, 'divData/' + hashId);
-				Persist.register(cachedWidth, 'divData/' + hashId + "Width");
-				Persist.register(cachedHeight, 'divData/' + hashId + "Height");
-				canvas.width = width = cachedWidth.value;
-				canvas.height = height = cachedHeight.value;
-				cachedData.dispatch();
-			} else {
-				loadFromDiv(div);
-			}
-		} else {*/
-		loadFromDiv(div);
-		// }
-	}
-
-	/*function set_text(value:String):String {
-			if (text == value)
-				return value;
-			text = value;
-			update();
-			return text;
-		}
-
-		function set_styleId(value:String):String {
-			if (styleId == value)
-				return value;
-			styleId = value;
-			Delay.killDelay(update);
-			Delay.nextFrame(update);
-			return styleId;
-		}
-
-		function set_css(value:Dynamic):Dynamic {
-			if (css == value)
-				return value;
-			css = value;
-			Delay.killDelay(update);
-			Delay.nextFrame(update);
-			return styleId;
-	}*/
-	/*function onBase64Set(base64:String) {
-		if (base64 != null) {
-			loadFromData(base64);
-		} else {
-			loadFromDiv(div);
-		}
-	}*/
-	public function loadFromDiv(div:DivElement) {
-		this.div = div;
-		getSize();
-		cachedWidth.value = width;
-		cachedHeight.value = height;
-		updateDivContent();
-	}
-
-	function updateDivContent() {
-		base64CssAssetBundler.findCss(div, (cssStr:String) -> {
-			this.cssStr = cssStr;
-			createSvg();
-		});
-	}
-
-	public function createSvg() {
 		if (svg != null) {
 			js.Browser.document.body.removeChild(svg);
 		}
@@ -190,8 +112,8 @@ class DivRenderer {
 		if (svg == null) {
 			svg = untyped js.Browser.document.createElementNS("http://www.w3.org/2000/svg", "svg");
 
-			style = js.Browser.document.createStyleElement();
-			svg.appendChild(style);
+			svgStyle = js.Browser.document.createStyleElement();
+			svg.appendChild(svgStyle);
 
 			var foreignObject:ForeignObjectElement = untyped js.Browser.document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
 			foreignObject.setAttribute("x", "0");
@@ -203,39 +125,49 @@ class DivRenderer {
 			foreignObject.appendChild(div);
 		}
 
-		svg.setAttribute("width", Std.string(width));
-		svg.setAttribute("height", Std.string(height));
-		style.innerText = cssStr;
+		canvas = js.Browser.document.createCanvasElement();
 
-		loadFromData(svg2img(svg));
+		ctx = canvas.getContext2d();
+		js.Browser.document.body.appendChild(svg);
 
-		// js.Browser.document.body.append(svg);
+		bundleCss();
 	}
 
-	public function loadFromData(base64:String) {
-		try {
-			img.src = base64;
-			cachedData.value = base64;
-		} catch (e:Dynamic) {
-			trace(e);
+	function bundleCss() {
+		base64CssAssetBundler.findCss(div, (cssStr:String) -> {
+			this.cssStr = cssStr;
+			updateSvgStyles();
+			onCssReady.dispatch();
+		});
+	}
+
+	function updateSvgStyles() {
+		if (textDiv.innerHTML != "") {
+			base64CssAssetBundler.findCss(textDiv, (innerCssStr:String) -> {
+				svgStyle.innerText = cssStr + innerCssStr;
+			});
+		} else {
+			svgStyle.innerText = cssStr;
 		}
 	}
 
-	function onImageLoadComplete() {
-		canvas = js.Browser.document.createCanvasElement();
-		canvas.width = textWidth;
-		canvas.height = textHeight;
-		ctx = canvas.getContext2d();
-		// js.Browser.document.body.append(canvas);
+	function set_text(value:String):String {
+		text = textDiv.innerHTML = value;
+		updateSvgStyles();
 
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		ctx.drawImage(img, 0, 0);
-		onRender.dispatch();
+		if (cssStr == null)
+			return value;
+		getSize();
+
+		svg2img();
+		loadBase64();
+
+		return text;
 	}
 
 	function getSize() {
-		if (div.parentNode == null) {
-			js.Browser.document.body.append(div);
+		if (svg.parentNode == null) {
+			js.Browser.document.body.append(svg);
 			tempAdd = true;
 		}
 		bounds = div.getBoundingClientRect();
@@ -246,25 +178,42 @@ class DivRenderer {
 		textWidth = Math.floor(textBounds.width);
 		textHeight = Math.floor(textBounds.height);
 
+		svg.setAttribute("width", Std.string(width));
+		svg.setAttribute("height", Std.string(height));
+
 		if (tempAdd) {
 			tempAdd = false;
-			js.Browser.document.body.removeChild(div);
+			js.Browser.document.body.removeChild(svg);
 		}
 	}
 
-	function svg2img(svg) {
+	function svg2img() {
 		var xml:String = new XMLSerializer().serializeToString(svg);
 		var svg64 = null;
 		try {
 			svg64 = Base64.encode(Bytes.ofString(xml));
 		} catch (e:Dynamic) {
 			trace(e);
-			return null;
+			return;
 		}
+		image64 = 'data:image/svg+xml;base64,' + svg64;
+	}
 
-		var b64start = 'data:image/svg+xml;base64,';
-		var image64 = b64start + svg64;
-		return image64;
+	function loadBase64() {
+		try {
+			img.src = image64;
+			// cachedData.value = image64;
+		} catch (e:Dynamic) {
+			trace(e);
+		}
+	}
+
+	function onImageLoadComplete() {
+		canvas.width = textWidth;
+		canvas.height = textHeight;
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.drawImage(img, 0, 0);
+		onRender.dispatch();
 	}
 
 	function get_src():String {

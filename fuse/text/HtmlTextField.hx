@@ -1,14 +1,11 @@
 package fuse.text;
 
+import color.Color;
 import fuse.display.Sprite;
 import fuse.texture.CanvasTexture;
 import fuse.utils.div.DivRenderer;
-import fuse.core.front.texture.Textures;
 import fuse.display.Image;
 import js.html.DivElement;
-import notifier.utils.Persist;
-import utils.Hash;
-import notifier.Notifier;
 
 /**
  * ...
@@ -17,29 +14,34 @@ import notifier.Notifier;
 class HtmlTextField extends Sprite {
 	var divRenderer:DivRenderer;
 
-	// @:isVar var text(default, set):String = "";
 	// @:isVar var styleId(default, set):String = null;
 	// @:isVar var css(default, set):Dynamic = null;
 	public var divWidth(get, null):Int;
 	public var divHeight(get, null):Int;
 	public var textWidth(get, null):Int;
 	public var textHeight(get, null):Int;
+	@:isVar public var text(default, set):String = "";
 
 	var div:DivElement;
 	var canvasTexture:CanvasTexture;
 
-	public function new(styleId:String = null, text:String = "", css:Dynamic = null, cacheDate:Bool = false) {
-		divRenderer = new DivRenderer(styleId, text, css, cacheDate);
+	public function new(?styleId:String = null, ?width:Null<Int>, ?height:Null<Int>, ?size:Null<Float>, ?color:Color, ?kerning:Null<Float>,
+			?leading:Null<Float>, ?font:String, ?alignment:Null<TextFormatAlign>, ?css:Dynamic = null) {
+		divRenderer = new DivRenderer(styleId, width, height, size, color, kerning, leading, font, alignment, css);
 		divRenderer.onRender.add(onDivRendered);
 		super();
 	}
 
 	function onDivRendered() {
-		canvasTexture = new CanvasTexture(divRenderer.canvas);
-		var image = new Image(canvasTexture);
-		addChild(image);
-		this.width = canvasTexture.width;
-		this.height = canvasTexture.height;
+		if (canvasTexture == null) {
+			canvasTexture = new CanvasTexture(divRenderer.canvas);
+			var image = new Image(canvasTexture);
+			addChild(image);
+			this.width = canvasTexture.width;
+			this.height = canvasTexture.height;
+		} else {
+			canvasTexture.update();
+		}
 	}
 
 	function get_divWidth():Int {
@@ -56,5 +58,10 @@ class HtmlTextField extends Sprite {
 
 	function get_textHeight():Int {
 		return divRenderer.textHeight;
+	}
+
+	function set_text(value:String):String {
+		value = value.split("\n").join("<br/>");
+		return divRenderer.text = value;
 	}
 }

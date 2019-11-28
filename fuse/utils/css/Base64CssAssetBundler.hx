@@ -5,7 +5,7 @@ import js.html.XMLHttpRequestResponseType;
 import js.html.FileReader;
 import js.html.XMLHttpRequest;
 import js.html.CSSStyleRule;
-import js.html.DivElement;
+import js.html.Element;
 import js.Browser;
 
 class Base64CssAssetBundler {
@@ -19,7 +19,7 @@ class Base64CssAssetBundler {
 
 	public function new() {}
 
-	public function findCss(div:DivElement, callback:String->Void) {
+	public function findCss(element:Element, callback:String->Void) {
 		// urls = [];
 		Base64Loader.COUNT = 0;
 		cssStr = "";
@@ -27,6 +27,18 @@ class Base64CssAssetBundler {
 
 		findFontFaces();
 
+		cssStr = cssFromElement(element);
+
+		findUrls(() -> {
+			for (loader in loaders.iterator()) {
+				cssStr = cssStr.split(loader.token).join("url(" + loader.base64 + ")");
+			}
+			callback(cssStr);
+		});
+	}
+
+	function cssFromElement(element:Element):String {
+		var returnCss:String = "";
 		var fontFacesToAdd = new Map<String, CSSStyleRule>();
 		for (stylesheet in Browser.document.styleSheets) {
 			var cssStyleRules:Array<CSSStyleRule> = untyped stylesheet.cssRules;
@@ -36,13 +48,13 @@ class Base64CssAssetBundler {
 					continue;
 					// apply = true;
 				} else if (cssStyleRule.selectorText.indexOf("#") == 0) {
-					if (div.id == cssStyleRule.selectorText.substring(1, cssStyleRule.selectorText.length))
+					if (element.id == cssStyleRule.selectorText.substring(1, cssStyleRule.selectorText.length))
 						apply = true;
 				} else if (cssStyleRule.selectorText.indexOf(".") == 0) {
-					if (div.className == cssStyleRule.selectorText.substring(1, cssStyleRule.selectorText.length))
+					if (element.className == cssStyleRule.selectorText.substring(1, cssStyleRule.selectorText.length))
 						apply = true;
 				} else {
-					if (div.nodeName == cssStyleRule.selectorText)
+					if (element.nodeName == cssStyleRule.selectorText)
 						apply = true;
 				}
 				if (apply) {
@@ -56,23 +68,22 @@ class Base64CssAssetBundler {
 						}
 					}
 
-					cssStr += cssStyleRule.cssText;
+					returnCss += cssStyleRule.cssText;
 				}
 			}
 		}
 
 		for (fontFace in fontFacesToAdd.iterator()) {
-			cssStr += fontFace.cssText;
+			returnCss += fontFace.cssText;
 		}
 
-		cssStr = cssStr.split("\n").join(" ");
+		returnCss = returnCss.split("\n").join(" ");
 
-		findUrls(() -> {
-			for (loader in loaders.iterator()) {
-				cssStr = cssStr.split(loader.token).join("url(" + loader.base64 + ")");
-			}
-			callback(cssStr);
-		});
+		for (child in element.children) {
+			returnCss += cssFromElement(child);
+		}
+
+		return returnCss;
 	}
 
 	function findFontFaces() {
