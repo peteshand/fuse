@@ -1,14 +1,11 @@
 package fuse.utils.div;
 
-import js.html.Element;
 import fuse.text.TextFormatAlign;
 import fuse.display.Sprite;
 import js.html.DOMRect;
 import haxe.Json;
 import delay.Delay;
-import js.html.DivElement;
 import fuse.utils.css.Base64CssAssetBundler;
-import fuse.utils.div.DivRenderer;
 import js.html.CanvasRenderingContext2D;
 import js.html.StyleElement;
 import js.html.XMLSerializer;
@@ -20,11 +17,7 @@ import js.html.CanvasElement;
 import js.Browser;
 import haxe.crypto.Base64;
 import haxe.io.Bytes;
-import signals.Signal1;
 import signals.Signal;
-import notifier.utils.Persist;
-import utils.Hash;
-import notifier.Notifier;
 
 class DivRenderer {
 	public var div(default, null):DivElement;
@@ -37,14 +30,14 @@ class DivRenderer {
 	public var height(get, null):Null<Int> = null;
 	public var textWidth(get, null):Null<Int> = null;
 	public var textHeight(get, null):Null<Int> = null;
-	public var onCssReady = new Signal();
+	// public var onCssReady = new Signal();
 	public var onRender = new Signal();
 
 	public var canvas:CanvasElement;
 
 	var styleId:String = null;
 	var ctx:CanvasRenderingContext2D;
-	var cssStr:String = "";
+	var cssStr:String = null;
 	var svg:SVGElement;
 	var svgStyle:StyleElement;
 	var img:Image;
@@ -56,12 +49,20 @@ class DivRenderer {
 	var textBounds:DOMRect;
 	var image64:String;
 
+	static var currentlyLoading:Void->Void;
+	static var queue:Array<Void->Void> = [];
+
 	@:isVar public var text(default, set):String = "";
+
+	var index:Int;
+
+	static var COUNT:Int = 0;
 
 	public function new(?styleId:String = null, ?width:Null<Int>, ?height:Null<Int>, ?size:Null<Float>, ?color:Null<Color>, ?kerning:Null<Float>,
 			?leading:Null<Float>, ?font:String, ?alignment:Null<TextFormatAlign>, ?css:Dynamic = null) {
 		this.styleId = styleId;
-
+		index = COUNT++;
+		// trace(index);
 		div = untyped js.Browser.document.createDivElement();
 		textDiv = untyped js.Browser.document.createDivElement();
 		div.appendChild(textDiv);
@@ -128,7 +129,7 @@ class DivRenderer {
 		canvas = js.Browser.document.createCanvasElement();
 
 		ctx = canvas.getContext2d();
-		js.Browser.document.body.appendChild(svg);
+		// js.Browser.document.body.appendChild(svg);
 
 		bundleCss();
 	}
@@ -136,8 +137,8 @@ class DivRenderer {
 	function bundleCss() {
 		base64CssAssetBundler.findCss(div, (cssStr:String) -> {
 			this.cssStr = cssStr;
-			updateSvgStyles();
-			onCssReady.dispatch();
+			// updateSvgStyles();
+			// onCssReady.dispatch();
 		});
 	}
 
@@ -153,14 +154,10 @@ class DivRenderer {
 
 	function set_text(value:String):String {
 		text = textDiv.innerHTML = value;
-		updateSvgStyles();
-
-		if (cssStr == null)
-			return value;
-		getSize();
-
-		svg2img();
-		loadBase64();
+		if (queue.indexOf(svg2img) == -1) {
+			queue.push(svg2img);
+			loadFromQueue();
+		}
 
 		return text;
 	}
@@ -178,6 +175,9 @@ class DivRenderer {
 		textWidth = Math.floor(textBounds.width);
 		textHeight = Math.floor(textBounds.height);
 
+		// trace("width = " + width);
+		// trace("height = " + height);
+
 		svg.setAttribute("width", Std.string(width));
 		svg.setAttribute("height", Std.string(height));
 
@@ -187,7 +187,23 @@ class DivRenderer {
 		}
 	}
 
+	static function loadFromQueue() {
+		if (currentlyLoading != null)
+			return;
+		if (queue.length == 0)
+			return;
+		currentlyLoading = queue.shift();
+		currentlyLoading();
+	}
+
 	function svg2img() {
+		updateSvgStyles();
+
+		if (cssStr == null)
+			return;
+
+		getSize();
+
 		var xml:String = new XMLSerializer().serializeToString(svg);
 		var svg64 = null;
 		try {
@@ -196,15 +212,20 @@ class DivRenderer {
 			trace(e);
 			return;
 		}
+		if (svg64 == null) {
+			currentlyLoading = null;
+			loadFromQueue();
+			return;
+		}
 		image64 = 'data:image/svg+xml;base64,' + svg64;
-	}
 
-	function loadBase64() {
 		try {
 			img.src = image64;
-			// cachedData.value = image64;
 		} catch (e:Dynamic) {
 			trace(e);
+			currentlyLoading = null;
+			loadFromQueue();
+			return;
 		}
 	}
 
@@ -214,6 +235,9 @@ class DivRenderer {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.drawImage(img, 0, 0);
 		onRender.dispatch();
+
+		currentlyLoading = null;
+		loadFromQueue();
 	}
 
 	function get_src():String {
