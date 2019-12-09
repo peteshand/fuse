@@ -334,6 +334,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 	private function renderFrame(e:Event):Void {
 		// trace2("renderFrame");
 		nativeVideoTexture.removeEventListener(Event.TEXTURE_READY, renderFrame);
+		EnterFrame.remove(onTick);
 		EnterFrame.add(onTick);
 
 		textureData.placed = 0;
