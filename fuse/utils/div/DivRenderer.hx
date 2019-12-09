@@ -1,5 +1,7 @@
 package fuse.utils.div;
 
+import js.html.CSSStyleDeclaration;
+import js.html.DOMRectList;
 import fuse.text.TextFormatAlign;
 import fuse.display.Sprite;
 import js.html.DOMRect;
@@ -30,7 +32,6 @@ class DivRenderer {
 	public var height(get, null):Null<Int> = null;
 	public var textWidth(get, null):Null<Int> = null;
 	public var textHeight(get, null):Null<Int> = null;
-	// public var onCssReady = new Signal();
 	public var onRender = new Signal();
 
 	public var canvas:CanvasElement;
@@ -40,6 +41,7 @@ class DivRenderer {
 	var cssStr:String = null;
 	var svg:SVGElement;
 	var svgStyle:StyleElement;
+	var textDivStyle:StyleElement;
 	var img:Image;
 
 	public var src(get, null):String;
@@ -49,9 +51,8 @@ class DivRenderer {
 	var textBounds:DOMRect;
 	var image64:String;
 
-	static var currentlyLoading:Void->Void;
-	static var queue:Array<Void->Void> = [];
-
+	// static var currentlyLoading:Void->Void;
+	// static var queue:Array<Void->Void> = [];
 	@:isVar public var text(default, set):String = "";
 
 	var index:Int;
@@ -66,6 +67,11 @@ class DivRenderer {
 		div = untyped js.Browser.document.createDivElement();
 		textDiv = untyped js.Browser.document.createDivElement();
 		div.appendChild(textDiv);
+
+		// textDiv.style.verticalAlign = 'top';
+		textDivStyle = js.Browser.document.createStyleElement();
+		textDiv.appendChild(textDivStyle);
+		// vertical-align: top;
 
 		img = new Image();
 		img.setAttribute("crossOrigin", "anonymous");
@@ -137,8 +143,6 @@ class DivRenderer {
 	function bundleCss() {
 		base64CssAssetBundler.findCss(div, (cssStr:String) -> {
 			this.cssStr = cssStr;
-			// updateSvgStyles();
-			// onCssReady.dispatch();
 		});
 	}
 
@@ -154,10 +158,18 @@ class DivRenderer {
 
 	function set_text(value:String):String {
 		text = textDiv.innerHTML = value;
-		if (queue.indexOf(svg2img) == -1) {
-			queue.push(svg2img);
-			loadFromQueue();
+		trace("textDiv.children.length = " + textDiv.children.length);
+		if (textDiv.children.length > 0) {
+			var cssText:String = "";
+			for (child in textDiv.children) {
+				cssText += child.style.cssText;
+			}
+			trace("cssText = " + cssText);
+			// textDivStyle.innerText = cssText;
+			textDiv.style.cssText = cssText;
 		}
+
+		svg2img();
 
 		return text;
 	}
@@ -174,28 +186,46 @@ class DivRenderer {
 		textBounds = textDiv.getBoundingClientRect();
 		textWidth = Math.floor(textBounds.width);
 		textHeight = Math.floor(textBounds.height);
+		trace("textHeight = " + textHeight);
+
+		/*var textBounds2:DOMRectList = textDiv.getClientRects();
+			for (bounds in textBounds2) {
+				var textWidth2 = Math.floor(bounds.width);
+				var textHeight2 = Math.floor(bounds.height);
+				trace("textHeight2 = " + textHeight2);
+			}
+
+			var fontSize:String = js.Browser.window.getComputedStyle(textDiv).fontSize;
+			fontSize = fontSize.substr(0, fontSize.length - 2);
+			textHeight = Std.parseInt(fontSize);
+			trace("fontSize = " + fontSize); */
 
 		// trace("width = " + width);
 		// trace("height = " + height);
 
-		svg.setAttribute("width", Std.string(width));
-		svg.setAttribute("height", Std.string(height));
+		svg.setAttribute("width", Std.string(textWidth));
+		svg.setAttribute("height", Std.string(textHeight));
+
+		trace("textHeight = " + textHeight);
+		trace("svg.height = " + svg.height);
 
 		if (tempAdd) {
 			tempAdd = false;
-			js.Browser.document.body.removeChild(svg);
+			trace("text = " + text);
+			if (text != "<span style='font-size:52px;'>109</span>") {
+				js.Browser.document.body.removeChild(svg);
+			}
 		}
 	}
 
-	static function loadFromQueue() {
+	/*static function loadFromQueue() {
 		if (currentlyLoading != null)
 			return;
 		if (queue.length == 0)
 			return;
 		currentlyLoading = queue.shift();
 		currentlyLoading();
-	}
-
+	}*/
 	function svg2img() {
 		updateSvgStyles();
 
@@ -213,8 +243,8 @@ class DivRenderer {
 			return;
 		}
 		if (svg64 == null) {
-			currentlyLoading = null;
-			loadFromQueue();
+			// currentlyLoading = null;
+			// loadFromQueue();
 			return;
 		}
 		image64 = 'data:image/svg+xml;base64,' + svg64;
@@ -223,8 +253,8 @@ class DivRenderer {
 			img.src = image64;
 		} catch (e:Dynamic) {
 			trace(e);
-			currentlyLoading = null;
-			loadFromQueue();
+			// currentlyLoading = null;
+			// loadFromQueue();
 			return;
 		}
 	}
@@ -232,12 +262,18 @@ class DivRenderer {
 	function onImageLoadComplete() {
 		canvas.width = textWidth;
 		canvas.height = textHeight;
+
+		if (ctx != null) {
+			ctx = null;
+		}
+		ctx = canvas.getContext2d();
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 		ctx.drawImage(img, 0, 0);
 		onRender.dispatch();
 
-		currentlyLoading = null;
-		loadFromQueue();
+		// currentlyLoading = null;
+		// loadFromQueue();
 	}
 
 	function get_src():String {

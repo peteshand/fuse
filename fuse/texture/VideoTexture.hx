@@ -16,9 +16,9 @@ class VideoTexture extends BaseTexture {
 	public var onError(get, null):Signal;
 	public var onMetaData(get, null):Signal;
 
-	public function new(url:String = null) {
+	public function new(width:Int = 512, height:Int = 512, url:String = null) {
 		super();
-		texture = videoTexture = new FrontVideoTexture(url);
+		texture = videoTexture = new FrontVideoTexture(width, height, url);
 	}
 
 	public function play(url:String = null, autoPlay:Bool = true) {

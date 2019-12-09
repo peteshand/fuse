@@ -47,7 +47,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 	var action = new Notifier<VideoAction>();
 	var state = new Notifier<VideoAction>();
 
-	public function new(url:String = null) {
+	public function new(width:Int = 512, height:Int = 512, url:String = null) {
 		// trace2("supportsVideoTexture = " + Context3D.supportsVideoTexture);
 		netConnection = new NetConnection();
 		netConnection.addEventListener(NetStatusEvent.NET_STATUS, onNetEvent);
@@ -60,7 +60,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 		netStream.onError.add(() -> {
 			onError.dispatch();
 		});
-		super(512, 512, false, false);
+		super(width, height, false, false);
 		this.directRender = true;
 
 		// if (url != null) play(url);
@@ -334,6 +334,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 	private function renderFrame(e:Event):Void {
 		// trace2("renderFrame");
 		nativeVideoTexture.removeEventListener(Event.TEXTURE_READY, renderFrame);
+
 		EnterFrame.remove(onTick);
 		EnterFrame.add(onTick);
 
