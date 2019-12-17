@@ -49,7 +49,6 @@ import openfl.display.ShaderData;
 import openfl.display.ShaderInput;
 import openfl.display.ShaderJob;
 import openfl.display.ShaderParameter;
-import openfl.display.ShaderParameterType;
 import openfl.display.ShaderPrecision;
 import openfl.display.Shape;
 import openfl.display.SimpleButton;
