@@ -20,6 +20,7 @@ import js.Browser;
 import haxe.crypto.Base64;
 import haxe.io.Bytes;
 import signals.Signal;
+import notifier.Notifier;
 
 class DivRenderer {
 	public var div(default, null):DivElement;
@@ -38,7 +39,7 @@ class DivRenderer {
 
 	var styleId:String = null;
 	var ctx:CanvasRenderingContext2D;
-	var cssStr:String = null;
+	var cssStr = new Notifier<String>(null);
 	var svg:SVGElement;
 	var svgStyle:StyleElement;
 	var textDivStyle:StyleElement;
@@ -142,34 +143,45 @@ class DivRenderer {
 
 	function bundleCss() {
 		base64CssAssetBundler.findCss(div, (cssStr:String) -> {
-			this.cssStr = cssStr;
+			this.cssStr.value = cssStr;
 		});
 	}
 
 	function updateSvgStyles() {
 		if (textDiv.innerHTML != "") {
 			base64CssAssetBundler.findCss(textDiv, (innerCssStr:String) -> {
-				svgStyle.innerText = cssStr + innerCssStr;
+				svgStyle.innerText = cssStr.value + innerCssStr;
 			});
 		} else {
-			svgStyle.innerText = cssStr;
+			svgStyle.innerText = cssStr.value;
 		}
 	}
 
 	function set_text(value:String):String {
 		text = textDiv.innerHTML = value;
-		trace("textDiv.children.length = " + textDiv.children.length);
 		if (textDiv.children.length > 0) {
 			var cssText:String = "";
 			for (child in textDiv.children) {
 				cssText += child.style.cssText;
 			}
-			trace("cssText = " + cssText);
 			// textDivStyle.innerText = cssText;
 			textDiv.style.cssText = cssText;
 		}
 
-		svg2img();
+		if (cssStr.value == null){
+			cssStr.add((value) -> {
+				svg2img();
+
+				if (text == "Girl doesn't hear ambulance"){
+					js.Browser.document.body.appendChild(svg);
+					trace([textWidth, textHeight]);
+				}
+			}).repeat(0);
+		} else {
+			svg2img();
+		}
+
+		
 
 		return text;
 	}
@@ -186,7 +198,6 @@ class DivRenderer {
 		textBounds = textDiv.getBoundingClientRect();
 		textWidth = Math.floor(textBounds.width);
 		textHeight = Math.floor(textBounds.height);
-		trace("textHeight = " + textHeight);
 
 		/*var textBounds2:DOMRectList = textDiv.getClientRects();
 			for (bounds in textBounds2) {
@@ -203,15 +214,13 @@ class DivRenderer {
 		// trace("width = " + width);
 		// trace("height = " + height);
 
-		svg.setAttribute("width", Std.string(textWidth));
-		svg.setAttribute("height", Std.string(textHeight));
+		
+		svg.setAttribute("width", Std.string(width));
+		svg.setAttribute("height", Std.string(height));
 
-		trace("textHeight = " + textHeight);
-		trace("svg.height = " + svg.height);
-
+		
 		if (tempAdd) {
 			tempAdd = false;
-			trace("text = " + text);
 			if (text != "<span style='font-size:52px;'>109</span>") {
 				js.Browser.document.body.removeChild(svg);
 			}
@@ -229,7 +238,7 @@ class DivRenderer {
 	function svg2img() {
 		updateSvgStyles();
 
-		if (cssStr == null)
+		if (cssStr.value == null)
 			return;
 
 		getSize();
@@ -260,8 +269,8 @@ class DivRenderer {
 	}
 
 	function onImageLoadComplete() {
-		canvas.width = textWidth;
-		canvas.height = textHeight;
+		canvas.width = width;
+		canvas.height = height;
 
 		if (ctx != null) {
 			ctx = null;
