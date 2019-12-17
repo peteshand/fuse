@@ -52,6 +52,7 @@ class CoreEntryPoint {
 		Core.init();
 
 		workerComms.addListener(MessageType.UPDATE, onUpdateMsg);
+		workerComms.addListener(MessageType.RESIZE, onResizeMsg);
 		workerComms.addListener(MessageType.ADD_CHILD, onAddChild);
 		workerComms.addListener(MessageType.ADD_CHILD_AT, onAddChildAt);
 		workerComms.addListener(MessageType.SET_CHILD_INDEX, onSetChildIndex);
@@ -85,11 +86,7 @@ class CoreEntryPoint {
 	}
 
 	function onTick() {
-		Core.STAGE_WIDTH = Conductor.conductorData.stageWidth;
-		Core.STAGE_HEIGHT = Conductor.conductorData.stageHeight;
-		Core.WINDOW_WIDTH = Conductor.conductorData.windowWidth;
-		Core.WINDOW_HEIGHT = Conductor.conductorData.windowHeight;
-
+		
 		// Remove for New Assembler //
 		// Core.assembler.update();
 
@@ -171,5 +168,12 @@ class CoreEntryPoint {
 	function onUpdateMsg(workerPayload:WorkerPayload) {
 		workerComms.send(MessageType.UPDATE_RETURN);
 		// OnTick();
+	}
+
+	function onResizeMsg(payload:{stageWidth:Int, stageHeight:Int, windowWidth:Int, windowHeight:Int}){
+		Core.STAGE_WIDTH = payload.stageWidth;
+		Core.STAGE_HEIGHT = payload.stageHeight;
+		Core.WINDOW_WIDTH = payload.windowWidth;
+		Core.WINDOW_HEIGHT = payload.windowHeight;
 	}
 }

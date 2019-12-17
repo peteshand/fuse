@@ -62,32 +62,24 @@ class Core {
 	}
 
 	static function set_STAGE_WIDTH(value:Int):Int {
-		if (STAGE_WIDTH == value)
-			return value;
 		STAGE_WIDTH = value;
 		RESIZE = true;
 		return STAGE_WIDTH;
 	}
 
 	static function set_STAGE_HEIGHT(value:Int):Int {
-		if (STAGE_HEIGHT == value)
-			return value;
 		STAGE_HEIGHT = value;
 		RESIZE = true;
 		return STAGE_HEIGHT;
 	}
 
 	static function set_WINDOW_WIDTH(value:Int):Int {
-		if (WINDOW_WIDTH == value)
-			return value;
 		WINDOW_WIDTH = value;
 		RESIZE = true;
 		return WINDOW_WIDTH;
 	}
 
 	static function set_WINDOW_HEIGHT(value:Int):Int {
-		if (WINDOW_HEIGHT == value)
-			return value;
 		WINDOW_HEIGHT = value;
 		RESIZE = true;
 		return WINDOW_HEIGHT;

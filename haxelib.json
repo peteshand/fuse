@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Fuse is a Haxe based hardware accelerated displaylist style 2d rendering library",
-	"version": "0.0.48",
-	"releasenote": "add width height to new VideoTexture",
+	"version": "0.0.49",
+	"releasenote": "update stage resize logic",
 	"contributors": [ "p.j.shand" ],
 	"dependencies": {
 		"notifier": "",

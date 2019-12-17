@@ -25,17 +25,13 @@ class WorkerConductorData {
 	static public inline var LAYER_CACHE_TEXTURE_ID_3:Int = 56;
 	static public inline var LAYER_CACHE_TEXTURE_ID_4:Int = 60;
 	static public inline var LAYER_CACHE_TEXTURE_ID_5:Int = 64;
-	static public inline var STAGE_WIDTH:Int = 68;
-	static public inline var STAGE_HEIGHT:Int = 72;
-	static public inline var WINDOW_WIDTH:Int = 76;
-	static public inline var WINDOW_HEIGHT:Int = 80;
-	static public inline var CHANGE_AVAILABLE:Int = 84;
-	static public inline var FRONT_STATIC_COUNT:Int = 88;
-	static public inline var BACK_IS_STATIC:Int = 92;
-	static public inline var NUM_TRIANGLES:Int = 96;
-	static public inline var HIGHEST_NUM_TEXTURES:Int = 100;
-	static public inline var NUM_RANGES:Int = 104;
-	public static inline var BUFFER_SIZE:Int = 108;
+	static public inline var CHANGE_AVAILABLE:Int = 68;
+	static public inline var FRONT_STATIC_COUNT:Int = 72;
+	static public inline var BACK_IS_STATIC:Int = 76;
+	static public inline var NUM_TRIANGLES:Int = 80;
+	static public inline var HIGHEST_NUM_TEXTURES:Int = 84;
+	static public inline var NUM_RANGES:Int = 88;
+	public static inline var BUFFER_SIZE:Int = 92;
 	public static var memoryBlock:MemoryBlock;
 
 	@:isVar public var frameIndex(get, set):Int = 0;
@@ -55,10 +51,6 @@ class WorkerConductorData {
 	@:isVar public var layerCacheTextureId3(get, set):Int = 0;
 	@:isVar public var layerCacheTextureId4(get, set):Int = 0;
 	@:isVar public var layerCacheTextureId5(get, set):Int = 0;
-	@:isVar public var stageWidth(get, set):Int = 0;
-	@:isVar public var stageHeight(get, set):Int = 0;
-	@:isVar public var windowWidth(get, set):Int = 0;
-	@:isVar public var windowHeight(get, set):Int = 0;
 
 	// @:isVar public var isStatic(get, set):Int = 0;
 	var _changeAvailable:Int = 0;
@@ -148,22 +140,6 @@ class WorkerConductorData {
 
 	inline function get_layerCacheTextureId5():Int {
 		return memoryBlock.readInt(LAYER_CACHE_TEXTURE_ID_5);
-	}
-
-	inline function get_stageWidth():Int {
-		return memoryBlock.readInt(STAGE_WIDTH);
-	}
-
-	inline function get_stageHeight():Int {
-		return memoryBlock.readInt(STAGE_HEIGHT);
-	}
-
-	inline function get_windowWidth():Int {
-		return memoryBlock.readInt(WINDOW_WIDTH);
-	}
-
-	inline function get_windowHeight():Int {
-		return memoryBlock.readInt(WINDOW_HEIGHT);
 	}
 
 	inline function get_changeAvailable():Int {
@@ -272,26 +248,6 @@ class WorkerConductorData {
 
 	inline function set_layerCacheTextureId5(value:Int):Int {
 		memoryBlock.writeInt(LAYER_CACHE_TEXTURE_ID_5, value);
-		return value;
-	}
-
-	inline function set_stageWidth(value:Int):Int {
-		memoryBlock.writeInt(STAGE_WIDTH, value);
-		return value;
-	}
-
-	inline function set_stageHeight(value:Int):Int {
-		memoryBlock.writeInt(STAGE_HEIGHT, value);
-		return value;
-	}
-
-	inline function set_windowWidth(value:Int):Int {
-		memoryBlock.writeInt(WINDOW_WIDTH, value);
-		return value;
-	}
-
-	inline function set_windowHeight(value:Int):Int {
-		memoryBlock.writeInt(WINDOW_HEIGHT, value);
 		return value;
 	}
 

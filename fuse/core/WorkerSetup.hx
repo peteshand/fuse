@@ -235,6 +235,10 @@ class WorkerSetup {
 		send(MessageType.UPDATE, null);
 	}
 
+	public function resize(stageWidth:Int, stageHeight:Int, windowWidth:Int, windowHeight:Int) {
+		send(MessageType.RESIZE, {stageWidth:stageWidth, stageHeight:stageHeight, windowWidth:windowWidth, windowHeight:windowHeight});
+	}
+
 	public function unlock() {
 		#if air
 		if (WorkerInfo.usingWorkers) {

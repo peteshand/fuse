@@ -6,6 +6,7 @@ package fuse.core.communication.data;
  */
 class MessageType {
 	public static inline var INIT:String = "init";
+	public static inline var RESIZE:String = "resize";
 	public static inline var UPDATE:String = "update";
 	static public inline var UPDATE_RETURN:String = "updateReturn";
 	static public inline var ADD_MASK:String = "addMask";
