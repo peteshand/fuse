@@ -17,6 +17,7 @@ class MessageType {
 	static public inline var REMOVE_CHILD:String = "removeDisplay";
 	static public inline var ADD_TO_RENDER_TEXTURE:String = "addToRenderTexture";
 	static public inline var VISIBLE_CHANGE:String = "visibleChange";
+	static public inline var SET_RENDER_LAYER:String = "setRenderLayer";
 	static public inline var SET_TOUCHABLE:String = "setTouchable";
 	static public inline var MAIN_THREAD_TICK:String = "mainThreadTick";
 	static public inline var WORKER_STARTED:String = "workerStarted";

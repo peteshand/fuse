@@ -59,6 +59,8 @@ class CoreEntryPoint {
 		workerComms.addListener(MessageType.REMOVE_CHILD, onRemoveChild);
 		workerComms.addListener(MessageType.ADD_TO_RENDER_TEXTURE, onAddToRenderTexture);
 		workerComms.addListener(MessageType.VISIBLE_CHANGE, onVisibleChange);
+		workerComms.addListener(MessageType.SET_RENDER_LAYER, onSetRenderLayer);
+		
 		workerComms.addListener(MessageType.ADD_MASK, onAddMask);
 		workerComms.addListener(MessageType.REMOVE_MASK, onRemoveMask);
 		workerComms.addListener(MessageType.ADD_TEXTURE, onAddTexture);
@@ -156,6 +158,12 @@ class CoreEntryPoint {
 	function onVisibleChange(visibleMsg:VisibleMsg) {
 		Core.displayList.visibleChange(visibleMsg.objectId, visibleMsg.visible);
 	}
+
+	function onSetRenderLayer(data:{objectId:Int,renderLayer:Int}) {
+		Core.displayList.renderLayerChange(data.objectId, data.renderLayer);
+	}
+
+	
 
 	private function onSetTouchable(payload:TouchableMsg):Void {
 		Touchables.setTouchable(payload);

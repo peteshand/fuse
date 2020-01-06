@@ -36,6 +36,14 @@ class DisplayList {
 		hierarchyChangeCount = 0;
 	}
 
+	function renderLayerChange(objectId:Int, renderLayer:Int) {
+		var display:CoreImage = untyped map.get(objectId);
+		if (display == null)
+			return;
+		display.renderLayer = renderLayer;
+		hierarchyChangeCount = 0;
+	}
+
 	function addMask(payload:AddMaskMsg) // objectId:Int, displayType:Int, maskId:Int, maskDisplayType:Int
 	{
 		var display:CoreImage = untyped getDisplay(payload.objectId, payload.displayType); // map.get(objectId);

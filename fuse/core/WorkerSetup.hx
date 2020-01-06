@@ -170,6 +170,13 @@ class WorkerSetup {
 		});
 	}
 
+	public function setRenderLayer(child:DisplayObject, renderLayer:Int) {
+		send(MessageType.SET_RENDER_LAYER, {
+			objectId: child.objectId,
+			renderLayer: renderLayer
+		});
+	}
+
 	public function addTexture(textureRef:TextureRef) {
 		send(MessageType.ADD_TEXTURE, textureRef);
 	}

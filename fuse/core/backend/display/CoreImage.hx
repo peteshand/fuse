@@ -97,8 +97,9 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable {
 			textureId = displayData.textureId;
 		}
 
-		if (updatePosition || updateVisible || this.isMask) {
-			renderLayer = displayData.renderLayer;
+		renderLayer = displayData.renderLayer;
+
+		if (updatePosition || updateVisible || this.isMask) {	
 			renderTargetId = displayData.renderTargetId;
 			renderTexture = Core.textures.getRenderTexture(renderTargetId);
 			// trace("renderTarget = " + renderTargetId);

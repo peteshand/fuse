@@ -169,6 +169,7 @@ class Image extends DisplayObject {
 		// if (renderLayer != value) {
 		displayData.renderLayer = renderLayer = value;
 		updateVisible = true;
+		Fuse.current.workerSetup.setRenderLayer(this, renderLayer);
 		Fuse.current.workerSetup.visibleChange(this, this.visible);
 		updateStaticBackend();
 
