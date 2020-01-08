@@ -1,10 +1,12 @@
 package fuse.text;
 
+import js.html.svg.SVGElement;
 import color.Color;
 import fuse.display.Sprite;
 import fuse.texture.CanvasTexture;
 import fuse.utils.div.DivRenderer;
 import fuse.display.Image;
+import js.html.CanvasElement;
 import js.html.DivElement;
 
 /**
@@ -24,6 +26,9 @@ class HtmlTextField extends Sprite {
 
 	var div:DivElement;
 	var canvasTexture:CanvasTexture;
+
+	public var canvas(get, null):CanvasElement;
+	public var svg(get, null):SVGElement;
 
 	public function new(?styleId:String = null, ?width:Null<Int>, ?height:Null<Int>, ?size:Null<Float>, ?color:Color, ?kerning:Null<Float>,
 			?leading:Null<Float>, ?font:String, ?alignment:Null<TextFormatAlign>, ?css:Dynamic = null) {
@@ -63,5 +68,13 @@ class HtmlTextField extends Sprite {
 	function set_text(value:String):String {
 		value = value.split("\n").join("<br/>");
 		return divRenderer.text = value;
+	}
+
+	function get_canvas() {
+		return divRenderer.canvas;
+	}
+
+	function get_svg() {
+		return divRenderer.svg;
 	}
 }

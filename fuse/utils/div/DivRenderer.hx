@@ -20,14 +20,12 @@ import js.Browser;
 import haxe.crypto.Base64;
 import haxe.io.Bytes;
 import signals.Signal;
-import notifier.Notifier;
 
 class DivRenderer {
 	public var div(default, null):DivElement;
 	public var textDiv(default, null):DivElement;
 
 	var base64CssAssetBundler = new Base64CssAssetBundler();
-	var tempAdd:Bool = false;
 
 	public var width(get, null):Null<Int> = null;
 	public var height(get, null):Null<Int> = null;
@@ -39,8 +37,11 @@ class DivRenderer {
 
 	var styleId:String = null;
 	var ctx:CanvasRenderingContext2D;
-	var cssStr = new Notifier<String>(null);
-	var svg:SVGElement;
+	var cssStr:String = null;
+
+	public var svg:SVGElement;
+
+	var foreignObject:ForeignObjectElement;
 	var svgStyle:StyleElement;
 	var textDivStyle:StyleElement;
 	var img:Image;
@@ -93,6 +94,8 @@ class DivRenderer {
 		if (size != null)
 			div.style.setProperty('font-size', size + "px");
 
+		div.style.setProperty('display', "inline-block");
+
 		if (font != null && alignment == null) {
 			if (font == TextFormatAlign.CENTER || font == TextFormatAlign.END || font == TextFormatAlign.JUSTIFY || font == TextFormatAlign.LEFT
 				|| font == TextFormatAlign.RIGHT || font == TextFormatAlign.START) {
@@ -123,7 +126,7 @@ class DivRenderer {
 			svgStyle = js.Browser.document.createStyleElement();
 			svg.appendChild(svgStyle);
 
-			var foreignObject:ForeignObjectElement = untyped js.Browser.document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
+			foreignObject = untyped js.Browser.document.createElementNS("http://www.w3.org/2000/svg", 'foreignObject');
 			foreignObject.setAttribute("x", "0");
 			foreignObject.setAttribute("y", "0");
 			foreignObject.setAttribute("width", "100%");
@@ -143,17 +146,17 @@ class DivRenderer {
 
 	function bundleCss() {
 		base64CssAssetBundler.findCss(div, (cssStr:String) -> {
-			this.cssStr.value = cssStr;
+			this.cssStr = cssStr;
 		});
 	}
 
 	function updateSvgStyles() {
 		if (textDiv.innerHTML != "") {
 			base64CssAssetBundler.findCss(textDiv, (innerCssStr:String) -> {
-				svgStyle.innerText = cssStr.value + innerCssStr;
+				svgStyle.innerText = cssStr + innerCssStr;
 			});
 		} else {
-			svgStyle.innerText = cssStr.value;
+			svgStyle.innerText = cssStr;
 		}
 	}
 
@@ -164,33 +167,17 @@ class DivRenderer {
 			for (child in textDiv.children) {
 				cssText += child.style.cssText;
 			}
-			// textDivStyle.innerText = cssText;
 			textDiv.style.cssText = cssText;
 		}
 
-		if (cssStr.value == null){
-			cssStr.add((value) -> {
-				svg2img();
-
-				if (text == "Girl doesn't hear ambulance"){
-					js.Browser.document.body.appendChild(svg);
-					trace([textWidth, textHeight]);
-				}
-			}).repeat(0);
-		} else {
-			svg2img();
-		}
-
-		
+		svg2img();
 
 		return text;
 	}
 
 	function getSize() {
-		if (svg.parentNode == null) {
-			js.Browser.document.body.append(svg);
-			tempAdd = true;
-		}
+		js.Browser.document.body.append(div);
+
 		bounds = div.getBoundingClientRect();
 		width = Math.floor(bounds.width);
 		height = Math.floor(bounds.height);
@@ -199,46 +186,16 @@ class DivRenderer {
 		textWidth = Math.floor(textBounds.width);
 		textHeight = Math.floor(textBounds.height);
 
-		/*var textBounds2:DOMRectList = textDiv.getClientRects();
-			for (bounds in textBounds2) {
-				var textWidth2 = Math.floor(bounds.width);
-				var textHeight2 = Math.floor(bounds.height);
-				trace("textHeight2 = " + textHeight2);
-			}
+		svg.setAttribute("width", Std.string(textWidth));
+		svg.setAttribute("height", Std.string(textHeight));
 
-			var fontSize:String = js.Browser.window.getComputedStyle(textDiv).fontSize;
-			fontSize = fontSize.substr(0, fontSize.length - 2);
-			textHeight = Std.parseInt(fontSize);
-			trace("fontSize = " + fontSize); */
-
-		// trace("width = " + width);
-		// trace("height = " + height);
-
-		
-		svg.setAttribute("width", Std.string(width));
-		svg.setAttribute("height", Std.string(height));
-
-		
-		if (tempAdd) {
-			tempAdd = false;
-			if (text != "<span style='font-size:52px;'>109</span>") {
-				js.Browser.document.body.removeChild(svg);
-			}
-		}
+		foreignObject.appendChild(div);
 	}
 
-	/*static function loadFromQueue() {
-		if (currentlyLoading != null)
-			return;
-		if (queue.length == 0)
-			return;
-		currentlyLoading = queue.shift();
-		currentlyLoading();
-	}*/
 	function svg2img() {
 		updateSvgStyles();
 
-		if (cssStr.value == null)
+		if (cssStr == null)
 			return;
 
 		getSize();
@@ -269,8 +226,8 @@ class DivRenderer {
 	}
 
 	function onImageLoadComplete() {
-		canvas.width = width;
-		canvas.height = height;
+		canvas.width = textWidth;
+		canvas.height = textHeight;
 
 		if (ctx != null) {
 			ctx = null;
