@@ -62,6 +62,7 @@ class Base64CssAssetBundler {
 					if (fontFamily != null) {
 						for (fontFace in allFontFaces) {
 							var fontFaceFontFamily = fontFace.style.getPropertyValue('font-family');
+							fontFaceFontFamily = fontFaceFontFamily.split('"').join('');
 							if (fontFaceFontFamily == fontFamily) {
 								fontFacesToAdd.set(fontFaceFontFamily, fontFace);
 							}
