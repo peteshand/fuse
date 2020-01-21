@@ -161,16 +161,17 @@ class DivRenderer {
 	}
 
 	function set_text(value:String):String {
-		text = textDiv.innerHTML = value;
-		if (textDiv.children.length > 0) {
-			var cssText:String = "";
-			for (child in textDiv.children) {
-				cssText += child.style.cssText;
+		if (text != value) {
+			text = textDiv.innerHTML = value;
+			if (textDiv.children.length > 0) {
+				var cssText:String = "";
+				for (child in textDiv.children) {
+					cssText += child.style.cssText;
+				}
+				textDiv.style.cssText = cssText;
 			}
-			textDiv.style.cssText = cssText;
+			svg2img();
 		}
-
-		svg2img();
 
 		return text;
 	}
@@ -179,12 +180,12 @@ class DivRenderer {
 		js.Browser.document.body.append(div);
 
 		bounds = div.getBoundingClientRect();
-		width = Math.floor(bounds.width);
-		height = Math.floor(bounds.height);
+		width = Math.ceil(bounds.width);
+		height = Math.ceil(bounds.height);
 
 		textBounds = textDiv.getBoundingClientRect();
-		textWidth = Math.floor(textBounds.width);
-		textHeight = Math.floor(textBounds.height);
+		textWidth = Math.ceil(textBounds.width);
+		textHeight = Math.ceil(textBounds.height);
 
 		svg.setAttribute("width", Std.string(textWidth));
 		svg.setAttribute("height", Std.string(textHeight));
