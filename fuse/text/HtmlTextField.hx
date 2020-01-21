@@ -26,6 +26,7 @@ class HtmlTextField extends Sprite {
 
 	var div:DivElement;
 	var canvasTexture:CanvasTexture;
+	var image:Image;
 
 	public var canvas(get, null):CanvasElement;
 	public var svg(get, null):SVGElement;
@@ -40,7 +41,7 @@ class HtmlTextField extends Sprite {
 	function onDivRendered() {
 		if (canvasTexture == null) {
 			canvasTexture = new CanvasTexture(divRenderer.canvas);
-			var image = new Image(canvasTexture);
+			image = new Image(canvasTexture);
 			addChild(image);
 			this.width = canvasTexture.width;
 			this.height = canvasTexture.height;
@@ -66,8 +67,13 @@ class HtmlTextField extends Sprite {
 	}
 
 	function set_text(value:String):String {
-		value = value.split("\n").join("<br/>");
-		return divRenderer.text = value;
+		divRenderer.text = value = value.split("\n").join("<br/>");
+		if (canvasTexture != null) {
+			this.width = canvasTexture.width;
+			this.height = canvasTexture.height;
+		}
+
+		return value;
 	}
 
 	function get_canvas() {
