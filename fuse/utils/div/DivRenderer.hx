@@ -1,5 +1,6 @@
 package fuse.utils.div;
 
+import openfl.Lib;
 import js.html.CSSStyleDeclaration;
 import js.html.DOMRectList;
 import fuse.text.TextFormatAlign;
@@ -20,6 +21,7 @@ import js.Browser;
 import haxe.crypto.Base64;
 import haxe.io.Bytes;
 import signals.Signal;
+import notifier.Notifier;
 
 class DivRenderer {
 	public var div(default, null):DivElement;
@@ -37,7 +39,7 @@ class DivRenderer {
 
 	var styleId:String = null;
 	var ctx:CanvasRenderingContext2D;
-	var cssStr:String = null;
+	var cssStr = new Notifier<String>();
 
 	public var svg:SVGElement;
 
@@ -67,19 +69,20 @@ class DivRenderer {
 		index = COUNT++;
 		// trace(index);
 		div = untyped js.Browser.document.createDivElement();
+
+		if (styleId != null) {
+			div.id = styleId;
+		}
 		textDiv = untyped js.Browser.document.createDivElement();
 		div.appendChild(textDiv);
 
-		// textDiv.style.verticalAlign = 'top';
 		textDivStyle = js.Browser.document.createStyleElement();
 		textDiv.appendChild(textDivStyle);
-		// vertical-align: top;
 
 		img = new Image();
 		img.setAttribute("crossOrigin", "anonymous");
 		img.onload = onImageLoadComplete;
 
-		div.id = styleId;
 		for (field in Reflect.fields(css)) {
 			var value = Reflect.getProperty(css, field);
 			div.style.setProperty(field, value);
@@ -145,37 +148,70 @@ class DivRenderer {
 	}
 
 	function bundleCss() {
-		base64CssAssetBundler.findCss(div, (cssStr:String) -> {
-			this.cssStr = cssStr;
+		base64CssAssetBundler.findCss(div, (css:String) -> {
+			this.cssStr.value = css;
 		});
 	}
 
-	function updateSvgStyles() {
+	function updateSvgStyles(callback:Void->Void) {
 		if (textDiv.innerHTML != "") {
 			base64CssAssetBundler.findCss(textDiv, (innerCssStr:String) -> {
-				svgStyle.innerText = cssStr + innerCssStr;
+				svgStyle.innerText = cssStr.value + innerCssStr;
+				Delay.nextFrame(callback);
 			});
 		} else {
-			svgStyle.innerText = cssStr;
+			svgStyle.innerText = cssStr.value;
+			Delay.nextFrame(callback);
 		}
 	}
 
 	function set_text(value:String):String {
-		if (text != value) {
-			text = textDiv.innerHTML = value;
-			if (textDiv.children.length > 0) {
-				var cssText:String = "";
-				for (child in textDiv.children) {
-					cssText += child.style.cssText;
-				}
-				textDiv.style.cssText = cssText;
+		text = textDiv.innerHTML = value;
+		if (textDiv.children.length > 0) {
+			var cssText:String = "";
+			for (child in textDiv.children) {
+				cssText += child.style.cssText;
 			}
-			svg2img();
+			textDiv.style.cssText = cssText;
 		}
+
+		svg2img();
 
 		return text;
 	}
 
+	/*
+
+		function set_text(value:String):String {
+			text = textDiv.innerHTML = value;
+			if (textDiv.children.length > 0) {
+				var count:Int = 0;
+
+				// Browser.console.log(textDiv.children);
+				var cssText:String = "";
+				for (child in textDiv.children) {
+					base64CssAssetBundler.findCss(child, (innerCssStr:String) -> {
+						cssText += innerCssStr;
+						count++;
+						if (count == textDiv.children.length) {
+							trace(cssText);
+							textDiv.style.cssText = cssText;
+							svg2img();
+						}
+					});
+					// Browser.console.log(child);
+					// cssText += base64CssAssetBundler.cssFromElement(child);
+					// trace(cssText);
+					// cssText += child.style.cssText;
+				}
+			} else {
+				svg2img();
+			}
+
+			return text;
+		}
+
+	 */
 	function getSize() {
 		js.Browser.document.body.append(div);
 
@@ -194,36 +230,38 @@ class DivRenderer {
 	}
 
 	function svg2img() {
-		updateSvgStyles();
-
-		if (cssStr == null)
-			return;
-
-		getSize();
-
-		var xml:String = new XMLSerializer().serializeToString(svg);
-		var svg64 = null;
-		try {
-			svg64 = Base64.encode(Bytes.ofString(xml));
-		} catch (e:Dynamic) {
-			trace(e);
+		if (cssStr.value == null) {
+			cssStr.add(svg2img).repeat(0);
 			return;
 		}
-		if (svg64 == null) {
-			// currentlyLoading = null;
-			// loadFromQueue();
-			return;
-		}
-		image64 = 'data:image/svg+xml;base64,' + svg64;
 
-		try {
-			img.src = image64;
-		} catch (e:Dynamic) {
-			trace(e);
-			// currentlyLoading = null;
-			// loadFromQueue();
-			return;
-		}
+		updateSvgStyles(() -> {
+			getSize();
+
+			var xml:String = new XMLSerializer().serializeToString(svg);
+			var svg64 = null;
+			try {
+				svg64 = Base64.encode(Bytes.ofString(xml));
+			} catch (e:Dynamic) {
+				trace(e);
+				return;
+			}
+			if (svg64 == null) {
+				// currentlyLoading = null;
+				// loadFromQueue();
+				return;
+			}
+			image64 = 'data:image/svg+xml;base64,' + svg64;
+
+			try {
+				img.src = image64;
+			} catch (e:Dynamic) {
+				trace(e);
+				// currentlyLoading = null;
+				// loadFromQueue();
+				return;
+			}
+		});
 	}
 
 	function onImageLoadComplete() {

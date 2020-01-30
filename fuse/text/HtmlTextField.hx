@@ -24,6 +24,9 @@ class HtmlTextField extends Sprite {
 	public var textHeight(get, null):Int;
 	@:isVar public var text(default, set):String = "";
 
+	@:isVar public var offsetU(default, set):Float = 0;
+	@:isVar public var offsetV(default, set):Float = 0;
+
 	var div:DivElement;
 	var canvasTexture:CanvasTexture;
 	var image:Image;
@@ -45,6 +48,9 @@ class HtmlTextField extends Sprite {
 			addChild(image);
 			this.width = canvasTexture.width;
 			this.height = canvasTexture.height;
+			image.offsetV = offsetV;
+			image.offsetU = offsetU;
+			image.color = color;
 		} else {
 			canvasTexture.update();
 		}
@@ -67,13 +73,8 @@ class HtmlTextField extends Sprite {
 	}
 
 	function set_text(value:String):String {
-		divRenderer.text = value = value.split("\n").join("<br/>");
-		if (canvasTexture != null) {
-			this.width = canvasTexture.width;
-			this.height = canvasTexture.height;
-		}
-
-		return value;
+		value = value.split("\n").join("<br/>");
+		return divRenderer.text = value;
 	}
 
 	function get_canvas() {
@@ -82,5 +83,35 @@ class HtmlTextField extends Sprite {
 
 	function get_svg() {
 		return divRenderer.svg;
+	}
+
+	function set_offsetV(value:Float):Float {
+		offsetV = value;
+		if (image != null) {
+			image.offsetV = offsetV;
+		}
+		return offsetV;
+	}
+
+	function set_offsetU(value:Float):Float {
+		offsetU = value;
+		if (image != null) {
+			image.offsetU = offsetU;
+		}
+		return offsetU;
+	}
+
+	override function set_color(value:Color):Color {
+		color = value;
+		if (image != null) {
+			image.color = value;
+		}
+		return value;
+	}
+
+	override function get_color():Color {
+		if (image != null)
+			return image.color;
+		return color;
 	}
 }

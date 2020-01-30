@@ -8,7 +8,8 @@ import fuse.core.front.texture.FrontBaseTexture;
 import fuse.core.front.texture.Textures;
 import openfl.events.Event;
 import openfl.events.NetStatusEvent;
-import cacher.openfl.NetStream;
+import openfl.net.NetStream;
+import cacher.openfl.NetStream as CachedNetStream;
 import openfl.display3D.textures.VideoTexture as NativeVideoTexture;
 import time.EnterFrame;
 import notifier.Notifier;
@@ -20,11 +21,11 @@ import signals.Signal;
  */
 @:access(fuse)
 #if (js && html5)
-@:access(cacher.openfl.NetStream)
+@:access(openfl.net.NetStream)
 @:access(notifier.Notifier)
 #end
 class FrontVideoTexture extends FrontBaseTexture {
-	public var netStream:NetStream;
+	@:isVar public var netStream(default, set):NetStream;
 	public var nativeVideoTexture:NativeVideoTexture;
 	public var loop:Bool = false;
 	public var duration:Null<Float>;
@@ -37,6 +38,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 	@:isVar public var onError(get, null):Signal;
 	public var onMetaData = new Signal();
 
+	var cachedNetStream:CachedNetStream;
 	var url:String;
 	var currentUrl:String;
 	var paused:Null<Bool> = null;
@@ -53,13 +55,8 @@ class FrontVideoTexture extends FrontBaseTexture {
 		netConnection.addEventListener(NetStatusEvent.NET_STATUS, onNetEvent);
 		netConnection.connect(null);
 
-		netStream = new NetStream(netConnection);
-		netStream.client = {onMetaData: onMetaDataReceived};
-		netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetEvent);
+		netStream = new CachedNetStream(netConnection);
 
-		netStream.onError.add(() -> {
-			onError.dispatch();
-		});
 		super(width, height, false, false);
 		this.directRender = true;
 
@@ -68,6 +65,33 @@ class FrontVideoTexture extends FrontBaseTexture {
 		action.add(onActiveChange);
 		available.add(onAvailableChange);
 		// available.requireChange = false;
+	}
+
+	function set_netStream(value:NetStream):NetStream {
+		if (netStream != null) {
+			netStream.removeEventListener(NetStatusEvent.NET_STATUS, onNetEvent);
+		}
+		if (cachedNetStream != null) {
+			cachedNetStream.onError.remove(error);
+		}
+		netStream = value;
+		if (Std.is(netStream, CachedNetStream)) {
+			cachedNetStream = untyped netStream;
+		} else {
+			cachedNetStream = null;
+		}
+		if (netStream != null) {
+			netStream.client = {onMetaData: onMetaDataReceived};
+			netStream.addEventListener(NetStatusEvent.NET_STATUS, onNetEvent);
+		}
+		if (cachedNetStream != null) {
+			cachedNetStream.onError.add(error);
+		}
+		return netStream;
+	}
+
+	function error() {
+		onError.dispatch();
 	}
 
 	function onActiveChange() {
@@ -163,7 +187,11 @@ class FrontVideoTexture extends FrontBaseTexture {
 
 			videoMetaData = null;
 
-			netStream.playLocal(url);
+			if (cachedNetStream == null) {
+				netStream.play(url);
+			} else {
+				cachedNetStream.playLocal(url);
+			}
 			netStream.soundTransform = new SoundTransform(volume);
 			available.value = false;
 		}
@@ -183,7 +211,9 @@ class FrontVideoTexture extends FrontBaseTexture {
 		this.url = null;
 		paused = null;
 		netStream.close();
-		netStream.url = null;
+		if (cachedNetStream != null) {
+			cachedNetStream.url = null;
+		}
 		available.value = false;
 	}
 
@@ -332,7 +362,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 	}
 
 	private function renderFrame(e:Event):Void {
-		// trace2("renderFrame");
+		trace2("renderFrame");
 		nativeVideoTexture.removeEventListener(Event.TEXTURE_READY, renderFrame);
 
 		EnterFrame.remove(onTick);
@@ -351,6 +381,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 	}
 
 	function onTick() {
+		trace(action.value);
 		if (loop) {
 			if (duration != null) {
 				if (time + 0.3 >= duration && action.value == VideoAction.PLAY) {
@@ -397,7 +428,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 	}
 
 	function trace2(value:Dynamic) {
-		// trace(value);
+		trace(value);
 	}
 }
 

@@ -1,12 +1,13 @@
 package fuse.texture;
 
+import openfl.net.NetStream;
 import fuse.core.front.texture.FrontVideoTexture;
 import signals.Signal;
 
 class VideoTexture extends BaseTexture {
 	var videoTexture:FrontVideoTexture;
 
-	// public var netStream:NetStream;
+	public var netStream(get, set):NetStream;
 	// public var nativeVideoTexture:NativeVideoTexture;
 	public var loop(get, set):Bool;
 	public var duration(get, set):Null<Float>;
@@ -79,5 +80,13 @@ class VideoTexture extends BaseTexture {
 
 	function set_volume(value:Float):Float {
 		return videoTexture.volume = value;
+	}
+
+	function get_netStream():NetStream {
+		return videoTexture.netStream;
+	}
+
+	function set_netStream(value:NetStream):NetStream {
+		return videoTexture.netStream = value;
 	}
 }

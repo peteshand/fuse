@@ -37,7 +37,7 @@ class Base64CssAssetBundler {
 		});
 	}
 
-	function cssFromElement(element:Element):String {
+	public function cssFromElement(element:Element):String {
 		var returnCss:String = "";
 		var fontFacesToAdd = new Map<String, CSSStyleRule>();
 		for (stylesheet in Browser.document.styleSheets) {
@@ -54,7 +54,7 @@ class Base64CssAssetBundler {
 					if (element.className == cssStyleRule.selectorText.substring(1, cssStyleRule.selectorText.length))
 						apply = true;
 				} else {
-					if (element.nodeName == cssStyleRule.selectorText)
+					if (element.nodeName.toUpperCase() == cssStyleRule.selectorText.toUpperCase())
 						apply = true;
 				}
 				if (apply) {
@@ -62,7 +62,6 @@ class Base64CssAssetBundler {
 					if (fontFamily != null) {
 						for (fontFace in allFontFaces) {
 							var fontFaceFontFamily = fontFace.style.getPropertyValue('font-family');
-							fontFaceFontFamily = fontFaceFontFamily.split('"').join('');
 							if (fontFaceFontFamily == fontFamily) {
 								fontFacesToAdd.set(fontFaceFontFamily, fontFace);
 							}
