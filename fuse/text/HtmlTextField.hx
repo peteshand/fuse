@@ -14,22 +14,20 @@ import js.html.DivElement;
  * @author P.J.Shand
  */
 class HtmlTextField extends Sprite {
-	var divRenderer:DivRenderer;
-
-	// @:isVar var styleId(default, set):String = null;
-	// @:isVar var css(default, set):Dynamic = null;
 	public var divWidth(get, null):Int;
 	public var divHeight(get, null):Int;
 	public var textWidth(get, null):Int;
 	public var textHeight(get, null):Int;
-	@:isVar public var text(default, set):String = "";
 
+	@:isVar public var text(default, set):String = "";
 	@:isVar public var offsetU(default, set):Float = 0;
 	@:isVar public var offsetV(default, set):Float = 0;
 
+	var divRenderer:DivRenderer;
 	var div:DivElement;
 	var canvasTexture:CanvasTexture;
 	var image:Image;
+	var textColor:Color = 0x00000000;
 
 	public var canvas(get, null):CanvasElement;
 	public var svg(get, null):SVGElement;
@@ -48,12 +46,12 @@ class HtmlTextField extends Sprite {
 			addChild(image);
 			this.width = canvasTexture.width;
 			this.height = canvasTexture.height;
-			image.offsetV = offsetV;
-			image.offsetU = offsetU;
-			image.color = color;
 		} else {
 			canvasTexture.update();
 		}
+		image.offsetV = offsetV;
+		image.offsetU = offsetU;
+		image.color = textColor;
 	}
 
 	function get_divWidth():Int {
@@ -101,17 +99,15 @@ class HtmlTextField extends Sprite {
 		return offsetU;
 	}
 
-	override function set_color(value:Color):Color {
-		color = value;
-		if (image != null) {
-			image.color = value;
-		}
-		return value;
+	override function get_color():Color {
+		return textColor;
 	}
 
-	override function get_color():Color {
-		if (image != null)
-			return image.color;
-		return color;
+	override function set_color(value:Color):Color {
+		textColor = value;
+		if (image != null) {
+			image.color = textColor;
+		}
+		return value;
 	}
 }
