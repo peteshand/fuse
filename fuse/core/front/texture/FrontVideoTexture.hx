@@ -26,8 +26,11 @@ import signals.Signal;
 #end
 class FrontVideoTexture extends FrontBaseTexture {
 	@:isVar public var netStream(default, set):NetStream;
+	@:isVar public var playbackRate(default, set):Float = 1;
 	public var nativeVideoTexture:NativeVideoTexture;
 	public var loop:Bool = false;
+	public var loopBuffer:Float = 0.3;
+
 	public var duration:Null<Float>;
 
 	var netConnection:NetConnection;
@@ -87,7 +90,17 @@ class FrontVideoTexture extends FrontBaseTexture {
 		if (cachedNetStream != null) {
 			cachedNetStream.onError.add(error);
 		}
+		netStream.speed = playbackRate;
+		js.Browser.document.body.append(netStream.__video);
+		Reflect.setProperty(js.Browser.window, 'video', netStream.__video);
 		return netStream;
+	}
+
+	function set_playbackRate(value:Float):Float {
+		playbackRate = value;
+		netStream.speed = playbackRate;
+		// netStream.__video.playbackRate = playbackRate;
+		return playbackRate;
 	}
 
 	function error() {
@@ -300,6 +313,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 		duration = videoMetaData.duration;
 		setTextureData();
 
+		netStream.speed = playbackRate;
 		// trace2("volume = " + volume);
 		netStream.soundTransform = new SoundTransform(volume);
 
@@ -381,13 +395,13 @@ class FrontVideoTexture extends FrontBaseTexture {
 	}
 
 	function onTick() {
-		trace(action.value);
+		// trace(action.value);
 		if (loop) {
 			if (duration != null) {
-				if (time + 0.3 >= duration && action.value == VideoAction.PLAY) {
+				if (time + loopBuffer >= duration && action.value == VideoAction.PLAY) {
 					action.value = VideoAction.RESTART;
 				}
-				if (action.value == VideoAction.RESTART && time + 0.3 < duration) {
+				if (action.value == VideoAction.RESTART && time + loopBuffer < duration) {
 					action.value = VideoAction.PLAY;
 				}
 			}
@@ -428,7 +442,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 	}
 
 	function trace2(value:Dynamic) {
-		trace(value);
+		// trace(value);
 	}
 }
 

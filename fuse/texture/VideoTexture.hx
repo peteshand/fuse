@@ -9,7 +9,9 @@ class VideoTexture extends BaseTexture {
 
 	public var netStream(get, set):NetStream;
 	// public var nativeVideoTexture:NativeVideoTexture;
+	public var playbackRate(get, set):Float;
 	public var loop(get, set):Bool;
+	public var loopBuffer(get, set):Float;
 	public var duration(get, set):Null<Float>;
 	public var time(get, null):Float;
 	public var volume(get, set):Float;
@@ -46,6 +48,14 @@ class VideoTexture extends BaseTexture {
 		return videoTexture.loop;
 	}
 
+	function get_loopBuffer():Float {
+		return videoTexture.loopBuffer;
+	}
+
+	function get_playbackRate():Float {
+		return videoTexture.playbackRate;
+	}
+
 	function get_duration():Null<Float> {
 		return videoTexture.duration;
 	}
@@ -72,6 +82,14 @@ class VideoTexture extends BaseTexture {
 
 	function set_loop(value:Bool):Bool {
 		return videoTexture.loop = value;
+	}
+
+	function set_loopBuffer(value:Float):Float {
+		return videoTexture.loopBuffer = value;
+	}
+
+	function set_playbackRate(value:Float):Float {
+		return videoTexture.playbackRate = value;
 	}
 
 	function set_duration(value:Null<Float>):Null<Float> {

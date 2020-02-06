@@ -14,16 +14,19 @@ import js.html.DivElement;
  * @author P.J.Shand
  */
 class HtmlTextField extends Sprite {
+	var divRenderer:DivRenderer;
+
+	// @:isVar var styleId(default, set):String = null;
+	// @:isVar var css(default, set):Dynamic = null;
 	public var divWidth(get, null):Int;
 	public var divHeight(get, null):Int;
 	public var textWidth(get, null):Int;
 	public var textHeight(get, null):Int;
-
 	@:isVar public var text(default, set):String = "";
+
 	@:isVar public var offsetU(default, set):Float = 0;
 	@:isVar public var offsetV(default, set):Float = 0;
 
-	var divRenderer:DivRenderer;
 	var div:DivElement;
 	var canvasTexture:CanvasTexture;
 	var image:Image;
