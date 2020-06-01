@@ -1,5 +1,6 @@
 package fuse.text;
 
+import signals.Signal;
 import js.html.svg.SVGElement;
 import color.Color;
 import fuse.display.Sprite;
@@ -34,6 +35,7 @@ class HtmlTextField extends Sprite {
 
 	public var canvas(get, null):CanvasElement;
 	public var svg(get, null):SVGElement;
+	public var onRender = new Signal();
 
 	public function new(?styleId:String = null, ?width:Null<Int>, ?height:Null<Int>, ?size:Null<Float>, ?color:Color, ?kerning:Null<Float>,
 			?leading:Null<Float>, ?font:String, ?alignment:Null<TextFormatAlign>, ?css:Dynamic = null) {
@@ -55,6 +57,8 @@ class HtmlTextField extends Sprite {
 		image.offsetV = offsetV;
 		image.offsetU = offsetU;
 		image.color = textColor;
+		updateAlignment();
+		onRender.dispatch();
 	}
 
 	function get_divWidth():Int {

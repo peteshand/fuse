@@ -169,6 +169,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 	public function resume() {
 		trace2("resume: " + action.value);
 		if (action.value == VideoAction.PAUSE || action.value == VideoAction.PAUSE_WAIT) {
+			autoPlay = true;
 			action.value = VideoAction.PLAY;
 		}
 	}
