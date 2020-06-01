@@ -41,7 +41,7 @@ class VertexData implements IVertexData {
 		// poolStartPosition = Fuse.current.sharedMemory.vertexDataPool.start;
 	}
 
-	inline public function setRect(index:Int, x:Float, y:Float, width:Float = -1, height:Float = -1, rotation:Float = 0):Void {
+	inline public function setRect(index:Int, x:Float, y:Float, width:Float = -1, height:Float = -1, rotation:Float = 0, edgeAA:Int = 0):Void {
 		writeFloat(INDEX_X + indexOffset(index), x);
 		writeFloat(INDEX_Y + indexOffset(index), y);
 
@@ -56,6 +56,8 @@ class VertexData implements IVertexData {
 		var amp:Float = 1000;
 		// var m:Float = Math.sin(rotation / 180 * Math.PI * 2);
 		var r1:Float = rotation % 90;
+		if (edgeAA == 0)
+			r1 = 0;
 		if (r1 < 0)
 			r1 += 90;
 		var m:Float = Math.sin(r1 / 180 * Math.PI * 2);

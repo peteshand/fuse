@@ -91,8 +91,6 @@ class FrontVideoTexture extends FrontBaseTexture {
 			cachedNetStream.onError.add(error);
 		}
 		netStream.speed = playbackRate;
-		js.Browser.document.body.append(netStream.__video);
-		Reflect.setProperty(js.Browser.window, 'video', netStream.__video);
 		return netStream;
 	}
 
@@ -169,7 +167,6 @@ class FrontVideoTexture extends FrontBaseTexture {
 	public function resume() {
 		trace2("resume: " + action.value);
 		if (action.value == VideoAction.PAUSE || action.value == VideoAction.PAUSE_WAIT) {
-			autoPlay = true;
 			action.value = VideoAction.PLAY;
 		}
 	}

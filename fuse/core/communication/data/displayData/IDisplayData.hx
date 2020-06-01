@@ -43,4 +43,5 @@ typedef IDisplayData = {
 	topRightY:Float,
 	bottomRightX:Float,
 	bottomRightY:Float,
+	edgeAA:Int
 }

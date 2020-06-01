@@ -4,8 +4,8 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Fuse is a Haxe based hardware accelerated displaylist style 2d rendering library",
-	"version": "0.0.58",
-	"releasenote": "fix VideoTexture !autoPlay resume issue",
+	"version": "0.0.60",
+	"releasenote": "add property to enable/disable edgeAA",
 	"contributors": [ "p.j.shand" ],
 	"dependencies": {
 		"notifier": "",

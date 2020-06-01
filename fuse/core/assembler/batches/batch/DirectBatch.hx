@@ -164,22 +164,22 @@ class DirectBatch extends BaseBatch implements IBatch {
 		if (updatePosition) {
 			if (coreTexture.rotate) {
 				vertexData.setRect(0, image.quadData.topLeftX, image.quadData.topLeftY, image.displayData.width, image.displayData.height,
-					image.absoluteRotation());
+					image.absoluteRotation(), image.edgeAA);
 				vertexData.setRect(1, image.quadData.topRightX, image.quadData.topRightY, image.displayData.width, image.displayData.height,
-					image.absoluteRotation());
+					image.absoluteRotation(), image.edgeAA);
 				vertexData.setRect(2, image.quadData.bottomRightX, image.quadData.bottomRightY, image.displayData.width, image.displayData.height,
-					image.absoluteRotation());
+					image.absoluteRotation(), image.edgeAA);
 				vertexData.setRect(3, image.quadData.bottomLeftX, image.quadData.bottomLeftY, image.displayData.width, image.displayData.height,
 					image.absoluteRotation());
 			} else {
 				vertexData.setRect(0, image.quadData.bottomLeftX, image.quadData.bottomLeftY, image.displayData.width, image.displayData.height,
-					image.absoluteRotation());
+					image.absoluteRotation(), image.edgeAA);
 				vertexData.setRect(1, image.quadData.topLeftX, image.quadData.topLeftY, image.displayData.width, image.displayData.height,
-					image.absoluteRotation());
+					image.absoluteRotation(), image.edgeAA);
 				vertexData.setRect(2, image.quadData.topRightX, image.quadData.topRightY, image.displayData.width, image.displayData.height,
-					image.absoluteRotation());
+					image.absoluteRotation(), image.edgeAA);
 				vertexData.setRect(3, image.quadData.bottomRightX, image.quadData.bottomRightY, image.displayData.width, image.displayData.height,
-					image.absoluteRotation());
+					image.absoluteRotation(), image.edgeAA);
 			}
 		}
 

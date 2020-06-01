@@ -82,6 +82,7 @@ class WorkerDisplayData /*implements IDisplayData*/ {
 	public var topRightY:Float;
 	public var bottomRightX:Float;
 	public var bottomRightY:Float;
+	public var edgeAA:Float;
 
 	public function new(objectOffset:Null<Int>) {
 		if (objectOffset != null) {

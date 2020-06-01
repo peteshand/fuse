@@ -45,6 +45,7 @@ class DisplayData {
 	public var topRightY:Float;
 	public var bottomRightX:Float;
 	public var bottomRightY:Float;
+	public var edgeAA:Int;
 
 	public function new(objectOffset:Null<Int>) {
 		objectId = objectOffset;

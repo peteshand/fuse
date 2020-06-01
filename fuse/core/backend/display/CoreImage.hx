@@ -37,6 +37,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable {
 	public var batchType:BatchType = null;
 	public var renderTargetId:Int = -1;
 	public var renderTexture:CoreRenderTexture;
+	public var edgeAA:Int;
 
 	// var updateUVs			:Bool = false;
 	// var renderTarget:Int = -1;
@@ -99,7 +100,8 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable {
 
 		renderLayer = displayData.renderLayer;
 
-		if (updatePosition || updateVisible || this.isMask) {	
+		if (updatePosition || updateVisible || this.isMask) {
+			edgeAA = displayData.edgeAA;
 			renderTargetId = displayData.renderTargetId;
 			renderTexture = Core.textures.getRenderTexture(renderTargetId);
 			// trace("renderTarget = " + renderTargetId);

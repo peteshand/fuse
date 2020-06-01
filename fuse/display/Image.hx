@@ -21,6 +21,7 @@ class Image extends DisplayObject {
 	@:isVar public var offsetV(default, set):Float;
 	@:isVar public var scaleU(default, set):Float;
 	@:isVar public var scaleV(default, set):Float;
+	@:isVar public var edgeAA(default, set):Bool;
 	@:isVar public var renderTarget(default, set):RenderTexture;
 
 	var shaders:Array<IShader> = [];
@@ -149,6 +150,21 @@ class Image extends DisplayObject {
 		if (scaleV != value) {
 			displayData.scaleV = scaleV = value;
 			updateUVs = true;
+			updatePosition = true;
+			updateStaticBackend();
+		}
+		return value;
+	}
+
+	function set_edgeAA(value:Bool):Bool {
+		if (edgeAA != value) {
+			edgeAA = value;
+			if (value == true) {
+				displayData.edgeAA = 1;
+			} else {
+				displayData.edgeAA = 0;
+			}
+
 			updatePosition = true;
 			updateStaticBackend();
 		}
