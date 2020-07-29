@@ -16,6 +16,7 @@ import openfl._internal.backend.gl.GLTexture;
 import openfl.events.Event;
 import openfl.display3D.textures.TextureBase;
 import openfl.display3D.Context3D;
+import signals.Signal1;
 
 /**
  * ...
@@ -27,9 +28,12 @@ import openfl.display3D.Context3D;
 #end
 class FrontImageTexture extends FrontBaseTexture {
 	public var nativeImageTexture:ImageTexture;
+	@:isVar public var url(default, set):String;
 
 	var imageElement:ImageElement;
 	var available = new Notifier<Bool>();
+
+	public var onError = new Signal1<Dynamic>();
 
 	public function new(url:String, ?width:Null<Int>, ?height:Null<Int>, queUpload:Bool = false) {
 		imageElement = Browser.document.createImageElement();
@@ -38,11 +42,20 @@ class FrontImageTexture extends FrontBaseTexture {
 
 		super(imageElement.width, imageElement.height, false, false, false);
 
+		imageElement.onerror = (e:Dynamic) -> {
+			onError.dispatch(e);
+		}
 		imageElement.src = url;
 		if (width != null)
 			imageElement.width = width;
 		if (height != null)
 			imageElement.height = height;
+	}
+
+	function set_url(value:String) {
+		url = value;
+		imageElement.src = url;
+		return value;
 	}
 
 	function onImageLoaded() {
