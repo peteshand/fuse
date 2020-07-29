@@ -77,7 +77,10 @@ class HtmlTextField extends Sprite {
 	}
 
 	function set_text(value:String):String {
-		value = value.split("\n").join("<br/>");
+		if (value == null)
+			value = "";
+		else
+			value = value.split("\n").join("<br/>");
 		return divRenderer.text = value;
 	}
 

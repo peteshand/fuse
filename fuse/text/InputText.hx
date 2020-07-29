@@ -122,7 +122,7 @@ class InputText extends TextField {
 			return;
 		} else {
 			for (i in 0...ignoreKeyCodes.length) {
-				if ( /*charCode == ignoreKeyCodes[i] ||*/ keyCode == ignoreKeyCodes[i])
+				if (/*charCode == ignoreKeyCodes[i] ||*/ keyCode == ignoreKeyCodes[i])
 					return;
 			}
 			var letter:String = String.fromCharCode(charCode);
@@ -210,8 +210,10 @@ class Caret extends Sprite {
 		quad.visible = false;
 
 		inputText.charIndex.add(onCharIndexChange);
-
-		inputText.hasFocus.add(onFocusChange);
+		inputText.hasFocus.add(() -> {
+			onCharIndexChange();
+			onFocusChange();
+		});
 	}
 
 	function onCharIndexChange() {
@@ -226,10 +228,12 @@ class Caret extends Sprite {
 			_cursorCharBounds = inputText.nativeTextField.getCharBoundaries(i);
 		} else {
 			if (cursorCharBounds == null) {
+				inputText.onTextChange.mute = true;
 				inputText.text = "A";
 				// quad.height = inputText.textHeight * 0.75;
 				_cursorCharBounds = inputText.nativeTextField.getCharBoundaries(0);
 				inputText.text = "";
+				inputText.onTextChange.mute = false;
 			} else {
 				_cursorCharBounds = cursorCharBounds;
 			}
@@ -261,9 +265,8 @@ class Caret extends Sprite {
 		return value;
 	}
 
-	function onFocusChange()
-	{
-		if (inputText.hasFocus.value){
+	function onFocusChange() {
+		if (inputText.hasFocus.value) {
 			count = 0;
 			EnterFrame.add(tick);
 			inputText.onUpdate.add(onTextUpdate);
