@@ -4,7 +4,7 @@
 This library is currently in a pre-release stage of development. As a result APIs may change or even be removed without warning. 
 
 ## What is Fuse ##
-Fuse is a free hardware accelerated displaylist style 2d rendering library and application framework, with a focus on real world performance. It's built with Haxe and runs on top of Lime and OpenFL, so theoretically it should work on all openfl supported targets (Windows, macOS, Linux, iOS, Android, Flash, AIR and even HTML5). However testing has recently only focused on AIR and HTML5.
+Fuse is a free hardware accelerated displaylist style 2d rendering library and application framework, with a focus on real world performance. It's built with Haxe and runs on top of Lime and OpenFL, so theoretically it should work on all openfl supported targets (HTML5, Windows, macOS, Linux, iOS, Android, and AIR/Flash). However testing has recently only focused on HTML5.
 
 ## Features ##
 
