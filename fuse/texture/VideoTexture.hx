@@ -18,6 +18,7 @@ class VideoTexture extends BaseTexture {
 	public var onComplete(get, null):Signal;
 	public var onError(get, null):Signal;
 	public var onMetaData(get, null):Signal;
+	public var url(get, set):String;
 
 	public function new(width:Int = 512, height:Int = 512, url:String = null) {
 		super();
@@ -42,6 +43,10 @@ class VideoTexture extends BaseTexture {
 
 	public function seek(offset:Float) {
 		videoTexture.seek(offset);
+	}
+
+	function get_url():String {
+		return videoTexture.url;
 	}
 
 	function get_loop():Bool {
@@ -78,6 +83,10 @@ class VideoTexture extends BaseTexture {
 
 	function get_onMetaData():Signal {
 		return videoTexture.onMetaData;
+	}
+
+	function set_url(value:String):String {
+		return videoTexture.url = value;
 	}
 
 	function set_loop(value:Bool):Bool {

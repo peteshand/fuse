@@ -42,7 +42,9 @@ class FrontVideoTexture extends FrontBaseTexture {
 	public var onMetaData = new Signal();
 
 	var cachedNetStream:CachedNetStream;
-	var url:String;
+
+	public var url:String;
+
 	var currentUrl:String;
 	var paused:Null<Bool> = null;
 	var videoMetaData:VideoMetaData;
@@ -150,7 +152,9 @@ class FrontVideoTexture extends FrontBaseTexture {
 	public function play(url:String = null, autoPlay:Bool = true) {
 		trace2("play");
 		this.autoPlay = autoPlay;
-		this.url = url;
+		if (url != null) {
+			this.url = url;
+		}
 		action.value = VideoAction.PLAY;
 	}
 
@@ -289,6 +293,10 @@ class FrontVideoTexture extends FrontBaseTexture {
 	}
 
 	inline function updateTextureSurface() {
+		// trace(url);
+		// TODO: enable surface update only when texture is visible
+		// return;
+
 		textureAvailable = true;
 		Fuse.current.workerSetup.updateTextureSurface(objectId);
 	}

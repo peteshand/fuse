@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"tags": [],
 	"description": "Fuse is a Haxe based hardware accelerated displaylist style 2d rendering library",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"releasenote": "add ImageTexture Error",
 	"contributors": [ "p.j.shand" ],
 	"dependencies": {

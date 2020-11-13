@@ -17,36 +17,13 @@ class CoreTextures {
 
 	public var renderTextures = new Array<CoreRenderTexture>();
 
-	// var count:Int = 0;
-
 	public function new() {}
 
 	public function checkForTextureChanges():Void {
-		/*
-			texturesHaveChanged = false;
-
-			for (i in 0...textures.length) {
-				textures[i].checkForChanges();
-
-				if (textures[i].textureHasChanged) {
-					//count = -1;
-					texturesHaveChanged = true;
-				}
-			}
-		 */
-
-		// trace("textures.length = " + textures.length);
 		if (texturesHaveChanged) {
+			// trace("backIsStatic 4");
 			Fuse.current.conductorData.backIsStatic = 0;
 		}
-
-		// count++;
-		// if (count <= 2) {
-		// texturesHaveChanged = true;
-		// }
-		// else {
-		// texturesHaveChanged = false;
-		// }
 	}
 
 	public function create(textureRef:TextureRef) {

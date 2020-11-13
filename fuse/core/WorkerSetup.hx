@@ -243,7 +243,12 @@ class WorkerSetup {
 	}
 
 	public function resize(stageWidth:Int, stageHeight:Int, windowWidth:Int, windowHeight:Int) {
-		send(MessageType.RESIZE, {stageWidth:stageWidth, stageHeight:stageHeight, windowWidth:windowWidth, windowHeight:windowHeight});
+		send(MessageType.RESIZE, {
+			stageWidth: stageWidth,
+			stageHeight: stageHeight,
+			windowWidth: windowWidth,
+			windowHeight: windowHeight
+		});
 	}
 
 	public function unlock() {
