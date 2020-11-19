@@ -27,8 +27,9 @@ class FrameBudget {
 	static var frameDuration:Float;
 
 	static function startFrame() {
-		frameDuration = Lib.getTimer() - startTime;
-		startTime = Lib.getTimer();
+		var now:Int = Lib.getTimer();
+		frameDuration = now - startTime;
+		startTime = now;
 	}
 
 	static function get_progress():Float {
