@@ -24,14 +24,14 @@ class AtlasBufferAssembler {
 	static public function build() {
 		AtlasSheets.active = false;
 
-		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged) {
+		if (DisplayList.hierarchyBuildRequired || CoreTextures.atlasTxtsHaveChanged) {
 			AtlasTextures.build();
 			AtlasSheets.build();
 		}
 	}
 
 	static public function closePartitions() {
-		if (DisplayList.hierarchyBuildRequired || CoreTextures.texturesHaveChanged) {
+		if (DisplayList.hierarchyBuildRequired || CoreTextures.atlasTxtsHaveChanged) {
 			AtlasSheets.closePartitions();
 		}
 	}

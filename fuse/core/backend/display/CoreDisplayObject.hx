@@ -92,6 +92,7 @@ class CoreDisplayObject {
 		visible = parent.visible && (displayData.visible == 1);
 
 		if (updateAny == true) {
+			// trace("backIsStatic 2");
 			Fuse.current.conductorData.backIsStatic = 0;
 		}
 

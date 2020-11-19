@@ -11,6 +11,7 @@ import fuse.texture.TextureId;
 @:access(fuse.core.backend.texture.CoreTexture)
 class CoreTextures {
 	public static var texturesHaveChanged:Bool = false;
+	public static var atlasTxtsHaveChanged:Bool = false;
 
 	var texturesMap = new Map<TextureId, CoreTexture>();
 	var textures = new Array<CoreTexture>();
@@ -21,7 +22,7 @@ class CoreTextures {
 
 	public function checkForTextureChanges():Void {
 		if (texturesHaveChanged) {
-			// trace("backIsStatic 4");
+			// trace("backIsStatic 6");
 			Fuse.current.conductorData.backIsStatic = 0;
 		}
 	}
@@ -64,10 +65,12 @@ class CoreTextures {
 		var texture:CoreTexture = texturesMap.get(objectId);
 		if (texture != null) {
 			// TODO: amend so altas isn't recalulated every frame
-			// if (texture.textureData.directRender == 0) {
-			// trace("FIX");
+			if (texture.textureData.directRender == 0) {
+				// trace("FIX");
+				atlasTxtsHaveChanged = true;
+			}
 			texturesHaveChanged = true;
-			// }
+
 			texture.updateSurface();
 		}
 	}

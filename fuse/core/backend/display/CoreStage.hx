@@ -36,6 +36,7 @@ class CoreStage extends CoreInteractiveObject {
 		visible = displayData.visible == 1;
 
 		if (updateAny == true) {
+			// trace("backIsStatic 4");
 			Fuse.current.conductorData.backIsStatic = 0;
 		}
 

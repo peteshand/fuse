@@ -414,6 +414,7 @@ class FrontVideoTexture extends FrontBaseTexture {
 		}
 		if (action.value == VideoAction.PLAY) {
 			updateTextureSurface();
+			// trace(url);
 		}
 	}
 

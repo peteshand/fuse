@@ -180,6 +180,7 @@ class DisplayList {
 	public function checkForDisplaylistChanges() {
 		if (hierarchyChangeCount < 2) {
 			hierarchyBuildRequired = true;
+			// trace("backIsStatic 5");
 			Fuse.current.conductorData.backIsStatic = 0;
 		} else {
 			hierarchyBuildRequired = false;
@@ -202,7 +203,5 @@ class DisplayList {
 		display.updateAlpha = payload.updateAlpha;
 		display.updateTexture = payload.updateTexture;
 		display.updateUVs = payload.updateUVs;
-
-		
 	}
 }

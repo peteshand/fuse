@@ -81,6 +81,7 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable {
 
 		// trace("updateAny = " + updateAny);
 		if (updateAny) {
+			// trace("backIsStatic 3");
 			Fuse.current.conductorData.backIsStatic = 0;
 		}
 

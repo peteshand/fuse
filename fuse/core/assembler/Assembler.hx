@@ -81,6 +81,7 @@ class Assembler {
 		}
 
 		CoreTextures.texturesHaveChanged = false;
+		CoreTextures.atlasTxtsHaveChanged = false;
 	}
 
 	static function OnBackIsStaticChange() {
