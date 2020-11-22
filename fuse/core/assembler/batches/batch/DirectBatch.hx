@@ -189,11 +189,8 @@ class DirectBatch extends BaseBatch implements IBatch {
 			vertexData.setColor(2, image.displayData.colorTR);
 			vertexData.setColor(3, image.displayData.colorBR);
 		}
-		if (updateAlpha) {
-			var alpha:Float = image.alpha;
-			// if (mask != null) alpha *= mask.alpha;
-			vertexData.setAlpha(alpha);
-		}
+
+		vertexData.setAlpha(image.alpha);
 
 		image.setUpdates(false);
 
