@@ -39,6 +39,7 @@ class WorkerSetup {
 	var touchables = new Map<Int, DisplayObject>();
 	var workerComms:Array<IWorkerComms> = [];
 	// var staticChanges = new Map<Int, DisplayObject>();
+	var staticCount:Int = 0;
 	var staticChanges = new GcoArray<DisplayObject>();
 	var count:Int = 0;
 	var staticData:StaticData = {};
@@ -218,6 +219,7 @@ class WorkerSetup {
 		// trace("frontStaticCount = 0");
 		Fuse.current.conductorData.frontStaticCount = 0;
 		staticChanges[displayObject.objectId] = displayObject;
+		staticCount++;
 		// Fuse.current.conductorData.backIsStatic = 0;
 		// staticChanges.set(displayObject.objectId, displayObject);
 		// staticChanges.push(displayObject);
@@ -261,7 +263,7 @@ class WorkerSetup {
 	}
 
 	public function sendQue() {
-		// trace("sendQue: " + staticChanges.length);
+		// trace("sendQue: " + staticCount);
 		for (i in 0...staticChanges.length) {
 			var displayObject:DisplayObject = staticChanges[i];
 			if (displayObject == null)
@@ -288,7 +290,7 @@ class WorkerSetup {
 			displayObject.resetMovement();
 			staticChanges[i] = null;
 		}
-		staticChanges.length = 0;
+		staticChanges.length = staticCount = 0;
 	}
 
 	function OnUpdateReturn(workerPayload:WorkerPayload) {}

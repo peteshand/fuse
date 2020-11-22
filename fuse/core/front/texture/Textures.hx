@@ -37,10 +37,10 @@ class Textures {
 
 		createDefaultTextures();
 
-		Lib.current.addEventListener(Event.ENTER_FRAME, onTick);
+		Lib.current.addEventListener(Event.ENTER_FRAME, OnTick);
 	}
 
-	static private function onTick(e:Event) {
+	static private function OnTick(e:Event) {
 		TextureUploadQue.check();
 	}
 

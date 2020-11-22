@@ -20,19 +20,14 @@ class TextureUploadQue {
 		// B: No more than 50% of the framebudget has been used, or No textures have been updated in current frame
 		count = 0;
 
-		if (que.length == 0) {
-			return;
-		}
-
 		// trace("FrameBudget.progress = " + FrameBudget.progress);
-		FrameBudget.startFrame();
+
 		while (que.length > 0 && (FrameBudget.progress < 0.5 || count == 0)) {
 			// trace(count);
 			var texture:IFrontTexture = que.shift();
 			texture.upload();
 			count++;
 		}
-		FrameBudget.endFrame();
 	}
 
 	static public function add(texture:IFrontTexture) {

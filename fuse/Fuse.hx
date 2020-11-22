@@ -51,13 +51,12 @@ class Fuse extends EventDispatcher {
 			// workerThread.init();
 		}
 
-		// Moved this logic into TextureUploadQue
-		/*Lib.current.stage.addEventListener(Event.ENTER_FRAME, function(e:Event):Void {
-				FrameBudget.startFrame();
-			}, false, 1000);
-			Lib.current.stage.addEventListener(Event.EXIT_FRAME, function(e:Event):Void {
-				FrameBudget.endFrame();
-		}, false, 1000);*/
+		Lib.current.stage.addEventListener(Event.ENTER_FRAME, function(e:Event):Void {
+			FrameBudget.startFrame();
+		}, false, 1000);
+		Lib.current.stage.addEventListener(Event.EXIT_FRAME, function(e:Event):Void {
+			FrameBudget.endFrame();
+		}, false, 1000);
 		super();
 
 		if (fuseConfig.autoStart == true) {

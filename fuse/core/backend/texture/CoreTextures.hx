@@ -65,12 +65,12 @@ class CoreTextures {
 		var texture:CoreTexture = texturesMap.get(objectId);
 		if (texture != null) {
 			// TODO: amend so altas isn't recalulated every frame
-			if (texture.textureData.directRender == 0) {
+			if (texture.textureData.directRender != 1) {
 				// trace("FIX");
 				atlasTxtsHaveChanged = true;
 			}
 			texturesHaveChanged = true;
-
+			// trace([atlasTxtsHaveChanged, texturesHaveChanged, texture.textureData.directRender]);
 			texture.updateSurface();
 		}
 	}
