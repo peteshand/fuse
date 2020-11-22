@@ -276,7 +276,7 @@ class WorkerSetup {
 			staticData.updateRotation = displayObject.updateRotation;
 			staticData.updateColour = displayObject.updateColour;
 			staticData.updateVisible = displayObject.updateVisible;
-			staticData.updateAlpha = displayObject.updateAlpha;
+			staticData.updateAlpha = displayObject.updateAlpha || displayObject.updateVisible;
 			staticData.updateTexture = displayObject.updateTexture;
 			staticData.updateUVs = displayObject.updateUVs;
 

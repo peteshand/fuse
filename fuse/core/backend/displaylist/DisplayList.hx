@@ -24,8 +24,6 @@ class DisplayList {
 	public var stage:CoreDisplayObject;
 	public var map = new Map<Int, CoreDisplayObject>();
 
-	// var transformDataMap = new Map<Int, IDisplayData>();
-
 	public function new() {}
 
 	function visibleChange(objectId:Int, visible:Bool) {
