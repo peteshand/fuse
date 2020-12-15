@@ -31,8 +31,11 @@ class CoreStage extends CoreInteractiveObject {
 		return true;
 	}
 
+	override function get_alpha() {
+		return displayData.alpha;
+	}
+
 	override function updateTransform() {
-		alpha = displayData.alpha;
 		visible = displayData.visible == 1;
 
 		if (updateAny == true) {

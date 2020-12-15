@@ -40,7 +40,7 @@ class CoreDisplayObject {
 
 	var parentNonStatic:Bool;
 
-	public var alpha:Float = 1;
+	@:isVar public var alpha(get, null):Float;
 	public var visible:Bool = true;
 	public var renderIndex:Int = -1;
 	public var drawIndex:Int = -1;
@@ -87,8 +87,11 @@ class CoreDisplayObject {
 		updateTransform();
 	}
 
+	function get_alpha() {
+		return parent.alpha * displayData.alpha;
+	}
+
 	function updateTransform() {
-		alpha = parent.alpha * displayData.alpha;
 		visible = parent.visible && (displayData.visible == 1);
 
 		if (updateAny == true) {

@@ -76,7 +76,6 @@ class CoreImage extends CoreDisplayObject implements ICoreRenderable {
 	}
 
 	override function updateTransform() {
-		alpha = parent.alpha * displayData.alpha;
 		visible = (parent.visible && (displayData.visible == 1));
 
 		// trace("updateAny = " + updateAny);
